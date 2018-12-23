@@ -1,0 +1,278 @@
+/*共用CSS*/
+*{margin:0px;padding:0px;}
+body { font: 12px/1.5 'Microsoft Yahei', 'Simsun'; color: #666666; background: #fff }
+img { border: 0; display: block }
+ul { list-style: none; }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal; }
+a { outline: none; }
+a:link, a:visited { text-decoration: none; color: #666 }
+a:hover { text-decoration: none; }
+.f_l{float:left;}
+.f_r{float:right;    font: 12px/1.5 'Microsoft Yahei', 'Simsun';	margin:0 10px 0 0;
+	padding:2px 0 0 20px;}
+.l_box{width: 96%;
+    padding: 0 2% 0 2%;}
+.r_box{width:50%;}
+/*头部样式*/
+header{
+	width:1000px;
+	margin:20px auto;
+	overflow:hidden;
+	clear:both;
+}
+#topnav {
+	width:60%;
+	background:#48AE15;
+	height:46px;
+	line-height:46px; 
+	text-align:center;
+	border-radius:46px; 
+}
+#topnav a { display: inline-block; font-size: 18px; font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif; padding: 0 20px; }
+#topnav a:hover { background: #fff; color: #000; }
+#topnav a { color: #FFF }
+#topnav_current { background: #F3FF41; }/* 高亮选中颜色 */
+a#topnav_current { color: #000 }
+article{
+	width:100%;
+	/*margin:20px auto;*/
+}
+/*右侧选项卡*/
+.tab{
+	width:100%;
+	margin:30px 0 20px 0;
+	overflow:hidden;
+}
+.tab-top{
+	height:32px;
+	border-bottom:solid 1px #EAEAEA;
+	font-size:14px;
+}
+#tb li a{
+	float:left;
+	height:32px;
+	cursor:pointer;
+	line-height:32px;
+	list-style-type:none;
+	padding:0 15px;
+}
+#tb li.cur a { color: #fff; background: #f77825; }
+.bd { display: none }
+.bd-news ul { padding: 10px 0 0 10px; background: url(../images/ph2.png) no-repeat 10px 29px; }
+.bd-news ul li { border-bottom: solid 1px #EAEAEA; line-height: 30px; height: 30px; overflow: hidden; font-size: 14px; padding: 10px 0 0 30px; }
+.bd-news ul li a { display: block; }
+.bd-news ul li a:hover { color: #000; }
+.bd-news ul li:hover { border-bottom: #000 1px solid; }/* 鼠标放上去的效果 */
+/*标签云*/
+.cloud{
+	width:100%;
+	clear:both;
+	overflow:hidden;
+}
+.cloud h3{
+	line-height:40px;
+	color:#38485A;
+	font-size:18px;
+	border-bottom:1px solid #E6E6E6;
+	height:40px;
+}
+.cloud ul{
+	margin:20px 0;
+}
+.cloud ul li { line-height: 24px; height: 24px; display: block; background: #999; float: left; padding: 3px 11px; margin: 10px 10px 0 0; border-radius: 8px; -moz-transition: all 0.5s; -webkit-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; }
+.cloud ul li a { color: #FFF }
+.cloud ul li:nth-child(8n-7) { background: #8A9B0F }
+.cloud ul li:nth-child(8n-6) { background: #EB6841 }
+.cloud ul li:nth-child(8n-5) { background: #3FB8AF }
+.cloud ul li:nth-child(8n-4) { background: #FE4365 }
+.cloud ul li:nth-child(8n-3) { background: #FC9D9A }
+.cloud ul li:nth-child(8n-2) { background: #EDC951 }
+.cloud ul li:nth-child(8n-1) { background: #C8C8A9 }
+.cloud ul li:nth-child(8n) { background: #83AF9B }
+.cloud ul li:first-child { background: #036564 }
+.cloud ul li:last-child { background: #3299BB }
+.cloud ul li:hover { border-radius: 0; text-shadow: #000 1px 1px 1px }
+
+.zan{    margin: 0 10px 0 0;
+    padding-left: 20px;
+	background: url(../images/zan.png) no-repeat left center;
+	float: right;}
+.zaned{    margin: 0 10px 0 0;
+    padding-left: 20px;
+	background: url(../images/zaned.png) no-repeat left center;
+	float: right;}
+.zan_loading{    margin: 0 10px 0 0;
+    padding-left: 20px;
+	background: url(../images/loading16.gif) no-repeat left center;
+	float: right;}
+.zan a{padding-left:10px;font: 15px/1.5 'Microsoft Yahei', 'Simsun';text-decoration: none;}
+.zaned a{padding-left:10px;font: 15px/1.5 'Microsoft Yahei', 'Simsun';text-decoration: none;}
+.zan_loading a{padding-left:10px;font: 15px/1.5 'Microsoft Yahei', 'Simsun';text-decoration: none;}
+.num{text-decoration: none;}
+.huifu{padding:0 0 0 10px}
+.rectangle { width: 5px; height: 16px; background: #3FB8AF;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.write_msg{cursor: pointer;float:right;font: 15px/1.5 'Microsoft Yahei', 'Simsun';	background: url(../images/ooopic.png) no-repeat left center;
+padding-left: 20px;color:#3299BB;padding-right: 40%;}
+.msg_box{  display:none;  width: 98%;padding:1%;
+    margin-bottom: 5px;
+    height: 100px;
+    border: #B5B5B5 1px solid;border-radius: 6px;}
+.msg_box textarea{font: 15px/1.5 'Microsoft Yahei', 'Simsun';}
+.loadmore{cursor: pointer; }
+.msg_box_button {  display:none; cursor: pointer; 
+    margin-top: 3px;
+    margin-right: 5px;
+    border-radius: 4px;
+    padding: 5px 10px;
+	float:right;
+	font: 12x/1.5 'Microsoft Yahei', 'Simsun';
+	color: #0072A9;
+	border: #0072A9 1px solid;}
+	
+#t{ width: 100%;
+border-bottom: #FFC107 4px solid;    background-color: white;
+    z-index: 1000;top:0;}
+.comment_replay{
+	width: 85%;
+    height: 100px;
+    border: #CCC 1px solid;
+    margin-left: 5%;
+    border-radius: 4px;	
+}
+#load_more {
+	width: 100%;
+    height: 30px;
+    border: #015FB1 1px solid;
+    /* padding-top: 10px; */
+    margin-top: 10px;
+    text-align: center;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #015FB1;
+    padding-top: 3px;
+}
+#load_more span {
+	background:url(../images/loading16.gif) no-repeat right center;
+    padding-right : 20px;
+}
+.remsg_div{
+    height: 100px;
+    border: #015FB1 1px solid;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #015FB1;
+
+}
+.remsg_div textarea{font: 15px/1.5 'Microsoft Yahei', 'Simsun';}
+.rectangle1 { width: 5px; height: 16px; background: #DB6D4C;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle2 { width: 5px; height: 16px; background: #FC9D9A;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle3 { width: 5px; height: 16px; background: #FE4365;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle4 { width: 5px; height: 16px; background: #38485A;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle5 { width: 5px; height: 16px; background: #84C7DE;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle6 { width: 5px; height: 16px; background: #3299BB;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle7 { width: 5px; height: 16px; background: #036564;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle8 { width: 5px; height: 16px; background: #3FB8AF;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle9 { width: 5px; height: 16px; background: #48AE15;float: left;margin-top: 3px;
+    margin-right: 5px;}
+.rectangle0 { width: 5px; height: 16px; background: #E91E63;float: left;margin-top: 3px; margin-right: 5px;}
+
+.comment_box{border: #CCC 1px solid;
+float: left;
+border-radius: 6px;
+padding :4px 6px;width:auto !important;
+max-width: 250px;
+    background-color: #e6e6e6;position:relative;}
+.comment_box_admin{    border: #009688 1px solid;
+    border-radius: 6px;
+    padding: 4px 6px;
+    width: auto !important;
+    max-width: 250px;
+    background-color: rgba(3, 169, 244, 0.36);
+    position: relative;
+    float: right;
+    color: #142025;float: right;}
+.nav {
+   position:absolute;
+  left:-10px;
+   overflow:hidden;
+  width:0;
+  height:0;
+   border-width:5px;
+  border-style:solid dashed dashed dashed;
+ }
+  .nav-border {
+   top:9px;
+  border-color:transparent  #ccc transparent transparent ;
+ }
+ .nav-background {
+  top:10px;
+  border-color:transparent #e6e6e6 transparent  transparent;
+ }
+ .nav_r {
+   position:absolute;
+  right:-10px;
+   overflow:hidden;
+  width:0;
+  height:0;
+   border-width:5px;
+  border-style:solid dashed dashed dashed;
+ }
+  .nav-border_r {
+   top:9px;
+  border-color:transparent transparent transparent  #607D8B;
+ }
+ .nav-background_r {
+  top:10px;
+  border-color:transparent  transparent  transparent rgba(55, 154, 187, 0.39);
+ }
+ #reply_more {
+	width: 98%;
+    border: #015FB1 1px solid;
+    /* padding-top: 10px; */
+    margin-top: 10px;
+    text-align: center;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #015FB1;
+    padding: 1%;
+    bottom: 1px;
+	background-color: white;
+}
+.reply_canlce, .reply_commit,.returnList {
+    margin-right: 20px;
+    border: #009688 1px solid;
+    padding: 2px 5px;
+    margin-bottom: 3px;
+    border-radius: 3px;
+    bottom: 2px;
+    
+}
+.reply_canlce{
+	padding-right: 31px;
+	background: url(../images/cancel_16px.png) no-repeat 50px center;
+}
+.returnList{
+	padding-left: 31px;
+	background: url(../images/left_16px.png) no-repeat 10px center;
+}
+.reply_commit{
+	padding-right: 31px;
+	background: url(../images/yes_16px.png) no-repeat 50px center;
+}
+
+.reply_textarea{
+	 font: 14px/1.5 'Microsoft Yahei', 'Simsun';
+	padding: 0 1%;width: 98%;
+}

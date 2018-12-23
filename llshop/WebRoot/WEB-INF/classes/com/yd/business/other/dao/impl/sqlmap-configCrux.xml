@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="configCrux">
+	
+	
+	<select id="queryConfigCruxInfo" parameterType="configCrux" resultType="configCrux">
+		select * from ll_config_crux l 
+		<where>
+			<if test="id != null"> and l.id = #{id} </if>
+			<if test="name != null"> and l.name = #{name} </if>
+			<if test="code != null"> and l.code = #{code} </if>
+			<if test="type != null"> and l.type = #{type} </if>
+			<if test="key != null"> and l.key = #{key} </if>
+			<if test="value != null"> and l.value = #{value} </if>
+			<if test="status != null"> and l.status = #{status} </if>
+			<if test="create_time != null"> and l.create_time = #{create_time} </if>
+			<if test="modify_time != null"> and l.modify_time = #{modify_time} </if>
+		</where>
+	</select>
+	
+		
+	<select id="queryConfigCruxInfoPage" parameterType="configCrux" resultType="configCrux">
+		select * from ll_config_crux l 
+		<where>
+			<if test="id != null"> and l.id = #{id} </if>
+			<if test="name!=null and name!=''">and name like concat('%', #{name}, '%')</if>
+			<if test="code != null"> and l.code = #{code} </if>
+			<if test="type != null"> and l.type = #{type} </if>
+			<if test="key != null"> and l.key = #{key} </if>
+			<if test="value != null"> and l.value = #{value} </if>
+			<if test="status != null"> and l.status = #{status} </if>
+			<if test="create_time != null"> and l.create_time = #{create_time} </if>
+			<if test="modify_time != null"> and l.modify_time = #{modify_time} </if>
+		</where>
+	</select>
+	
+	
+	<select id="configCruxCount" parameterType="configCrux" resultType="int">
+		select count(1) from ll_config_crux
+		<where>
+			<if test="status != null"> and `status` = #{status} </if>
+			<if test="key != null and key!=''"> and `key` = #{key} </if>
+		</where>
+	</select>
+	
+	
+	<delete id="deleteSendMessage" parameterType="configCrux">
+		delete from ll_config_crux where id = #{id} 
+	</delete>
+	
+	
+	
+	
+	<insert id="insertSendMessage" parameterType="configCrux">
+		insert into ll_config_crux ( `code`, `type`, `key`, `value`, `status`, `create_time`, `name`) values 
+		(#{code},#{type},#{key},#{value},#{status},#{create_time},#{name})
+	</insert>
+	
+	<update id="updateSendMessage" parameterType="configCrux">
+	    update ll_config_crux
+	    <set>
+	        <if test="code!=null and code!=''">`code`=#{code},</if>
+	        <if test="type!=null and type!=''">`type`=#{type},</if>
+	        <if test="key!=null and key!=''">`key`=#{key},</if>
+	        <if test="value!=null and value!=''">`value`=#{value},</if>
+	       	<if test="status!=null ">`status`=#{status},</if>
+	        <if test="modify_time!=null and modify_time!=''">`modify_time`=#{modify_time},</if>
+	        <if test="name!=null and name!=''">`name`=#{name},</if>
+	    </set>
+	    where id=#{id}
+	</update>
+</mapper>
+
+

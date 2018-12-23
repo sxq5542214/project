@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="userWechat">
+	<select id="select" resultType="userWechat" parameterType="userWechat">
+		select * from ll_wechat_user 
+		<where>
+			<if test="nick_name != null ">
+				and nick_name like concat('%',#{nick_name},'%')
+			</if>
+			<if test="sex != null ">
+				and sex = #{sex}
+			</if>
+			<if test="status != null ">
+				and status = #{status}
+			</if>
+			<if test="parentid != null ">
+				and parentid = #{parentid}
+			</if>
+			<if test="openid != null ">
+				and openid like concat('%',#{openid},'%')
+			</if>
+			<if test="unionid != null ">
+				and unionid = #{unionid}
+			</if>
+			
+			<if test="id != null"> and id = #{id}</if>
+		</where>
+	</select>
+	
+	<select id="findUserByOpenId" resultType="userWechat">
+		select * from ll_wechat_user where openid = #{openid}
+	</select>
+
+	<select id="findUserById" resultType="userWechat">
+		select * from ll_wechat_user where id = #{id}
+	</select>
+	
+	
+	<select id="getOfflineNumById" parameterType="string" resultType="Integer">
+		select offline_num from ll_wechat_user where id=#{id}
+	</select>
+	
+	<update id="updateOfflineNumById" parameterType="map">
+		update ll_wechat_user set offline_num = #{num} 
+		where id=#{id}
+	</update>
+	
+	<update id="updateParentId" parameterType="map">
+		update ll_wechat_user set parentId = #{parentId} 
+		where openid=#{openid}
+	</update>
+	
+	<insert id="saveUserTicket" parameterType="map">
+		
+		insert into ll_wechat_user_qrcode(openId,senceCode,senceId,ticket,ticket_expire,ticket_url,createDate,originalid) 
+		values(#{openId},#{senceCode},#{senceId},#{ticket},#{ticket_expire},#{ticket_url},#{createDate},#{originalid})
+	</insert>
+	
+	<delete id="deleteUserTicket" parameterType="map">
+		delete from  ll_wechat_user_qrcode
+		where openId=#{openId} and senceCode = #{senceCode} and senceId = #{senceId}
+	</delete>
+	
+	<insert id="insert" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_wechat_user(
+		<trim suffix="" suffixOverrides=",">
+			<if test="openid != null">openid,</if>
+			<if test="create_time != null">create_time,</if>
+			<if test="nick_name != null">nick_name,</if>
+			<if test="phone != null">phone,</if>
+			<if test="sex != null">sex,</if>
+			<if test="province != null">province,</if>
+			<if test="city != null">city,</if>
+			<if test="status != null">status,</if>
+			<if test="expire_date != null">expire_date,</if>
+			<if test="access_token != null">access_token,</if>
+			<if test="token_end_time != null">token_end_time,</if>
+			<if test="parentid != null">parentid,</if>
+			<if test="level != null">level,</if>
+			<if test="offline_num != null">offline_num,</if>
+			<if test="join_img_num != null">join_img_num,</if>
+			<if test="join_offline_num != null">join_offline_num,</if>
+			<if test="winning_num != null">winning_num,</if>
+			<if test="head_img != null">head_img,</if>
+			<if test="last_access_time != null">last_access_time,</if>
+			<if test="sence_type != null">sence_type,</if>
+			<if test="senceid != null">senceid,</if>
+			<if test="points != null">points,</if>
+			<if test="balance != null">balance,</if>
+			<if test="last_order_time != null">last_order_time,</if>
+			<if test="unionid != null">unionid,</if>
+			<if test="originalid != null"> originalid,</if>
+		</trim>
+		)values(
+		<trim suffix="" suffixOverrides=",">
+			<if test="openid != null">#{openid},</if>
+			<if test="create_time != null">#{create_time},</if>
+			<if test="nick_name != null">#{nick_name},</if>
+			<if test="phone != null">#{phone},</if>
+			<if test="sex != null">#{sex},</if>
+			<if test="province != null">#{province},</if>
+			<if test="city != null">#{city},</if>
+			<if test="status != null">#{status},</if>
+			<if test="expire_date != null">#{expire_date},</if>
+			<if test="access_token != null">#{access_token},</if>
+			<if test="token_end_time != null">#{token_end_time},</if>
+			<if test="parentid != null">#{parentid},</if>
+			<if test="level != null">#{level},</if>
+			<if test="offline_num != null">#{offline_num},</if>
+			<if test="join_img_num != null">#{join_img_num},</if>
+			<if test="join_offline_num != null">#{join_offline_num},</if>
+			<if test="winning_num != null">#{winning_num},</if>
+			<if test="head_img != null">#{head_img},</if>
+			<if test="last_access_time != null">#{last_access_time},</if>
+			<if test="sence_type != null">#{sence_type},</if>
+			<if test="senceid != null">#{senceid},</if>
+			<if test="points != null">#{points},</if>
+			<if test="balance != null">#{balance},</if>
+			<if test="last_order_time != null">#{last_order_time},</if>
+			<if test="unionid != null"> #{unionid},</if>
+			<if test="originalid != null">#{originalid},</if>
+		</trim>
+		)
+	</insert>
+	
+	
+ 	<update id="updateUserWechat" parameterType="userWechat">
+		update ll_wechat_user 
+		<set>
+			<if test="openid != null">openid = #{openid},</if>
+			<if test="create_time != null">create_time = #{create_time},</if>
+			<if test="nick_name != null">nick_name = #{nick_name},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="province != null">province = #{province},</if>
+			<if test="city != null">city = #{city},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="expire_date != null">expire_date = #{expire_date},</if>
+			<if test="access_token != null">access_token = #{access_token},</if>
+			<if test="token_end_time != null">token_end_time = #{token_end_time},</if>
+			<if test="parentid != null">parentid = #{parentid},</if>
+			<if test="level != null">level = #{level},</if>
+			<if test="offline_num != null">offline_num = #{offline_num},</if>
+			<if test="join_img_num != null">join_img_num = #{join_img_num},</if>
+			<if test="join_offline_num != null">join_offline_num = #{join_offline_num},</if>
+			<if test="winning_num != null">winning_num = #{winning_num},</if>
+			<if test="head_img != null">head_img = #{head_img},</if>
+			<if test="points != null">points = #{points},</if>
+			<if test="balance != null">balance = #{balance},</if>
+			<if test="last_order_time != null">last_order_time = #{last_order_time},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="share_type != null">share_type = #{share_type},</if>
+			<if test="share_time != null">share_time = #{share_time},</if>
+			<if test="unionid != null"> unionid = #{unionid},</if>
+			<if test="originalid != null"> originalid = #{originalid}</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+		
+	</update>
+	
+	
+	<update id="updateUserLastAccessTime" parameterType="map">
+		update ll_wechat_user set last_access_time = #{last_access_time}
+		where openid = #{openid}
+	</update>
+	
+	
+	
+	<delete id="delete" parameterType="int">
+		delete from ll_wechat_user where id = #{value}
+	</delete>
+	<update id="setblack" parameterType="map">
+		update ll_wechat_user set expire_date=#{expire_date},status=0 where id in (${ids})
+	</update>
+	
+	<insert id="createBWCUserCommissionPoint" parameterType="map">
+		insert into commissionpoints (toUserId,date,pay,detailed) values(
+		#{toUserId},#{date},#{pay},#{detailed}	)
+	</insert>
+	
+	<insert id="createBWCUserConsumeTable" parameterType="map">
+		insert into consumetable (money,date,buyCount,userId,transactionId,outTradeNo,interfaceType) values(
+		#{money},#{date},#{buyCount},#{userId},#{transactionId},#{outTradeNo},#{interfaceType}	)
+	</insert>
+	
+	<select id="queryQrCodeTicket" parameterType="userQrCode" resultType="userQrCode">
+		select * from ll_wechat_user_qrcode 
+		<where>
+			<if test="openId !=null"> and openId = #{openId}</if>
+			<if test="senceCode !=null"> and senceCode = #{senceCode}</if>
+			<if test="senceId !=null"> and senceId = #{senceId}</if>
+			<if test="id !=null"> and id = #{id}</if>
+		</where>
+	</select>
+	
+	<select id="getOpenId" parameterType="string" resultType="java.lang.String">
+		select openId from user where  userId=#{userId}
+	</select>
+	
+	<select id="getWechatUserId" parameterType="string" resultType="java.lang.String">
+		select id from ll_wechat_user where  openid=#{openId}
+	</select>
+	<select id="getParentId" parameterType="string" resultType="java.lang.String">
+		select parentid from ll_wechat_user where  openid=#{openId}
+	</select>
+	<select id="getBrotherNum" parameterType="string" resultType="Integer">
+		select count(*) from ll_wechat_user where  parentid=#{parentId}
+	</select>
+	
+	<select id="getYesterDaychildNum" parameterType="map" resultType="Integer">
+		select count(*) from ll_wechat_user where parentid =#{id}
+		and create_time>=#{startTime} and create_time &lt;#{endTime}
+	</select>
+	
+	
+	<select id="getProductRealPrice" parameterType="map" resultType="java.lang.String">
+		select sum(p.productRealPrice) as winCash from product p,latestlottery l where l.productId = p.productId 
+		and l.userId=#{userId}
+		and l.announcedTime>=#{startTime}
+		and l.announcedTime&lt;#{endTime}
+	</select>
+	
+	<select id="getProductPrice" parameterType="map" resultType="java.lang.String">
+		select sum(sbp.spellbuyPrice) as winMoneyCount from spellbuyproduct sbp,latestlottery l where l.spellbuyProductId = sbp.spellbuyProductId
+		and l.userId=#{userId}
+		and l.announcedTime>=#{startTime}
+		and l.announcedTime&lt;#{endTime}
+	</select>
+
+	<select id="queryUserBetweenLastDate" parameterType="map" resultType="userWechat">
+		<![CDATA[   select * from ll_wechat_user u where u.last_access_time >= #{startDate} and  u.last_access_time <= #{endDate}  ]]>
+	</select>
+	
+	<insert id="createUserSenceLog" parameterType="userSenceLog" useGeneratedKeys="true"  keyProperty="id" >
+		
+		insert into ll_user_sence_log(user_id,user_name,openid,cratetime,sence_type,senceid,read_num,share_type,share_time,share_num,share_from,share_time_ms)
+		values(#{user_id},#{user_name},#{openid},#{cratetime},#{sence_type},#{senceid},0,#{share_type},#{share_time},#{share_num},#{share_from},#{share_time_ms})
+		<!-- 
+		<selectKey resultType="int"  keyProperty="id">
+			 SELECT @@IDENTITY  as id
+		</selectKey> -->
+	</insert>
+	<update id="updateUserSenceLog" parameterType="userSenceLog">
+		update ll_user_sence_log 
+		<set>
+			<if test="user_id != null"> user_id = #{user_id} ,</if>
+			<if test="user_name != null"> user_name = #{user_name} ,</if>
+			<if test="openid != null"> openid = #{openid} ,</if>
+			<if test="cratetime != null"> cratetime = #{cratetime} ,</if>
+			<if test="sence_type != null"> sence_type = #{sence_type} ,</if>
+			<if test="senceid != null"> senceid = #{senceid} ,</if>
+			<if test="read_num != null"> read_num = #{read_num} ,</if>
+			<if test="first_read_time != null"> first_read_time = #{first_read_time} ,</if>
+			<if test="last_read_time != null"> last_read_time = #{last_read_time} ,</if>
+			<if test="share_type != null"> share_type = #{share_type} ,</if>
+			<if test="share_time != null"> share_time = #{share_time} ,</if>
+			<if test="share_num != null"> share_num = #{share_num} ,</if>
+			<if test="share_from != null"> share_from = #{share_from} ,</if>
+			<if test="share_time_ms != null"> share_time_ms = #{share_time_ms} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="findUserSenceLogById" parameterType="int" resultType="userSenceLog">
+		select * from ll_user_sence_log where id = #{value}
+	</select>
+	
+	<select id="queryActivityFriendLevelOneCount" parameterType="map" resultType="int">
+		select count(1) from ll_wechat_user wu where wu.parentid = #{user_id}
+		and wu.last_order_time  >= #{last_order_time}
+
+	</select>
+	
+	<select id="queryActivityFriendLevelTwoCount" parameterType="map" resultType="int">
+		select count(wu2.id) from ll_wechat_user wu2,ll_wechat_user wu 
+		where wu.parentid = #{user_id} and wu.id = wu2.parentid 
+	</select>
+	
+	<select id="queryActivityFriendLevelThreeCount" parameterType="map" resultType="int">
+		select count(wu3.id) from ll_wechat_user wu3,ll_wechat_user wu2,ll_wechat_user wu 
+		where wu.parentid = #{user_id} and wu.id = wu2.parentid  and wu2.id = wu3.parentid
+	</select>
+	
+	<select id="queryActivityFriendLevelFourCount" parameterType="map" resultType="int">
+		select count(wu4.id) from ll_wechat_user wu4, ll_wechat_user wu3,ll_wechat_user wu2,ll_wechat_user wu 
+		where wu.parentid = #{user_id} and wu.id = wu2.parentid  and wu2.id = wu3.parentid and wu3.id = wu4.parentid
+	</select>
+	
+	<select id="queryUserSenceLog" parameterType="userSenceLog" resultType="userSenceLog">
+		select * from ll_user_sence_log 
+		<where>
+			<if test="user_id != null"> and user_id = #{user_id} </if>
+			<if test="user_name != null"> and user_name = #{user_name} </if>
+			<if test="openid != null"> and openid = #{openid} </if>
+			<if test="cratetime != null"> and cratetime = #{cratetime} </if>
+			<if test="sence_type != null"> and sence_type = #{sence_type} </if>
+			<if test="senceid != null"> and senceid = #{senceid} </if>
+			<if test="share_type != null"> and share_type = #{share_type} </if>
+			<if test="share_time != null"> and share_time = #{share_time} </if>
+			<if test="share_from != null"> and share_from = #{share_from} </if>
+			<if test="share_time_ms != null"> and share_time_ms = #{share_time_ms} </if>
+		</where>
+	</select>
+	
+	<select id="queryUserByCondition" parameterType="userWechatCondition" resultType="userWechat">
+		select * from ll_wechat_user u
+		<where>
+			<if test="nick_name != null ">
+				and nick_name like concat('%',#{nick_name},'%')
+			</if>
+			<if test="sex != null ">
+				and sex = #{sex}
+			</if>
+			<if test="status != null ">
+				and status = #{status}
+			</if>
+			<if test="parentid != null ">
+				and parentid = #{parentid}
+			</if>
+			<if test="unionid != null ">
+				and unionid = #{unionid}
+			</if>
+			<if test="openid != null ">
+				and openid like concat('%',#{openid},'%')
+			</if>
+			<if test="id != null"> and id = #{id}</if>
+			<if test="start_date != null"> and u.last_access_time >= #{start_date} </if>
+			<if test="end_date != null"> and #{end_date} >=  u.last_access_time </if>
+			
+		</where>
+		
+		
+	
+	</select>
+	
+	
+		
+	<select id="queryWechatUserPage"  parameterType="userWechat" resultType="userWechat">
+		select * from ll_wechat_user sp
+		<where>
+			<if test="nick_name != null and nick_name!=''"> and sp.nick_name like concat('%', #{nick_name}, '%')</if>
+			<if test="city != null and city!=''"> and sp.city like concat('%', #{city}, '%')</if>
+		</where>
+	</select>
+	
+	
+	
+	<select id="wechatUserCount" parameterType="userWechat" resultType="int">
+		select count(1) from ll_wechat_user
+	</select>
+	
+	
+		
+	<delete id="deleteWechatUser" parameterType="userWechat">
+		delete from ll_wechat_user where id = #{id} 
+	</delete>
+	
+	
+	
+	<insert id="insertWechatUserAdmin" parameterType="userWechat"   keyProperty="id">
+		insert into ll_wechat_user(openid,create_time,nick_name,phone,sex,province,city,status,parentid,
+		level,offline_num,head_img,points,balance,share_type,originalid,type) values 
+								(#{openid},#{create_time},#{nick_name},#{phone},#{sex},#{province},#{city},#{status},#{parentid},
+								#{level},#{offline_num},#{head_img},#{points},#{balance},#{share_type},#{originalid},#{type})
+	</insert>
+	
+	<update id="updateWechatUserAdmin" parameterType="userWechat">
+		update ll_wechat_user 
+		<set>
+			<if test="openid != null and openid !=''">openid = #{openid},</if>
+			<if test="nick_name != null and nick_name !=''">nick_name = #{nick_name},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="sex != null and sex !=''">sex = #{sex},</if>
+			<if test="province != null and province !=''">province = #{province},</if>
+			<if test="city != null and city !=''">city = #{city},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="parentid != null">parentid = #{parentid},</if>
+			<if test="level != null">level = #{level},</if>
+			<if test="offline_num != null">offline_num = #{offline_num},</if>
+			<if test="head_img != null and head_img !=''">head_img = #{head_img},</if>
+			<if test="points != null">points = #{points},</if>
+			<if test="balance != null">balance = #{balance},</if>
+			<if test="share_type != null">share_type = #{share_type},</if>
+			<if test="originalid != null and originalid != ''"> originalid = #{originalid},</if>
+			<if test="type != null">type = #{type},</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+		</update>
+	
+	<select id="queryMGRAdminUser" resultType="userWechat">
+		select * from ll_wechat_user where unionid in ('o6sTawUscdbTcaxHMPu9loncp_5Y','o6sTawaEEnPFDjejRHLD-WdH8Yjc',
+		'o6sTawdrA5u7jiDcf-V5RUOzAMWw','o6sTawZ6lrHJNgEI8wv7wkCbba1M','o6sTawWDZrx9EyU1Sxj6UJkXGr84')
+	</select>
+	
+</mapper>
+
+

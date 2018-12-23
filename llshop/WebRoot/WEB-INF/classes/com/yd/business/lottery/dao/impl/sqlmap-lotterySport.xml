@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="lotterySport">
+
+	<insert id="createExpertResultInfo" parameterType="expertResult" keyProperty="id" useGeneratedKeys="true">
+		insert into sl_expert_result(id,expert_id,expert_name,enter_time,create_time,sports_lottery_date,
+		sports_lottery_time,sports_lottery_code,sports_lottery_name,odds,join_money,lottery_result,lottery_money,commons)
+		values(#{id},#{expert_id},#{expert_name},#{enter_time},#{create_time},#{sports_lottery_date},#{sports_lottery_time},
+		#{sports_lottery_code},#{sports_lottery_name},#{odds},#{join_money},#{lottery_result},#{lottery_money},#{commons})
+		
+	</insert>
+	
+	<insert id="createResultFlow" parameterType="expertResultFlow">
+		insert into sl_result_flow(expert_id,expert_name,expert_result_id,current_join_money,lottery_money,
+		init_money,money_sum,sum_lottery_money,sum_loss_money,sum_lottery_count,sum_loss_count,sum_not_join_count,
+		long_loss_days,loss_days_count,loss_money_continue_sum,sum_flow,current_loss_days,index_no,create_time,
+		num_of_break_even,max_long_loss_days,loss_count_cost_multiple,userids,cash_pool) values(#{expert_id},
+		#{expert_name},#{expert_result_id},#{current_join_money},#{lottery_money},#{init_money},#{money_sum},
+		#{sum_lottery_money},#{sum_loss_money},#{sum_lottery_count},#{sum_loss_count},#{sum_not_join_count},
+		#{long_loss_days},#{loss_days_count},#{loss_money_continue_sum},#{sum_flow},#{current_loss_days},#{index_no},
+		#{create_time},#{num_of_break_even},#{max_long_loss_days},#{loss_count_cost_multiple},#{userids},#{cash_pool})
+		
+		
+		
+	</insert>
+	
+	
+	<update id="updateExpertResultInfo" parameterType="expertResult">
+		update  sl_expert_result
+		<set>
+			<if test="sports_lottery_code != null "> sports_lottery_code = #{sports_lottery_code}, </if>
+			<if test="sports_lottery_name != null "> sports_lottery_name = #{sports_lottery_name}, </if>
+			<if test="lottery_result != null "> lottery_result = #{lottery_result}, </if>
+			<if test="lottery_money != null "> lottery_money = #{lottery_money}, </if>
+			<if test="join_money != null "> join_money = #{join_money}, </if>
+			<if test="enter_time != null "> enter_time = #{enter_time}, </if>
+			<if test="modify_time != null "> modify_time = #{modify_time}, </if>
+			<if test="commons != null "> commons = #{commons}, </if>
+		</set>
+		<where>
+			<if test="id != null "> and id = #{id} </if>
+		</where>
+	</update>
+	
+	<update id="updateExpertResultFlow" parameterType="expertResultFlow">
+		update sl_result_flow 
+		<set>
+			<if test="lottery_money != null "> lottery_money = #{lottery_money}, </if>
+			<if test="sum_lottery_money != null "> sum_lottery_money = #{sum_lottery_money}, </if>
+			<if test="sum_lottery_count != null "> sum_lottery_count = #{sum_lottery_count}, </if>
+			<if test="loss_days_count != null "> loss_days_count = #{loss_days_count}, </if>
+			<if test="loss_money_continue_sum != null "> loss_money_continue_sum = #{loss_money_continue_sum}, </if>
+			<if test="sum_flow != null "> sum_flow = #{sum_flow}, </if>
+			<if test="current_loss_days != null "> current_loss_days = #{current_loss_days}, </if>
+			<if test="sum_loss_money != null "> sum_loss_money = #{sum_loss_money}, </if>
+			<if test="sum_loss_count != null "> sum_loss_count = #{sum_loss_count}, </if>
+			<if test="long_loss_days != null "> long_loss_days = #{long_loss_days}, </if>
+			<if test="money_sum != null "> money_sum = #{money_sum}, </if>
+			<if test="cash_pool != null "> cash_pool = #{cash_pool}, </if>
+			
+		</set>
+		<where>
+			<if test="id != null "> and id = #{id} </if>
+		</where>
+	</update>
+	
+	<select id="queryExpertResultInfo" parameterType="expertResult" resultType="expertResult">
+		select * from sl_expert_result
+		<where>
+			<if test="id != null"> and id = #{id}</if>
+			<if test="expert_id != null"> and expert_id = #{expert_id}</if>
+			<if test="sports_lottery_code != null"> and sports_lottery_code = #{sports_lottery_code}</if>
+			<if test="lottery_result != null"> and lottery_result in (${lottery_result})</if>
+		</where>
+		
+			<if test="groupby != null"> ${groupby}</if>
+			<if test="orderby != null"> ${orderby}</if>
+	</select>
+	<select id="queryExpertResultAndFlow" parameterType="expertResult" resultType="expertResultAndFlow">
+		select r.* , f.money_sum ,f.cash_pool,f.current_loss_days  from sl_expert_result r , sl_result_flow f
+		where r.id = f.expert_result_id
+			<if test="id != null"> and r.id = #{id}</if>
+			<if test="expert_id != null"> and r.expert_id = #{expert_id}</if>
+			<if test="sports_lottery_code != null"> and r.sports_lottery_code like concat(concat('%',#{sports_lottery_code}),'%')</if>
+			<if test="lottery_result != null"> and r.lottery_result in (${lottery_result})</if>
+			<if test="enter_time != null"> and r.enter_time like concat(concat('%',#{enter_time}),'%')</if>
+			<if test="groupby != null"> ${groupby}</if>
+			<if test="orderby != null"> ${orderby}</if>
+	</select>
+	
+	<select id="queryExpertInfo" parameterType="expert" resultType="expert">
+		select * from sl_expert
+		<where>
+			<if test="id != null"> and id = #{id}</if>
+			<if test="status != null"> and status = #{status}</if>
+		</where>
+			<if test="groupby != null"> ${groupby}</if>
+			<if test="orderby != null"> ${orderby}</if>
+	</select>
+	
+	<select id="queryExpertResultFlow" parameterType="expertResultFlow" resultType="expertResultFlow">
+		select * from sl_result_flow
+		<where>
+			<if test="id != null"> and id = #{id}</if>
+			<if test="expert_id != null"> and expert_id = #{expert_id}</if>
+			<if test="expert_result_id != null"> and expert_result_id = #{expert_result_id}</if>
+		
+		</where>
+			<if test="groupby != null"> ${groupby}</if>
+			<if test="orderby != null"> ${orderby}</if>
+	</select>
+	
+	<select id="queryCashPool" resultType="int">
+		select cash_pool from sl_expert where id = 1 
+	</select>
+	
+	<update id="updateCashPool" parameterType="int">
+		update sl_expert set cash_pool = cash_pool + #{value}
+		where id = 1
+	</update>
+	
+</mapper>
+
+

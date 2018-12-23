@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="product">
+	<select id="queryProductById" parameterType="product" resultType="product">
+		select * ,(select name from ll_product_type where id = product_type ) product_type_name , 
+		(select name from ll_product_type where id = product_brand ) product_brand_name   from ll_product where id = #{value}
+	</select>
+	<select id="queryProduct" parameterType="product" resultType="product">
+		select * ,(select name from ll_product_type where id = product_type ) product_type_name , 
+		(select name from ll_product_type where id = product_brand ) product_brand_name  from ll_product 
+		<where>
+			<if test="product_type!=null"> and product_type=#{product_type}</if>
+			<if test="product_brand!=null"> and product_brand=#{product_brand}</if>
+		</where>
+	</select>
+	
+	<select id="findProductByCode" parameterType="string" resultType="product">
+		select * ,(select name from ll_product_type where id = product_type ) product_type_name , 
+		(select name from ll_product_type where id = product_brand ) product_brand_name from ll_product where code = #{value}
+	</select>
+	
+	<select id="queryMealProductList" parameterType="product" resultType="product">
+	    select * from ll_product_meal 
+	    <where>
+	        <if test="status!=null"> and status=#{status}</if>
+			<if test="product_type!=null"> and product_type=#{product_type}</if>
+			<if test="product_brand!=null"> and product_brand=#{product_brand}</if>
+		</where>
+	</select>
+	<select id="queryProductByIds" resultType="product">
+	    select t.*,(select name from ll_product_type where id = t.product_brand) product_brand_name from ll_product t where t.product_brand in 
+	    <foreach collection="ids" item="item" open="(" close=")" separator=",">#{item}</foreach>
+	</select>
+	
+	<insert id="createProduct" parameterType="product" useGeneratedKeys="true">
+		insert into ll_product(name,code,product_price,product_real_price,product_brand,product_title,product_desc,product_type,product_province,
+		product_limit_points,discount,head_img,status,attribute,give_points,intf_code,intf_param,package_size,package_size_simple,month_count)
+		 values(#{name},#{code},#{product_price},#{product_real_price},#{product_brand},#{product_title},#{product_desc},#{product_type},#{product_province},
+		 #{product_limit_points},#{discount},#{head_img},#{status},#{attribute},#{give_points},#{intf_code},#{intf_param},#{package_size},#{package_size_simple},#{month_count})
+	</insert>
+	
+	<update id="updateProduct" parameterType="product">
+		update ll_product 
+		<set>
+			<if test="name != null "> name = #{name} ,</if>
+			<if test="code != null "> code = #{code} ,</if>
+			<if test="product_price != null "> product_price = #{product_price} ,</if>
+			<if test="product_real_price != null "> product_real_price = #{product_real_price} ,</if>
+			<if test="product_brand != null "> product_brand = #{product_brand} ,</if>
+			<if test="product_title != null "> product_title = #{product_title} ,</if>
+			<if test="product_desc != null "> product_desc = #{product_desc} ,</if>
+			<if test="product_type != null "> product_type = #{product_type} ,</if>
+			<if test="product_province != null "> product_province = #{product_province} ,</if>
+			<if test="product_limit_points != null "> product_limit_points = #{product_limit_points} ,</if>
+			<if test="discount != null "> discount = #{discount} ,</if>
+			<if test="head_img != null "> head_img = #{head_img} ,</if>
+			<if test="status != null "> status = #{status} ,</if>
+			<if test="attribute != null "> attribute = #{attribute} ,</if>
+			<if test="give_points != null "> give_points = #{give_points} ,</if>
+			<if test="intf_code != null "> intf_code = #{intf_code} ,</if>
+			<if test="intf_param != null "> intf_param = #{intf_param} ,</if>
+			<if test="package_size != null "> package_size = #{package_size} ,</if>
+			<if test="package_size_simple != null "> package_size_simple = #{package_size_simple} ,</if>
+			<if test="month_count != null "> month_count = #{month_count} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+</mapper>
+
+

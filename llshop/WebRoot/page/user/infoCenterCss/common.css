@@ -1,0 +1,15 @@
+@charset "utf-8"; 
+
+footer{position:fixed; bottom:0; left:0; right:0; height:3.7em; padding:0.3em 0.3em 0 0.3em; border-top:2px solid #E9E9E9; background:#F9F9F9;/* background: -webkit-gradient(linear, 0 0, 0 100%, from(#C30205), to(#8D0300)) /* Chorme *//* ;background-image: -moz-linear-gradient(top, #C30205, #8D0300);*/ /* Firefox */}
+footer li{float:left; text-align:center; font-size:1.333em; line-height:1.5em;}
+footer .w20{width:19.5%;}
+
+footer a{color:#888; font-size:0.8em; display:block}
+footer a:hover,footer a.on{color:#E54043;}
+
+footer.next{position:fixed; bottom:0; left:0; right:0;  background:#fff; border-top: 1px solid #aaa; padding-top:0; height:4em;z-index: 100;}
+footer.next li{border-right:1px solid #aaa; padding-top:0.5em;}
+footer.next li a{color:#333;}
+footer.next li a.red{color:#E54042;}
+footer.next li.noline{border:none;}
+.numtip{  position:absolute; top:0.2em; right:22%; background:#E54042; color:#fff; height:1.2em; padding:0 0.3em; border-radius:0.6em; -webkit-border-radius:0.6em; -moz-border-radius:0.6em; line-height:1.2em; font-size:1em; z-index:12;}

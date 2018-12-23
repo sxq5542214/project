@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="customerApplyProduct">
+	<select id="queryCustomerApplyProductById" resultType="customerApplyProduct" parameterType="customerApplyProduct">
+		select * from ll_customer_apply_product t where t.id = #{value}
+	</select>
+	<select id="queryCustomerApplyProduct" resultType="customerApplyProduct" parameterType="map">
+		select * from ll_customer_apply_product
+		<where>
+			<if test="supplier_name!=null and supplier_name!=''">
+				and supplier_name like concat('%',#{supplier_name},'%')
+			</if>
+			<if test="product_name!=null and product_name!=''">
+				and product_name like concat('%', #{product_name}, '%')
+			</if>
+			<if test="status!=null">
+				and status = #{status}
+			</if>
+			<if test="customer_id!=null">
+				and customer_id=#{customer_id}
+			</if>
+			<if test="apply_supplier_id!=null">
+				and apply_supplier_id = #{apply_supplier_id}
+			</if>
+			<if test="apply_customer_id!=null">
+				and apply_customer_id = #{apply_customer_id}
+			</if>
+			<if test="product_id!=null">
+				and product_id = #{product_id}
+			</if>
+			<if test="apply_num!=null">
+				and apply_num = #{apply_num}
+			</if>
+			<if test="supplier_store_num!=null">
+				and supplier_store_num = #{supplier_store_num}
+			</if>
+		</where>
+	</select>
+	<insert id="insertCustomerApplyProduct" parameterType="customerApplyProduct">
+		insert into ll_customer_apply_product(customer_id,apply_supplier_id,apply_customer_id,product_id,product_name,apply_num,status,create_time,remark,modify_time,supplier_store_num,supplier_name)
+		values(#{customer_id},#{apply_supplier_id},#{apply_customer_id},#{product_id},#{product_name},#{apply_num},#{status},#{create_time},#{remark},#{modify_time},#{supplier_store_num},#{supplier_name})
+	</insert>
+	<update id="updateCustomerApplyProduct" parameterType="customerApplyProduct">
+		update ll_customer_apply_product 
+		<set>
+			<if test="apply_num!=null">apply_num=#{apply_num},</if>
+			<if test="use_num!=null">use_num=#{use_num},</if>
+			<if test="audit_by_num!=null">audit_by_num=#{audit_by_num},</if>
+			<if test="modify_time!=null and modify_time!=''">modify_time=#{modify_time},</if>
+			<if test="status!=null">status=#{status},</if>
+			<if test="supplier_store_num!=null">supplier_store_num=#{supplier_store_num},</if>
+		</set>
+		where id=#{id}
+	</update>
+	<delete id="deleteCustomerApplyProduct" parameterType="customerApplyProduct">
+		delete from ll_customer_apply_product where id = #{id} 
+	</delete>
+	<delete id="batchDelete" parameterType="list">
+		delete from ll_customer_apply_product where id in 
+		<foreach collection="list" index="" item="item" separator="," open="(" close=")">
+			#{item.id} 
+		</foreach>
+	</delete>
+</mapper>

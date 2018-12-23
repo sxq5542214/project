@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="userSign">
+	<select id="findLastUserSign" parameterType="int" resultType="userSign">
+		select * from ll_user_sign
+		where user_id = #{value}
+		order by id desc
+		limit 1
+	</select>
+	
+	<select id="queryUserSign" parameterType="userSign" resultType="userSign">
+		select * from ll_user_sign
+		<where>
+			<if test="user_id != null"> and user_id = #{user_id}</if>
+			<if test="sence_id != null"> and sence_id = #{sence_id}</if>
+			<if test="sign_date != null"> and sign_date = #{sign_date}</if>
+			<if test="sign_count != null"> and sign_count = #{sign_count}</if>
+			<if test="sign_month != null"> and sign_month = #{sign_month}</if>
+			<if test="last_sign_date != null"> and last_sign_date = #{last_sign_date}</if>
+		</where>
+		
+	</select>
+	
+	<insert id="createUserSign" parameterType="userSign">
+		insert into ll_user_sign(create_time,modify_time,sign_month,sign_date,user_id,sence_id,
+		sign_count,serial_sign_count,last_sign_date,last_points,points_month) values (#{create_time},
+		#{modify_time},#{sign_month},#{sign_date},#{user_id},#{sence_id},#{sign_count},#{serial_sign_count},
+		#{last_sign_date},#{last_points},#{points_month})
+	</insert>
+	
+	<update id="updateUserSign" parameterType="userSign">
+		update ll_user_sign
+		<set>
+			<if test="modify_time != null"> modify_time = #{modify_time} ,</if>
+			<if test="sign_month != null"> sign_month = #{sign_month} ,</if>
+			<if test="sign_date != null"> sign_date = #{sign_date} ,</if>
+			<if test="user_id != null"> user_id = #{user_id} ,</if>
+			<if test="sence_id != null"> sence_id = #{sence_id} ,</if>
+			<if test="sign_count != null"> sign_count = #{sign_count} ,</if>
+			<if test="serial_sign_count != null"> serial_sign_count = #{serial_sign_count} ,</if>
+			<if test="last_sign_date != null"> last_sign_date = #{last_sign_date} ,</if>
+			<if test="last_points != null"> last_points = #{last_points} ,</if>
+			<if test="points_month != null"> points_month = #{points_month} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+	
+	<select id="queryUserSingPage"  parameterType="userSign" resultType="userSign">
+		select * from ll_user_sign sp
+		<where>
+			<if test="sign_date !='' and sign_date != null"> and sp.sign_date like concat('%', #{sign_date}, '%')</if>
+			<if test="user_id!='' and user_id != null"> and sp.user_id like concat('%', #{user_id}, '%')</if>
+		</where>
+	</select>
+	
+	
+	
+	<select id="userSingCount" parameterType="userSign" resultType="int">
+		select count(1) from ll_user_sign
+	</select>
+	
+	<delete id="deleteUserSign" parameterType="userSign">
+		delete from ll_user_sign where id = #{id} 
+	</delete>
+	
+	
+</mapper>
+
+

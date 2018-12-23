@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="address">
+	<select id="queryAddress" parameterType="address" resultType="address" useCache="true"  >
+		select * from ll_address
+		<where>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="name != null"> and name = #{name} </if>
+			<if test="level != null"> and level = #{level} </if>
+			<if test="code != null"> and code = #{code} </if>
+			<if test="full_name != null"> and full_name = #{full_name} </if>
+			<if test="parent_id != null"> and parent_id = #{parent_id} </if>
+			<if test="status != null"> and status = #{status} </if>
+		</where>
+	</select>
+	<cache eviction="LRU" size="4096" ></cache>
+</mapper>
+
+

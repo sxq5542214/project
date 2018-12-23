@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="userConsumeInfo">
+	
+	<insert id="createConsumeInfo" parameterType="userConsumeInfo">
+		insert into ll_user_consume_info(phone,money,create_date,supplier_product_id,user_id,transaction_id,out_trade_code,interface_type,status,eff_num,event_type)
+		values(#{phone},#{money},#{create_date},#{supplier_product_id},#{user_id},#{transaction_id},#{out_trade_code},#{interface_type},#{status},#{eff_num},#{event_type})
+	</insert>
+	
+	<update id="updateUserConsumeInfoBean" parameterType="userConsumeInfo">
+		update ll_user_consume_info 
+		<set>
+			<if test="money != null">money = #{money} ,</if>
+			<if test="phone != null">phone = #{phone} ,</if>
+			<if test="create_date != null">create_date = #{create_date} ,</if>
+			<if test="supplier_product_id != null">supplier_product_id = #{supplier_product_id} ,</if>
+			<if test="user_id != null">user_id = #{user_id} ,</if>
+			<if test="transaction_id != null">transaction_id = #{transaction_id} ,</if>
+			<if test="out_trade_code != null">out_trade_code = #{out_trade_code} ,</if>
+			<if test="interface_type != null">interface_type = #{interface_type} ,</if>
+			<if test="status != null">status = #{status} ,</if>
+			<if test="eff_num != null">eff_num = #{eff_num} ,</if>
+			<if test="event_type != null">event_type = #{event_type} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="updateUserConsumeInfoStatus" parameterType="map">
+		update ll_user_consume_info 
+		set status = #{status}
+		where out_trade_code = #{out_trade_code}
+	</update>
+	
+	<select id="findUserConsumeInfoBean" parameterType="string" resultType="userConsumeInfo">
+		select * from ll_user_consume_info ll where ll.out_trade_code = #{value}
+	</select>
+	
+	<select id="queryUserConsumeInfoBean" parameterType="userConsumeInfo" resultType="userConsumeInfo">
+		select * from ll_user_consume_info ll 
+		<where>
+			<if test="money != null"> and money = #{money} </if>
+			<if test="phone != null"> and phone = #{phone} </if>
+			<if test="supplier_product_id != null"> and supplier_product_id = #{supplier_product_id} </if>
+			<if test="user_id != null"> and user_id = #{user_id} </if>
+			<if test="transaction_id != null"> and transaction_id = #{transaction_id} </if>
+			<if test="out_trade_code != null"> and out_trade_code = #{out_trade_code} </if>
+			<if test="interface_type != null"> and interface_type = #{interface_type} </if>
+			<if test="status != null"> and status = #{status} </if>
+			<if test="event_type != null"> and event_type = #{event_type} </if>
+			<if test="id != null"> and id = #{id} </if>
+		</where>
+		order by id desc
+	</select>
+	
+</mapper>
+
+

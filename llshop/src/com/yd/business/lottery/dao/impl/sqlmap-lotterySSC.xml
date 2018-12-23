@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="lotterySSC">
+
+	<insert id="createCqsscInfo" parameterType="cqsscInfo">
+		insert into luck_lottery_data(id,name,type,period,openCode,code,total,bigOrSmall,singleOrDouble,
+		dragonOrTiger,openTime,insertTime,nextTime) values(#{id},#{name},#{type},#{period},#{openCode},#{code},
+		#{total},#{bigOrSmall},#{singleOrDouble},#{dragonOrTiger},#{openTime},#{insertTime},#{nextTime})
+		
+	</insert>
+	
+	
+	<update id="updateCqsscInfo" parameterType="cqsscInfo">
+		update  luck_lottery_data
+		<set>
+			<if test="type != null "> type = #{type}, </if>
+		</set>
+		<where>
+			<if test="id != null "> and id = #{id} </if>
+		</where>
+	</update>
+	
+	<select id="queryCqsscInfo" parameterType="cqsscInfo" resultType="cqsscInfo">
+		select * from luck_lottery_data
+		<where>
+			<if test="id != null"> and id = #{id}</if>
+			<if test="type != null"> and type = #{type}</if>
+			<if test="period != null"> and period = #{period}</if>
+			<if test="openTime != null"> and openTime like '${openTime}%'</if>
+		</where>
+		
+			<if test="groupby != null"> ${groupby}</if>
+			<if test="orderby != null"> ${orderby}</if>
+	</select>
+	
+</mapper>
+
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="partnerApplyOrderProduct">
+	<select id="queryOrderProduct" resultType="partnerApplyOrderProduct" parameterType="map">
+		select * from ll_partner_apply_order_product
+		<where>
+			<if test="orderid!=null and orderid!=''">
+				and orderid = #{orderid}
+			</if>
+			<if test="product_id!=null and product_id!=''">
+				and product_id = #{product_id}
+			</if>
+			<if test="product_name!=null and product_name!=''">
+				and product_name like concat('%', #{product_name}, '%')
+			</if>
+			<if test="status!=null">
+				and status = #{status}
+			</if>
+			<if test="id!=null"> and id=#{id}</if>
+		</where>
+	</select>
+	<insert id="insertOrderProduct" parameterType="partnerApplyOrderProduct" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_partner_apply_order_product(orderid,product_id,product_name,status,comments)
+		values(#{orderid},#{product_id},#{product_name},#{status},#{comments})
+	</insert>
+	<update id="updateOrderProduct" parameterType="partnerApplyOrderProduct">
+		update ll_partner_apply_order_product 
+		<set>
+			<if test="orderid!=null and orderid!=''">orderid=#{orderid},</if>
+			<if test="product_id!=null and product_id!=''">product_id=#{product_id},</if>
+			<if test="product_name!=null and product_name!=''">product_name=#{product_name},</if>
+			<if test="status!=null">status=#{status},</if>
+			<if test="comments!=null and comments!=''">comments=#{comments},</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteOrderProduct" parameterType="partnerApplyOrderProduct">
+		delete from ll_partner_apply_order_product where id = #{value} 
+	</delete>
+	<delete id="deleteOrderProductByOrderId" parameterType="partnerApplyOrderProduct">
+		delete from ll_partner_apply_order_product where orderid = #{value} 
+	</delete>
+</mapper>

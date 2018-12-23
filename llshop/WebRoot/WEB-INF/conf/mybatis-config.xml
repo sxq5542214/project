@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="true" />
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<setting name="useColumnLabel" value="true" />
+		<setting name="useGeneratedKeys" value="true" />
+		<!-- <setting name="enhancementEnabled" value="false" /> -->
+		<setting name="defaultExecutorType" value="SIMPLE" />
+		<setting name="defaultStatementTimeout" value="30000" />
+	</settings>
+	<typeAliases>
+		<package name="com.yd.business"/>
+		<!-- 
+		<typeAlias alias="dictionary" type="com.yd.business.dictionary.bean.DictionaryBean"/>
+		<typeAlias alias="task" type="com.yd.business.other.bean.TaskCronsBean"/>
+		<typeAlias alias="configAttribute" type="com.yd.business.other.bean.ConfigAttributeBean" />	
+		<typeAlias alias="userWechat" type="com.yd.business.user.bean.UserWechatBean"/>
+		<typeAlias alias="userBWC" type="com.yd.business.user.bean.UserBWCBean"/>
+		<typeAlias alias="baseMessage" type="com.yd.business.wechat.bean.BaseMessage"/>
+		<typeAlias alias="supplier" type="com.yd.business.supplier.bean.SupplierBean"/>
+		<typeAlias alias="activityConfig" type="com.yd.business.activity.bean.ActivityConfigBean"/>
+		<typeAlias alias="activity" type="com.yd.business.activity.bean.ActivityBean"/>
+		<typeAlias alias="activityUserRelation" type="com.yd.business.activity.bean.ActivityUserRelationBean"/>
+		<typeAlias alias="activityWinHis" type="com.yd.business.activity.bean.ActivityWinHisBean"/>
+		<typeAlias alias="userWechat" type="com.yd.business.user.bean.UserWechatBean" />
+		<typeAlias alias="supplierVolum" type="com.yd.business.supplier.bean.SupplierVolumBean"/>
+		<typeAlias alias="userQrCode" type="com.yd.business.user.bean.UserQrCodeBean"/>	
+		<typeAlias alias="userSenceLog" type="com.yd.business.user.bean.UserSenceLog"/>	
+		 -->
+	</typeAliases>
+	
+	
+	
+	<!-- <typeHandlers>
+	    <typeHandler  handler="com.yd.basic.framework.persistence.typehandler.DateType"
+	    jdbcType="TIMESTAMP" javaType="com.yd.basic.framework.extend.Date" />
+	</typeHandlers> -->
+<!-- 
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://127.0.0.1:3306/custact" />
+				<property name="username" value="root" />
+				<property name="password" value="5542214" />
+			</dataSource>
+		</environment>
+	</environments>
+
+
+	<mappers>
+		
+		<mapper resource="com/ym/business/dictionary/dao/impl/sqlmap-dictionary.xml" />
+	</mappers> -->
+</configuration>

@@ -1,0 +1,573 @@
+/*共用CSS*/
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	font: 12px/1.5 'Microsoft Yahei', 'Simsun';
+	color: #666666;
+	background: #fff
+}
+
+img {
+	border: 0;
+	display: block
+}
+
+ul {
+	list-style: none;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+
+a {
+	outline: none;
+}
+
+a:link,a:visited {
+	text-decoration: none;
+	color: #666
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.f_l {
+	float: left;
+}
+
+.f_r {
+	    float: right;
+    font: 12px/1.5 'Microsoft Yahei', 'Simsun';
+    margin: 0 10px 0 0;
+    padding: 0 0 0 20px;
+}
+
+.l_box {
+	width: 100%;
+	padding: 0 0 0 0;
+}
+
+.r_box {
+	width: 50%;
+}
+/*头部样式*/
+header {
+	width: 1000px;
+	margin: 20px auto;
+	overflow: hidden;
+	clear: both;
+}
+
+#topnav {
+	width: 60%;
+	background: #48AE15;
+	height: 46px;
+	line-height: 46px;
+	text-align: center;
+	border-radius: 46px;
+}
+
+#topnav a {
+	display: inline-block;
+	font-size: 18px;
+	font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+	padding: 0 20px;
+}
+
+#topnav a:hover {
+	background: #fff;
+	color: #000;
+}
+
+#topnav a {
+	color: #FFF
+}
+
+#topnav_current {
+	background: #F3FF41;
+} /* 高亮选中颜色 */
+a#topnav_current {
+	color: #000
+}
+
+article {
+	width: 100%;
+	/*margin:20px auto;*/
+}
+/*右侧选项卡*/
+.tab {
+	width: 100%;
+	margin: 30px 0 20px 0;
+	overflow: hidden;
+}
+
+.tab-top {
+	height: 32px;
+	border-bottom: solid 1px #EAEAEA;
+	font-size: 14px;
+}
+
+#tb li a {
+	float: left;
+	height: 32px;
+	cursor: pointer;
+	line-height: 32px;
+	list-style-type: none;
+	padding: 0 15px;
+}
+
+#tb li.cur a {
+	color: #fff;
+	background: #f77825;
+}
+
+.bd {
+	display: none
+}
+
+.bd-news ul {
+	padding: 10px 0 0 10px;
+	background: url(../images/ph2.png) no-repeat 10px 29px;
+}
+
+.bd-news ul li {
+	border-bottom: solid 1px #EAEAEA;
+	line-height: 30px;
+	height: 30px;
+	overflow: hidden;
+	font-size: 14px;
+	padding: 10px 0 0 30px;
+}
+
+.bd-news ul li a {
+	display: block;
+}
+
+.bd-news ul li a:hover {
+	color: #000;
+}
+
+.bd-news ul li:hover {
+	border-bottom: #000 1px solid;
+} /* 鼠标放上去的效果 */
+/*标签云*/
+.cloud {
+	width: 100%;
+	clear: both;
+	overflow: hidden;
+}
+
+.cloud h3 {
+	line-height: 40px;
+	color: #38485A;
+	font-size: 18px;
+	border-bottom: 1px solid #E6E6E6;
+	height: 40px;
+}
+
+.cloud ul {
+	margin: 20px 0;
+}
+
+.cloud ul li {
+	line-height: 24px;
+	height: 24px;
+	display: block;
+	background: #999;
+	float: left;
+	padding: 3px 11px;
+	margin: 10px 10px 0 0;
+	border-radius: 8px;
+	-moz-transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;
+}
+
+.pingl {
+	background: url(../images/newsbg03.png) no-repeat left center;
+	cursor: pointer;
+	background-size: 16px;
+	padding-top: 3px;
+}
+.pingl a {
+        font: 10px/1.5 'Microsoft Yahei', 'Simsun';
+    text-decoration: none;
+    padding-left: 7px;
+}
+
+.cloud ul li a {
+	color: #FFF
+}
+
+.cloud ul li:nth-child(8n-7) {
+	background: #8A9B0F
+}
+
+.cloud ul li:nth-child(8n-6) {
+	background: #EB6841
+}
+
+.cloud ul li:nth-child(8n-5) {
+	background: #3FB8AF
+}
+
+.cloud ul li:nth-child(8n-4) {
+	background: #FE4365
+}
+
+.cloud ul li:nth-child(8n-3) {
+	background: #FC9D9A
+}
+
+.cloud ul li:nth-child(8n-2) {
+	background: #EDC951
+}
+
+.cloud ul li:nth-child(8n-1) {
+	background: #C8C8A9
+}
+
+.cloud ul li:nth-child(8n) {
+	background: #83AF9B
+}
+
+.cloud ul li:first-child {
+	background: #036564
+}
+
+.cloud ul li:last-child {
+	background: #3299BB
+}
+
+.cloud ul li:hover {
+	border-radius: 0;
+	text-shadow: #000 1px 1px 1px
+}
+
+.zan {
+	margin: 0 30px 0 0;
+	cursor: pointer;
+	padding-left: 20px;
+	background: url(../images/zan.png) no-repeat left center;
+	float: right;
+}
+
+.zaned {
+	margin: 0 30px 0 0;
+	cursor: pointer;
+	padding-left: 20px;
+	background: url(../images/zaned.png) no-repeat left center;
+	float: right;
+}
+
+.comment_username{
+	font: 20px/1.5 'Microsoft Yahei', 'Simsun';
+    color: #00BCD4;
+}
+
+.zan_loading {
+	margin: 0 10px 0 0;
+	padding-left: 20px;
+	background: url(../images/loading16.gif) no-repeat left center;
+	float: right;
+}
+
+.zan a {
+	padding-left: 10px;
+	font: 10px/1.5 'Microsoft Yahei', 'Simsun';
+	text-decoration: none;
+}
+
+.zaned a {
+	padding-left: 10px;
+	font: 10px/1.5 'Microsoft Yahei', 'Simsun';
+	text-decoration: none;
+}
+
+.zan_loading a {
+	padding-left: 10px;
+	font: 15px/1.5 'Microsoft Yahei', 'Simsun';
+	text-decoration: none;
+}
+
+.num {
+	text-decoration: none;
+}
+
+.huifu {
+	padding: 0 0 0 10px
+}
+
+.rectangle {
+	width: 5px;
+	height: 16px;
+	background: #3FB8AF;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.write_msg {
+	cursor: pointer;
+    background-size: 32px;
+    float: right;
+    font: 15px/1.5 'Microsoft Yahei', 'Simsun';
+    background: url(../images/add_comment.png) no-repeat left center;
+    padding-left: 38px;
+    color: #3299BB;
+    height: 32px;
+    /* position: fixed; */
+    right: 21px;
+    /* bottom: 20px; */
+    /* z-index: 1000; */
+    padding-top: 10px;
+}
+
+.upload_img {
+	float: right;
+	font: 12px/1.5 'Microsoft Yahei', 'Simsun';
+	background: url(../images/Picture.png) no-repeat left center;
+	padding-left: 22px;
+}
+
+.msg_box {
+	display: none;
+	width: 98%;
+	padding: 1%;
+	margin-bottom: 5px;
+	height: 150px;
+	border-radius: 6px;
+}
+
+.msg_box textarea {
+	font: 15px/1.5 'Microsoft Yahei', 'Simsun';
+}
+
+.msg_box_button {
+display: none;
+    cursor: pointer;
+    margin: 3px 3% 5px 3%;
+    border-radius: 4px;
+    padding: 5px 10px;
+    float: right;
+    font: 12x/1.5 'Microsoft Yahei', 'Simsun';
+    color: #4a4a4a;
+    border: #9E9E9E 1px solid;
+    width: 30%;
+    text-align: center;
+}
+
+.container {
+	padding-top: 10px;
+}
+
+#t {
+	width: 100%;
+	border-bottom: #CCC 1px solid;
+	background-color: white;
+	z-index: 900;
+	top: 0;
+}
+
+.comment_replay {
+	width: 85%;
+	height: 100px;
+	border: #CCC 1px solid;
+	margin-left: 5%;
+	border-radius: 4px;
+}
+
+.load_more {
+	width: 99%;
+	height: 30px;
+	border: #8BC34A  1px solid;
+	/* padding-top: 10px; */
+	margin-top: 10px;
+	text-align: center;
+	margin-bottom: 5px;
+	border-radius: 4px;
+	font-size: 18px;
+	color: #8BC34A ;
+	padding-top: 3px;
+}
+
+.load_more span {
+	background: url(../images/loading16.gif) no-repeat right center;
+	padding-right: 20px;
+}
+
+.remsg_div {
+	width: 95%;
+	height: 100px;
+	border: #015FB1 1px solid;
+	text-align: center;
+	border-radius: 4px;
+	font-size: 18px;
+	color: #015FB1;
+}
+
+.remsg_div textarea {
+	font: 15px/1.5 'Microsoft Yahei', 'Simsun';
+}
+
+.rectangle1 {
+	width: 32px;
+	height: 32px;
+	background: #FC9D9A;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+	border-radius: 50%;
+	background-size: 16px 16px;
+}
+
+.rectangle2 {
+	width: 5px;
+	height: 16px;
+	background: #FC9D9A;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.rectangle3 {
+	width: 5px;
+	height: 16px;
+	background: #FE4365;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.rectangle4 {
+	width: 5px;
+	height: 16px;
+	background: #38485A;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.rectangle5 {
+	width: 5px;
+	height: 16px;
+	background: #84C7DE;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.rectangle6 {
+	width: 5px;
+	height: 16px;
+	background: #3299BB;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.rectangle7 {
+	width: 5px;
+	height: 16px;
+	background: #036564;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.rectangle8 {
+	width: 5px;
+	height: 16px;
+	background: #3FB8AF;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.rectangle9 {
+	width: 5px;
+	height: 16px;
+	background: #48AE15;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+}
+
+.rectangle0 {
+	width: 16px;
+	height: 16px;
+	background: #E91E63;
+	float: left;
+	margin-top: 3px;
+	margin-right: 5px;
+	border-radius: 50%;
+}
+
+.comment_tab {
+	cursor: pointer;
+	height: 34px;
+	font-size: 16px;
+	text-align: center;
+	float: left;
+	background-color: rgb(118, 207, 247);
+	border-radius: 4px 4px 0 0;
+	padding-top: 10px;
+}
+.comment_msg {color: #292929;
+    font: 13px/1.5 'Microsoft Yahei', 'Simsun';}
+    .note{  
+position:absolute;line-height:20px;padding:3px 5px;  
+}
+#comment_bag{
+	display: none;
+	position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 800;
+    background-color: rgba(218, 218, 218, 0.68);
+}
+.comment_upload_img{
+	/*display : none;*/
+	background: url(../images/camera.png) no-repeat left center;
+    cursor: pointer;
+    background-size: 39px;
+    color: #3299BB;
+    height: 32px;
+    margin-left: 10px;
+    width: 50px;
+}
+.commnet_upload_img_temp{
+	/*display : none;*/
+	width: 75px;
+    height: 75px;
+    float: left;
+    border: #B5B5B5 1px solid;
+    margin-left: 12px;
+    margin-top: 7px;
+    border-radius: 7px;
+}
+.comment_remove_img{
+	    background: url(https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/mantpl/img/news/dustbin_new_41cbcb37.png) no-repeat;
+    background-position: -0px -19px;
+    width: 19px;
+    height: 15px;
+    /* display: none; */
+    position: absolute;
+    top: 1px;
+    right: -9px;
+    zoom: 1;
+    background-color: #38485a;
+    border-radius: 10px;
+}
+.comment_img{
+	width: 100px;
+    float: left;
+    border: rgba(206, 206, 206, 0) 2px solid;
+}

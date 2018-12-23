@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="msgCenterAction">
+	
+	
+	<select id="queryActionDefine" parameterType="msgCenterActionDefine" resultType="msgCenterActionDefine">
+		
+		select * from ll_msg_center_action_define
+		<where>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="action_type != null"> and action_type = #{action_type} </if>
+			<if test="action_name != null"> and action_name = #{action_name} </if>
+			<if test="parent_action_type != null"> and parent_action_type = #{parent_action_type} </if>
+			<if test="parent_action_name != null"> and parent_action_name = #{parent_action_name} </if>
+			<if test="action_key != null"> and action_key = #{action_key} </if>
+			<if test="status != null"> and status = #{status} </if>
+			<if test="check_key != null"> and check_key = #{check_key} </if>
+		</where>
+		
+	</select>
+	
+	<select id="findActionDefineById" parameterType="int" resultType="msgCenterActionDefine">
+		select * from ll_msg_center_action_define where id = #{value}
+	</select>
+	
+	<select id="queryUserAction"  parameterType="msgCenterUserAction" resultType="msgCenterUserAction">
+		select * from ll_msg_center_user_action
+		<where>
+			<if test="id != null"> and id = #{id}</if>
+			<if test="user_id != null"> and user_id = #{user_id}</if>
+			<if test="openid != null"> and openid = #{openid}</if>
+			<if test="nick_name != null"> and nick_name = #{nick_name}</if>
+			<if test="action_type != null"> and action_type = #{action_type}</if>
+			<if test="action_name != null"> and action_name = #{action_name}</if>
+			<if test="action_value != null"> and action_value = #{action_value}</if>
+			<if test="action_param != null"> and action_param = #{action_param}</if>
+			<if test="action_param_class != null"> and action_param_class = #{action_param_class}</if>
+			<if test="create_time != null"> and create_time = #{create_time}</if>
+			<if test="modify_time != null"> and modify_time = #{modify_time}</if>
+			<if test="status != null"> and status = #{status}</if>
+		</where>
+		<if test="orderby != null"> ${orderby}</if>
+		<if test="groupby != null"> ${groupby}</if>
+	</select>
+	
+	<insert id="createUserAction"  parameterType="msgCenterUserAction" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_msg_center_user_action (user_id,openid,nick_name,action_type,action_name,action_value,
+		action_param,action_param_class,create_time,modify_time,status) values(#{user_id},#{openid},
+		#{nick_name},#{action_type},#{action_name},#{action_value},#{action_param},#{action_param_class},
+		#{create_time},#{modify_time},#{status})
+	</insert>
+	
+	<update id="updateUserAction" parameterType="msgCenterUserAction">
+		update ll_msg_center_user_action
+		<set>
+			<if test="user_id != null">  user_id = #{user_id}, </if>
+			<if test="openid != null">  openid = #{openid}, </if>
+			<if test="nick_name != null">  nick_name = #{nick_name}, </if>
+			<if test="action_type != null">  action_type = #{action_type}, </if>
+			<if test="action_name != null">  action_name = #{action_name}, </if>
+			<if test="action_value != null">  action_value = #{action_value}, </if>
+			<if test="action_param != null">  action_param = #{action_param}, </if>
+			<if test="action_param_class != null">  action_param_class = #{action_param_class}, </if>
+			<if test="create_time != null">  create_time = #{create_time}, </if>
+			<if test="modify_time != null">  modify_time = #{modify_time}, </if>
+			<if test="status != null">  status = #{status}, </if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="queryMsgCenterActionArticleRelation" parameterType="msgCenterActionArticleRelation" resultType="msgCenterActionArticleRelation">
+		select * from ll_msg_center_action_article_relation
+		<where>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="action_type != null"> and action_type = #{action_type} </if>
+			<if test="action_name != null"> and action_name = #{action_name} </if>
+			<if test="article_type != null"> and article_type = #{article_type} </if>
+			<if test="article_type_name != null"> and article_type_name = #{article_type_name} </if>
+			<if test="article_id != null"> and article_id = #{article_id} </if>
+			<if test="article_name != null"> and article_name = #{article_name} </if>
+			<if test="status != null"> and status = #{status} </if>
+		</where>
+	</select>
+	
+	<select id="queryActionTriggerCondition" parameterType="msgCenterActionTriggerCondition" resultType="msgCenterActionTriggerCondition">
+		
+		select * from ll_msg_center_action_trigger_condition
+		<where>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="action_type != null"> and action_type = #{action_type} </if>
+			<if test="action_name != null"> and action_name = #{action_name} </if>
+			<if test="not_trigger_action != null"> and not_trigger_action = #{not_trigger_action} </if>
+			<if test="not_trigger_action_name != null"> and not_trigger_action_name = #{not_trigger_action_name} </if>
+			<if test="status != null"> and status = #{status} </if>
+		</where>
+	</select>
+	
+	<insert id="createActionArticleRelation" parameterType="msgCenterActionArticleRelation">
+		insert into ll_msg_center_action_article_relation(action_type,action_name,article_type,article_type_name,article_id,article_name,status,delay_time)
+		values(#{action_type},#{action_name},#{article_type},#{article_type_name},#{article_id},#{article_name},#{status},#{delay_time})
+	</insert>
+	
+	<update id="updateActionArticleRelation" parameterType="msgCenterActionArticleRelation">
+		update ll_msg_center_action_article_relation
+		<set>
+			<if test="action_type != null "> action_type = #{action_type} ,</if>
+			<if test="action_name != null "> action_name = #{action_name} ,</if>
+			<if test="article_type != null "> article_type = #{article_type} ,</if>
+			<if test="article_type_name != null "> article_type_name = #{article_type_name} ,</if>
+			<if test="article_id != null "> article_id = #{article_id} ,</if>
+			<if test="article_id == null "> article_id = null ,</if>
+			<if test="article_name != null "> article_name = #{article_name} ,</if>
+			<if test="article_name == null "> article_name = null ,</if>
+			<if test="status != null "> status = #{status} ,</if>
+			<if test="delay_time != null "> delay_time = #{delay_time} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	
+</mapper>
+
+

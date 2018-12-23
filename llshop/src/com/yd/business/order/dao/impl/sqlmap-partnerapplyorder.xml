@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="partnerApplyOrder">
+	<select id="queryOrderById" resultType="partnerApplyOrder" parameterType="partnerApplyOrder">
+		select * from ll_partner_apply_order where id = #{value}
+	</select>
+	<select id="queryOrder" resultType="partnerApplyOrder" parameterType="map">
+		select * from ll_partner_apply_order
+		<where>
+			<if test="name!=null and name!=''">
+				and name like concat('%', #{name}, '%')
+			</if>
+			<if test="code!=null and code!=''">
+				and code like concat('%', #{code}, '%')
+			</if>
+			<if test="status!=null and status!=''">
+				and status = #{status}
+			</if>
+			<if test="apply_customer_id!=null and apply_customer_id!=''">
+				and apply_customer_id=#{apply_customer_id}
+			</if>
+		</where>
+	</select>
+	<insert id="insertOrder" parameterType="partnerApplyOrder" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_partner_apply_order(code,name,create_time,audit_time,status,apply_customer_id,apply_customer_name)
+		values(#{code},#{name},#{create_time},#{audit_time},#{status},#{apply_customer_id},#{apply_customer_name})
+	</insert>
+	<update id="updateOrder" parameterType="partnerApplyOrder">
+		update ll_partner_apply_order 
+		<set>
+			<if test="name!=null and name!=''">name=#{name},</if>
+			<if test="code!=null and code!=''">code=#{code},</if>
+			<if test="audit_time!=null and audit_time!=''">audit_time=#{audit_time},</if>
+			<if test="status!=null">status=#{status},</if>
+			<if test="apply_customer_id!=null"> apply_customer_id=#{apply_customer_id},</if>
+			<if test="apply_customer_name!=null and apply_customer_name!=''"> apply_customer_name=#{apply_customer_name},</if>
+		</set>
+		where id=#{id}
+	</update>
+	<delete id="deleteOrderById" parameterType="partnerApplyOrder">
+		delete from ll_partner_apply_order where id = #{value} 
+	</delete>
+	
+</mapper>

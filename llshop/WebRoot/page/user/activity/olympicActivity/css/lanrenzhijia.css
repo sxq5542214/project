@@ -1,0 +1,10 @@
+@charset "utf-8";
+/* 代码整理：懒人之家 www.lanrenzhijia.com */
+*{margin:0;padding:0;list-style-type:none;}
+a,img{border:0;}
+.tab1{width:90%; border-bottom:#cccccc solid 1px; margin:0px auto;}
+.menu{height:28px; font-size:14px;}
+.menu li{float:left; width:50%; text-align:center; line-height:28px; height:28px; cursor:pointer;   color:#666;overflow:hidden; background:#E0E2EB;}
+.menu li.off{background:#ff6723; color:#fff; font-weight:bold; border-bottom:none;}
+.menudiv{border-top:0; background:#fff; width:100%;}
+.menudiv div{padding:15px; line-height:28px; }

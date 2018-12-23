@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="activity">
+	
+	<select id="getActivityJoinCount" parameterType="map" resultType="int">
+		select count(1) from ll_activity_user_relation t 
+		where t.activity_config_id = #{activity_config_id}
+		and t.join_date = #{join_date} 
+	</select>
+	
+	<select id="getActivityWinCount" parameterType="int" resultType="int">
+		select count(1) from ll_activity_img 
+		where activity_config_id = #{value}
+	</select>
+	
+	<select id="findRelationByBean" resultType="activityUserRelation">
+		select t.*,c.activity_type from ll_activity_user_relation t,ll_activity_conf c
+		<where>
+			c.id = t.activity_config_id
+			<if test="id != null"> and t.id = #{id}	</if>
+			<if test="user_id != null"> and user_id = #{user_id}	</if>
+			<if test="openid != null"> and openid = #{openid}	</if>
+			<if test="status != null"> and t.status = #{status}	</if>
+			<if test="activity_config_id != null"> and activity_config_id = #{activity_config_id}	</if>
+			<if test="join_date != null"> and join_date = #{join_date}	</if>
+			<if test="category != null"> and category = #{category}	</if>
+			<if test="activity_time != null"> and activity_time = #{activity_time}	</if>
+			<if test="order_code != null"> and order_code = #{order_code}	</if>
+			<if test="phone != null"> and phone = #{phone}	</if>
+		</where>
+	</select>
+	
+		<select id="findRelationByInstanceBean" resultType="activityUserRelation">
+		select t.* from ll_activity_user_relation t
+		<where>
+			<if test="user_id != null"> and user_id = #{user_id}	</if>
+			<if test="openid != null"> and openid = #{openid}	</if>
+			<if test="status != null"> and t.status = #{status}	</if>
+			<if test="activity_config_id != null"> and activity_config_id = #{activity_config_id}	</if>
+			<if test="join_date != null"> and join_date = #{join_date}	</if>
+			<if test="category != null"> and category = #{category}	</if>
+			<if test="activity_time != null"> and activity_time = #{activity_time}	</if>
+			<if test="order_code != null"> and order_code = #{order_code}	</if>
+			<if test="phone != null"> and phone = #{phone}	</if>
+		</where>
+	</select>
+	
+	<select id="queryActivityRelation" parameterType="activityUserRelation" resultType="activityUserRelation">
+		select t.*,c.activity_type from ll_activity_user_relation t,ll_activity_conf c
+		<where>
+			c.id = t.activity_config_id
+			<if test="id != null"> and t.id = #{id}	</if>
+			<if test="user_id != null"> and user_id = #{user_id}	</if>
+			<if test="openid != null"> and openid = #{openid}	</if>
+			<if test="status != null"> and t.status = #{status}	</if>
+			<if test="activity_config_id != null"> and activity_config_id = #{activity_config_id}	</if>
+			<if test="join_date != null"> and join_date = #{join_date}	</if>
+			<if test="category != null"> and category = #{category}	</if>
+			<if test="activity_time != null"> and activity_time = #{activity_time}	</if>
+			<if test="order_code != null"> and order_code = #{order_code}	</if>
+			<if test="phone != null"> and phone = #{phone}	</if>
+		</where>
+	</select>
+	
+	<select id="findActivityBean" parameterType="map" resultType="activity">
+		select * from ll_activity_img 
+		<where>
+			<if test="user_id != null"> and user_id = #{user_id}</if>
+			<if test="activity_config_id != null"> and activity_config_id = #{activity_config_id}</if>
+			<if test="weixin_id != null"> and weixin_id = #{weixin_id}</if>
+			<if test="id != null"> and id = #{id}</if>
+		</where>
+	</select>
+	
+	<insert id="saveActivityUserRelateion" parameterType="activityUserRelation" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into ll_activity_user_relation(user_id,openid,activity_name,activity_config_id,activity_time,join_date,product_name,
+		act_prod_id,product_id,category,modify_time,create_time,phone,status,share_status,user_ip ,order_code) values(
+		#{user_id},#{openid},#{activity_name},#{activity_config_id},#{activity_time},#{join_date},#{product_name},#{act_prod_id},
+		#{product_id},#{category},#{modify_time},#{create_time},#{phone},#{status},#{share_status},#{user_ip},#{order_code}
+		)
+	</insert>
+	
+	<insert id="saveActivityUserRelateionNoPrize" parameterType="activityUserRelation" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into ll_activity_user_relation_noprize(user_id,openid,activity_name,activity_config_id,activity_time,join_date,product_name,
+		act_prod_id,product_id,category,modify_time,create_time,phone,status,share_status,user_ip ,order_code) values(
+		#{user_id},#{openid},#{activity_name},#{activity_config_id},#{activity_time},#{join_date},#{product_name},#{act_prod_id},
+		#{product_id},#{category},#{modify_time},#{create_time},#{phone},#{status},#{share_status},#{user_ip},#{order_code}
+		)
+	</insert>
+	
+	<insert id="saveActivityImg" parameterType="activity">
+		insert into ll_activity_img(user_id,weixin_id,user_name,user_type,img_url,create_time,
+		user_money,bonus_money,category,modify_time,activity_name,activity_time,activity_config_id) 
+		values(#{user_id},#{weixin_id},#{user_name},#{user_type},#{img_url},sysdate(),
+		#{user_money},#{bonus_money},#{category},sysdate(),#{activity_name},#{activity_time},#{activity_config_id})
+	</insert>
+	
+	<insert id="saveActivityWinHis" parameterType="activityWinHis">
+		insert into ll_activity_win_his(user_id,weixin_id,user_name,user_type,img_url,create_time,
+		user_money,bonus_money,category,modify_time,activity_name,activity_time,activity_config_id,win_time,win_id,status) 
+		values(#{user_id},#{weixin_id},#{user_name},#{user_type},#{img_url},sysdate(),
+		#{user_money},#{bonus_money},#{category},sysdate(),#{activity_name},#{activity_time},#{activity_config_id}
+		,sysdate(),#{win_id},#{status})
+		
+	</insert>
+		
+	<delete id="deleteActivityWinData">
+		truncate ll_activity_img 
+	</delete>
+	
+	<select id="queryActivityHis" parameterType="activityWinHis" resultType="activityWinHis">
+		select * from ll_activity_win_his
+		<where>
+			<if test="activity_name!=null and activity_name!=''">and activity_name=#{activity_name}</if>
+			<if test="user_name!=null and user_name!=''">and user_name=#{user_name}</if>
+			<if test="category!=null">and category = #{category}</if>
+			<if test="status!=null">and status = #{status}</if>
+			<if test="arrstatus!=null">and status in (${arrstatus})</if>
+			<if test="beginWinTime!=null and beginWinTime!=''">and win_time>=#{beginWinTime}</if>
+			<if test="endWinTime!=null and endWinTime!=''">and win_time<![CDATA[<]]>=#{endWinTime}</if>
+		</where>
+	</select>
+	
+	<select id="queryActivityProductList" parameterType="activityProduct" resultType="activityProduct" >
+		select * from ll_activity_product_relation
+		<where>
+		real_num != 0 
+			<if test="id != null"> and id = #{id}</if>
+			<if test="activity_id != null"> and activity_id = #{activity_id}</if>
+			<if test="prize_id != null"> and prize_id = #{prize_id}</if>
+			<if test="supplier_product_id != null"> and supplier_product_id = #{supplier_product_id}</if>
+			<if test="other_spid != null"> and other_spid = #{other_spid}</if>
+			<if test="product_name != null"> and product_name = #{product_name}</if>
+			<if test="create_time != null"> and create_time = #{create_time}</if>
+			<if test="eff_time != null"> and eff_time = #{eff_time}</if>
+			<if test="dff_time != null"> and dff_time = #{dff_time}</if>
+			<if test="weight != null"> and weight = #{weight}</if>
+		</where>
+		
+	</select>
+	
+	<update id="updateUserRelateion" parameterType="activityUserRelation">
+		update ll_activity_user_relation
+		<set>
+			<if test="activity_time != null"> activity_time = #{activity_time} ,</if>
+			<if test="product_id != null"> product_id = #{product_id} ,</if>
+			<if test="category != null"> category = #{category} ,</if>
+			<if test="modify_time != null"> modify_time = #{modify_time} ,</if>
+			<if test="phone != null"> phone = #{phone} ,</if>
+			<if test="status != null"> status = #{status} ,</if>
+			<if test="share_status != null"> share_status = #{share_status} ,</if>
+			<if test="user_ip != null"> user_ip = #{user_ip} ,</if>
+			<if test="order_code != null"> order_code = #{order_code} ,</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<select id="findUserRelationByTestTable" resultType="activityUserRelation">
+		select * from test_table
+	</select>
+	
+	<select id="queryOlympicGuessInfo" parameterType="activityOlympicGuess" resultType="activityOlympicGuess">
+		select * from ll_activity_olympic_guess
+		<where>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="user_id != null"> and user_id = #{user_id} </if>
+			<if test="guess_date != null"> and guess_date = #{guess_date} </if>
+			<if test="status != null"> and status = #{status} </if>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="win_num != null"> and win_num = #{win_num} </if>
+			<if test="win_desc != null"> and win_desc = #{win_desc} </if>
+		</where>
+	</select>
+	
+	<insert id="createOlympicGuessInfo" parameterType="activityOlympicGuess">
+		insert into ll_activity_olympic_guess (user_id,guess_date,guess_num,create_time,status,win_num,win_desc,shared)
+		values(#{user_id},#{guess_date},#{guess_num},#{create_time},#{status},#{win_num},#{win_desc},#{shared})
+	</insert>
+	
+	<update id="updateOlympicGuess" parameterType="activityOlympicGuess">
+		update ll_activity_olympic_guess 
+		<set>
+			<if test="user_id != null"> user_id = #{user_id} ,</if>
+			<if test="guess_date != null"> guess_date = #{guess_date} ,</if>
+			<if test="status != null"> status = #{status} ,</if>
+			<if test="win_num != null"> win_num = #{win_num} ,</if>
+			<if test="win_desc != null"> win_desc = #{win_desc} ,</if>
+		</set>
+		where id = #{id}
+		
+	</update>
+	
+	<update id="updateActivityProduct" parameterType="activityProduct">
+		update ll_activity_product_relation 
+		<set>
+			<if test="weight != null"> weight = #{weight}, </if>
+			<if test="real_num != null"> real_num = #{real_num}, </if>
+		</set>
+		where id = #{id}
+		
+	</update>
+	
+		<insert id="createActivityInstance" parameterType="activityInstance">
+		insert into ll_activity_instance(activity_id,real_join_num,name,life_status,start_hour,createdate,max_join_num,code,start_day,time,frequency,max_win_num,real_win_num,life_age)
+		values(#{activity_id},#{real_join_num},#{name},#{life_status},#{start_hour},#{createdate},#{max_join_num},#{code},#{start_day},#{time},#{frequency},#{max_win_num},#{real_win_num},#{life_age})
+	</insert>
+		<update id="updateActivityInstance" parameterType="activityInstance">
+		update ll_activity_instance 
+		<set>
+			<if test="activity_id != null"> activity_id = #{activity_id} ,</if>
+			<if test="real_join_num != null"> real_join_num = #{real_join_num} ,</if>
+			<if test="name != null"> name = #{name} ,</if>
+			<if test="life_status != null"> life_status = #{life_status} ,</if>
+			<if test="max_join_num != null"> max_join_num = #{max_join_num}, </if>
+			<if test="real_win_num != null"> real_win_num = #{real_win_num} </if>
+		</set>
+		where id = #{id}
+	</update>
+	<select id="queryActivityInstance" parameterType="activityInstance" resultType="activityInstance">
+	select *  from  ll_activity_instance 
+	<where>
+	<if test="id != null"> and id = #{id} </if>
+		<if test="activity_id != null"> and activity_id = #{activity_id} </if>
+			<if test="name != null"> and  name = #{name} </if>
+			<if test="life_status != null">  and life_status = #{life_status} </if>
+			<if test="max_join_num != null">  and max_join_num = #{max_join_num} </if>
+			<if test="start_hour != null">  and start_hour = #{start_hour} </if>
+			<if test="createdate != null">  and createdate = #{createdate} </if>
+			<if test="code != null">  and code = #{code} </if>
+			<if test="start_day != null">  and start_day = #{start_day} </if>
+			<if test="frequency != null">  and frequency = #{frequency} </if>
+			<if test="time != null">  and time = #{time} </if>
+	</where>
+	order by start_day,start_hour asc
+	</select>
+	
+	<select id="findActivityPrizeById" parameterType="activityPrize" resultType="activityPrize">
+	select * from ll_activity_prize where id = #{id}
+	</select>
+	
+	<select id="findUserRelationByPage" parameterType="activityUserRelation" resultType="activityUserRelation">
+	SELECT USER.nick_name,USER.head_img,rr.* from ll_activity_user_relation rr,ll_wechat_user user where user.id = rr.user_id  order by rr.create_time desc   LIMIT #{nowpage},#{pageSize} 
+	</select>
+	
+	<insert id="createActivityPrize" parameterType="activityPrize">
+	</insert>
+		<update id="updateActivityPrize" parameterType="activityPrize">
+		update ll_activity_prize 
+		<set>
+			<if test="remain_num != null"> remain_num = #{remain_num} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="queryActivityRuleByBean" parameterType="activityRule" resultType="activityRule">
+	select * from ll_activity_rule
+	<where>
+	<if test="activity_id != null">activity_id = #{activity_id}</if>
+	order by seq asc
+	</where>
+	</select>
+	
+	<update id="updateActivityRemind" parameterType="activityRemind">
+		update ll_activity_remind 
+		<set>
+			<if test="user_id != null"> user_id = #{user_id}, </if>
+			<if test="instance_id != null"> instance_id = #{instance_id} </if>
+		</set>
+		where id = #{id}
+	</update>
+	<insert id="createActivityRemind" parameterType="activityRemind">
+		insert into ll_activity_remind(user_id,openid,instance_name,instance_id,remind_time,create_time)
+		values(#{user_id},#{openid},#{instance_name},#{instance_id},#{remind_time},#{create_time})
+	</insert>
+	
+	<select id="queryActivityRemindByBean" parameterType="activityRemind" resultType="activityRemind">
+	select *  from  ll_activity_remind
+	<where>
+		<if test="id != null"> and id = #{id} </if>
+		<if test="user_id != null"> and user_id = #{user_id} </if>
+		<if test="instance_id != null"> and  instance_id = #{instance_id} </if>
+		<if test="openid != null">  and openid = #{openid} </if>
+	</where>
+	</select>
+
+
+<select id="queryActivityOriginalRelationBean" parameterType="activityOriginalRelation" resultType="activityOriginalRelation">
+	select * from ll_activity_original_relation 
+	<where>
+		<if test="id != null">and id =#{id}</if>
+		<if test="original_id != null">and original_id =#{original_id}</if>
+		<if test="activity_code != null">and activity_code =#{activity_code}</if>
+	</where>
+</select>
+	
+</mapper>
+
+

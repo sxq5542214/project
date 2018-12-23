@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0042)http://lab.cubiq.org/iscroll5/demos/probe/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+<title>iScroll demo: probe</title>
+ <link href="css/buju.css" rel="stylesheet">
+ <link href="css/index.css" rel="stylesheet">
+ <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/iScroll.js"></script>
+<script type="text/javascript" src="js/comment.js"></script>
+
+<script type="text/javascript">
+var myScroll;
+var position;
+var _getHeight;
+
+
+function updatePosition () {
+	position = this.y>>0;
+}
+function loaded () {
+var obj = document.getElementById("t");
+    _getHeight = obj.offsetTop;
+
+	myScroll = new IScroll('#wrapper', { probeType: 3, mouseWheel: true });
+	myScroll.on('scroll', updatePosition);
+	myScroll.on('scrollEnd', updatePosition);
+}
+
+document.addEventListener('touchmove', function (e) { 
+var obj = document.getElementById("t");
+    var _getHeight = obj.offsetTop;
+changePos("t",_getHeight,position);e.preventDefault(); }, false);
+
+function changePos(id,height,position){
+    var obj = document.getElementById(id);
+    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop ||position;
+    if(scrollTop < 0){
+    	scrollTop = scrollTop *-1;
+    }
+    console.log(scrollTop)
+    
+    if(scrollTop < height){
+        obj.style.position = 'relative';
+        obj.style.width = '100%';
+        var blogList = document.getElementById("blogList");
+        blogList.style.paddingTop = '0px';
+    }else{
+        obj.style.position = 'fixed';
+       obj.style.width = '90%';
+        obj.style.top = 10|'px';
+        var blogList = document.getElementById("blogList");
+        blogList.style.paddingTop = '80px';
+    }
+}
+</script>
+
+<style type="text/css">
+#wrapper {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	overflow: hidden;
+}
+
+#scroller {
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 100%;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+
+
+
+</style>
+</head>
+<body>
+<div class="topnews" id="t">
+	   <h2> 
+	    精选留言
+	   </h2>
+	   <div>
+	   <div class="container" >
+	   <div style="height: 30px;width: 100%;margin-bottom: 5px;">
+	   <span class="write_msg">写留言</span>
+	   <div class="msg_box_button"><span>提交</span></div>
+	   <div class="msg_box_button"><span>取消</span></div>
+	   </div>
+	   <div class="msg_box"><textarea name="textarea"rows="4" style="BORDER-BOTTOM: 0px solid; BORDER-LEFT: 0px solid; BORDER-RIGHT: 0px solid; BORDER-TOP: 0px solid;    width: 100%; height: 100px;border-radius: 6px;"></textarea></div>
+	   
+	   
+</div>
+	   </div>
+	   </div>
+<div id="wrapper">
+	<div id="scroller" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
+  <article>
+    <div class="l_box f_l">
+	   
+	   <div id = "blogList">
+	     <div class="blogs">
+		      <figure>
+			     <img src="page/comment/images/01.jpg">
+			   </figure>
+			   <ul>
+			   <li>
+			     <h3><a href="/">住在手机里的朋友</a>
+				 <span class="zan"><a class="num">60</a></span>
+				 </h3>
+				  <p>"通信时代，无论是初次相见还是老友重逢，交换联系方式，常常是彼此交换名片，然后郑重或是出于礼貌用手机记下对方的电话号码 ..."</p>
+			     <p class="autor">
+					 <span class="dtime f_l">2016-02-16</span>
+					 <span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span>
+				  </p>
+				  </li>
+				  <li>
+				  <h4><div class="rectangle0"></div><a href="/">作者回复3</a>
+				 </h4>
+				  <div class="huifu">
+				  <p>"通信时代，无论是初次相见还是老友重逢，..."</p>
+			     <p class="autor">
+					 <span class="dtime f_l ">2016-02-16</span>
+					  <!--<span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span> -->
+				  </p>
+				  </div>
+			   </li>
+			   <li class="noShow" style="display:none">
+				  <h4><div class="rectangle1"></div><a href="/">作者回复3</a>
+				 </h4>
+				  <div class="huifu">
+				  <p>"通信时代，无论是初次相见还是老友重逢，..."</p>
+				   <p class="autor">
+					 <span class="dtime f_l ">2016-02-16</span>
+					  <!--<span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span> -->
+				  </p>
+				  </div>
+			   </li>
+			   <li class="noShow" style="display:none">
+			<h4><div class="rectangle2"></div><a href="/">作者回复3</a>
+				 </h4>
+				  <div class="huifu">
+				  <p>"通信时代，无论是初次相见还是老友重逢，..."</p>
+				   <p class="autor">
+					 <span class="dtime f_l ">2016-02-16</span>
+					  <!--<span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span> -->
+				  </p>
+				  </div>
+			   </li>
+			   <li class="noShow" style="display:none">
+				  <h4><div class="rectangle3"></div><a href="/">作者回复3</a>
+				 </h4>
+				  <div class="huifu">
+				  <p>"通信时代，无论是初次相见还是老友重逢，..."</p>
+				   <p class="autor">
+					 <span class="dtime f_l ">2016-02-16</span>
+					  <!--<span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span> -->
+				  </p>
+				  </div>
+			   </li>
+			   <li>
+			   <div class="loadmore"><span class="loading f_r">加载更多...</span></div>
+			   </li>
+			   </ul>
+	       </div>
+		   
+		   <div class="blogs">
+		      <figure>
+			     <img src="images/02.jpg">
+			   </figure>
+			   <ul>
+			   <li>
+			     <h3><a href="/">住在手机里的朋友</a>
+				 <span class="zan"><a>60</a></span>
+				 </h3>
+				  <p>"通信时代，无论是初次相见还是老友重逢，交换联系方式，常常是彼此交换名片，然后郑重或是出于礼貌用手机记下对方的电话号码 ..."</p>
+			     <p class="autor">
+					 <span class="dtime f_l">2016-02-16</span>
+					 <span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span>
+				  </p>
+				  </li>
+				  <li>
+				  <h3><div class="rectangle"></div><a href="/">作者回复</a>
+				 </h3>
+				  <div class="huifu">
+				  <p>"通信时代，无论是初次相见还是老友重逢，..."</p>
+			     <p class="autor">
+					 <span class="dtime f_l">2016-02-16</span>
+					 <span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span>
+				  </p>
+				  </div>
+			   </li>
+			   
+			   </ul>
+	       </div>
+		   
+		   <div class="blogs">
+		      <figure>
+			     <img src="images/03.jpg">
+			   </figure>
+			   <ul>
+			   <li>
+			     <h3><a href="/">住在手机里的朋友</a>
+				 <span class="zan"><a>60</a></span>
+				 </h3>
+				  <p>"通信时代，无论是初次相见还是老友重逢，交换联系方式，常常是彼此交换名片，然后郑重或是出于礼貌用手机记下对方的电话号码 ..."</p>
+			     <p class="autor">
+					 <span class="dtime f_l">2016-02-16</span>
+					 <span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span>
+				  </p>
+				  </li>
+				  <li>
+				  <h3><div class="rectangle"></div><a href="/">作者回复</a>
+				 </h3>
+				  <div class="huifu">
+				  <p>"通信时代，无论是初次相见还是老友重逢，..."</p>
+			     <p class="autor">
+					 <span class="dtime f_l">2016-02-16</span>
+					 <span class="pingl f_r">	
+					    评论（<a href="/">60</a>）</span>
+				  </p>
+				  </div>
+			   </li>
+			   </ul>
+	       </div>
+		   
+		   
+	   </div>
+	 </div>  
+  </article>
+	</div>
+</div>
+
+
+</body></html>

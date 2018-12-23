@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="smsSign">
+	<select id="querySmsSignById" parameterType="smsSign" resultType="smsSign">
+		select * from ll_smssign where id = #{value}
+	</select>
+	<select id="querySmsSign" parameterType="smsSign" resultType="smsSign">
+		select * from ll_smssign 
+		<where>
+			<if test="status!=null"> and status=#{status}</if>
+		</where>
+	</select>
+	<insert id="insertSmsSign" parameterType="smsSign" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_smssign(order_code,sign_name,apply_time,apply_commen,sign_type,status)
+		values(#{order_code},#{sign_name},#{apply_time},#{apply_commen},#{sign_type},#{status})
+	</insert>
+	<delete id="deleteSmsSign" parameterType="smsSign">
+		delete from ll_smssign where id = #{id} 
+	</delete>
+</mapper>
+
+
