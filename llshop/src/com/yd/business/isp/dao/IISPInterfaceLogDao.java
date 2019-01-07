@@ -19,7 +19,7 @@ import com.yd.business.isp.bean.ZhuoweiInterfaceBean;
 /**
  * @author ice
  *
- */
+ */ 
 public interface IISPInterfaceLogDao {
 
 	void createYDInterfaceLog(YDInterfaceBean bean);
