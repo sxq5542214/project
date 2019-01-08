@@ -107,7 +107,7 @@ public abstract class BaseCrons implements Job{
 		
 		taskBean = (TaskCronsBean) job.getJobDataMap().get(BaseCrons.JOB_DETAIL_KEY);
 		
-		if(taskBean.getStatus() == TaskCronsBean.STATUS_RUNING){
+		if(taskBean.getStatus() != null &&  taskBean.getStatus() == TaskCronsBean.STATUS_RUNING){
 			log.info(taskBean.getCron_name() +" 依然在运行中，本次任务跳过");
 			return ;
 		}
