@@ -18,11 +18,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.yd.basic.framework.filter.BaseFilter;
+
 /**
  * 需要配置到web.xml
  *
  */
-public class WebContext implements Filter {
+public class WebContext extends BaseFilter {
 	private static ServletContext servletContext;
 	private static ThreadLocal<ServletRequest> requests = new ThreadLocal<ServletRequest>();
 	private static Map<String,HttpSession> sessions = new HashMap<String, HttpSession>();
@@ -31,10 +33,6 @@ public class WebContext implements Filter {
 	
 	public static final String SESSION_ATTRIBUTE_USER_OPENID = "wechat_user_openid";
 	
-	
-	@Override
-	public void destroy() {
-	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
@@ -45,6 +43,7 @@ public class WebContext implements Filter {
 
 	@Override
 	public void init(FilterConfig fc) throws ServletException {
+		super.init(fc);
 		setServletContext(fc.getServletContext());
 	}
 
