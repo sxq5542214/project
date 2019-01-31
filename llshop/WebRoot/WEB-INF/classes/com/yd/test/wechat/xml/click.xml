@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xml><ToUserName><![CDATA[gh_4ad01fb5fe69]]></ToUserName>
-<FromUserName><![CDATA[owsWDw_PB0-UsHbn7ScAbPlKTTeU]]></FromUserName>
-<CreateTime>1465527669</CreateTime>
-<MsgType><![CDATA[event]]></MsgType>
-<Event><![CDATA[VIEW]]></Event>
-<EventKey><![CDATA[https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx99dce57358a594ab&redirect_uri=http://112.74.215.147/llshop/wechat/user/queryPlatformProduct.do&response_type=code&scope=snsapi_base&state=1#wechat_redirect]]></EventKey>
-<MenuId>407452779</MenuId>
-</xml>
