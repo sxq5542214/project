@@ -25,6 +25,7 @@ import com.yd.business.wechat.service.IWechatService;
 
 /**
  * 程序上下文信息，spring上下文
+ * 
  * @author ice
  *
  */
@@ -37,25 +38,20 @@ public class BaseContext {
 	private static List<WechatOriginalInfoBean> infoList;
 	private static Logger log = Logger.getLogger(BaseContext.class);
 	private static Properties pops;
-	
+
 	public static String POPS_SERVER_NAME = "server_name";
-	
-	
-	public static void initContext(ServletContext servletContext){
-		 context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		 
-		 AlipayConfig.initValue();
-		 try {
-			pops = PropertiesLoaderUtils.loadAllProperties(SYSCONFIG);
-			refreshParam();
-		} catch (IOException e) {
-			log.error(e, e);
-		}
+
+	public static void initContext(ServletContext servletContext) {
+		context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+
+		AlipayConfig.initValue();
+		initPops();
+		refreshParam();
 	}
-	
+
 	/**
-	 * 获取在spring中配置的该类型的实例。
-	 * 如有多个符合，只返回一个。
+	 * 获取在spring中配置的该类型的实例。 如有多个符合，只返回一个。
+	 * 
 	 * @param type
 	 * @return
 	 */
@@ -63,9 +59,10 @@ public class BaseContext {
 		Object[] beans = getBeansOfType(type);
 		return beans.length == 0 ? null : beans[0];
 	}
-	
+
 	/**
 	 * 获取在spring中配置的该类型的实例。
+	 * 
 	 * @param type
 	 * @return
 	 */
@@ -78,13 +75,14 @@ public class BaseContext {
 		}
 		return ret.toArray();
 	}
-	
+
 	public static Object getBean(String beanName) {
 		return context.getBean(beanName);
 	}
 
 	/**
 	 * 获取spring上下文。
+	 * 
 	 * @return
 	 */
 	public static WebApplicationContext getSpringContext() {
@@ -92,57 +90,73 @@ public class BaseContext {
 	}
 
 	public static String getMchName(String originalid) {
-		
-		for(WechatOriginalInfoBean info : infoList){
-			if(info.getOriginalid().equals(originalid)){
+
+		for (WechatOriginalInfoBean info : infoList) {
+			if (info.getOriginalid().equals(originalid)) {
 				return info.getMch_name();
 			}
 		}
-		String default_mch_name = ((IConfigAttributeService)getBean("configAttributeService")).getValueByCode(AttributeConstant.CODE_DEFAULT_MCH_NAME);
+		String default_mch_name = ((IConfigAttributeService) getBean("configAttributeService"))
+				.getValueByCode(AttributeConstant.CODE_DEFAULT_MCH_NAME);
 
 		return default_mch_name;
 	}
-	
+
 	public static WechatOriginalInfoBean getWechatOriginalInfo(String originalid) {
-		
-		for(WechatOriginalInfoBean info : infoList){
-			if(info.getOriginalid().equals(originalid)){
+
+		for (WechatOriginalInfoBean info : infoList) {
+			if (info.getOriginalid().equals(originalid)) {
 				return info;
 			}
 		}
-		
+
 		return null;
 	}
+
 	public static Properties getPops() {
 		return pops;
 	}
-	
+
+	public static Properties initPops(){
+		try {
+			pops = PropertiesLoaderUtils.loadAllProperties(SYSCONFIG);
+		} catch (IOException e) {
+			log.error(e, e);
+		}
+		return pops;
+	}
+
 	public static String getServerUrl() {
 		return serverUrl;
 	}
 
-	public static String getPopsValueByName(String name){
+	public static String getPopsValueByName(String name) {
 		return getPops().getProperty(name);
 	}
 
 	public static String getDefault_share_url() {
-		if(default_share_url == null){
-			default_share_url = ((IConfigAttributeService)getBean("configAttributeService")).getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_URL);
+		if (default_share_url == null) {
+			default_share_url = ((IConfigAttributeService) getBean("configAttributeService"))
+					.getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_URL);
 		}
 		return default_share_url;
 	}
 
 	public static String getDefault_share_title() {
-		if(default_share_title == null){
-			default_share_title = ((IConfigAttributeService)getBean("configAttributeService")).getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_TITLE);
+		if (default_share_title == null) {
+			default_share_title = ((IConfigAttributeService) getBean("configAttributeService"))
+					.getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_TITLE);
 		}
 		return default_share_title;
 	}
-	
-	public static void refreshParam(){
-		serverUrl = ((IConfigAttributeService)getBean("configAttributeService")).getValueByCode(AttributeConstant.CODE_SERVER_URL);
-		default_share_title = ((IConfigAttributeService)getBean("configAttributeService")).getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_TITLE);
-		default_share_url = ((IConfigAttributeService)getBean("configAttributeService")).getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_URL);
-		infoList = ((IWechatService)getBean("wechatService")).queryWechatOriginalInfo(null);
+
+	public static void refreshParam() {
+		serverUrl = ((IConfigAttributeService) getBean("configAttributeService"))
+				.getValueByCode(AttributeConstant.CODE_SERVER_URL);
+		default_share_title = ((IConfigAttributeService) getBean("configAttributeService"))
+				.getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_TITLE);
+		default_share_url = ((IConfigAttributeService) getBean("configAttributeService"))
+				.getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_URL);
+		infoList = ((IWechatService) getBean("wechatService")).queryWechatOriginalInfo(null);
 	}
 }

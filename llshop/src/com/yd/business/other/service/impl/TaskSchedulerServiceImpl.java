@@ -6,6 +6,7 @@ package com.yd.business.other.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -64,6 +65,10 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					log.error(e,e);
+				}
+				Properties pops = BaseContext.getPops();
+				if(pops == null) {
+					pops = BaseContext.initPops();
 				}
 				String flag = BaseContext.getPops().getProperty("crons.config", "false");
 				
