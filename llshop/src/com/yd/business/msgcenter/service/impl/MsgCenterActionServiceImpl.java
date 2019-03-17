@@ -91,13 +91,8 @@ public class MsgCenterActionServiceImpl extends BaseService implements IMsgCente
 			{
 				// 每个动作与文章的关系都走发送逻辑，到底要不要发，交给后面来判断
 				queryAndSendArticleToUser(relation, action);
-				
 			}
-			
-			
 		}
-		
-		
 	}
 	
 	/**
@@ -151,7 +146,7 @@ public class MsgCenterActionServiceImpl extends BaseService implements IMsgCente
 	private void checkAndSendArticle(UserWechatBean user, MsgCenterArticleBean article,MsgCenterUserActionBean action,MsgCenterActionArticleRelationBean relation){
 		boolean isSend = true;
 			//判断用户性别条件,如果文章指定性别，那性别不一样的，就不发这篇文章
-			if(article.getSex_type() != null && article.getSend_type() != Integer.parseInt(user.getSex())){
+			if(article.getSex_type() != null && article.getSex_type() != Integer.parseInt(user.getSex())){
 				isSend = false;
 			}
 			//判断用户区域条件，如果文章指定区域，那区域不一样的，就不发这篇文章

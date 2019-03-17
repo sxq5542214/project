@@ -248,6 +248,7 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 		content = content.replaceAll("#server_domain#", info.getServer_domain());
 		content = content.replaceAll("#server_url#", info.getServer_url());
 		content = content.replaceAll("#appid#", info.getAppid());
+		content = content.replaceAll("#openid#", action.getOpenid());
 		for(int i = 0 ; i < 8;i++){
 			content = content.replace("#wildcard#", RandomUtil.randomString(3));
 		}
@@ -333,6 +334,7 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 			url = convertActionParameter(url, action);
 			url = url.replaceAll("#server_domain#", info.getServer_domain());
 			url = url.replaceAll("#server_url#", info.getServer_url());
+			url = url.replaceAll("#openid#", user.getOpenid());
 			url = url.replaceAll("#appid#", info.getAppid());
 
 			if(url.indexOf("#wildcard#") >= 0){
@@ -374,6 +376,7 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 			url = url.replaceAll("#server_domain#", info.getServer_domain());
 			url = url.replaceAll("#server_url#", info.getServer_url());
 			url = url.replaceAll("#appid#", info.getAppid());
+			url = url.replaceAll("#openid#", action.getOpenid());
 			
 			if(url.indexOf("#wildcard#") >= 0){
 				for(int i = 0 ; i < 8;i++){
@@ -410,7 +413,7 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 		value = value.replaceAll("#server_url#", info.getServer_url());
 		value = value.replaceAll("#appid#", info.getAppid());
 		value = value.replaceAll("#template_id#", template.getTemplate_id());
-		value = value.replaceAll("#action_openid#", action.getOpenid());
+		value = value.replaceAll("#openid#", action.getOpenid());
 		
 		TemplateMessage tm = new TemplateMessage();
 		tm.setToUserName(user.getOpenid());

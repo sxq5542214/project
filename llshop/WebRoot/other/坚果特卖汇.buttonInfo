@@ -1,0 +1,44 @@
+{
+    "button": [
+        {
+        	"name": "坚果商城", 
+        	 "type": "click", 
+		     "key": "wechat_shop"
+        }, 
+        {
+            "name": "免费福利", 
+            "sub_button": [
+            	{
+            		"type": "click", 
+                    "name": "免费抽奖系列活动", 
+                    "key": "wechat_mianfeichoujiang"
+                },
+             	{
+		            "type": "click", 
+                    "name": "有奖评论系列互动", 
+                    "key": "wechat_youjianghuati"
+                }
+            ]
+        },
+        {
+            "name": "个人中心", 
+            "sub_button": [
+               {
+		            "type": "click", 
+                    "name": "今日签到", 
+                    "key": "userSign"
+                },
+                {
+                    "type": "click", 
+                    "name": "个人中心", 
+                    "key": "userInfoCenter"
+                },
+                {
+                    "type": "click", 
+                    "name": "关于我们", 
+                    "key": "aboutus"
+                } 
+            ]
+        } 
+    ]
+}

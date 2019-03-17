@@ -289,7 +289,7 @@
   		if(num > 0){
   		
 	  		var time = new Date();
-	  		var gotoUrl = '<%=basePath%>user/toSupplierShopUserOrderPage.do?openid=<%=openid%>&time='+time.getTime();
+	  		var gotoUrl = '<%=basePath%>user/supplier/toSupplierShopUserOrderPage.do?openid=<%=openid%>&time='+time.getTime();
 	  		location.href = gotoUrl;
   		}else{
   			alert('小主，您还没有选择商品呢');
