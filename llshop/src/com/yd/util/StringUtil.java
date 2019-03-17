@@ -27,7 +27,7 @@ public class StringUtil
 			return str;
 		}
 	}
-	
+
 	public static String convertNull(Integer str)
 	{
 		if(str == null )
@@ -37,6 +37,23 @@ public class StringUtil
 		{
 			return str.toString();
 		}
+	}
+
+	public static String convertNull(Integer str,String opt)
+	{
+		if(str == null )
+		{
+			return opt;
+		}else
+		{
+			return str.toString();
+		}
+	}
+	
+
+	public static String convertNull(Integer str,Integer opt)
+	{
+		return convertNull(str,String.valueOf(opt));
 	}
 	
 	public static boolean isNull(Object o){

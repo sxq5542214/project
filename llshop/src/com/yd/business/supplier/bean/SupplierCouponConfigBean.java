@@ -8,7 +8,7 @@ import com.yd.basic.framework.bean.BaseBean;
 public class SupplierCouponConfigBean  extends BaseBean {
 
 	public static final int STATUS_UP = 1;			//可用
-	public static final int STATUS_DOWN = 2;			//不可用
+	public static final int STATUS_DOWN = -1;			//不可用
 	
 	public static final int TYPE_CASH = 1;			//代金券
 	public static final int TYPE_DISCOUNT = 2;			//折扣券

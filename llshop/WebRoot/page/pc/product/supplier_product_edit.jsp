@@ -133,14 +133,14 @@
                             <label class="col-sm-3 control-label">折扣(百分比，售价之上再折扣)</label>
                             <div class="col-sm-9">
                               <input type="number" class="form-control" id="discount" name="discount" 
-                              	value="<%=StringUtil.convertNull(bean.getDiscount()) %>" >
+                              	value="<%=StringUtil.convertNull(bean.getDiscount(),100) %>" >
                             </div>
                           </div>
                           <div class="form-group">
                             <label class="col-sm-3 control-label">积分抵扣（折扣之上再抵扣）</label>
                             <div class="col-sm-9">
                               <input type="text" class="form-control" id="product_offset_points" name="product_offset_points" 
-                              	value="<%=StringUtil.convertNull(bean.getGive_points()) %>" >
+                              	value="<%=StringUtil.convertNull(bean.getGive_points(),0) %>" >
                             </div>
                           </div>
                            <div class="form-group">
@@ -227,7 +227,7 @@
       	$("#product_brand").val(op.attr("brand_id"));
       	$("#product_type_name").val(op.attr("type_name"));
       	$("#product_type").val(op.attr("type_id"));
-      	$("#discount").val(op.attr("discount"));
+ //     	$("#discount").val(op.attr("discount"));
       	
       }
       
