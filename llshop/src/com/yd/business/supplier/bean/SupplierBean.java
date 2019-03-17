@@ -18,7 +18,7 @@ public class SupplierBean extends BaseBean {
 	public static int STATUS_N = 0;
 	public static int STATUS_Y = 1;
 	
-	public static int ID_PLATFROM_CUSTOMER = 1;
+	public static int PLATFROM_SUPPLIER_ID = 1;
 
 	private Integer id;
 	private Integer customer_id;

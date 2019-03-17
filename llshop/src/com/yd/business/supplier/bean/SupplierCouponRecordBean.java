@@ -7,16 +7,17 @@ import com.yd.basic.framework.bean.BaseBean;
 @Alias("supplierCouponRecord")
 public class SupplierCouponRecordBean  extends BaseBean {
 	
-	public static final Integer USE_STATUS = 1;//可以使用状态
-	public static final Integer USERED_STATUS = 0;//该优惠卷已经使用
+	public static final int STATUS_CANUSE = 1;//可以使用状态
+	public static final int STATUS_USED = 2;//该优惠卷已经使用
+	public static final int STATUS_EXPIRED = 3;//该优惠卷已经使用
 
 	public static final String  USER_STATUS_DESCRIPTION = "拥有优惠卷可以使用";//可以使用状态
 	public static final String  USERED_STATUS_DESCRIPTION = "该优惠卷已经使用";//可以使用状态
 
-	public static final Integer USE_NO_COUPON_COUNT = 0 ;	//用户没有优惠总数为0
-	public static final Integer LIST_SIZE_ZERO = 0 ;	//list为0
+	public static final int USE_NO_COUPON_COUNT = 0 ;	//用户没有优惠总数为0
+	public static final int LIST_SIZE_ZERO = 0 ;	//list为0
 	
-	public static final Integer COUNT_NUMBER_ZERO = 0 ;	//count总数为0
+	public static final int COUNT_NUMBER_ZERO = 0 ;	//count总数为0
 	
 	public static final int SUBTRING_NUMBER_ZERO = 0 ; //substring方法中用到的数字0
 	public static final int SUBTRING_NUMBER_TEN = 10 ; //substring方法中用到的数字10
@@ -33,13 +34,12 @@ public class SupplierCouponRecordBean  extends BaseBean {
 	private String supplier_name;//产品名称
 	private Integer coupon_id;		//优惠卷id
 	private Integer order_id;		//优惠卷使用规则id
-	private String order_codé;		//订单编号
 	private String product_name;	//产品名称
 	private String create_time;	//用户领用优惠卷时间
 	private String modify_time;	//修改时间
 	private String use_time;		//用户使用优惠卷时间
 	private String expire_time;	//优惠卷到期时间
-	private int status;			//状态
+	private Integer status;			//状态
 	private String status_description;	//状态描述
 	private String remark;		//备注信息
 	private String order_code;	//订单编号
@@ -47,8 +47,10 @@ public class SupplierCouponRecordBean  extends BaseBean {
 	//关联ll_coupon_config表查询用到的字段
 	private String merchant_name;		//商户名称
 	private String coupon_name;			//优惠卷名称
-	private int coupon_offsetmoney;		//优惠卷抵扣现金
-	private int coupon_discount;		//优惠卷折扣
+	private Integer coupon_type;			//优惠卷类型
+	private Integer coupon_offsetmoney;		//优惠卷抵扣现金
+	private Integer coupon_discount;		//优惠卷折扣
+	private String coupon_remark;			//优惠卷名称
 	private String coupon_backgroup;	//背景颜色
 	private String couponshow_product;	//优惠卷可以展示的商品
 	
@@ -117,11 +119,17 @@ public class SupplierCouponRecordBean  extends BaseBean {
 	public void setExpire_time(String expire_time) {
 		this.expire_time = expire_time;
 	}
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public Integer getCoupon_type() {
+		return coupon_type;
+	}
+	public void setCoupon_type(Integer coupon_type) {
+		this.coupon_type = coupon_type;
 	}
 	public String getStatus_description() {
 		return status_description;
@@ -147,16 +155,16 @@ public class SupplierCouponRecordBean  extends BaseBean {
 	public void setCoupon_name(String coupon_name) {
 		this.coupon_name = coupon_name;
 	}
-	public int getCoupon_offsetmoney() {
+	public Integer getCoupon_offsetmoney() {
 		return coupon_offsetmoney;
 	}
-	public void setCoupon_offsetmoney(int coupon_offsetmoney) {
+	public void setCoupon_offsetmoney(Integer coupon_offsetmoney) {
 		this.coupon_offsetmoney = coupon_offsetmoney;
 	}
-	public int getCoupon_discount() {
+	public Integer getCoupon_discount() {
 		return coupon_discount;
 	}
-	public void setCoupon_discount(int coupon_discount) {
+	public void setCoupon_discount(Integer coupon_discount) {
 		this.coupon_discount = coupon_discount;
 	}
 	public String getCoupon_backgroup() {
@@ -177,12 +185,6 @@ public class SupplierCouponRecordBean  extends BaseBean {
 	public void setOrder_code(String order_code) {
 		this.order_code = order_code;
 	}
-	public String getOrder_codé() {
-		return order_codé;
-	}
-	public void setOrder_codé(String order_codé) {
-		this.order_codé = order_codé;
-	}
 	public String getProduct_name() {
 		return product_name;
 	}
@@ -200,6 +202,12 @@ public class SupplierCouponRecordBean  extends BaseBean {
 	}
 	public void setReveiveresult(String reveiveresult) {
 		this.reveiveresult = reveiveresult;
+	}
+	public String getCoupon_remark() {
+		return coupon_remark;
+	}
+	public void setCoupon_remark(String coupon_remark) {
+		this.coupon_remark = coupon_remark;
 	}
 	
 	

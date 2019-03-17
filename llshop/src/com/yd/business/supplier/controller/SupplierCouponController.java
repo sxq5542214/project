@@ -85,10 +85,13 @@ public class SupplierCouponController extends BaseController{
 	
 	
 	public static final String PAGE_MYCOUPON = "/page/user/activity/coupon/myCoupon.jsp";
+	public static final String PAGE_MYCOUPONPAGE = "/page/user/activity/coupon/myCoupon.jsp";
 	public static final String PAGE_COUPONSHOP = "/page/user/activity/coupon/orderProduct.jsp";
 	public static final String PAGE_ORDERCONFIRM = "/page/user/activity/coupon/orderConfirm.jsp";
 	public static final String PAGE_USER_ORDER_PRODUCT_RESULT = "/page/user/orderResult.jsp";
 	public static final String PAGE_RECEIVECOUPON = "/page/user/activity/coupon/receiveCoupon.jsp";
+	public static final String PAGE_USER_COUPONCENTER = "/page/user/supplierProductShop/couponCenter.jsp";
+	public static final String PAGE_USER_MYCOUPON = "/page/user/supplierProductShop/myCoupon.jsp";
 
 	
 	
@@ -168,12 +171,13 @@ public class SupplierCouponController extends BaseController{
 	/**
 	 *	查询用户自己拥有的优惠卷数目
 	 *	 *	 */
+	@Deprecated
 	@RequestMapping("**/supplier/supplierCouponController/queryMyAllCoupon.do")
 	public ModelAndView queryMyAllCoupon(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		try{
 			String userid = request.getParameter("userid");					//当前用户id
 			String supplier_id = request.getParameter("supplier_id");  		//当前用户产品id
-			List<SupplierCouponRecordBean> list = supplierCouponService.queryMyAllCoupon(Integer.parseInt(userid),Integer.parseInt(supplier_id));			
+			List<SupplierCouponRecordBean> list = supplierCouponService.queryUserAllCoupon(Integer.parseInt(userid),Integer.parseInt(supplier_id));			
 			writeJson(response,list); 
 		}catch(Exception e){
 			log.error(e, e);
@@ -192,15 +196,16 @@ public class SupplierCouponController extends BaseController{
 		try{
 			String userid = request.getParameter("userid");	//接收userid
 			String coupon_id = request.getParameter("coupon_id");	//优惠卷id
+			String orderCode = request.getParameter("orderCode");
 			 SupplierCouponRecordBean bean = new  SupplierCouponRecordBean();
 			 bean.setUserid(Integer.parseInt(userid));
 			 bean.setCoupon_id(Integer.parseInt(coupon_id));
-			 List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryMycoupon(bean);
+			 List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryUserCanUseCoupon(bean.getUserid());
 			 if(myCouponList.size() == SupplierCouponRecordBean.LIST_SIZE_ZERO ){
 			       writeJson(response, "<script>alert('出现错误，请关闭当前页面后重试！');</script>" );
 			       return null ;
 			   }
-			String reveiveResult = supplierCouponService.useCouponResult(Integer.parseInt(coupon_id),Integer.parseInt(userid));				//根据优惠卷规则表中该优惠卷规则，返回结果
+			String reveiveResult = supplierCouponService.useCouponResult(Integer.parseInt(coupon_id),Integer.parseInt(userid),orderCode);				//根据优惠卷规则表中该优惠卷规则，返回结果
 			bean.setReveiveresult(reveiveResult);
 			writeJson(response,bean); 
 		}catch(Exception e){
@@ -232,10 +237,10 @@ public class SupplierCouponController extends BaseController{
 			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 
-			SupplierCouponRecordBean bean = new  SupplierCouponRecordBean();
-			bean.setUserid(user.getId());
-			bean.setCoupon_id(Integer.parseInt(coupon_id));
-			List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryMycoupon(bean);
+//			SupplierCouponRecordBean bean = new  SupplierCouponRecordBean();
+//			bean.setUserid(user.getId());
+//			bean.setCoupon_id(Integer.parseInt(coupon_id));
+			List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryUserCanUseCoupon(user.getId());
 			if(myCouponList.size() == SupplierCouponRecordBean.LIST_SIZE_ZERO){
 				writeJson(response, "<script>alert('出现错误，请关闭当前页面后重试！');</script>");
 				return null ;
@@ -269,7 +274,7 @@ public class SupplierCouponController extends BaseController{
 	
 	
 	
-	
+
 
 	/**
 	 * 查询目前配置的优惠卷
@@ -277,11 +282,30 @@ public class SupplierCouponController extends BaseController{
 	@RequestMapping("/supplier/queryCouponInfo.do")
 	public ModelAndView queryCouponInfo(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		try{
-			List<SupplierCouponConfigBean> list = supplierCouponService.queryCouponInfo();
+			List<SupplierCouponConfigBean> list = supplierCouponService.queryAllCouponInfo();
 			if(list == null || list.size() != 0)
 			{
 				writeJson(response, list);
 			}
+		}catch(Exception e){
+			log.error(e, e);
+		}
+		
+		return null;
+	}
+
+
+	/**
+	 * 查询目前配置的优惠卷
+	 */
+	@RequestMapping("**/supplier/coupon/toUserCouponCenterPage.do")
+	public ModelAndView toUserCouponCenterPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		try{
+			List<SupplierCouponConfigBean> list = supplierCouponService.queryAllEnableCouponInfo();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("list", list);
+			
+			return new ModelAndView(PAGE_USER_COUPONCENTER, map);
 		}catch(Exception e){
 			log.error(e, e);
 		}
@@ -294,6 +318,7 @@ public class SupplierCouponController extends BaseController{
 	/**
 	 * 查询自己拥有的优惠卷,跳到转查询自己优惠卷界面
 	 */
+	@Deprecated
 	@RequestMapping("**/supplier/supplierCouponController/queryMycouponPage.do")
 	public ModelAndView queryMycouponPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		try{
@@ -302,7 +327,7 @@ public class SupplierCouponController extends BaseController{
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			SupplierCouponRecordBean bean = new  SupplierCouponRecordBean();
 			bean.setUserid(user.getId());
-			List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryMycoupon(bean);
+			List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryUserCanUseCoupon(user.getId());
 			if(myCouponList == null || myCouponList.size() != 0)
 			{
 				Map<String, Object> model = new HashMap<String, Object>();
@@ -317,6 +342,31 @@ public class SupplierCouponController extends BaseController{
 	}
 	
 	
+
+	
+	/**
+	 * 查询自己拥有的优惠卷,跳到转查询自己优惠卷界面
+	 */
+	@RequestMapping("**/supplier/supplierCouponController/toMycouponPage.do")
+	public ModelAndView toMycouponPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		try{
+			String openid = request.getParameter("openid");	//用于正式
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			SupplierCouponRecordBean bean = new  SupplierCouponRecordBean();
+			bean.setUserid(user.getId());
+			List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryUserAllCoupon(user.getId(),null);
+			if(myCouponList == null || myCouponList.size() != 0)
+			{
+				Map<String, Object> model = new HashMap<String, Object>();
+				model.put("openid",user.getOpenid());
+				model.put("list", myCouponList);
+				return new ModelAndView(PAGE_USER_MYCOUPON,model);
+			}
+		}catch(Exception e){
+			log.error(e, e);
+		}
+		return null;
+	}
 	
 	
 	/**
@@ -361,7 +411,7 @@ public class SupplierCouponController extends BaseController{
 				bean.setNowpage(NumberUtil.toInt(nowpage));
 			}
 			if(!StringUtil.isNull(merchant_name)){
-				bean.setMerchant_name(coupon_name);
+				bean.setSupplier_name(merchant_name);
 			}
 			if(!StringUtil.isNull(coupon_name)){
 				bean.setCoupon_name(coupon_name);
@@ -439,7 +489,7 @@ public class SupplierCouponController extends BaseController{
 				bean.setSQL(sql);
 			}
 			PageinationData pd =  supplierCouponService.queryAdminConponRulePage(bean);
-			List<SupplierCouponConfigBean> couponInfo = supplierCouponService.queryCouponInfo();
+			List<SupplierCouponConfigBean> couponInfo = supplierCouponService.queryAllCouponInfo();
 
 			if(!StringUtil.isNull(nowpage)){
 				pd.setNowpage(NumberUtil.toInt(nowpage));
@@ -545,8 +595,8 @@ public class SupplierCouponController extends BaseController{
 			if(!StringUtil.isNull(id)){
 			bean.setId(Integer.parseInt(request.getParameter("id")));
 			}
-			bean.setMerchant_id(Integer.parseInt(request.getParameter("merchant_id")));
-			bean.setMerchant_name(request.getParameter("merchant_name"));
+			bean.setSupplier_id(Integer.parseInt(request.getParameter("merchant_id")));
+			bean.setSupplier_name(request.getParameter("merchant_name"));
 			bean.setCode(request.getParameter("code"));
 			bean.setType(Integer.parseInt(request.getParameter("type")));
 			bean.setCoupon_name(request.getParameter("coupon_name"));
@@ -560,7 +610,7 @@ public class SupplierCouponController extends BaseController{
 			bean.setEnd_time(request.getParameter("end_time"));
 			bean.setRemark(request.getParameter("remark"));
 			bean.setCoupon_backgroup(request.getParameter("coupon_backgroup"));
-			bean.setCouponshow_product(request.getParameter("couponshow_product"));
+			bean.setCoupon_spid(request.getParameter("couponshow_product"));
 			supplierCouponService.editCouponConfig(bean);
 			bean.setRemark(configCruxService.getValueByTypeAndKey(SupplierCouponConfigBean.CONFIG_CRUX_TYPE_POP_NEWS,SupplierCouponConfigBean.CONFIG_CRUX_KEY_OPERATION_SUCCESS)) ;
 			writeJson(response, bean);
@@ -620,7 +670,7 @@ public class SupplierCouponController extends BaseController{
 			String id = request.getParameter("id");
 			String show_prodcut = request.getParameter("show_product");
 			bean.setId(Integer.parseInt(id));
-			bean.setCouponshow_product(show_prodcut);
+			bean.setCoupon_spid(show_prodcut);
 			String remark = supplierCouponService.deleteShowProduct(bean);
 			writeJson(response, remark);
 		} catch (Exception e) {
@@ -642,7 +692,7 @@ public class SupplierCouponController extends BaseController{
 			String id = request.getParameter("ids");
 			String show_prodcut = request.getParameter("show_product");
 			bean.setId(Integer.parseInt(id));
-			bean.setCouponshow_product(show_prodcut);
+			bean.setCoupon_spid(show_prodcut);
 			String remark = supplierCouponService.addShowProduct(bean);
 			writeJson(response, remark);
 		} catch (Exception e) {

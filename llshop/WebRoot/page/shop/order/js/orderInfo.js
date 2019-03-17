@@ -1,7 +1,7 @@
 function pay(){
 	
 	var order_code = $("#order_code").val();
-	var price = $("#price").html();
+	var cost_money = $("#cost_money").html();
 	var cost_balance = $("#cost_balance").val();
 	var openid = $("#openid").val();
 	var phone = $("#phone").html();
@@ -14,7 +14,7 @@ function pay(){
 	$("#payButton").hide();
 	$.ajax({
 		url : "wechat/createUnifiedOrderByShop.do",
-		data : { price : (price - cost_balance).toFixed(2),
+		data : { cost_money : (cost_money - cost_balance).toFixed(2),
 				 cost_balance : (cost_balance * 100).toFixed(0),
 				 openid : openid,
 				 order_code : order_code,
@@ -25,7 +25,7 @@ function pay(){
 		success : function(result) {
 			if(result == 'false'){
 				alert('调用支付失败');
-				hidediv();
+				$("#payButton").show();
 			}else{
 				result = eval('('+result+')');
 				
@@ -40,11 +40,11 @@ function pay(){
 			       },
 			       function(res){
 			           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-			           	alert('已支付成功！待商家确认后发货！');
+			           	alert('已支付成功！我们将会尽快安排发货！');
 			           
 			           	$("#payButton").hide();
 //			           	location.href = "order/userOrderProduct.do?out_trade_code="+result.outTradeNo;
-			           	
+			         	location.href = "user/toUserShopOrderListPage.do?openid="+openid;			           	
 			           }else{
 			           	$.ajax({
 							url : "wechat/deleteUnifiedOrderByShop.do",

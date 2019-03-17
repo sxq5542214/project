@@ -14,6 +14,15 @@ Login = function(){
 				else alert(data);
 				myReload();
 			});
+		},
+		loginAccount:function(){
+			var username = $('#username').val();
+			var password = $('#userpass').val();
+			$.post("customer/loginTest.do",{"username":username,"password":password},function(data){
+				if(data.indexOf('.do')>=0) window.location.href=data;
+				else alert(data);
+
+			});
 		}
 	};
 }();

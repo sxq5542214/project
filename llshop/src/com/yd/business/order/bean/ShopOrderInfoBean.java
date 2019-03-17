@@ -27,6 +27,7 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	private Integer cost_points;
 	private Integer cost_money;
 	private Integer cost_balance;
+	private Integer coupon_total_price;
 	private Integer status;
 	private String remark;
 	private Integer event_type;
@@ -225,5 +226,11 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	}
 	public void setOrder_img(String order_img) {
 		this.order_img = order_img;
+	}
+	public Integer getCoupon_total_price() {
+		return coupon_total_price;
+	}
+	public void setCoupon_total_price(Integer coupon_total_price) {
+		this.coupon_total_price = coupon_total_price;
 	}
 }

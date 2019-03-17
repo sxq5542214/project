@@ -188,5 +188,11 @@ public interface ISupplierCouponDao {
 	 * 后台更新ll_coupon_rule表数据
 	 */
 	public void updateCouponRule(SupplierCouponRuleBean bean);
+
+	/**
+	 * 以当前时间更新用户优惠卷过期状态
+	 * @param userid
+	 */
+	public void updateCouponRecordStatusExpiredBySysdate(int userid);
 	
 }

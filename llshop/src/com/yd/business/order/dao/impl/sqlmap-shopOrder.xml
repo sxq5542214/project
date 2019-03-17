@@ -6,12 +6,12 @@
 	
 	<insert id="createShopOrderInfo" parameterType="shopOrderInfo" useGeneratedKeys="true" keyProperty="id" >
 		insert into ll_shop_order_info(user_id,nick_name,order_code,order_name,order_img,create_time,
-		modify_time,cost_price,cost_points,cost_money,cost_balance,status,remark,
+		modify_time,cost_price,cost_points,cost_money,cost_balance,coupon_total_price,status,remark,
 		event_type,lucky_money,share_time,share_type,is_sended,express_price,
 		contact_name,contact_phone,contact_address,express_mode,express_date,
 		express_time,express_order_code,invoice_type,invoice_info) values(#{user_id},
 		#{nick_name},#{order_code},#{order_name},#{order_img},#{create_time},#{modify_time},#{cost_price},
-		#{cost_points},#{cost_money},#{cost_balance},#{status},#{remark},#{event_type},
+		#{cost_points},#{cost_money},#{cost_balance},#{coupon_total_price},#{status},#{remark},#{event_type},
 		#{lucky_money},#{share_time},#{share_type},#{is_sended},#{express_price},
 		#{contact_name},#{contact_phone},#{contact_address},#{express_mode},
 		#{express_date},#{express_time},#{express_order_code},#{invoice_type},#{invoice_info})
@@ -30,6 +30,8 @@
 			<if test=" contact_name != null"> and contact_name like concat('%', #{contact_name} ,'%')  </if>
 			<if test=" invoice_type != null"> and invoice_type = #{invoice_type} </if>
 			<if test=" notInStatus != null"> and status not in (${notInStatus})</if>
+			
+			<if test=" orderby != null">  ${orderby}</if>
 		</where>
 	</select>
 	
@@ -45,6 +47,7 @@
 			<if test=" cost_points != null"> cost_points = #{cost_points} ,</if>
 			<if test=" cost_money != null"> cost_money = #{cost_money} ,</if>
 			<if test=" cost_balance != null"> cost_balance = #{cost_balance} ,</if>
+			<if test=" coupon_total_price != null"> coupon_total_price = #{coupon_total_price} ,</if>
 			<if test=" status != null"> status = #{status} ,</if>
 			<if test=" remark != null"> remark = #{remark} ,</if>
 			<if test=" event_type != null"> event_type = #{event_type} ,</if>
@@ -73,10 +76,10 @@
 	<insert id="createShopOrderProduct" parameterType="shopOrderProduct" useGeneratedKeys="true" keyProperty="id">
 		insert into ll_shop_order_product(order_info_id,order_code,user_id,nick_name,
 		supplier_id,supplier_name,supplier_product_id,supplier_product_name,
-		original_price,real_price,cost_points,discount,num,create_time) values(#{order_info_id},
+		original_price,real_price,cost_points,discount,num,create_time,type) values(#{order_info_id},
 		#{order_code},#{user_id},#{nick_name},#{supplier_id},#{supplier_name},
 		#{supplier_product_id},#{supplier_product_name},#{original_price},#{real_price},
-		#{cost_points},#{discount},#{num},#{create_time})
+		#{cost_points},#{discount},#{num},#{create_time},#{type})
 	</insert>
 	
 	<select id="queryShopOrderProduct" parameterType="shopOrderProduct" resultType="shopOrderProduct">
@@ -89,6 +92,8 @@
 			<if test="user_id != null "> and sop.user_id = #{user_id} </if>
 			<if test="supplier_id != null "> and sop.supplier_id = #{supplier_id} </if>
 			<if test="supplier_product_id != null "> and sop.supplier_product_id = #{supplier_product_id} </if>
+			
+			<if test=" orderby != null">  ${orderby}</if>
 	</select>
 	
 	<delete id="delteShopOrderById" parameterType="int">

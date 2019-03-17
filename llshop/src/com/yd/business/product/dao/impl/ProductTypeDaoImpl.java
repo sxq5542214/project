@@ -22,4 +22,10 @@ public class ProductTypeDaoImpl extends BaseDao implements IProductTypeDao {
 		return sqlSessionTemplate.selectList(NAMESPACE+"queryProductTypeByCustomerid", customerid);
 	}
 
+	@Override
+	public List<ProductTypeBean> listProductBrandByCustomerId(int customerid) {
+		// TODO Auto-generated method stub
+		return sqlSessionTemplate.selectList(NAMESPACE+"listProductBrandByCustomerId", customerid);
+	}
+
 }

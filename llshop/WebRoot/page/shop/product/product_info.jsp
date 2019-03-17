@@ -8,7 +8,7 @@
 			+ path + "/";
 	boolean hasDiscount = false;
 	SupplierProductBean bean = (SupplierProductBean) request.getAttribute("bean");
-			
+	
 	%>
 <!DOCTYPE html>
 <html class="">
@@ -399,7 +399,8 @@
 <script src="page/shop/product/js/js_tracker.js"></script> -->
 <script src="js/cookieUtil.js"></script>
 <script src="js/jquery.js"></script>
-<script src="page/shop/product/js/shoppingCart.js"></script>
+<script src="page/shop/product/js/shoppingCart.js"></script><!-- 
+<script src="js/user/supplierProductShop/shoppingCart.js"></script> -->
 
 
 </body>

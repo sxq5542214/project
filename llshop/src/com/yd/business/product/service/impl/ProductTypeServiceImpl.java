@@ -26,6 +26,11 @@ public class ProductTypeServiceImpl extends BaseService implements
 		// TODO Auto-generated method stub
 		return productTypeDao.listProductTypeByCustomerId(customerid);
 	}
+	@Override
+	public List<ProductTypeBean> listProductBrandByCustomerId(int customerid) {
+		// TODO Auto-generated method stub
+		return productTypeDao.listProductBrandByCustomerId(customerid);
+	}
 	
 	@Override
 	public ProductTypeBean findProductType(String name,int type){

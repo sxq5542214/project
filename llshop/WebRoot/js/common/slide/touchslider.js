@@ -13,9 +13,9 @@ function advertising(codein,preurl){
 				if(result.length == 1){
 					var advertising= result[0];
 					if(advertising.picture_link == null || advertising.picture_link == ""){	// width='"+document.body.scrollWidth+"px'
-						$("#main_image").append("<li><img src='"+advertising.picture+"' style='margin:0 auto; height:100% ;width:100%;'    /></LI>");
+						$("#main_image").append("<li><img src='"+advertising.picture+"' style='margin:0 auto; width:100%;'    /></LI>");
 					}else{
-						$("#main_image").append("<li><a href='"+advertising.picture_link+"'><img  style='margin:0 auto;height:100%;width:100%;' src='"+advertising.picture+"' /></a></li>");
+						$("#main_image").append("<li><a href='"+advertising.picture_link+"'><img  style='margin:0 auto; width:100%;' src='"+advertising.picture+"' /></a></li>");
 					}
 				}else{
 					var styleCon = 69;
@@ -24,13 +24,16 @@ function advertising(codein,preurl){
 						styleCon =  styleCon-5;
 					$(".flicking_con").css("left",""+styleCon+"%");
 					if(advertising.picture_link == null || advertising.picture_link == ""){		
-					$("#main_image").append("<li><img src='"+advertising.picture+"'  style='margin:0 auto;'  height='100%'/></li>");
+					$("#main_image").append("<li><img style='margin:0 auto; width:100%;' src='"+advertising.picture+"'   /></li>");
 					$("#flicking_con").append("<a href='#'></a>");
 					}
 					else{
-						$("#main_image").append("<li><a href='"+advertising.picture_link+"'><img src='"+advertising.picture+"'  style='margin:0 auto;'  height='100%'/></a></li>");
+						$("#main_image").append("<li><a href='"+advertising.picture_link+"'><img style='margin:0 auto; width:100%;' src='"+advertising.picture+"'  /></a></li>");
 						$("#flicking_con").append("<a href='#'></a>");
 					}
+					
+					
+					
 				}
 				slide();
 				}

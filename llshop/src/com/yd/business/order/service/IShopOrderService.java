@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
+import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.user.bean.UserCartBean;
 
 /**
@@ -25,8 +26,6 @@ public interface IShopOrderService {
 
 	List<ShopOrderProductBean> queryShopOrderProduct(ShopOrderProductBean bean);
 
-	ShopOrderInfoBean createOrderLogByUserCartList(String openid, String productJson);
-
 	void setupOrderAddress(String order_code, int userAddrId);
 
 	ShopOrderInfoBean findShopOrderInfoByCode(String order_code);
@@ -40,5 +39,11 @@ public interface IShopOrderService {
 	void updateShopOrderStatusToDelete(String order_code);
 
 	void updateShopOrderExpressInfo(int order_id, String mode, String code, Integer price);
+
+	ShopOrderInfoBean createOrderLogByUserCartList(String openid, String productJson, Long time);
+
+	void updateShopOrderPaySuccess(int payMoney, String orderCode);
+
+	void updateShopOrderByCoupon(String orderCode, SupplierCouponRecordBean bean);
 
 }

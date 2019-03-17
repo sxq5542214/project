@@ -1,3 +1,7 @@
+<%@page import="com.yd.business.supplier.bean.SupplierCouponConfigBean"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="com.yd.util.JsonUtil"%>
+<%@page import="com.yd.business.supplier.bean.SupplierCouponRecordBean"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@page import="com.yd.util.StringUtil"%>
 <%@page import="com.yd.business.order.bean.ShopOrderInfoBean"%>
@@ -12,9 +16,10 @@
 	
 	ShopOrderInfoBean order = (ShopOrderInfoBean) request.getAttribute("order");
 	UserWechatBean user = (UserWechatBean) request.getAttribute("user");
+	List<SupplierCouponRecordBean> couponList = (List<SupplierCouponRecordBean>) request.getAttribute("couponList");
 	List<ShopOrderProductBean> productList = order.getProductList();
 	
-			
+	
 %>
 
 <!DOCTYPE html>
@@ -38,13 +43,14 @@
 
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="page/shop/order/js/orderInfo.js"></script>
-<script type="text/javascript" src="js/spin.min.js"></script>
-
+<!-- <script type="text/javascript" src="js/spin.min.js"></script>
+ -->
+ <script type="text/javascript" src="js/common/cookieUtil.js"></script>
 <!-- 对url处理 -->
-<script type="text/javascript" src="js/ojbUrl.js"></script>
+<!-- <script type="text/javascript" src="js/ojbUrl.js"></script> -->
 
 <!--数据埋点-->
-<script type="text/javascript" src="js/pingJS.1.0.js"></script>
+<!-- <script type="text/javascript" src="js/pingJS.1.0.js"></script> -->
 
 <!--通用头尾css js add by lizhenyou 2015-4-17-->
 <link rel="stylesheet" type="text/css" href="page/shop/order/css/header.css"
@@ -99,7 +105,7 @@
 					<div class="order-box">
 						<div class="order-width" style="padding-top: 5px;">
 							<p>订单编号：<%=order.getOrder_code() %></p>
-							<p>订单金额：￥<%= (order.getCost_price() + order.getCost_points()) / 100d %></p>
+							<p>订单金额：￥<%=order.getCost_price()/ 100d %></p>
 							<p>订单日期：<%=order.getCreate_time() %></p>
 						</div>
 
@@ -108,7 +114,12 @@
 				<li>
 					<div class="order-box">
 						<ul class="book-list">
-							<%for(ShopOrderProductBean product : productList){ %>
+							<%for(ShopOrderProductBean product : productList){ 
+								String couponStr = "";
+								if(product.getType() == ShopOrderProductBean.TYPE_COUPON){
+									couponStr = " （优惠卷抵扣）";
+								}
+							%>
 							<li class="border-bottom"><a href="supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getSupplier_product_id()%>">
 									<div class="order-msg">
 										<img src="<%=product.getHead_img() %>" class="img_ware">
@@ -117,7 +128,7 @@
 											<p class="price">
 												单价：￥<%=product.getOriginal_price() /100d %> &nbsp;&nbsp;元 <span></span>
 											</p>
-											<p class="order-data">X<%=product.getNum() %></p>
+											<p class="order-data">X<%=product.getNum() + couponStr %></p>
 										</div>
 									</div> </a></li>
 							<%} %>
@@ -141,29 +152,52 @@
 							<span class="fr"><a href="user/toUserAddressListPage.do?user_id=<%=order.getUser_id() %>&order_code=<%=order.getOrder_code()%>">修改地址  </a> </span> </p>
 							<%}} %>
 						</div>
-					</div></li>
-
+					</div>
+				</li>
+				
+				<%if(couponList.size()>0){ %>
+				<li>
+					<div class="order-box">
+						<div class="order-width">
+							<p class="border-bottom usr-name">
+								当前订单可用优惠卷：
+							</p>
+							<%-- <p class="usr-addr" style="text-align: center;"> 
+								<a class="add-address" id="do_checkout" href="user/toUserAddressListPage.do?user_id=<%=order.getUser_id() %>&order_code=<%=order.getOrder_code()%>" onclick="toSetupAddress()">设置收货地址</a>
+							</p> --%>
+							
+							<%for(SupplierCouponRecordBean coupon : couponList){ %>
+							<p class="border-bottom usr-name"  onclick="chooseRadio(this)">
+								<input type="radio" name="couponId" value="<%=coupon.getId() %>" > <%=coupon.getCoupon_name() %> （<%=coupon.getCoupon_remark()  %> ）
+								
+							</p>
+							
+							<%} %>
+							
+						</div>
+					</div>
+				</li>
+				<%} %>
 				<li>
 					<div class="order-box">
 						<div class="order-width">
 							<p class="border-bottom usr-name">
 								定单状态:<span class="fr"><%=order.getDictValueByField("status") %></span>
 							</p>
-
 							<p>
-								商品金额:<span class="fr red">￥<%=(order.getCost_price() + order.getCost_points() )/100d %>&nbsp;元</span>
+								商品金额:<span class="fr red" >￥ <span id="cost_price"><%=order.getCost_price()/100d %></span>&nbsp;元</span>
 							</p>
-
+							<p >
+								运费(会员专享免运费):   <span class="fr red">￥ <del> <span id="express_price">6.00</span>&nbsp;元 </del> </span>
+							</p>
 							<p>
-								积分抵扣:<span class="fr red" >￥ <span id="points"> <%=order.getCost_points() / 100d %></span>&nbsp;元</span>
+								积分抵扣:<span class="fr red" >￥ -<span id="points"><%=order.getCost_points() / 100d %></span>&nbsp;元</span>
 							</p>
-
 							<p class="border-bottom">
-								运费:<span class="fr red">￥ <span id="price">0.00</span>&nbsp;元</span>
+								优惠:<span class="fr red">￥ -<span id="coupon_price">0.00</span>&nbsp;元</span>
 							</p>
-
 							<p>
-								支付金额:<span class="fr red">￥<span  id="price"> <%=order.getCost_price() / 100d %></span>&nbsp;元</span>
+								支付金额:<span class="fr red">￥ <span id="cost_money"><%=(order.getCost_price() - order.getCost_points()) / 100d %></span>&nbsp;元</span>
 							</p>
 						</div>
 					</div></li>
@@ -214,7 +248,92 @@
 	<input type="hidden" id="openid" value="<%=user.getOpenid()%>">
 	<input type="hidden" id="cost_balance" value="0">
 
-
+<script type="text/javascript">
+	delCookie('productInfo');
+	var coupon = eval('<%=JsonUtil.convertObjectToJsonString(couponList) %>');
+	var currentCoupon ;
+	var orderStatus = <%=order.getStatus()%>;
+	function chooseRadio(dom){
+		dom.children[0].checked = true;
+		
+		if(orderStatus != <%=ShopOrderInfoBean.STATUS_WAIT%>){
+			return;
+		}
+		
+		var couponid = dom.children[0].value ;
+		$("#coupon_record_id").val(couponid);
+		var coupon = findCouponById(couponid);
+		if(coupon != currentCoupon)
+		{
+			calcPayPrice(coupon);
+			currentCoupon = coupon;
+		}
+	}
+	
+	function findCouponById(couponid){
+		for(var i = 0; i < coupon.length; i++){
+			var record = coupon[i];
+			if(record.id == couponid){
+				return record;
+			}
+		}
+	}
+	
+	//计算优惠信息
+	function calcPayPrice(coupon){
+		
+		var coupon_offsetmoney;
+		//还原为未选择优惠卷时的数据
+		if(currentCoupon != null ){
+			$("#cost_price").html(<%=order.getCost_price()/100d %>);
+			$("#cost_money").html(<%= (order.getCost_price() - order.getCost_points()) / 100d %>);
+		}
+		
+		var cost_money = Number($("#cost_money").html());
+		var cost_price = Number($("#cost_price").html());
+		var points =  Number($("#points").html());
+		
+		//新选择的优惠卷
+		//代金卷
+		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_CASH%>)
+		{
+			coupon_offsetmoney = Number(coupon.coupon_offsetmoney)/100 ;
+		}
+		//折扣卷
+		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_DISCOUNT%>)
+		{
+			coupon_offsetmoney = Number(coupon.coupon_offsetmoney/100).toFixed(2) ;
+			var discount = Number(coupon.coupon_discount) ;
+			var new_price = cost_money * discount / 100;
+			var value = Number(cost_money - new_price).toFixed(2) ;  // 折扣后的差值
+			
+			if(value > coupon_offsetmoney){
+				value = coupon_offsetmoney ;
+			}else{
+				
+			}
+			coupon_offsetmoney = value ;
+			
+		}
+		//礼品卷、 换购卷
+		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_GIFT%> || coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_CHANGE%>)
+		{
+			coupon_offsetmoney = Number(coupon.coupon_offsetmoney)/100 ; //礼品价值
+			cost_money = cost_money  + coupon_offsetmoney;	// 订单总价增加礼品的价值
+			cost_price = cost_price + coupon_offsetmoney;	// 商品总价也要相应的增加
+			coupon_offsetmoney = coupon_offsetmoney;		// 礼品同等价值的优惠
+		}
+		//体验卷、待补充
+		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_GIFT%> || coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_EXPERIENCE%>)
+		{
+			
+		}
+		$("#cost_price").html(cost_price );
+		$("#cost_money").html((cost_money - coupon_offsetmoney).toFixed(2) );
+		$("#coupon_price").html(coupon_offsetmoney );
+	}
+	
+</script>
 </body>
 </html>
 <!--LHC-2015-09-21-->

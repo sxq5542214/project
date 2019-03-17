@@ -97,11 +97,11 @@
 <div class="block order<%=order.getId() %>" >
     <div class="order_list">
         <!--非商城自营显示店铺入口-->
-            <div class="shop_title">
+    <%--         <div class="shop_title">
                 <!--合并支付选项-->
                                                 <!--店铺名称-->
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
-            </div>
+            </div> --%>
                 <!--分包商品信息-->
         <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/toUserShopOrderPage.do?order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
@@ -112,22 +112,29 @@
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
-                        <div class="prd_state_title" id="oltit_12254370245">
+                        <div class="prd_state_title" id="" style="font-size: 1.5rem;">
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
                                 <p class="fl prd_tit">
-                                   <%=order.getOrder_name() %>           </p>
+                                   <%=order.getOrder_name() %>           </p><br>
+                                   <p>收货人：<%=order.getContact_name() %>    号码：<%=order.getContact_phone() %></p>
+                                   <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
-	    </a>
+	    </a> 
 	    <!--数量价格信息-->
 	    <div class="detail2">
-	
-	        <span class="order_price">　总价：￥<%=order.getCost_price() /100d %>元</span>
+	    	<span style="color:black; ">总价：<%= (order.getCost_points() + order.getCost_price() ) /100d %>元 &nbsp;</span>
+			<span style="color: #ff463c;">积分抵扣：<%=order.getCost_points()/100d %>元&nbsp;</span>
+	        <span class="order_price" style="font-size: 1.6rem;">优惠价：￥<%=order.getCost_price() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
+	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
+	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
+	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
+	        	<%} %>
 	        </div>
 	    </div>
     </div>
@@ -145,11 +152,11 @@
 <div class="block order<%=order.getId() %>" >
     <div class="order_list">
         <!--非商城自营显示店铺入口-->
-            <div class="shop_title">
+    <%--         <div class="shop_title">
                 <!--合并支付选项-->
                                                 <!--店铺名称-->
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
-            </div>
+            </div> --%>
                 <!--分包商品信息-->
         <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/toUserShopOrderPage.do?order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
@@ -160,22 +167,29 @@
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
-                        <div class="prd_state_title" id="oltit_12254370245">
+                        <div class="prd_state_title" id="" style="font-size: 1.5rem;">
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
                                 <p class="fl prd_tit">
-                                   <%=order.getOrder_name() %>           </p>
+                                   <%=order.getOrder_name() %>           </p><br>
+                                   <p>收货人：<%=order.getContact_name() %>    号码：<%=order.getContact_phone() %></p>
+                                   <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
-	    </a>
+	    </a> 
 	    <!--数量价格信息-->
 	    <div class="detail2">
-	
-	        <span class="order_price">　总价：￥<%=order.getCost_price() /100d %>元</span>
+	    	<span style="color:black; ">总价：<%= (order.getCost_points() + order.getCost_price() ) /100d %>元 &nbsp;</span>
+			<span style="color: #ff463c;">积分抵扣：<%=order.getCost_points()/100d %>元&nbsp;</span>
+	        <span class="order_price" style="font-size: 1.6rem;">优惠后：￥<%=order.getCost_price() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
+	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
+	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
+	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
+	        	<%} %>
 	        </div>
 	    </div>
     </div>
@@ -194,11 +208,11 @@
 <div class="block order<%=order.getId() %>" >
     <div class="order_list">
         <!--非商城自营显示店铺入口-->
-            <div class="shop_title">
+    <%--         <div class="shop_title">
                 <!--合并支付选项-->
                                                 <!--店铺名称-->
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
-            </div>
+            </div> --%>
                 <!--分包商品信息-->
         <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/toUserShopOrderPage.do?order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
@@ -209,22 +223,29 @@
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
-                        <div class="prd_state_title" id="oltit_12254370245">
+                        <div class="prd_state_title" id="" style="font-size: 1.5rem;">
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
                                 <p class="fl prd_tit">
-                                   <%=order.getOrder_name() %>           </p>
+                                   <%=order.getOrder_name() %>           </p><br>
+                                   <p>收货人：<%=order.getContact_name() %>    号码：<%=order.getContact_phone() %></p>
+                                   <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
-	    </a>
+	    </a> 
 	    <!--数量价格信息-->
 	    <div class="detail2">
-	
-	        <span class="order_price">　总价：￥<%=order.getCost_price() /100d %>元</span>
+	    	<span style="color:black; ">总价：<%= (order.getCost_points() + order.getCost_price() ) /100d %>元 &nbsp;</span>
+			<span style="color: #ff463c;">积分抵扣：<%=order.getCost_points()/100d %>元&nbsp;</span>
+	        <span class="order_price" style="font-size: 1.6rem;">优惠后：￥<%=order.getCost_price() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
+	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
+	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
+	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
+	        	<%} %>
 	        </div>
 	    </div>
     </div>

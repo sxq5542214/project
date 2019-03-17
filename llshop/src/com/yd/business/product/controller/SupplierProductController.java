@@ -230,7 +230,7 @@ public class SupplierProductController extends BaseController {
 			bean.setCustomer_id(user.getId());
 			supplierProductService.createOrUpdateSupplierProduct(bean);
 			
-			
+			return toSupplierProductListPage(request, response);
 		} catch (Exception e) {
 			log.error(e, e);
 		}

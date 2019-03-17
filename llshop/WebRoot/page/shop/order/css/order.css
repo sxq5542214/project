@@ -887,7 +887,7 @@ a.orange_hollow{border:1px solid #ff463c;color:#fff; background:#ff463c}
 .total_result .c_checkbox{padding: 1.15rem 0 0rem 1.4rem}
 
 /*живЊЬсаб*/
-.warnning{padding:1rem 1.2rem;background-color:#ffe6c2;border-top:1px solid #edd6b4;font-size:1.1rem;line-height:1.3rem;}
+.warnning{padding:0.2rem 1.2rem;background-color:#ffe6c2;border-top:1px solid #edd6b4;font-size:1.1rem;line-height:1.5rem;}
 .warnning span{display:block;color:#333;}
 .warnning .title{color:#ff463c;padding-left:1.8rem;background:url(../images/warn.png) left center no-repeat;background-size:contain;margin-bottom:.5rem;}
 .warnning .word i{color:#ff463c;font-style:normal;}

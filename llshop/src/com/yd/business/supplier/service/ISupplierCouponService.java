@@ -34,7 +34,7 @@ public interface ISupplierCouponService {
 	/**
 	 * 查询用户目前自己已经拥有的优惠卷
 	 */	
-	public List<SupplierCouponRecordBean> queryMyAllCoupon(Integer userid,Integer supplier_id);
+	public List<SupplierCouponRecordBean> queryUserAllCoupon(Integer userid,Integer supplier_id);
 	
 	
 	/**
@@ -46,13 +46,17 @@ public interface ISupplierCouponService {
 	/**
 	 * 根据订单号改变优惠卷状态为使用状态
 	 */
-	public void updateStatusBecomeUserByOrderCode(String order_code , String product_name);
+	public void updateCouponRecordStatusBecomeUsedByOrderCode(String order_code , String product_name);
 	
+	/**
+	 * 查询目前配置可用的优惠卷
+	 */
+	public List<SupplierCouponConfigBean> queryAllEnableCouponInfo();
 	/**
 	 * 查询目前配置的优惠卷
 	 */
-	public List<SupplierCouponConfigBean> queryCouponInfo();
-	
+	public List<SupplierCouponConfigBean> queryAllCouponInfo();
+
 	
 	/**
 	 *用户获得优惠卷插入记录
@@ -76,14 +80,14 @@ public interface ISupplierCouponService {
 	/**
 	 *查询自己拥有的优惠卷
 	 */
-	public List<SupplierCouponRecordBean> queryMycoupon(SupplierCouponRecordBean bean);
+	public List<SupplierCouponRecordBean> queryUserCanUseCoupon(Integer userid);
 	
 	
 	
 	/**
-	 * 根据优惠卷规则表中该优惠卷规则领取优惠卷,返回结果
+	 * 根据优惠卷规则表中该优惠卷规则使用优惠卷,返回结果
 	 */
-	public String useCouponResult(Integer coupon_id,Integer userid);
+	public String useCouponResult(Integer coupon_id, Integer userid, String orderCode);
 	
 	
 	
@@ -210,5 +214,28 @@ public interface ISupplierCouponService {
 	/**
 	 * 根据优惠卷id查询单个优惠卷配置表中信息
 	 * */
-	public SupplierCouponConfigBean  findCouponInfoByCouponid(Integer coupon_id); 
+	public SupplierCouponConfigBean  findCouponInfoByCouponid(Integer coupon_id);
+
+	/**
+	 * 查询用户当前订单可用的优惠卷列表
+	 * @param userid
+	 * @param orderCode
+	 * @return
+	 */
+	public List<SupplierCouponRecordBean> queryUserCanUseCouponByOrderCode(Integer userid, String orderCode);
+
+	/**
+	 * 通过订单号查询优惠卷记录
+	 * @param orderCode
+	 * @return
+	 */
+	public List<SupplierCouponRecordBean> queryCouponRecordByOrderCode(String orderCode);
+
+
+
+
+	
+
+
+
 }

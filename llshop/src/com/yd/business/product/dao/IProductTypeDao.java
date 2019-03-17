@@ -8,4 +8,5 @@ public interface IProductTypeDao {
 
 	public List<ProductTypeBean> listProductType(ProductTypeBean bean);
 	public List<ProductTypeBean> listProductTypeByCustomerId(int customerid);
+	public List<ProductTypeBean> listProductBrandByCustomerId(int customerid);
 }

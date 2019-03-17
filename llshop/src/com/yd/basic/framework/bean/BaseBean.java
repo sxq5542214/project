@@ -24,7 +24,7 @@ public class BaseBean extends PageinationData {
 //	}
 //	public void setDictMap(HashMap<String, Object> dictMap) {
 //		this.dictMap = dictMap;
-//	}
+//	}1
 
 	public String getDictValueByField(String fieldName,Integer fieldValue){
 		try {

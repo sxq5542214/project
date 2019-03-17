@@ -92,7 +92,7 @@ ISupplierCouponService {
 			// TODO Auto-generated method stub
 			try{
 				List<SupplierCouponConfigBean> returnlist = new ArrayList<SupplierCouponConfigBean>();
-				List<SupplierCouponConfigBean>  list = queryCouponInfo();			//查询目前配置的所有可用的优惠卷信息
+				List<SupplierCouponConfigBean>  list = queryAllCouponInfo();			//查询目前配置的所有可用的优惠卷信息
 				for(SupplierCouponConfigBean bean : list){
 					//根据优惠卷id查询优惠卷展示规则
 					List<SupplierCouponRuleBean> ruleSqlList = QueryShowCouponRuleByCouponid(bean.getId());	
@@ -129,25 +129,36 @@ ISupplierCouponService {
 	 * 查询目前配置所有的可以使用的优惠卷
 	 */
 	@Override
-	public List<SupplierCouponConfigBean> queryCouponInfo() {
+	public List<SupplierCouponConfigBean> queryAllEnableCouponInfo() {
 		SupplierCouponConfigBean bean = new SupplierCouponConfigBean();
-		bean.setStatus(SupplierCouponConfigBean.USE_STATUS);
+		bean.setStatus(SupplierCouponConfigBean.STATUS_UP);
 		bean.setBegin_time(DateUtil.getNowDateStr());
 		bean.setEnd_time(DateUtil.getNowDateStr());
+		bean.setOrderby(" order by seq ");
 		return supplierCouponDao.queryCouponInfo(bean);
 	}
 		
 		
 	
-	
+
+	/**
+	 * 查询目前配置所有的优惠卷
+	 */
+	@Override
+	public List<SupplierCouponConfigBean> queryAllCouponInfo() {
+		SupplierCouponConfigBean bean = new SupplierCouponConfigBean();
+		bean.setOrderby(" order by seq ");
+		return supplierCouponDao.queryCouponInfo(bean);
+	}
+
 	/**
 	 * 根据优惠卷表中的id查询优惠卷规则表中展示优惠卷的所有sql
 	 * */
 	private List<SupplierCouponRuleBean> QueryShowCouponRuleByCouponid(Integer coupon_id){
 		SupplierCouponRuleBean bean = new SupplierCouponRuleBean();
 		bean.setCoupon_id(coupon_id);
-		bean.setStatus(SupplierCouponRuleBean.USE_STATUS);
-		bean.setType(SupplierCouponRuleBean.SHOW_COUPON_RULE_TYPE);
+		bean.setStatus(SupplierCouponRuleBean.STATUS_ENABLE);
+		bean.setType(SupplierCouponRuleBean.TYPE_SHOW);
 		bean.setBegin_time(DateUtil.getNowDateStr());
 		bean.setEnd_time(DateUtil.getNowDateStr());
 		return supplierCouponDao.queryCouponRuleSQLByCouponId(bean);
@@ -159,7 +170,7 @@ ISupplierCouponService {
 	 * 拼接优惠卷规则中规则名称
 	 * */
 	public  SupplierCouponConfigBean  spliceCouponRuleName(SupplierCouponConfigBean bean) {
-		List<SupplierCouponRuleBean> ruleList = queryReceiveCouponRuleSQLById(bean.getId(),SupplierCouponRuleBean.SHOW_COUPON_RULE_TYPE);	
+		List<SupplierCouponRuleBean> ruleList = queryReceiveCouponRuleSQLById(bean.getId(),SupplierCouponRuleBean.TYPE_SHOW);	
 		if(!StringUtil.isNull(ruleList) && ruleList.size() != SupplierCouponConfigBean.COUPON_RULE_LIST_IS_ZERO){
 			if(ruleList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ONE){
 				bean.setRule_name(ruleList.get(SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO).getRule_name());
@@ -182,7 +193,7 @@ ISupplierCouponService {
 	private List<SupplierCouponRuleBean> queryReceiveCouponRuleSQLById(Integer coupon_id,Integer type){
 		SupplierCouponRuleBean bean = new SupplierCouponRuleBean();
 		bean.setCoupon_id(coupon_id);
-		bean.setStatus(SupplierCouponRuleBean.USE_STATUS);
+		bean.setStatus(SupplierCouponRuleBean.STATUS_ENABLE);
 		bean.setType(type);
 		bean.setBegin_time(DateUtil.getNowDateStr());
 		bean.setEnd_time(DateUtil.getNowDateStr());
@@ -232,7 +243,7 @@ ISupplierCouponService {
 		String reveiveResult = configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.RECEIVE_COUPON_INTERNET_BAD);		
 
 		try{
-		List<SupplierCouponRuleBean> ruleSqlList = queryReceiveCouponRuleSQLById(coupon_id,SupplierCouponRuleBean.RECEIVE_COUPON_RULE_TYPE);		//把所有的sql条件通过list方式给查出来
+			List<SupplierCouponRuleBean> ruleSqlList = queryReceiveCouponRuleSQLById(coupon_id,SupplierCouponRuleBean.TYPE_RECEIVE);		//把所有的sql条件通过list方式给查出来
 		if(StringUtil.isNull(ruleSqlList) || ruleSqlList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){				//如果从优惠卷规则表中查询领取优惠卷的规则为空
 			reveiveResult = receiveCoupon(coupon_id,user);	
 			return reveiveResult;
@@ -243,7 +254,7 @@ ISupplierCouponService {
 				return reveiveResult;
 			}else{
 				//根据优惠卷id到规则表中查询该优惠卷的规则信息
-				reveiveResult = findCouponRuleName(coupon_id,SupplierCouponRuleBean.SHOW_COUPON_RULE_TYPE);
+				reveiveResult = findCouponRuleName(coupon_id,SupplierCouponRuleBean.TYPE_SHOW);
 				return reveiveResult;
 			}
 		}
@@ -275,7 +286,7 @@ ISupplierCouponService {
 			SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
 			bean.setUserid(user.getId());								//设置用户id
 			bean.setCoupon_id(coupon_id);								//设置优惠卷id
-			bean.setUse_time(conponInfo.getBegin_time());				//设置生效时间
+			bean.setCreate_time(DateUtil.getNowDateStr());				//设置生效时间
 			bean.setExpire_time(conponInfo.getEnd_time());				//设置失效时间
 			boolean UserReceiveLimit = UserReveiceCouponLimit(coupon_id,user.getId());		//判断改用户领取这个优惠卷的上线是多少
 			if(UserReceiveLimit){											//达到领取条件
@@ -296,35 +307,32 @@ ISupplierCouponService {
 		return reveiveResult;
 	}
 	
-	
-	
-	
 
 	//根据优惠卷id从优惠卷配置表中查询优惠卷信息
-			public SupplierCouponConfigBean findCouponInfoAndRuleNameByCouponid(Integer coupon_id){
-				SupplierCouponConfigBean bean = new SupplierCouponConfigBean();
-				bean.setId(coupon_id);
-				bean.setStatus(SupplierCouponConfigBean.USE_STATUS);
-				bean.setBegin_time(DateUtil.getNowDateStr());
-				bean.setEnd_time(DateUtil.getNowDateStr());
-				bean = supplierCouponDao.findCouponConfigInfo(bean);
-				bean = spliceCouponRuleName(bean);
-				return bean;
-			}
-	
-	
-	
-			/**
-			 * 	 根据优惠卷id从优惠卷配置表中查询优惠卷信息 
-			 * */
-			public SupplierCouponConfigBean findCouponInfoByCouponid(Integer coupon_id){
-				SupplierCouponConfigBean bean = new SupplierCouponConfigBean();
-				bean.setId(coupon_id);
-				bean.setStatus(SupplierCouponConfigBean.USE_STATUS);
-				bean.setBegin_time(DateUtil.getNowDateStr());
-				bean.setEnd_time(DateUtil.getNowDateStr());
-				return supplierCouponDao.findCouponConfigInfo(bean);
-			}
+	public SupplierCouponConfigBean findCouponInfoAndRuleNameByCouponid(Integer coupon_id){
+		SupplierCouponConfigBean bean = new SupplierCouponConfigBean();
+		bean.setId(coupon_id);
+		bean.setStatus(SupplierCouponConfigBean.STATUS_UP);
+		bean.setBegin_time(DateUtil.getNowDateStr());
+		bean.setEnd_time(DateUtil.getNowDateStr());
+		bean = supplierCouponDao.findCouponConfigInfo(bean);
+		bean = spliceCouponRuleName(bean);
+		return bean;
+	}
+
+
+
+	/**
+	 * 	 根据优惠卷id从优惠卷配置表中查询优惠卷信息 
+	 * */
+	public SupplierCouponConfigBean findCouponInfoByCouponid(Integer coupon_id){
+		SupplierCouponConfigBean bean = new SupplierCouponConfigBean();
+		bean.setId(coupon_id);
+		bean.setStatus(SupplierCouponConfigBean.STATUS_UP);
+		bean.setBegin_time(DateUtil.getNowDateStr());
+		bean.setEnd_time(DateUtil.getNowDateStr());
+		return supplierCouponDao.findCouponConfigInfo(bean);
+	}
 	
 	
 	
@@ -335,7 +343,7 @@ ISupplierCouponService {
 	 */
 	@Override
 	public void InsertGetCouponRecord(SupplierCouponRecordBean bean) {
-			bean.setStatus(SupplierCouponRecordBean.USE_STATUS);							//设置状态
+			bean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);							//设置状态
 			bean.setStatus_description(SupplierCouponRecordBean.USER_STATUS_DESCRIPTION);	//设置状态描述
 			bean.setCreate_time(DateUtil.getNowDateStr());									//设置当前系统日期
 			supplierCouponDao.InsertGetCouponRecord(bean);
@@ -344,66 +352,82 @@ ISupplierCouponService {
 	
 	
 	
+//	/**
+//	 *  查询用户目前自己已经拥有的优惠卷
+//	 * */
+//	@Override
+//	public List<SupplierCouponRecordBean> queryMyAllCoupon(Integer userid,Integer supplier_id) {
+//
+//		//更新当前用户的优惠卷到期数据
+//		supplierCouponDao.updateCouponRecordStatusExpiredBySysdate(userid);
+//		List<SupplierCouponRecordBean> myCouponList =  new ArrayList<SupplierCouponRecordBean>();
+//		try{
+//			SupplierCouponRecordBean ruleBean = new SupplierCouponRecordBean();
+//			ruleBean.setUserid(userid);
+//			List<SupplierCouponRecordBean> recordList = queryMycoupon(ruleBean); 		//通过userid,到优惠卷记录表查询我的优惠卷记录
+//			for(SupplierCouponRecordBean recordBeanNew : recordList){
+//				//从前台传过来的产品id,和自己的优惠卷进行比较,如果没有匹配上就给这个状态改为99.
+//				recordBeanNew = matchingCouponUseProduct(supplier_id,recordBeanNew);
+//				
+//				//判断如果匹配到了,该优惠卷可以使用此产品
+//				if(recordBeanNew.getStatus() == SupplierCouponConfigBean.MATCH_TO_PRODUCT ){
+//				//查询此优惠卷的规则是什么做出判断
+//					 List<SupplierCouponRuleBean> couponRuleList = QueryUseCouponRuleByCouponid(recordBeanNew.getCoupon_id());
+//					 if(StringUtil.isNull(couponRuleList) || couponRuleList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){				//如果从优惠卷规则表中查询领取优惠卷的规则为空
+//						 //如果此优惠卷既可以使用此
+//						 recordBeanNew.setRule_name(configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_NO_USE_RULE));
+//						 
+//
+//					 }else{
+//						if(couponRuleList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ONE){
+//							recordBeanNew.setRule_name(couponRuleList.get(SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO).getRule_name());
+//						}
+//						else{
+//							recordBeanNew.setRule_name(couponRuleList.get(SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO).getRule_name());
+//							for(int i = SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ONE; i<couponRuleList.size();i++){
+//								recordBeanNew.setRule_name(couponRuleList.get(i).getRule_name() +";"+ recordBeanNew.getRule_name());
+//							}
+//						}
+//					 }
+//				}else{
+//					//如果该优惠卷没有匹配此产品,那么给优惠卷规则名称设置为该优惠卷不可展示字段
+//					recordBeanNew.setRule_name(configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.NO_USE_COUPON_SHOW));
+//				}
+//				//根据优惠卷id还有优惠卷的type确定查询优惠卷的规则名称
+//				myCouponList.add(recordBeanNew);
+//			}
+//		}catch(Exception e){
+//			log.error(e, e);
+//		}
+//		return myCouponList;
+//	}
+//	
+	
+
 	/**
 	 *  查询用户目前自己已经拥有的优惠卷
 	 * */
 	@Override
-	public List<SupplierCouponRecordBean> queryMyAllCoupon(Integer userid,Integer supplier_id) {
-		// TODO Auto-generated method stub
-		List<SupplierCouponRecordBean> myCouponList =  new ArrayList<SupplierCouponRecordBean>();
-		try{
-			SupplierCouponRecordBean ruleBean = new SupplierCouponRecordBean();
-			ruleBean.setUserid(userid);
-			List<SupplierCouponRecordBean> recordList = queryMycoupon(ruleBean); 		//通过userid,到优惠卷记录表查询我的优惠卷记录
-			for(SupplierCouponRecordBean recordBeanNew : recordList){
-				//从前台传过来的产品id,和自己的优惠卷进行比较,如果没有匹配上就给这个状态改为99.
-				recordBeanNew = matchingCouponUseProduct(supplier_id,recordBeanNew);
-				
-				//判断如果匹配到了,该优惠卷可以使用此产品
-				if(recordBeanNew.getStatus() == SupplierCouponConfigBean.MATCH_TO_PRODUCT ){
-				//查询此优惠卷的规则是什么做出判断
-					 List<SupplierCouponRuleBean> couponRuleList = QueryUseCouponRuleByCouponid(recordBeanNew.getCoupon_id());
-					 if(StringUtil.isNull(couponRuleList) || couponRuleList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){				//如果从优惠卷规则表中查询领取优惠卷的规则为空
-						 //如果此优惠卷既可以使用此
-						 recordBeanNew.setRule_name(configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_NO_USE_RULE));
-						 
-
-					 }else{
-						if(couponRuleList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ONE){
-							recordBeanNew.setRule_name(couponRuleList.get(SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO).getRule_name());
-						}
-						else{
-							recordBeanNew.setRule_name(couponRuleList.get(SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO).getRule_name());
-							for(int i = SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ONE; i<couponRuleList.size();i++){
-								recordBeanNew.setRule_name(couponRuleList.get(i).getRule_name() +";"+ recordBeanNew.getRule_name());
-							}
-						}
-					 }
-				}else{
-					//如果该优惠卷没有匹配此产品,那么给优惠卷规则名称设置为该优惠卷不可展示字段
-					recordBeanNew.setRule_name(configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.NO_USE_COUPON_SHOW));
-				}
-				//根据优惠卷id还有优惠卷的type确定查询优惠卷的规则名称
-				myCouponList.add(recordBeanNew);
-			}
-		}catch(Exception e){
-			log.error(e, e);
-		}
-		return myCouponList;
+	public List<SupplierCouponRecordBean> queryUserAllCoupon(Integer userid,Integer supplier_id) {
+		
+		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
+		bean.setUserid(userid);
+		bean.setSupplier_id(supplier_id);
+		bean.setOrderby(" order by status asc ,id desc ");
+		List<SupplierCouponRecordBean> list = supplierCouponDao.queryMycoupon(bean);
+		
+		return list;
 	}
-	
-	
-	
 	
 	
 	/**
 	 * 根据优惠卷表中的id查询优惠卷规则表中使用优惠卷的所有sql
 	 * */
-	private List<SupplierCouponRuleBean> QueryUseCouponRuleByCouponid(Integer coupon_id){
+	private List<SupplierCouponRuleBean> QueryEnableCouponRuleByCouponid(Integer coupon_id){
 		SupplierCouponRuleBean bean = new SupplierCouponRuleBean();
 		bean.setCoupon_id(coupon_id);
-		bean.setStatus(SupplierCouponRuleBean.USE_STATUS);
-		bean.setType(SupplierCouponRuleBean.USE_COUPON_RULE_TYPE);
+		bean.setStatus(SupplierCouponRuleBean.STATUS_ENABLE);
+		bean.setType(SupplierCouponRuleBean.TYPE_USE);
 		bean.setBegin_time(DateUtil.getNowDateStr());
 		bean.setEnd_time(DateUtil.getNowDateStr());
 		return supplierCouponDao.queryCouponRuleSQLByCouponId(bean);
@@ -427,13 +451,15 @@ ISupplierCouponService {
 	
 	
 	
-
+	/**
+	 * 更新订单的优惠卷为已使用
+	 */
 	@Override
-	public void updateStatusBecomeUserByOrderCode(String order_code , String product_name) {
+	public void updateCouponRecordStatusBecomeUsedByOrderCode(String order_code , String product_name) {
 		// TODO Auto-generated method stub
 		int count = countCouponRecordByOrderCode(order_code);				//根据订单号在优惠卷记录表中查询是否有这个优惠卷正在使用
 		if(count > SupplierCouponRecordBean.COUNT_NUMBER_ZERO){				//如果返回count的结果大于优惠卷总数
-			updateStatusyByOrderCode(order_code,product_name);							//根据订单号更改优惠卷记录表中的状态,把状态更改为已经使用状态
+			updateStatusUsedByOrderCode(order_code,product_name);							//根据订单号更改优惠卷记录表中的状态,把状态更改为已经使用状态
 		}
 		
 		
@@ -454,15 +480,20 @@ ISupplierCouponService {
 	/**
 	 * 根据优惠卷订单号,更新优惠卷状态为使用状态
 	 */
-	public void updateStatusyByOrderCode(String order_code,String product_name) {
+	private void updateStatusUsedByOrderCode(String order_code,String product_name) {
 		// TODO Auto-generated method stub
 		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();	
 		bean.setOrder_code(order_code);													//设置订单编号
 		bean.setProduct_name(product_name);												//设置产品名称
-		bean.setStatus(SupplierCouponRecordBean.USERED_STATUS);							//设置使用状态
+		bean.setStatus(SupplierCouponRecordBean.STATUS_USED);							//设置使用状态
 		bean.setStatus_description(SupplierCouponRecordBean.USERED_STATUS_DESCRIPTION);//设置状态描述
 		bean.setModify_time(DateUtil.getNowDateStr());									//设置修改时间为当前时间
+		bean.setUse_time(DateUtil.getNowDateStr());
 		supplierCouponDao.updateStatusyByOrderCode(bean);
+		
+	}
+	
+	public void updateStatusExpiredByUser(int userid){
 		
 	}
 	
@@ -493,24 +524,16 @@ ISupplierCouponService {
 	 *查询自己拥有的优惠卷 , 优惠卷配置表和优惠卷记录表关联查询
 	 */
 	@Override
-	public List<SupplierCouponRecordBean> queryMycoupon(SupplierCouponRecordBean bean) {
-		// TODO Auto-generated method stub
-		bean.setStatus(SupplierCouponRecordBean.USE_STATUS);
+	public List<SupplierCouponRecordBean> queryUserCanUseCoupon(Integer userid) {
+		//更新当前用户的优惠卷到期数据
+		supplierCouponDao.updateCouponRecordStatusExpiredBySysdate(userid);
+		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
+		bean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
 	//	bean.setUse_time(DateUtil.getNowOnlyDateStr());
 	//  bean.setExpire_time(DateUtil.getNowOnlyDateStr());
 		List<SupplierCouponRecordBean> list = supplierCouponDao.queryMycoupon(bean);
-		List<SupplierCouponRecordBean> listNew = new ArrayList<SupplierCouponRecordBean>(); 
-		try{
-			for(SupplierCouponRecordBean beanNew : list){
-				beanNew.setUse_time(beanNew.getUse_time().substring(SupplierCouponRecordBean.SUBTRING_NUMBER_ZERO,SupplierCouponRecordBean.SUBTRING_NUMBER_TEN));
-				beanNew.setExpire_time(beanNew.getExpire_time().substring(SupplierCouponRecordBean.SUBTRING_NUMBER_ZERO,SupplierCouponRecordBean.SUBTRING_NUMBER_TEN));
-				listNew.add(beanNew);
-			}
-			
-		}catch(Exception e){
-			log.error(e, e);
-		}
-		return listNew;
+	
+		return list;
 	}
 	
 	
@@ -520,17 +543,17 @@ ISupplierCouponService {
 	 * 根据优惠卷规则表的规则使用优惠卷
 	 */
 	@Override
-	public String useCouponResult(Integer coupon_id, Integer userid) {
+	public String useCouponResult(Integer coupon_id, Integer userid,String orderCode) {
 		// TODO Auto-generated method stub
 		//设置"网络原因领取失败,请稍后在试"返回结果,如果后面方法报错,界面将会弹出此结果
 		String	reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.USE_COUPON_INTERNET_BAD);
 		try{
-		List<SupplierCouponRuleBean> ruleSqlList = queryReceiveCouponRuleSQLById(coupon_id,SupplierCouponRuleBean.USE_COUPON_RULE_TYPE);		//把所有的sql条件通过list方式给查出来
+		List<SupplierCouponRuleBean> ruleSqlList = queryReceiveCouponRuleSQLById(coupon_id,SupplierCouponRuleBean.TYPE_USE);		//把所有的sql条件通过list方式给查出来
 		if(StringUtil.isNull(ruleSqlList) || ruleSqlList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){				//如果从优惠卷规则表中查询领取优惠卷的规则为空
 			reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_CAN_USE);
 			return reveiveResult;
 		}else{
-			boolean whetherReceiveCoupon = judgeUseCouponRuleSQL(ruleSqlList,userid);			//如果有使用规则判断领取规则的条件是否成立
+			boolean whetherReceiveCoupon = judgeUseCouponRuleSQL(ruleSqlList,userid,orderCode);			//如果有使用规则判断领取规则的条件是否成立
 			if(whetherReceiveCoupon){															//满足领取规则
 				reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_CAN_USE);
 				return reveiveResult;
@@ -546,18 +569,41 @@ ISupplierCouponService {
 		}
 		
 	}
-
+	
+	/**
+	 * 查询用户当前订单可用的优惠卷列表
+	 * @param userid
+	 * @param orderCode
+	 * @return
+	 */
+	@Override
+	public List<SupplierCouponRecordBean> queryUserCanUseCouponByOrderCode(Integer userid,String orderCode){
+		List<SupplierCouponRecordBean> recordList = queryUserCanUseCoupon(userid);
+		List<SupplierCouponRecordBean> canUseList = new ArrayList<SupplierCouponRecordBean>();
+		for(SupplierCouponRecordBean record : recordList){
+			// 查询当前拥有优惠卷的使用规则
+			List<SupplierCouponRuleBean> ruleList = QueryEnableCouponRuleByCouponid(record.getCoupon_id());
+			// 执行使用条件规则的SQL，返回成功为可使用
+			boolean flag = judgeUseCouponRuleSQL(ruleList, userid, orderCode);
+			if(flag){
+				canUseList.add(record);
+			}
+		}
+		return canUseList;
+	}
+	
 
 	
 	
 	/**
 	 * 判断使用优惠卷的规则是否满足
 	 * */
-		private boolean judgeUseCouponRuleSQL(List<SupplierCouponRuleBean> ruleSqlList,Integer user){
+		private boolean judgeUseCouponRuleSQL(List<SupplierCouponRuleBean> ruleSqlList,Integer user,String orderCode){
 			boolean whetherReceiveCoupon = true ;
 			try{
 				for(SupplierCouponRuleBean bean : ruleSqlList){
 					bean.setSQL(bean.getSQL().replace("#userid#", String.valueOf(user)));
+					bean.setSQL(bean.getSQL().replace("#orderCode#", orderCode));
 					int count = couponRuleSQLCounValue(bean.getSQL());						//执行该优惠卷对应规则表中sql判断是否有返回数据
 					if(count ==  SupplierCouponRuleBean.RULE_SQL_COUNT_MIN_VALUE ){
 						whetherReceiveCoupon = false ;
@@ -579,9 +625,8 @@ ISupplierCouponService {
 	/**
 	 * 查询优惠卷记录表中记录
 	 */
-	public List<SupplierCouponRecordBean> queryCouponRecord(SupplierCouponRecordBean bean) {
+	private List<SupplierCouponRecordBean> queryCouponRecord(SupplierCouponRecordBean bean) {
 		// TODO Auto-generated method stub
-		bean.setStatus(SupplierCouponRecordBean.USE_STATUS);
 		return supplierCouponDao.queryCouponRecord(bean);
 	}
 	
@@ -591,7 +636,7 @@ ISupplierCouponService {
 	 * 查询优惠卷配置表单个优惠卷信息
 	 */
 	public SupplierCouponConfigBean  findCouponConfigInfo(SupplierCouponConfigBean bean){
-		bean.setStatus(SupplierCouponConfigBean.USE_STATUS);
+		bean.setStatus(SupplierCouponConfigBean.STATUS_UP);
 		return  supplierCouponDao.findCouponConfigInfo(bean); 
 	}
 	
@@ -674,20 +719,20 @@ ISupplierCouponService {
 		// TODO Auto-generated method stub
 		SupplierCouponConfigBean couponConfigBean = supplierCouponDao.findCouponConfigInfo(bean);
 		List<String> coupon_show_product_list = new  ArrayList<String>();
-		if(!StringUtil.isNull(couponConfigBean.getCouponshow_product())){
-			StringTokenizer st = new StringTokenizer(couponConfigBean.getCouponshow_product(),",");
+		if(!StringUtil.isNull(couponConfigBean.getCoupon_spid())){
+			StringTokenizer st = new StringTokenizer(couponConfigBean.getCoupon_spid(),",");
 		    while(st.hasMoreTokens() ){
 		    String aa = String.valueOf(st.nextToken());
-		    if(!aa.equals(bean.getCouponshow_product())){
+		    if(!aa.equals(bean.getCoupon_spid())){
 		    	coupon_show_product_list.add(aa);
 		    }
 //		    System.out.println(aa+"你好");
 		    }
 		    for(int i = SupplierCouponConfigBean.INT_ZERO;i<coupon_show_product_list.size();i++){
 		    	if(i == SupplierCouponConfigBean.INT_ZERO){
-		    		bean.setCouponshow_product(coupon_show_product_list.get(i));
+		    		bean.setCoupon_spid(coupon_show_product_list.get(i));
 		    	}else{
-		    		bean.setCouponshow_product(bean.getCouponshow_product()+","+coupon_show_product_list.get(i));
+		    		bean.setCoupon_spid(bean.getCoupon_spid()+","+coupon_show_product_list.get(i));
 		    	}
 		    }
 		supplierCouponDao.updateCouponConfig(bean);
@@ -707,14 +752,14 @@ ISupplierCouponService {
 		// TODO Auto-generated method stub
 		SupplierCouponConfigBean couponConfigBean = supplierCouponDao.findCouponConfigInfo(bean);
 		List<String> coupon_show_product_list = new  ArrayList<String>();
-		if(!StringUtil.isNull(couponConfigBean.getCouponshow_product())){
-			StringTokenizer st = new StringTokenizer(bean.getCouponshow_product(),",");
+		if(!StringUtil.isNull(couponConfigBean.getCoupon_spid())){
+			StringTokenizer st = new StringTokenizer(bean.getCoupon_spid(),",");
 			while(st.hasMoreTokens() ){
 			    String aa = String.valueOf(st.nextToken());
 			    coupon_show_product_list.add(aa);
 			 }
 			
-			StringTokenizer stb = new StringTokenizer(couponConfigBean.getCouponshow_product(),",");
+			StringTokenizer stb = new StringTokenizer(couponConfigBean.getCoupon_spid(),",");
 			while(stb.hasMoreTokens() ){
 				 String bb = String.valueOf(stb.nextToken());
 				 coupon_show_product_list.add(bb);
@@ -726,9 +771,9 @@ ISupplierCouponService {
 			
 			 for(int i = SupplierCouponConfigBean.INT_ZERO;i<coupon_show_product_list.size();i++){
 			    	if(i == SupplierCouponConfigBean.INT_ZERO){
-			    		bean.setCouponshow_product(coupon_show_product_list.get(i));
+			    		bean.setCoupon_spid(coupon_show_product_list.get(i));
 			    	}else{
-			    		bean.setCouponshow_product(bean.getCouponshow_product()+","+coupon_show_product_list.get(i));
+			    		bean.setCoupon_spid(bean.getCoupon_spid()+","+coupon_show_product_list.get(i));
 			    	}
 			    }
 			supplierCouponDao.updateCouponConfig(bean);
@@ -833,7 +878,7 @@ ISupplierCouponService {
 			SupplierCouponConfigBean beanIn = new SupplierCouponConfigBean();
 			beanIn.setId(id);
 			SupplierCouponConfigBean beanOut =  findCouponConfigInfo(beanIn); 
-			List<String> list = Arrays.asList(beanOut.getCouponshow_product().split(","));
+			List<String> list = Arrays.asList(beanOut.getCoupon_spid().split(","));
 			for(SupplierProductBean bean : csp){
 			for(String string : list){
 				int judgeSame =string.compareTo(bean.getId().toString());
@@ -859,7 +904,7 @@ ISupplierCouponService {
 		bean.setId(coupon_record_id);
 		bean.setUserid(userid);
 		bean.setCoupon_id(coupon_id);
-		bean.setStatus(SupplierCouponRecordBean.USERED_STATUS);
+		bean.setStatus(SupplierCouponRecordBean.STATUS_USED);
 		bean.setStatus_description(SupplierCouponRecordBean.USERED_STATUS_DESCRIPTION);
 		supplierCouponDao.changeCouponRecodeUserd(bean);
 	}
@@ -1241,7 +1286,7 @@ ISupplierCouponService {
 		public int reduceCouponNum(Integer coupon_id ){
 			SupplierCouponConfigBean bean = new SupplierCouponConfigBean();
 			bean.setId(coupon_id);
-			bean.setStatus(SupplierCouponConfigBean.USE_STATUS);
+			bean.setStatus(SupplierCouponConfigBean.STATUS_UP);
 		    return supplierCouponDao.UpdateCouponNumReduceOne(bean);
 		}
 		
@@ -1271,7 +1316,7 @@ ISupplierCouponService {
 			SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
 			bean.setCoupon_id(coupon_id);
 			bean.setUserid(userid);
-			bean.setStatus(SupplierCouponRecordBean.USE_STATUS);
+			bean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
 			return 	supplierCouponDao.UserReceiveCouponCount(bean);
 		}
 		
@@ -1328,7 +1373,7 @@ ISupplierCouponService {
 			bean.setId(coupon_record_id);
 			bean.setUserid(userid);
 			bean.setCoupon_id(coupon_id);
-			bean.setStatus(SupplierCouponRecordBean.USE_STATUS);
+			bean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
 			return supplierCouponDao.UserReceiveCouponCount(bean);
 		}
 
@@ -1389,7 +1434,19 @@ ISupplierCouponService {
 			}
 		}
 
-	
+	/**
+	 * 通过订单号查询优惠卷记录
+	 * @param orderCode
+	 * @return
+	 */
+	@Override
+	public List<SupplierCouponRecordBean> queryCouponRecordByOrderCode(String orderCode){
+		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
+		bean.setOrder_code(orderCode);
+		bean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
+		List<SupplierCouponRecordBean> list = queryCouponRecord(bean );
+		return list;
+	}
 
 		
 		

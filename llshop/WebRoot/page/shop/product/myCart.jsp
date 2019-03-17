@@ -9,6 +9,7 @@
 	+ request.getServerName() + ":" + request.getServerPort()
 	+ path + "/";
 	UserCartBean userCart = (UserCartBean)request.getAttribute("userCart");
+	String openid = request.getParameter("openid");
 	int totalPrice = 0 ;
 %>
 <!DOCTYPE html>
@@ -204,10 +205,10 @@
 
 	<script src="js/jquery.js" type="text/javascript"></script>
 	<script src="js/cookieUtil.js"></script>
-	<script src="page/shop/product/js/shoppingCart.js"
+	<script src="js/user/supplierProductShop/shoppingCart.js"
 		type="text/javascript"></script>
 	<script type="text/javascript">
-		var openid = getCookie("openid");
+		var openid = getCookie('openid');
 		function dropCart(spid){
 			if(confirm('确认要删除此商品？')){
 				$("#"+spid).hide();
@@ -269,8 +270,8 @@
 		};
 		
 		function gotoOrder(){
-			var prods = $("span[id^='spTotalPrice']");
 			var time = new Date();
+			var prods = $("span[id^='spTotalPrice']");
 			var json_temp = "{productInfos:[";
 			var isEmpty = true;
 			
@@ -281,7 +282,7 @@
 				if(prods[i].getAttribute("check") == "true"){
 					json_temp += "{spid:" + spid +",num:"+ num +"}" ;
 					isEmpty = false;
-					deleteProductToCart(spid);
+			//		deleteProductToCart(spid);
 				}
 				if(i != prods.length - 1){
 					json_temp +=",";
@@ -294,7 +295,7 @@
 				return ;
 			}
 			json_temp += "],time:" + time.getTime() +"}";
-			location.href= "<%=basePath%>user/toUserShopOrderPage.do?openid="+openid+"&data="+ json_temp ;
+			location.href= "<%=basePath%>user/toSupplierShopUserOrderPage.do?openid="+openid+"&time="+time.getTime() ;
 		};
 		
 	</script>

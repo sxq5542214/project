@@ -381,7 +381,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 		if(status == OrderProductLogBean.STATUS_SUCCESS)
 		{
 			//根据订单号,把优惠卷消除,如果根据订单号在优惠卷记录表中查不到任何信息则不更新
-			supplierCouponService.updateStatusBecomeUserByOrderCode(orderLog.getOrder_code(),orderLog.getProduct_name());
+			supplierCouponService.updateCouponRecordStatusBecomeUsedByOrderCode(orderLog.getOrder_code(),orderLog.getProduct_name());
 			
 			user.setLast_order_time(DateUtil.getNowDateStr());
 			//生成扣减积分记录
@@ -1038,7 +1038,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 		user.setLast_order_time(DateUtil.getNowDateStr());
 		userWechatService.update(user);
 		//根据订单号,把优惠卷消除,如果根据订单号在优惠卷记录表中查不到任何信息则不更新
-		supplierCouponService.updateStatusBecomeUserByOrderCode(orderLog.getOrder_code(),orderLog.getProduct_name());
+		supplierCouponService.updateCouponRecordStatusBecomeUsedByOrderCode(orderLog.getOrder_code(),orderLog.getProduct_name());
 		
 		
 		return eff;

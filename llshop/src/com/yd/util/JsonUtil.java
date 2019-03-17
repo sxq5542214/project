@@ -4,6 +4,7 @@
 package com.yd.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -91,6 +92,18 @@ public class JsonUtil {
 		}
 		
 		return key;
+	}
+	
+	public static String convertObjectToJsonString(Object obj){
+		if(obj instanceof Collection){
+			JSONArray json = new JSONArray((Collection)obj);
+			return json.toString();
+		}else if(obj instanceof Integer){
+			return String.valueOf(obj);
+		}else{
+			JSONObject json = new JSONObject(obj);
+			return json.toString();
+		}
 	}
 	  
 	  

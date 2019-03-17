@@ -54,7 +54,7 @@
               </li>
               <li>
                 <div class="demo-btn-group clearfix">
-                  <a href="login.html" class="btn btn-danger">
+                  <a href="loginAccount.html" class="btn btn-danger">
                     系统退出
                   </a>
                 </div>

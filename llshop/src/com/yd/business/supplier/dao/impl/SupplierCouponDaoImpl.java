@@ -251,6 +251,11 @@ public class SupplierCouponDaoImpl  extends BaseDao implements ISupplierCouponDa
 		// TODO Auto-generated method stub
 		sqlSessionTemplate.update(NAMESPACE+"updateCouponRecord", bean);
 	}
+	@Override
+	public void updateCouponRecordStatusExpiredBySysdate(int userid) {
+		// TODO Auto-generated method stub
+		sqlSessionTemplate.update(NAMESPACE+"updateCouponRecordStatusExpiredBySysdate", userid);
+	}
 
 
 	@Override

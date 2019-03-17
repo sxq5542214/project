@@ -311,7 +311,7 @@ public class WechatController extends BaseController {
 		
 		String coupon_record_id = request.getParameter("coupon_record_id");			//优惠卷id
 		String openid = request.getParameter("openid");								//openid 	123
-		String price = request.getParameter("price");								//用户需要支付的价格		14.20
+		String cost_money = request.getParameter("cost_money");								//用户需要支付的价格		14.20
 		String points = request.getParameter("points");							//该产品可以抵用的积分		100
 		String balanceStr = request.getParameter("cost_balance");					//可以使用的余额			100
 		Integer cost_balance = StringUtil.isNull(balanceStr) ? 0:Integer.parseInt(balanceStr);	//给eff_numStr字段          String类型转换成Integer类型
@@ -321,7 +321,8 @@ public class WechatController extends BaseController {
 		
 		UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);					//通过openid到user表中查找记录
 		if(user == null){																		//做一个验证,确定此openid能够找到对应的用户
-			throw new RuntimeException(" createUnifiedOrderByShop user is null!");
+			log.error(" createUnifiedOrderByShop user is null! ,openid:"+ openid );
+			return null;
 		}
 		
 		
@@ -329,10 +330,13 @@ public class WechatController extends BaseController {
 		if(!StringUtil.isNull(coupon_record_id) ){
 			SupplierCouponRecordBean couponRecordBean = new SupplierCouponRecordBean();
 			couponRecordBean.setUserid(user.getId());
+			couponRecordBean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
 			couponRecordBean.setId(Integer.parseInt(coupon_record_id));
 			couponRecordBean  = supplierCouponService.findCouponRecord(couponRecordBean);
+			//根据优惠卷信息 更新订单数据，主要是价格侧的变动
+			shopOrderService.updateShopOrderByCoupon(order_code, couponRecordBean);
 			if(couponRecordBean == null){
-					throw new RuntimeException(" createUnifiedOrderByShop couponRecord is null!");
+				log.error(" createUnifiedOrderByShop couponRecord is null ,userid:"+ user.getId() +" recordid:" + coupon_record_id);
 			}
 		}
 		
@@ -354,7 +358,7 @@ public class WechatController extends BaseController {
 //		String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_WXPAY, user.getId());
 		String out_trade_no = "out_trade_no="+ order_code;
 		//需要支付的总金额,以分为单位
-		int rmb = (int) (Double.parseDouble(price)  * 100);
+		int rmb = (int) (Double.parseDouble(cost_money)  * 100);
 		String total_fee = "total_fee="+ rmb;
 		//客户IP
 		String spbill_create_ip = request.getRemoteAddr();
@@ -397,20 +401,16 @@ public class WechatController extends BaseController {
 				if(cost_balance != null && cost_balance >0){
 					interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHATANDBALANCE;
 				}
-			
+				
 				UserConsumeInfoBean consume ;
 				//如果优惠卷记录id为不为空
 				if(!StringUtil.isNull(coupon_record_id) ){
 					//根据优惠卷记录表中的id,在优惠卷优惠卷记录表中添加订单号
 					supplierCouponService.updateOrderCodeCouponRecordById(Integer.parseInt(coupon_record_id),order_code);
-					interface_type =  UserConsumeInfoBean.INTERFACETYPE_COUPONPAY;
-					//保存充值记录     在ll_user_consume_info表中加入充值记录
-					consume = userConsumeInfoService.createConsumeInfo(phone,rmb, (Integer)null, user.getId(), resultBean.getPrepay_id(), order_code,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_COUPON);
-				}else{
-					//保存充值记录     在ll_user_consume_info表中加入充值记录
-					consume = userConsumeInfoService.createConsumeInfo(phone,rmb, (Integer)null, user.getId(), resultBean.getPrepay_id(), order_code,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
-
 				}
+				//保存充值记录     在ll_user_consume_info表中加入充值记录
+				consume = userConsumeInfoService.createConsumeInfo(phone,rmb, (Integer)null, user.getId(), resultBean.getPrepay_id(), order_code,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
+				
 				
 				//返回界面需要支付的信息
 				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
@@ -602,7 +602,13 @@ public class WechatController extends BaseController {
 		//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
 		userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
 		//通过订单号在订购表中更改状态为更新支付成功状态
-		shopOrderService.updateShopOrderStatus(result.getOut_trade_no(),ShopOrderInfoBean.STATUS_PAYSUCCESS);
+		shopOrderService.updateShopOrderPaySuccess(Integer.parseInt(result.getCash_fee()), result.getOut_trade_no());
+		
+		//保存并处理用户动作
+		msgCenterActionService.saveAndHandleUserAction(result.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, result.getOut_trade_no());
+				
+		
+		
 		
 //		UserConsumeInfoBean consumeInfo = userConsumeInfoService.findUserConsumeInfo(result.getOut_trade_no());
 //		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogByCode(result.getOut_trade_no());

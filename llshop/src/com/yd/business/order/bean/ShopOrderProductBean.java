@@ -13,6 +13,17 @@ import com.yd.basic.framework.bean.BaseBean;
  */
 @Alias("shopOrderProduct")
 public class ShopOrderProductBean extends BaseBean {
+	
+	/**
+	 * 正常类商品
+	 */
+	public static final int TYPE_NORMAL = 1 ;
+	/**
+	 * 优惠卷类相关商品
+	 */
+	public static final int TYPE_COUPON = 2 ;
+	
+	
 	private Integer id;
 	private Integer order_info_id;
 	private String order_code;
@@ -27,6 +38,7 @@ public class ShopOrderProductBean extends BaseBean {
 	private Integer cost_points;
 	private Integer discount;
 	private Integer num;
+	private Integer type;
 	private String create_time;
 	
 	private String head_img;
@@ -125,5 +137,11 @@ public class ShopOrderProductBean extends BaseBean {
 	}
 	public void setNum(Integer num) {
 		this.num = num;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
 	}
 }

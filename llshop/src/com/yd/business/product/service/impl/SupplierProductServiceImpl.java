@@ -117,7 +117,7 @@ public class SupplierProductServiceImpl extends BaseService implements
 	 * 查询平台的商品
 	 */
 	@Override
-	public List<CustomerSupplierProductBean> queryPlatformSupplierProduct(){
+	public List<SupplierProductBean> queryPlatformSupplierProduct(){
 		
 		SupplierProductBean condition = new SupplierProductBean();
 		condition.setCustomer_id(CustomerBean.ID_PLATFROM);
@@ -125,13 +125,9 @@ public class SupplierProductServiceImpl extends BaseService implements
 		List<CustomerSupplierProductBean> listCsp = new ArrayList<CustomerSupplierProductBean>();
 		
 		//查询每个商户下的商品
-		List<SupplierProductBean> csp = supplierProductDao.queryPlatformProduct(condition);
+		List<SupplierProductBean> csp = supplierProductDao.querySupplierProduct(condition);
 		
-		if(csp.size() >0){
-			listCsp.add(new CustomerSupplierProductBean(null,null,csp));
-		}
-		
-		return listCsp;
+		return csp;
 	}
 	
 	

@@ -17,7 +17,7 @@ public interface ISupplierProductService {
 
 	List<CustomerSupplierProductBean> queryCustomerProductByPhone(int customer_id, String phone);
 	
-	List<CustomerSupplierProductBean> queryPlatformSupplierProduct();
+	List<SupplierProductBean> queryPlatformSupplierProduct();
 
 	SupplierProductBean findSupplierProductBySpid(Integer spid);
 	

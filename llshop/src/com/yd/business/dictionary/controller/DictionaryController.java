@@ -42,6 +42,7 @@ public class DictionaryController extends BaseController {
 	public ModelAndView refreshDictionary(HttpServletRequest request,HttpServletResponse response){
 		try{
 			dictionaryService.initDictData();
+			writeJson(response, "已完成字典数据刷新");
 		}catch (Exception e) {
 			log.error(e, e);
 		}
@@ -52,6 +53,7 @@ public class DictionaryController extends BaseController {
 	public ModelAndView refreshBaseContext(HttpServletRequest request,HttpServletResponse response){
 		try{
 			BaseContext.refreshParam();
+			writeJson(response, "已完成上下文参数数据刷新");
 		}catch (Exception e) {
 			log.error(e, e);
 		}

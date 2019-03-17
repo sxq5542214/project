@@ -15,6 +15,7 @@ public class ProductTypeBean extends BaseBean {
 	private Integer type;
 	private String remark;
 	private String typeName;
+	private Integer seq;
 	
 	public String getTypeName() {
 		return typeName;
@@ -51,6 +52,12 @@ public class ProductTypeBean extends BaseBean {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public Integer getSeq() {
+		return seq;
+	}
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 	
 }

@@ -174,7 +174,6 @@
                             </div>
                           </div>
                           <div class="form-actions">
-                          	<input type="hidden" id="id" name="id" value="<%=StringUtil.convertNull(bean.getId()) %>">
 							<input type="submit"  class="btn btn-info pull-right"
 							id="save-infor-btn" value="保存"> &nbsp;&nbsp; <input type="button"
 							 class="btn btn-info pull-right" value="返回"

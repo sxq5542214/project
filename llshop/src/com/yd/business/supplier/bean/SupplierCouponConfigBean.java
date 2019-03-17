@@ -7,19 +7,28 @@ import com.yd.basic.framework.bean.BaseBean;
 @Alias("supplierCouponConfig")
 public class SupplierCouponConfigBean  extends BaseBean {
 
-	public static final Integer USE_STATUS = 1;			//使用状态
-	public static final Integer MATCH_TO_PRODUCT = 99;  //该优惠卷匹配到可以展示的产品
+	public static final int STATUS_UP = 1;			//可用
+	public static final int STATUS_DOWN = 2;			//不可用
 	
-	public	static final Integer COUPON_RULE_LIST_IS_ZERO = 0;
+	public static final int TYPE_CASH = 1;			//代金券
+	public static final int TYPE_DISCOUNT = 2;			//折扣券
+	public static final int TYPE_GIFT = 3;			//礼品卷
+	public static final int TYPE_CHANGE = 4;			//换购卷
+	public static final int TYPE_EXPERIENCE = 5;			//体验卷
+	
+	
+	public static final int MATCH_TO_PRODUCT = 99;  //该优惠卷匹配到可以展示的产品
+	
+	public	static final int COUPON_RULE_LIST_IS_ZERO = 0;
 
-	public static final Integer COUPON_SHOW_PRODUCT_ZERO = 0 ;
+	public static final int COUPON_SHOW_PRODUCT_ZERO = 0 ;
 	
-	public static final Integer COUPON_DISCOUNT_ZERO = 0 ;
+	public static final int COUPON_DISCOUNT_ZERO = 0 ;
 	
-	public static final Integer COUPON_DISCOUNT_DIVIDE_ONE_HUNDRED = 100 ;
-	public static final Integer COUPON_OFFSET_MONEY_DIVIDE_TEN = 10;
+	public static final int COUPON_DISCOUNT_DIVIDE_ONE_HUNDRED = 100 ;
+	public static final int COUPON_OFFSET_MONEY_DIVIDE_TEN = 10;
 	
-	public static final Integer PRICE_IS_ZERO = 0;
+	public static final int PRICE_IS_ZERO = 0;
 	
 	public static final int SUBSTRING_ZEOR = 0;
 	public static final int SUBSTRING_TEN = 10;
@@ -32,8 +41,8 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	public static final String CONFIG_CRUX_DELETE_ERROR = "delete_error";				//删除错误
 	
 	private Integer id;
-	private Integer merchant_id;		//商户id
-	private String merchant_name;	//商户名称
+	private Integer supplier_id;		//商户id
+	private String supplier_name;	//商户名称
 	private String code;			
 	private Integer type;
 	private String coupon_name;		//优惠卷名称
@@ -47,7 +56,8 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	private String end_time;			//优惠卷结束时间
 	private String remark;			//备注
 	private String coupon_backgroup;//优惠卷背景颜色
-	private String couponshow_product;//优惠卷展示的产品
+	private String coupon_spid;//优惠卷对应的产品ID，逗号隔开
+	private Integer seq;	//顺序
 	
 	private String rule_name;			//优惠卷规则  	此字段是从优惠卷规则表中取
 	private String reveiveResult;		//存储领取优惠卷执行结果
@@ -58,17 +68,17 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getMerchant_id() {
-		return merchant_id;
+	public Integer getSupplier_id() {
+		return supplier_id;
 	}
-	public void setMerchant_id(Integer merchant_id) {
-		this.merchant_id = merchant_id;
+	public void setSupplier_id(Integer supplier_id) {
+		this.supplier_id = supplier_id;
 	}
-	public String getMerchant_name() {
-		return merchant_name;
+	public String getSupplier_name() {
+		return supplier_name;
 	}
-	public void setMerchant_name(String merchant_name) {
-		this.merchant_name = merchant_name;
+	public void setSupplier_name(String supplier_name) {
+		this.supplier_name = supplier_name;
 	}
 	public String getCode() {
 		return code;
@@ -148,11 +158,11 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	public void setCoupon_backgroup(String coupon_backgroup) {
 		this.coupon_backgroup = coupon_backgroup;
 	}
-	public String getCouponshow_product() {
-		return couponshow_product;
+	public String getCoupon_spid() {
+		return coupon_spid;
 	}
-	public void setCouponshow_product(String couponshow_product) {
-		this.couponshow_product = couponshow_product;
+	public void setCoupon_spid(String coupon_spid) {
+		this.coupon_spid = coupon_spid;
 	}
 	public String getRule_name() {
 		return rule_name;
@@ -171,6 +181,12 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	}
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+	public Integer getSeq() {
+		return seq;
+	}
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 	
 }

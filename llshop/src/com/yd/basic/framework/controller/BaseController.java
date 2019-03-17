@@ -31,6 +31,7 @@ import com.yd.basic.framework.context.WebContext;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.impl.CustomerServiceImpl;
 import com.yd.util.DateUtil;
+import com.yd.util.JsonUtil;
 import com.yd.util.StringUtil;
 
 
@@ -98,20 +99,24 @@ public abstract class BaseController extends MultiActionController {
 				return;
 			}
 			
-			if(obj instanceof Collection){
-				JSONArray json = new JSONArray((Collection)obj);
-				response.getWriter().append(json.toString());
-				
-				log.debug(this.getClass()+ " json:"+json.toString());
-			}else if(obj instanceof Integer){
-				response.getWriter().append(String.valueOf(obj));
-				log.debug(this.getClass()+ " json:"+obj);
-			}else{
-				JSONObject json = new JSONObject(obj);
-				response.getWriter().append(json.toString());
-				
-				log.debug(this.getClass()+ " json:"+json.toString());
-			}
+//			if(obj instanceof Collection){
+//				JSONArray json = new JSONArray((Collection)obj);
+//				response.getWriter().append(json.toString());
+//				
+//				log.debug(this.getClass()+ " json:"+json.toString());
+//			}else if(obj instanceof Integer){
+//				response.getWriter().append(String.valueOf(obj));
+//				log.debug(this.getClass()+ " json:"+obj);
+//			}else{
+//				JSONObject json = new JSONObject(obj);
+//				response.getWriter().append(json.toString());
+//				
+//				log.debug(this.getClass()+ " json:"+json.toString());
+//			}
+			
+			String jsonString = JsonUtil.convertObjectToJsonString(obj);
+			log.debug(this.getClass()+ " json:"+jsonString);
+			response.getWriter().append(jsonString);
 			response.getWriter().flush();
 			response.getWriter().close();
 		}catch (Exception e) {

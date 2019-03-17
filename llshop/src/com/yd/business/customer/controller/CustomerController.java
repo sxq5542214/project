@@ -123,6 +123,35 @@ public class CustomerController extends BaseController {
 		}
 		return null;
 	}
+	
+
+	/*******************微信－end***********************/
+	/**
+	 * 系统登录测试
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping("/customer/loginTest.do")
+	public ModelAndView loginTest(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		try {
+			String result = "";
+			String user = request.getParameter("username");
+			String pwd = request.getParameter("password");
+			result = login(user, pwd,"admin/index.do");
+			if("admin/index.do".equals(result)){
+				return new ModelAndView("/admin/index.do");
+			}else{
+				writeJson(response, LoginBean.USER_PWD_ERROR);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e,e);
+			writeJson(response, LoginBean.DATA_ERROR);
+		}
+		return null;
+	}
 	/**
 	 * 操作员登录
 	 * @param user

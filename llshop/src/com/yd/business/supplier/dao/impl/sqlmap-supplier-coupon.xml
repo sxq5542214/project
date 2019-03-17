@@ -11,7 +11,7 @@
 			<if test="begin_time !=null and begin_time !=''"> and  #{begin_time} >= b.begin_time </if>
 			<if test="end_time !=null and end_time !=''"> and b.end_time >= #{end_time} </if>
 			<if test="type !=null "> and a.type >= #{type} </if>
-			
+			<if test="orderby != null"> ${orderby}</if>
 		</where>
 		
 	</select>
@@ -25,7 +25,7 @@
 			<if test="begin_time !=null and begin_time !=''"> and  #{begin_time} >= begin_time </if>
 			<if test="end_time !=null and end_time !=''"> and end_time >= #{end_time} </if>
 			<if test="type !=null "> and a.type >= #{type} </if>
-			
+			<if test="orderby != null"> ${orderby}</if>
 		</where>
 		
 	</select>
@@ -38,28 +38,34 @@
 	</insert>
 	
 	<select id="queryMycoupon" resultType="supplierCouponRecord" parameterType="supplierCouponRecord">
-	select a.*,b.merchant_name,b.coupon_name,b.coupon_discount,b.coupon_offsetmoney,b.coupon_backgroup,b.couponshow_product from ll_coupon_record a , ll_coupon_config b 
+	select a.*,b.supplier_name,b.coupon_name,b.coupon_discount,b.coupon_offsetmoney,b.coupon_backgroup,b.coupon_spid,b.type coupon_type , b.remark coupon_remark from ll_coupon_record a , ll_coupon_config b 
 		<where>
 		b.id = a.coupon_id 
 		<if test="userid !=null "> and a.userid = #{userid} </if>
 		<if test="status !=null  "> and a.status = #{status} </if>
+		<if test="coupon_id !=null "> and a.coupon_id = #{coupon_id} </if>
+		<if test="order_code !=null  "> and a.order_code = #{order_code} </if>
 		<if test="use_time !=null and use_time !=''"> and  #{use_time} >= a.use_time </if>
 		<if test="expire_time !=null and expire_time !=''"> and a.expire_time >= #{expire_time} </if>
 		</where>
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	
 	
 	<select id="queryCouponRecord" resultType="supplierCouponRecord" parameterType="supplierCouponRecord">
-		select * from ll_coupon_record 
+		select a.*,b.supplier_name,b.coupon_name,b.coupon_discount,b.coupon_offsetmoney,b.coupon_backgroup,b.coupon_spid,b.type coupon_type , b.remark coupon_remark from ll_coupon_record a , ll_coupon_config b
 		<where>
-			<if test="id !=null ">and id = #{id} </if>
-			<if test="userid !=null "> and userid = #{userid} </if>
-			<if test="coupon_id !=null "> and coupon_id = #{coupon_id} </if>
-			<if test="use_time !=null and use_time !=''"> and  #{use_time} >= use_time </if>
-			<if test="expire_time !=null and expire_time !=''"> and expire_time >= #{expire_time} </if>
-			<if test="status !=null "> and status = #{status} </if>
+			b.id = a.coupon_id 
+			<if test="id !=null ">and a.id = #{id} </if>
+			<if test="userid !=null "> and a.userid = #{userid} </if>
+			<if test="coupon_id !=null "> and a.coupon_id = #{coupon_id} </if>
+			<if test="use_time !=null and use_time !=''"> and  #{use_time} >= a.use_time </if>
+			<if test="expire_time !=null and expire_time !=''"> and a.expire_time >= #{expire_time} </if>
+			<if test="status !=null "> and a.status = #{status} </if>
+			<if test="order_code !=null  "> and a.order_code = #{order_code} </if>
 		</where>
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 		
 	<select id="queryCouponRuleSQLByCouponId" resultType="supplierCouponRule" parameterType="supplierCouponRule">
@@ -71,6 +77,7 @@
 		<if test="begin_time !=null and begin_time !=''"> and #{begin_time} >= begin_time </if>
 		<if test="end_time !=null and end_time !=''"> and end_time >= #{end_time} </if>
 		</where>	
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	<select id="queryProductByCouponRuleSQL" parameterType="String" resultType="supplierProduct">
@@ -122,7 +129,7 @@
 			<if test="id !=null ">and id = #{id} </if>
 			<if test="userid !=null ">and userid = #{userid} </if>
 		</where>
-		
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	
@@ -132,7 +139,7 @@
 		<where>
 			<if test="order_code !=null ">and order_code = #{order_code} </if>
 		</where>
-		
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	
@@ -167,7 +174,7 @@
 			<if test="coupon_id !=null ">and coupon_id = #{coupon_id} </if>
 			<if test="type !=null ">and type = #{type} </if>
 		</where>
-		
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	
@@ -175,27 +182,30 @@
 	<select id="queryCouponConfigPage"  parameterType="supplierCouponConfig" resultType="supplierCouponConfig">
 		select * from ll_coupon_config sp
 	<where>
-		<if test="merchant_name != null and merchant_name!=''"> and sp.merchant_name like concat('%', #{merchant_name}, '%')</if>
+		<if test="supplier_name != null and supplier_name!=''"> and sp.supplier_name like concat('%', #{supplier_name}, '%')</if>
 		<if test="coupon_name != null and coupon_name!=''"> and sp.coupon_name like concat('%', #{coupon_name}, '%')</if>
 	</where>
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	
 	<select id="queryCouponRecordPage"  parameterType="supplierCouponRecord" resultType="supplierCouponRecord">
 		select * from ll_coupon_record sp
-	<where>
-		<if test="userid != null "> and sp.userid like concat('%', #{userid}, '%')</if>
-		<if test="order_code != null and order_code !=''"> and sp.order_code like concat('%', #{order_code}, '%')</if>
-	</where>
+		<where>
+			<if test="userid != null "> and sp.userid like concat('%', #{userid}, '%')</if>
+			<if test="order_code != null and order_code !=''"> and sp.order_code like concat('%', #{order_code}, '%')</if>
+		</where>
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	
 	<select id="queryCouponRulePage"  parameterType="supplierCouponRule" resultType="supplierCouponRule">
 		select * from ll_coupon_rule sp
-	<where>
-		<if test="rule_name != null and rule_name !=''"> and sp.rule_name like concat('%', #{rule_name}, '%')</if>
-		<if test="SQL != null and SQL !=''"> and sp.SQL like concat('%', #{SQL}, '%')</if>
-	</where>
+		<where>
+			<if test="rule_name != null and rule_name !=''"> and sp.rule_name like concat('%', #{rule_name}, '%')</if>
+			<if test="SQL != null and SQL !=''"> and sp.SQL like concat('%', #{SQL}, '%')</if>
+		</where>
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	
@@ -229,17 +239,17 @@
 	
 
 	<insert id="insertCouponConfig" parameterType="supplierCouponConfig"   keyProperty="id">
-		insert into ll_coupon_config(merchant_id,merchant_name,code,type,coupon_name,coupon_discount,coupon_offsetmoney,status,number,
-		receive_limit_num,coupon_count,begin_time,end_time,remark,coupon_backgroup,couponshow_product) values 
-		(#{merchant_id},#{merchant_name},#{code},#{type},#{coupon_name},#{coupon_discount},#{coupon_offsetmoney},#{status},#{number},
-		#{receive_limit_num},#{coupon_count},#{begin_time},#{end_time},#{remark},#{coupon_backgroup},#{couponshow_product})
+		insert into ll_coupon_config(supplier_id,supplier_name,code,type,coupon_name,coupon_discount,coupon_offsetmoney,status,number,
+		receive_limit_num,coupon_count,begin_time,end_time,remark,coupon_backgroup,coupon_spid) values 
+		(#{supplier_id},#{supplier_name},#{code},#{type},#{coupon_name},#{coupon_discount},#{coupon_offsetmoney},#{status},#{number},
+		#{receive_limit_num},#{coupon_count},#{begin_time},#{end_time},#{remark},#{coupon_backgroup},#{coupon_spid})
 	</insert>
 	
 	<update id="updateCouponConfig" parameterType="supplierCouponConfig">
 		update ll_coupon_config 
 		<set>
-			<if test="merchant_id != null">merchant_id = #{merchant_id},</if>
-			<if test="merchant_name != null and merchant_name !=''">merchant_name = #{merchant_name},</if>
+			<if test="supplier_id != null">supplier_id = #{supplier_id},</if>
+			<if test="supplier_name != null and supplier_name !=''">supplier_name = #{supplier_name},</if>
 			<if test="code != null and code !=''">code = #{code},</if>
 			<if test="type != null">type = #{type},</if>
 			<if test="coupon_name != null and coupon_name !=''">coupon_name = #{coupon_name},</if>
@@ -253,7 +263,7 @@
 			<if test="end_time != null and end_time !=''">end_time = #{end_time},</if>
 			<if test="remark != null and remark !=''">remark = #{remark},</if>
 			<if test="coupon_backgroup != null and coupon_backgroup != ''"> coupon_backgroup = #{coupon_backgroup},</if>
-			<if test="couponshow_product != null and couponshow_product !=''">couponshow_product = #{couponshow_product},</if>
+			<if test="coupon_spid != null and coupon_spid !=''">coupon_spid = #{coupon_spid},</if>
 		</set>
 		<where>
 			id = #{id}
@@ -316,5 +326,8 @@
 		</where>
 	</update>
 	
-	
+	<update id="updateCouponRecordStatusExpiredBySysdate" parameterType="int">
+		update ll_coupon_record set status = 3 , status_description='优惠卷已过期'  where 
+		userid = #{value} and SYSDATE() >= expire_time  and status = 1 
+	</update>
 </mapper>

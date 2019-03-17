@@ -7,15 +7,15 @@ import com.yd.basic.framework.bean.BaseBean;
 @Alias("supplierCouponRule")
 public class SupplierCouponRuleBean  extends BaseBean {
 	
-	public static final Integer USE_STATUS = 1;//可以使用状态
-	public static final Integer USE_NO_STATUS = -1;//不可以使用状态
+	public static final int STATUS_ENABLE = 1;//可以使用状态
+	public static final int STATUS_DISABLE = -1;//不可以使用状态
 
-	public static final Integer SHOW_COUPON_RULE_TYPE= 0;	//展示优惠卷type类型
-	public static final Integer RECEIVE_COUPON_RULE_TYPE= 1;	//领取优惠卷type类型
-	public static final Integer USE_COUPON_RULE_TYPE =2;		//使用优惠卷type类型
+	public static final int TYPE_SHOW = 0;	//展示优惠卷type类型
+	public static final int TYPE_RECEIVE = 1;	//领取优惠卷type类型
+	public static final int TYPE_USE =2;		//使用优惠卷type类型
 
-	public static final Integer RULE_SQL_COUNT_MIN_VALUE = 0;	//	
-	public static final Integer UPDATE_COUPON_MIN_NUMBER = 0 ;		//更新优惠卷最小次数
+	public static final int RULE_SQL_COUNT_MIN_VALUE = 0;	//	
+	public static final int UPDATE_COUPON_MIN_NUMBER = 0 ;		//更新优惠卷最小次数
 	
 	//优惠卷的
 	public static final String NO_USE_COUPON_SHOW = "no_use_coupon_show";			//该优惠卷不可展示此商品
@@ -41,7 +41,7 @@ public class SupplierCouponRuleBean  extends BaseBean {
 	public static final String CONFIG_CRUX_DELETE_ERROR = "delete_error";				//删除错误
 	
 	private Integer id;
-	private int coupon_id;		//优惠卷id
+	private Integer coupon_id;		//优惠卷id
 	private String rule_name;	//规则名称
 	private String explain;		//规则解释
 	private Integer status;		//状态
@@ -59,10 +59,10 @@ public class SupplierCouponRuleBean  extends BaseBean {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public int getCoupon_id() {
+	public Integer getCoupon_id() {
 		return coupon_id;
 	}
-	public void setCoupon_id(int coupon_id) {
+	public void setCoupon_id(Integer coupon_id) {
 		this.coupon_id = coupon_id;
 	}
 	public String getRule_name() {
@@ -89,10 +89,10 @@ public class SupplierCouponRuleBean  extends BaseBean {
 	public void setExplain(String explain) {
 		this.explain = explain;
 	}
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	public Integer getType() {

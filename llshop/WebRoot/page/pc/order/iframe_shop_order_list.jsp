@@ -104,13 +104,47 @@
 					</table>
 					</form>
 				
-				<div class="widget-body">
+				<div class="widget-body" style="padding: 5px;">
 					<!-- <a class="btn btn-success" href="javascript:window.location.href='admin/supplierTopic/toUpdatePage.do'">
 						<i class="fa fa-plus-circle"></i> 新增客户
 					</a> -->
 					<div id="dt_example" class="example_alt_pagination">
 					<table class="table table-condensed table-striped table-hover table-bordered pull-left" id="data-table">
-                        <thead>
+					 <thead>
+                          <tr>
+                              <th >
+                              ID
+                            </th>
+							<th >
+                               下单时间
+                            </th>
+                            <th >
+                         订单名称    
+                            </th>
+                            <th >
+                               定单状态
+                            </th>
+                            <th >
+                              下单金额
+                            </th>
+                         </tr>
+                         <tr>
+                            <th colspan="2">
+                              快递单号
+                            </th>
+                            <th colspan="2">
+                              收货信息
+                            </th>
+                            
+                            <th >
+                              操作
+                            </th>
+                          </tr>
+                        </thead>
+					
+					
+					
+       <!--                  <thead>
                           <tr>
                               <th >
                                用户昵称
@@ -143,38 +177,53 @@
                               操作
                             </th>
                           </tr>
-                        </thead>
+                        </thead> -->
                         <tbody>
-                        <% for(ShopOrderInfoBean order : orderList){
+                        <%  int i = 0 ; 
+                        	for(ShopOrderInfoBean order : orderList){
+							String str = "";
+							if(i++ %2 ==0){ str = "gradeX warning"; }
 							 %>
-                          <tr class="gradeX warning">
-                          <td>
+                          <tr class="<%=str %>">
+                         <%--  <td>
                               <%=order.getNick_name() %>
-                          </td>
+                          </td> --%>
+                          
+                            <td>
+                              <%=order.getId() %>
+                            </td>  <td>
+                              <%=order.getCreate_time() %>
+                            </td>
                             <td>
                               <%=order.getOrder_name() %>
                             </td>
                             <td>
-                              <%=order.getOrder_code() %>
+                              <%=order.getDictValueByField("status") %>
                             </td>
-                            <td>
-                              <%=order.getCreate_time() %>
-                            </td>
+                           
                             <td>
                               <span ><%=order.getCost_price() /100d %>元</span>
                             </td>
-                            <td>
-                              <%=order.getDictValueByField("status") %>
+                          </tr>
+                          
+                          <tr class="<%=str %>" >
+                          
+                           <%--  <td>
+                              <%=order.getOrder_code() %>
                             </td>
-                            <td>
-                              <%=order.getContact_name()+","+order.getContact_phone() +","+order.getContact_address() %>
-                            </td>
+                            
                             <td id="expressMode<%=order.getId()%>" price="<%=order.getExpress_price()%>">
                               <%=order.getExpress_mode() == null ? "未发货":order.getExpress_mode() %>
                             </td>
-                            <td id="expressOrderCode<%=order.getId()%>">
-                              <%=order.getExpress_order_code() == null ? "未发货":order.getExpress_order_code()%>
+                             --%>
+                             
+                             <td colspan="2" id="expressMode<%=order.getId()%>" price="<%=order.getExpress_price()%>">
+                              <%=order.getExpress_order_code() == null ? "未发货":order.getExpress_order_code() %>
                             </td>
+                             <td colspan="2">
+                              <%=order.getContact_name()+","+order.getContact_phone() +","+order.getContact_address() %>
+                            </td>
+                            
                             <td>
                                 <div class="btn-group">
                                   <button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle">
@@ -193,6 +242,7 @@
                                   </ul>
                                 </div>
                               </td>
+                            
                           </tr>
                           <%} %>
                         </tbody>
@@ -215,27 +265,27 @@
                 <h4 class="modal-title" id="myModalLabel">修改配送信息</h4>
             </div>
             <div class="modal-body">
-            	
+            	 <div></div>
             	 <div class="form-group">
                     <label class="col-sm-4 control-label">配送方式（顺丰、圆通等）</label>
                     <input id="order_id" type="hidden" >
                     <div class="input-group col-sm-6 ">
                       <input type="text" class="form-control" id="express_mode" name="express_mode"
-						placeholder="顺丰、圆通等"  value="" >
+						placeholder="顺丰、圆通等"  value="圆通" >
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-sm-4 control-label">配送单号</label>
                     <div class="input-group col-sm-6">
                       <input type="text" class="form-control" id="express_order_code" name="express_order_code"
-						placeholder="配送单号"  value="" >
+						placeholder="配送单号"  value="" >  <button>点我扫码单号</button> 
                     </div>
                   </div>
                   <div class="form-group">
                     <label class="col-sm-4 control-label">配送价格（单位：分）</label>
                     <div class="input-group col-sm-6">
                       <input type="number" class="form-control" id="express_price" name="express_price"
-						placeholder="配送价格,单位为分"  value="" >
+						placeholder="配送价格,单位为分"  value="0" >
                     </div>
                   </div>
             		<div class="form-actions">
@@ -305,7 +355,7 @@
       //Data Tables
       $(document).ready(function () {
         $('#data-table').dataTable({
-        "bPaginate":true,"iDisplayLength":50,"bFilter":true,
+        "bPaginate":true,"iDisplayLength":10,"bFilter":true,
           "sPaginationType": "full_numbers"
         });
       });
@@ -314,8 +364,8 @@
       	
       	$("#order_id").val(id);
       	
-      	var price = $("#expressMode"+id).attr("price");
-      	$("#express_price").val(price);
+ //     	var price = $("#expressMode"+id).attr("price");
+ //     	$("#express_price").val(price);
       	$("#myModal-originalList").modal("show");
       };
       

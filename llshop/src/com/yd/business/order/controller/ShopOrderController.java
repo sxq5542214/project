@@ -48,7 +48,9 @@ public class ShopOrderController extends BaseController {
 			
 			shopOrderService.setupOrderAddress(order_code, Integer.parseInt(userAddrId));
 			
-			return new ModelAndView("redirect:/user/toUserShopOrderPage.do?order_code="+order_code);
+//			return new ModelAndView("redirect:/user/toUserShopOrderPage.do?order_code="+order_code);
+			return new ModelAndView("redirect:/user/toSupplierShopUserOrderPage.do?order_code="+order_code);
+			
 			
 		} catch (Exception e) {
 			log.error(e, e);
@@ -78,10 +80,14 @@ public class ShopOrderController extends BaseController {
 	@RequestMapping("**/admin/order/shop/toShopOrderListMgr.do")
 	public ModelAndView toShopOrderListMgr(HttpServletRequest request,HttpServletResponse response){
 		try {
-			
+			int paramLength = request.getParameterMap().size();
 			
 			ShopOrderInfoBean condition = new ShopOrderInfoBean();
 			AutoInvokeGetSetMethod.autoInvoke(getRequestParamsMap(request), condition);
+			if(paramLength == 0){
+				condition.setStatus(ShopOrderInfoBean.STATUS_PAYSUCCESS);
+				condition.setOrderby(" order by id asc");
+			}
 			
 			List<ShopOrderInfoBean> orderList = shopOrderService.queryShopOrderInfo(condition );
 			List<DictionaryBean> dictList = dictionaryService.getZidianBycache("ShopOrderInfoBean", "status", true);

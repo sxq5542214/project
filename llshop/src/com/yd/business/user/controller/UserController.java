@@ -271,7 +271,7 @@ public class UserController extends BaseController {
 			
 			if(StringUtil.isNull(user.getLast_order_time()) 
 					&& StringUtil.isNotNull(user.getShare_time())
-					&& orderProductLog.getSupplier_id() == SupplierBean.ID_PLATFROM_CUSTOMER){
+					&& orderProductLog.getSupplier_id() == SupplierBean.PLATFROM_SUPPLIER_ID){
 				return new ModelAndView(PAGE_FIRST_ORDERCONFIRM, model);
 			}else{
 				return new ModelAndView(PAGE_ORDERCONFIRM, model);
@@ -874,6 +874,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("**/user/toUserShopOrderPage.do")
+	@Deprecated
 	public ModelAndView toUserShopOrderPage(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String data = request.getParameter("data");
@@ -890,7 +891,7 @@ public class UserController extends BaseController {
 				order.setProductList(productList);
 				
 			}else{ //没有定单号
-				order = shopOrderService.createOrderLogByUserCartList(openid,data);
+				order = shopOrderService.createOrderLogByUserCartList(openid,data,null);
 			}
 			
 			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
@@ -927,6 +928,7 @@ public class UserController extends BaseController {
 			ShopOrderInfoBean bean = new ShopOrderInfoBean();
 			bean.setUser_id(user.getId());
 			bean.setNotInStatus(""+ShopOrderInfoBean.STATUS_USER_DELETE);
+			bean.setOrderby("order by id desc");
 			List<ShopOrderInfoBean> orderList = shopOrderService.queryShopOrderInfo(bean );
 			
 			

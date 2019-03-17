@@ -251,13 +251,11 @@ public class ProductController extends BaseController {
 			ProductBean bean = new ProductBean();
 			AutoInvokeGetSetMethod.autoInvoke(param, bean);
 
-			String serverUrl = BaseContext.getServerUrl();
-
 			String imageName = getImgName();
 			String path = appendPath(PATH_FOLDER, "thumb_img") + "\\" + imageName;
 			boolean hasUpload = FileUploadUtil.isExists(request);
 			if (hasUpload) {
-				bean.setHead_img(serverUrl + getImgPath("thumb_img", imageName));
+				bean.setHead_img(request.getContextPath() +"/" + getImgPath("thumb_img", imageName));
 			}
 
 			productService.createOrUpdateProduct(bean);

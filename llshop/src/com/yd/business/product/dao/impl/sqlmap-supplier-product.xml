@@ -43,7 +43,7 @@
 		</foreach>
 	</delete>
 	<select id="querySupplierProduct" parameterType="supplierProduct" resultType="supplierProduct">
-		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img from ll_supplier_product sp, ll_product p 
+		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title from ll_supplier_product sp, ll_product p 
 		<where>
 			sp.product_id = p.id 
 			<if test="supplier_id != null"> and sp.supplier_id = #{supplier_id}</if>
@@ -96,7 +96,7 @@
 	</select>
 	
 	<select id="querySupplierProductByIdList" resultType="supplierProduct">
-		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img from ll_supplier_product sp, ll_product p
+		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title  from ll_supplier_product sp, ll_product p
 		where p.id = sp.product_id and sp.id in
 		<foreach collection="list" item="id" index="index"
             open="(" close=")" separator=",">
@@ -105,7 +105,7 @@
 		
 	</select>	
 	<select id="querySupplierProductByIdsString" parameterType="string" resultType="supplierProduct">
-		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img from ll_supplier_product sp, ll_product p
+		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title  from ll_supplier_product sp, ll_product p
 		where p.id = sp.product_id and sp.id in (${value})
 		
 	</select>

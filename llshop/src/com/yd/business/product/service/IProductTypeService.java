@@ -10,4 +10,5 @@ public interface IProductTypeService {
 	ProductTypeBean findProductType(String name, int type);
 	ProductTypeBean findProductType(int type, String code);
 	ProductTypeBean findProductTypeById(int id);
+	List<ProductTypeBean> listProductBrandByCustomerId(int customerid);
 }
