@@ -74,7 +74,7 @@
                     <div class="ltdian"></div><div class="lbdian"></div>
                     <div class="padding">
                     	<div class="price"><i><%=rightTitle %></i></div>
-                    	<a href="user/toSupplierProductCategoryPage.do?openid=<%=openid%>">
+                    	<a href="user/supplier/toSupplierProductCategoryPage.do?openid=<%=openid%>">
                         	<div class="btn" ><button class="<%=buttonClass %>" >去使用</button></div>
                         </a>
                     </div>

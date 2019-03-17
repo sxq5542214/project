@@ -123,11 +123,10 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	
 	@Override
 	public BaseMessage handlerWechatMessage(Document doc) throws Exception{
-		System.out.print("进入核心类---------------------");
+		System.out.print("进入核心类--------------------- 这个类有子类，记得找子类里的方法");
 		boolean isUserOperate = true;
 		final BaseMessage base = WechatUtil.parseXMLToBean(doc);
 		BaseMessage result = null;
-		System.out.print(base.getMsgType());
 		//事件
 		if(base.getMsgType().equalsIgnoreCase(WechatUtil.MESSAGE_TYPE_EVENT)){
 			
@@ -141,11 +140,11 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 			}
 			
 			if(WechatUtil.EVENT_TYPE_SUBSCRIBE.equalsIgnoreCase(event)){
-				
+				// 子类有重写此方法
 				result = handleUserSubscribeMessage(eventBean);
 				
 			}if(WechatUtil.EVENT_TYPE_UNSUBSCRIBE.equalsIgnoreCase(event)){
-				
+				// 子类有重写此方法
 				result = handleUserUnSubscribeMessage(eventBean);
 				
 			}else if(WechatUtil.EVENT_TYPE_VIEW.equalsIgnoreCase(event) ){
@@ -155,9 +154,8 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 			}else if(WechatUtil.EVENT_TYPE_CLICK.equalsIgnoreCase(event)){
 				String key = eventBean.getEventKey();
 				log.debug("user click menu: "+key);
-				
+				// 子类有重写此方法
 				result = handleUserClickMenuMessage(eventBean);
-				msgCenterActionService.saveAndHandleUserAction(eventBean.getFromUserName(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_CLICK, key, eventBean);
 
 			}else if(WechatUtil.EVENT_TYPE_SCAN.equalsIgnoreCase(event)){
 				
@@ -176,6 +174,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 					UserWechatBean user = userWechatService.findUserWechatByOpenId(eventBean.getFromUserName());
 					if(user == null){
 						createWechatUser(eventBean.getFromUserName(), parentId,senceType,senceId,eventBean.getToUserName());
+						// 子类有重写此方法
 						handleSenceCode(senceValue,eventBean.getFromUserName(),parentId);
 						
 					}
@@ -204,8 +203,6 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		
 		}else if(base.getMsgType().equalsIgnoreCase(WechatUtil.MESSAGE_TYPE_NEWS)){
 			//用户点击图文消息
-			
-		}else if(base.getMsgType().equalsIgnoreCase(WechatUtil.EVENT_TYPE_VIEW)){
 			
 		}
 		
@@ -277,43 +274,10 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	protected BaseMessage handleUserClickMenuMessage(EventBean bean){
 		
 		String eventKeyStr = bean.getEventKey();
-
-		String eventKey = eventKeyStr.split("_")[0];
 		BaseMessage result = null;
-//		UserWechatBean user =  new UserWechatBean();
 		
-		/**
-		 * 用户签到
-		 */
-		if(WechatConstant.MENU_KEY_USERSIGN.equals(eventKey)){
-			
-			
-		}
-		//点击具体的某个营销活动菜单
-		if(WechatConstant.MENU_KEY_SUPPLIEREVENT.equals(eventKey)){
-			
-			
-		}
-		//点击具体的某个菜单
-		if(WechatConstant.MENU_KEY_WECHAT.equals(eventKey)){
-			// 已不用，全部走 消息中心的回调
-
-			String value = configAttributeService.getValueByCode(eventKeyStr);
-			
-//			if(value.startsWith("http")){
-//				
-//			}else{
-			
-				value = value.replaceAll("#1#", bean.getFromUserName()); //替换openId
-				TextBean text = new TextBean();
-				text.setFromUserName(bean.getToUserName());
-				text.setToUserName(bean.getFromUserName());
-				text.setMsgType(WechatUtil.MESSAGE_TYPE_TEXT);
-				text.setCreateTime(DateUtil.java2phpDate(System.currentTimeMillis()));
-				text.setContent(value);
-				result = text;
-//			}
-		}
+		
+//		msgCenterActionService.saveAndHandleUserAction(bean.getFromUserName(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_CLICK, eventKeyStr, bean);
 		
 		return result;
 	}

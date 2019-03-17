@@ -6,17 +6,23 @@
 		     "key": "wechat_shop"
         }, 
         {
-            "name": "免费福利", 
+            "name": "优惠活动", 
             "sub_button": [
+            
             	{
             		"type": "click", 
-                    "name": "免费抽奖系列活动", 
+                    "name": "免费抽奖活动", 
                     "key": "wechat_mianfeichoujiang"
                 },
              	{
 		            "type": "click", 
-                    "name": "有奖评论系列互动", 
-                    "key": "wechat_youjianghuati"
+                    "name": "我的优惠卷", 
+                    "key": "myCoupon"
+                },
+            	{
+            		"type": "click", 
+                    "name": "优惠卷中心", 
+                    "key": "couponCenter"
                 }
             ]
         },
