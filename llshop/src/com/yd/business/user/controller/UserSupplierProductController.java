@@ -37,9 +37,11 @@ import com.yd.business.order.service.IOrderProductLogService;
 import com.yd.business.order.service.IOrderService;
 import com.yd.business.order.service.IShopOrderService;
 import com.yd.business.other.bean.AddressBean;
+import com.yd.business.other.bean.AdvertisingBean;
 import com.yd.business.other.bean.ConfigCruxBean;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IAddressService;
+import com.yd.business.other.service.IAdvertisingService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.product.bean.ProductTypeBean;
@@ -120,26 +122,25 @@ public class UserSupplierProductController extends BaseController {
 	private IShopOrderService shopOrderService;
 	@Resource
 	private IProductTypeService productTypeService;
+	@Resource
+	private IAdvertisingService advertisingService;
 	
 	public static final String PAGE_USERSUPPLIERPRODUCT = "/page/user/supplierProductShop/index.jsp";
 	public static final String PAGE_USERSUPPLIERCATEGORY = "/page/user/supplierProductShop/category.jsp";
 	public static final String PAGE_USER_SHOP_ORDER = "/page/shop/order/orderInfo.jsp";
 	
 	
-	@RequestMapping("**/user/queryPlatformSupplierProduct.do")
+	@RequestMapping("**/user/supplier/queryPlatformSupplierProduct.do")
 	public ModelAndView queryPlatformSupplierProduct(String spid,String openid){
 		try{
-			
-			
 			List<SupplierProductBean> list= supplierProductService.queryPlatformSupplierProduct();
-			
-			
-			
+			List<AdvertisingBean> advertList = advertisingService.queryAdvertisingInfo(AdvertisingBean.CODE_USERINDEXPAGE);
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			Map<String, Object> model = new HashMap<String, Object>();
 			model = new HashMap<String, Object>();
 			model.put("user", user);
 			model.put("supplierProductList", list);
+			model.put("advertList", advertList);
 
 			
 			return new ModelAndView(PAGE_USERSUPPLIERPRODUCT, model);			//返回第二次购买页面
@@ -152,7 +153,7 @@ public class UserSupplierProductController extends BaseController {
 	/**
 	 *  打开商城分类界面
 	 */
-	@RequestMapping("**/user/toSupplierProductCategoryPage.do")
+	@RequestMapping("**/user/supplier/toSupplierProductCategoryPage.do")
 	public ModelAndView toSupplierProductCategoryPage(String sid,String openid){
 		try{
 			Integer supplier_id = SupplierBean.PLATFROM_SUPPLIER_ID;
@@ -189,7 +190,7 @@ public class UserSupplierProductController extends BaseController {
 	 * 跳转到用户定单界面
 	 * @return
 	 */
-	@RequestMapping("**/user/toSupplierShopUserOrderPage.do")
+	@RequestMapping("**/user/supplier/toSupplierShopUserOrderPage.do")
 	public ModelAndView toSupplierShopUserOrderPage(HttpServletRequest request,HttpServletResponse response){
 		try {
 			

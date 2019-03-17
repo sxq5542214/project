@@ -273,7 +273,7 @@ public class SupplierProductController extends BaseController {
 	/**
 	 * 客户端查询商户商品
 	 */
-	@RequestMapping("/supplierProduct/toSupplierProductShopInfo.do")
+	@RequestMapping("/product/supplierProduct/toSupplierProductShopInfo.do")
 	public ModelAndView toSupplierProductShopInfo(HttpServletRequest request,HttpServletResponse response){
 		try{
 			String id = request.getParameter("id");

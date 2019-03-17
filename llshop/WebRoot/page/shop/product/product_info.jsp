@@ -150,7 +150,7 @@
 						}if( NumberUtil.toIntDefaultZero(bean.getProduct_offset_points()) > 0) {
 							hasDiscount = true;
 						%>
-							<p>可使用积分抵扣，最高可抵扣￥ <%=bean.getProduct_offset_points() / 100d %>元 </p>
+							<p>本商品可叠加积分抵扣，最高可抵扣￥ <%=bean.getProduct_offset_points() / 100d %>元 </p>
 						<%} if(!hasDiscount){ %>
 							<p>暂时没有优惠信息</p>
 							<%} %>

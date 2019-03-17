@@ -17,6 +17,8 @@ public class AdvertisingBean extends BaseBean {
 
 		public static String EDIT_SUCCESS = "edit_success";
 		
+		public static String CODE_USERINDEXPAGE = "userIndexPage";
+		
 		
 		private Integer id ; 
 		private String code;

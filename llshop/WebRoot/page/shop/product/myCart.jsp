@@ -239,7 +239,7 @@
 			$("#spTotalPrice"+spid).html( (nowNum * singlePrice).toFixed(2) );
 			$("#spTotalPrice"+spid).attr("data_num",nowNum);
 			
-			addProductToCart(spid,nowNum);
+			addProductToCart(spid,num);
 			
 			calcTotalPrice();
 		};
@@ -295,7 +295,7 @@
 				return ;
 			}
 			json_temp += "],time:" + time.getTime() +"}";
-			location.href= "<%=basePath%>user/toSupplierShopUserOrderPage.do?openid="+openid+"&time="+time.getTime() ;
+			location.href= "<%=basePath%>user/supplier/toSupplierShopUserOrderPage.do?openid="+openid+"&time="+time.getTime() ;
 		};
 		
 	</script>

@@ -29,6 +29,9 @@
 
 <body>
 
+		<div style="position: absolute;" onclick="javascript:history.go(-1);">
+			<img style="width: 0.6rem; margin-top: 8px; margin-left: 8px;" src="page/shop/order/images/c_back_btn.png">
+		</div>
 	<div id="_contain">
 
 		<div >

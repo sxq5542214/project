@@ -52,13 +52,15 @@
 								<div v-for="ite in item.list">
 									<div class="item">
 										<div class="item-left">
-											<div class="item-img">
-												<img :src="ite.imgUrl" alt="" width="100%" height="100%">
-											</div>
+											<a :href="ite.productUrl">
+												<div class="item-img">
+													<img :src="ite.imgUrl" alt="" width="100%" height="100%">
+												</div>
+											</a>
 										</div>
 										<div class="item-right">
-											<div class="title">{{ite.name}}</div>
-											<div class="subtitle">{{ite.title}}</div>
+												<div class="title">{{ite.name}}</div>
+												<div class="subtitle">{{ite.title}}</div>
 											<div class="price" >
 												<div style="float: left;">¥{{ite.price}}</div>
 												<div style="float: left;text-decoration: line-through;color: black;font-size: 1rem; line-height: 25px;">{{ite.real_price}}</div>
@@ -219,10 +221,10 @@
 				if (!typeName.equalsIgnoreCase(product.getProduct_type_name())) {
 					if (i != 0) {%> ] }, <%}%>
         
-        { class : '<%=product.getProduct_type_name()%>',list : [ {id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>', real_price:'<%=product.getProduct_real_price()/100d%>', imgUrl:'<%=product.getHead_img()%>' } 
+        { class : '<%=product.getProduct_type_name()%>',list : [ {id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>', real_price:'<%=product.getProduct_real_price()/100d%>', imgUrl:'<%=product.getHead_img()%>', productUrl:'product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getId()%>' } 
         
         <%} else {%>
-        		,{ id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>' , real_price:'<%=product.getProduct_real_price()/100d %>', img:'<%=product.getHead_img()%>' }
+        		,{ id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>' , real_price:'<%=product.getProduct_real_price()/100d %>', img:'<%=product.getHead_img()%>', productUrl:'product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getId()%>' }
         <%}
 				if (productList.size() == 1 || i == productList.size() - 1) {%>
        	  ] }
@@ -369,7 +371,7 @@
   			
   			isClickMask = false;
   			setTimeout(function() {
-  				isClickMask = false;
+  				isClickMask = true;
   			}, 100);
 		};
   		node.style.display = 'flex';

@@ -1,3 +1,4 @@
+<%@page import="com.yd.business.other.bean.AdvertisingBean"%>
 <%@page import="com.yd.business.product.bean.SupplierProductBean"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
@@ -6,6 +7,8 @@
 	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 	List<SupplierProductBean> list = (List<SupplierProductBean>)request.getAttribute("supplierProductList");
 	UserWechatBean user = (UserWechatBean) request.getAttribute("user");
+	String openid = user.getOpenid();
+	List<AdvertisingBean> advertList = (List<AdvertisingBean>)request.getAttribute("advertList");
 	if(list == null){
 		list = Collections.EMPTY_LIST;
 	}
@@ -24,6 +27,7 @@
 <meta name="keywords"
 	content="坚果,核桃,开心果,核桃仁,夏威夷果">
     <script src="js/user/supplierProductShop/rem.js"></script>    
+    <script src="js/common/slide/sliderCommon.js"></script>    
     <link href="css/user/supplierProductShop/iconfont.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/user/supplierProductShop/base.css"/>
     <link href="css/user/supplierProductShop/mui.min.css" rel="stylesheet">
@@ -92,11 +96,10 @@
 
     <div class="mui-content">
         <div class="banner swiper-container">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><a href="javascript:void(0)"><img class="swiper-lazy" data-src="images/user/supplierProductShop/banner1.jpg" alt=""></a></div>
-                <div class="swiper-slide"><a href="javascript:void(0)"><img class="swiper-lazy" data-src="images/user/supplierProductShop/banner1.jpg" alt=""></a></div>
-                <div class="swiper-slide"><a href="javascript:void(0)"><img class="swiper-lazy" data-src="images/user/supplierProductShop/banner1.jpg" alt=""></a></div>
-                <div class="swiper-slide"><a href="javascript:void(0)"><img class="swiper-lazy" data-src="images/user/supplierProductShop/banner1.jpg" alt=""></a></div>
+            <div class="swiper-wrapper" id="sliderDiv">
+            	<%for(AdvertisingBean bean : advertList){ %>
+            		<div class="swiper-slide"><a href="<%=bean.getPicture_link() %>"><img class="swiper-lazy" data-src="<%=bean.getPicture() %>" alt=""></a></div>
+            	<%} %>
             </div>
             <div class="swiper-pagination"></div>
         </div>
@@ -119,7 +122,7 @@
             </div>
         </div> -->
 
-        <div class="home-newgoods ui-box">
+  <!--       <div class="home-newgoods ui-box">
             <img class="home-imgtit" src="images/user/supplierProductShop/hometit1.jpg" alt="" />
             <div class="list-type1 plist-puzzle">
                 <a class="b" href=""><img src="images/user/supplierProductShop/t1.jpg" alt="" /></a>
@@ -136,18 +139,19 @@
                 <a class="box" href=""><img class="figure" src="images/user/supplierProductShop/t3.jpg" alt="" /><span class="tit">全部新款</span></a>
             </div>
         </div>
-
+ -->
         <div class="home-fashion ui-box ui-border-t">
-            <img class="home-imgtit" src="images/user/supplierProductShop/hometit3.jpg" alt="" />
-	      <a href=""><img class="db margin-b-s" src="images/user/supplierProductShop/t4.jpg" width="100%" alt="" /></a>
-            <div class="fastion-plist mui-row">
+            <img class="home-imgtit" src="images/user/supplierProductShop/hometit2.jpg" alt="" />
             
+           <a href=""><img class="db margin-b-s" src="images/user/supplierProductShop/t4.jpg" width="100%" alt="" /></a>
+            
+            <div class="fastion-plist mui-row">
             <% for(int i = 0 ; i <list.size();i++){
             	SupplierProductBean prod = list.get(i);
              %>
             
                 <div class="mui-col-xs-6">
-                    <a class="item">
+                    <a class="item" href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=prod.getId()%>">
                         <img src="<%=prod.getHead_img() %>" alt="" class="figure" />
                         <span class="tit2"><span style="color: red;font-size:0.5rem;">	<%=prod.getProduct_price()/100d %>元 </span> / <del style="color: #999;"><%=prod.getProduct_real_price()/100d %>元</del><br>
                         <%=prod.getProduct_title() %>
@@ -156,30 +160,9 @@
                     </a>
                 </div>
             <%} %>
-            
-                <div class="mui-col-xs-6">
-                    <a class="item">
-                        <img src="images/user/supplierProductShop/t5.jpg" alt="" class="figure" /><span class="tit2">印花卫衣</span>
-                    </a>
-                </div>
-                <div class="mui-col-xs-6">
-                    <a class="item">
-                        <img src="images/user/supplierProductShop/t5.jpg" alt="" class="figure" /><span class="tit2" >印花卫衣asdfasdfsadfa<br>dsfaaaaaaafasadfasdfsadfasdfsdf</span>
-                    </a>
-                </div>
-                  <div class="mui-col-xs-6">
-                    <a class="item">
-                        <img src="images/user/supplierProductShop/t5.jpg" alt="" class="figure" /><span class="tit2">印花卫衣</span>
-                    </a>
-                </div>
-                <div class="mui-col-xs-6">
-                    <a class="item">
-                        <img src="images/user/supplierProductShop/t5.jpg" alt="" class="figure" /><span class="tit2">印花卫衣asdfasdfsadfa<br>dsfaaaaaaafasadfasdfsadfasdfsdf</span>
-                    </a>
-                </div>
-                
-                
             </div>
+            
+            
         </div>
     </div> <!--mui-content end-->
 </div>
@@ -188,25 +171,25 @@
     <footer class="page-footer fixed-footer" id="footer">
 		<ul style="padding-left: 0px;">
 			<li class="active" style="margin: 0;">
-				<a href="index.html">
+				<a href="user/supplier/queryPlatformSupplierProduct.do?openid=<%=openid%>">
 					<img src="images/user/supplierProductShop/footer01.png"/>
 					<p>首页</p>
 				</a>
 			</li>
 			<li>
-				<a href="assort.html">
+				<a href="user/supplier/toSupplierProductCategoryPage.do?openid=123">
 					<img src="images/user/supplierProductShop/footer002.png"/>
 					<p>分类</p>
 				</a>
 			</li>
 			<li>
-				<a href="shopcar.html">
+				<a href="user/cart/toMycartPage.do?openid=<%=openid%>">
 					<img src="images/user/supplierProductShop/footer003.png"/>
 					<p>购物车</p>
 				</a>
 			</li>
 			<li>
-				<a href="self.html">
+				<a href="user/toUserInfoCenter.do?openid=<%=openid%>">
 					<img src="images/user/supplierProductShop/footer004.png"/>
 					<p>个人中心</p>
 				</a>
@@ -250,5 +233,16 @@
         });
 
     });
+    
+/*     function initSlider(data){
+    	var sliderDiv = document.getElementById("sliderDiv");
+    	for(var i = 0 ; i < data.length ; i++)
+    	{
+    		var str = '<div class="swiper-slide"><a href="'+ data[i].picture_link +'"><img class="swiper-lazy" src="'+ data[i].picture +'" data-src="'+ data[i].picture +'" alt=""></a></div>';
+    		sliderDiv.innerHTML = sliderDiv.innerHTML + str;
+    	}
+    } */
+    
+//    querySliderData( 'userIndexPage', initSlider);
 </script>
 </html>

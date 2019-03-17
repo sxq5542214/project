@@ -307,14 +307,15 @@ public class UserController extends BaseController {
 	@RequestMapping("**/user/toUserInfoCenter.do")
 	public ModelAndView toUserInfoCenter(HttpServletRequest request,HttpServletResponse response){
 		try{
-			//测试用，写死
-			UserWechatBean user = userWechatService.findUserWechatById(5000);
+			String openid = request.getParameter("openid");
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			UserInfoCenterPageBean userInfoPage = userWechatService.queryActivityFriendLevelCount(user.getId());
 			userInfoPage.setUserWechat(user);
 			
 			boolean isShop = configAttributeService.getBooleanValueByCode(AttributeConstant.CODE_SYSTEM_IS_SHOP_ORDER);
-			
-			if(user != null && user.getParentid() != null)
+
+//			if(user != null && user.getParentid() != null) 这是判断好坏人的
+			if(user != null )
 			{
 				Map<String, Object> model = new HashMap<String, Object>();
 				model.put("userInfoPage", userInfoPage);

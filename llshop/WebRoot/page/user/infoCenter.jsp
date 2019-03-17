@@ -90,9 +90,9 @@ left:30px " href="javascript:;()" id="xiugainicheng" onclick="xiugai();">修改�
 			    <%} %>
 			    <li><a href="user/queryCommissionPoint.do?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>积分明细</a></li>
           		<li><a href="user/queryBalanceLog.do?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>现金明细</a></li>
-         		<li><a href="/login/ssoToIndexPage.html?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>一元购流量</a></li>
-        	    <li><a href="supplier/supplierCouponController/queryMycouponPage.do?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>我的优惠卷</a></li>       	    
-          	    <li><a href="supplier/supplierCouponController/receiveCouponPage.do?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>领取优惠卷</a></li>       	    
+<%--          		<li><a href="/login/ssoToIndexPage.html?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>一元购流量</a></li>
+ --%>        	    <li><a href="supplier/supplierCouponController/toMycouponPage.do?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>我的优惠卷</a></li>       	    
+          	    <li><a href="supplier/coupon/toUserCouponCenterPage.do?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>领取优惠卷</a></li>       	    
           		
  	<!--
           <li><a href="user/queryFriendLevelOne.do?openid=<%=user.getOpenid()%>"><b class="z-arrow"></b>一级好友，共<%=user.getOffline_num() %>人，有<%=level1 %>人购买过<span style="float: right;"></span></a></li>

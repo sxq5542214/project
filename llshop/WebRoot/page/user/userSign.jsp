@@ -146,6 +146,9 @@ a:active {
 	    </style>
 	</head>
 	<body>
+		<div style="position: absolute;" onclick="javascript:history.go(-1);">
+			<img style="width: 1.05rem; margin-top: 8px; margin-left: 8px;" src="page/shop/order/images/c_back_btn.png">
+		</div>
 		<img src="page/user/activity/scratch/img/sign_top.jpg" class="banner1"/>
 		<div  class = "progressbar" ><img src='page/user/infoCenterCss/img/loding2.gif'></div>
 		<div class="ggl" style="margin: 0 auto;width: 95%;height: 120px;background: white;border-radius: 5px;word-wrap: break-word;">

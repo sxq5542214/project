@@ -40,14 +40,14 @@ public class UserCartController extends BaseController {
 	public ModelAndView toMycartPage(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
-			
+			String openid = request.getParameter("openid");
 			Map<String, Object> model = new HashMap<String, Object>();
 			
 			String productJson = CookieUtil.getValueByCookie(request, COOKIE_KEY_PRODUCTINFO);
 			
 			UserCartBean userCart = userCartService.queryUserCartListByCookieJson(productJson);
 			
-			
+			userCart.setOpenid(openid);
 			model.put("userCart", userCart);
 			
 			

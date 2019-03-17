@@ -138,8 +138,8 @@
                         	<tr class="gradeA">
                             <td class="table_couponconfig_id_a"><input type="checkbox" class="no-margin"  value="<%=bean.getId() %>"/></td>
                             <td class="table_couponconfig_id"><%=StringUtil.convertNull(bean.getId())%></td>
-                            <td class="table_couponconfig_merchant_id"><%=StringUtil.convertNull(bean.getMerchant_id())%></td>
-                            <td class="table_couponconfig_merchant_name"><%=StringUtil.convertNull(bean.getMerchant_name())%></td>
+                            <td class="table_couponconfig_merchant_id"><%=StringUtil.convertNull(bean.getSupplier_id())%></td>
+                            <td class="table_couponconfig_merchant_name"><%=StringUtil.convertNull(bean.getSupplier_name())%></td>
                             <td class="table_couponconfig_code"><%=StringUtil.convertNull(bean.getCode())%></td>
                             <td class="table_couponconfig_type"><%=StringUtil.convertNull(bean.getType())%></td>
                             <td class="table_couponconfig_coupon_name"><%=StringUtil.convertNull(bean.getCoupon_name())%></td>
@@ -155,7 +155,7 @@
                             <td class="table_couponconfig_remark"><%=StringUtil.convertNull(bean.getRemark())%></td>
                             <td class="table_couponconfig_coupon_backgroup" style="display:none;"><input type="hidden" class="no-margin"  value="<%=bean.getCoupon_backgroup() %>"/></td>
                             <td class="table_couponconfig_coupon_backgroup_value"><%=StringUtil.convertNull(bean.getDictValueByField("coupon_backgroup")) %></td>
-                            <td class="table_couponconfig_couponshow_product"><%=StringUtil.convertNull(bean.getCouponshow_product())%></td>
+                            <td class="table_couponconfig_couponshow_product"><%=StringUtil.convertNull(bean.getCoupon_spid())%></td>
                             <td>
            							<a class="btn btn-success " data-toggle="modal" data-target="#myModal" style="padding: 0px 4px;margin-left:5px;" onclick="editCouponConfig(this);">
 											<i class="fa"></i>修改
@@ -254,8 +254,8 @@
 							<div class="col-md-3">
 									<select  name="couponconfig_status" class="form-control">
 											<option value="">请选择优惠卷状态</option>
-											<option value="1">使用</option>
-											<option value="0">不使用</option>
+											<option value="<%=SupplierCouponConfigBean.STATUS_UP%>">生效</option>
+											<option value="<%=SupplierCouponConfigBean.STATUS_DOWN%>">不生效</option>
 									</select>														
 							</div>
 						</div>
