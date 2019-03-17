@@ -7,11 +7,29 @@ import com.yd.basic.framework.bean.BaseBean;
 @Alias("msgCenterArticle")
 public class MsgCenterArticleBean extends BaseBean {
 	
+	/**
+	 * 微信文本消息
+	 */
 	public static final int SEND_TYPE_WECHAT_TEXT = 1;
+	/**
+	 * 短信消息
+	 */
 	public static final int SEND_TYPE_SMS_TEXT = 2;
+	/**
+	 * 微信单图文链接
+	 */
 	public static final int SEND_TYPE_WECHAT_NEWS = 3;
+	/**
+	 * 外系统图文链接
+	 */
 	public static final int SEND_TYPE_SYSTEM_NEWS = 4;
+	/**
+	 * 微信多图文链接
+	 */
 	public static final int SEND_TYPE_WECHAT_NEWS_ALL = 5;
+	/**
+	 * 系统文章
+	 */
 	public static final int SEND_TYPE_SYSTEM_TOPIC = 6;
 	/**
 	 * 微信模板消息

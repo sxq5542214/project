@@ -157,6 +157,8 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 				log.debug("user click menu: "+key);
 				
 				result = handleUserClickMenuMessage(eventBean);
+				msgCenterActionService.saveAndHandleUserAction(eventBean.getFromUserName(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_CLICK, key, eventBean);
+
 			}else if(WechatUtil.EVENT_TYPE_SCAN.equalsIgnoreCase(event)){
 				
 				String eventKey = eventBean.getEventKey();
@@ -294,7 +296,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		}
 		//点击具体的某个菜单
 		if(WechatConstant.MENU_KEY_WECHAT.equals(eventKey)){
-			
+			// 已不用，全部走 消息中心的回调
 
 			String value = configAttributeService.getValueByCode(eventKeyStr);
 			
