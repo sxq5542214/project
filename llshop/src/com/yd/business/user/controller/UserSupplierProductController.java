@@ -175,6 +175,7 @@ public class UserSupplierProductController extends BaseController {
 //			model.put("user", user);
 			model.put("productTypeList", productTypeList);
 			model.put("productList", productList);
+			model.put("openid", openid);
 
 			
 			return new ModelAndView(PAGE_USERSUPPLIERCATEGORY, model);			

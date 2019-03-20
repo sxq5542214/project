@@ -6,7 +6,7 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	String openid = (String)request.getParameter("openid");
+	String openid = (String)request.getAttribute("openid");
 	List<SupplierProductBean> productList = (List<SupplierProductBean>) request.getAttribute("productList");
 	List<ProductTypeBean> productTypeList = (List<ProductTypeBean>) request.getAttribute("productTypeList");
 %>

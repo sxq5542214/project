@@ -6,7 +6,7 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	String openid = (String)request.getParameter("openid");
+	String openid = (String)request.getAttribute("openid");
 	List<SupplierCouponConfigBean> list = (List<SupplierCouponConfigBean>)request.getAttribute("list");
 	
 %>
