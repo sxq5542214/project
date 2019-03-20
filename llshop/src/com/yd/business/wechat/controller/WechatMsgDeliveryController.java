@@ -17,6 +17,7 @@ import com.yd.basic.framework.pageination.PageinationData;
 import com.yd.business.wechat.bean.WechatMaterialBean;
 import com.yd.business.wechat.bean.WechatMaterialRelationBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.StringUtil;
@@ -26,6 +27,8 @@ public class WechatMsgDeliveryController extends BaseController {
 
 	@Resource
 	private IWechatService wechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	/**
 	 * 分发微信消息
@@ -63,7 +66,7 @@ public class WechatMsgDeliveryController extends BaseController {
 			WechatMaterialBean bean = new WechatMaterialBean();
 			AutoInvokeGetSetMethod.autoInvoke(param,bean);
 			//得到系统所有公众号集合
-			List<WechatOriginalInfoBean> originalList = wechatService.queryWechatOriginalInfo(null);
+			List<WechatOriginalInfoBean> originalList = wechatOriginalInfoService.queryWechatOriginalInfo(null);
 			Object start_time = request.getParameter("start_time");
 			Object end_time = request.getParameter("end_time");
 			PageinationData pd = wechatService.showWechatMaterialInfoForDelivery(originalList,bean,start_time,end_time);
@@ -110,7 +113,7 @@ public class WechatMsgDeliveryController extends BaseController {
 	public ModelAndView getOriginalWecahtMaterialList(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String original_id = request.getParameter("original_id");
-			WechatOriginalInfoBean wechatOriginalInfoBean = wechatService.findWechatOriginalInfoByOriginalid(original_id);
+			WechatOriginalInfoBean wechatOriginalInfoBean = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(original_id);
 			String nowpage = request.getParameter("nowpage");
 			String type = request.getParameter("type");
 			WechatMaterialBean materialBean = new WechatMaterialBean();

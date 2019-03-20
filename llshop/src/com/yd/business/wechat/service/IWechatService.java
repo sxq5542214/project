@@ -54,12 +54,6 @@ public interface IWechatService {
 
 	String getOpenId(String code, String originalid);
 
-	List<WechatOriginalInfoBean> queryWechatOriginalInfo(WechatOriginalInfoBean bean);
-
-	WechatOriginalInfoBean findWechatOriginalInfoByServer(String server_domain);
-
-	WechatOriginalInfoBean findWechatOriginalInfoByOriginalid(String originalid);
-
 	PageinationData showWechatMaterialInfoForDelivery(List<WechatOriginalInfoBean> originalList,WechatMaterialBean bean,Object start_times,Object end_time);
 	
 	List<WechatMaterialRelationBean> deliveryWechatMaterialInfo(String media_ids,String originalids,String action);

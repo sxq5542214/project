@@ -17,6 +17,7 @@ import com.yd.business.other.bean.ConfigAttributeBean;
 import com.yd.business.other.dao.IConfigAttributeDao;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.StringUtil;
 
@@ -31,6 +32,8 @@ public class ConfigAttributeServiceImpl extends BaseService implements IConfigAt
 	private IConfigAttributeDao configAttributeDao;
 	@Resource
 	private IWechatService wechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	@Override
 	public ConfigAttributeBean getAttributeByCode(String code){
@@ -101,7 +104,7 @@ public class ConfigAttributeServiceImpl extends BaseService implements IConfigAt
 	@Override
 	public ConfigAttributeBean commitConfigAttributeBean(ConfigAttributeBean bean) {
 		//获取公众号信息
-		WechatOriginalInfoBean original = wechatService.findWechatOriginalInfoByOriginalid(bean.getOriginalid());
+		WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(bean.getOriginalid());
 		bean.setOriginal_name(original.getOriginal_name());
 		if(StringUtil.isNull(bean.getId())){
 			ConfigAttributeBean queryBean = new ConfigAttributeBean();

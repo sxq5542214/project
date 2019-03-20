@@ -38,6 +38,7 @@ import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.bean.WechatPayResultBean;
 import com.yd.business.wechat.bean.WechatSendRedPackLogBean;
 import com.yd.business.wechat.dao.IWechatPayDao;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatPayService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.DateUtil;
@@ -62,6 +63,8 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 	private IUserWechatService userWechatService;
 	@Resource
 	private IWechatService wechatService;
+	@Resource
+	protected IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	private Map<String,SSLConnectionSocketFactory> map_sslsf = new HashMap<String, SSLConnectionSocketFactory>();
 
@@ -146,7 +149,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		
 		int userId = user.getId();
 		
-		WechatOriginalInfoBean originalInfo = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 		
 		//wx26a55db19faf530f
 		String appidStr = originalInfo.getAppid();

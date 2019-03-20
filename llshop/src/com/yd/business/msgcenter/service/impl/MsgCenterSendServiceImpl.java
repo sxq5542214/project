@@ -43,6 +43,7 @@ import com.yd.business.wechat.bean.WechatMaterialBean;
 import com.yd.business.wechat.bean.WechatMaterialRelationBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.bean.WechatTemplateMsgBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.DateUtil;
 import com.yd.util.JsonUtil;
@@ -76,6 +77,8 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 	private ISmsCustomerService smsCustomerService;
 	@Resource
 	private IUserWechatService userWechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 
 	public static final String split_symbol = "#";
 	public static final String http_pre = "http://";
@@ -243,7 +246,7 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 		UserWechatBean user = userWechatService.findUserWechatByOpenId(action.getOpenid());
 		String content = configCruxService.getValueByTypeAndKey(ConfigCruxBean.TYPE_WECHAT_NOTIFY_TEXT,material_code);
 
-		WechatOriginalInfoBean info = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+		WechatOriginalInfoBean info = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 		content = convertActionParameter(content, action);
 		content = content.replaceAll("#server_domain#", info.getServer_domain());
 		content = content.replaceAll("#server_url#", info.getServer_url());
@@ -330,7 +333,7 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 			
 			String url = supplierEvent.getUrl();
 
-			WechatOriginalInfoBean info = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+			WechatOriginalInfoBean info = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 			url = convertActionParameter(url, action);
 			url = url.replaceAll("#server_domain#", info.getServer_domain());
 			url = url.replaceAll("#server_url#", info.getServer_url());
@@ -371,7 +374,7 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 			
 			String url = supplierTopic.getUrl();
 
-			WechatOriginalInfoBean info = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+			WechatOriginalInfoBean info = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 			url = convertActionParameter(url, action);
 			url = url.replaceAll("#server_domain#", info.getServer_domain());
 			url = url.replaceAll("#server_url#", info.getServer_url());
@@ -404,7 +407,7 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 	private void sendWechatTemplateMsgToUser(MsgCenterArticleBean article,MsgCenterUserActionBean action){
 
 		UserWechatBean user = userWechatService.findUserWechatByOpenId(action.getOpenid());
-		WechatOriginalInfoBean info = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+		WechatOriginalInfoBean info = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 		String value = configCruxService.getValueByTypeAndKey(ConfigCruxBean.TYPE_WECHAT_TEMPLATE_MSG, article.getMaterial_code() );
 		WechatTemplateMsgBean template = wechatService.queryWechatTemplateMsg(user.getOriginalid(), article.getMaterial_code() );
 

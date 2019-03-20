@@ -31,6 +31,7 @@ import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 
 /**
@@ -55,6 +56,8 @@ public class ActivityManagerController extends BaseController {
 	private IConfigAttributeService configAttributeService;
 	@Resource
 	private IConfigCruxService configCruxService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	public static final String PAGE_ACTIVITY_LIST_QUERY = "/page/pc/activity/iframe_config_activity_mgr.jsp";
 	
 	/**
@@ -70,7 +73,7 @@ public class ActivityManagerController extends BaseController {
 			ActivityConfigBean bean = new ActivityConfigBean();
 			List<ActivityConfigBean> confList = activityConfigService.queryActivityConfigByActivity(bean);
 			//得到系统所有公众号集合
-			List<WechatOriginalInfoBean> originalList = wechatService.queryWechatOriginalInfo(null);
+			List<WechatOriginalInfoBean> originalList = wechatOriginalInfoService.queryWechatOriginalInfo(null);
 			//初始化字典值
 			Map<String, List<DictionaryBean>>  dicMap = dictionaryService.getTableAttributuByDictionaryCache(bean.getClass().getSimpleName());
 			Map<String, List<DictionaryBean>>  paramDicMap = dictionaryService.getTableAttributuByDictionaryCache("ActicityLimitParamBean");

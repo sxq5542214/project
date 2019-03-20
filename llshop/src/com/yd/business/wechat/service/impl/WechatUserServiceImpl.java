@@ -240,7 +240,7 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 		for(WechatWaitSendBean bean : list){
 
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(bean.getOpenid());
-			WechatOriginalInfoBean original = findWechatOriginalInfoByOriginalid(user.getOriginalid());
+			WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 			//参数替换
 			if(bean.getText_msg() != null){
 				String text = bean.getText_msg() ;

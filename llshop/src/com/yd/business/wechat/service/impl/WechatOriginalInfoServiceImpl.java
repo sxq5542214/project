@@ -5,6 +5,7 @@ package com.yd.business.wechat.service.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class WechatOriginalInfoServiceImpl extends BaseService implements IWecha
 	public PageinationData queryWechatOriginalInfoPage(WechatOriginalInfoBean bean) {
 		PageinationData pd = new PageinationData();
 		try{
-			List<WechatOriginalInfoBean> showList = wechatOriginalInfoDAO.queryWechatOriginalInfoPage(bean);
+			List<WechatOriginalInfoBean> showList = wechatOriginalInfoDAO.queryWechatOriginalInfo(bean);
 		    int count = wechatOriginalInfoDAO.wechatOriginalInfoCount(bean);
 		    pd.setDataList(showList);
 		    pd.setTotalcount(count);
@@ -79,6 +80,83 @@ public class WechatOriginalInfoServiceImpl extends BaseService implements IWecha
 		
 		return wechatOriginalInfoDAO.queryWechatOriginalInfo(bean);
 	}
-			
+	
+	/**
+	 * 查询第一条记录
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public WechatOriginalInfoBean queryFirstWechatOriginalInfo(){
+		List<WechatOriginalInfoBean> list = queryWechatOriginalInfo(null);
+		if(list.size()>0){
+			return list.get(0);
+		}
+		return null;
+	}
 
+	
+	@Override
+	public WechatOriginalInfoBean findWechatOriginalInfoByOriginalid(String originalid){
+		WechatOriginalInfoBean bean = new WechatOriginalInfoBean();
+		bean.setOriginalid(originalid);
+		List<WechatOriginalInfoBean> list = queryWechatOriginalInfo(bean);
+		if(list.size()>0){
+			return list.get(0);
+		}
+		return null;
+	}
+	
+	@Override
+	public WechatOriginalInfoBean findWechatOriginalInfoByServer(String server_domain){
+		WechatOriginalInfoBean bean = new WechatOriginalInfoBean();
+		bean.setServer_domain(server_domain);
+		List<WechatOriginalInfoBean> list = queryWechatOriginalInfo(bean);
+		if(list.size()>0){
+			return list.get(0);
+		}else{
+			//如果没有查到，再按serverurl去查
+			bean.setServer_domain(null);
+			bean.setServer_url(server_domain);
+
+			list = queryWechatOriginalInfo(bean);
+			if(list.size()>0){
+				return list.get(0);
+			}
+			
+		}
+		return null;
+	}
+	
+	
+
+	/**
+	 * 通过服务域名换取公众号的原始ID
+	 * @param request
+	 * @return
+	 */
+	@Override
+	public String getOriginalidByServerDomain(HttpServletRequest request) {
+		String serverName = request.getServerName();
+		System.out.println("serverName:"+serverName);
+		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByServer(serverName);
+		if(originalInfo == null){
+			queryFirstWechatOriginalInfo();
+		}
+		
+		return originalInfo.getOriginalid();
+	}
+	/**
+	 * 通过服务域名换取公众号的原始ID
+	 * @param request
+	 * @return
+	 */
+	@Override
+	public WechatOriginalInfoBean getOriginalInfoByServerDomain(HttpServletRequest request) {
+		String serverName = request.getServerName();
+		System.out.println("serverName:"+serverName);
+		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByServer(serverName);
+		return originalInfo;
+	}
+	
 }

@@ -23,9 +23,9 @@ public class WechatOriginalInfoDAOImpl extends BaseDao implements IWechatOrigina
 	private static final String NAMESPACE = "wechatOriginalInfo.";
 
 	@Override
-	public List<WechatOriginalInfoBean> queryWechatOriginalInfoPage(WechatOriginalInfoBean bean) {
+	public List<WechatOriginalInfoBean> queryWechatOriginalInfo(WechatOriginalInfoBean bean) {
 		// TODO Auto-generated method stub
-		return sqlSessionTemplate.selectList(NAMESPACE+"queryWechatOriginalInfoPage", bean,rowBound(bean));
+		return sqlSessionTemplate.selectList(NAMESPACE+"queryWechatOriginalInfo", bean,rowBound(bean));
 	}
 
 	@Override
@@ -52,11 +52,4 @@ public class WechatOriginalInfoDAOImpl extends BaseDao implements IWechatOrigina
 		sqlSessionTemplate.update(NAMESPACE+"updateWechatOriginalInfo",bean);
 	}
 
-	@Override
-	public List<WechatOriginalInfoBean> queryWechatOriginalInfo(WechatOriginalInfoBean bean) {
-		// TODO Auto-generated method stub
-		return sqlSessionTemplate.selectList(NAMESPACE+"queryWechatOriginalInfo", bean);
-	}
-
-	
 }

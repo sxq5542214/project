@@ -44,6 +44,7 @@ import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.bean.WechatPayInfoBean;
 import com.yd.business.wechat.bean.WechatPayResultBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.HttpUtil;
 import com.yd.util.MD5Util;
@@ -76,6 +77,8 @@ public class WechatController extends BaseController {
 	private ISupplierCouponService supplierCouponService;
 	@Resource
 	private IShopOrderService shopOrderService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 //	@Deprecated
 //	@RequestMapping("/wechat/handle.do")
@@ -204,7 +207,7 @@ public class WechatController extends BaseController {
 		}
 		
 		//根据用户表中originalid 在ll_wechat_original_info表中信息 ,主要用于查询来自哪个公众号
-		WechatOriginalInfoBean originalInfo = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 		
 		//wx26a55db19faf530f
 		String appidStr = originalInfo.getAppid();
@@ -341,7 +344,7 @@ public class WechatController extends BaseController {
 		}
 		
 		//根据用户表中originalid 在ll_wechat_original_info表中信息 ,主要用于查询来自哪个公众号
-		WechatOriginalInfoBean originalInfo = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 		
 		//wx26a55db19faf530f
 		String appidStr = originalInfo.getAppid();
@@ -667,7 +670,7 @@ public class WechatController extends BaseController {
 		String appid = result.getAppid();
 		WechatOriginalInfoBean info = new WechatOriginalInfoBean();
 		info.setAppid(appid);
-		info = wechatService.queryWechatOriginalInfo(info).get(0);
+		info = wechatOriginalInfoService.queryWechatOriginalInfo(info).get(0);
 		
 		String key = "key=" + info.getPay_wechat_sign_key();
 //		Object[] strParams =  list.toArray();

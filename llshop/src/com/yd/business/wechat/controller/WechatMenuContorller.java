@@ -16,6 +16,7 @@ import com.yd.business.wechat.bean.WechatMaterialBean;
 import com.yd.business.wechat.bean.WechatMenuBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.service.IWechatMenuService;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 
 /**
@@ -30,6 +31,8 @@ public class WechatMenuContorller extends BaseController {
 	private IWechatMenuService wechatMenuService;
 	@Resource
 	private IWechatService wechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	/**
 	 * 获取微信公众号的菜单
@@ -60,7 +63,7 @@ public class WechatMenuContorller extends BaseController {
 	public ModelAndView sendWechatMenuToWeixin(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String original_id = request.getParameter("original_id");
-			WechatOriginalInfoBean original = wechatService.findWechatOriginalInfoByOriginalid(original_id);
+			WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(original_id);
 			String result = wechatMenuService.sendWechatMenuToWeixin(original);
 			writeJson(response, result);
 		} catch (Exception e) {
@@ -121,7 +124,7 @@ public class WechatMenuContorller extends BaseController {
 	public ModelAndView syncNewWechatMenu(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String original_id = request.getParameter("original_id");
-			WechatOriginalInfoBean original = wechatService.findWechatOriginalInfoByOriginalid(original_id);
+			WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(original_id);
 			wechatMenuService.saveWechatMenuToLoal(original);
 			writeJson(response, "SUCCESS");
 		} catch (Exception e) {

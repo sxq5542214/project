@@ -79,6 +79,7 @@ import com.yd.business.wechat.bean.WechatTemplateMsgBean;
 import com.yd.business.wechat.bean.WechatSendAllJsonBean.WechatFilter;
 import com.yd.business.wechat.bean.WechatUploadMaterialBean;
 import com.yd.business.wechat.dao.IWechatDao;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.business.wechat.util.SHA1Util;
 import com.yd.business.wechat.util.WechatConstant;
@@ -113,9 +114,11 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	@Resource
 	protected IMsgCenterActionService msgCenterActionService;
 	@Resource
-	private ICommentInfoService commentInfoService;
+	protected ICommentInfoService commentInfoService;
 	@Resource
-	private ICustomerService customerService;
+	protected ICustomerService customerService;
+	@Resource
+	protected IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	private Map<String,String> wechatCodeMap = new HashMap<String, String>();
 	private HashMap<Long,String> codeTimeMap = new HashMap<Long, String>();
@@ -544,7 +547,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	 */
 	private String getUserInfoUrl(String openid,String originalid){
 
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
 		String url = server_url + WechatConstant.USERINFO + "?access_token="+access_token+"&openid="+openid+"&lang=zh_CN" ;
@@ -748,7 +751,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	 */
 	private void updateToken(TokenBean bean,String originalid){
 
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		originalInfo.setAccess_token(bean.getAccess_token());
 		originalInfo.setExpires_in(bean.getExpires_in().toString());
 		originalInfo.setModify_time(DateUtil.getNowDateStrSSS());
@@ -761,7 +764,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	 */
 	private void updateJsAPITicket(String ticket,String originalid){
 
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		originalInfo.setJsapi_ticket(ticket);
 		originalInfo.setModify_time(DateUtil.getNowDateStrSSS());
 		wechatDao.updateWechatOriginalInfo(originalInfo);
@@ -774,7 +777,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	private String getTokenUrl(String originalid) {
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
 
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String appid = originalInfo.getAppid();
 		String secret = originalInfo.getSecret();
 		String url = server_url + WechatConstant.TOKEN + "?grant_type=" + WechatConstant.GRANT_TYPE_CLIENT_CREDENTIAL
@@ -788,7 +791,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	 */
 	private String getCustomerSendUrl(String originalid){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		
 		String url = server_url + WechatConstant.CUSTOMER_SEND +"?access_token="
@@ -802,7 +805,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	 */
 	private String getTemplateSendUrl(String originalid){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		
 		String url = server_url + WechatConstant.TEMPLATE_SEND +"?access_token="
@@ -840,7 +843,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	@Override
 	public String validateServerSign(SignServerBean bean,String originalid){
 
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String token= originalInfo.getToken();
 		String[] str={token,bean.getTimestamp(),bean.getNonce()};
 	    Arrays.sort(str);
@@ -917,7 +920,7 @@ log.debug("userTicketResponse:"+response);
 	
 	private String getQrCodeUrl(String originalid){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		String url = server_url+ WechatConstant.QRCODE +"?access_token="+access_token;
 		return url;
@@ -950,7 +953,7 @@ log.debug("userTicketResponse:"+response);
 	
 	private String getOauthUrl(String code,String originalid){
 		String oauthUrl =configAttributeService.getValueByCode(AttributeConstant.CODE_OAUTH);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String appid = originalInfo.getAppid();
 		String secret = originalInfo.getSecret();
 		String url = oauthUrl+"access_token?appid="+appid+"&secret="+secret
@@ -1020,7 +1023,7 @@ log.debug("userTicketResponse:"+response);
 
 	@Override
 	public String getJsapiTicket(String originalid) {
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String ticket_value = originalInfo.getJsapi_ticket();
 		return ticket_value;
 	}
@@ -1044,7 +1047,7 @@ log.debug("userTicketResponse:"+response);
 
 	private String getJsapiUrl(String originalid){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		String url = server_url+ WechatConstant.JSAPI_TICKET_URL +"access_token="+access_token+"&type=jsapi";
 		return url;
@@ -1056,7 +1059,7 @@ log.debug("userTicketResponse:"+response);
 	 */
 	private String getWechatMaterialCountUrl(String originalid){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		String url = server_url+ WechatConstant.GET_MATERIALCOUNT +"access_token="+access_token ;
 		return url;
@@ -1067,7 +1070,7 @@ log.debug("userTicketResponse:"+response);
 	 */
 	private String getWechatMaterialListUrl(String originalid){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		String url = server_url+ WechatConstant.BATCHGET_MATERIAL +"access_token="+access_token ;
 		return url;
@@ -1080,7 +1083,7 @@ log.debug("userTicketResponse:"+response);
 	 */
 	private String getWechatMaterialAddNewsUrl(String originalid,String action){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		String mothed = "";
 		if(WechatMaterialDeliveryLogBean.ACTION_ADD.equals(action)){
@@ -1622,46 +1625,6 @@ log.debug("userTicketResponse:"+response);
 		//分发操作		
 		return action;
 	}
-	
-	@Override
-	public WechatOriginalInfoBean findWechatOriginalInfoByOriginalid(String originalid){
-		WechatOriginalInfoBean bean = new WechatOriginalInfoBean();
-		bean.setOriginalid(originalid);
-		List<WechatOriginalInfoBean> list = queryWechatOriginalInfo(bean);
-		if(list.size()>0){
-			return list.get(0);
-		}
-		return null;
-	}
-	
-	@Override
-	public WechatOriginalInfoBean findWechatOriginalInfoByServer(String server_domain){
-		WechatOriginalInfoBean bean = new WechatOriginalInfoBean();
-		bean.setServer_domain(server_domain);
-		List<WechatOriginalInfoBean> list = queryWechatOriginalInfo(bean);
-		if(list.size()>0){
-			return list.get(0);
-		}else{
-			//如果没有查到，再按serverurl去查
-			bean.setServer_domain(null);
-			bean.setServer_url(server_domain);
-
-			list = queryWechatOriginalInfo(bean);
-			if(list.size()>0){
-				return list.get(0);
-			}
-			
-		}
-		return null;
-	}
-	
-	@Override
-	public List<WechatOriginalInfoBean> queryWechatOriginalInfo(WechatOriginalInfoBean bean){
-		return wechatDao.queryWechatOriginalInfo(bean);
-	}
-	
-	
-	
 	public static void main(String[] args) {
 		long senceValue = WechatUtil.getScenceStr(4, 1, 2);
 		String json = "{\"expire_seconds\": 2592000, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\":"+senceValue+"}}}";
@@ -1965,7 +1928,7 @@ log.debug("userTicketResponse:"+response);
 	 */
 	private String getMaterialSendToAllUrl(String originalid){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		String url = server_url + WechatConstant.MATERIAL_SEND_ALL +"?access_token=" + access_token;
 		return url;
@@ -1977,7 +1940,7 @@ log.debug("userTicketResponse:"+response);
 	 */
 	private String getUpLoadThumbMaterialUrl(String originalid){
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-		WechatOriginalInfoBean originalInfo = findWechatOriginalInfoByOriginalid(originalid);
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
 		String url = server_url + WechatConstant.ADD_MATERIAL +"?access_token=" + access_token;
 		return url;

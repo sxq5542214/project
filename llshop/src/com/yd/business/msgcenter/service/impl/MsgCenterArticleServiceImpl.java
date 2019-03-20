@@ -22,6 +22,7 @@ import com.yd.business.msgcenter.service.IMsgCenterArticleService;
 import com.yd.business.wechat.bean.WechatMaterialBean;
 import com.yd.business.wechat.bean.WechatMaterialRelationBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.DateUtil;
 import com.yd.util.RandomUtil;
@@ -37,6 +38,8 @@ public class MsgCenterArticleServiceImpl extends BaseService implements IMsgCent
 	private IMsgCenterArticleDao msgCenterArticleDao;
 	@Resource
 	private IWechatService wechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	/**
 	 * 通过ID查找文章
@@ -69,7 +72,7 @@ public class MsgCenterArticleServiceImpl extends BaseService implements IMsgCent
 			List<WechatMaterialRelationBean> beanList = wechatService.queryWechatMaterialRelationByBean(material,relBean,null);
 			List<String> delivery_original_names = new ArrayList<String>();
 			for (WechatMaterialRelationBean wechatMaterialRelationBean : beanList) {
-				WechatOriginalInfoBean original = wechatService.findWechatOriginalInfoByOriginalid(wechatMaterialRelationBean.getOriginalid());
+				WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(wechatMaterialRelationBean.getOriginalid());
 				delivery_original_names.add(original.getOriginal_name());
 			}
 			if(delivery_original_names.size() > 0){

@@ -54,6 +54,7 @@ import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.user.util.EmojiUtil;
 import com.yd.business.wechat.bean.BaseMessage;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.business.wechat.util.WechatConstant;
 import com.yd.util.AutoInvokeGetSetMethod;
@@ -82,6 +83,8 @@ public class CommentInfoServiceImpl extends BaseService implements ICommentInfoS
 	protected IConfigAttributeService configAttributeService;
 	@Resource
 	protected ThreadPoolTaskExecutor taskExecutor;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	@Override
 	public void insertCommentInfo(CommentInfoBean bean) {
@@ -300,7 +303,7 @@ public class CommentInfoServiceImpl extends BaseService implements ICommentInfoS
 			//真实存在的用户发消息
 			if(!StringUtil.isNull(parentReplyBean.getOpenid())){
 				UserWechatBean user = userWechatService.findUserWechatByOpenId(parentReplyBean.getOpenid());
-				WechatOriginalInfoBean info = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+				WechatOriginalInfoBean info = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 				String link_url = commentConfig.getLink_url();
 				//修改链接的参数
 				if(StringUtil.isNotNull(link_url)){
@@ -1154,7 +1157,7 @@ public class CommentInfoServiceImpl extends BaseService implements ICommentInfoS
 	public void UpLoadImgThread(Object img_arr, String code, CommentInfoBean bean, String originalid) throws ImageFormatException, IOException {
 		if (!StringUtil.isNull(img_arr)) {
 			String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
-			WechatOriginalInfoBean originalInfo = wechatService.findWechatOriginalInfoByOriginalid(originalid);
+			WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 			String access_token = originalInfo.getAccess_token();
 			String url = server_url + WechatConstant.DOWNLOAD_IMG + "?access_token=" + access_token;
 			List<String> mediaList = Arrays.asList(img_arr.toString().split(","));

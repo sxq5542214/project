@@ -8,9 +8,9 @@ import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 public interface IWechatOriginalInfoDAO {
 
 	/**
-	 * 分页查询ll_WechatOriginalInfo表信息
+	 * 查询ll_WechatOriginalInfo表信息
 	 */
-	public List<WechatOriginalInfoBean> queryWechatOriginalInfoPage(WechatOriginalInfoBean bean);
+	public List<WechatOriginalInfoBean> queryWechatOriginalInfo(WechatOriginalInfoBean bean);
 	
 	
 	/**
@@ -34,12 +34,5 @@ public interface IWechatOriginalInfoDAO {
 	 * 更新ll_WechatOriginalInfo表信息
 	 */
 	public void updateWechatOriginalInfo(WechatOriginalInfoBean bean);
-	
-	
-	/**
-	 * 查询ll_WechatOriginalInfo表信息
-	 */
-	public List<WechatOriginalInfoBean> queryWechatOriginalInfo(WechatOriginalInfoBean bean);
-	
 	
 }

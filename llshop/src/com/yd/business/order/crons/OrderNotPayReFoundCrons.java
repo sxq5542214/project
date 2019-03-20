@@ -22,6 +22,7 @@ import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.TextBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
@@ -41,6 +42,8 @@ public class OrderNotPayReFoundCrons extends BaseCrons {
 	private IUserWechatService userWechatService;
 	@Resource
 	private IConfigAttributeService configAttributeService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	
 	/* (non-Javadoc)
@@ -107,7 +110,7 @@ public class OrderNotPayReFoundCrons extends BaseCrons {
 		for(OrderProductLogBean bean : listreduser){
 			try{
 				UserWechatBean user = userWechatService.findUserWechatById(bean.getUser_id());
-				WechatOriginalInfoBean original = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+				WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 				String openid = user.getOpenid();
 				//获取短信内容
 				String content = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_USER_PAIED_REMIND_TAKE_RED);

@@ -24,6 +24,7 @@ import com.yd.business.wechat.bean.WechatMenuBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.dao.IWechatDao;
 import com.yd.business.wechat.service.IWechatMenuService;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.business.wechat.util.WechatConstant;
 import com.yd.util.AutoInvokeGetSetMethod;
@@ -46,10 +47,12 @@ public class WechatMenuServiceImpl extends BaseService implements IWechatMenuSer
 	private IWechatDao wechatDao;
 	@Resource
 	private IConfigCruxService configCruxService;
+	@Resource
+	protected IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	@Override
 	public WechatMenuBean getWechatMenuList(WechatOriginalInfoBean originalBean) {
-		WechatOriginalInfoBean wechatOriginalInfoBean = wechatService.findWechatOriginalInfoByOriginalid(originalBean.getOriginalid());
+		WechatOriginalInfoBean wechatOriginalInfoBean = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalBean.getOriginalid());
 		WechatMenuBean showBean = new WechatMenuBean();
 		showBean.setId(0);
 		showBean.setName(wechatOriginalInfoBean.getOriginal_name());

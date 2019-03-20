@@ -49,6 +49,7 @@ import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.bean.WechatPayInfoBean;
 import com.yd.business.wechat.bean.WechatPayResultBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.HttpUtil;
 import com.yd.util.MD5Util;
@@ -82,6 +83,8 @@ public class SupplierCouponController extends BaseController{
 	private IOrderService orderService;
 	@Resource
 	private IConfigCruxService configCruxService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	
 	public static final String PAGE_MYCOUPON = "/page/user/activity/coupon/myCoupon.jsp";
@@ -280,7 +283,7 @@ public class SupplierCouponController extends BaseController{
 	 * 查询目前配置的优惠卷
 	 */
 	@RequestMapping("/supplier/queryCouponInfo.do")
-	public ModelAndView queryCouponInfo(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	public ModelAndView queryCouponInfo(HttpServletRequest request,HttpServletResponse response){
 		try{
 			List<SupplierCouponConfigBean> list = supplierCouponService.queryAllCouponInfo();
 			if(list == null || list.size() != 0)
@@ -299,7 +302,7 @@ public class SupplierCouponController extends BaseController{
 	 * 查询目前配置的优惠卷
 	 */
 	@RequestMapping("**/supplier/coupon/toUserCouponCenterPage.do")
-	public ModelAndView toUserCouponCenterPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	public ModelAndView toUserCouponCenterPage(HttpServletRequest request,HttpServletResponse response){
 		try{
 			List<SupplierCouponConfigBean> list = supplierCouponService.queryAllEnableCouponInfo();
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -939,7 +942,7 @@ public class SupplierCouponController extends BaseController{
 			throw new RuntimeException(" createUnifiedOrder user is null!");
 		}
 		
-		WechatOriginalInfoBean originalInfo = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 		
 		//wx26a55db19faf530f
 		String appidStr = originalInfo.getAppid();

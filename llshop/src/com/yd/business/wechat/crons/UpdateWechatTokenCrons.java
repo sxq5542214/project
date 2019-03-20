@@ -18,6 +18,7 @@ import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.TextBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.DateUtil;
 
@@ -33,6 +34,8 @@ public class UpdateWechatTokenCrons extends BaseCrons {
 	@Resource
 	private IUserWechatService userWechatService;
 	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
+	@Resource
 	private IConfigAttributeService configAttributeService;
 	
 	/* (non-Javadoc)
@@ -44,7 +47,7 @@ public class UpdateWechatTokenCrons extends BaseCrons {
 		log.debug(" updateWechatTokenCrons begin.....");
 		
 		//读取所有的微信公众号配置信息
-		List<WechatOriginalInfoBean> list = wechatService.queryWechatOriginalInfo(null);
+		List<WechatOriginalInfoBean> list = wechatOriginalInfoService.queryWechatOriginalInfo(null);
 		
 		for(WechatOriginalInfoBean bean : list){
 			wechatService.updateWechatAccessToken(bean.getOriginalid());

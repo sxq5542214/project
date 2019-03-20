@@ -25,6 +25,7 @@ import com.yd.business.dictionary.service.impl.DictionaryServiceImpl;
 import com.yd.business.other.bean.ConfigAttributeBean;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.StringUtil;
 
@@ -40,6 +41,8 @@ public class ConfigAttributeController extends BaseController {
 	private IDictionaryService dictionaryService;
 	@Resource
 	private IWechatService wechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 public static final String PAGE_CONFIGATTRIBUTE = "/page/pc/attribute/iframe_config_attribute_mgr.jsp";
 	
@@ -74,7 +77,7 @@ public static final String PAGE_CONFIGATTRIBUTE = "/page/pc/attribute/iframe_con
 				bean.setStatus(Integer.valueOf(status.toString()));
 			}
 			//得到系统所有公众号集合
-			List<WechatOriginalInfoBean> originalList = wechatService.queryWechatOriginalInfo(null);
+			List<WechatOriginalInfoBean> originalList = wechatOriginalInfoService.queryWechatOriginalInfo(null);
 			PageinationData pd = configAttributeService.queryConfigAttributeForPage(bean);
 			//初始化字典值
 			Map<String, List<DictionaryBean>>  dicMap = dictionaryService.getTableAttributuByDictionaryCache(bean.getClass().getSimpleName());

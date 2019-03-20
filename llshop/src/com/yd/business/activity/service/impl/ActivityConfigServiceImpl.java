@@ -41,6 +41,7 @@ import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
@@ -74,6 +75,8 @@ public class ActivityConfigServiceImpl extends BaseService implements IActivitCo
 	private IActivityService activityService;
 	@Resource
 	private IConfigCruxService configCruxService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	@Override
 	public List<ActivityConfigBean> queryAllActivityConfig(Integer status){
@@ -243,7 +246,7 @@ public class ActivityConfigServiceImpl extends BaseService implements IActivitCo
 				//查询这个活动下配置的公众号
 				List<ActivityOriginalRelationBean> activityOriginalList = activityDao.queryActivityOriginalRelationBean(oBean);
 				for (ActivityOriginalRelationBean activityOriginalRelationBean : activityOriginalList) {
-					WechatOriginalInfoBean o = wechatService.findWechatOriginalInfoByOriginalid(activityOriginalRelationBean.getOriginal_id());
+					WechatOriginalInfoBean o = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(activityOriginalRelationBean.getOriginal_id());
 					if(!StringUtil.isNull(o)){
 						activityOriginalRelationBean.setOriginal_name(o.getOriginal_name());
 					}

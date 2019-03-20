@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.wechat.bean.WechatMaterialBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 
 /**
@@ -26,6 +27,8 @@ import com.yd.business.wechat.service.IWechatService;
 public class WechatAjaxController extends BaseController {
 	@Resource
 	private IWechatService wechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	@RequestMapping("wechat/ajax/queryWechatMaterialInfo.do")
 	public ModelAndView queryWechatMaterialInfo(HttpServletRequest request,HttpServletResponse response){
@@ -48,7 +51,7 @@ public class WechatAjaxController extends BaseController {
 		
 		try{
 			
-			List<WechatOriginalInfoBean> list = wechatService.queryWechatOriginalInfo(null);
+			List<WechatOriginalInfoBean> list = wechatOriginalInfoService.queryWechatOriginalInfo(null);
 			
 			for(WechatOriginalInfoBean bean : list)
 			{

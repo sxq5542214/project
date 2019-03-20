@@ -43,6 +43,7 @@ import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.business.wechat.util.WechatConstant;
 import com.yd.util.DateUtil;
@@ -66,6 +67,8 @@ public class SupplierEventController extends BaseController{
 	private IWechatService wechatService;
 	@Resource
 	private ILogService logService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	
 	@Override
 	protected void initServletContext(ServletContext servletContext) {
@@ -202,7 +205,7 @@ public class SupplierEventController extends BaseController{
 			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			//公众号信息
-			WechatOriginalInfoBean original = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+			WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 //			UserQrCodeBean ticket = userWechatService.queryQrCodeTicketByUserIdAndSence(openid, WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, eId);
 			
 			
@@ -255,7 +258,7 @@ public class SupplierEventController extends BaseController{
 			UserQrCodeBean ticket = userWechatService.queryQrCodeTicketByUserIdAndSence(openid, WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, eId);
 			
 			//公众号信息
-			WechatOriginalInfoBean original = wechatService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+			WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 			
 //			int count = logService.queryUserOperationLogCount(user.getOpenid(), "/wechat/user/supplierEvent/userRead/toMyEventPage.do");
 //			user.setTotalcount(count);
@@ -487,7 +490,7 @@ public class SupplierEventController extends BaseController{
 
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(fromOpenid);
 			UserQrCodeBean ticket = userWechatService.queryQrCodeTicketByUserIdAndSence(fromOpenid, WechatConstant.TICKET_SENCE_CODE_LOTTERY, Integer.parseInt(productid));
-			WechatOriginalInfoBean original = wechatService.findWechatOriginalInfoByOriginalid(ticket.getOriginalid());
+			WechatOriginalInfoBean original = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(ticket.getOriginalid());
 			
 			userWechatService.readUserSenceLog(fromOpenid, null, share_time_ms);
 			

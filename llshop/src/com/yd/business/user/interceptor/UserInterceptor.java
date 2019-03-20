@@ -21,6 +21,7 @@ import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.HttpUtil;
 import com.yd.util.StringUtil;
@@ -40,6 +41,8 @@ public class UserInterceptor extends BaseInterceptor {
 	private ILogService logService;
 	@Resource
 	private IWechatService wechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 
 	/* (non-Javadoc)
 	 * @see com.yd.basic.framework.interceptor.BaseInterceptor#getPath()
@@ -75,7 +78,7 @@ public class UserInterceptor extends BaseInterceptor {
 		String code = requestMap.get("code");
 		if(StringUtil.isNull(openid) && StringUtil.isNotNull(code) && request.getServletPath().startsWith("/wechat/")){
 			String serverName = request.getServerName();
-			WechatOriginalInfoBean originalInfo = wechatService.findWechatOriginalInfoByServer(serverName);
+			WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByServer(serverName);
 			
 			openid = wechatService.getOpenId(code,originalInfo.getOriginalid());
 		}

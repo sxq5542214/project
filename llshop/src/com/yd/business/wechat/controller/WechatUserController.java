@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpRequest;
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
 import org.json.JSONException;
@@ -39,29 +40,38 @@ import com.yd.business.comment.service.IWechatCommentReplyService;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.impl.CustomerServiceImpl;
 import com.yd.business.order.bean.OrderProductLogBean;
+import com.yd.business.order.bean.ShopOrderInfoBean;
+import com.yd.business.order.bean.ShopOrderProductBean;
 import com.yd.business.order.service.IOrderProductLogService;
+import com.yd.business.other.bean.AdvertisingBean;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.product.bean.ProductTypeBean;
 import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.IProductTypeService;
 import com.yd.business.product.service.ISupplierProductService;
+import com.yd.business.supplier.bean.SupplierBean;
+import com.yd.business.supplier.bean.SupplierCouponRecordBean;
+import com.yd.business.supplier.controller.SupplierCouponController;
 import com.yd.business.user.bean.UserInfoCenterPageBean;
 import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserSenceLog;
 import com.yd.business.user.bean.UserSignBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.controller.UserController;
+import com.yd.business.user.controller.UserSupplierProductController;
 import com.yd.business.user.service.IUserSignService;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.BaseMessage;
 import com.yd.business.wechat.bean.SignServerBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.business.wechat.util.Sign;
 import com.yd.business.wechat.util.WechatConstant;
 import com.yd.business.wechat.util.WechatUtil;
 import com.yd.util.AutoInvokeGetSetMethod;
+import com.yd.util.CookieUtil;
 import com.yd.util.HttpUtil;
 import com.yd.util.StringUtil;
 
@@ -76,6 +86,8 @@ public class WechatUserController extends BaseController {
 	private IWechatService wechatUserService;
 	@Resource
 	protected IWechatService wechatService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
 	@Resource
 	protected IUserWechatService userWechatService;
 	@Resource
@@ -94,11 +106,16 @@ public class WechatUserController extends BaseController {
 	private ThreadPoolTaskExecutor taskExecutor;
 	@Resource
 	private IWechatCommentReplyService wechatCommentReplyService;
+	@Resource
+	private UserSupplierProductController userSupplierProductController;
+	@Resource
+	private SupplierCouponController supplierCouponController;
+	
 	
 	@RequestMapping("/wechat/user/handle.do")
 	public String handle(HttpServletRequest request,HttpServletResponse response){
 		
-		String originalid = getOriginalidByServerDomain(request);
+		String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 		
 		setResponseCharSet(response);
 		log.debug("wechat/user/handleSupplier.do  method:" + request.getMethod());
@@ -186,7 +203,7 @@ public class WechatUserController extends BaseController {
 			String originalid = null;
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -217,7 +234,7 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -267,7 +284,7 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -362,7 +379,7 @@ public class WechatUserController extends BaseController {
 			boolean hasUser = true;
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				String originalid = getOriginalidByServerDomain(request);
+				String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				String openId = wechatService.getOpenId(code,originalid);
 			}
 			if(openid == null && fromOpenid == null){
@@ -422,7 +439,7 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -473,7 +490,7 @@ public class WechatUserController extends BaseController {
 			String originalid = null;
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid  = getOriginalidByServerDomain(request);
+				originalid  = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -520,7 +537,7 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -558,7 +575,7 @@ public class WechatUserController extends BaseController {
 			String originalid = null;
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -588,7 +605,7 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				String originalid = getOriginalidByServerDomain(request);
+				String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			
@@ -615,7 +632,7 @@ public class WechatUserController extends BaseController {
 			String eventId = request.getParameter("eventId");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				String originalid = getOriginalidByServerDomain(request);
+				String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			
@@ -662,7 +679,7 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -715,7 +732,7 @@ public class WechatUserController extends BaseController {
 			String code = request.getParameter("code");
 			String fromOpenid = request.getParameter("fromOpenid");
 			String share_time_ms = request.getParameter("share_time_ms");
-			String originalid = getOriginalidByServerDomain(request);
+			String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 			String openId = wechatService.getOpenId(code,originalid);
 			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openId);
@@ -771,7 +788,7 @@ public class WechatUserController extends BaseController {
 		try{
 			String code = request.getParameter("code");
 			String fromOpenid = request.getParameter("fromOpenid");
-			String originalid = getOriginalidByServerDomain(request);
+			String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 			String openId = wechatService.getOpenId(code,originalid);
 //			openId = "123";
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openId);
@@ -849,7 +866,7 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -884,9 +901,10 @@ public class WechatUserController extends BaseController {
 			jso = new JSONObject(json);
 			String url = jso.optString("url");
 			
-			WechatOriginalInfoBean info = getOriginalInfoByServerDomain(request);
+			WechatOriginalInfoBean info = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			if(info == null){
-				
+				log.error("not found WechatOriginalInfo by reqeust:"+ request.getRequestURI() +"  , try find the first...");
+				info = wechatOriginalInfoService.queryFirstWechatOriginalInfo();
 			}
 			
 			String originalid = info.getOriginalid();
@@ -952,6 +970,8 @@ public class WechatUserController extends BaseController {
 		return null;
 	}
 	
+	
+	
 	/**
 	 * 活动入口
 	 * @param request
@@ -965,8 +985,9 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				 
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -982,29 +1003,6 @@ public class WechatUserController extends BaseController {
 		return null;
 	}
 	
-	/**
-	 * 通过服务域名换取公众号的原始ID
-	 * @param request
-	 * @return
-	 */
-	private String getOriginalidByServerDomain(HttpServletRequest request) {
-		String serverName = request.getServerName();
-		System.out.println("serverName:"+serverName);
-		WechatOriginalInfoBean originalInfo = wechatService.findWechatOriginalInfoByServer(serverName);
-		return originalInfo.getOriginalid();
-	}
-	/**
-	 * 通过服务域名换取公众号的原始ID
-	 * @param request
-	 * @return
-	 */
-	private WechatOriginalInfoBean getOriginalInfoByServerDomain(HttpServletRequest request) {
-		String serverName = request.getServerName();
-		System.out.println("serverName:"+serverName);
-		WechatOriginalInfoBean originalInfo = wechatService.findWechatOriginalInfoByServer(serverName);
-		return originalInfo;
-	}
-	
 	@RequestMapping("**/wechat/user/queryWechatUserCommentInfo.do")
 	public ModelAndView queryWechatUserCommentInfo(HttpServletRequest request,HttpServletResponse response){
 		
@@ -1014,7 +1012,7 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			if(StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid = getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
@@ -1032,6 +1030,77 @@ public class WechatUserController extends BaseController {
 			log.error(e, e);
 		}
 		return null;
+	}
+	
+
+	@RequestMapping("/wechat/user/toDefaultPlatformSupplierProduct.do")
+	public ModelAndView toDefaultPlatformSupplierProduct(HttpServletRequest request,HttpServletResponse response){
+
+		String openid = request.getParameter("openid");
+		String originalid = null;
+		if(StringUtil.isNull(openid)){
+			String code = request.getParameter("code");
+			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+			openid = wechatService.getOpenId(code,originalid);
+		}
+		//获取 参数解析后，访问用户的控制层
+		return userSupplierProductController.queryPlatformSupplierProduct(null, openid);
+	}
+	  
+
+	/**
+	 * 查询目前配置的优惠卷
+	 */
+	@RequestMapping("/wechat/user/toCouponCenterPage.do")
+	public ModelAndView toCouponCenterPage(HttpServletRequest request,HttpServletResponse response){
+		String openid = request.getParameter("openid");
+		//微信公众号菜单直接打开界面，要获取CODE为OPENID
+		if(StringUtil.isNull(openid)){
+			String originalid = null;
+			String code = request.getParameter("code");
+			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+			openid = wechatService.getOpenId(code,originalid);
+			 
+		}
+		return supplierCouponController.toUserCouponCenterPage(request, response);
+	}
+	
+	/**
+	 *  打开商城分类界面
+	 */
+	@RequestMapping("/wechat/user/toSupplierProductCategoryPage.do")
+	public ModelAndView toSupplierProductCategoryPage(HttpServletRequest request,HttpServletResponse response){
+
+		String openid = request.getParameter("openid");
+		String sid = request.getParameter("sid");
+		String originalid = null;
+		//微信公众号菜单直接打开界面，要获取CODE为OPENID
+		if(StringUtil.isNull(openid)){
+			String code = request.getParameter("code");
+			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+			openid = wechatService.getOpenId(code,originalid);
+			 
+		}
+		
+		return userSupplierProductController.toSupplierProductCategoryPage(sid, openid);
+	}
+	
+	
+	/**
+	 * 查询自己拥有的优惠卷,跳到转查询自己优惠卷界面
+	 */
+	@RequestMapping("/wechat/user/toUserCouponPage.do")
+	public ModelAndView toUserCouponPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		String openid = request.getParameter("openid");
+		String originalid = null;
+		//微信公众号菜单直接打开界面，要获取CODE为OPENID
+		if(StringUtil.isNull(openid)){
+			String code = request.getParameter("code");
+			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+			openid = wechatService.getOpenId(code,originalid);
+			 
+		}
+		return supplierCouponController.toMycouponPage(request, response);
 	}
 	
 }

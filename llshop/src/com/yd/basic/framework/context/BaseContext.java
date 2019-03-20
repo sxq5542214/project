@@ -21,6 +21,7 @@ import com.yd.business.alipay.bean.AlipayConfig;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 
 /**
@@ -157,6 +158,6 @@ public class BaseContext {
 				.getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_TITLE);
 		default_share_url = ((IConfigAttributeService) getBean("configAttributeService"))
 				.getValueByCode(AttributeConstant.CODE_WECHAT_DEFAULT_SHARE_URL);
-		infoList = ((IWechatService) getBean("wechatService")).queryWechatOriginalInfo(null);
+		infoList = ((IWechatOriginalInfoService) getBean("wechatOriginalInfoService")).queryWechatOriginalInfo(null);
 	}
 }
