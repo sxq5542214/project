@@ -1062,7 +1062,7 @@ public class WechatUserController extends BaseController {
 			openid = wechatService.getOpenId(code,originalid);
 			 
 		}
-		return supplierCouponController.toUserCouponCenterPage(request, response);
+		return supplierCouponController.toUserCouponCenterPage(openid);
 	}
 	
 	/**
@@ -1100,7 +1100,7 @@ public class WechatUserController extends BaseController {
 			openid = wechatService.getOpenId(code,originalid);
 			 
 		}
-		return supplierCouponController.toMycouponPage(request, response);
+		return supplierCouponController.toMycouponPage(openid);
 	}
 	
 }

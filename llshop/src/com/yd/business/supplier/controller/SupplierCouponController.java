@@ -302,11 +302,12 @@ public class SupplierCouponController extends BaseController{
 	 * 查询目前配置的优惠卷
 	 */
 	@RequestMapping("**/supplier/coupon/toUserCouponCenterPage.do")
-	public ModelAndView toUserCouponCenterPage(HttpServletRequest request,HttpServletResponse response){
+	public ModelAndView toUserCouponCenterPage(String openid){
 		try{
 			List<SupplierCouponConfigBean> list = supplierCouponService.queryAllEnableCouponInfo();
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("list", list);
+			map.put("openid", openid);
 			
 			return new ModelAndView(PAGE_USER_COUPONCENTER, map);
 		}catch(Exception e){
@@ -351,9 +352,8 @@ public class SupplierCouponController extends BaseController{
 	 * 查询自己拥有的优惠卷,跳到转查询自己优惠卷界面
 	 */
 	@RequestMapping("**/supplier/supplierCouponController/toMycouponPage.do")
-	public ModelAndView toMycouponPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	public ModelAndView toMycouponPage(String openid) throws IOException{
 		try{
-			String openid = request.getParameter("openid");	//用于正式
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			SupplierCouponRecordBean bean = new  SupplierCouponRecordBean();
 			bean.setUserid(user.getId());
