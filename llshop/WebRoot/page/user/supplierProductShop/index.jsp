@@ -151,7 +151,7 @@
              %>
             
                 <div class="mui-col-xs-6">
-                    <a class="item" href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=prod.getId()%>">
+                    <a class="item" href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=prod.getId()%>&openid=<%=openid%>">
                         <img src="<%=prod.getHead_img() %>" alt="" class="figure" />
                         <span class="tit2"><span style="color: red;font-size:0.5rem;">	<%=prod.getProduct_price()/100d %>元 </span> / <del style="color: #999;"><%=prod.getProduct_real_price()/100d %>元</del><br>
                         <%=prod.getProduct_title() %>
@@ -177,7 +177,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="user/supplier/toSupplierProductCategoryPage.do?openid=123">
+				<a href="user/supplier/toSupplierProductCategoryPage.do?openid=<%=openid%>">
 					<img src="images/user/supplierProductShop/footer002.png"/>
 					<p>分类</p>
 				</a>
