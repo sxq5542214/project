@@ -21,6 +21,7 @@ public class WechatPayInfoBean {
 	
 	//非微信接口字段
 	private String outTradeNo;
+	private String transactionId;
 	
 	public String getOutTradeNo() {
 		return outTradeNo;
@@ -63,6 +64,12 @@ public class WechatPayInfoBean {
 	}
 	public void setPaySign(String paySign) {
 		this.paySign = paySign;
+	}
+	public String getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
 	}
 	
 }

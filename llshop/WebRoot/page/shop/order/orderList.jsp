@@ -103,7 +103,7 @@
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
             </div> --%>
                 <!--分包商品信息-->
-        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/toUserShopOrderPage.do?order_code=<%=order.getOrder_code()%>">
+        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserOrderPage.do?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">
@@ -158,7 +158,7 @@
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
             </div> --%>
                 <!--分包商品信息-->
-        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/toUserShopOrderPage.do?order_code=<%=order.getOrder_code()%>">
+        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserOrderPage.do?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">
@@ -214,7 +214,7 @@
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
             </div> --%>
                 <!--分包商品信息-->
-        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/toUserShopOrderPage.do?order_code=<%=order.getOrder_code()%>">
+        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserOrderPage.do?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">

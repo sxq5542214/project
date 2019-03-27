@@ -195,7 +195,6 @@ public class UserSupplierProductController extends BaseController {
 	public ModelAndView toSupplierShopUserOrderPage(HttpServletRequest request,HttpServletResponse response){
 		try {
 			
-			String data = CookieUtil.getValueByCookie(request, "productInfo");
 			String openid = request.getParameter("openid");
 			String order_code = request.getParameter("order_code");
 			String timeString = request.getParameter("time");
@@ -213,6 +212,7 @@ public class UserSupplierProductController extends BaseController {
 				order.setProductList(productList);
 				
 			}else{ //没有定单号,则根据cookie里的数据创建订单
+				String data = CookieUtil.getValueByCookie(request, "productInfo");
 				order = shopOrderService.createOrderLogByUserCartList(openid,data,time);
 			}
 			

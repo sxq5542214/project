@@ -49,7 +49,7 @@ public class ShopOrderController extends BaseController {
 			shopOrderService.setupOrderAddress(order_code, Integer.parseInt(userAddrId));
 			
 //			return new ModelAndView("redirect:/user/toUserShopOrderPage.do?order_code="+order_code);
-			return new ModelAndView("redirect:/user/toSupplierShopUserOrderPage.do?order_code="+order_code);
+			return new ModelAndView("redirect:/user/supplier/toSupplierShopUserOrderPage.do?order_code="+order_code);
 			
 			
 		} catch (Exception e) {

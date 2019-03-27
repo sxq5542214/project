@@ -51,7 +51,7 @@
 			<if test="event_type != null"> and event_type = #{event_type} </if>
 			<if test="id != null"> and id = #{id} </if>
 		</where>
-		order by id desc
+		<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 </mapper>

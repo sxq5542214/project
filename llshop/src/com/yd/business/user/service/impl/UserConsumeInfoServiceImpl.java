@@ -61,6 +61,19 @@ public class UserConsumeInfoServiceImpl extends BaseService implements IUserCons
 	}
 	
 	@Override
+	public void deleteConsumeInfoByTransactionId(String transactionId){
+
+		UserConsumeInfoBean query = new UserConsumeInfoBean();
+		query.setTransaction_id(transactionId);
+		List<UserConsumeInfoBean> list = userConsumeInfoDao.queryUserConsumeInfoBean(query);
+		for(UserConsumeInfoBean bean : list)
+		{
+			bean.setStatus(UserConsumeInfoBean.STATUS_CANCEL);
+			userConsumeInfoDao.updateUserConsumeInfoBean(bean);
+		}
+	}
+	
+	@Override
 	public UserConsumeInfoBean findUserConsumeInfo(String out_trade_code){
 		
 		return userConsumeInfoDao.findUserConsumeInfoBean(out_trade_code);

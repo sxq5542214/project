@@ -417,6 +417,7 @@ public class WechatController extends BaseController {
 				
 				//返回界面需要支付的信息
 				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
+				data.setTransactionId(resultBean.getPrepay_id());
 				data.setOutTradeNo(order_code);
 				writeJson(response, data);
 				return null;
@@ -467,8 +468,9 @@ public class WechatController extends BaseController {
 	 */
 	@RequestMapping("**/wechat/deleteUnifiedOrderByShop.do")
 	public ModelAndView deleteUnifiedOrderByShop(HttpServletRequest request,HttpServletResponse response){
-		
+
 		String outTradeNo = request.getParameter("outTradeNo");
+		String transactionId = request.getParameter("transactionId");
 		String openid = request.getParameter("openid");
 		
 		ShopOrderInfoBean order = shopOrderService.findShopOrderInfoByCode(outTradeNo);
@@ -476,7 +478,7 @@ public class WechatController extends BaseController {
 		msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_CANCEL , null, order);
 		
 		try{
-			userConsumeInfoService.deleteConsumeInfo(outTradeNo);
+			userConsumeInfoService.deleteConsumeInfoByTransactionId(transactionId);
 			
 			order.setStatus(ShopOrderInfoBean.STATUS_CANCEL);
 			shopOrderService.updateShopOrderInfo(order);

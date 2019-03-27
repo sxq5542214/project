@@ -45,4 +45,6 @@ public interface IUserConsumeInfoService {
 	String createOutTradeNo(String type, String userId, Date date);
 
 	String createOutTradeNo(String type, String userId, Date date, boolean flag);
+
+	void deleteConsumeInfoByTransactionId(String transactionId);
 }
