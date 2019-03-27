@@ -493,6 +493,8 @@ public class WechatUserController extends BaseController {
 				originalid  = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
 			}
+			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
+			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
 			
@@ -1098,8 +1100,8 @@ public class WechatUserController extends BaseController {
 			String code = request.getParameter("code");
 			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 			openid = wechatService.getOpenId(code,originalid);
-			 
 		}
+		WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
 		return supplierCouponController.toMycouponPage(openid);
 	}
 	

@@ -114,7 +114,7 @@
 									<div class="w-goods-pic">
 <%-- 										<a href="<%=basePath %>product/showProductDescById.do?id=<%=prod.getProduct_id() %>"> 
  --%>										
- 										<a href="<%=basePath %>supplierProduct/toSupplierProductShopInfo.do?id=<%=prod.getId() %>">
+ 										<a href="<%=basePath %>supplierProduct/toSupplierProductShopInfo.do?id=<%=prod.getId() %>&openid=<%=user.getOpenid()%>">
  											<img alt="<%=prod.getProduct_name() %>" src="<%=prod.getHead_img()%>" >
 										</a>
 									</div>

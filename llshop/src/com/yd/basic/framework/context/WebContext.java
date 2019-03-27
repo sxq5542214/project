@@ -83,5 +83,10 @@ public class WebContext extends BaseFilter {
 	public static ConcurrentHashMap<String, Object> getRunningCacheMap() {
 		return runningCacheMap;
 	}
-	
+	public static void setObejctToSession(String name,Object obj){
+		getHttpSession().setAttribute(name, obj);
+	}
+	public static Object getObjectBySession(String name){
+		return getHttpSession().getAttribute(name);
+	}
 }

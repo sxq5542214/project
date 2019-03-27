@@ -277,10 +277,12 @@ public class SupplierProductController extends BaseController {
 	public ModelAndView toSupplierProductShopInfo(HttpServletRequest request,HttpServletResponse response){
 		try{
 			String id = request.getParameter("id");
+			String openid = request.getParameter("openid");
 			SupplierProductBean bean = supplierProductService.findSupplierProductById(Integer.parseInt(id));
 			
 			Map<String,Object> map = new HashMap<String, Object>();
 			map.put("bean", bean);
+			map.put("openid", openid);
 			
 			return new ModelAndView("/page/shop/product/product_info.jsp", map);
 		}catch (Exception e) {

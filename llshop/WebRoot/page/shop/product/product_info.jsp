@@ -8,6 +8,7 @@
 			+ path + "/";
 	boolean hasDiscount = false;
 	SupplierProductBean bean = (SupplierProductBean) request.getAttribute("bean");
+	String openid = (String) request.getAttribute("openid");
 	
 	%>
 <!DOCTYPE html>
@@ -52,7 +53,7 @@
 	
 	function gotoCart(spid){
 		addToCart(spid);
-		location.href = 'user/cart/toMycartPage.do';
+		location.href = 'user/cart/toMycartPage.do?openid=<%=openid%>';
 	}
 	
 	
