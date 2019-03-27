@@ -494,7 +494,7 @@ public class WechatController extends BaseController {
 	/**
 	 * 响应微信发送的支付结果，目前仅仅是C端会用微信支付
 	 */
-	@RequestMapping("**/wechat/serverNotify.do")
+	@RequestMapping(value = {"/wechat/serverNotify.html","/wechat/serverNotify.do"})
 	public ModelAndView serverNotify(HttpServletRequest request,HttpServletResponse response){
 		// 从request中取得输入流  
 		ServletInputStream inputStream = null;

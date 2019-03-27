@@ -39,8 +39,6 @@ function pay(){
 			           "paySign" : result.paySign //微信签名 
 			       },
 			       function(res){
-			    	   alert(res);
-			    	   alert(res.err_msg);
 			           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 			           	alert('已支付成功！我们将会尽快安排发货！');
 			           
