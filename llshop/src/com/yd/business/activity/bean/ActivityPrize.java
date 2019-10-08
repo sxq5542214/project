@@ -15,7 +15,9 @@ import com.yd.business.dictionary.bean.DictionaryBean;
  */
 @Alias("activityPrize")
 public class ActivityPrize extends BaseBean {
-	
+
+	public static final String PRODUCT_TABLE_COUPONCONFIG = "ll_coupon_config" ;
+	public static final String PRODUCT_TABLE_SUPPLIERPRODUCT = "ll_supplier_product" ;
 	/**
 	 * 启用
 	 */

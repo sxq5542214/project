@@ -4,6 +4,13 @@
 
 <mapper namespace="shopOrder">
 	
+	<resultMap id="shopOrderInfoMap" type="shopOrderInfo" >
+		<collection property="productList" ofType="shopOrderProduct" select="queryShopOrderProduct" column="order_info_id">
+		</collection>
+	</resultMap>
+
+	
+	
 	<insert id="createShopOrderInfo" parameterType="shopOrderInfo" useGeneratedKeys="true" keyProperty="id" >
 		insert into ll_shop_order_info(user_id,nick_name,order_code,order_name,order_img,create_time,
 		modify_time,cost_price,cost_points,cost_money,cost_balance,coupon_total_price,status,remark,
@@ -31,8 +38,8 @@
 			<if test=" invoice_type != null"> and invoice_type = #{invoice_type} </if>
 			<if test=" notInStatus != null"> and status not in (${notInStatus})</if>
 			
-			<if test=" orderby != null">  ${orderby}</if>
 		</where>
+			<if test=" orderby != null">  ${orderby}</if>
 	</select>
 	
 	<update id="updateShopOrderInfo" parameterType="shopOrderInfo" useGeneratedKeys="true" >
@@ -99,6 +106,28 @@
 	<delete id="delteShopOrderById" parameterType="int">
 		delete from ll_shop_order_info where id = #{value}
 	</delete>
+	
+	<select id="queryShopOrderAndProductList" resultMap="shopOrderInfoMap" parameterType="shopOrderInfo">
+		select * from ll_shop_order_info 
+		<where>
+			<if test=" id != null"> and id = #{id} </if>
+			<if test=" user_id != null"> and user_id = #{user_id} </if>
+			<if test=" order_code != null"> and order_code like concat('%', #{order_code} ,'%')  </if>
+			<if test=" status != null"> and status = #{status} </if>
+			<if test=" event_type != null"> and event_type = #{event_type} </if>
+			<if test=" is_sended != null"> and is_sended = #{is_sended} </if>
+			<if test=" contact_phone != null"> and contact_phone like concat('%', #{contact_phone} ,'%') </if>
+			<if test=" contact_name != null"> and contact_name like concat('%', #{contact_name} ,'%')  </if>
+			<if test=" invoice_type != null"> and invoice_type = #{invoice_type} </if>
+			<if test=" notInStatus != null"> and status not in (${notInStatus})</if>
+		</where>
+		<if test=" orderby != null">  ${orderby}</if>
+	</select>
+	
+	<insert id="createShopOrderRemind" parameterType="shopOrderRemind">
+		insert into ll_shop_order_remind(orderId,orderCode,remind,createDate,readFlag,userId,nickName,contactName,contactPhone,orderName)
+		values(#{orderId},#{orderCode},#{remind},#{createDate},#{readFlag},#{userId},#{nickName},#{contactName},#{contactPhone},#{orderName})
+	</insert>
 	
 </mapper>
 

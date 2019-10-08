@@ -26,7 +26,7 @@
 		<servlet-name>ServletController</servlet-name>
 		<url-pattern>*.do</url-pattern>
 		<url-pattern>*.action</url-pattern>
-		<url-pattern>*.htm</url-pattern>
+		<url-pattern>*.html</url-pattern>
 	</servlet-mapping>
 	<filter>
 		<filter-name>wcFilter</filter-name><filter-class>com.yd.basic.framework.context.WebContext</filter-class>
@@ -61,7 +61,8 @@
        <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
   <welcome-file-list>
-    <welcome-file>login.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>login.htm</welcome-file>
   </welcome-file-list>
   <error-page>
   	<error-code>404</error-code>

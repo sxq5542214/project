@@ -1,3 +1,4 @@
+<%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@page import="com.yd.basic.framework.context.BaseContext"%>
 <%@page import="com.yd.business.order.bean.ShopOrderInfoBean"%>
@@ -46,17 +47,30 @@
         				$.ajax({
 							url : "order/shop/deleteShopOrder.do",
 							data : { order_id : orderId,
-									 user_id : $("#user_id").val()
+									 openid : '<%=user.getOpenid() %>'
 									},
 							success : function(d) {
 								alert("已成功删除");
         						$(".order"+orderId).hide();
 							}
 			           	});
-        			
-        			
-        			
         		}
+        	}
+        	
+        	
+        	function remindOrder(orderId){
+        		var remark = prompt("请填写催单说明，以便我们为您提供更好的服务");
+        			
+   				$.ajax({
+					url : "order/shop/remindShopOrder.do",
+					data : { order_id : orderId,
+							 openid : '<%=user.getOpenid() %>',
+							 remark : remark
+							},
+					success : function(d) {
+    					alert('已提交催单申请，我们将会尽快为您完成发货');
+					}
+	           	});
         	}
         	
         </script>
@@ -124,14 +138,17 @@
 	    </a> 
 	    <!--数量价格信息-->
 	    <div class="detail2">
-	    	<span style="color:black; ">总价：<%= (order.getCost_points() + order.getCost_price() ) /100d %>元 &nbsp;</span>
-			<span style="color: #ff463c;">积分抵扣：<%=order.getCost_points()/100d %>元&nbsp;</span>
-	        <span class="order_price" style="font-size: 1.6rem;">优惠价：￥<%=order.getCost_price() /100d %>元</span>
+	    	<span style="color:black; ">总价：<%= (order.getCost_price() ) /100d %>元 &nbsp;</span>
+			<span style="color: #ff463c;">优惠抵扣：<%=NumberUtil.addtion(order.getCost_points(),order.getCoupon_total_price())   /100d %>元&nbsp;</span>
+	        <span class="order_price" style="font-size: 1.6rem;">优惠后实付：￥<%=order.getCost_money() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
 	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
 	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
+	        	<%}else if(order.getStatus() == ShopOrderInfoBean.STATUS_ALREADY_DELIVERY) { %>
+	        	<a href="https://www.kuaidi100.com/chaxun?com=<%=order.getExpress_mode() %>&nu=<%=order.getExpress_order_code() %>" >查看物流</a>
+	        	
 	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
 	        	<%} %>
@@ -179,9 +196,9 @@
 	    </a> 
 	    <!--数量价格信息-->
 	    <div class="detail2">
-	    	<span style="color:black; ">总价：<%= (order.getCost_points() + order.getCost_price() ) /100d %>元 &nbsp;</span>
-			<span style="color: #ff463c;">积分抵扣：<%=order.getCost_points()/100d %>元&nbsp;</span>
-	        <span class="order_price" style="font-size: 1.6rem;">优惠后：￥<%=order.getCost_price() /100d %>元</span>
+	    	<span style="color:black; ">总价：<%= (order.getCost_price() ) /100d %>元 &nbsp;</span>
+			<span style="color: #ff463c;">优惠抵扣：<%=NumberUtil.addtion(order.getCost_points(),order.getCoupon_total_price())   /100d %>元&nbsp;</span>
+	        <span class="order_price" style="font-size: 1.6rem;">优惠后实付：￥<%=order.getCost_money() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
@@ -235,14 +252,17 @@
 	    </a> 
 	    <!--数量价格信息-->
 	    <div class="detail2">
-	    	<span style="color:black; ">总价：<%= (order.getCost_points() + order.getCost_price() ) /100d %>元 &nbsp;</span>
-			<span style="color: #ff463c;">积分抵扣：<%=order.getCost_points()/100d %>元&nbsp;</span>
-	        <span class="order_price" style="font-size: 1.6rem;">优惠后：￥<%=order.getCost_price() /100d %>元</span>
+	    	<span style="color:black; ">总价：<%= ( order.getCost_price() ) /100d %>元 &nbsp;</span>
+			<span style="color: #ff463c;">优惠抵扣：<%=NumberUtil.addtion(order.getCost_points(),order.getCoupon_total_price())   /100d %>元&nbsp;</span>
+	        <span class="order_price" style="font-size: 1.6rem;">优惠后实付：￥<%=order.getCost_money() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
 	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
 	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
+	        	<%}else if(order.getStatus() == ShopOrderInfoBean.STATUS_ALREADY_DELIVERY) { %>
+	        	<a href="https://www.kuaidi100.com/chaxun?com=<%=order.getExpress_mode() %>&nu=<%=order.getExpress_order_code() %>" >查看物流</a>
+	        	
 	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
 	        	<%} %>

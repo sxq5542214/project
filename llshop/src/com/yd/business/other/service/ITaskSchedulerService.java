@@ -5,7 +5,6 @@ import com.yd.business.other.bean.TaskCronsBean;
 
 public interface ITaskSchedulerService {
 
-	
 	/**
 	 * 分页查询crons表信息
 	 */

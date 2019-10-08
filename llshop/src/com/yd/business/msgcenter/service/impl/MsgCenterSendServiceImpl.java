@@ -81,8 +81,8 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 	private IWechatOriginalInfoService wechatOriginalInfoService;
 
 	public static final String split_symbol = "#";
-	public static final String http_pre = "http://";
-	public static final String http_end = "/llshop/";
+//	public static final String http_pre = "http://";
+//	public static final String http_end = "/llshop/";
 	
 	/**
 	 * 将等待发送的信息，入表保存

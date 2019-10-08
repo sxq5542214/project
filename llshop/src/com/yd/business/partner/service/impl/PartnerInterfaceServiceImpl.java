@@ -611,7 +611,6 @@ public class PartnerInterfaceServiceImpl extends BaseService implements IPartner
 		
 		
 		try {
-//			String result = HttpUtil.post("http://localhost:8080/llshop/p/intf/handlePartnerAsyncOrder.htm", map);
 			String result = HttpUtil.post("http://www.91liuliang.cc/llshop/p/intf/handlePartnerAsyncOrder.htm", map);
 		
 			System.out.println(result);

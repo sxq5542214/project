@@ -14,6 +14,7 @@ import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.order.bean.AreaData;
 import com.yd.business.other.bean.ConfigCruxBean;
 import com.yd.business.other.constant.AttributeConstant;
+import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.supplier.service.ISupplierEventService;
 import com.yd.business.user.bean.UserSignBean;
 import com.yd.business.user.bean.UserWechatBean;
@@ -37,12 +38,19 @@ import com.yd.util.StringUtil;
  */
 @Service("wechatUserService")
 public class WechatUserServiceImpl extends WechatServiceImpl {
+	// 网页手动授权
+	public static final String WEB_AUTH_CODE_SNSAPI_USERINFO = "snsapi_userinfo";
+	// 网页静默授权
+	public static final String WEB_AUTH_CODE_SNSAPI_BASE = "snsapi_base";
+	
 	@Resource
 	private IUserSignService userSignService;
 	@Resource
 	private IMsgCenterActionService msgCenterActionService;
 	@Resource
 	private ISupplierEventService supplierEventService;
+	@Resource
+	private IConfigAttributeService configAttributeService;
 	
 	@Override
 	protected BaseMessage handleUserSubscribeMessage(EventBean eventBean) throws Exception {
@@ -51,7 +59,7 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 		final String weixin_id = eventBean.getFromUserName(); 
 		String parentId = null;
 //		String senceCode = null;
-		Long senceValue =  null;
+		String senceValue =  null;
 		Integer senceType = null;
 		Integer senceId = null;
 		
@@ -63,7 +71,7 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 			
 			//扫二维码的
 			if("qrscene".equalsIgnoreCase(prefix) && senceString.length() >= 3){
-				senceValue = Long.parseLong(senceString);
+				senceValue = senceString;
 				senceType = WechatUtil.getSenceType(senceValue);
 				senceId = WechatUtil.getSenceId(senceValue);
 				parentId = String.valueOf(WechatUtil.getUserId(senceValue));
@@ -176,7 +184,7 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 	 * @param parentId
 	 */
 	@Override
-	protected void handleSenceCode(Long senceValue, String weixin_id, String parentId) {
+	protected void handleSenceCode(String senceValue, String weixin_id, String parentId) {
 		if(senceValue == null) return;
 //		String[] senceTypes = senceStr.split(SENCECODE_SPLIT_STR_2);
 		int senceCode = WechatUtil.getSenceType(senceValue);
@@ -270,4 +278,7 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 		}
 		
 	}
+	
+
+	
 }

@@ -7,8 +7,10 @@ import java.util.List;
 
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
+import com.yd.business.order.bean.ShopOrderRemindBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.user.bean.UserCartBean;
+import com.yd.business.user.bean.UserWechatBean;
 
 /**
  * @author ice
@@ -38,12 +40,17 @@ public interface IShopOrderService {
 
 	void updateShopOrderStatusToDelete(String order_code);
 
-	void updateShopOrderExpressInfo(int order_id, String mode, String code, Integer price);
+	void updateShopOrderExpressInfo(ShopOrderInfoBean order, String mode, String code, Integer price);
 
 	ShopOrderInfoBean createOrderLogByUserCartList(String openid, String productJson, Long time);
 
 	void updateShopOrderPaySuccess(int payMoney, String orderCode);
 
 	void updateShopOrderByCoupon(String orderCode, SupplierCouponRecordBean bean);
+
+	List<ShopOrderInfoBean> queryShopOrderAndProductList(ShopOrderInfoBean bean);
+
+	ShopOrderRemindBean createShopOrderRemind(String remind, UserWechatBean user, ShopOrderInfoBean order);
+
 
 }

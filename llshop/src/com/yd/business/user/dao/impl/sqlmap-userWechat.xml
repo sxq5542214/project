@@ -398,6 +398,38 @@
 		'o6sTawdrA5u7jiDcf-V5RUOzAMWw','o6sTawZ6lrHJNgEI8wv7wkCbba1M','o6sTawWDZrx9EyU1Sxj6UJkXGr84')
 	</select>
 	
+	<select id="queryWechatUserActionAgree" resultType="userWechat" parameterType="map">
+		select u.* from ll_wechat_user_action_agree  a,ll_wechat_user u 
+		where a.openid = u.openid 
+		<if test="openid != null"> and a.openid = #{openid} </if>
+		<if test="action != null"> and a.mapping_action = #{action} </if>
+		
+		
+	</select>
+	
+	<select id="queryUserWechatFriends" parameterType="userWechatFriend" resultType="userWechatFriend">
+		select * from ll_user_wechat_friend 
+		<where>
+			<if test="userid != null"> and userid = #{userid}  </if>
+			<if test="openid != null"> and openid = #{openid}  </if>
+			<if test="friendUserid != null"> and friendUserid = #{friendUserid}  </if>
+			<if test="friendOpenid != null"> and friendOpenid = #{friendOpenid}  </if>
+		</where>
+	</select>
+	
+	<insert id="insertUserWechatFriend" parameterType="userWechatFriend" >
+		insert into ll_user_wechat_friend(userid,openid,friendUserid,friendOpenid,createDate,fromSenceId,fromSenceType)
+		values(#{userid},#{openid},#{friendUserid},#{friendOpenid},#{createDate},#{fromSenceId},#{fromSenceType})
+	</insert>
+	
+	<select id="queryUserFriends" parameterType="userWechat" resultType="userWechat">
+		select a.* from ll_wechat_user a, ll_user_wechat_friend b
+		where a.id = b.userid
+		<if test="userid != null"> and b.userid = #{userid}  </if>
+		<if test="openid != null"> and b.openid = #{openid}  </if>
+	</select>
+	
+	
 </mapper>
 
 

@@ -32,6 +32,7 @@ import com.yd.business.activity.bean.ActivityRule;
 import com.yd.business.activity.bean.ActivityUserRelationBean;
 import com.yd.business.activity.bean.ActivityWinHisBean;
 import com.yd.business.activity.service.IActivitConfigService;
+import com.yd.business.activity.service.IActivityPrizeService;
 import com.yd.business.activity.service.IActivityService;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.order.bean.OrderProductLogBean;
@@ -40,11 +41,16 @@ import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.ISupplierProductService;
+import com.yd.business.supplier.bean.SupplierEventCodeBean;
+import com.yd.business.supplier.service.ISupplierEventService;
 import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.controller.UserController;
 import com.yd.business.user.service.IUserCommissionPointsService;
 import com.yd.business.user.service.IUserWechatService;
+import com.yd.business.wechat.bean.WechatWebAuthBean;
+import com.yd.business.wechat.service.IWechatOriginalInfoService;
+import com.yd.business.wechat.service.IWechatService;
 import com.yd.business.wechat.util.WechatConstant;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
@@ -64,6 +70,8 @@ public class ActivityController extends BaseController {
 	@Resource
 	private IActivitConfigService activityConfigService;
 	@Resource
+	private IActivityPrizeService activityPrizeService;
+	@Resource
 	private IUserWechatService userWechatService;
 	@Resource
 	private ISupplierProductService supplierProductService;
@@ -75,6 +83,13 @@ public class ActivityController extends BaseController {
 	private IUserCommissionPointsService userCommissionPointsService;
 	@Resource
 	private IOrderProductLogService orderProductLogService;
+	@Resource
+	private ISupplierEventService supplierEventService;
+	@Resource
+	private IWechatService wechatUserService;
+	@Resource
+	private IWechatOriginalInfoService wechatOriginalInfoService;
+	
 
 	public static final String PAGE_BUYGIVEONE_ORDERCONFIRM = "/page/user/activity/buyGiveOne/orderConfirm.jsp";
 	public static final String PAGE_USER_ACTIVITY_SHAKE_SHAKEADDPHONE = "/page/user/activity/firstShake/shakeAddPhone.jsp";
@@ -87,6 +102,10 @@ public class ActivityController extends BaseController {
 	public static final String PAGE_USER_ACTIVITY_OLYMPIC_USERGETPOINTSRESULT = "/page/user/activity/olympicActivity/userGetPointsResult.jsp";
 	public static final String PAGE_USER_ACTIVITY_OLYMPIC_JOINRESULT = "/page/user/activity/olympicActivity/joinResult.jsp";
 	public static final String PAGE_USER_ACTIVITY_OLYMPIC_ADDPHONE = "/page/user/activity/olympicActivity/olympicAddPhone.jsp";
+	public static final String PAGE_USER_ACTIVITY_FREECUTACTIVITY = "/page/user/activity/freeCutActivity/freeCutActivity.jsp";
+	public static final String PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpActivity.jsp";
+
+	
 	public static final String PAGE_USER_ACTIVITY_LISTHOME = "/page/user/activity/signActivity/index.jsp";
 	public static final String PAGE_USER_ACTIVITY_HOURLYACTIVITY = "/page/user/activity/signActivity/hourlyActivity.jsp";
 	public static final String PAGE_USER_ACTIVITY_WINNERLIST = "/page/user/activity/signActivity/winners.jsp";
@@ -935,6 +954,96 @@ public class ActivityController extends BaseController {
 		}
 		return null;
 	} 
+	
+	
+	
+	/**
+	 * 免费得坚果活动
+	 */
+	@RequestMapping("/activity/user/toFreeCutActivity.html")
+	public ModelAndView toFreeCutActivity(HttpServletRequest request,HttpServletResponse response){
+		Map<String, Object> model = new HashMap<String, Object>();
+		try{
+			String openId = request.getParameter("openid");
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openId);
+			String code = request.getParameter("code");
+			Integer supplierEventId = 1; //也是activityconfigid ,需要保持一致
+			
+			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
+			
+			model.put("user", user);
+			model.put("list", list);
+			model.put("supplierEventId", supplierEventId);
+			
+			return new ModelAndView(PAGE_USER_ACTIVITY_FREECUTACTIVITY, model);
+
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	/**
+	 * 免费得坚果活动
+	 */
+	@RequestMapping("/activity/user/toFreeCutHelpActivity.html")
+	public ModelAndView toFreeCutHelpActivity(HttpServletRequest request,HttpServletResponse response){
+		Map<String, Object> model = new HashMap<String, Object>();
+		try{
+			String toOpenId = request.getParameter("toOpenid");
+			Integer supplierEventId = Integer.parseInt(request.getParameter("supplierEventId")); //也是activityconfigid ,需要保持一致
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(toOpenId);
+			
+			String code = request.getParameter("code");
+			if(StringUtil.isNotNull(code)){
+				//好友信息，创建用户的好友关系
+				String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, originalid);
+				
+				UserWechatBean friend = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), user.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId, originalid , auth.getAccess_token());
+				userWechatService.createUserWechatFriend(user,friend);
+			}
+			
+			UserQrCodeBean qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(toOpenId, WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId);
+			
+			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
+
+			model.put("user", user);
+			model.put("qrCode", qrCode);
+			model.put("list", list);
+			model.put("supplierEventId", supplierEventId);
+			
+			return new ModelAndView(PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY, model);
+
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	
+	/**
+	 * 领取免费得坚果活动的奖品
+	 */
+	@RequestMapping("/activity/user/dealFreeCutPrize.html")
+	public ModelAndView dealFreeCutPrize(HttpServletRequest request,HttpServletResponse response){
+		try{
+			String openId = request.getParameter("openid");
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openId);
+			Integer supplierEventId = Integer.parseInt(request.getParameter("supplierEventId"));
+			Integer prizeId = Integer.parseInt(request.getParameter("prizeId"));
+			
+			
+			String result = activityPrizeService.dealUserActivityPrize(user, supplierEventId, prizeId);
+//			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(1, user.getId(), null);
+			writeJson(response, result);
+			
+			return null;
+
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	
 	
 	
 	

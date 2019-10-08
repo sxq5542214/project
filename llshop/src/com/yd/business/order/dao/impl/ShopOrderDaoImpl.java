@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.yd.basic.framework.persistence.BaseDao;
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
+import com.yd.business.order.bean.ShopOrderRemindBean;
 import com.yd.business.order.dao.IShopOrderDao;
 
 /**
@@ -46,7 +47,16 @@ public class ShopOrderDaoImpl extends BaseDao implements IShopOrderDao {
 	public void delteShopOrderById(int id) {
 		sqlSessionTemplate.delete(NAMESPACE +"delteShopOrderById", id);
 	}
+
+	@Override
+	public List<ShopOrderInfoBean> queryShopOrderAndProductList(ShopOrderInfoBean bean) {
+		return sqlSessionTemplate.selectList(NAMESPACE +"queryShopOrderAndProductList", bean);
+	}
 	
+	@Override
+	public int createShopOrderRemind(ShopOrderRemindBean bean){
+		return sqlSessionTemplate.insert(NAMESPACE +"createShopOrderRemind", bean);
+	}
 	
 	
 }

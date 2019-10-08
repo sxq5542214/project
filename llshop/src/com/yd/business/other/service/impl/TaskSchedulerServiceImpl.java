@@ -61,8 +61,8 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 			public void run() {
 				try {
 					System.out.println(" init TaskSchedulerService");
-					Thread.sleep(15 * 1000);
-				} catch (InterruptedException e) {
+					Thread.sleep(20 * 1000);
+				} catch (Exception e) {
 					e.printStackTrace();
 					log.error(e,e);
 				}

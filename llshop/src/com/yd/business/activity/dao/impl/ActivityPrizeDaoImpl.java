@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
 import com.yd.business.activity.bean.ActivityPrize;
+import com.yd.business.activity.bean.ActivityPrizeRelationBean;
+import com.yd.business.activity.bean.ActivityPrizeRuleBean;
 import com.yd.business.activity.bean.ActivityProductBean;
 import com.yd.business.activity.bean.ActivityRule;
 import com.yd.business.activity.dao.IActivityPrizeDao;
@@ -75,4 +77,23 @@ public class ActivityPrizeDaoImpl extends BaseDao implements IActivityPrizeDao {
 	public List<ActivityProductBean> queryActivityProductBean(ActivityProductBean prize) {
 		return sqlSessionTemplate.selectList(NAMESPACE + "queryActivityProductBean", prize);
 	}
+	
+	@Override
+	public List<ActivityPrizeRuleBean> queryPrizeRule(ActivityPrizeRuleBean bean){
+		return sqlSessionTemplate.selectList(NAMESPACE + "queryPrizeRule", bean);
+	}
+	@Override
+	public List<ActivityPrizeRelationBean> queryActivityPrizeRelation(ActivityPrizeRelationBean bean){
+		return sqlSessionTemplate.selectList(NAMESPACE +"queryActivityPrizeRelation", bean);
+	}
+	
+	
+	@Override
+	public int execActivityPrizeRuleSQL(String sql){
+		return sqlSessionTemplate.selectOne(NAMESPACE+"execActivityPrizeRule", sql);
+	}
+	
+	
+	
+	
 }

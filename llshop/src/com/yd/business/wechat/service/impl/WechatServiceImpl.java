@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -68,6 +69,7 @@ import com.yd.business.wechat.bean.SignServerBean;
 import com.yd.business.wechat.bean.TemplateMessage;
 import com.yd.business.wechat.bean.TextBean;
 import com.yd.business.wechat.bean.TokenBean;
+import com.yd.business.wechat.bean.WechatWebAuthBean;
 import com.yd.business.wechat.bean.WechatArticlesBean;
 import com.yd.business.wechat.bean.WechatMaterialDeliveryLogBean;
 import com.yd.business.wechat.bean.WechatMaterialBean;
@@ -167,7 +169,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 				
 				if(StringUtil.isNotNull(eventKey) && eventKey.length() >2)
 				{
-					Long senceValue = Long.parseLong(eventKey);
+					String senceValue = eventKey;
 //					String senceCode = String.valueOf(WechatUtil.getSenceType(senceValue));
 					String parentId = String.valueOf(WechatUtil.getUserId(senceValue));
 					int senceType = WechatUtil.getSenceType(senceValue);
@@ -308,7 +310,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		String weixin_id = eventBean.getFromUserName(); 
 		String parentId = null;
 //		String senceCode = null;
-		Long senceValue =  null;
+		String senceValue =  null;
 		Integer senceType = null;
 		Integer senceId = null;
 		
@@ -320,7 +322,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 			
 			//扫二维码的
 			if("qrscene".equalsIgnoreCase(prefix) && senceString.length() >= 3){
-				senceValue = Long.parseLong(senceString);
+				senceValue = senceString;
 				senceType = WechatUtil.getSenceType(senceValue);
 				senceId = WechatUtil.getSenceId(senceValue);
 				parentId = String.valueOf(WechatUtil.getUserId(senceValue));
@@ -411,35 +413,36 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	}
 	
 	/**
+	 * 具体看子类
 	 * 处理不同场景下的用户关注信息
 	 * @param senceCode
 	 * @param weixin_id
 	 * @param parentId
 	 */
-	protected void handleSenceCode(Long senceValue, String weixin_id, String parentId) {
-		if(senceValue == null) return;
-//		String[] senceTypes = senceStr.split(SENCECODE_SPLIT_STR_2);
-		int senceCode = WechatUtil.getSenceType(senceValue);
-		int idValue = WechatUtil.getSenceId(senceValue);
-		
-		switch (senceCode) {
-		case WechatConstant.TICKET_SENCE_CODE_UNDEFINE:
-			
-			break;
-		case WechatConstant.TICKET_SENCE_CODE_LOTTERY:
-			
-			break;
-		case WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT:
-			if(parentId != null){
-			}
-			break;
-		case WechatConstant.TICKET_SENCE_CODE_INVITEFRIENDS:
-			
-			break;
-		default:
-			break;
-		}
-		
+	protected void handleSenceCode(String senceValue, String weixin_id, String parentId) {
+//		if(senceValue == null) return;
+////		String[] senceTypes = senceStr.split(SENCECODE_SPLIT_STR_2);
+//		int senceCode = WechatUtil.getSenceType(senceValue);
+//		int idValue = WechatUtil.getSenceId(senceValue);
+//		
+//		switch (senceCode) {
+//		case WechatConstant.TICKET_SENCE_CODE_UNDEFINE:
+//			
+//			break;
+//		case WechatConstant.TICKET_SENCE_CODE_LOTTERY:
+//			
+//			break;
+//		case WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT:
+//			if(parentId != null){
+//			}
+//			break;
+//		case WechatConstant.TICKET_SENCE_CODE_INVITEFRIENDS:
+//			
+//			break;
+//		default:
+//			break;
+//		}
+//		
 	}
 
 	/**
@@ -458,6 +461,25 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		userBean.setOpenid(openid);
 		String filterName = EmojiUtil.filterEmoji(userBean.getNick_name());
 		userBean.setNick_name(filterName);
+		return userBean;
+	}
+	
+	/**
+	 * 根据openId获取用户基本信息
+	 * @param openId
+	 * @return
+	 * @throws Exception 
+	 */
+	@Override
+	public UserWechatExtendBean getWechatUserInfoByAccessToken(String openid,String access_token) throws Exception{
+		UserWechatExtendBean userBean ;
+		String url = getUserInfoUrlByAccessToken(openid,access_token);
+		String response = HttpUtil.get(url);
+		log.debug("getWechatUserInfo response--------------------"+response);
+		userBean = WechatUtil.parseJsonToUserWechatBean(new JSONObject(response));
+		userBean.setOpenid(openid);
+//		String filterName = EmojiUtil.filterEmoji(userBean.getNick_name());
+//		userBean.setNick_name(filterName);
 		return userBean;
 	}
 	
@@ -540,6 +562,45 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		
 	}
 	
+	@Override
+	public UserWechatBean createWechatUserByWebAuth(String weixin_id,Integer parentId,Integer senceType,Integer senceId,String originalid,String access_token) throws Exception{
+		UserWechatBean userBean =getWechatUserInfoByAccessToken(weixin_id,access_token);
+		
+		//父用户不为空
+		if( parentId != null ){
+			userBean.setParentid(parentId);
+			
+			//设置用户级别
+			UserWechatBean parent = userWechatService.findUserWechatById(userBean.getParentid());
+			if(parent != null){
+				Integer level = parent.getLevel();
+				if(level == null){
+					level = 1;
+				}
+				userBean.setLevel(level + 1);
+			}
+		}
+		//新关注用户入库，并且parentId存入所获取的参数
+		//先根据用户id，获取用户基本信息,一起存入库中
+//		System.out.print("用户基本信息-----------------"+userBean.getNick_name());
+		userBean.setOpenid(weixin_id);
+		userBean.setOriginalid(originalid);
+		userBean.setSenceid(senceId);
+		userBean.setSence_type(senceType);
+		
+		String date = DateUtil.getNowDateStr();
+		userBean.setCreate_time(date);
+		userBean.setLast_access_time(date);
+		if(StringUtil.isNull(userBean.getNick_name())){
+			userBean.setNick_name("微信用户"+ DateUtil.java2phpDate(System.currentTimeMillis()) );
+		}
+		
+		//首次关注的积分
+		userWechatService.addUser(userBean);
+		userBean = userWechatService.findUserWechatByOpenId(userBean.getOpenid());
+		return userBean;
+	}
+	
 	/**
 	 * 获取用户基本信息url
 	 * @param openId
@@ -549,6 +610,16 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 
 		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(originalid);
 		String access_token = originalInfo.getAccess_token();
+		return getUserInfoUrlByAccessToken(openid,access_token);
+	}
+	
+	/**
+	 * 获取用户基本信息url
+	 * @param openId
+	 * @return
+	 */
+	private String getUserInfoUrlByAccessToken(String openid,String access_token){
+
 		String server_url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHATSERVERURL);
 		String url = server_url + WechatConstant.USERINFO + "?access_token="+access_token+"&openid="+openid+"&lang=zh_CN" ;
 		return url;
@@ -871,7 +942,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		if(userBean != null){
 			String originalid = getRandomOriginalidByWeight(userBean.getOriginalid());
 			String qrCodeUrl = getQrCodeUrl(originalid);
-			long senceValue = WechatUtil.getScenceStr(senceCode, senceId, userBean.getId());
+			long senceValue = WechatUtil.getScenceIdValue(senceCode, senceId, userBean.getId());
 			String json = "{\"expire_seconds\": 2592000, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\":"+senceValue+"}}}";
 
 			String response = HttpUtil.post(qrCodeUrl,json);	
@@ -981,11 +1052,9 @@ log.debug("userTicketResponse:"+response);
 				JSONObject jso = new JSONObject(result);
 				openId = jso.getString("openid");
 				
-				userWechatService.addUserToSession(openId);
-				
-				long time = System.currentTimeMillis();
-				wechatCodeMap.put(code, openId);
-				codeTimeMap.put(time, code);
+//				long time = System.currentTimeMillis();
+//				wechatCodeMap.put(code, openId);
+//				codeTimeMap.put(time, code);
 			} catch (Exception e) {
 				e.printStackTrace();
 				log.error(e,e);
@@ -994,10 +1063,54 @@ log.debug("userTicketResponse:"+response);
 			openId = cachedCode;
 		}
 		
-		checkCacheCodeTimeOut();
+//		checkCacheCodeTimeOut();
 		
 		return openId;
 	}
+	
+	@Override
+	public WechatWebAuthBean getOpenIdByWebAuthCode(String code,String originalid) {
+
+		if(StringUtil.isNull(code)){
+			return null;
+		}
+		WechatWebAuthBean bean = new WechatWebAuthBean();
+
+		String url =getOauthUrl(code,originalid);
+		
+		try {
+			String result = HttpUtil.get(url);
+			JSONObject jso = new JSONObject(result);
+			bean.setAccess_token(jso.optString("access_token"));
+			bean.setExpires_in(jso.optInt("expires_in"));
+			bean.setOpenid(jso.optString("openid"));
+			bean.setRefresh_token(jso.optString("refresh_token"));
+			bean.setScope(jso.optString("scope"));
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e,e);
+		}
+		
+		
+		return bean;
+	}
+	
+	/**
+	 * 根据微信传递的code转化为openid
+	 * @param code
+	 * @param request
+	 * @return
+	 */
+	@Override
+	public String getOpenidByWechatCode(String code ,HttpServletRequest request){
+		String serverName = request.getServerName();
+		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByServer(serverName);
+		
+		return getOpenId(code,originalInfo.getOriginalid());
+	}
+	
 	
 	/**
 	 * 缓存的微信code，定时清除掉
@@ -1626,8 +1739,8 @@ log.debug("userTicketResponse:"+response);
 		return action;
 	}
 	public static void main(String[] args) {
-		long senceValue = WechatUtil.getScenceStr(4, 1, 2);
-		String json = "{\"expire_seconds\": 2592000, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\":"+senceValue+"}}}";
+		String senceValue = WechatUtil.getScenceStrValue(4, 1, 2);
+		String json = "{\"expire_seconds\": 2592000, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_str\":\""+senceValue+"\"}}}";
 
 		String qrCodeUrl = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" +
 				"qn_c1W8APzQP6wzIN8eqYFAcw-vddMXtykjxf93rt08V7CI1VtV1OKuROwMDH7Zozc-4sudqtbfyjrAX0af2UBZsSAntuahXe0diSNftYRYXPYfAJAQIR" ;

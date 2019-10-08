@@ -18,10 +18,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.dictionary.service.IDictionaryService;
+import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
+import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
+import com.yd.business.order.bean.ShopOrderRemindBean;
 import com.yd.business.order.service.IShopOrderService;
+import com.yd.business.order.service.impl.ShopOrderServiceImpl;
+import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserCartService;
+import com.yd.business.user.service.IUserWechatService;
+import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.StringUtil;
 
@@ -38,6 +45,12 @@ public class ShopOrderController extends BaseController {
 	private IUserCartService userCartService;
 	@Resource
 	private IDictionaryService dictionaryService;
+	@Resource
+	private IUserWechatService userWechatService;
+	@Resource
+	private IWechatService wechatService;
+	@Resource
+	private IMsgCenterActionService msgCenterActionService;
 	
 	@RequestMapping("**/order/shop/setupOrderAddress.do")
 	public ModelAndView setupOrderAddress(HttpServletRequest request, HttpServletResponse response){
@@ -57,16 +70,17 @@ public class ShopOrderController extends BaseController {
 		}
 		return null;
 	}
-	
+
 	@RequestMapping("**/order/shop/deleteShopOrder.do")
 	public ModelAndView deleteShopOrder(HttpServletRequest request,HttpServletResponse response){
 		try {
-			String user_id = request.getParameter("user_id");
+			String openid = request.getParameter("openid");
 			String order_id = request.getParameter("order_id");
 			
 			ShopOrderInfoBean order = shopOrderService.findShopOrderInfoById(Integer.parseInt(order_id));
 			
-			if(Integer.parseInt(user_id) == order.getUser_id().intValue()){
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user.getId().intValue() == order.getUser_id().intValue()){
 				shopOrderService.updateShopOrderStatusToDelete(order.getOrder_code());
 			}
 			
@@ -76,6 +90,32 @@ public class ShopOrderController extends BaseController {
 		}
 		return null;
 	}
+	
+
+	@RequestMapping("**/order/shop/remindShopOrder.do")
+	public ModelAndView remindShopOrder(HttpServletRequest request,HttpServletResponse response){
+		try {
+			String openid = request.getParameter("openid");
+			String order_id = request.getParameter("order_id");
+			String remindStr = request.getParameter("remind");
+			
+			ShopOrderInfoBean order = shopOrderService.findShopOrderInfoById(Integer.parseInt(order_id));
+			
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user.getId().intValue() == order.getUser_id().intValue()){
+				//催单
+				ShopOrderRemindBean remind = shopOrderService.createShopOrderRemind(remindStr, user, order);
+				
+				msgCenterActionService.saveAndHandleUserAction(openid,  MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_REMIND, null, remind);
+			}
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
+	
+	
 	
 	@RequestMapping("**/admin/order/shop/toShopOrderListMgr.do")
 	public ModelAndView toShopOrderListMgr(HttpServletRequest request,HttpServletResponse response){
@@ -104,12 +144,20 @@ public class ShopOrderController extends BaseController {
 		}
 		return null;
 	}
-	
+
 	@RequestMapping("**/admin/order/shop/updateShopOrderExpress.do")
 	public ModelAndView updateShopOrderExpress(HttpServletRequest request,HttpServletResponse response){
 		try {
+
+			ShopOrderInfoBean order;
+			String order_code = request.getParameter("order_code");
+			if(StringUtil.isNotNull(order_code)){
+				order = shopOrderService.findShopOrderInfoByCode(order_code);
+			}else{
+				String order_id = request.getParameter("order_id");
+				order = shopOrderService.findShopOrderInfoById(Integer.parseInt(order_id));
+			}
 			
-			String order_id = request.getParameter("order_id");
 			String express_mode = request.getParameter("express_mode");
 			String express_order_code = request.getParameter("express_order_code");
 			String express_price = request.getParameter("express_price");
@@ -118,9 +166,73 @@ public class ShopOrderController extends BaseController {
 				price = Integer.parseInt(express_price);
 			}
 			
-			shopOrderService.updateShopOrderExpressInfo(Integer.parseInt(order_id), express_mode, express_order_code,price);
+			shopOrderService.updateShopOrderExpressInfo(order, express_mode, express_order_code,price);
 			
 			writeJson(response, "true");
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			writeJson(response, "false");
+		}
+		return null;
+	}
+	
+	@RequestMapping("**/order/shop/updateShopOrderExpressByWechatUser.do")
+	public ModelAndView updateShopOrderExpressByWechatUser(HttpServletRequest request,HttpServletResponse response){
+		try {
+
+			ShopOrderInfoBean order;
+			String order_code = request.getParameter("order_code");
+			order = shopOrderService.findShopOrderInfoByCode(order_code);
+			String openid = request.getParameter("openid");
+			
+			// 检测当前用户是否有权限进行此项操作
+			List<UserWechatBean> list = userWechatService.queryWechatUserActionAgree("**/order/shop/updateShopOrderExpressByWechatUser.do", openid);
+			if(list.size() == 0){
+				writeJson(response, "您没有权限进行此项操作，请联系管理员添加权限");
+				return null;
+			}
+			
+			String express_mode = request.getParameter("express_mode");
+			String express_order_code = request.getParameter("express_order_code");
+			String express_price = request.getParameter("express_price");
+			Integer price = null;
+			if(StringUtil.isNotNull(express_price)){
+				price = Integer.parseInt(express_price);
+			}
+			
+			shopOrderService.updateShopOrderExpressInfo(order, express_mode, express_order_code,price);
+			
+			writeJson(response, "true");
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			writeJson(response, "false");
+		}
+		return null;
+	}
+
+	@RequestMapping("**/order/shop/toShopOrderDeliverPage.do")
+	public ModelAndView toShopOrderDeliverPage(HttpServletRequest request,HttpServletResponse response){
+		try {
+			String openid = request.getParameter("openid");
+			
+			if(openid == null){
+				String code = request.getParameter("code");
+				openid = wechatService.getOpenidByWechatCode(code, request);
+			}
+			
+			//查询所有待发货的订单
+			ShopOrderInfoBean bean = new ShopOrderInfoBean();
+			bean.setStatus(ShopOrderInfoBean.STATUS_PAYSUCCESS);
+			bean.setOrderby(" order by id asc ");
+			List<ShopOrderInfoBean> list = shopOrderService.queryShopOrderInfo(bean);
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("list", list);
+			map.put("openid", openid);
+			
+			return new ModelAndView("/page/pc/order/h5/order_delver.jsp",map);
 			
 		} catch (Exception e) {
 			log.error(e, e);
@@ -128,5 +240,20 @@ public class ShopOrderController extends BaseController {
 		return null;
 	}
 	
-	
+	@RequestMapping("**/order/shop/queryShopOrderProductList.do")
+	public ModelAndView queryShopOrderProductList(HttpServletRequest request,HttpServletResponse response){
+		try {
+			//查询所有待发货的订单
+			String orderCode = request.getParameter("orderCode");
+			ShopOrderProductBean bean = new ShopOrderProductBean();
+			bean.setOrder_code(orderCode);
+			List<ShopOrderProductBean> list = shopOrderService.queryShopOrderProduct(bean );
+
+			writeJson(response, list);
+			return null;
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
 }

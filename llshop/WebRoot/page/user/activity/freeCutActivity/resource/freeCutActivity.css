@@ -1,0 +1,49 @@
+.sharetofriend-md {
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:10;
+}
+.sharetofriend-panel {
+    width:80%;
+    height:auto;
+    border-radius:5px;
+    position:fixed;
+    left:10%;
+    top:10em;
+    z-index:11;
+    overflow:hidden;
+}
+    .sharetofriend-panel .top{
+        width:100%;
+        height:auto;
+        text-align:center;
+        background-color: #A4845F;
+        display:table;
+    }
+        .sharetofriend-panel .top .info{
+            width:90%;
+            height:auto;
+            margin:1.5em auto 1.5em auto;
+            text-align:center;
+            color:#fff;
+            font-size:1.2em;
+        }
+            .sharetofriend-panel .top .info div{
+                font-size:1em;
+                color:#fff;
+            }
+             .sharetofriend-panel .top .info b{
+                font-size:1em;
+                color:#fff;
+            }
+    .sharetofriend-panel .img-div{
+        width:100%;
+        height:auto;
+    }
+        .sharetofriend-panel .img-div img{
+            width:100%;
+        }

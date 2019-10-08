@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.dom4j.Document;
 
 import com.yd.basic.framework.pageination.PageinationData;
@@ -13,6 +15,7 @@ import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatExtendBean;
 import com.yd.business.wechat.bean.BaseMessage;
 import com.yd.business.wechat.bean.SignServerBean;
+import com.yd.business.wechat.bean.WechatWebAuthBean;
 import com.yd.business.wechat.bean.WechatMaterialBean;
 import com.yd.business.wechat.bean.WechatMaterialRelationBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
@@ -63,5 +66,14 @@ public interface IWechatService {
 	public List<WechatMaterialRelationBean> queryWechatMaterialRelationByBean(WechatMaterialRelationBean relBean);
 
 	WechatTemplateMsgBean queryWechatTemplateMsg(String originalid, String code);
+
+	String getOpenidByWechatCode(String code, HttpServletRequest request);
+
+	WechatWebAuthBean getOpenIdByWebAuthCode(String code, String originalid);
+
+	UserWechatExtendBean getWechatUserInfoByAccessToken(String openid, String access_token) throws Exception;
+
+	UserWechatBean createWechatUserByWebAuth(String weixin_id, Integer parentId, Integer senceType, Integer senceId,
+			String originalid, String access_token) throws Exception;
 
 }

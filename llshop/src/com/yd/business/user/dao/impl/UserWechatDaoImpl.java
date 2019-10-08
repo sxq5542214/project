@@ -19,6 +19,7 @@ import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserSenceLog;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
+import com.yd.business.user.bean.UserWechatFriendBean;
 import com.yd.business.user.dao.IUserWechatDao;
 import com.yd.util.BeanUtil;
 import com.yd.util.DateUtil;
@@ -109,15 +110,6 @@ public class UserWechatDaoImpl extends BaseDao implements IUserWechatDao {
 		params.put("expire_date", expireDate);
 		params.put("ids", ids);
 		sqlSessionTemplate.update(NAMESPACE+"setblack",params);
-	}
-	@Override
-	public void updateUserWechatJoinImageNum(String weixin_id){
-		sqlSessionTemplate.update(NAMESPACE+"updateUserWechatJoinImageNum", weixin_id);
-	}
-	
-	@Override
-	public void updateUserWechatJoinOfflineNum(String weixin_id){
-		sqlSessionTemplate.update(NAMESPACE+"updateUserWechatJoinOfflineNum", weixin_id);
 	}
 	
 	@Override
@@ -261,6 +253,29 @@ public class UserWechatDaoImpl extends BaseDao implements IUserWechatDao {
 	@Override
 	public List<UserWechatBean> queryMGRAdminUser(){
 		return sqlSessionTemplate.selectList(NAMESPACE +"queryMGRAdminUser");
+	}
+	
+	@Override
+	public List<UserWechatBean> queryWechatUserActionAgree(String action,String openid){
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(action, action);
+		map.put(openid, openid);
+		return sqlSessionTemplate.selectList(NAMESPACE +"queryWechatUserActionAgree" , map);
+	}
+	
+	@Override
+	public List<UserWechatFriendBean> queryUserWechatFriends(UserWechatFriendBean bean){
+		return sqlSessionTemplate.selectList(NAMESPACE + "queryUserWechatFriends", bean);
+	}
+	@Override
+	public int createUserWechatFriends(UserWechatFriendBean bean){
+		return sqlSessionTemplate.insert(NAMESPACE +"insertUserWechatFriend", bean);
+	}
+	
+	@Override
+	public List<UserWechatBean> queryUserFriends(UserWechatBean bean){
+		return sqlSessionTemplate.selectList(NAMESPACE +"queryUserFriends", bean);
+		
 	}
 	
 }

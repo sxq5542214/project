@@ -20,6 +20,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.yd.business.alipay.bean.AlipayConfig;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.other.service.ITaskSchedulerService;
+import com.yd.business.other.service.impl.TaskSchedulerServiceImpl;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
@@ -44,12 +46,11 @@ public class BaseContext {
 
 	public static void initContext(ServletContext servletContext) {
 		context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
-
+		
 		AlipayConfig.initValue();
 		initPops();
 		refreshParam();
 	}
-
 	/**
 	 * 获取在spring中配置的该类型的实例。 如有多个符合，只返回一个。
 	 * 

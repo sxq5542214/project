@@ -19,6 +19,7 @@ import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
+import com.yd.business.order.bean.ShopOrderRemindBean;
 import com.yd.business.order.dao.IShopOrderDao;
 import com.yd.business.order.service.IOrderService;
 import com.yd.business.order.service.IShopOrderService;
@@ -84,10 +85,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	}
 	
 	@Override
-	public void updateShopOrderExpressInfo(int order_id,String mode,String code,Integer price){
+	public void updateShopOrderExpressInfo(ShopOrderInfoBean order,String mode,String code,Integer price){
 		
-		ShopOrderInfoBean order = findShopOrderInfoById(order_id);
-
 		if(price != null){
 			order.setExpress_price(price);
 		}
@@ -174,6 +173,12 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	@Override
 	public List<ShopOrderProductBean> queryShopOrderProduct(ShopOrderProductBean bean){
 		return shopOrderDao.queryShopOrderProduct(bean);
+	}
+	
+	@Override
+	public List<ShopOrderInfoBean> queryShopOrderAndProductList(ShopOrderInfoBean bean){
+		
+		return shopOrderDao.queryShopOrderAndProductList(bean);
 	}
 	
 	
@@ -315,6 +320,12 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			
 			//处理订单的优惠卷为已使用，并创建赠送的订单商品
 			handleOrderCouponToUsed(order, recordList);
+			
+			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
+			//保存并处理用户购买成功的动作
+			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
+			
+			
 		}else{
 			//订单金额有问题
 			updateShopOrderStatus(orderCode,ShopOrderInfoBean.STATUS_NEED_AGAIN_ORDER);
@@ -347,6 +358,18 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 						// 根据配置的商户商品ID 创建 优惠卷增加的订单商品
 						createShopOrderProductBySpid(Integer.parseInt(spid), 1, ShopOrderProductBean.TYPE_COUPON, 0, 0, order.getOrder_code());
 					}
+					
+					//更新订单名称，增加数量
+					String orderName = order.getOrder_name();
+					if(orderName.indexOf("等")>=0){
+						ShopOrderProductBean bean = new ShopOrderProductBean();
+						bean.setOrder_code(order.getOrder_code());
+						List<ShopOrderProductBean> products = shopOrderDao.queryShopOrderProduct(bean );
+						orderName = orderName.split("等")[0] + "等" + (products.size() + spids.length )+ "件商品";
+					}else{
+						orderName = orderName+"等"+ (spids.length + 1 ) +"件商品";
+					}
+					
 				}
 				break;
 			case SupplierCouponConfigBean.TYPE_DISCOUNT:
@@ -401,6 +424,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		case SupplierCouponConfigBean.TYPE_CHANGE:
 			//因为赠送了商品，订单总价要增加，优惠也要增加
 			order.setCost_price(order.getCost_price() + couponMoney);
+			
 			break;
 		case SupplierCouponConfigBean.TYPE_EXPERIENCE:
 			// 待补充
@@ -408,8 +432,11 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		}
 		bean.setOrder_id(order.getId());
 		bean.setOrder_code(order.getOrder_code());
-		
+		//更新订单
 		updateShopOrderInfo(order);
+		
+		//更新优惠卷中的订单编号
+		supplierCouponService.updateOrderCodeCouponRecordById(bean.getId(), orderCode);
 	}
 	
 	@Override
@@ -444,6 +471,25 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		
 	}
 	
-	
+	@Override
+	public ShopOrderRemindBean createShopOrderRemind(String remind,UserWechatBean user,ShopOrderInfoBean order){
+		
+		ShopOrderRemindBean bean = new ShopOrderRemindBean();
+		bean.setCreateDate(DateUtil.getNowDateStr());
+		bean.setRemind(remind);
+		bean.setOrderCode(order.getOrder_code());
+		bean.setUserId(user.getId());
+//		bean.setNickName(user.getNick_name());
+		bean.setOrderId(order.getId());
+		bean.setReadFlag(ShopOrderRemindBean.READFALG_NO);
+		bean.setContactName(order.getContact_name());
+		bean.setContactPhone(order.getContact_phone());
+		bean.setOrderName(order.getOrder_name());
+		
+		
+		shopOrderDao.createShopOrderRemind(bean);
+		
+		return bean;
+	}
 	
 }

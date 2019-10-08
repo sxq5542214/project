@@ -211,7 +211,7 @@ public class SupplierEventServiceImpl extends BaseService implements
 		
 		maxCode++;
 		bean.setCode(maxCode);
-		bean.setCreateDate(new Date());
+		bean.setCreateDate(DateUtil.getNowDateStr());
 		bean.setEventId(eventId);
 		bean.setUserId(userId);
 		bean.setFromUserId(fromUser.getId());

@@ -20,8 +20,7 @@ import com.yd.business.login.bean.LoginBean;
 import com.yd.business.login.service.ILoginService;
 
 @Service("loginService")
-public class LoginServiceImpl extends BaseService implements
-ILoginService{
+public class LoginServiceImpl extends BaseService implements ILoginService{
 	
 	/**
 	 * 生成随机验证码图片

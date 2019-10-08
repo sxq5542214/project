@@ -727,4 +727,20 @@ public class NumberUtil {
 		double   RoundingNum   =   b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();  
 		return RoundingNum; 
 	}
+	
+	/**
+	 * 数值的加法，自动过滤空值
+	 * @param params
+	 * @return
+	 */
+	public static Integer addtion(Integer... params){
+		Integer total = 0;
+		for(Integer i : params){
+			if(i != null){
+				total += i;
+			}
+		}
+		return total;
+	}
+	
 }

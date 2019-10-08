@@ -440,11 +440,11 @@ ISupplierCouponService {
 	 * 根据优惠卷记录表中的id,在优惠卷记录表中更新订单
 	 */
 	@Override
-	public void updateOrderCodeCouponRecordById(Integer coupon_record_id,String out_no) {
+	public void updateOrderCodeCouponRecordById(Integer coupon_record_id,String orderCode) {
 		// TODO Auto-generated method stub
 		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
 		bean.setId(coupon_record_id);					//设置记录表中的id
-		bean.setOrder_code(out_no);						//设置订单编号
+		bean.setOrder_code(orderCode);						//设置订单编号
 		supplierCouponDao.updateOrderCodeCouponRecordById(bean);
 		
 	}

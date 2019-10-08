@@ -10,10 +10,25 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	public static final int STATUS_UP = 1;			//可用
 	public static final int STATUS_DOWN = -1;			//不可用
 	
+	/**
+	 * 代金卷
+	 */
 	public static final int TYPE_CASH = 1;			//代金券
+	/**
+	 * 折扣卷
+	 */
 	public static final int TYPE_DISCOUNT = 2;			//折扣券
+	/**
+	 * 礼品卷
+	 */
 	public static final int TYPE_GIFT = 3;			//礼品卷
+	/**
+	 * 换购卷
+	 */
 	public static final int TYPE_CHANGE = 4;			//换购卷
+	/**
+	 * 体验卷
+	 */
 	public static final int TYPE_EXPERIENCE = 5;			//体验卷
 	
 	

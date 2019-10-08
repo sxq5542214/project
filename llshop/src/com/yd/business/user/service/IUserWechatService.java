@@ -14,6 +14,7 @@ import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserSenceLog;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
+import com.yd.business.user.bean.UserWechatFriendBean;
 
 public interface IUserWechatService {
 
@@ -25,8 +26,6 @@ public interface IUserWechatService {
 
 	void addUser(UserWechatBean userBean);
 	void updateParentId(String parentId,String weixin_id);
-	void updateUserWechatJoinImageNum(String weixin_id);
-	void updateUserWechatJoinOfflineNum(String weixin_id);
 	void updateUserWechat(UserWechatBean user);
 	List<UserWechatBean> list(UserWechatBean bean);
 	void update(UserWechatBean bean);
@@ -94,4 +93,41 @@ public interface IUserWechatService {
 	public void editWechatUser(UserWechatBean bean);
 
 	List<UserWechatBean> queryMGRAdminUser();
+
+	/**
+	 * 查询为参加活动用户助力的所有好友
+	 * @param userid	参加活动的用户ID
+	 * @param supplierEventId	活动ID
+	 * @return	该项活动助力的所有好友
+	 */
+	List<UserWechatBean> querySupplierEventHelpUser(int userid, int supplierEventId);
+
+	/**
+	 * 查询访问Action 的openid 是否被授权
+	 * @param action
+	 * @param openid
+	 * @return
+	 */
+	List<UserWechatBean> queryWechatUserActionAgree(String action, String openid);
+
+	/**
+	 * 查找用户的好友
+	 * @param bean
+	 * @return
+	 */
+	List<UserWechatBean> queryUserFriends(int id);
+
+	/**
+	 * 查找用户的好友
+	 * @param bean
+	 * @return
+	 */
+	List<UserWechatBean> queryUserFriends(String openid);
+
+	/**
+	 * 创建用户好友关系
+	 * @param bean
+	 * @return
+	 */
+	UserWechatFriendBean createUserWechatFriend(UserWechatBean user, UserWechatBean friend);
 }

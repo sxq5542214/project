@@ -76,6 +76,10 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_ORDER_DELIVERY = "wechat_user_order_delivery";
 	/**
+	 * 订单催单
+	 */
+	public static final String ACTION_TYPE_WECHAT_USER_ORDER_REMIND = "wechat_user_order_remind";
+	/**
 	 * 取消支付
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_ORDER_CANCEL = "wechat_user_order_cancel";
@@ -83,6 +87,10 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	 * 有新的子用户
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_ADD_CHILD = "wechat_user_add_child";
+	/**
+	 * 参与活动获得奖品
+	 */
+	public static final String ACTION_TYPE_WECHAT_USER_ACTIVITY_GET_PRIZE = "wechat_user_activity_get_prize";
 	/**
 	 * 用户订阅活动提醒
 	 */

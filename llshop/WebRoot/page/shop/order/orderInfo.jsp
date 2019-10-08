@@ -1,3 +1,4 @@
+<%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.supplier.bean.SupplierCouponConfigBean"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="com.yd.util.JsonUtil"%>
@@ -18,7 +19,7 @@
 	UserWechatBean user = (UserWechatBean) request.getAttribute("user");
 	List<SupplierCouponRecordBean> couponList = (List<SupplierCouponRecordBean>) request.getAttribute("couponList");
 	List<ShopOrderProductBean> productList = order.getProductList();
-	
+	Integer checkCouponId = 0; 
 	
 %>
 
@@ -166,9 +167,11 @@
 								<a class="add-address" id="do_checkout" href="user/toUserAddressListPage.do?user_id=<%=order.getUser_id() %>&order_code=<%=order.getOrder_code()%>" onclick="toSetupAddress()">设置收货地址</a>
 							</p> --%>
 							
-							<%for(SupplierCouponRecordBean coupon : couponList){ %>
+							<%for(SupplierCouponRecordBean coupon : couponList){ 
+								if( order.getOrder_code().equals(coupon.getOrder_code())){  checkCouponId = coupon.getId(); }
+							 %>
 							<p class="border-bottom usr-name"  onclick="chooseRadio(this)">
-								<input type="radio" name="couponId" value="<%=coupon.getId() %>" > <%=coupon.getCoupon_name() %> （<%=coupon.getCoupon_remark()  %> ）
+								<input type="radio" name="couponId" value="<%=coupon.getId() %>" <%= checkCouponId == 0?"":"checked" %> > <%=coupon.getCoupon_name() %> （<%=coupon.getCoupon_remark()  %> ）
 								
 							</p>
 							
@@ -188,16 +191,16 @@
 								商品金额:<span class="fr red" >￥ <span id="cost_price"><%=order.getCost_price()/100d %></span>&nbsp;元</span>
 							</p>
 							<p >
-								运费(会员专享免运费):   <span class="fr red">￥ <del> <span id="express_price">6.00</span>&nbsp;元 </del> </span>
+								运费(会员专享免运费):   <span class="fr red">￥ <del> <span id="express_price">10.00</span>&nbsp;元 </del> </span>
 							</p>
 							<p>
 								积分抵扣:<span class="fr red" >￥ -<span id="points"><%=order.getCost_points() / 100d %></span>&nbsp;元</span>
 							</p>
 							<p class="border-bottom">
-								优惠:<span class="fr red">￥ -<span id="coupon_price">0.00</span>&nbsp;元</span>
+								优惠卷:<span class="fr red">￥ -<span id="coupon_price"><%=order.getCoupon_total_price() / 100d %></span>&nbsp;元</span>
 							</p>
 							<p>
-								支付金额:<span class="fr red">￥ <span id="cost_money"><%=(order.getCost_price() - order.getCost_points()) / 100d %></span>&nbsp;元</span>
+								支付金额:<span class="fr red">￥ <span id="cost_money"><%=(order.getCost_money()) / 100d %></span>&nbsp;元</span>
 							</p>
 						</div>
 					</div></li>
@@ -251,7 +254,7 @@
 <script type="text/javascript">
 	delCookie('productInfo');
 	var coupon = eval('<%=JsonUtil.convertObjectToJsonString(couponList) %>');
-	var currentCoupon ;
+	var currentCoupon = findCouponById(<%=checkCouponId %>);
 	var orderStatus = <%=order.getStatus()%>;
 	function chooseRadio(dom){
 		dom.children[0].checked = true;

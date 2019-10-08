@@ -609,8 +609,6 @@ public class WechatController extends BaseController {
 		//通过订单号在订购表中更改状态为更新支付成功状态
 		shopOrderService.updateShopOrderPaySuccess(Integer.parseInt(result.getCash_fee()), result.getOut_trade_no());
 		
-		//保存并处理用户动作
-		msgCenterActionService.saveAndHandleUserAction(result.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, result.getOut_trade_no());
 				
 		
 		

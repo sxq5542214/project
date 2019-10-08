@@ -11,8 +11,8 @@
 			<if test="begin_time !=null and begin_time !=''"> and  #{begin_time} >= b.begin_time </if>
 			<if test="end_time !=null and end_time !=''"> and b.end_time >= #{end_time} </if>
 			<if test="type !=null "> and a.type >= #{type} </if>
-			<if test="orderby != null"> ${orderby}</if>
 		</where>
+			<if test="orderby != null"> ${orderby}</if>
 		
 	</select>
 	
@@ -25,9 +25,9 @@
 			<if test="begin_time !=null and begin_time !=''"> and  #{begin_time} >= begin_time </if>
 			<if test="end_time !=null and end_time !=''"> and end_time >= #{end_time} </if>
 			<if test="type !=null "> and a.type >= #{type} </if>
-			<if test="orderby != null"> ${orderby}</if>
 		</where>
 		
+			<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	

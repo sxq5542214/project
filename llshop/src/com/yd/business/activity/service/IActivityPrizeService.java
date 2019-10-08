@@ -3,6 +3,7 @@ package com.yd.business.activity.service;
 import java.util.List;
 
 import com.yd.business.activity.bean.ActivityPrize;
+import com.yd.business.user.bean.UserWechatBean;
 
 public interface IActivityPrizeService {
 
@@ -25,5 +26,21 @@ public interface IActivityPrizeService {
 	 * @param ids
 	 */
 	void deleteActivityPrizeByIds(String ids) throws Exception;
+
+	/**
+	 * 根据ID找奖品
+	 * @param id
+	 * @return
+	 */
+	ActivityPrize findActivityPrizeByID(int id);
+
+	/**
+	 * 处理用户领取奖品
+	 * @param user
+	 * @param activityId
+	 * @param prizeId
+	 * @return
+	 */
+	String dealUserActivityPrize(UserWechatBean user, int activityId, int prizeId);
 	
 }

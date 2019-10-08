@@ -129,6 +129,11 @@ public class WechatUtil {
      */
     public static final String EVENT_TYPE_VIEW = "VIEW";
     
+    public static int QRCODE_PARAM_LENGTH_SENCE_TYPE = 3;
+    public static int QRCODE_PARAM_LENGTH_SENCE_ID = 9;
+    public static int QRCODE_PARAM_LENGTH_USER_ID = 11;
+    
+    
     /** 
      * 解析微信发来的请求（XML） 
      *  
@@ -336,18 +341,18 @@ public class WechatUtil {
 	 */
 	public static UserWechatExtendBean parseJsonToUserWechatBean(JSONObject jso) throws JSONException{
 		UserWechatExtendBean userBean = new UserWechatExtendBean();
-		userBean.setSubscribe(jso.optInt("subscribe"));
+		userBean.setSubscribe(jso.optInt("subscribe",0));
 		
-		if(userBean.getSubscribe() == UserWechatExtendBean.SUBSCRIBE_YES) //为1时才能取到其它数据
-		{
+//		if(userBean.getSubscribe() == UserWechatExtendBean.SUBSCRIBE_YES) //为1时才能取到其它数据  modfiy by sxq  网页授权时未关注也可以
+//		{
 			userBean.setNick_name(jso.optString("nickname"));
 			userBean.setSex(jso.optInt("sex")+"");
 			userBean.setCity(jso.optString("city"));
 			userBean.setProvince(jso.optString("province"));
 			userBean.setHead_img(jso.optString("headimgurl"));
 			userBean.setUnionid(jso.optString("unionid"));
-		}
-//		System.out.print("province-------------------"+jso.getString("nickname"));
+//		}
+		
 		return userBean;
 	}
 	
@@ -658,6 +663,7 @@ public class WechatUtil {
 	 * @param value
 	 * @return
 	 */
+	@Deprecated
 	public static int getSenceType(long value ){
 
 		long senceType = 0xE0000000;
@@ -665,14 +671,56 @@ public class WechatUtil {
 		return realValue;
 	}
 	/**
+	 * 微信二维码的值中取senceType
+	 * @param value
+	 * @return
+	 */
+	public static int getSenceType(String value ){
+		int result = -1;
+		if(StringUtil.isNotNull(value)){
+			result = Integer.parseInt(value.substring(0, QRCODE_PARAM_LENGTH_SENCE_TYPE));
+		}
+		
+		return result;
+	}
+	
+	
+	/**
 	 * 微信二维码的值中取senceId
 	 * @param value
 	 * @return
 	 */
+	@Deprecated
 	public static int getSenceId(long value ){
 
 		long senceId = 0x1FF00000;
 		int realValue = (int) ((value & senceId ) >> 20);
+		return realValue;
+	}
+	
+	/**
+	 * 微信二维码的值中取senceId
+	 * @param value
+	 * @return
+	 */
+	public static int getSenceId(String value ){
+		int result = -1;
+		if(StringUtil.isNotNull(value)){
+			result = Integer.parseInt(value.substring(QRCODE_PARAM_LENGTH_SENCE_TYPE,  QRCODE_PARAM_LENGTH_SENCE_TYPE + QRCODE_PARAM_LENGTH_SENCE_ID ));
+		}
+		
+		return result;
+	}
+	/**
+	 * 微信二维码的值中取userId
+	 * @param value
+	 * @return
+	 */
+	@Deprecated
+	public static int getUserId(long value ){
+
+		long userId = 0x000FFFFF;
+		int realValue = (int) (value & userId );
 		return realValue;
 	}
 	/**
@@ -680,11 +728,13 @@ public class WechatUtil {
 	 * @param value
 	 * @return
 	 */
-	public static int getUserId(long value ){
+	public static int getUserId(String value ){
 
-		long userId = 0x000FFFFF;
-		int realValue = (int) (value & userId );
-		return realValue;
+		int result = -1;
+		if(StringUtil.isNotNull(value)){
+			result = Integer.parseInt(value.substring(QRCODE_PARAM_LENGTH_SENCE_TYPE + QRCODE_PARAM_LENGTH_SENCE_ID, QRCODE_PARAM_LENGTH_SENCE_TYPE + QRCODE_PARAM_LENGTH_SENCE_ID + QRCODE_PARAM_LENGTH_USER_ID ));
+		}
+		return result;
 	}
 	
 	
@@ -695,7 +745,8 @@ public class WechatUtil {
 	 * @param userId	不能大于1048575
 	 * @return
 	 */
-	public static long getScenceStr(int senceType,int senceId,int userId ){
+	@Deprecated
+	public static long getScenceIdValue(int senceType,int senceId,int userId ){
 		
 		if(senceType > 7 ){
 			throw new RuntimeException("getScenceStr senceType > 7 !");
@@ -713,15 +764,44 @@ public class WechatUtil {
 		value = value | value1 | value2;
 		return value;
 	}
+	/**
+	 * 微信二维码共64个字符， 前3位用于表示senceType，中9位表示senceId，后11位表示userId
+	 * @param senceType 不能大于3位
+	 * @param senceId	不能大于9位
+	 * @param userId	不能大于11位
+	 * @return
+	 */
+	public static String getScenceStrValue(int senceType,int senceId,int userId ){
+		
+		if(senceType > 999 ){
+			throw new RuntimeException("getScenceStr must senceType.length <= 3 !");
+		}
+		if(senceId > 999999999 ){
+			throw new RuntimeException("getScenceStr must senceId.length <= 9 !");
+		}
+		if(userId > Integer.MAX_VALUE ){
+			throw new RuntimeException("getScenceStr must userId <= Integer.MAX_VALUE !");
+		}
+		
+		String value = StringUtil.fixIntToString(senceType, 3);
+		value = value + StringUtil.fixIntToString(senceId, 9);
+		value = value + StringUtil.fixIntToString(userId, 11);
+		return value;
+	}
 	
 	
 	public static void main(String[] args) {
 		
-		long l = getScenceStr(3, 7, 6);
+		String l = getScenceStrValue(3, 7, 6);
 		System.out.println( l );
+		System.out.println(l.substring(0, QRCODE_PARAM_LENGTH_SENCE_TYPE));
+		System.out.println(l.substring(3, QRCODE_PARAM_LENGTH_SENCE_TYPE + QRCODE_PARAM_LENGTH_SENCE_ID));
+		System.out.println(l.substring(12, QRCODE_PARAM_LENGTH_SENCE_TYPE + QRCODE_PARAM_LENGTH_SENCE_ID + QRCODE_PARAM_LENGTH_USER_ID));
+		
+		
 //System.out.println(l > (Integer.MAX_VALUE * 2l));
-		System.out.println( getSenceId(l));
 		System.out.println( getSenceType(l));
+		System.out.println( getSenceId(l));
 		System.out.println( getUserId(l));
 		
 //		TextBean t = new TextBean();
@@ -730,12 +810,5 @@ public class WechatUtil {
 //		t.setContent("椒我啊");
 //		t.setCreateTime(DateUtil.java2phpDate(System.currentTimeMillis()));
 //		t.setMsgType("text");
-		WechatJsonBean b = new WechatJsonBean();
-		b.setMsgtype("image");
-		b.setTouser("123");
-		b.setImage("123123123321");
-		
-		String str = new JSONObject(b).toString();
-		System.out.println(str);
 	}
 }  

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.activity.bean.ActivityConfigBean;
 import com.yd.business.activity.bean.ActivityPrize;
+import com.yd.business.activity.bean.ActivityPrizeRelationBean;
+import com.yd.business.activity.bean.ActivityPrizeRuleBean;
 import com.yd.business.activity.bean.ActivityProductBean;
 import com.yd.business.activity.dao.IActivityConfigDao;
 import com.yd.business.activity.dao.IActivityDao;
@@ -20,12 +22,17 @@ import com.yd.business.activity.service.IActivitConfigService;
 import com.yd.business.activity.service.IActivityPrizeService;
 import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.dictionary.service.IDictionaryService;
+import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
+import com.yd.business.msgcenter.service.IMsgCenterActionService;
+import com.yd.business.supplier.service.ISupplierCouponService;
+import com.yd.business.user.bean.UserWechatBean;
+import com.yd.business.user.service.IUserWechatService;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.StringUtil;
 
 @Service("activityPrizeService")
 public class ActivityPrizeServiceImpl extends BaseService implements IActivityPrizeService {
-
+	
 	@Resource
 	private IActivityPrizeDao activityPrizeDao;
 	@Resource
@@ -34,12 +41,30 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 	private IActivitConfigService activityConfigService;
 	@Resource
 	private IDictionaryService dictionaryService;
+	@Resource
+	private IUserWechatService userWechatService;
+	@Resource
+	private ISupplierCouponService supplierCouponService;
+	@Resource
+	private IMsgCenterActionService msgCenterActionService;
+	
 	
 	@Override
 	public List<ActivityPrize> queryActivityPrizeByBean(ActivityPrize bean) {
 		return activityPrizeDao.queryActivityPrize(bean);
 	}
 
+	@Override
+	public ActivityPrize findActivityPrizeByID(int id){
+		ActivityPrize prize = new ActivityPrize();
+		prize.setId(id);
+		List<ActivityPrize> list = queryActivityPrizeByBean(prize);
+		if(list.size() > 0){
+			return list.get(0);
+		}
+		return null;
+	}
+	
 	@Override
 	public ActivityPrize commitActivityPrizeForJson(String json) {
 		ActivityPrize paramBean = new ActivityPrize();
@@ -96,5 +121,67 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 			}
 		}
 	}
+	
+	/**
+	 * 处理用户获得奖品
+	 * @param userId
+	 * @param activityId
+	 */
+	@Override
+	public String dealUserActivityPrize(UserWechatBean user,int activityId,int prizeId){
+		String result = "";
+		ActivityPrizeRelationBean bean = new ActivityPrizeRelationBean();
+		bean.setActivity_id(activityId);
+		bean.setActivity_prize_id(prizeId);
+		List<ActivityPrizeRelationBean> relationList = activityPrizeDao.queryActivityPrizeRelation(bean );
+		for(ActivityPrizeRelationBean relation : relationList){
+			//是否能获取这个奖品
+			boolean canGet = checkUserCanGetPrize(user, relation.getId());
+			if(canGet){
+				ActivityPrize prize = findActivityPrizeByID(relation.getActivity_prize_id());
+				
+				String taleName = prize.getProduct_table();
+				switch (taleName) {
+				case ActivityPrize.PRODUCT_TABLE_COUPONCONFIG:
+					int couponId = prize.getProduct_id();
+					//获取优惠卷
+					result = supplierCouponService.reveiveCouponResult(couponId, user);
+					//保存并处理用户动作
+					msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ACTIVITY_GET_PRIZE , null, prize);
+					
+					break;
+				case ActivityPrize.PRODUCT_TABLE_SUPPLIERPRODUCT:
+					
+					
+					break;
+				default:
+					break;
+				}
+				
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 判断用户是否能获取这个奖品
+	 * @return
+	 */
+	private boolean checkUserCanGetPrize(UserWechatBean user,int activityPrizeRelationId){
+		ActivityPrizeRuleBean bean = new ActivityPrizeRuleBean();
+		bean.setActivity_prize_relation_id(activityPrizeRelationId);
+		List<ActivityPrizeRuleBean> ruleList = activityPrizeDao.queryPrizeRule(bean);
+		for(ActivityPrizeRuleBean rule: ruleList){
+			String sql = rule.getParam_sql();
+			sql.replaceAll("#userID#", String.valueOf(user.getId()));
 
+			int result = activityPrizeDao.execActivityPrizeRuleSQL(sql);
+			if(result <= 0){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 }

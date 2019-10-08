@@ -3,6 +3,8 @@ package com.yd.business.activity.dao;
 import java.util.List;
 
 import com.yd.business.activity.bean.ActivityPrize;
+import com.yd.business.activity.bean.ActivityPrizeRelationBean;
+import com.yd.business.activity.bean.ActivityPrizeRuleBean;
 import com.yd.business.activity.bean.ActivityProductBean;
 
 public interface IActivityPrizeDao {
@@ -66,4 +68,25 @@ public interface IActivityPrizeDao {
 	 * @return
 	 */
 	List<ActivityProductBean> queryActivityProductBean(ActivityProductBean prize);
+
+	/**
+	 * 查询奖品规则
+	 * @param bean
+	 * @return
+	 */
+	List<ActivityPrizeRuleBean> queryPrizeRule(ActivityPrizeRuleBean bean);
+
+	/**
+	 * 执行获取奖品的规则SQL
+	 * @param sql
+	 * @return 大于0则表示验证成功
+	 */
+	int execActivityPrizeRuleSQL(String sql);
+
+	/**
+	 * 查询活动与奖品的关系
+	 * @param bean
+	 * @return
+	 */
+	List<ActivityPrizeRelationBean> queryActivityPrizeRelation(ActivityPrizeRelationBean bean);
 }

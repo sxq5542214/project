@@ -7,8 +7,9 @@
 	<select id="queryWechatOriginalInfo"  parameterType="wechatOriginalInfo" resultType="wechatOriginalInfo">
 		select * from ll_wechat_original_info sp
 		<where>
-			<if test="original_name != null and original_name!=''"> and sp.original_name like concat('%', #{original_name}, '%')</if>
+			<if test="original_name != null and original_name !=''"> and sp.original_name like concat('%', #{original_name}, '%')</if>
 			<if test="server_domain != null and server_domain !=''"> and sp.server_domain like concat('%', #{server_domain}, '%')</if>
+			<if test="originalid != null and originalid !=''"> and sp.originalid = #{originalid}</if>
 		</where>
 		<if test="orderby != null "> ${orderby}</if>
 		

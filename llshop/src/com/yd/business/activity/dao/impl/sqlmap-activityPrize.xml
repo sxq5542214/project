@@ -80,6 +80,35 @@
 	</where>
 </select>
 
+<select id="queryPrizeRule" resultType="activityPrizeRule" parameterType="activityPrizeRule">
+	select * from ll_activity_prize_rule 
+	<where>
+		<if test="id != null">and id = #{id}</if>
+		<if test="activity_prize_relation_id != null">and activity_prize_relation_id = #{activity_prize_relation_id}</if>
+		<if test="status != null">and status = #{status}</if>
+		<if test="type != null">and type = #{type}</if>
+	</where>
+	<if test="orderby != null"> ${orderby} </if>
+</select>
+
+<select id="queryActivityPrizeRelation" parameterType="activityPrizeRelation" resultType="activityPrizeRelation">
+	select * from ll_activity_prize_relation
+	<where>
+		<if test="id != null">and id = #{id}</if>
+		<if test="activity_id != null">and activity_id = #{activity_id}</if>
+		<if test="activity_prize_id != null">and activity_prize_id = #{activity_prize_id}</if>
+		
+	</where>
+	order by seq desc
+	
+</select>
+
+
+<select id="execActivityPrizeRule">
+	${value}
+</select>
+
+
 </mapper>
 
 

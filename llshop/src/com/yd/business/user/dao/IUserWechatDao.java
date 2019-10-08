@@ -15,6 +15,7 @@ import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserSenceLog;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
+import com.yd.business.user.bean.UserWechatFriendBean;
 
 public interface IUserWechatDao {
 
@@ -28,9 +29,7 @@ public interface IUserWechatDao {
 	void update(UserWechatBean bean);
 	void delete(Integer id);
 	void goBlack(Date expireDate,String ids);
-	void updateUserWechatJoinImageNum(String weixin_id);
 
-	void updateUserWechatJoinOfflineNum(String weixin_id);
 
 	int findUserOfflineNumWechat(String parentId);
 	int findUserJoinOfflineNum(String openId);
@@ -97,4 +96,33 @@ public interface IUserWechatDao {
 	public void updateWechatUserAdmin(UserWechatBean bean);
 
 	List<UserWechatBean> queryMGRAdminUser();
+
+	/**
+	 * 查询访问当前action的openid 是否在后台配置中
+	 * @param action
+	 * @param openid
+	 * @return
+	 */
+	List<UserWechatBean> queryWechatUserActionAgree(String action, String openid);
+
+	/**
+	 * 查询用户的好友信息
+	 * @param bean
+	 * @return
+	 */
+	List<UserWechatFriendBean> queryUserWechatFriends(UserWechatFriendBean bean);
+
+	/**
+	 * 创建用户好友关系
+	 * @param bean
+	 * @return
+	 */
+	int createUserWechatFriends(UserWechatFriendBean bean);
+
+	/**
+	 * 查找用户好友
+	 * @param bean
+	 * @return
+	 */
+	List<UserWechatBean> queryUserFriends(UserWechatBean bean);
 }

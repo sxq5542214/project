@@ -40,6 +40,7 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	private String contact_phone;
 	private String contact_address;
 	private String express_mode;
+	private String express_code;
 	private String express_date;
 	private String express_time;
 	private String express_order_code;
@@ -90,24 +91,28 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 		this.modify_time = modify_time;
 	}
 	public Integer getCost_price() {
+		if(cost_price == null) cost_price = 0;
 		return cost_price;
 	}
 	public void setCost_price(Integer cost_price) {
 		this.cost_price = cost_price;
 	}
 	public Integer getCost_points() {
+		if(cost_points == null) cost_points = 0;
 		return cost_points;
 	}
 	public void setCost_points(Integer cost_points) {
 		this.cost_points = cost_points;
 	}
 	public Integer getCost_money() {
+		if(cost_money == null) cost_money = 0;
 		return cost_money;
 	}
 	public void setCost_money(Integer cost_money) {
 		this.cost_money = cost_money;
 	}
 	public Integer getCost_balance() {
+		if(cost_balance == null) cost_balance = 0;
 		return cost_balance;
 	}
 	public void setCost_balance(Integer cost_balance) {
@@ -228,9 +233,16 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 		this.order_img = order_img;
 	}
 	public Integer getCoupon_total_price() {
+		if(coupon_total_price == null) coupon_total_price = 0;
 		return coupon_total_price;
 	}
 	public void setCoupon_total_price(Integer coupon_total_price) {
 		this.coupon_total_price = coupon_total_price;
+	}
+	public String getExpress_code() {
+		return express_code;
+	}
+	public void setExpress_code(String express_code) {
+		this.express_code = express_code;
 	}
 }

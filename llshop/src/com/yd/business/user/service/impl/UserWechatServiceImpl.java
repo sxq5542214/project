@@ -39,6 +39,7 @@ import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserSenceLog;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
+import com.yd.business.user.bean.UserWechatFriendBean;
 import com.yd.business.user.dao.IUserWechatDao;
 import com.yd.business.user.service.IUserCommissionPointsService;
 import com.yd.business.user.service.IUserConsumeInfoService;
@@ -286,27 +287,11 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		userWechatDao.goBlack(expireDate,ids);
 	}
 
-	/**
-	 * 将用户的参加传图抢红包活动次数加1
-	 */
-	@Override
-	public void updateUserWechatJoinImageNum(String weixin_id){
-		userWechatDao.updateUserWechatJoinImageNum(weixin_id);
-	}
-	
 	@Override
 	public void updateUserWechat(UserWechatBean user){
 		userWechatDao.updateUserWechat(user);
 	}
 	
-	/**
-	 * 将用户的参加发展下线抢红包活动次数加1
-	 */
-	@Override
-	public void updateUserWechatJoinOfflineNum(String weixin_id){
-		userWechatDao.updateUserWechatJoinOfflineNum(weixin_id);
-	}
-
 	@Override
 	public UserQrCodeBean updateUserTicket(int senceCode,int senceId,String weixin_id, String ticket,Date date,String url,String originalid) {
 		
@@ -388,6 +373,10 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		return userWechatDao.queryMGRAdminUser();
 	}
 	
+	@Override
+	public List<UserWechatBean> queryWechatUserActionAgree(String action,String openid){
+		return userWechatDao.queryWechatUserActionAgree(action, openid);
+	}
 	
 	@Override
 	public void updateUserLastAccessTime(String openId, Date date) {
@@ -422,6 +411,19 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		
 		return bean;
 	}
+	
+	/**
+	 * 查询为参加活动用户助力的所有好友
+	 * @param userid	参加活动的用户ID
+	 * @param supplierEventId	活动ID
+	 * @return	该项活动助力的所有好友
+	 */
+	@Override
+	public List<UserWechatBean> querySupplierEventHelpUser(int userid,int supplierEventId){
+		
+		return null;
+	}
+	
 	
 	/**
 	 * 记录用户的分享场景
@@ -740,13 +742,11 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 
 	@Override
 	public void deteleWechatUser(UserWechatBean bean) {
-		// TODO Auto-generated method stub
 		userWechatDao.deleteWechatUser(bean);
 	}
 
 	@Override
 	public void editWechatUser(UserWechatBean bean) {
-		// TODO Auto-generated method stub
 		try{
 			if(StringUtil.isNull(bean.getId())){
 				bean.setCreate_time(DateUtil.getNowDateStr());
@@ -759,4 +759,54 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 			log.error(e,e);			
 		}
 	}
+	
+	
+	@Override
+	public UserWechatFriendBean createUserWechatFriend(UserWechatBean user,UserWechatBean friend){
+		UserWechatFriendBean bean = new UserWechatFriendBean();
+		
+		
+		bean.setFriendOpenid(friend.getOpenid());
+		bean.setFriendUserid(friend.getId());
+		bean.setOpenid(user.getOpenid());
+		bean.setUserid(user.getId());
+		
+		//判断是否已有用户好友关系
+		List<UserWechatFriendBean> list = userWechatDao.queryUserWechatFriends(bean);
+		if(list.size() == 0){
+		
+			bean.setCreateDate(DateUtil.getNowDateStr());
+			bean.setFromSenceId(friend.getSenceid());
+			bean.setFromSenceType(friend.getSence_type());
+			createUserWechatFriend(bean);
+		}else{
+			bean = list.get(0);
+		}
+		
+		return bean;
+	}
+	
+	private int createUserWechatFriend(UserWechatFriendBean bean){
+		return userWechatDao.createUserWechatFriends(bean);
+	}
+	private List<UserWechatBean> queryUserFriends(UserWechatBean bean){
+		return userWechatDao.queryUserFriends(bean);
+	}
+
+	@Override
+	public List<UserWechatBean> queryUserFriends(int id){
+		UserWechatBean bean = new UserWechatBean();
+		bean.setId(id);
+		return queryUserFriends(bean);
+	}
+
+	@Override
+	public List<UserWechatBean> queryUserFriends(String openid){
+		UserWechatBean bean = new UserWechatBean();
+		bean.setOpenid(openid);
+		return queryUserFriends(bean);
+	}
+	
+	
+	
 }

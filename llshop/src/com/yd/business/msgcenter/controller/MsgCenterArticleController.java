@@ -24,6 +24,8 @@ import com.yd.business.msgcenter.bean.MsgCenterArticleTypeBean;
 import com.yd.business.msgcenter.bean.MsgCenterUserSubscribeBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.msgcenter.service.IMsgCenterArticleService;
+import com.yd.business.order.bean.ShopOrderInfoBean;
+import com.yd.business.order.service.IShopOrderService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
 import com.yd.business.user.service.IUserWechatService;
@@ -51,6 +53,8 @@ public class MsgCenterArticleController extends BaseController {
 	private IMsgCenterActionService msgCenterActionService;
 	@Resource
 	private IUserWechatService userWechatService;
+	@Resource
+	private IShopOrderService shopOrderService;
 	
 	
 	@RequestMapping("admin/msgcenter/article/toQueryArticleListPage.do")
@@ -343,4 +347,17 @@ public class MsgCenterArticleController extends BaseController {
 		return null;
 	}
 	
+	
+	@RequestMapping("/msgcenter/test.do")
+	public ModelAndView test(HttpServletRequest request,HttpServletResponse response){
+		
+		String orderCode = "Shop_5001_20190920150515529";
+		String openid = "o7fNQ5sacrzCPSRdbzSTZ3chToGs";
+		
+		ShopOrderInfoBean order = shopOrderService.findShopOrderInfoByCode(orderCode);
+		//保存并处理用户动作
+		msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
+		
+		return null;
+	}
 }

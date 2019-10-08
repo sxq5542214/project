@@ -21,7 +21,10 @@ public class SupplierEventCodeBean extends BaseBean {
 	private Integer code;
 	private Integer fromUserId;
 	private String fromUserName;
-	private Date createDate;
+	private String createDate;
+	
+	private String head_img;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -58,11 +61,17 @@ public class SupplierEventCodeBean extends BaseBean {
 	public void setFromUserName(String fromUserName) {
 		this.fromUserName = fromUserName;
 	}
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
+	}
+	public String getHead_img() {
+		return head_img;
+	}
+	public void setHead_img(String head_img) {
+		this.head_img = head_img;
 	}
 	
 }
