@@ -110,6 +110,9 @@ public class NumberUtil {
 	
 	
 	public static Integer toInt(Object obj) {
+		if(obj == null){
+			return null;
+		}
 		if (obj instanceof Number) return ((Number)obj).intValue();
 		try {
 			String string = obj + "";

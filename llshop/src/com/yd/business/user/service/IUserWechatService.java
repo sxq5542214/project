@@ -130,4 +130,26 @@ public interface IUserWechatService {
 	 * @return
 	 */
 	UserWechatFriendBean createUserWechatFriend(UserWechatBean user, UserWechatBean friend);
+
+
+	/**
+	 * 创建用户好友关系
+	 * @param bean
+	 * @return
+	 */
+	UserWechatFriendBean createUserWechatFriend(String openid, String friendOpenid);
+
+	/**
+	 * 创建用户好友关系
+	 * @param bean
+	 * @return
+	 */
+	UserWechatFriendBean createUserWechatFriend(String openid, Integer friendUserId);
+
+	/**
+	 * 创建用户好友关系
+	 * @param bean
+	 * @return
+	 */
+	UserWechatFriendBean createUserWechatFriend(Integer userId, String friendOpenId);
 }

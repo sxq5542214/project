@@ -103,8 +103,8 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 	@Override
 	public void addUser(UserWechatBean userBean) {
 		//emoji表情过虑
-		String filterName = EmojiUtil.filterEmoji(userBean.getNick_name());
-		userBean.setNick_name(filterName);
+//		String filterName = EmojiUtil.filterEmoji(userBean.getNick_name());
+//		userBean.setNick_name(filterName);
 		
 		try{
 			if(userBean.getOpenid() != null)
@@ -760,11 +760,51 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		}
 	}
 	
+
+	@Override
+	public UserWechatFriendBean createUserWechatFriend(String openid,String friendOpenid){
+		if(openid == null || friendOpenid == null){
+			return null;
+		}
+		UserWechatBean user = findUserWechatByOpenId(openid);
+		UserWechatBean friendUser = findUserWechatByOpenId(friendOpenid);
+		
+		return createUserWechatFriend(user, friendUser);
+	}
+	@Override
+	public UserWechatFriendBean createUserWechatFriend(String openid,Integer friendUserId){
+		if(openid == null || friendUserId == null){
+			return null;
+		}
+		UserWechatBean user = findUserWechatByOpenId(openid);
+		UserWechatBean friendUser = findUserWechatById(friendUserId);
+		
+		return createUserWechatFriend(user, friendUser);
+	}
+
+	@Override
+	public UserWechatFriendBean createUserWechatFriend(Integer userId,String friendOpenId){
+		if(userId == null || friendOpenId == null){
+			return null;
+		}
+		UserWechatBean user = findUserWechatById(userId);
+		UserWechatBean friendUser = findUserWechatByOpenId(friendOpenId);
+		
+		return createUserWechatFriend(user, friendUser);
+	}
 	
 	@Override
 	public UserWechatFriendBean createUserWechatFriend(UserWechatBean user,UserWechatBean friend){
 		UserWechatFriendBean bean = new UserWechatFriendBean();
 		
+		//如果是自己和自己，则返回空
+		if(StringUtil.isNotNull(user.getOpenid()) && user.getOpenid().equals(friend.getOpenid())){
+			return null;
+		}
+		
+		if(StringUtil.isNotNull(user.getUnionid()) && user.getUnionid().equals(friend.getUnionid())){
+			return null;
+		}
 		
 		bean.setFriendOpenid(friend.getOpenid());
 		bean.setFriendUserid(friend.getId());

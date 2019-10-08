@@ -89,14 +89,14 @@ public class WechatCommentReplyServiceImpl extends BaseService implements IWecha
 		UserWechatBean user = userWechatService.findUserWechatById(bean.getUser_id());
 		TextBean text = new TextBean();
 		text.setToUserName(user.getOpenid());
-		text.setContent(EmojiUtil.filterEmoji(str));
+		text.setContent(str);
 		text.setFromUserName(user.getOriginalid());
 		//记录消息日志
 		CommentInfoBean infoBean = new CommentInfoBean();
 		//发送消息
 		BaseMessage base = wechatService.sendMessageToUser(text);
 		if(base.getErrcode().compareTo(BaseMessage.ERROR_CODE_SUCCESS) == 0){
-			infoBean.setMsgtext(EmojiUtil.filterEmoji(str));
+			infoBean.setMsgtext(str);
 			infoBean.setComment_parentid(Integer.valueOf(commentid));
 			infoBean.setOpenid(adminopenid);
 			infoBean.setHead_img(admin.getHead_img());

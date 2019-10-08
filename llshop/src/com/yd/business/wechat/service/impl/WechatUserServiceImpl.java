@@ -29,6 +29,7 @@ import com.yd.business.wechat.bean.WechatWaitSendBean;
 import com.yd.business.wechat.util.WechatConstant;
 import com.yd.business.wechat.util.WechatUtil;
 import com.yd.util.DateUtil;
+import com.yd.util.NumberUtil;
 import com.yd.util.StringUtil;
 
 /**
@@ -93,6 +94,8 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 			uBean.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
 			userWechatService.update(uBean);
 		}
+		//创建用户好友关系
+		userWechatService.createUserWechatFriend(NumberUtil.toInt(parentId) ,weixin_id );
 		
 		TextBean result = null;
 //		result = new TextBean();
@@ -199,14 +202,14 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 			break;
 			
 		case WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT://商户活动
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(weixin_id);
+//			UserWechatBean user = userWechatService.findUserWechatByOpenId(weixin_id);
 			//商户活动关注的,创建活动code
 			if(parentId != null){
 				
 				//如果两个用户的unionid一样，那就不给它号了
-				UserWechatBean parent = userWechatService.findUserWechatById(Integer.parseInt(parentId));
+//				UserWechatBean parent = userWechatService.findUserWechatById(Integer.parseInt(parentId));
 				//不是自己
-				if(StringUtil.isNotNull(user.getUnionid()) && !user.getUnionid().equals(parent.getUnionid())){
+//				if(StringUtil.isNotNull(user.getUnionid()) && !user.getUnionid().equals(parent.getUnionid())){
 					//查一下这个父用户下，有没有相同unionid的子用户
 //					UserWechatConditionBean condition = new UserWechatConditionBean();
 //					condition.setParentid(parent.getId());
@@ -215,7 +218,7 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 //					if(list.size() == 0){
 						supplierEventService.createEventCode(idValue, Integer.parseInt(parentId), weixin_id);
 //					}
-				}
+//				}
 			}
 //			else if(!AreaData.PROVINCE_AH.equals(user.getProvince())){ 
 //				//没有父用户的，并且省份不是安徽的直接送给自己一个幸运号

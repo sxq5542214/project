@@ -45,8 +45,8 @@ public class UpdateUserWechatInfoCrons extends BaseCrons {
 	        if(newInfo.getSubscribe() == UserWechatExtendBean.SUBSCRIBE_YES)
 	        {
 
-	          String filterName = EmojiUtil.filterEmoji(newInfo.getNick_name());
-	          newInfo.setNick_name(filterName);
+//	          String filterName = EmojiUtil.filterEmoji(newInfo.getNick_name());
+//	          newInfo.setNick_name(filterName);
 	          newInfo.setId(bean.getId());
 	          newInfo.setBalance(null);
 	          newInfo.setPoints(null);

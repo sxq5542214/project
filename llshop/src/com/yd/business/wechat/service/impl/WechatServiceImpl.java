@@ -90,6 +90,7 @@ import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
 import com.yd.util.FileUploadUtil;
 import com.yd.util.HttpUtil;
+import com.yd.util.NumberUtil;
 import com.yd.util.RandomUtil;
 import com.yd.util.StringUtil;
 
@@ -128,7 +129,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	
 	@Override
 	public BaseMessage handlerWechatMessage(Document doc) throws Exception{
-		System.out.print("进入核心类--------------------- 这个类有子类，记得找子类里的方法");
+		System.out.print("进入核心类--------------------- 这个类有子类，记得找子类里的方法 doc:" + doc.asXML());
 		boolean isUserOperate = true;
 		final BaseMessage base = WechatUtil.parseXMLToBean(doc);
 		BaseMessage result = null;
@@ -183,6 +184,9 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 						handleSenceCode(senceValue,eventBean.getFromUserName(),parentId);
 						
 					}
+					//创建好友关系
+					userWechatService.createUserWechatFriend( NumberUtil.toInt(parentId) ,eventBean.getFromUserName() );
+					
 					eventBean.setProductId(senceType);
 					eventBean.setProductId(senceId);
 					msgCenterActionService.saveAndHandleUserAction(eventBean.getFromUserName(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_SCAN, senceType +","+ senceId, eventBean);
@@ -459,8 +463,8 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		log.debug("getWechatUserInfo response--------------------"+response);
 		userBean = WechatUtil.parseJsonToUserWechatBean(new JSONObject(response));
 		userBean.setOpenid(openid);
-		String filterName = EmojiUtil.filterEmoji(userBean.getNick_name());
-		userBean.setNick_name(filterName);
+//		String filterName = EmojiUtil.filterEmoji(userBean.getNick_name());
+//		userBean.setNick_name(filterName);
 		return userBean;
 	}
 	
@@ -592,7 +596,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		userBean.setCreate_time(date);
 		userBean.setLast_access_time(date);
 		if(StringUtil.isNull(userBean.getNick_name())){
-			userBean.setNick_name("微信用户"+ DateUtil.java2phpDate(System.currentTimeMillis()) );
+			userBean.setNick_name("用户未设置昵称");
 		}
 		
 		//首次关注的积分
@@ -735,8 +739,8 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 			    UserWechatExtendBean newInfo = getWechatUserInfo(user.getOpenid(),user.getOriginalid());
 		        if(newInfo.getSubscribe() == UserWechatExtendBean.SUBSCRIBE_YES)
 		        {
-				    String filterName = EmojiUtil.filterEmoji(newInfo.getNick_name());
-			        newInfo.setNick_name(filterName);
+//				    String filterName = EmojiUtil.filterEmoji(newInfo.getNick_name());
+//			        newInfo.setNick_name(filterName);
 			        newInfo.setId(user.getId());
 			        newInfo.setBalance(null);
 			        newInfo.setPoints(null);
@@ -942,8 +946,8 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		if(userBean != null){
 			String originalid = getRandomOriginalidByWeight(userBean.getOriginalid());
 			String qrCodeUrl = getQrCodeUrl(originalid);
-			long senceValue = WechatUtil.getScenceIdValue(senceCode, senceId, userBean.getId());
-			String json = "{\"expire_seconds\": 2592000, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_id\":"+senceValue+"}}}";
+			String senceValue = WechatUtil.getScenceStrValue(senceCode, senceId, userBean.getId());
+			String json = "{\"expire_seconds\": 2592000, \"action_name\": \"QR_STR_SCENE\", \"action_info\": {\"scene\": {\"scene_str\":\""+senceValue+"\"}}}";
 
 			String response = HttpUtil.post(qrCodeUrl,json);	
 log.debug("userTicketResponse:"+response);
