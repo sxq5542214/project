@@ -115,7 +115,7 @@
 	</delete>
 	
 	<select id="queryEventCode" parameterType="supplierEventCode" resultType="supplierEventCode">
-		select *,(select head_img from ll_wechat_user x where x.id = userId ) head_img from ll_supplier_event_code 
+		select *,(select head_img from ll_wechat_user x where x.id = fromUserId ) head_img from ll_supplier_event_code 
 		<where>
 			<if test="id != null"> and id = #{id} </if>
 			<if test="eventId != null"> and eventId = #{eventId} </if><!-- 

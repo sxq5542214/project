@@ -117,7 +117,7 @@ rotate
 						src="images/user/supplierProductShop/coupon/lipingjuan.png"
 						alt="礼品图片" class="order-cover">
 					<div data-v-fbc5d9ba="" class="order-content">
-						<p data-v-fbc5d9ba="" class="order-title">【坚果礼品卷】<br>邀请好友帮忙助力<br>积累后可免费得坚果礼品！
+						<p data-v-fbc5d9ba="" class="order-title">【坚果赠送卷】<br>邀请好友帮忙助力<br>积累后可免费得坚果礼品！
 							</p>
 						<p data-v-fbc5d9ba="" class="order-price">
 							价值可达 <small data-v-fbc5d9ba="" class="mtfin">￥</small><b
@@ -136,7 +136,7 @@ rotate
 								
 								String str = "";
 								int level = 0;
-								int size = list.size() + 1;
+								int size = list.size();
 								int needNum = 10 - size;
 								String prize = "杏仁150g";
 								int persent = size *100 / 40;
@@ -251,18 +251,6 @@ rotate
 					</div>
 					
 					<%} %>
-					<div data-v-0f850d4c="" mode="out-in" class="item-wrapper">
-						<div data-v-0f850d4c="">
-							<div data-v-7faf502c="" class="item">
-								<img data-v-163c7539="" data-v-7faf502c=""
-									src="page/user/activity/freeCutActivity/resource/a5bc351a852ca7838f106c395cc3176f1895.png.webp@100w_100h_1e_1c_80Q"
-									alt="头像" class="avatar"><span data-v-7faf502c=""
-									class="text-center text-ellipsis">
-									JMa44...拿到【民宿券】满99立即减20 有效期30天 新老客均可使用 </span><span data-v-7faf502c=""
-									class="text-time"></span>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 			<!---->
@@ -277,24 +265,18 @@ rotate
 				</p>
 				<div data-v-ab1c5a10="">
 					<p data-v-ab1c5a10="">
-						1.免单攻略： <br data-v-ab1c5a10="">1）选择商品，点击免费领； <br
-							data-v-ab1c5a10="">2）分享给未关注过榛果服务号的好友； <br data-v-ab1c5a10="">3）好友关注榛果服务号，并点击助力；
-						<br data-v-ab1c5a10="">4）达到规则要求，免单成功； <br data-v-ab1c5a10="">5）填写地址，等待收货；
+						1.免单攻略： <br data-v-ab1c5a10="">1）点击邀请好友助力； <br
+							data-v-ab1c5a10="">2）按界面提示发送给未关注过公众号的好友或朋友圈； <br data-v-ab1c5a10="">3）好友打开界面后，长按二维码识别并关注完成助力；
+						<br data-v-ab1c5a10="">4）达到规则要求，即可领取赠送的礼品卷； <br data-v-ab1c5a10="">5）商城中下单并填写地址，等待收货；
 					</p>
 					<p data-v-ab1c5a10="">
-						2.活动期间，每个用户仅限成功领取3个商品（商品可重复），超过3次后，将无法发起活动，同一美团账号、手机号、移动设备、银行卡、支付账号、身份证以及其他信息相同均视为同一用户；
+						2.活动期间，用户可领取各类礼品卷一份（同品类仅可领一份）；
 					</p>
-					<p data-v-ab1c5a10="">3.每个榛果服务号新粉丝可助力一次，同一手机号、移动设备、微信号视为同一用户；</p>
+					<p data-v-ab1c5a10="">3.每个好友可助力一次，同一手机号、移动设备、微信号视为同一用户；</p>
 					<p data-v-ab1c5a10="">
-						4.订单生成后，请尽快填写收货地址，对于已填写收货地址的用户榛果会在4个工作日内发货，您可登陆中通官网，通过收件手机号查询物流信息（若未查到物流信息，可能是暂未发货，请您耐心等待）；
+						4.订单生成后，请尽快填写收货地址，对于已填写收货地址的用户我们会在24小时内发货，您可通过公众号查询物流状态；
 					</p>
-					<p data-v-ab1c5a10="">5.青海、甘肃、内蒙、宁夏、新疆、西藏、台湾、香港、澳门地区暂不参与此次活动；</p>
-					<p data-v-ab1c5a10="">
-						6.活动过程中，如果出现因网络攻击、黑客攻击、数据泄露等原因导致活动无法继续，美团有权利提前终止活动；</p>
-					<p data-v-ab1c5a10="">
-						7.活动过程中，用户不得使用任何外挂、插件以及其他破坏活动规则、违背活动公平原则的方式参加本次活动（如批量注册、恶意购买、虚假分享、倒买倒卖、虚假交易等），用户和商户不得进行有组织的众包作弊行为，否则美团有权取消用户、商户参与活动资格，取消已经领取的商品，必要时取消后续参与美团任意活动的权利，并追究法律责任；
-					</p>
-					<p data-v-ab1c5a10="">8.对物流、商品有疑问，可联系榛果客服，电话:400-0660-190；</p>
+					<p data-v-ab1c5a10="">5.对物流、商品有疑问，可联系客服，微信号: yoyoyo1105 </p>
 					<p data-v-ab1c5a10="">&nbsp;</p>
 				</div>
 			</div>
@@ -326,7 +308,7 @@ rotate
 	<div class="sharetofriend-panel" style="display:none;" id="inviteFriend_div" >
 		<div class="top">
 			<div class="info" style="text-align:left;">
-				点击右上角选择 <b>[分享到微信群或朋友圈]</b> 即可参加活动！<br><br>好友打开您分享的文章，并点击助力按钮扫码即可
+				点击右上角选择 <b>[分享到微信好友或朋友圈]</b> 即可参加活动！<br><br>好友打开您分享的文章，并扫码即可完成助力
 			</div>
 		</div>
 		<div class="img-div">

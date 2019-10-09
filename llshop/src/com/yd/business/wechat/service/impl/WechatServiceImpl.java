@@ -180,10 +180,9 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 					UserWechatBean user = userWechatService.findUserWechatByOpenId(eventBean.getFromUserName());
 					if(user == null){
 						createWechatUser(eventBean.getFromUserName(), parentId,senceType,senceId,eventBean.getToUserName());
-						// 子类有重写此方法
-						handleSenceCode(senceValue,eventBean.getFromUserName(),parentId);
-						
 					}
+					// 子类有重写此方法
+					handleSenceCode(senceValue,eventBean.getFromUserName(),parentId);
 					//创建好友关系
 					userWechatService.createUserWechatFriend( NumberUtil.toInt(parentId) ,eventBean.getFromUserName() );
 					
@@ -424,6 +423,11 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	 * @param parentId
 	 */
 	protected void handleSenceCode(String senceValue, String weixin_id, String parentId) {
+		
+		
+		
+//		具体看子类
+		
 //		if(senceValue == null) return;
 ////		String[] senceTypes = senceStr.split(SENCECODE_SPLIT_STR_2);
 //		int senceCode = WechatUtil.getSenceType(senceValue);

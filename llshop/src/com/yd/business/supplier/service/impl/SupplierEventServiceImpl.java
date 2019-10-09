@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.pageination.PageinationData;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
+import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.supplier.bean.SupplierArticleBean;
 import com.yd.business.supplier.bean.SupplierEventBean;
 import com.yd.business.supplier.bean.SupplierEventCodeBean;
@@ -34,6 +36,8 @@ public class SupplierEventServiceImpl extends BaseService implements
 	private IUserWechatService userWechatService;
 	@Resource
 	private IWechatPayService wechatPayService;
+	@Resource
+	private IMsgCenterActionService msgCenterActionService;
 	
 
 	@Override
@@ -194,8 +198,11 @@ public class SupplierEventServiceImpl extends BaseService implements
 		SupplierEventCodeBean bean = new SupplierEventCodeBean();
 		bean.setEventId(eventId);
 		bean.setFromUserId(fromUser.getId());
-		bean.setUserId(userId);
 		int count = supplierEventDao.queryEventCodeCount(bean);
+		bean.setTotalcount(count+1);//记录当前有多少用户助力了
+		
+		bean.setUserId(userId);
+		count = supplierEventDao.queryEventCodeCount(bean);
 		//如果已经助力过，直接返回了
 		if(count > 0)return;
 		
@@ -219,15 +226,19 @@ public class SupplierEventServiceImpl extends BaseService implements
 		try {
 			
 			supplierEventDao.createSupplierEventCode(bean);
+
+			event = supplierEventDao.queryByid(eventId);
+			//活动人数加1
+			event.setJoinCount(maxCode);
+			supplierEventDao.update(event);
+			
+			UserWechatBean user = userWechatService.findUserWechatById(userId);
+			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_GET_CODE, null , bean);
 			
 		} catch (Exception e) {
-			log.error(e, e);
+			log.error(e, e); //并发量大时，code可能会重复，导致报错
 			createEventCode(eventId, userId, fromOpenId);
 		}
-		event = supplierEventDao.queryByid(eventId);
-		//活动人数加1
-		event.setJoinCount(maxCode);
-		supplierEventDao.update(event);
 	}
 
 	@Override
