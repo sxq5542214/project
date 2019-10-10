@@ -530,7 +530,7 @@ ISupplierCouponService {
 		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
 		bean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
 	//	bean.setUse_time(DateUtil.getNowOnlyDateStr());
-	//  bean.setExpire_time(DateUtil.getNowOnlyDateStr());
+		bean.setExpire_time(DateUtil.getNowOnlyDateStr());
 		List<SupplierCouponRecordBean> list = supplierCouponDao.queryMycoupon(bean);
 	
 		return list;

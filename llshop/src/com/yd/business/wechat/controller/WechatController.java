@@ -379,11 +379,11 @@ public class WechatController extends BaseController {
 		//设备信息，公众号使用WEB
 		String device_info = "device_info=WEB";
 		//指定支付方式，不可使用信用卡
-		String limit_pay = "limit_pay=no_credit";
+//		String limit_pay = "limit_pay=no_credit";
 		String key = "key=" + originalInfo.getPay_wechat_sign_key();
 
 		Object[] params={appid,mch_id,nonce_str,attach,body,out_trade_no,device_info,
-				total_fee,spbill_create_ip,notify_url,trade_type,openid,limit_pay};
+				total_fee,spbill_create_ip,notify_url,trade_type,openid};
 		String tempStr = concatParam(params);
 		//签名,需要把key放在最后
 		tempStr += "&"+key;

@@ -1046,7 +1046,14 @@ public class WechatUserController extends BaseController {
 			openid = wechatService.getOpenId(code,originalid);
 		}
 		//获取 参数解析后，访问用户的控制层
-		return userSupplierProductController.queryPlatformSupplierProduct(null, openid);
+		try {
+			response.sendRedirect(request.getServletContext().getContextPath()+"/user/supplier/queryPlatformSupplierProduct.do?openid="+openid);
+		} catch (IOException e) {
+			log.error(e, e);
+		}
+		return null;
+//		这种方式用户刷新会有code 重复问题，改为跳转链接
+//		return userSupplierProductController.queryPlatformSupplierProduct(null, openid);
 	}
 	  
 

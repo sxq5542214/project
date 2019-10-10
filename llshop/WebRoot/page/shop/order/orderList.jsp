@@ -126,7 +126,7 @@
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
-                        <div class="prd_state_title" id="" style="font-size: 1.5rem;">
+                        <div class="prd_state_title" id="" style="font-size: 1rem;">
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
@@ -184,7 +184,7 @@
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
-                        <div class="prd_state_title" id="" style="font-size: 1.5rem;">
+                        <div class="prd_state_title" id="" style="font-size: 1rem;">
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
@@ -240,7 +240,7 @@
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
-                        <div class="prd_state_title" id="" style="font-size: 1.5rem;">
+                        <div class="prd_state_title" id="" style="font-size: 1rem;">
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
