@@ -3,7 +3,7 @@
  */
 package com.yd.business.area.service;
 
-import com.yd.business.order.bean.AreaData;
+import com.yd.business.area.bean.AreaDataBean;
 
 /**
  * @author ice
@@ -11,8 +11,8 @@ import com.yd.business.order.bean.AreaData;
  */
 public interface IAreaDataService {
 
-	AreaData findAreaData(String phoneCode);
+	AreaDataBean findAreaData(String phoneCode);
 
-	AreaData getAreaDataByPhone(String phone);
+	AreaDataBean getAreaDataByPhone(String phone);
 
 }

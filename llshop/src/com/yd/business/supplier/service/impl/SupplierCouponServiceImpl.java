@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.pageination.PageinationData;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.channel.bean.ChannelBean;
 import com.yd.business.channel.service.IChannelProductService;
 import com.yd.business.isp.bean.ISPInterfaceBean;
 import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
-import com.yd.business.order.bean.AreaData;
 import com.yd.business.order.bean.OrderProductLogBean;
 import com.yd.business.order.service.IOrderProductLogService;
 import com.yd.business.order.service.IOrderService;
@@ -801,7 +801,7 @@ ISupplierCouponService {
 	@Override
 	public List<CustomerSupplierProductBean> queryCustomerProductByPhone(Integer customer_id,String phone,Integer coupon_id){
 		
-		AreaData areaData = orderService.getAreaDataByPhone(phone);
+		AreaDataBean areaData = orderService.getAreaDataByPhone(phone);
 		if(areaData == null) return null;
 		SupplierProductBean condition = new SupplierProductBean();
 		condition.setCustomer_id(customer_id);
@@ -841,9 +841,9 @@ ISupplierCouponService {
 			}
 			
 			//如果查出的数据不是全国的，那么界面上再展示出来全国的
-			if(areaData == null || !AreaData.PROVINCE_QG.equals(areaData.getProvince())){
+			if(areaData == null || !AreaDataBean.PROVINCE_QG.equals(areaData.getProvince())){
 				//查询全国的商品
-				condition.setProduct_province(AreaData.PROVINCE_QG);
+				condition.setProduct_province(AreaDataBean.PROVINCE_QG);
 				cspnew = supplierProductDao.querySupplierProduct(condition);
 				if(cspnew.size() >0){
 					listCsp.add(new CustomerSupplierProductBean(areaData,sb,cspnew));
@@ -1328,7 +1328,7 @@ ISupplierCouponService {
 		
 		public boolean checkCouponProduct(Integer customer_id,String phone,Integer coupon_id){
 			//通过producrt_id到产品表中查询该产品的信息
-			AreaData areaData = orderService.getAreaDataByPhone(phone);
+			AreaDataBean areaData = orderService.getAreaDataByPhone(phone);
 			if(areaData == null) return false;
 			SupplierProductBean condition = new SupplierProductBean();
 			condition.setCustomer_id(customer_id);

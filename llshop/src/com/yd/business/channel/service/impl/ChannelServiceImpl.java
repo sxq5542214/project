@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.activity.bean.ActivityProductBean;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.channel.bean.ChannelBalanceLogBean;
 import com.yd.business.channel.bean.ChannelBean;
 import com.yd.business.channel.bean.ChannelCustomerBean;
@@ -24,7 +25,6 @@ import com.yd.business.channel.service.IChannelService;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
-import com.yd.business.order.bean.AreaData;
 import com.yd.business.order.service.IOrderService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.util.DateUtil;
@@ -66,7 +66,7 @@ public class ChannelServiceImpl extends BaseService implements IChannelService {
 		Integer channel_id = null;
 		//先查商品通道表，如果没有，再查客户通道表
 		//取手机号码的省份
-		AreaData ad = orderService.getAreaDataByPhone(phone);
+		AreaDataBean ad = orderService.getAreaDataByPhone(phone);
 		String province = ad.getProvince();
 		
 		ChannelProductBean channelProduct = channelProductService.getRandomChannelProduct(province, product_id, customer_id);

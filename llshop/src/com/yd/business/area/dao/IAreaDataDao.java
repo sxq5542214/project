@@ -3,7 +3,7 @@
  */
 package com.yd.business.area.dao;
 
-import com.yd.business.order.bean.AreaData;
+import com.yd.business.area.bean.AreaDataBean;
 
 /**
  * @author ice
@@ -11,6 +11,6 @@ import com.yd.business.order.bean.AreaData;
  */
 public interface IAreaDataDao {
 
-	AreaData findAreaData(String phoneCode);
+	AreaDataBean findAreaData(String phoneCode);
 
 }

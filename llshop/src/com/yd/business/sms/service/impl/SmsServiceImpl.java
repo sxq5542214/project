@@ -18,9 +18,9 @@ import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
 import com.yd.business.customer.bean.CustomerBean;
-import com.yd.business.order.bean.AreaData;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.sms.bean.SmsBean;
@@ -142,9 +142,9 @@ public class SmsServiceImpl extends BaseService implements ISmsService {
 	public String sendSuccessMsgMyPhoneNumAndContent(String recNum, String wechatName,String productName,
 			Integer customerid) {
 		//目前只发移动的
-		AreaData ad = areaDataService.getAreaDataByPhone(recNum);
+		AreaDataBean ad = areaDataService.getAreaDataByPhone(recNum);
 		
-		if(ad != null && ad.getBrand().equals(AreaData.BRAND_YD)){
+		if(ad != null && ad.getBrand().equals(AreaDataBean.BRAND_YD)){
 		
 			SmsCustomerBean cust = new SmsCustomerBean();
 			cust.setOrderStatus(SmsCustomerBean.ORDERSTATUS_SUCCESS);

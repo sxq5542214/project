@@ -31,6 +31,13 @@ public class UserAddressServiceImpl extends BaseService implements IUserAddressS
 	@Override
 	public void createUserAddress(UserAddressBean bean){
 		
+		UserAddressBean countBean = new UserAddressBean();
+		countBean.setUser_id(bean.getUser_id());
+		List<UserAddressBean> list = userAddressDao.queryUserAddress(countBean);
+		if(list.size() >= 30){
+			throw new RuntimeException("user Address mustBe <= 30");
+		}
+		
 		AddressBean address = addressService.findAddressById(bean.getAddress_id());
 		
 		bean.setContact_address(address.getFull_name() + bean.getStreet_name());

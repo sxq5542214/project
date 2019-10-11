@@ -3,7 +3,7 @@ package com.yd.business.order.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.yd.business.order.bean.AreaData;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.order.bean.OrderProductEffBean;
 import com.yd.business.order.bean.OrderProductEffShowPageBean;
 import com.yd.business.order.bean.OrderProductLogBean;
@@ -11,7 +11,7 @@ import com.yd.business.order.bean.PartnerOrderProductBean;
 
 public interface IOrderDao {
 
-	List<AreaData> queryAreaData(AreaData ad);
+	List<AreaDataBean> queryAreaData(AreaDataBean ad);
 
 	void savePartnerOrderProduct(PartnerOrderProductBean bean);
 

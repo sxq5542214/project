@@ -1,6 +1,6 @@
-﻿<%@page import="com.yd.util.StringUtil"%>
+<%@page import="com.yd.util.StringUtil"%>
 <%@page import="com.yd.business.wechat.bean.WechatOriginalInfoBean"%>
-<%@page import="com.yd.business.order.bean.AreaData"%>
+<%@page import="com.yd.business.area.bean.AreaDataBean"%>
 <%@page import="com.yd.basic.framework.context.BaseContext"%>
 <%@page import="com.yd.business.user.bean.UserSenceLog"%>
 <%@page import="com.yd.util.DateUtil"%>

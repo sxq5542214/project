@@ -36,9 +36,9 @@ import com.yd.business.activity.bean.ActivityWinHisBean;
 import com.yd.business.activity.dao.IActivityDao;
 import com.yd.business.activity.service.IActivitConfigService;
 import com.yd.business.activity.service.IActivityService;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
-import com.yd.business.order.bean.AreaData;
 import com.yd.business.order.bean.OrderProductLogBean;
 import com.yd.business.order.service.IOrderProductLogService;
 import com.yd.business.order.service.IOrderService;
@@ -203,7 +203,7 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 		}
 		
 		
-		AreaData ad = orderService.getAreaDataByPhone(phone);
+		AreaDataBean ad = orderService.getAreaDataByPhone(phone);
 		if(ad != null){
 			bean.setPhone(phone);
 			bean.setModify_time(DateUtil.getNowDateStr());

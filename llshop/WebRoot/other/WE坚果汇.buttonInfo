@@ -3,7 +3,7 @@
         {
         	"name": "坚果商城", 
         	 "type": "view", 
-		     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toDefaultPlatformSupplierProduct.do?response_type=openid&scope=snsapi_base&state=1#wechat_redirect"
+		     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toDefaultPlatformSupplierProduct.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
         }, 
         {
             "name": "优惠活动", 
@@ -11,18 +11,18 @@
             
             	{
             		"type": "click", 
-                    "name": "免费抽奖活动", 
-                    "key": "wechat_mianfeichoujiang"
+                    "name": "免费得坚果", 
+                    "key": "mianfeijianguo"
                 },
              	{
 		            "type": "view", 
                     "name": "我的优惠卷", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toUserCouponPage.do?response_type=openid&scope=snsapi_base&state=1#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toUserCouponPage.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
                 },
             	{
             		"type": "view", 
                     "name": "优惠卷中心", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toCouponCenterPage.do?response_type=openid&scope=snsapi_base&state=1#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toCouponCenterPage.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
                 }
             ]
         },
@@ -32,12 +32,12 @@
                {
 		            "type": "view", 
                     "name": "今日签到", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toUserSignPage.do?response_type=openid&scope=snsapi_base&state=1#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toUserSignPage.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
                 },
                 {
                     "type": "view", 
                     "name": "个人中心", 
-                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toUserInfoCenter.do?response_type=openid&scope=snsapi_base&state=1#wechat_redirect"
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://www.jg-shop.cn/jgshop/wechat/user/toUserInfoCenter.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
                 },
                 {
                     "type": "click", 

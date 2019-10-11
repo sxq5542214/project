@@ -21,12 +21,12 @@ import com.yd.basic.framework.context.BaseContext;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.basic.framework.pageination.PageinationData;
 import com.yd.basic.framework.runable.BaseRunable;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.msgcenter.bean.MsgCenterUserSubscribeBean;
 import com.yd.business.msgcenter.service.IMsgCenterArticleService;
-import com.yd.business.order.bean.AreaData;
 import com.yd.business.order.bean.OrderProductEffBean;
 import com.yd.business.order.bean.OrderProductEffShowPageBean;
 import com.yd.business.order.bean.OrderProductLogBean;
@@ -157,7 +157,7 @@ public class UserController extends BaseController {
 		try {
 			
 			String phone = request.getParameter("phone");
-			AreaData ad = areaDataService.getAreaDataByPhone(phone);
+			AreaDataBean ad = areaDataService.getAreaDataByPhone(phone);
 			writeJson(response, ad);
 		} catch (Exception e) {
 			log.error(e, e);
@@ -869,7 +869,48 @@ public class UserController extends BaseController {
 		return null;
 	}
 	
+	@RequestMapping("**/user/addAddressByWechatData.do")
+	public ModelAndView addAddressByWechatData(HttpServletRequest request,HttpServletResponse response){
+		try {
 
+//			String orderCode = request.getParameter("order_code");
+			String openid = request.getParameter("openid");
+			
+			
+			
+			UserAddressBean bean = new UserAddressBean();
+			AutoInvokeGetSetMethod.autoInvoke(getRequestParamsMap(request), bean);
+			bean.setUser_name("用户使用微信地址");
+			
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user.getId().intValue() == bean.getUser_id().intValue() ){
+				
+				AddressBean address = new AddressBean();
+				address.setFull_name("%"+bean.getProvince()+"%" +bean.getCity() +"%"+bean.getDistrict()+"%");
+				
+				List<AddressBean> listAddr = addressService.queryAddress(address);
+				if(listAddr.size() == 0){
+					log.error("error! addAddressByWechatData  address:"+bean.getProvince()+"%" +bean.getCity() +"%"+bean.getDistrict() + " notfound please check data!");
+					return null;
+				}else{
+					bean.setAddress_id(listAddr.get(0).getId());
+					userAddressService.createUserAddress(bean);
+					
+					bean.setOrderby(" order by id desc");
+					bean = userAddressService.queryUserAddress(bean).get(0);
+					
+					writeJson(response, ""+ bean.getId());
+				}
+				
+			}
+			
+			
+			
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
 	/**
 	 * 跳转到用户定单界面
 	 * @return

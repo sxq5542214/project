@@ -11,6 +11,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.channel.bean.ChannelBean;
 import com.yd.business.channel.service.IChannelProductService;
 import com.yd.business.channel.service.IChannelService;
@@ -37,7 +38,6 @@ import com.yd.business.isp.client.OrderProductInstanceClient7;
 import com.yd.business.isp.client.OrderProductInstanceClient8;
 import com.yd.business.isp.client.OrderProductInstanceClient9;
 import com.yd.business.isp.client.OrderYDProductClient;
-import com.yd.business.order.bean.AreaData;
 import com.yd.business.isp.dao.IISPInterfaceLogDao;
 import com.yd.business.order.exception.ISPException;
 import com.yd.business.isp.service.IAccessISPOrderInterfaceService;
@@ -105,7 +105,7 @@ public class AccessISPOrderInterfaceServiceImpl extends BaseService implements I
 	@Override
 	public ISPInterfaceBean accessISPOrderInterface(String order_code,String phone, Integer productId) {
 		
-		AreaData ad = orderService.getAreaDataByPhone(phone);
+		AreaDataBean ad = orderService.getAreaDataByPhone(phone);
 
 		ISPInterfaceBean bean = null;
 		if(ad == null){
@@ -116,21 +116,21 @@ public class AccessISPOrderInterfaceServiceImpl extends BaseService implements I
 		}else{
 			
 			ProductBean product = productService.findProductById(productId);
-			if(AreaData.BRAND_YD.equals(ad.getBrand())){
+			if(AreaDataBean.BRAND_YD.equals(ad.getBrand())){
 				
 				bean = accessYDOrderInterface(order_code,phone, product);
 //				bean = new YDInterfaceBean();
 //				bean.setStatus(ISPInterfaceBean.STATUS_SUCCESS);
 //				bean.setOrder_code(order_code);
 				bean.setType(ISPInterfaceBean.TYPE_AHYD_SZ);
-			}else if(AreaData.BRAND_DX.equals(ad.getBrand())){
+			}else if(AreaDataBean.BRAND_DX.equals(ad.getBrand())){
 				
 				bean = accessDXOrderInterface(order_code,phone, product);
 //				bean = new DXInterfaceBean();
 //				bean.setStatus(ISPInterfaceBean.STATUS_SUCCESS);
 //				bean.setOrder_code(order_code);
 				bean.setType(ISPInterfaceBean.TYPE_AHDX_HF);
-			}else if(AreaData.BRAND_LT.equals(ad.getBrand())){
+			}else if(AreaDataBean.BRAND_LT.equals(ad.getBrand())){
 	
 				bean = accessLTOrderInterface(phone, product.getCode());
 //				bean.setType(ISPInterfaceBean.TYPE_AHLT);

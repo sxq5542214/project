@@ -8,9 +8,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.dao.IAreaDataDao;
 import com.yd.business.area.service.IAreaDataService;
-import com.yd.business.order.bean.AreaData;
 import com.yd.util.StringUtil;
 
 /**
@@ -26,7 +26,7 @@ public class AreaDataServiceImpl extends BaseService implements IAreaDataService
 	 * 完全匹配参数
 	 */
 	@Override
-	public AreaData findAreaData(String phoneCode){
+	public AreaDataBean findAreaData(String phoneCode){
 		return areaDataDao.findAreaData(phoneCode);
 	}
 	
@@ -37,8 +37,8 @@ public class AreaDataServiceImpl extends BaseService implements IAreaDataService
 	 * @return
 	 */
 	@Override
-	public AreaData getAreaDataByPhone(String phone){
-		AreaData ad = null;
+	public AreaDataBean getAreaDataByPhone(String phone){
+		AreaDataBean ad = null;
 		
 		if(StringUtil.isNotNull(phone) && phone.length() == 11 ){
 			String pre8 = phone.substring(0, 8);
@@ -57,4 +57,8 @@ public class AreaDataServiceImpl extends BaseService implements IAreaDataService
 		}
 		return ad;
 	}
+	
+	
+	
+	
 }

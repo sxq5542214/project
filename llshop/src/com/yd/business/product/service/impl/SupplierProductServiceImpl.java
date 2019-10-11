@@ -8,8 +8,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.customer.bean.CustomerBean;
-import com.yd.business.order.bean.AreaData;
 import com.yd.business.order.service.IOrderService;
 import com.yd.business.product.bean.SupplierProductAttachBean;
 import com.yd.business.product.bean.SupplierProductBean;
@@ -137,7 +137,7 @@ public class SupplierProductServiceImpl extends BaseService implements
 	@Override
 	public List<CustomerSupplierProductBean> queryCustomerProductByPhone(int customer_id,String phone){
 		
-		AreaData areaData = orderService.getAreaDataByPhone(phone);
+		AreaDataBean areaData = orderService.getAreaDataByPhone(phone);
 		if(areaData == null) return null;
 		SupplierProductBean condition = new SupplierProductBean();
 		condition.setCustomer_id(customer_id);
@@ -169,9 +169,9 @@ public class SupplierProductServiceImpl extends BaseService implements
 			}
 			
 			//如果查出的数据不是全国的，那么界面上再展示出来全国的
-			if(areaData == null || !AreaData.PROVINCE_QG.equals(areaData.getProvince())){
+			if(areaData == null || !AreaDataBean.PROVINCE_QG.equals(areaData.getProvince())){
 				//查询全国的商品
-				condition.setProduct_province(AreaData.PROVINCE_QG);
+				condition.setProduct_province(AreaDataBean.PROVINCE_QG);
 				csp = supplierProductDao.querySupplierProduct(condition);
 				if(csp.size() >0){
 					listCsp.add(new CustomerSupplierProductBean(areaData,sb,csp));

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.activity.bean.ActivityUserRelationBean;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
 import com.yd.business.channel.bean.ChannelBean;
 import com.yd.business.channel.service.IChannelProductService;
@@ -30,7 +31,6 @@ import com.yd.business.customer.service.ICustomerAdminService;
 import com.yd.business.isp.bean.ISPInterfaceBean;
 import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
-import com.yd.business.order.bean.AreaData;
 import com.yd.business.order.bean.OrderProductEffBean;
 import com.yd.business.order.bean.OrderProductEffShowPageBean;
 import com.yd.business.order.bean.OrderProductLogBean;
@@ -144,8 +144,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 	 * @return
 	 */
 	@Override
-	public AreaData getAreaDataByPhone(String phone){
-		AreaData ad = null;
+	public AreaDataBean getAreaDataByPhone(String phone){
+		AreaDataBean ad = null;
 		
 		if(StringUtil.isNotNull(phone) && phone.length() == 11 ){
 			String pre8 = phone.substring(0, 8);
@@ -753,7 +753,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 		if(runningCacheMap.get(cardSecret.getSecret_key()) == null) { //只有不在runningCacheMap  中的定单号才去定购
 			runningCacheMap.put(cardSecret.getSecret_key(), "running");
 		
-			AreaData ad = getAreaDataByPhone(phone);
+			AreaDataBean ad = getAreaDataByPhone(phone);
 			if(ad != null){
 				
 				//查询品牌是否一致

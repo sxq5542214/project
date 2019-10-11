@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yd.business.order.bean;
+package com.yd.business.area.bean;
 
 import org.apache.ibatis.type.Alias;
 
@@ -12,7 +12,7 @@ import com.yd.basic.framework.bean.BaseBean;
  *
  */
 @Alias("areaData")
-public class AreaData extends BaseBean {
+public class AreaDataBean extends BaseBean {
 
 	public static final String PROVINCE_QG = "全国";
 	public static final String PROVINCE_AH = "安徽";

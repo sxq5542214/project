@@ -12,6 +12,7 @@
 	List<UserAddressBean> list = (List<UserAddressBean>) request.getAttribute("list");
 	UserWechatBean user = (UserWechatBean) request.getAttribute("user");
 	int userId = user.getId();
+	String openid = user.getOpenid();
 	String order_code = (String)request.getAttribute("order_code");
  %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -30,10 +31,12 @@
 <link href="page/shop/css_wy/comm.css" rel="stylesheet" type="text/css" />
 <link href="page/shop/css_wy/member.css" rel="stylesheet" type="text/css" />
 
+<script type="text/javascript" src="<%=request.getScheme()  %>://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/wechat/weixinInit.js"></script>
 <script type="text/javascript">
 	var userId = "<%=userId%>";
-	
+	var openid = "<%=openid %>";
 	function deleteAddress(id){
 		
 		if(confirm("确定要删除这条地址信息吗？")){
@@ -56,6 +59,56 @@
 			});
 		}
 	}
+	
+	
+function useWechatAddress(){
+	wx.openAddress({
+	  success: function (res) {
+	    var userName = res.userName; // 收货人姓名
+	    var postalCode = res.postalCode; // 邮编
+	    var provinceName = res.provinceName; // 国标收货地址第一级地址（省）
+	    var cityName = res.cityName; // 国标收货地址第二级地址（市）
+	    var countryName = res.countryName; // 国标收货地址第三级地址（国家）
+	    var detailInfo = res.detailInfo; // 详细收货地址信息
+	    var nationalCode = res.nationalCode; // 收货地址国家码
+	    var telNumber = res.telNumber; // 收货人手机号码
+	    
+//	    var addressInfo = JSON.stringify(res);
+	    
+	    $.ajax({
+			url : "user/addAddressByWechatData.do",
+			data : {"openid" : openid,
+					"province" : provinceName,
+					"city" : cityName,
+					"district" : countryName,
+					"street_name" : detailInfo,
+					"post_code" : postalCode,
+					"contact_name" : userName,
+					"contact_phone" : telNumber,
+					"contact_address" : provinceName+ cityName+ countryName+ detailInfo,
+					"user_id" : userId
+			},
+			success : function(addressid) {
+				if(addressid == null || addressid == 'null'){
+					alert("使用微信地址失败,请新增地址");
+				}else{
+					location.href = 'order/shop/setupOrderAddress.do?userAddrId='+ addressid +'&order_code=<%=order_code %>';
+				}
+			},
+			error : function() {
+				alert("使用微信地址失败,请新增地址");
+			}
+		});
+	    
+	    
+	  },
+	  fail : function(res){
+	  	alert('fail:' + res.errMsg);
+	  }
+	  
+	});
+
+}
 </script>
 </head>
 <body>
@@ -130,10 +183,15 @@
 		            	<%} %>
 		            </ul>
 		        </article>
-		        <div id="divBtmMoney" class="g-Total-bt" ><a href="user/toUserAddAddressPage.do?openid=<%=user.getOpenid() %>&order_code=<%=order_code %>" class="orgBtn" style="  border:#3399FE" >添加新的收货地址</a></div>
+		        <div id="divBtmMoney" class="g-Total-bt" >
+		        	<a href="javascript: useWechatAddress()" class="orgBtn" style="  border:#3399FE;background: green;float: left;width: 49%" >使用微信地址</a>
+		        	<a href="user/toUserAddAddressPage.do?openid=<%=user.getOpenid() %>&order_code=<%=order_code %>" class="orgBtn" style="float:right;width:49%;  border:#3399FE" >添加新的收货地址</a>
+		        
+		        </div>
     </section>
     
 </div>
 </body>
 
 </html>
+

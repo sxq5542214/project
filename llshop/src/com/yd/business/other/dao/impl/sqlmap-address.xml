@@ -10,7 +10,7 @@
 			<if test="name != null"> and name = #{name} </if>
 			<if test="level != null"> and level = #{level} </if>
 			<if test="code != null"> and code = #{code} </if>
-			<if test="full_name != null"> and full_name = #{full_name} </if>
+			<if test="full_name != null"> and full_name like '${full_name}' </if>
 			<if test="parent_id != null"> and parent_id = #{parent_id} </if>
 			<if test="status != null"> and status = #{status} </if>
 		</where>

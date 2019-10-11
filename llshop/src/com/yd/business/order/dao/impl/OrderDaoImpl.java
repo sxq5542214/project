@@ -10,7 +10,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
-import com.yd.business.order.bean.AreaData;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.order.bean.OrderProductEffBean;
 import com.yd.business.order.bean.OrderProductEffShowPageBean;
 import com.yd.business.order.bean.OrderProductLogBean;
@@ -26,7 +26,7 @@ public class OrderDaoImpl extends BaseDao implements IOrderDao {
 	private static final String NAMESPACE = "order.";
 	
 	@Override
-	public List<AreaData> queryAreaData(AreaData ad){
+	public List<AreaDataBean> queryAreaData(AreaDataBean ad){
 		return sqlSessionTemplate.selectList(NAMESPACE+"queryAreaData", ad);
 	}
 	

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.yd.business.activity.bean.ActivityUserRelationBean;
-import com.yd.business.order.bean.AreaData;
+import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.order.bean.OrderProductEffBean;
 import com.yd.business.order.bean.OrderProductEffShowPageBean;
 import com.yd.business.order.bean.OrderProductLogBean;
@@ -15,7 +15,7 @@ import com.yd.business.user.bean.UserConsumeInfoBean;
 
 public interface IOrderService {
 
-	AreaData getAreaDataByPhone(String phone);
+	AreaDataBean getAreaDataByPhone(String phone);
 
 	OrderProductLogBean orderProductByUser(String out_trade_no, String param);
 
