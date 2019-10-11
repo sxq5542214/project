@@ -41,8 +41,8 @@ var editor;
 KindEditor.ready(function(K) {
 	editor = K.create('textarea[name="product_desc"]', {
 		fontSizeTable:['8pt','9pt','10pt','11pt','12pt','13pt','14pt','15pt','16pt','17pt','18pt','19pt','20pt','22pt','24pt','26pt','28pt','30pt','32pt','34pt','36pt','38pt','40pt'],
-		uploadJson : 'KindEditor/jsp/upload_json.jsp',
-        fileManagerJson : 'KindEditor/jsp/file_manager_json.jsp',
+		uploadJson : '<%=path%>/KindEditor/jsp/upload_json.jsp',
+        fileManagerJson : '<%=path%>/KindEditor/jsp/file_manager_json.jsp',
 		allowFileManager : true
 	});
 	

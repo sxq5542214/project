@@ -3,7 +3,7 @@
 <%@ page import="java.util.*,java.io.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%
-
+System.out.println("............... file manager................");
 //根目录路径，可以指定绝对路径，比如 /var/www/attached/
 String rootPath = pageContext.getServletContext().getRealPath("/") + "attached/";
 //根目录URL，可以指定绝对路径，比如 http://www.yoursite.com/attached/
@@ -11,6 +11,8 @@ String rootUrl  = request.getContextPath() + "/attached/";
 //图片扩展名
 String[] fileTypes = new String[]{"gif", "jpg", "jpeg", "png", "bmp"};
 
+//最大文件大小
+long maxSize = 10240000;
 String dirName = request.getParameter("dir");
 if (dirName != null) {
 	if(!Arrays.<String>asList(new String[]{"image", "flash", "media", "file"}).contains(dirName)){
