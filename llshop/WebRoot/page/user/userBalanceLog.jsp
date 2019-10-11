@@ -75,8 +75,8 @@
 						
 					
 						
-						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;">充值号码：<big  style="color: black;"><%=b.getPhone()%></big></span> 
-						<span class="discount" style="font-size: 0.4rem;margin: 0;">充值时间：<big style="color: black;"><%=b.getCreate_date()  %></big></span>
+						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;">消费订单：<big  style="color: black;"><%=b.getOut_trade_code() %></big></span> 
+						<span class="discount" style="font-size: 0.4rem;margin: 0;">消费时间：<big style="color: black;"><%=b.getCreate_date()  %></big></span>
 						<span class="discount" style="font-size: 0.4rem;margin: 0;float: right;"><%=b.getInterface_type() %>：<big style="color: black;"><%= b.getMoney()/100d%></big>元&nbsp;&nbsp;&nbsp;&nbsp;</span>
 		
 					</p>

@@ -61,17 +61,18 @@
         	
         	function remindOrder(orderId){
         		var remind = prompt("请填写催单说明，以便我们为您提供更好的服务");
-        			
-   				$.ajax({
-					url : "order/shop/remindShopOrder.do",
-					data : { order_id : orderId,
-							 openid : '<%=user.getOpenid() %>',
-							 remind : remind
-							},
-					success : function(d) {
-    					alert('已提交催单申请，我们将会尽快为您完成发货');
-					}
-	           	});
+        		if(remind != null && remind != '' && remind != 'null'){
+	   				$.ajax({
+						url : "order/shop/remindShopOrder.do",
+						data : { order_id : orderId,
+								 openid : '<%=user.getOpenid() %>',
+								 remind : remind
+								},
+						success : function(d) {
+	    					alert('已提交催单申请，我们将会尽快为您完成发货');
+						}
+		           	});
+	           	}
         	}
         	
         </script>
