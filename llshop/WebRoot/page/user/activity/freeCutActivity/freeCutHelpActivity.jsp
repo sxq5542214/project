@@ -309,5 +309,6 @@ coupon[3].setCoupon_count(40); //复用字段，代表参与人数要求
 				
 		</div>
 	</div>
+	<img alt="" src="http://120.24.62.58:8080/images/img2019_28.do" style="display: none;">
 </body>
 </html>

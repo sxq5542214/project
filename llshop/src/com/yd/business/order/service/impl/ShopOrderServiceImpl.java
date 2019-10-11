@@ -197,6 +197,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		order.setCost_points(0);
 		order.setCost_price(0);
 		order.setCost_money(0);
+		order.setCost_balance(0);
+		order.setCoupon_total_price(0);
 		try{
 			if(StringUtil.isNull(productJson)){
 				return order;

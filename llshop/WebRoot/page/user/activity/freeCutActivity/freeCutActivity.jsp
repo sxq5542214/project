@@ -362,6 +362,10 @@ rotate
 		</div>
 	</div>
 </body>
+<!-- 
+<img alt="" src="testImg.do" style="display: none;"> -->
+
+
 <script type="text/javascript">
 var openid = '<%=user.getOpenid()%>';
 function getPrize(couponId,couponName){

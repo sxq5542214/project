@@ -998,17 +998,21 @@ public class ActivityController extends BaseController {
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(toOpenId);
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String originalid = original.getOriginalid();
+			
+			String openid = (String)request.getSession().getAttribute("code_openid");
 			String code = request.getParameter("code");
-			if(StringUtil.isNotNull(code)){
-				//好友信息，创建用户及好友关系
-				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, originalid);
-				
-				UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), user.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId, originalid , auth.getAccess_token());
-				userWechatService.createUserWechatFriend(user,friendUser);
-			}else{
+			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
+				// 没有缓存，也没有传code过来，则跳转至微信授权
 				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toFreeCutHelpActivity.html?toOpenid="+ toOpenId +"&supplierEventId="+ supplierEventId , "utf-8");
 				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 				return null;
+			}else if(StringUtil.isNull(openid)){
+				//好友信息，创建用户及好友关系
+				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, originalid);
+
+				request.getSession().setAttribute("code_openid",auth.getOpenid());
+				UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), user.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId, originalid , auth.getAccess_token());
+				userWechatService.createUserWechatFriend(user,friendUser);
 			}
 			
 			UserQrCodeBean qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(toOpenId, WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId);
