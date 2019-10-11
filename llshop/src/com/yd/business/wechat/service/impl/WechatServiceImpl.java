@@ -479,9 +479,10 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	 * @throws Exception 
 	 */
 	@Override
-	public UserWechatExtendBean getWechatUserInfoByAccessToken(String openid,String access_token) throws Exception{
+	public UserWechatExtendBean getWechatUserInfoByWebAuthAccessToken(String openid,String access_token) throws Exception{
 		UserWechatExtendBean userBean ;
 		String url = getUserInfoUrlByAccessToken(openid,access_token);
+		url = url.replaceAll("cgi-bin/user/info", "sns/userinfo");
 		String response = HttpUtil.get(url);
 		log.debug("getWechatUserInfo response--------------------"+response);
 		userBean = WechatUtil.parseJsonToUserWechatBean(new JSONObject(response));
@@ -572,7 +573,12 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	
 	@Override
 	public UserWechatBean createWechatUserByWebAuth(String weixin_id,Integer parentId,Integer senceType,Integer senceId,String originalid,String access_token) throws Exception{
-		UserWechatBean userBean =getWechatUserInfoByAccessToken(weixin_id,access_token);
+		
+		UserWechatBean userBean = userWechatService.findUserWechatByOpenId(weixin_id);
+		if(userBean != null){
+			return userBean;
+		}
+		userBean =getWechatUserInfoByWebAuthAccessToken(weixin_id,access_token);
 		
 		//父用户不为空
 		if( parentId != null ){

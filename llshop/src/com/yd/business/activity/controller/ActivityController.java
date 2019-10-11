@@ -4,6 +4,7 @@
 package com.yd.business.activity.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,6 +50,7 @@ import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.controller.UserController;
 import com.yd.business.user.service.IUserCommissionPointsService;
 import com.yd.business.user.service.IUserWechatService;
+import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.bean.WechatWebAuthBean;
 import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
@@ -994,15 +996,19 @@ public class ActivityController extends BaseController {
 			String toOpenId = request.getParameter("toOpenid");
 			Integer supplierEventId = Integer.parseInt(request.getParameter("supplierEventId")); //也是activityconfigid ,需要保持一致
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(toOpenId);
-			
+			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
+			String originalid = original.getOriginalid();
 			String code = request.getParameter("code");
 			if(StringUtil.isNotNull(code)){
-				//好友信息，创建用户的好友关系
-				String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+				//好友信息，创建用户及好友关系
 				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, originalid);
 				
-				UserWechatBean friend = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), user.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId, originalid , auth.getAccess_token());
-				userWechatService.createUserWechatFriend(user,friend);
+				UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), user.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId, originalid , auth.getAccess_token());
+				userWechatService.createUserWechatFriend(user,friendUser);
+			}else{
+				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toFreeCutHelpActivity.html?toOpenid="+ toOpenId +"&supplierEventId="+ supplierEventId , "utf-8");
+				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+				return null;
 			}
 			
 			UserQrCodeBean qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(toOpenId, WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId);

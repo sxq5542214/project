@@ -71,9 +71,9 @@ public interface IWechatService {
 
 	WechatWebAuthBean getOpenIdByWebAuthCode(String code, String originalid);
 
-	UserWechatExtendBean getWechatUserInfoByAccessToken(String openid, String access_token) throws Exception;
-
 	UserWechatBean createWechatUserByWebAuth(String weixin_id, Integer parentId, Integer senceType, Integer senceId,
 			String originalid, String access_token) throws Exception;
+
+	UserWechatExtendBean getWechatUserInfoByWebAuthAccessToken(String openid, String access_token) throws Exception;
 
 }
