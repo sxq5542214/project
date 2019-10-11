@@ -343,15 +343,18 @@ public class WechatUtil {
 		UserWechatExtendBean userBean = new UserWechatExtendBean();
 		userBean.setSubscribe(jso.optInt("subscribe",0));
 		
-//		if(userBean.getSubscribe() == UserWechatExtendBean.SUBSCRIBE_YES) //为1时才能取到其它数据  modfiy by sxq  网页授权时未关注也可以
-//		{
-			userBean.setNick_name(jso.optString("nickname"));
-			userBean.setSex(jso.optInt("sex")+"");
-			userBean.setCity(jso.optString("city"));
-			userBean.setProvince(jso.optString("province"));
-			userBean.setHead_img(jso.optString("headimgurl"));
-			userBean.setUnionid(jso.optString("unionid"));
-//		}
+		if(userBean.getSubscribe() == UserWechatExtendBean.SUBSCRIBE_YES) //为1时才能取到其它数据  modfiy by sxq  网页授权时未关注也可以
+		{
+			userBean.setStatus(UserWechatExtendBean.STATUS_SUBSCRIBE);
+		}else{
+			userBean.setStatus(UserWechatExtendBean.STATUS_UNSUBSCRIBE);
+		}
+		userBean.setNick_name(jso.optString("nickname"));
+		userBean.setSex(jso.optInt("sex")+"");
+		userBean.setCity(jso.optString("city"));
+		userBean.setProvince(jso.optString("province"));
+		userBean.setHead_img(jso.optString("headimgurl"));
+		userBean.setUnionid(jso.optString("unionid"));
 		
 		return userBean;
 	}

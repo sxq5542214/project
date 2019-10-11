@@ -109,7 +109,7 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		try{
 			if(userBean.getOpenid() != null)
 			{
-				userBean.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
+//				userBean.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
 				userWechatDao.addUser(userBean);
 			}
 		}catch(Exception e){
