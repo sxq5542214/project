@@ -21,7 +21,7 @@ extMap.put("media", "swf,flv,mp3,wav,wma,wmv,mid,avi,mpg,asf,rm,rmvb");
 extMap.put("file", "doc,docx,xls,xlsx,ppt,htm,html,txt,zip,rar,gz,bz2");
 
 //最大文件大小
-long maxSize = 10000000;
+long maxSize = 10240000;
 
 response.setContentType("text/html; charset=UTF-8");
 
