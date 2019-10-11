@@ -22,8 +22,9 @@
     <link rel="stylesheet" type="text/css" href="page/pc/order/h5/css/base.css"/>
     <link rel="stylesheet" type="text/css" href="page/pc/order/h5/css/style.css"/>
 	<script	src="page/user/supplierEvent/common/jquery-1.10.2-min.js"></script>
-	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+	<script type="text/javascript" src="<%=request.getScheme()  %>://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 	<script type="text/javascript" src="js/wechat/weixinInit.js"></script>
+	
     <script type="text/javascript">
     	$(window).load(function(){
     		$(".loading").addClass("loader-chanage")
@@ -170,7 +171,15 @@ function scanDeliver(orderCode){
 	  needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
 	  scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
 	  success: function (res) {
-	  	var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+	  	var strCode = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+	  	var strCount = strCode.split(',').length ;
+	  	var result ;
+	  	if(strCount <=1 ){
+	  		result = strCode.split(',')[0];
+	  	}else{
+	  		result = strCode.split(',')[1];
+	  	}
+	  	
 	    if(confirm('确定运单号为：'+ result +"?")){
 	    	$.ajax({
 				url:"order/shop/updateShopOrderExpressByWechatUser.do",
