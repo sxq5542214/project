@@ -189,135 +189,18 @@
 	</div>
 </section>
 
-
-<section class="detail book_detail">
+<section class="detail book_detail" style="margin-bottom: 0px;">
 	<div class="title">
 		<div class="right">
 		<span class="icon"></span>
 		</div>商品简介</div>
-
-	<%=bean.getProduct_desc() == null? "<p><span>该商品暂时没有更多介绍</span></p>":bean.getProduct_desc() %>
-
-<!-- 
-	<p><span>产&nbsp;&nbsp;&nbsp;&nbsp;品：</span>姗蔻无毒指甲油包邮环保裸色指甲油儿童孕妇持久无毒指甲油快干</p>
-	<p><span>净含量：</span>7.5</p>
-	<p><span>上市时间：</span>2013-06-18</p>
-	<p><span>颜色分类：</span>颜色分类: 湖水蓝 裸粉色 透明亮片 玫红色 珠光红</p>
-	<p><span>肤&nbsp;&nbsp;&nbsp;&nbsp;质：</span>任何肤质</p>
-	<p><span>产&nbsp;&nbsp;&nbsp;&nbsp;地：</span>中国</p> -->
-
+</section>
+<section >
+		<%=bean.getProduct_desc() == null? "<p><span>该商品暂时没有更多介绍</span></p>":bean.getProduct_desc() %>
+	
 </section>
 
 
-<!-- <section class="review_area"><section class="jump">
-	<a href="javascript:return false;" class="arrow_con">
-		<div class="arrow">
-			<h4>商品评论（254）</h4>
-			<em>好评率92.9%</em>
-
-		</div>
-		<div style="line-height: 30px;">
-			&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;font-size: 12px">Johnson丶Lee</span><br>
-			<div style="padding-left: 14px;line-height: 1.5;font-size: 10px;">卖家服务态度很好，随商品也有附赠的小赠品，感觉买这家的商品很舒服。快递也非常快，接到东西的时候还感到有些意外：怎么这么快？！        <div style="float: right;padding-right: 7px;font-weight: bold">2015-09-16</div>
-			</div>
-		</div>
-	</a>
-</section></section> -->
-<!-- 商品评论结束 -->
-
-<!-- 店铺评价开始 -->
-<!-- <section class="shop">
-	<a href="">
-	<div class="shop_con arrow_con">
-		<div class="arrow">
-						<div class="logo"><img src="page/shop/product/images/2011111810580945.jpg" alt="Sweet city美甲官方旗舰店"></div>
-			<div class="name">Sweet city美甲官方旗舰店</div>
-		</div>
-	</div>
-	</a>
-	<ul class="evaluation"><li>
-	<p>描述相符</p>
-	<em>4.9</em>
-	<i class="low">低</i>
-</li>
-<li>
-	<p>服务态度</p>
-	<em>4.9</em>
-	<i class="low">低</i>
-</li>
-<li>
-	<p>发货速度</p>
-	<em>4.8</em>
-	<i class="low">低</i>
-</li>
-<li>
-	<p>关注人数</p>
-	<em>11980</em>
-</li></ul>
-	<div class="shop_btn">
-		<span><a id="collect_shop">关注店铺</a></span>
-		<span><a href="">进店逛逛</a></span>
-	</div>
-</section> -->
-<!-- 店铺评价结束 -->
-
-<!-- 猜你喜欢开始 -->
-<!-- <section class="J_guess">
-<section class="guess">
-<div class="title_con"><span class="title">猜你喜欢</span><div class="line"></div></div>
-<ul>
-
-<li>
-
-<a href="">
-
-<aside><img class="" src="page/shop/product/images/1477078008-1_b.jpg"></aside>
-<span>【包邮】珍视明冰敷眼罩 冷热敷双功效 缓解眼疲劳 满108赠礼 买就赠眼贴</span>
-<em>￥45.00</em>
-</a>
-</li>
-
-<li>
-
-<a href="">
-
-<aside><img class="" src="page/shop/product/images/1273687641-1_b.jpg"></aside>
-<span>女神新妆彩妆套装 现在买送 大礼包 BB霜+眼线液笔+ 加妆前乳+新款口红+睫毛</span>
-<em>￥128.00</em>
-</a>
-</li>
-
-
-
-<li>
-
-<a href="">
-
-<aside><img class="" src="page/shop/product/images/1426474506-1_b.jpg"></aside>
-<span>韩熙贞  丝滑细腻埃及粉饼 控油防汗修容 清爽服帖 补妆 全网抢购中</span>
-<em>￥39.00</em>
-</a>
-</li>
-
-
-
-
-
-<li>
-
-<a href="">
-
-<aside><img class="" src="page/shop/product/images/1206438229-1_b.jpg"></aside>
-<span>珍视明 薰衣草蒸汽眼罩 芳香蒸汽热敷 遮光安神助眠 买就赠眼贴！买3赠大礼包</span>
-<em>￥49.00</em>
-</a>
-</li>
-
-
-
-</ul>
-</section>
-</section> -->
 <!-- 猜你喜欢结束 -->
 <!-- 购物车开始 -->
 <section class="shopping_cart">
@@ -369,19 +252,9 @@
 <footer class="footer new">
     <section class="status-bar">
         <div class="actions-wrap">
-                            <!-- <a class="nickname" href="">L</a>
-                <a href="">退出</a> -->
                     </div>
         <a class="top" href="javascript:scrollTo(0,0);">TOP</a>
     </section>
-   <!--  <nav class="b-nav">
-        <p>
-            <a href="" ontouchstart="">提建议</a>
-            <a class="red" href="" ontouchstart="">触屏版</a>
-            <a href="" ontouchstart="">电脑版</a>
-            <a href="" ontouchstart="">帮&nbsp;&nbsp;助</a>
-        </p>
-    </nav> -->
     <section class="copyright">
         <p>优惠活动最终解释权归主办方所有 </p>
     </section>
@@ -390,14 +263,6 @@
 <section class="space"></section>
 <!-- 购物车占位结束 -->
 
-<!-- 
-<script src="page/shop/product/js/zepto.min.js"></script>
-<script src="page/shop/product/js/underscore.min.js"></script>
-<script src="page/shop/product/js/iscroll5.min.js"></script>
-<script src="page/shop/product/js/fastclick.min.js"></script>
-<script src="page/shop/product/js/common.min.js"></script>
-<script src="page/shop/product/js/product.min.js"></script>
-<script src="page/shop/product/js/js_tracker.js"></script> -->
 <script src="js/cookieUtil.js"></script>
 <script src="js/jquery.js"></script>
 <script src="page/shop/product/js/shoppingCart.js"></script><!-- 
