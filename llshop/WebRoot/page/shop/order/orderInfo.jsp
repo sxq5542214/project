@@ -121,7 +121,7 @@
 									couponStr = " （优惠卷抵扣）";
 								}
 							%>
-							<li class="border-bottom"><a href="supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getSupplier_product_id()%>">
+							<li class="border-bottom"><a href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getSupplier_product_id()%>">
 									<div class="order-msg">
 										<img src="<%=product.getHead_img() %>" class="img_ware">
 										<div class="order-msg">
@@ -218,7 +218,20 @@
 							<p>发货日期： <span class="fr"><%= order.getExpress_date() == null ? "待发货":order.getExpress_date() %></span></p>
 						</div>
 					</div></li>
-				<%} %>
+				<%}%>
+					
+				<li>
+					<div class="order-box">
+						<div class="order-width">
+							<p class="usr-addr" style="text-align: center;"> 
+							<% if(order.getStatus() ==  ShopOrderInfoBean.STATUS_WAIT ||  order.getStatus() ==  ShopOrderInfoBean.STATUS_CANCEL ){  %>
+								<a class="add-address" id="payButton" href="javascript:;" onclick="pay()">立即支付</a>
+							<%}else{ %>
+								<a class="add-address" style="background-color: gray;border: gray;" href="javascript:;" >已完成支付</a>
+							<%} %>
+							</p>
+						</div>
+					</div></li>
 				<!-- <li>
 					<div class="order-box">
 						<div class="order-width">
@@ -230,15 +243,6 @@
 							<p></p>
 						</div>
 					</div></li> -->
-					
-				<li>
-					<div class="order-box">
-						<div class="order-width">
-							<p class="usr-addr" style="text-align: center;"> 
-								<a class="add-address" id="payButton" href="javascript:;" onclick="pay()">立即支付</a>
-							</p>
-						</div>
-					</div></li>
 			</ul>
 
 		</section>

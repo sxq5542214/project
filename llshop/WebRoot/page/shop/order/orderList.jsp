@@ -1,3 +1,4 @@
+<%@page import="com.yd.util.StringUtil"%>
 <%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@page import="com.yd.basic.framework.context.BaseContext"%>
@@ -59,13 +60,13 @@
         	
         	
         	function remindOrder(orderId){
-        		var remark = prompt("请填写催单说明，以便我们为您提供更好的服务");
+        		var remind = prompt("请填写催单说明，以便我们为您提供更好的服务");
         			
    				$.ajax({
 					url : "order/shop/remindShopOrder.do",
 					data : { order_id : orderId,
 							 openid : '<%=user.getOpenid() %>',
-							 remark : remark
+							 remind : remind
 							},
 					success : function(d) {
     					alert('已提交催单申请，我们将会尽快为您完成发货');
@@ -122,7 +123,7 @@
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">
                 <!--包裹详情-->
-                <div class="detail">
+                <div class="detail" style="padding: 1.4rem 0 3.7rem 0">
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
@@ -130,9 +131,10 @@
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
-                                <p class="fl prd_tit">
-                                   <%=order.getOrder_name() %>           </p><br>
-                                   <p>收货人：<%=order.getContact_name() %>    号码：<%=order.getContact_phone() %></p>
+                                <p >
+                                   <%=order.getOrder_name() %>           </p>
+                                   <p>收货人：<%=StringUtil.convertNull(order.getContact_name()) %>  </p>
+                                   <p>号码：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
                                    <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
 	    </a> 
@@ -147,7 +149,7 @@
 	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
 	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
 	        	<%}else if(order.getStatus() == ShopOrderInfoBean.STATUS_ALREADY_DELIVERY) { %>
-	        	<a href="https://www.kuaidi100.com/chaxun?com=<%=order.getExpress_mode() %>&nu=<%=order.getExpress_order_code() %>" >查看物流</a>
+	        	<a href="https://m.kuaidi100.com/app/query/?com==<%=order.getExpress_mode() %>&nu=<%=order.getExpress_order_code() %>" >查看物流</a>
 	        	
 	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
@@ -180,7 +182,7 @@
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">
                 <!--包裹详情-->
-                <div class="detail">
+                <div class="detail" style="padding: 1.4rem 0 3.7rem 0">
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
@@ -188,9 +190,10 @@
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
-                                <p class="fl prd_tit">
-                                   <%=order.getOrder_name() %>           </p><br>
-                                   <p>收货人：<%=order.getContact_name() %>    号码：<%=order.getContact_phone() %></p>
+                                <p >
+                                   <%=order.getOrder_name() %>           </p>
+                                   <p>收货人：<%=order.getContact_name() %>  </p>
+                                   <p>号码：<%=order.getContact_phone() %>  </p>
                                    <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
 	    </a> 
@@ -236,7 +239,7 @@
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">
                 <!--包裹详情-->
-                <div class="detail">
+                <div class="detail" style="padding: 1.4rem 0 3.7rem 0">
                     <!--包裹状态-->
                     <div class="fr prd_state">
                         <!--状态文字-->
@@ -244,9 +247,10 @@
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
-                                <p class="fl prd_tit">
-                                   <%=order.getOrder_name() %>           </p><br>
-                                   <p>收货人：<%=order.getContact_name() %>    号码：<%=order.getContact_phone() %></p>
+                                <p >
+                                   <%=order.getOrder_name() %></p>
+                                   <p>收货人：<%=order.getContact_name() %>  </p>
+                                   <p>号码：<%=order.getContact_phone() %>  </p>
                                    <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
 	    </a> 
@@ -261,7 +265,7 @@
 	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
 	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
 	        	<%}else if(order.getStatus() == ShopOrderInfoBean.STATUS_ALREADY_DELIVERY) { %>
-	        	<a href="https://www.kuaidi100.com/chaxun?com=<%=order.getExpress_mode() %>&nu=<%=order.getExpress_order_code() %>" >查看物流</a>
+	        	<a href="https://m.kuaidi100.com/app/query/?com==<%=order.getExpress_mode() %>&nu=<%=order.getExpress_order_code() %>" >查看物流</a>
 	        	
 	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>

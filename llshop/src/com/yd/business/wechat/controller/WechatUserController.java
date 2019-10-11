@@ -574,11 +574,16 @@ public class WechatUserController extends BaseController {
 	public ModelAndView toUserInfoCenter(HttpServletRequest request,HttpServletResponse response){
 		try{
 			String openid = request.getParameter("openid");
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
 			String originalid = null;
-			if(StringUtil.isNull(openid)){
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
 				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
