@@ -7,6 +7,8 @@ var onShareTimelineSuccess;		//分享朋友圈成功
 var onShareTimelineFail;		//分享朋友圈失败
 var onShareAppMessageSuccess;	//分享朋友成功
 var onShareAppMessageFail;		//分享朋友失败
+var onUpdateTimelineShareDataSuccess; //新版分享到朋友圈
+var onUpdateAppMessageShareDataSuccess; //新版分享给朋友
 var servAppName = "";
 
 // 微信统一初始化
@@ -58,7 +60,7 @@ var weixinInit = function() {
 				timestamp : time, // 必填，生成签名的时间戳
 				nonceStr : str, // 必填，生成签名的随机串
 				signature : sign,// 必填，签名，见附录1
-				jsApiList : ['onMenuShareQQ', 'onMenuShareTimeline',
+				jsApiList : ['updateTimelineShareData','updateAppMessageShareData','onMenuShareQQ', 'onMenuShareTimeline',
 						'onMenuShareAppMessage', 'onMenuShareWeibo','openAddress',
 						'onMenuShareQZone', 'chooseImage','uploadImage','downloadImage','scanQRCode']
 					// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
@@ -118,7 +120,15 @@ var weixinInit = function() {
 		},
 		setOnShareAppMessageFail : function(fun) {
 			onShareAppMessageFail = fun;
+		},
+		setOnUpdateTimelineShareDataSuccess : function(fun) {
+			onUpdateTimelineShareDataSuccess = fun;
+		},
+		setOnUpdateAppMessageShareDataSuccess : function(fun) {
+			onUpdateAppMessageShareDataSuccess = fun;
 		}
+		
+		
 	};
 
 }();
@@ -135,6 +145,34 @@ wx.ready(function() {
 			var shareLink = weixinInit.getShareLink();
 			var shareImg = weixinInit.getShareImg();
 			// alert(shareTitle);
+			
+			//新版微信分享到朋友圈
+			wx.updateTimelineShareData({
+				title : shareTitle, // 分享标题
+				desc : shareDesc, // 分享描述
+				link : shareLink, // 分享链接
+				imgUrl : shareImg, // 分享图标
+				success : function() {
+					// 成功设置后的回调，不是用户成功分享后的回调
+//					alert("分享到朋友圈数据更新成功");
+//					onUpdateTimelineShareDataSuccess();
+				}
+			});
+			//新版微信分享到朋友圈
+			wx.updateAppMessageShareData({
+				title : shareTitle, // 分享标题
+				desc : shareDesc, // 分享描述
+				link : shareLink, // 分享链接
+				imgUrl : shareImg, // 分享图标
+				success : function() {
+					// 成功设置后的回调，不是用户成功分享后的回调
+//					alert("分享给朋友数据更新成功");
+//					onUpdateAppMessageShareDataSuccess();
+				}
+			});
+			
+			
+			
 			// QQ分享
 			wx.onMenuShareQQ({
 						title : shareTitle, // 分享标题

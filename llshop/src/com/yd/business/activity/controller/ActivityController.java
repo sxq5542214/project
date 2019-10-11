@@ -41,6 +41,7 @@ import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.ISupplierProductService;
+import com.yd.business.supplier.bean.SupplierEventBean;
 import com.yd.business.supplier.bean.SupplierEventCodeBean;
 import com.yd.business.supplier.service.ISupplierEventService;
 import com.yd.business.user.bean.UserQrCodeBean;
@@ -968,12 +969,13 @@ public class ActivityController extends BaseController {
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openId);
 			String code = request.getParameter("code");
 			Integer supplierEventId = 1; //也是activityconfigid ,需要保持一致
+			SupplierEventBean supplierEvent = supplierEventService.queryByid(supplierEventId);
 			
 			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
 			
 			model.put("user", user);
 			model.put("list", list);
-			model.put("supplierEventId", supplierEventId);
+			model.put("supplierEvent", supplierEvent);
 			
 			return new ModelAndView(PAGE_USER_ACTIVITY_FREECUTACTIVITY, model);
 

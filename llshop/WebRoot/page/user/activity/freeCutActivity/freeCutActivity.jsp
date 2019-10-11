@@ -1,3 +1,5 @@
+<%@page import="com.yd.basic.framework.context.BaseContext"%>
+<%@page import="com.yd.business.supplier.bean.SupplierEventBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierCouponConfigBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierEventCodeBean"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
@@ -7,8 +9,10 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 
 UserWechatBean user = (UserWechatBean)request.getAttribute("user");
+String serverUrl = BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url();
 List<SupplierEventCodeBean> list = (List<SupplierEventCodeBean>)request.getAttribute("list");
-Integer supplierEventId = (Integer)request.getAttribute("supplierEventId");
+SupplierEventBean supplierEvent = (SupplierEventBean)request.getAttribute("supplierEvent");
+Integer supplierEventId = supplierEvent.getId();
 SupplierCouponConfigBean[] coupon = new SupplierCouponConfigBean[]{new SupplierCouponConfigBean(),new SupplierCouponConfigBean(),new SupplierCouponConfigBean(),new SupplierCouponConfigBean()};
 coupon[0].setId(1);
 coupon[0].setCoupon_name("盐焗腰果125g");
@@ -90,8 +94,9 @@ rotate
 	href="page/user/activity/freeCutActivity/resource/chunk-6cddd8cf.f001de91.css">
 <link rel="stylesheet" type="text/css"
 	href="page/user/activity/freeCutActivity/resource/freeCutActivity.css">
-	<script
-		src="page/user/supplierEvent/common/jquery-1.10.2-min.js"></script>
+<script	src="page/user/supplierEvent/common/jquery-1.10.2-min.js"></script>
+<script type="text/javascript" src="<%=request.getScheme()  %>://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script type="text/javascript" src="js/wechat/weixinInit.js"></script>
 </head>
 <body>
 	<main data-v-49b8e837="" id="app">
@@ -359,7 +364,6 @@ rotate
 </body>
 <script type="text/javascript">
 var openid = '<%=user.getOpenid()%>';
-
 function getPrize(couponId,couponName){
 	if(confirm('确定领取:'+ couponName +"? ")){
 		var supplierEventId = <%=supplierEventId%> ;
@@ -379,14 +383,15 @@ function getPrize(couponId,couponName){
 				}else {
 					alert(val);
 				}
-				
-				
 			}
 		});
-		
-		
 	}
 }
+
+	weixinInit.setShareTitle("<%=supplierEvent.getTitle() %>");
+	weixinInit.setShareDesc("<%=supplierEvent.getDescrip() %>");
+	weixinInit.setShareLink("<%=serverUrl+"activity/user/toFreeCutHelpActivity.html?toOpenid="+user.getOpenid()+"&supplierEventId="+supplierEventId  %>");
+	weixinInit.setShareImg("<%=supplierEvent.getImg_url()%>");
 
 </script>
 </html>
