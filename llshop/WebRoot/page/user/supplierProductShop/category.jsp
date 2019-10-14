@@ -65,13 +65,13 @@
 												<div style="float: left;">¥{{ite.price}}</div>
 												<div style="float: left;text-decoration: line-through;color: black;font-size: 1rem; line-height: 25px;">{{ite.real_price}}</div>
 												
-												<div style="margin-right: 15px;position: absolute;right: 0;width: 80px;" :id="ite.id">
+												<div style="margin-right: 10px;position: absolute;right: 0;width: 74px;" :id="ite.id">
 												
 													<div style="float: left;" onclick="addToCart(this,-1)">
 														<img width="25px" height="25px;" alt="" src="images/user/supplierProductShop/cart_minus.png">
 													</div>
 													
-													<div style="float: left;margin-left: 10px; color: #333;font-size: 1rem;height: 25px;">
+													<div style="float: left;margin-left: 5px; color: #333;font-size: 1rem;height: 25px;">
 														<span style="line-height: 25px;" >0</span>
 													</div>
 													<div style="position: absolute;right: 0;" onclick="addToCart(this,1)" >
