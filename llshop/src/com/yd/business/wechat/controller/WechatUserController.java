@@ -167,28 +167,6 @@ public class WechatUserController extends BaseController {
 		}
 	}
 	
-	
-	/**
-	 * 用户签到功能
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping("/wechat/user/userSign.do")
-	public ModelAndView userSign(HttpServletRequest request,HttpServletResponse response){
-		
-		try{
-			System.out.println("userSign");
-			//具体业务代码
-			writeJson(response, "userSign");
-			
-		}catch (Exception e) {
-			log.error(e, e);
-		}
-		return null;
-	}
-	
-
 	@RequestMapping("/wechat/user/toInviteFriends.do")
 	public ModelAndView toInviteFriends(HttpServletRequest request,HttpServletResponse response){
 
@@ -230,12 +208,17 @@ public class WechatUserController extends BaseController {
 	public ModelAndView toInviteFriendsShare(HttpServletRequest request,HttpServletResponse response){
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
-			String originalid = null;
 			String openid = request.getParameter("openid");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
 				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -280,12 +263,17 @@ public class WechatUserController extends BaseController {
 	public ModelAndView toShakeActivity(HttpServletRequest request,HttpServletResponse response){
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
-			String originalid = null;
 			String openid = request.getParameter("openid");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
 				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -435,12 +423,17 @@ public class WechatUserController extends BaseController {
 		try{
 
 			Map<String,Object> model = new HashMap<String,Object>();
-			String originalid = null;
 			String openid = request.getParameter("openid");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
 				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -487,13 +480,18 @@ public class WechatUserController extends BaseController {
 	public ModelAndView queryPlatformProductByShop(HttpServletRequest request,HttpServletResponse response){
 		try{
 			String openid = request.getParameter("openid");
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
 			String originalid = null;
-			if(StringUtil.isNull(openid)){
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				originalid  = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
-			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
+//			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
 			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -610,12 +608,17 @@ public class WechatUserController extends BaseController {
 		
 		try {
 			String openid = request.getParameter("openid");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
-			
 			UserSignBean sign = userSignService.whetherSign(openid);
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 
@@ -637,10 +640,16 @@ public class WechatUserController extends BaseController {
 		try{
 			String openid = request.getParameter("openid");
 			String eventId = request.getParameter("eventId");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
-				String originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			
 			Map<String, Object> model = new HashMap<String, Object>();
@@ -682,12 +691,17 @@ public class WechatUserController extends BaseController {
 		
 		try{
 
-			String originalid = null;
 			String openid = request.getParameter("openid");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
 				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -869,12 +883,17 @@ public class WechatUserController extends BaseController {
 	public ModelAndView toScratchActivity(HttpServletRequest request,HttpServletResponse response){
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
-			String originalid = null;
 			String openid = request.getParameter("openid");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
 				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -988,13 +1007,17 @@ public class WechatUserController extends BaseController {
 	@RequestMapping("/wechat/user/showActivityList.do")
 	public ModelAndView showActivityList(HttpServletRequest request,HttpServletResponse response){
 		try {
-			String originalid = null;
 			String openid = request.getParameter("openid");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
 				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
-				 
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -1015,12 +1038,17 @@ public class WechatUserController extends BaseController {
 		
 		try{
 
-			String originalid = null;
 			String openid = request.getParameter("openid");
-			if(StringUtil.isNull(openid)){
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 				String code = request.getParameter("code");
 				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 				openid = wechatService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
@@ -1044,11 +1072,16 @@ public class WechatUserController extends BaseController {
 	public ModelAndView toDefaultPlatformSupplierProduct(HttpServletRequest request,HttpServletResponse response){
 
 		String openid = request.getParameter("openid");
+		String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
 		String originalid = null;
-		if(StringUtil.isNull(openid)){
+		//先查缓存
+		if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 			String code = request.getParameter("code");
 			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 			openid = wechatService.getOpenId(code,originalid);
+			request.getSession().setAttribute("cachedOpenid", openid);
+		}else if(StringUtil.isNotNull(cachedOpenid)){
+			openid = cachedOpenid;
 		}
 		//获取 参数解析后，访问用户的控制层
 		try {
@@ -1069,12 +1102,16 @@ public class WechatUserController extends BaseController {
 	public ModelAndView toCouponCenterPage(HttpServletRequest request,HttpServletResponse response){
 		String openid = request.getParameter("openid");
 		//微信公众号菜单直接打开界面，要获取CODE为OPENID
-		if(StringUtil.isNull(openid)){
-			String originalid = null;
+		String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+		String originalid = null;
+		//先查缓存
+		if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 			String code = request.getParameter("code");
 			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 			openid = wechatService.getOpenId(code,originalid);
-			 
+			request.getSession().setAttribute("cachedOpenid", openid);
+		}else if(StringUtil.isNotNull(cachedOpenid)){
+			openid = cachedOpenid;
 		}
 		return supplierCouponController.toUserCouponCenterPage(openid);
 	}
@@ -1089,11 +1126,15 @@ public class WechatUserController extends BaseController {
 		String sid = request.getParameter("sid");
 		String originalid = null;
 		//微信公众号菜单直接打开界面，要获取CODE为OPENID
-		if(StringUtil.isNull(openid)){
+		String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+		//先查缓存
+		if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 			String code = request.getParameter("code");
 			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 			openid = wechatService.getOpenId(code,originalid);
-			 
+			request.getSession().setAttribute("cachedOpenid", openid);
+		}else if(StringUtil.isNotNull(cachedOpenid)){
+			openid = cachedOpenid;
 		}
 		
 		return userSupplierProductController.toSupplierProductCategoryPage(sid, openid);
@@ -1106,14 +1147,18 @@ public class WechatUserController extends BaseController {
 	@RequestMapping("/wechat/user/toUserCouponPage.do")
 	public ModelAndView toUserCouponPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		String openid = request.getParameter("openid");
-		String originalid = null;
 		//微信公众号菜单直接打开界面，要获取CODE为OPENID
-		if(StringUtil.isNull(openid)){
+		String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+		String originalid = null;
+		//先查缓存
+		if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
 			String code = request.getParameter("code");
 			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
 			openid = wechatService.getOpenId(code,originalid);
+			request.getSession().setAttribute("cachedOpenid", openid);
+		}else if(StringUtil.isNotNull(cachedOpenid)){
+			openid = cachedOpenid;
 		}
-		WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
 		return supplierCouponController.toMycouponPage(openid);
 	}
 	

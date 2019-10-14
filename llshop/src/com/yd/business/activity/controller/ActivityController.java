@@ -967,9 +967,25 @@ public class ActivityController extends BaseController {
 	public ModelAndView toFreeCutActivity(HttpServletRequest request,HttpServletResponse response){
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
-			String openId = request.getParameter("openid");
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openId);
-			String code = request.getParameter("code");
+			String openid = request.getParameter("openid");
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
+				String code = request.getParameter("code");
+				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+				openid = wechatUserService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
+			}
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user == null){
+				//跳转至关注公众号界面
+				writeJson(response, "<script>alert(\"请先关注公众号!\");</script>");
+				return null;
+			}
+			
 			Integer supplierEventId = 1; //也是activityconfigid ,需要保持一致
 			SupplierEventBean supplierEvent = supplierEventService.queryByid(supplierEventId);
 			

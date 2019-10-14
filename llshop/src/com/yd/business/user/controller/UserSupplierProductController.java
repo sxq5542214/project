@@ -131,11 +131,20 @@ public class UserSupplierProductController extends BaseController {
 	
 	
 	@RequestMapping("**/user/supplier/queryPlatformSupplierProduct.do")
-	public ModelAndView queryPlatformSupplierProduct(String spid,String openid){
+	public ModelAndView queryPlatformSupplierProduct(HttpServletRequest request,HttpServletResponse response){
 		try{
+			String spid = request.getParameter("spid");
+			String openid = request.getParameter("openid");
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user == null){
+				//跳转至关注公众号界面
+				writeJson(response, "<script>alert(\"请先关注公众号!\");</script>");
+				return null;
+			}
+			
 			List<SupplierProductBean> list= supplierProductService.queryPlatformSupplierProduct();
 			List<AdvertisingBean> advertList = advertisingService.queryAdvertisingInfo(AdvertisingBean.CODE_USERINDEXPAGE);
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			
 			Map<String, Object> model = new HashMap<String, Object>();
 			model = new HashMap<String, Object>();
 			model.put("user", user);

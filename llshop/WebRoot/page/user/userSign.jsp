@@ -32,8 +32,9 @@ Object sign = request.getAttribute("sign");
 	<script src="js/photoswipe-ui-default.min.js"></script>
 	<script src="page/comment/js/initPhotoSwipeFromDOM.js"></script>
  <script type="text/javascript" src="js/wechat-upload.js"> </script>
- <script type="text/javascript" src="page/comment/js/comment.js"> </script>
  
+<!--  <script type="text/javascript" src="page/comment/js/comment.js"> </script>
+ --> 
 	    <style type="text/css">
 	    a:link {
  text-decoration: none;
@@ -170,7 +171,7 @@ a:active {
 						<span style="color: white;width: 100%;padding: 10px;" onclick="alert('即将开放，敬请期待');"><strong>今日排行</strong></span>
 					</div> -->
 					<div style="width: 100%;height:30px; margin: 10px 5px 10px 5px;border-radius: 5%;background-color: #d92b44;align-items: center;display: -webkit-flex;">
-						<a href="activity/user/getSignActivityList.do?openid=<%=openid %>"><span style="color: white;width: 100%;padding: 10px;"><strong>积分兑换</strong></span></a>
+						<a href="wechat/user/toDefaultPlatformSupplierProduct.do?openid=<%=openid %>"><span style="color: white;width: 100%;padding: 10px;"><strong>积分使用</strong></span></a>
 					</div>
 				</div>
 			</div>
@@ -179,13 +180,13 @@ a:active {
 		<div style="height: 40px;width: 90%; align-items: center;display: -webkit-flex;text-align: center;margin: 5px auto;">
 			
 			
-				<div style="width: 40%;height:90%; margin: 0 auto;border-radius: 5%;background-color: #d92b44;align-items: center;display: -webkit-flex;">
+				<div style="width: 80%;height:90%; margin: 0 auto;border-radius: 5%;background-color: #d92b44;align-items: center;display: -webkit-flex;">
 				<span id="todaysign" class="todaysignbtn" onclick="showScratchDiv();"><strong>今日签到</strong></span>
 				</div>
 			
-			<div style="width: 40%;height:90%; margin: 0 auto;border-radius: 5%;background-color: #d92b44;align-items: center;display: -webkit-flex;">
+			<!-- <div style="width: 40%;height:90%; margin: 0 auto;border-radius: 5%;background-color: #d92b44;align-items: center;display: -webkit-flex;">
 				<span style="color: white;width: 100%;padding: 10px;" onclick="alert('即将开放，敬请期待');"><strong>补签</strong></span>
-			</div>
+			</div> -->
 		</div>
 		
 		<div class="ggl" id="top" style="display: none;">
@@ -391,35 +392,6 @@ a:active {
 				}
 			});
 			
-    var share_time_ms = weixinInit.getShare_time_ms();
-	function shareTimeFirendSuccess(){
-	  	$.ajax({
-			type : "POST",
-			url : "user/handleUserShare.do",
-			data : {"openid": '<%=user.getOpenid() %>',"share_type":<%=UserSenceLog.SHARE_TYPE_FIREND_LINE %> 
-			, share_from:"<%=UserSenceLog.SHARE_FROM_USER_SIGN %>",share_time_ms:share_time_ms },
-			success : function(data) {
-			}
-		});
-  	}
-  	function shareOneFirendSuccess(){
-	  	$.ajax({
-			type : "POST",
-			url : "user/handleUserShare.do",
-			data : {"openid": '<%=user.getOpenid() %>',"share_type":<%=UserSenceLog.SHARE_TYPE_FIREND_ONE %> 
-			, share_from:"<%=UserSenceLog.SHARE_FROM_USER_SIGN %>",share_time_ms:share_time_ms },
-			success : function(data) {
-			}
-		});
-  	}
-    
-	weixinInit.setShareLink('<%=BaseContext.getDefault_share_url()%>?fromOpenid=<%=user.getOpenid() %>&share_time_ms='+share_time_ms);
-	weixinInit.setShareTitle('<%=BaseContext.getDefault_share_title()%>');
-	weixinInit.setShareImg('<%= user == null? basePath+"images/icon/4g.png":user.getHead_img() %>');
-	weixinInit.setShareDesc('<%=BaseContext.getDefault_share_title()%>');
-	
-  	weixinInit.setOnShareAppMessageSuccess(shareOneFirendSuccess);
-	weixinInit.setOnShareTimelineSuccess(shareTimeFirendSuccess);
 	
 	function showScratchDiv(){
 		todaySign();
@@ -464,7 +436,7 @@ $(function (){
    <%} %>
  });
  
-//修改原型
+<%-- //修改原型
 CommentCallBack.prototype.toPage = function(data,msg){
 	//评论需要关注，参数为“comment_need_user_subscribe”
     if(data == "comment_need_user_subscribe"){
@@ -486,6 +458,8 @@ p.comment_openid = "<%=user.getOpenid() %>";
 p.comment_code = "usersign";
 //初始化页面
 p.pageInit();
+ --%>
 </script>
+
 </body>
 </html>
