@@ -125,7 +125,7 @@ left:30px " href="javascript:;()" id="xiugainicheng" onclick="xiugai();">修改�
 	
 	
 	<span style="font-size: 14px; color: red;"><strong>如何获取积分？</strong></span><br>
-	<span style="font-size: 14px;">1、每次购买商品后返利 5% 积分</span></span><br>
+	<span style="font-size: 14px;">1、每次购买商品后会有不同的积分返利，下次购买就有优惠啦！</span></span><br>
 	<span style="font-size: 14px;">2、参加签到等活动获得积分</span></span><br>
 	<p><br></p>
 	
