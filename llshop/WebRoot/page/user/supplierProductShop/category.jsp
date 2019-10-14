@@ -224,7 +224,7 @@
         { class : '<%=product.getProduct_type_name()%>',list : [ {id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>', real_price:'<%=product.getProduct_real_price()/100d%>', imgUrl:'<%=product.getHead_img()%>', productUrl:'product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getId()%>' } 
         
         <%} else {%>
-        		,{ id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>' , real_price:'<%=product.getProduct_real_price()/100d %>', img:'<%=product.getHead_img()%>', productUrl:'product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getId()%>' }
+        		,{ id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>' , real_price:'<%=product.getProduct_real_price()/100d %>', imgUrl:'<%=product.getHead_img()%>', productUrl:'product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getId()%>' }
         <%}
 				if (productList.size() == 1 || i == productList.size() - 1) {%>
        	  ] }
