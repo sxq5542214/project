@@ -63,12 +63,12 @@
 			<%
 				for (UserCommissionPointsBean opl : list) {
 			%>
-			<div class="fb" style="height: auto;width: 98%;">
+			<div class="fb" style="height: auto;width: 98%;margin-left: 2px;">
 				<div class="fb-lt" style="width: 100%;">
 					<!-- <img src="images/scenics/scenic_3.png"> -->
 
 					<p class="price">
-						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;">说明：<big  style="color: black;"><%=opl.getDetailed()%></big></span> 
+						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;">收支说明：<big  style="color: black;"><%=opl.getDetailed()%></big></span> 
 						<span class="discount" style="font-size: 0.4rem;margin: 0;">获取时间：<big style="color: black;"><%=opl.getCreate_date()%></big></span>
 						<span class="discount" style="font-size: 0.4rem;margin: 0;float: right;">积分：<big style="color: black;"><%=opl.getPay().substring(0, 1)+ Integer.parseInt(opl.getPay().substring(1))/100d %></big>元&nbsp;&nbsp;&nbsp;&nbsp;</span>
 					</p>
