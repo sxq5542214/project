@@ -49,7 +49,7 @@ public class SupplierProductServiceImpl extends BaseService implements
 	public List<SupplierProductBean> listSupplierProduct(
 			SupplierProductBean bean) {
 		// TODO Auto-generated method stub
-		return supplierProductDao.listSupplierProduct(bean);
+		return supplierProductDao.querySupplierProduct(bean);
 	}
 	
 	@Override
@@ -122,7 +122,8 @@ public class SupplierProductServiceImpl extends BaseService implements
 		SupplierProductBean condition = new SupplierProductBean();
 		condition.setCustomer_id(CustomerBean.ID_PLATFROM);
 		condition.setStatus(SupplierProductBean.STATUS_UP);
-		List<CustomerSupplierProductBean> listCsp = new ArrayList<CustomerSupplierProductBean>();
+		condition.setNow_time(DateUtil.getNowDateStr());
+//		List<CustomerSupplierProductBean> listCsp = new ArrayList<CustomerSupplierProductBean>();
 		
 		//查询每个商户下的商品
 		List<SupplierProductBean> csp = supplierProductDao.querySupplierProduct(condition);

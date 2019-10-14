@@ -9,7 +9,6 @@ public interface ISupplierProductDao {
 
 	public int insertSupplierProduct(SupplierProductBean bean);
 	public void updateSupplierProduct(SupplierProductBean bean);
-	public List<SupplierProductBean> listSupplierProduct(SupplierProductBean bean);
 	public SupplierProductBean findSupplierProductById(Integer id);
 	List<SupplierProductBean> querySupplierProduct(SupplierProductBean sp);
 	List<SupplierProductBean> queryPlatformProduct(SupplierProductBean sp);

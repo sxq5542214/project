@@ -152,7 +152,7 @@ public class UserSupplierProductController extends BaseController {
 			model.put("advertList", advertList);
 
 			
-			return new ModelAndView(PAGE_USERSUPPLIERPRODUCT, model);			//返回第二次购买页面
+			return new ModelAndView(PAGE_USERSUPPLIERPRODUCT, model);			//返回购买页面
 		}catch (Exception e) {
 			log.error(e,e);
 		}
@@ -173,10 +173,7 @@ public class UserSupplierProductController extends BaseController {
 			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
 			List<ProductTypeBean> productTypeList = productTypeService.listProductTypeByCustomerId(supplier.getCustomer_id());
 			
-			SupplierProductBean bean = new SupplierProductBean();
-			bean.setSupplier_id(supplier_id);
-			bean.setNow_time(DateUtil.getNowDateStr());
-			List<SupplierProductBean> productList = supplierProductService.listSupplierProduct(bean );
+			List<SupplierProductBean> productList = supplierProductService.queryPlatformSupplierProduct();
 			
 			
 //			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);

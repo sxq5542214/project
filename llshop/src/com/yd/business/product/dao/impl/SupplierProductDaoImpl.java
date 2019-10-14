@@ -28,13 +28,6 @@ public class SupplierProductDaoImpl extends BaseDao implements
 	}
 
 	@Override
-	public List<SupplierProductBean> listSupplierProduct(
-			SupplierProductBean bean) {
-		// TODO Auto-generated method stub
-		return sqlSessionTemplate.selectList(NAMESPACE+"querySupplierProduct", bean);
-	}
-
-	@Override
 	public SupplierProductBean findSupplierProductById(Integer id) {
 		// TODO Auto-generated method stub
 		return sqlSessionTemplate.selectOne(NAMESPACE+"querySupplierProductById", id);
