@@ -19,7 +19,7 @@
     <meta charset="utf-8">
     <base href="<%=basePath%>">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>坚果特卖汇-专注于提供优质坚果</title><meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>坚果小店-专注于提供优质坚果</title><meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport"
 	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0,minimal-ui,viewport-fit=cover">
 <meta name="description"
@@ -46,10 +46,10 @@
                 <span class="shaomiao"><i class="iconfont icon-saoma"></i></span>
             </div>
         </div>
-        <a class="btn" href="">
+<!--         <a class="btn" href="">
             <i class="iconfont icon-tixing"></i>
-        </a>
-        <a class="btn" href="shopcar.html">
+        </a> -->
+        <a class="btn" href="user/cart/toMycartPage.do?openid=<%=openid%>">
             <i class="iconfont icon-cart"></i>
         </a>
     </header>
@@ -104,46 +104,10 @@
             <div class="swiper-pagination"></div>
         </div>
 
-<!--         <div class="home-nav ui-box">
-            <div class="ui-flex flex-justify-sb">
-                <div><a href=""><img src="images/user/supplierProductShop/homenav1.png" alt="" /></a></div>
-                <div><a href=""><img src="images/user/supplierProductShop/homenav2.png" alt="" /></a></div>
-                <div><a href=""><img src="images/user/supplierProductShop/homenav3.png" alt="" /></a></div>
-                <div><a href=""><img src="images/user/supplierProductShop/homenav4.png" alt="" /></a></div>
-            </div>
-        </div> -->
-
-<!--         <div class="home-qnav ui-box">
-            <div class="ui-flex flex-justify-sb">
-                <div><a href="http://www.591zq.com"><img src="images/user/supplierProductShop/qnav1.png" class="ico" /><span class="name">我的店铺</span></a></div>
-                <div><a href="http://www.591zq.com"><img src="images/user/supplierProductShop/qnav2.png" class="ico" /><span class="name">招商加盟</span></a></div>
-                <div><a href="http://www.591zq.com"><img src="images/user/supplierProductShop/qnav3.png" class="ico" /><span class="name">我的喜欢</span></a></div>
-                <div><a href="http://www.591zq.com"><img src="images/user/supplierProductShop/qnav4.png" class="ico" /><span class="name">猜你喜欢</span></a></div>
-            </div>
-        </div> -->
-
-  <!--       <div class="home-newgoods ui-box">
-            <img class="home-imgtit" src="images/user/supplierProductShop/hometit1.jpg" alt="" />
-            <div class="list-type1 plist-puzzle">
-                <a class="b" href=""><img src="images/user/supplierProductShop/t1.jpg" alt="" /></a>
-                <div class="s ui-flex-vt flex-justify-sb">
-                    <a class="box" href=""><img src="images/user/supplierProductShop/t2.jpg" alt="" /></a>
-                    <a class="box" href=""><img src="images/user/supplierProductShop/t2.jpg" alt="" /></a>
-                    <a class="box" href=""><img src="images/user/supplierProductShop/t2.jpg" alt="" /></a>
-                </div>
-            </div>
-            <img class="home-imgtit" src="images/user/supplierProductShop/hometit2.jpg" alt="" />
-            <div class="list-type2 ui-flex flex-justify-sb">
-                <a class="box" href=""><img class="figure" src="images/user/supplierProductShop/t3.jpg" alt="" /><span class="tit">情侣穿搭</span></a>
-                <a class="box" href=""><img class="figure" src="images/user/supplierProductShop/t3.jpg" alt="" /><span class="tit">约会美搭</span></a>
-                <a class="box" href=""><img class="figure" src="images/user/supplierProductShop/t3.jpg" alt="" /><span class="tit">全部新款</span></a>
-            </div>
-        </div>
- -->
         <div class="home-fashion ui-box ui-border-t">
             <img class="home-imgtit" src="images/user/supplierProductShop/hometit2.jpg" alt="" />
             
-           <a href=""><img class="db margin-b-s" src="images/user/supplierProductShop/t4.jpg" width="100%" alt="" /></a>
+           <a href="javascript:;"><img class="db margin-b-s" src="images/user/supplierProductShop/t4.jpg" width="100%" alt="" /></a>
             
             <div class="fastion-plist mui-row">
             <% for(int i = 0 ; i <list.size();i++){

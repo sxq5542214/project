@@ -15,6 +15,7 @@
 		<set>
 			<if test="store_num != null and store_num!=''">store_num=#{store_num},</if>
 			<if test="product_price!=null and product_price!=''">product_price=#{product_price},</if>
+			<if test="product_name !=null and product_name !=''">product_name=#{product_name},</if>
 			<if test="product_real_price!=null and product_real_price!=''">product_real_price=#{product_real_price},</if>
 			<if test="product_type!=null and product_type!=''">product_type=#{product_type},</if>
 			<if test="product_type_name!=null and product_type_name!=''">product_type_name=#{product_type_name},</if>

@@ -31,7 +31,7 @@ public class TokenFilter extends BaseFilter {
 			Object user = req.getSession().getAttribute(CustomerServiceImpl._CURRENT_USER);
 			if(user == null){
 				String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+req.getContextPath()+"/";
-				resp.sendRedirect(basePath+"login.html");
+				resp.sendRedirect(basePath+"login.htm");
 			}
 		}else if( req.getRequestURI().indexOf("/app/") >0 ){
 			Object user = req.getSession().getAttribute(CustomerServiceImpl._CURRENT_USER);

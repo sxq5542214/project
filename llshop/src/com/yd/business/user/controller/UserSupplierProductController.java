@@ -175,6 +175,7 @@ public class UserSupplierProductController extends BaseController {
 			
 			SupplierProductBean bean = new SupplierProductBean();
 			bean.setSupplier_id(supplier_id);
+			bean.setNow_time(DateUtil.getNowDateStr());
 			List<SupplierProductBean> productList = supplierProductService.listSupplierProduct(bean );
 			
 			

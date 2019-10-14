@@ -230,7 +230,7 @@
        	  ] }
         
          <%}
-				if (i != productTypeList.size() - 1) {%> ,
+				if (i != productTypeList.size() - 1  ) {%> 
         <%}
 				typeName = product.getProduct_type_name();
 			}%>
