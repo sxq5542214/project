@@ -22,7 +22,7 @@
 	
 	<select id="queryProductBrandByCustomerid" parameterType="productType" resultType="productType">
 	    select distinct t.*,tt.name typeName from ll_supplier l,ll_supplier_product p,ll_product_type t,ll_product_type tt
-where l.customer_id = #{value} and l.id = p.supplier_id and t.id = p.product_brand and tt.id = p.product_type
+		where l.customer_id = #{value} and l.id = p.supplier_id and t.id = p.product_brand and tt.id = p.product_type
 	order by t.id
 	</select>
 </mapper>
