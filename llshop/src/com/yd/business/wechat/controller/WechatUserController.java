@@ -586,16 +586,18 @@ public class WechatUserController extends BaseController {
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			user = checkUserExists(user,openid,originalid);
 			
-			UserInfoCenterPageBean userInfoPage = userWechatService.queryActivityFriendLevelCount(user.getId());
-			userInfoPage.setUserWechat(user);
-			boolean isShop = configAttributeService.getBooleanValueByCode(AttributeConstant.CODE_SYSTEM_IS_SHOP_ORDER);
+			
+			if(user != null ){
+				UserInfoCenterPageBean userInfoPage = userWechatService.queryActivityFriendLevelCount(user.getId());
+				userInfoPage.setUserWechat(user);
+				boolean isShop = configAttributeService.getBooleanValueByCode(AttributeConstant.CODE_SYSTEM_IS_SHOP_ORDER);
 
-			if(user != null )
-			{
 				Map<String, Object> model = new HashMap<String, Object>();
 				model.put("userInfoPage", userInfoPage);
 				model.put("isShop", isShop);
 				return new ModelAndView(UserController.PAGE_USERINFOCENTER, model);
+			}else{
+				writeJson(response, "请先关注公众号！如已关注请重新进入");
 			}
 		}catch (Exception e) {
 			log.error(e,e);

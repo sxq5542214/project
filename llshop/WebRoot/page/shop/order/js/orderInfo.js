@@ -1,4 +1,7 @@
 function pay(){
+
+	$("#payButton").html('加载中...');
+	$("#payButton").on('click', '' );
 	
 	var order_code = $("#order_code").val();
 	var cost_money = $("#cost_money").html();
@@ -11,7 +14,6 @@ function pay(){
 		alert("请先设置收货地址信息！");
 		return;
 	}
-	$("#payButton").hide();
 	$.ajax({
 		url : "wechat/createUnifiedOrderByShop.do",
 		data : { cost_money : (cost_money - cost_balance).toFixed(2),
@@ -25,7 +27,8 @@ function pay(){
 		success : function(result) {
 			if(result == 'false'){
 				alert('调用支付失败');
-				$("#payButton").show();
+				$("#payButton").html('立即支付');
+				$("#payButton").on('click','pay()');
 			}else{
 				result = eval('('+result+')');
 				
@@ -54,6 +57,7 @@ function pay(){
 									},
 							success : function(d) {
 								$("#payButton").show();
+								$("#payButton").on('click','pay()');
 							}
 			           	});
 			           }
