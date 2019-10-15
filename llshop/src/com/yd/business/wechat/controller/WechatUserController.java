@@ -597,7 +597,7 @@ public class WechatUserController extends BaseController {
 				model.put("isShop", isShop);
 				return new ModelAndView(UserController.PAGE_USERINFOCENTER, model);
 			}else{
-				writeJson(response, "请先关注公众号！如已关注请重新进入");
+				writeJson(response, "<script>alert('请先关注公众号！如已关注请重新进入')</script>");
 			}
 		}catch (Exception e) {
 			log.error(e,e);
