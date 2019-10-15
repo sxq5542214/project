@@ -124,6 +124,8 @@ public class SupplierProductServiceImpl extends BaseService implements
 		condition.setStatus(SupplierProductBean.STATUS_UP);
 		condition.setNow_time(DateUtil.getNowDateStr());
 //		List<CustomerSupplierProductBean> listCsp = new ArrayList<CustomerSupplierProductBean>();
+		condition.setHome_flag(SupplierProductBean.HOME_FLAG_YES);
+		condition.setOrderby(" order by seq  asc ");
 		
 		//查询每个商户下的商品
 		List<SupplierProductBean> csp = supplierProductDao.querySupplierProduct(condition);

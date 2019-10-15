@@ -18,6 +18,10 @@ public class SupplierProductBean extends ProductBean {
 
 	public static int NO_MATCHING_PRODUCT = 0;
 	
+	public static int HOME_FLAG_YES = 1;
+	public static int HOME_FLAG_NO = 0;
+	
+	
 	public static Integer ZERO = 0;
 	
 	private Integer product_id;
@@ -43,6 +47,10 @@ public class SupplierProductBean extends ProductBean {
 	 * 打包数，该产品一共有多少子产品，一般商品都是1个，有特殊商品的（连续购买3个月的，打包数是3）
 	 */
 	private Integer package_num;
+	
+	private Integer seq;
+	private Integer hot_flag;
+	private Integer home_flag;
 	
 	public String getSupplier_name() {
 		return supplier_name;
@@ -146,5 +154,22 @@ public class SupplierProductBean extends ProductBean {
 	public void setCoupon_discount_product(Integer coupon_discount_product) {
 		this.coupon_discount_product = coupon_discount_product;
 	}
-	
+	public Integer getSeq() {
+		return seq;
+	}
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
+	public Integer getHot_flag() {
+		return hot_flag;
+	}
+	public void setHot_flag(Integer hot_flag) {
+		this.hot_flag = hot_flag;
+	}
+	public Integer getHome_flag() {
+		return home_flag;
+	}
+	public void setHome_flag(Integer home_flag) {
+		this.home_flag = home_flag;
+	}
 }

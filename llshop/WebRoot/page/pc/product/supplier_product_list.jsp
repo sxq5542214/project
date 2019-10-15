@@ -66,6 +66,12 @@
                               积分抵扣（分）
                             </th>
                             <th >
+                              排序
+                            </th>
+                            <th >
+                              首页标识
+                            </th>
+                            <th >
                               商品品牌
                             </th>
                             <th >
@@ -104,6 +110,12 @@
                             </td>
                             <td>
                               <%=NumberUtil.toString(bean.getProduct_offset_points()) %>
+                            </td>
+                            <td>
+                              <%=NumberUtil.toString(bean.getSeq()) %>
+                            </td>
+                            <td>
+                              <%=NumberUtil.toString(bean.getHome_flag()) %>
                             </td>
                             <td>
                               <%=NumberUtil.toString(bean.getProduct_brand_name()) %>

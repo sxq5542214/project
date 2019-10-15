@@ -619,8 +619,12 @@ public class WechatUserController extends BaseController {
 			}else if(StringUtil.isNotNull(cachedOpenid)){
 				openid = cachedOpenid;
 			}
-			UserSignBean sign = userSignService.whetherSign(openid);
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user == null){
+				writeJson(response, " <script>alert('请先关注公众号！如果已关注，请重新打开界面 '); </script> ");
+				return null;
+			}
+			UserSignBean sign = userSignService.whetherSign(openid);
 
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("openid", openid);

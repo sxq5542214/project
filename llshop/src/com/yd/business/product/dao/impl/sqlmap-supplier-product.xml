@@ -4,11 +4,14 @@
 <mapper namespace="supplierProduct">
 	<select id="querySupplierProductById" resultType="supplierProduct" parameterType="supplierProduct">
 		select sp.*,p.product_limit_points,p.give_points,p.head_img ,p.product_title, p.product_desc from ll_supplier_product sp, ll_product p where sp.product_id = p.id 
-		and sp.id = #{value}
+		and sp.id = #{value} 
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	<insert id="insertSupplierProduct" parameterType="supplierProduct" useGeneratedKeys="true" keyProperty="id">
-		insert into ll_supplier_product(product_id,supplier_id,customer_id,store_num,product_name,product_price,product_real_price,product_type,product_type_name,product_brand,product_brand_name,discount,create_time,eff_time,dff_time,modify_time,modify_admin,min_luckymoney,max_luckymoney,product_offset_points,package_num)
-		values(#{product_id},#{supplier_id},#{customer_id},#{store_num},#{product_name},#{product_price},#{product_real_price},#{product_type},#{product_type_name},#{product_brand},#{product_brand_name},#{discount},#{create_time},#{eff_time},#{dff_time},#{modify_time},#{modify_admin},#{min_luckymoney},#{max_luckymoney},#{product_offset_points},#{package_num})
+		insert into ll_supplier_product(product_id,supplier_id,customer_id,store_num,product_name,product_price,product_real_price,product_type,product_type_name,product_brand,
+		product_brand_name,discount,create_time,eff_time,dff_time,modify_time,modify_admin,min_luckymoney,max_luckymoney,product_offset_points,package_num,seq,hot_flag,home_flag)
+		values(#{product_id},#{supplier_id},#{customer_id},#{store_num},#{product_name},#{product_price},#{product_real_price},#{product_type},#{product_type_name},#{product_brand},
+		#{product_brand_name},#{discount},#{create_time},#{eff_time},#{dff_time},#{modify_time},#{modify_admin},#{min_luckymoney},#{max_luckymoney},#{product_offset_points},#{package_num},#{seq},#{hot_flag},#{home_flag})
 	</insert>
 	<update id="updateSupplierProduct" parameterType="supplierProduct">
 		update ll_supplier_product 
@@ -30,6 +33,9 @@
 			<if test="max_luckymoney != null ">max_luckymoney = #{max_luckymoney},</if>
 			<if test="product_offset_points != null ">product_offset_points = #{product_offset_points},</if>
 			<if test="package_num != null ">package_num = #{package_num},</if>
+			<if test="seq != null ">seq = #{seq},</if>
+			<if test="hot_flag != null ">hot_flag = #{hot_flag},</if>
+			<if test="home_flag != null ">home_flag = #{home_flag},</if>
 		</set>
 		where id = #{id}
 	</update>
@@ -58,9 +64,11 @@
 			<if test="store_num != null"> and sp.store_num >= ${store_num} </if>
 			<if test="product_id != null"> and sp.product_id = #{product_id}</if>
 			<if test="id != null"> and sp.id = #{id}</if>
+			<if test="home_flag != null"> and sp.home_flag = #{home_flag}</if>
+			<if test="hot_flag != null"> and sp.hot_flag = #{hot_flag}</if>
 			<if test="now_time != null"> and #{now_time} >= sp.eff_time and sp.dff_time >= #{now_time}</if>
-			order by sp.product_type
 		</where>
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 	<select id="queryPlatfromProduct"  parameterType="supplierProduct" resultType="supplierProduct">
@@ -74,16 +82,20 @@
 			<if test="store_num != null"> and sp.store_num >= #{store_num} </if>
 			<if test="product_id != null"> and sp.product_id = #{product_id}</if>
 			<if test="id != null"> and sp.id = #{id}</if>
-			order by sp.product_price
+			<if test="home_flag != null"> and sp.home_flag = #{home_flag}</if>
+			<if test="hot_flag != null"> and sp.hot_flag = #{hot_flag}</if>
 		</where>
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 	<select id="findSupplierProductBySpid" parameterType="supplierProduct" resultType="supplierProduct">
 		select sp.*,p.product_limit_points ,p.give_points from ll_supplier_product sp, ll_product p where sp.product_id = p.id 
 		and sp.id = #{value}
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	<select id="querySupplierProductBySupplierParentCustomerId" parameterType="map" resultType="supplierProduct">
 		select p.* from ll_supplier l,ll_supplier_product p where l.parent_customer_id = #{parentcustomerid} and l.id = p.supplier_id and l.customer_id!=#{customerid}
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 	<select id="queryAttachProduct" parameterType="supplierProductAttach" resultType="supplierProductAttach">
@@ -94,6 +106,7 @@
 			<if test="attach_supplier_product_id != null"> and attach_supplier_product_id = #{attach_supplier_product_id} </if>
 			<if test="customer_id != null"> and customer_id = #{customer_id} </if>
 		</where>
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 	<select id="querySupplierProductByIdList" resultType="supplierProduct">
@@ -104,11 +117,13 @@
             #{id}
         </foreach>
 		
+			<if test="orderby != null"> ${orderby} </if>
 	</select>	
 	<select id="querySupplierProductByIdsString" parameterType="string" resultType="supplierProduct">
 		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title  from ll_supplier_product sp, ll_product p
 		where p.id = sp.product_id and sp.id in (${value})
 		
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 </mapper>

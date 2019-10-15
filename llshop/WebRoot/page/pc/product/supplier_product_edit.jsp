@@ -130,6 +130,27 @@
                             </div>
                           </div>
                           <div class="form-group">
+                            <label class="col-sm-3 control-label">排序数值（越小越优先）</label>
+                            <div class="col-sm-9">
+                              <input type="number" class="form-control" id="seq" name="seq" 
+												placeholder="排序数值（999以内）"  value="<%=StringUtil.convertNull(bean.getSeq()) %>" >
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-3 control-label">热门标识</label>
+                            <div class="col-sm-9">
+                              <input type="number" class="form-control" id="hot_flag" name="hot_flag" 
+												placeholder="请输入热门标识（1热门 0非热门）"  value="<%=StringUtil.convertNull(bean.getHot_flag()) %>" >
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-3 control-label">首页展示标识</label>
+                            <div class="col-sm-9">
+                              <input type="number" class="form-control" id="home_flag" name="home_flag" 
+												placeholder="请输入首页展示标识( 1展示 0 不展示)"  value="<%=StringUtil.convertNull(bean.getHome_flag()) %>" >
+                            </div>
+                          </div>
+                          <div class="form-group">
                             <label class="col-sm-3 control-label">折扣(百分比，售价之上再折扣)</label>
                             <div class="col-sm-9">
                               <input type="number" class="form-control" id="discount" name="discount" 

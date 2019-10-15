@@ -173,7 +173,14 @@ public class UserSupplierProductController extends BaseController {
 			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
 			List<ProductTypeBean> productTypeList = productTypeService.listProductTypeByCustomerId(supplier.getCustomer_id());
 			
-			List<SupplierProductBean> productList = supplierProductService.queryPlatformSupplierProduct();
+			
+			SupplierProductBean condition = new SupplierProductBean();
+			condition.setCustomer_id(CustomerBean.ID_PLATFROM);
+			condition.setStatus(SupplierProductBean.STATUS_UP);
+			condition.setNow_time(DateUtil.getNowDateStr());
+			condition.setHome_flag(SupplierProductBean.HOME_FLAG_YES);
+			condition.setOrderby(" order by product_type,seq  asc ");
+			List<SupplierProductBean> productList = supplierProductService.listSupplierProduct(condition );
 			
 			
 //			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
