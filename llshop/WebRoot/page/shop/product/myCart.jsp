@@ -211,7 +211,9 @@
 		var openid = getCookie('openid');
 		function dropCart(spid){
 			if(confirm('确认要删除此商品？')){
+				$("#spTotalPrice"+spid).attr("check","false");
 				$("#"+spid).hide();
+				calcTotalPrice();
 				deleteProductToCart(spid);
 			}
 		};

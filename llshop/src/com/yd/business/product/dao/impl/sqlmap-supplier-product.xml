@@ -2,10 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="supplierProduct">
-	<select id="querySupplierProductById" resultType="supplierProduct" parameterType="supplierProduct">
+	<select id="querySupplierProductById" resultType="supplierProduct" parameterType="Integer">
 		select sp.*,p.product_limit_points,p.give_points,p.head_img ,p.product_title, p.product_desc from ll_supplier_product sp, ll_product p where sp.product_id = p.id 
 		and sp.id = #{value} 
-			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	<insert id="insertSupplierProduct" parameterType="supplierProduct" useGeneratedKeys="true" keyProperty="id">
 		insert into ll_supplier_product(product_id,supplier_id,customer_id,store_num,product_name,product_price,product_real_price,product_type,product_type_name,product_brand,
@@ -91,7 +90,6 @@
 	<select id="findSupplierProductBySpid" parameterType="supplierProduct" resultType="supplierProduct">
 		select sp.*,p.product_limit_points ,p.give_points from ll_supplier_product sp, ll_product p where sp.product_id = p.id 
 		and sp.id = #{value}
-			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	<select id="querySupplierProductBySupplierParentCustomerId" parameterType="map" resultType="supplierProduct">
 		select p.* from ll_supplier l,ll_supplier_product p where l.parent_customer_id = #{parentcustomerid} and l.id = p.supplier_id and l.customer_id!=#{customerid}
