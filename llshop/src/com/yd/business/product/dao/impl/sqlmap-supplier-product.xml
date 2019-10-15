@@ -95,7 +95,6 @@
 	</select>
 	<select id="querySupplierProductBySupplierParentCustomerId" parameterType="map" resultType="supplierProduct">
 		select p.* from ll_supplier l,ll_supplier_product p where l.parent_customer_id = #{parentcustomerid} and l.id = p.supplier_id and l.customer_id!=#{customerid}
-			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 	<select id="queryAttachProduct" parameterType="supplierProductAttach" resultType="supplierProductAttach">
@@ -117,13 +116,11 @@
             #{id}
         </foreach>
 		
-			<if test="orderby != null"> ${orderby} </if>
 	</select>	
 	<select id="querySupplierProductByIdsString" parameterType="string" resultType="supplierProduct">
 		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title  from ll_supplier_product sp, ll_product p
 		where p.id = sp.product_id and sp.id in (${value})
 		
-			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 </mapper>
