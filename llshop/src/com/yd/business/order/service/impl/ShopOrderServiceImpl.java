@@ -295,15 +295,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 								order.setCost_points(order.getCost_points() + offset_points);
 								order.setOrder_name(order_name);
 								
-								//判断是否需要运费
-								int needExpressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
-								if(needExpressPrice > order.getCost_money()){
-									int expressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_EXPRESS_PRICE);
-									order.setExpress_price(expressPrice);
-									order.setCost_money(order.getCost_money() + expressPrice);
-								}else{
-									order.setExpress_price(0);
-								}
+								
 								
 								updateShopOrderInfo(order);
 	//							int give_points = sp.getGive_points() * num;   // 用户还没有付款呢
@@ -315,6 +307,18 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 							}
 						}
 					}
+					
+					//判断是否需要运费
+					int needExpressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
+					if(needExpressPrice > order.getCost_money()){
+						int expressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_EXPRESS_PRICE);
+						order.setExpress_price(expressPrice);
+						order.setCost_money(order.getCost_money() + expressPrice);
+						order.setCost_price(order.getCost_price() + expressPrice);
+					}else{
+						order.setExpress_price(0);
+					}
+					updateShopOrderInfo(order);
 				}
 			}
 		}catch(Exception e) {

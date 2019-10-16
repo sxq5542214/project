@@ -192,7 +192,7 @@
 								商品金额:<span class="fr red" >￥ <span id="cost_price"><%=order.getCost_price()/100d %></span>&nbsp;元</span>
 							</p>
 							<p >
-								运费(满<%=expressBottomPrice/100d %>元免运费):   <span class="fr red">￥ <%if(order.getExpress_price() != 0){ %>  <del> <span id="express_price"><%=order.getExpress_price()/100d %></span>&nbsp;元 </del> <%}else{ %> <span id="express_price"><%=order.getExpress_price()/100d %></span>&nbsp;元 <%} %> </span>
+								运费(满<%=expressBottomPrice/100d %>元免运费):   <span class="fr red">￥ <%if(order.getExpress_price() == null || order.getExpress_price() == 0){ %>  <del> <span id="express_price"><%=order.getExpress_price()/100d %></span>&nbsp;元 </del> <%}else{ %> <span id="express_price"><%=order.getExpress_price()/100d %></span>&nbsp;元 <%} %> </span>
 							</p>
 							<p>
 								积分抵扣:<span class="fr red" >￥ -<span id="points"><%=order.getCost_points() / 100d %></span>&nbsp;元</span>
