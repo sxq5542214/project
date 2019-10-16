@@ -165,6 +165,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		spb.setReal_price(sp_total_price);
 		spb.setType(sopType);
 		spb.setCreate_time(DateUtil.getNowDateStrSSS());
+		spb.setPrime_cost_price(sp.getPrime_cost_price() * num);
 		
 		createShopOrderProduct(spb);
 		return spb;

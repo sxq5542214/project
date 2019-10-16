@@ -105,6 +105,13 @@
 												placeholder="请输入商品市场价"  value="<%=StringUtil.convertNull(bean.getProduct_real_price()) %>" >
                             </div>
                           </div>
+                           <div class="form-group">
+                            <label class="col-sm-3 control-label">商品成本价（进货价）</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" id="prime_cost_price" name="prime_cost_price"
+												placeholder="请输入商品成本价"  value="<%=StringUtil.convertNull(bean.getPrime_cost_price()) %>" >
+                            </div>
+                          </div>
                           <div class="form-group">
                             <label class="col-sm-3 control-label">商品品牌</label>
                             <div class="col-sm-9">

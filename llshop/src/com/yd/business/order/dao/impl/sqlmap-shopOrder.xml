@@ -83,10 +83,10 @@
 	<insert id="createShopOrderProduct" parameterType="shopOrderProduct" useGeneratedKeys="true" keyProperty="id">
 		insert into ll_shop_order_product(order_info_id,order_code,user_id,nick_name,
 		supplier_id,supplier_name,supplier_product_id,supplier_product_name,
-		original_price,real_price,cost_points,discount,num,create_time,type) values(#{order_info_id},
+		original_price,real_price,cost_points,discount,num,create_time,type,prime_cost_price) values(#{order_info_id},
 		#{order_code},#{user_id},#{nick_name},#{supplier_id},#{supplier_name},
 		#{supplier_product_id},#{supplier_product_name},#{original_price},#{real_price},
-		#{cost_points},#{discount},#{num},#{create_time},#{type})
+		#{cost_points},#{discount},#{num},#{create_time},#{type},#{prime_cost_price})
 	</insert>
 	
 	<select id="queryShopOrderProduct" parameterType="shopOrderProduct" resultType="shopOrderProduct">

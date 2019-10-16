@@ -35,6 +35,7 @@ public class ShopOrderProductBean extends BaseBean {
 	private String supplier_product_name;
 	private Integer original_price;
 	private Integer real_price;
+	private Integer prime_cost_price;
 	private Integer cost_points;
 	private Integer discount;
 	private Integer num;
@@ -143,5 +144,11 @@ public class ShopOrderProductBean extends BaseBean {
 	}
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	public Integer getPrime_cost_price() {
+		return prime_cost_price;
+	}
+	public void setPrime_cost_price(Integer prime_cost_price) {
+		this.prime_cost_price = prime_cost_price;
 	}
 }

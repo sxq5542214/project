@@ -60,6 +60,9 @@
                               商品原价（分）
                             </th>
                             <th >
+                              成本价（分）
+                            </th>
+                            <th >
                               折扣（百分比）
                             </th>
                             <th >
@@ -104,6 +107,9 @@
                             </td>
                             <td>
                               <%=NumberUtil.toString(bean.getProduct_real_price()) %>
+                            </td>
+                            <td>
+                              <%=NumberUtil.toString(bean.getPrime_cost_price()) %>
                             </td>
                             <td>
                               <%=NumberUtil.toString(bean.getDiscount()) %>

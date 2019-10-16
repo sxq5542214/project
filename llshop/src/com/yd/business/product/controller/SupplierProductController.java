@@ -195,6 +195,7 @@ public class SupplierProductController extends BaseController {
 				bean.setMax_luckymoney(0);
 				bean.setProduct_offset_points(0);
 				bean.setStore_num(0);
+				bean.setPrime_cost_price(0);
 			} else {
 				bean = supplierProductService.findSupplierProductById(Integer.parseInt(id));
 			}

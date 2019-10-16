@@ -51,6 +51,7 @@ public class SupplierProductBean extends ProductBean {
 	private Integer seq;
 	private Integer hot_flag;
 	private Integer home_flag;
+	private Integer prime_cost_price;
 	
 	public String getSupplier_name() {
 		return supplier_name;
@@ -171,5 +172,11 @@ public class SupplierProductBean extends ProductBean {
 	}
 	public void setHome_flag(Integer home_flag) {
 		this.home_flag = home_flag;
+	}
+	public Integer getPrime_cost_price() {
+		return prime_cost_price;
+	}
+	public void setPrime_cost_price(Integer prime_cost_price) {
+		this.prime_cost_price = prime_cost_price;
 	}
 }

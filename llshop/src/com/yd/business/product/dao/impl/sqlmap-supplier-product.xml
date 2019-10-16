@@ -8,9 +8,9 @@
 	</select>
 	<insert id="insertSupplierProduct" parameterType="supplierProduct" useGeneratedKeys="true" keyProperty="id">
 		insert into ll_supplier_product(product_id,supplier_id,customer_id,store_num,product_name,product_price,product_real_price,product_type,product_type_name,product_brand,
-		product_brand_name,discount,create_time,eff_time,dff_time,modify_time,modify_admin,min_luckymoney,max_luckymoney,product_offset_points,package_num,seq,hot_flag,home_flag)
+		product_brand_name,discount,create_time,eff_time,dff_time,modify_time,modify_admin,min_luckymoney,max_luckymoney,product_offset_points,package_num,seq,hot_flag,home_flag,prime_cost_price)
 		values(#{product_id},#{supplier_id},#{customer_id},#{store_num},#{product_name},#{product_price},#{product_real_price},#{product_type},#{product_type_name},#{product_brand},
-		#{product_brand_name},#{discount},#{create_time},#{eff_time},#{dff_time},#{modify_time},#{modify_admin},#{min_luckymoney},#{max_luckymoney},#{product_offset_points},#{package_num},#{seq},#{hot_flag},#{home_flag})
+		#{product_brand_name},#{discount},#{create_time},#{eff_time},#{dff_time},#{modify_time},#{modify_admin},#{min_luckymoney},#{max_luckymoney},#{product_offset_points},#{package_num},#{seq},#{hot_flag},#{home_flag},#{prime_cost_price})
 	</insert>
 	<update id="updateSupplierProduct" parameterType="supplierProduct">
 		update ll_supplier_product 
@@ -35,6 +35,7 @@
 			<if test="seq != null ">seq = #{seq},</if>
 			<if test="hot_flag != null ">hot_flag = #{hot_flag},</if>
 			<if test="home_flag != null ">home_flag = #{home_flag},</if>
+			<if test="prime_cost_price != null ">prime_cost_price = #{prime_cost_price},</if>
 		</set>
 		where id = #{id}
 	</update>
