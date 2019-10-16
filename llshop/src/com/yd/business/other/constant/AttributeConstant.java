@@ -179,6 +179,12 @@ public interface AttributeConstant {
 	public static final String CODE_USER_SIGN_MAX_POINTS = "user_sign_max_points"; //用户签到最大获得的积分 
 	public static final String CODE_USER_SHARE_ADD_POINTS = "user_share_add_points"; //用户分享后获得的积分 
 
+
+	//订单的
+	public static final String CODE_SHOP_ORDER_EXPRESS_PRICE = "shop_order_express_price"; // 运费价格
+	public static final String CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE = "shop_order_need_express_bottom_price"; // 触发需运费的订单价格
+	
+	
 	
 	//短信的
 	public static final String CODE_SMS_REMARK_INFO = "sms_remark_info";

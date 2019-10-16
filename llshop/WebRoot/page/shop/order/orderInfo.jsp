@@ -16,6 +16,7 @@
 			+ path + "/";
 	
 	ShopOrderInfoBean order = (ShopOrderInfoBean) request.getAttribute("order");
+	int expressBottomPrice = (int) request.getAttribute("expressBottomPrice");
 	UserWechatBean user = (UserWechatBean) request.getAttribute("user");
 	List<SupplierCouponRecordBean> couponList = (List<SupplierCouponRecordBean>) request.getAttribute("couponList");
 	List<ShopOrderProductBean> productList = order.getProductList();
@@ -191,7 +192,7 @@
 								商品金额:<span class="fr red" >￥ <span id="cost_price"><%=order.getCost_price()/100d %></span>&nbsp;元</span>
 							</p>
 							<p >
-								运费(会员专享免运费):   <span class="fr red">￥ <del> <span id="express_price">10.00</span>&nbsp;元 </del> </span>
+								运费(满<%=expressBottomPrice/100d %>元免运费):   <span class="fr red">￥ <%if(order.getExpress_price() != 0){ %>  <del> <span id="express_price"><%=order.getExpress_price()/100d %></span>&nbsp;元 </del> <%}else{ %> <span id="express_price"><%=order.getExpress_price()/100d %></span>&nbsp;元 <%} %> </span>
 							</p>
 							<p>
 								积分抵扣:<span class="fr red" >￥ -<span id="points"><%=order.getCost_points() / 100d %></span>&nbsp;元</span>

@@ -106,7 +106,7 @@
 								<div style="flex:1 1 auto;min-width: 0;">
 									<div style="word-wrap:break-word;flex:1 1 auto;">鸡小腿</div>
 								</div>
-								<div style="margin: 0 25px;flex-shrink:0;color: #FB4E44">¥2.22</div>
+								<div style="margin: 0 25px;flex-shrink:0;color: #FB4E44">¥<span>2.22</span></div>
 							</div>
 							<div style="min-width: 82px;padding-left: 20px;">
 								<div style="flex-shrink:0;margin-left:-20px;float: right;">
@@ -242,18 +242,35 @@
   	var isClickMask = true;
   	function addToCart(div,num){
   		var parentDiv = div.parentNode; 
-  		addToCartBySpid(parentDiv.id,num);
+ 		var span = parentDiv.children[1].children[0];
+ 		var cur_num = Number(span.innerHTML);
+  		
+ 		if(cur_num == 0 ){
+			var item = findItem(parentDiv.id);
+		 	var price = item.price;
+		 	var name = item.name;
+ 			
+ 			createCartInfo(parentDiv.id, name, 0, price)
+ 		}
+  			modifyCartInfo(parentDiv.id,num);
+ 		
+  		
   	}
   	function addToCartBySpid(spid,num){
   		var parentDiv = document.getElementById(spid);
  		var span = parentDiv.children[1].children[0];
  		var cur_num = Number(span.innerHTML);
  		if(cur_num >0  || (cur_num == 0 && num > 0)){
+ 		
+			var item = findItem(spid);
+		 	var price = item.price;
+		 	var name = item.name;
+ 			
 		 	span.innerHTML = cur_num + num;
 		 	addProductToCart(spid,num);
 		 	updateTotalNum(num);
-		 	var price = findItem(spid).price;
 		 	updateTotalPrice(Number(price * num));
+		 	
   		}
   	}
   	
@@ -349,34 +366,52 @@
 		}
   	}
   	function createCartInfo(spid,name,num,price){
-  		var node=document.getElementById("cartInfoTemplate_div").cloneNode(true);
-  		node.children[0].children[0].children[0].innerHTML = name;
-  		node.children[0].children[1].innerHTML = "¥" + price;
-//  		node.children[1].children[0].children[0].onclick = addToCartBySpid(spid,-1);
-  		node.children[1].children[0].children[1].innerHTML = num;
-  		node.children[1].children[0].children[0].onclick = function(){
-  			var n = node.children[1].children[0].children[1].innerHTML;
-  			node.children[1].children[0].children[1].innerHTML = Number(n) - 1;
-  			addToCartBySpid(spid,-1);
+  		var item = findItem(spid);
+  		var node = document.getElementById('cartInfo_'+spid);
+  		
+  		if(node == null || node.id == undefined || node.id == null ){
+  			node = document.getElementById("cartInfoTemplate_div").cloneNode(true);
+  			node.id = 'cartInfo_'+spid;
+	  		node.children[0].children[0].children[0].innerHTML = name;
+	  		node.children[0].children[1].children[0].innerHTML = price;
+	//  		node.children[1].children[0].children[0].onclick = addToCartBySpid(spid,-1);
+	  		node.children[1].children[0].children[1].innerHTML = num;
+	  		node.children[1].children[0].children[0].onclick = function(){
+	  			modifyCartInfo(spid,-1);
+	  		};
+	  		node.children[1].children[0].children[2].onclick = function(){
+	  			modifyCartInfo(spid,1);
+	  		};
+	  		node.style.display = 'flex';
+			document.getElementById("cartInfoTemplate_div").parentNode.appendChild(node);
   			
-  			isClickMask = false;
-  			setTimeout(function() {
-  				isClickMask = true;
-  			}, 100);
-		};
-  		node.children[1].children[0].children[2].onclick =  function(){
-  			var n = node.children[1].children[0].children[1].innerHTML;
-  			node.children[1].children[0].children[1].innerHTML = Number(n) + 1;
-  			addToCartBySpid(spid,1);
-  			
-  			isClickMask = false;
-  			setTimeout(function() {
-  				isClickMask = true;
-  			}, 100);
-		};
-  		node.style.display = 'flex';
-		document.getElementById("cartInfoTemplate_div").parentNode.appendChild(node);
+  		}else{
+	  		var n = node.children[1].children[0].children[1].innerHTML;
+  			node.children[1].children[0].children[1].innerHTML = Number(n) + num;
+		  	node.children[0].children[1].children[0].innerHTML = (Number(n) + num) * item.price ;
+  		}
+  		
   	}
+  	
+  	 function modifyCartInfo(spid,num){
+  		var item = findItem(spid);
+  		var node = document.getElementById('cartInfo_'+spid);
+		var n = node.children[1].children[0].children[1].innerHTML;
+		if(n == 0 && num < 0){
+			
+		}else{
+			node.children[1].children[0].children[1].innerHTML = Number(n) + num;
+			node.children[0].children[1].children[0].innerHTML = (Number(n) + num) * item.price ;
+			
+			addToCartBySpid(spid, num );
+			
+			isClickMask = false;
+			setTimeout(function() {
+				isClickMask = true;
+			}, 100);
+			
+		}
+	};
   	initCart();
   	
 	

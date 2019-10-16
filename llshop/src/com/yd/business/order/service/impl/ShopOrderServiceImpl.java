@@ -23,6 +23,8 @@ import com.yd.business.order.bean.ShopOrderRemindBean;
 import com.yd.business.order.dao.IShopOrderDao;
 import com.yd.business.order.service.IOrderService;
 import com.yd.business.order.service.IShopOrderService;
+import com.yd.business.other.constant.AttributeConstant;
+import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.supplier.bean.SupplierCouponConfigBean;
@@ -67,6 +69,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	private IUserAddressService userAddressService;
 	@Resource
 	private IMsgCenterActionService msgCenterActionService;
+	@Resource
+	private IConfigAttributeService configAttributeService;
 	
 	
 	@Override
@@ -290,6 +294,17 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 								order.setCost_price(order.getCost_price() + sp_total_price);
 								order.setCost_points(order.getCost_points() + offset_points);
 								order.setOrder_name(order_name);
+								
+								//判断是否需要运费
+								int needExpressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
+								if(needExpressPrice > order.getCost_money()){
+									int expressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_EXPRESS_PRICE);
+									order.setExpress_price(expressPrice);
+									order.setCost_money(order.getCost_money() + expressPrice);
+								}else{
+									order.setExpress_price(0);
+								}
+								
 								updateShopOrderInfo(order);
 	//							int give_points = sp.getGive_points() * num;   // 用户还没有付款呢
 	//							if(offset_points >0){

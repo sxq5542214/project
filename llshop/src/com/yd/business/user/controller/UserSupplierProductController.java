@@ -237,11 +237,13 @@ public class UserSupplierProductController extends BaseController {
 				couponList = supplierCouponService.queryUserCanUseCouponByOrderCode(order.getUser_id(), order_code);
 			}
 			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
+			int expressBottomPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
 			
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("order", order);
 			model.put("user", user);
 			model.put("couponList", couponList);
+			model.put("expressBottomPrice", expressBottomPrice);
 			
 			return new ModelAndView(PAGE_USER_SHOP_ORDER,model );
 		} catch (Exception e) {

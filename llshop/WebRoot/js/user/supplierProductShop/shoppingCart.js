@@ -29,6 +29,7 @@ function addProductToCart(spid, num) {
 					}
 					
 				}
+				break;
 			}
 		}
 		if (notFind) {
