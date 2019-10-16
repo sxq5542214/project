@@ -44,7 +44,7 @@
 		<div class="mui-content new-min-quan">
             <ul>
             	<% for(SupplierCouponConfigBean bean : list){
-            		String time = bean.getBegin_time()+"至"+bean.getEnd_time();
+            		String time = "使用期限："+bean.getUseful_lift()/24+"天内";
             		String rightTitle = "";
             		String imageName = "type"+bean.getType()+".png";
             		if(bean.getCoupon_offsetmoney() != null){
@@ -58,9 +58,9 @@
                 	<div class="left">
                     <div class="rtdian"></div><div class="rbdian"></div>
                     <div class="padding">
-                    	<img src="images/user/supplierProductShop/coupon/<%=imageName%>">
- 					<div class="tit"><%=bean.getCoupon_name() %>
- 						<p>
+                    	<img src="images/user/supplierProductShop/coupon/<%=imageName%>" style="margin-top: 8px;">
+ 					<div class="tit" style="padding-top: 0;margin-top: 5px;"><%=bean.getCoupon_name() %>
+ 						<p style="white-space: normal;"> 
  						<%=StringUtil.convertNull(bean.getRemark()) %> <br>
  						<%=time %>
  						</p>

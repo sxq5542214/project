@@ -2,6 +2,8 @@ package com.yd.business.supplier.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -286,8 +288,17 @@ ISupplierCouponService {
 			SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
 			bean.setUserid(user.getId());								//设置用户id
 			bean.setCoupon_id(coupon_id);								//设置优惠卷id
+			
 			bean.setCreate_time(DateUtil.getNowDateStr());				//设置生效时间
-			bean.setExpire_time(conponInfo.getEnd_time());				//设置失效时间
+			//设置失效时间
+			if(conponInfo.getUseful_lift() != null){   //如果有使用期限
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(System.currentTimeMillis());
+				cal.add(Calendar.HOUR, conponInfo.getUseful_lift());
+				bean.setExpire_time(DateUtil.formatDate(cal.getTime()));			
+			}else{ // 没有就取 优惠卷的失效时间
+				bean.setExpire_time(conponInfo.getEnd_time());				
+			}
 			boolean UserReceiveLimit = UserReveiceCouponLimit(coupon_id,user.getId());		//判断改用户领取这个优惠卷的上线是多少
 			if(UserReceiveLimit){											//达到领取条件
 				int count = reduceCouponNum(coupon_id);						//减少此优惠卷数量

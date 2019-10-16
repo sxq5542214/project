@@ -69,6 +69,7 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	private Integer coupon_count;	//优惠卷总数
 	private String begin_time;		//优惠卷开始时间
 	private String end_time;			//优惠卷结束时间
+	private Integer useful_lift;	//使用期限，小时为单位
 	private String remark;			//备注
 	private String coupon_backgroup;//优惠卷背景颜色
 	private String coupon_spid;//优惠卷对应的产品ID，逗号隔开
@@ -202,6 +203,12 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	}
 	public void setSeq(Integer seq) {
 		this.seq = seq;
+	}
+	public Integer getUseful_lift() {
+		return useful_lift;
+	}
+	public void setUseful_lift(Integer useful_lift) {
+		this.useful_lift = useful_lift;
 	}
 	
 }

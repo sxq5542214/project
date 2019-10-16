@@ -61,9 +61,9 @@
                 	<div class="left">
                     <div class="rtdian"></div><div class="rbdian"></div>
                     <div class="padding">
-                    	<img src="images/user/supplierProductShop/coupon/<%=imageName%>">
- 					<div class="tit"><%=bean.getCoupon_name() %>
- 						<p>
+                    	<img src="images/user/supplierProductShop/coupon/<%=imageName%>" style="margin-top: 8px;">
+ 					<div class="tit" style="padding-top: 0;margin-top: 5px;"><%=bean.getCoupon_name() %>
+ 						<p style="white-space: normal;"> 
  						<%=bean.getDictValueByField("status", bean.getStatus()) %> <br>
  						过期时间：<%=bean.getExpire_time() %>
  						</p>
