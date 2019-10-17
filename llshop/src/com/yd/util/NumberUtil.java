@@ -110,7 +110,7 @@ public class NumberUtil {
 	
 	
 	public static Integer toInt(Object obj) {
-		if(obj == null){
+		if(StringUtil.isNull(obj)){
 			return null;
 		}
 		if (obj instanceof Number) return ((Number)obj).intValue();
