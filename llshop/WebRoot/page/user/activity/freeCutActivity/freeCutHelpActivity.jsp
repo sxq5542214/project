@@ -15,16 +15,16 @@ UserQrCodeBean qrCode = (UserQrCodeBean)request.getAttribute("qrCode");
 
 ActivityPrize[] prize = new ActivityPrize[]{new ActivityPrize(),new ActivityPrize(),new ActivityPrize(),new ActivityPrize()};
 prize[0].setId(115);
-prize[0].setPrize_name("腰果200g");
+prize[0].setPrize_name("腰果180g");
 prize[0].setTotalcount(5); //复用字段，代表参与人数要求
 prize[1].setId(116);
-prize[1].setPrize_name("碧根果200g");
+prize[1].setPrize_name("碧根果180g");
 prize[1].setTotalcount(10); //复用字段，代表参与人数要求
 prize[2].setId(117);
-prize[2].setPrize_name("开心果200g");
+prize[2].setPrize_name("开心果180g");
 prize[2].setTotalcount(15); //复用字段，代表参与人数要求
 prize[3].setId(118);
-prize[3].setPrize_name("山核桃仁200g");
+prize[3].setPrize_name("山核桃仁180g");
 prize[3].setTotalcount(30); //复用字段，代表参与人数要求
 int maxCount = prize[3].getTotalcount();
 %>
