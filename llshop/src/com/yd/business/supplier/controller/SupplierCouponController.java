@@ -304,7 +304,9 @@ public class SupplierCouponController extends BaseController{
 	@RequestMapping("**/supplier/coupon/toUserCouponCenterPage.do")
 	public ModelAndView toUserCouponCenterPage(String openid){
 		try{
-			List<SupplierCouponConfigBean> list = supplierCouponService.queryAllEnableCouponInfo();
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			List<SupplierCouponConfigBean> list = supplierCouponService.querySureShowCoupon(user);
+
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("list", list);
 			map.put("openid", openid);

@@ -34,11 +34,6 @@ public interface ISupplierCouponDao {
 	public List<SupplierCouponRuleBean> queryCouponRuleSQLByCouponId(SupplierCouponRuleBean bean);
 	
 	/**
-	 * 把规则表中的sql把一些变量带入在重新计算一次	
-	 */
-	public List<SupplierProductBean> queryProductByCouponRuleSQL(String couponRuleSql);
-	
-	/**
 	 * 查询单个优惠卷信息
 	 */
 	public SupplierCouponConfigBean findCouponConfigInfo(SupplierCouponConfigBean bean);

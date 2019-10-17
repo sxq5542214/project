@@ -46,11 +46,6 @@ public class SupplierCouponDaoImpl  extends BaseDao implements ISupplierCouponDa
 	}
 	
 	@Override
-	public List<SupplierProductBean> queryProductByCouponRuleSQL(String couponRuleSql){
-		return sqlSessionTemplate.selectList(NAMESPACE+"queryProductByCouponRuleSQL", couponRuleSql);
-	}
-	
-	@Override
 	public SupplierCouponConfigBean findCouponConfigInfo(SupplierCouponConfigBean bean){
 		return sqlSessionTemplate.selectOne(NAMESPACE+"queryCouponInfo",bean);
 	}

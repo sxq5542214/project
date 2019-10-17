@@ -1,6 +1,6 @@
+<%@page import="com.yd.business.activity.bean.ActivityPrize"%>
 <%@page import="com.yd.basic.framework.context.BaseContext"%>
 <%@page import="com.yd.business.supplier.bean.SupplierEventBean"%>
-<%@page import="com.yd.business.supplier.bean.SupplierCouponConfigBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierEventCodeBean"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
@@ -13,20 +13,20 @@ String serverUrl = BaseContext.getWechatOriginalInfo(user.getOriginalid()).getSe
 List<SupplierEventCodeBean> list = (List<SupplierEventCodeBean>)request.getAttribute("list");
 SupplierEventBean supplierEvent = (SupplierEventBean)request.getAttribute("supplierEvent");
 Integer supplierEventId = supplierEvent.getId();
-SupplierCouponConfigBean[] coupon = new SupplierCouponConfigBean[]{new SupplierCouponConfigBean(),new SupplierCouponConfigBean(),new SupplierCouponConfigBean(),new SupplierCouponConfigBean()};
-coupon[0].setId(1);
-coupon[0].setCoupon_name("盐焗腰果125g");
-coupon[0].setCoupon_count(7); //复用字段，代表参与人数要求
-coupon[1].setId(114);
-coupon[1].setCoupon_name("杏仁250g");
-coupon[1].setCoupon_count(15); //复用字段，代表参与人数要求
-coupon[2].setId(3);
-coupon[2].setCoupon_name("开心果250g");
-coupon[2].setCoupon_count(20); //复用字段，代表参与人数要求
-coupon[3].setId(4);
-coupon[3].setCoupon_name("山核桃仁250g");
-coupon[3].setCoupon_count(40); //复用字段，代表参与人数要求
-								
+ActivityPrize[] prize = new ActivityPrize[]{new ActivityPrize(),new ActivityPrize(),new ActivityPrize(),new ActivityPrize()};
+prize[0].setId(115);
+prize[0].setPrize_name("腰果200g");
+prize[0].setTotalcount(5); //复用字段，代表参与人数要求
+prize[1].setId(116);
+prize[1].setPrize_name("碧根果200g");
+prize[1].setTotalcount(10); //复用字段，代表参与人数要求
+prize[2].setId(117);
+prize[2].setPrize_name("开心果200g");
+prize[2].setTotalcount(15); //复用字段，代表参与人数要求
+prize[3].setId(118);
+prize[3].setPrize_name("山核桃仁200g");
+prize[3].setTotalcount(30); //复用字段，代表参与人数要求
+int maxCount = prize[3].getTotalcount();
 %>
 <html class="plat-pc not-native">
 <head>
@@ -110,7 +110,7 @@ rotate
 			</div>
 			<div data-v-fbc5d9ba="" data-v-49b8e837="" class="order-card card">
 				<div data-v-fbc5d9ba="" class="timer">
-					<div data-v-fbc5d9ba="" class="timer-title">不玩虚的，坚果免费送啦！</div>
+					<div data-v-fbc5d9ba="" class="timer-title">好吃的坚果免费送啦！</div>
 				<!-- 	<div data-v-8b9121ba="" data-v-fbc5d9ba="" class="timer">
 						<i data-v-8b9121ba="">04</i><span data-v-8b9121ba="" class="c">:</span><i
 							data-v-8b9121ba="">35</i><span data-v-8b9121ba="" class="c">:</span><i
@@ -126,7 +126,7 @@ rotate
 							</p>
 						<p data-v-fbc5d9ba="" class="order-price">
 							价值可达 <small data-v-fbc5d9ba="" class="mtfin">￥</small><b
-								data-v-fbc5d9ba="" class="mtfin">60</b>
+								data-v-fbc5d9ba="" class="mtfin">80</b>
 						</p>
 						<!---->
 						<!---->
@@ -141,33 +141,34 @@ rotate
 								
 								String str = "";
 								int level = 0;
-								int size = list.size();
+								int size = list.size() ;
 								int needNum = 10 - size;
-								String prize = "杏仁150g";
-								int persent = size *100 / 40;
-								if(size < coupon[0].getCoupon_count()){
+								String prizeName = "杏仁150g";
+								int persent = size *100 / maxCount;
+								if(size < prize[0].getTotalcount()){
 									level = 1;
-									needNum = coupon[0].getCoupon_count() - size;
-									prize = coupon[0].getCoupon_name();
-									persent = 5;
-								}else if(size < coupon[1].getCoupon_count()){
+									needNum = prize[0].getTotalcount() - size;
+									prizeName = prize[0].getPrize_name();
+									persent = size * 10 / prize[0].getTotalcount();
+								}else if(size < prize[1].getTotalcount()){
 									level = 2;
-									needNum = coupon[1].getCoupon_count() - size;
-									prize = coupon[1].getCoupon_name();
-								}else if(size < coupon[2].getCoupon_count()){
-									needNum = coupon[2].getCoupon_count() - size;
-									prize = coupon[2].getCoupon_name();
-									persent = persent +8;
+									needNum = prize[1].getTotalcount() - size;
+									prizeName = prize[1].getPrize_name();
+									persent = size *34 /  prize[1].getTotalcount();
+								}else if(size < prize[2].getTotalcount()){
 									level = 3;
-								}else if(size < coupon[3].getCoupon_count()){
-									needNum = coupon[3].getCoupon_count() - size;
-									prize = coupon[3].getCoupon_name();
-									persent = persent + 15;
+									needNum = prize[2].getTotalcount() - size;
+									prizeName = prize[2].getPrize_name();
+									persent = size * 60 /  prize[2].getTotalcount();
+								}else if(size <= prize[3].getTotalcount()){
 									level =4;
+									needNum = prize[3].getTotalcount() - size;
+									prizeName = prize[3].getPrize_name();
+									persent = size * 100 /  prize[3].getTotalcount();
+									if(persent < 65) persent = 65;
 								}
-								String needStr = "已有"+size+"个助力，再邀请"+needNum+"人可得"+prize;
-								
-								if(size >= 40){
+								String needStr = "已有"+size+"个助力，再邀请"+needNum+"人可得"+prizeName;
+								if(size >= maxCount){
 									needStr = "恭喜您可以拿走大奖啦！";
 									level =4;
 								}
@@ -186,28 +187,28 @@ rotate
 								<li data-v-b3bd69c2=""><img style="width: .507rem; height: .627rem;"
 									src="page/user/activity/freeCutActivity/resource/redbag1.png"
 									alt="红包">
-									<p data-v-b3bd69c2=""><%=coupon[0].getCoupon_count() %>个助力</p>
-									<p data-v-b3bd69c2=""><%=coupon[0].getCoupon_name() %></p>
+									<p data-v-b3bd69c2=""><%=prize[0].getTotalcount() %>个助力</p>
+									<p data-v-b3bd69c2=""><%=prize[0].getPrize_name() %></p>
 									
 								</li>
 								<li data-v-b3bd69c2=""><img data-v-b3bd69c2=""
 									src="page/user/activity/freeCutActivity/resource/redbag1.png"
 									alt="红包">
-									<p data-v-b3bd69c2=""><%=coupon[1].getCoupon_count() %>个助力</p>
-									<p data-v-b3bd69c2=""><%=coupon[1].getCoupon_name() %></p>
+									<p data-v-b3bd69c2=""><%=prize[1].getTotalcount() %>个助力</p>
+									<p data-v-b3bd69c2=""><%=prize[1].getPrize_name() %></p>
 								</li>
 								<li data-v-b3bd69c2=""><img data-v-b3bd69c2=""
 									src="page/user/activity/freeCutActivity/resource/redbag2.png"
 									alt="红包">
-									<p data-v-b3bd69c2=""><%=coupon[2].getCoupon_count() %>个助力</p>
-									<p data-v-b3bd69c2=""><%=coupon[2].getCoupon_name() %></p>
+									<p data-v-b3bd69c2=""><%=prize[2].getTotalcount() %>个助力</p>
+									<p data-v-b3bd69c2=""><%=prize[2].getPrize_name() %></p>
 								
 								</li>
 								<li data-v-b3bd69c2=""><img data-v-b3bd69c2=""
 									src="page/user/activity/freeCutActivity/resource/redbag3.png"
 									alt="红包">
-									<p data-v-b3bd69c2=""><%=coupon[3].getCoupon_count() %>个助力</p>
-									<p data-v-b3bd69c2=""><%=coupon[3].getCoupon_name() %></p>
+									<p data-v-b3bd69c2=""><%=prize[3].getTotalcount() %>个助力</p>
+									<p data-v-b3bd69c2=""><%=prize[3].getPrize_name() %></p>
 								
 								</li>
 							</ul>
@@ -217,7 +218,7 @@ rotate
 						<!---->
 						<button data-v-165a82e2="" type="button" class="btn btn-main" onclick="$('#inviteFriend_panel').show();$('#inviteFriend_div').show();">
 							邀请好友助力</button>
-						<%if(size >=10){ %>
+						<%if(size >=5){ %>
 							<button data-v-165a82e2="" type="button" class="btn btn-main" style="margin: 0;padding: 0;" onclick="$('#getPrize_panel').show();$('#getPrize_div').show();">
 							领取奖励</button>
 						<%} %>
@@ -310,8 +311,8 @@ rotate
 	</main>
 	
 	<div class="sharetofriend-md" style="display:none;" id="inviteFriend_panel" onclick="$('#inviteFriend_panel').hide();$('#inviteFriend_div').hide();"></div>
-	<div class="sharetofriend-panel" style="display:none;" id="inviteFriend_div" >
-		<div class="top">
+	<div class="sharetofriend-panel" style="display:none;top: 5em;" id="inviteFriend_div" >
+		<div class="top"> 
 			<div class="info" style="text-align:left;">
 				点击右上角选择 <b>[分享到微信好友或朋友圈]</b> 即可参加活动！<br><br>好友打开您分享的文章，并扫码即可完成助力
 			</div>
@@ -331,7 +332,7 @@ rotate
 	</div>
 	<!--  领取奖品的  -->
 	<div class="sharetofriend-md" style="display:none;" id="getPrize_panel" onclick="$('#getPrize_panel').hide();$('#getPrize_div').hide();"></div>
-	<div class="sharetofriend-panel" style="display:none;" id="getPrize_div" >
+	<div class="sharetofriend-panel" style="display:none;top: 5em;" id="getPrize_div" >
 		<div class="top">
 			<div class="info" style="text-align:center;">
 				<% if(level == 1) {%>
@@ -352,9 +353,9 @@ rotate
 			<%for(int i = 1 ; i < level  ; i++){ %>
 			
 			
-			<div class="get-prize" onclick="getPrize(<%=coupon[i-1].getId()%>,'<%=coupon[i-1].getCoupon_name() %>')">
+			<div class="get-prize" onclick="getPrize(<%=prize[i-1].getId()%>,'<%=prize[i-1].getPrize_name() %>')">
 				<span style="font-size: .4rem; color: rgb(213,36,34); ">
-				&nbsp;<br><b>礼品卷<br>&nbsp; <br> <%=coupon[i-1].getCoupon_name() %><br> </b> 
+				&nbsp;<br><b>礼品卷<br>&nbsp; <br> <%=prize[i-1].getPrize_name() %><br> </b> 
 				</span>
 			</div>
 			
@@ -368,12 +369,12 @@ rotate
 
 <script type="text/javascript">
 var openid = '<%=user.getOpenid()%>';
-function getPrize(couponId,couponName){
-	if(confirm('确定领取:'+ couponName +"? ")){
+function getPrize(prizeId,prizeName){
+	if(confirm('确定领取:'+ prizeName +"? ")){
 		var supplierEventId = <%=supplierEventId%> ;
 		$.ajax({
 			url:"activity/user/dealFreeCutPrize.html",
-			data:{openid:openid,  prizeId:couponId,supplierEventId:supplierEventId},
+			data:{openid:openid,  prizeId:prizeId,supplierEventId:supplierEventId},
 			async:false,
 			success:function(val){
 				if(val.indexOf('成功')>=0){

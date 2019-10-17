@@ -91,10 +91,9 @@ ISupplierCouponService {
 		 */
 		@Override
 		public List<SupplierCouponConfigBean> querySureShowCoupon(UserWechatBean user) {
-			// TODO Auto-generated method stub
 			try{
 				List<SupplierCouponConfigBean> returnlist = new ArrayList<SupplierCouponConfigBean>();
-				List<SupplierCouponConfigBean>  list = queryAllCouponInfo();			//查询目前配置的所有可用的优惠卷信息
+				List<SupplierCouponConfigBean>  list = queryAllEnableCouponInfo();			//查询目前配置的所有可用的优惠卷信息
 				for(SupplierCouponConfigBean bean : list){
 					//根据优惠卷id查询优惠卷展示规则
 					List<SupplierCouponRuleBean> ruleSqlList = QueryShowCouponRuleByCouponid(bean.getId());	
@@ -107,7 +106,7 @@ ISupplierCouponService {
 					if(StringUtil.isNull(ruleSqlList) || ruleSqlList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){
 						returnlist.add(bean);
 					}else{
-						boolean whetherCanShow = judgeShowCouponRuleSQL(ruleSqlList,user);
+						boolean whetherCanShow = judgeCouponRuleSQL(ruleSqlList, user.getId(), user.getOpenid(), null);
 							if(whetherCanShow){
 								returnlist.add(bean);
 							}
@@ -136,11 +135,35 @@ ISupplierCouponService {
 		bean.setStatus(SupplierCouponConfigBean.STATUS_UP);
 		bean.setBegin_time(DateUtil.getNowDateStr());
 		bean.setEnd_time(DateUtil.getNowDateStr());
+		bean.setDisplay(SupplierCouponConfigBean.DISPLAY_YES);
 		bean.setOrderby(" order by seq ");
 		return supplierCouponDao.queryCouponInfo(bean);
 	}
 		
-		
+//	/**
+//	 * 查询目前配置所有的可以使用的优惠卷
+//	 */
+//	@Override
+//	public List<SupplierCouponConfigBean> queryAllEnableCouponInfo(String openid) {
+//		SupplierCouponConfigBean bean = new SupplierCouponConfigBean();
+//		bean.setStatus(SupplierCouponConfigBean.STATUS_UP);
+//		bean.setBegin_time(DateUtil.getNowDateStr());
+//		bean.setEnd_time(DateUtil.getNowDateStr());
+//		bean.setDisplay(SupplierCouponConfigBean.DISPLAY_YES);
+//		bean.setOrderby(" order by seq ");
+//		List<SupplierCouponConfigBean> list = supplierCouponDao.queryCouponInfo(bean);
+//		List<SupplierCouponConfigBean> result = new ArrayList<SupplierCouponConfigBean>();
+//		for(SupplierCouponConfigBean coupon : list){
+//			List<SupplierCouponRuleBean> ruleList = queryEnableCouponRuleByCouponid(coupon.getId(), SupplierCouponRuleBean.TYPE_SHOW);
+//			
+//			boolean isShow = judgeCouponRuleSQL(ruleList, null, openid, null);
+//			if(isShow){
+//				result.add(coupon);
+//			}
+//		}
+//		
+//		return result;
+//	}
 	
 
 	/**
@@ -204,29 +227,29 @@ ISupplierCouponService {
 	
 	
 	
-	/**
-	 * 提取展示优惠卷的规则出来判断此优惠卷是否可以展示
-	 */
-	private boolean judgeShowCouponRuleSQL(List<SupplierCouponRuleBean> ruleSqlList,UserWechatBean user){
-		boolean whetherCanShow = true;
-		try{
-			//替换sql中的占位符
-				for(SupplierCouponRuleBean ruleBean : ruleSqlList){
-					ruleBean.setSQL(ruleBean.getSQL().replace("#userid#", String.valueOf(user.getId())));
-					ruleBean.setSQL(ruleBean.getSQL().replace("#openid#", String.valueOf(user.getOpenid())));
-					int count = couponRuleSQLCounValue(ruleBean.getSQL());						//执行该优惠卷对应规则表中sql判断是否有返回数据
-					if( count == SupplierCouponRuleBean.RULE_SQL_COUNT_MIN_VALUE){
-						whetherCanShow = false ; 
-						break;
-					}
-				}
-		}catch(Exception e){
-			log.error(e, e);
-		}
-	
-	return whetherCanShow;
-
-	}
+//	/**
+//	 * 提取展示优惠卷的规则出来判断此优惠卷是否可以展示
+//	 */
+//	private boolean judgeShowCouponRuleSQL(List<SupplierCouponRuleBean> ruleSqlList,UserWechatBean user){
+//		boolean whetherCanShow = true;
+//		try{
+//			//替换sql中的占位符
+//				for(SupplierCouponRuleBean ruleBean : ruleSqlList){
+//					ruleBean.setSQL(ruleBean.getSQL().replace("#userid#", String.valueOf(user.getId())));
+//					ruleBean.setSQL(ruleBean.getSQL().replace("#openid#", String.valueOf(user.getOpenid())));
+//					int count = couponRuleSQLCounValue(ruleBean.getSQL());						//执行该优惠卷对应规则表中sql判断是否有返回数据
+//					if( count == SupplierCouponRuleBean.RULE_SQL_COUNT_MIN_VALUE){
+//						whetherCanShow = false ; 
+//						break;
+//					}
+//				}
+//		}catch(Exception e){
+//			log.error(e, e);
+//		}
+//	
+//	return whetherCanShow;
+//
+//	}
 	
 	
 	
@@ -250,7 +273,7 @@ ISupplierCouponService {
 			reveiveResult = receiveCoupon(coupon_id,user);	
 			return reveiveResult;
 		}else{
-			boolean whetherReceiveCoupon = judgeReceiveCouponRuleSQL(ruleSqlList,user);			//如果有领取规则判断领取规则的条件是否成立
+			boolean whetherReceiveCoupon = judgeCouponRuleSQL(ruleSqlList, user.getId(), user.getOpenid(), null);		//如果有领取规则判断领取规则的条件是否成立
 			if(whetherReceiveCoupon){															//满足领取规则
 				reveiveResult = receiveCoupon(coupon_id,user);	
 				return reveiveResult;
@@ -434,11 +457,10 @@ ISupplierCouponService {
 	/**
 	 * 根据优惠卷表中的id查询优惠卷规则表中使用优惠卷的所有sql
 	 * */
-	private List<SupplierCouponRuleBean> QueryEnableCouponRuleByCouponid(Integer coupon_id){
+	private List<SupplierCouponRuleBean> queryEnableCouponRuleByCouponid(Integer coupon_id,int type){
 		SupplierCouponRuleBean bean = new SupplierCouponRuleBean();
 		bean.setCoupon_id(coupon_id);
 		bean.setStatus(SupplierCouponRuleBean.STATUS_ENABLE);
-		bean.setType(SupplierCouponRuleBean.TYPE_USE);
 		bean.setBegin_time(DateUtil.getNowDateStr());
 		bean.setEnd_time(DateUtil.getNowDateStr());
 		return supplierCouponDao.queryCouponRuleSQLByCouponId(bean);
@@ -452,7 +474,6 @@ ISupplierCouponService {
 	 */
 	@Override
 	public void updateOrderCodeCouponRecordById(Integer coupon_record_id,String orderCode) {
-		// TODO Auto-generated method stub
 		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
 		bean.setId(coupon_record_id);					//设置记录表中的id
 		bean.setOrder_code(orderCode);						//设置订单编号
@@ -492,7 +513,6 @@ ISupplierCouponService {
 	 * 根据优惠卷订单号,更新优惠卷状态为使用状态
 	 */
 	private void updateStatusUsedByOrderCode(String order_code,String product_name) {
-		// TODO Auto-generated method stub
 		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();	
 		bean.setOrder_code(order_code);													//设置订单编号
 		bean.setProduct_name(product_name);												//设置产品名称
@@ -514,7 +534,6 @@ ISupplierCouponService {
 	 */
 	@Override
 	public SupplierCouponRecordBean findCouponRecord(SupplierCouponRecordBean bean) {
-		// TODO Auto-generated method stub
 		return supplierCouponDao.findCouponRecord(bean);
 	}
 
@@ -524,7 +543,6 @@ ISupplierCouponService {
 	 */
 	@Override
 	public SupplierCouponRecordBean findCouponRecordByOrderCode(String order_code) {
-		// TODO Auto-generated method stub
 		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
 		bean.setOrder_code(order_code);
 		return supplierCouponDao.findCouponRecordByOrderCode(bean);
@@ -564,7 +582,7 @@ ISupplierCouponService {
 			reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_CAN_USE);
 			return reveiveResult;
 		}else{
-			boolean whetherReceiveCoupon = judgeUseCouponRuleSQL(ruleSqlList,userid,orderCode);			//如果有使用规则判断领取规则的条件是否成立
+			boolean whetherReceiveCoupon = judgeCouponRuleSQL(ruleSqlList,userid,null,orderCode);			//如果有使用规则判断领取规则的条件是否成立
 			if(whetherReceiveCoupon){															//满足领取规则
 				reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_CAN_USE);
 				return reveiveResult;
@@ -593,9 +611,9 @@ ISupplierCouponService {
 		List<SupplierCouponRecordBean> canUseList = new ArrayList<SupplierCouponRecordBean>();
 		for(SupplierCouponRecordBean record : recordList){
 			// 查询当前拥有优惠卷的使用规则
-			List<SupplierCouponRuleBean> ruleList = QueryEnableCouponRuleByCouponid(record.getCoupon_id());
+			List<SupplierCouponRuleBean> ruleList = queryEnableCouponRuleByCouponid(record.getCoupon_id(),SupplierCouponRuleBean.TYPE_USE);
 			// 执行使用条件规则的SQL，返回成功为可使用
-			boolean flag = judgeUseCouponRuleSQL(ruleList, userid, orderCode);
+			boolean flag = judgeCouponRuleSQL(ruleList, userid,null, orderCode);
 			if(flag){
 				canUseList.add(record);
 			}
@@ -607,14 +625,15 @@ ISupplierCouponService {
 	
 	
 	/**
-	 * 判断使用优惠卷的规则是否满足
+	 * 判断优惠卷的规则是否满足
 	 * */
-		private boolean judgeUseCouponRuleSQL(List<SupplierCouponRuleBean> ruleSqlList,Integer user,String orderCode){
+		private boolean judgeCouponRuleSQL(List<SupplierCouponRuleBean> ruleSqlList,Integer user,String openid,String orderCode){
 			boolean whetherReceiveCoupon = true ;
 			try{
 				for(SupplierCouponRuleBean bean : ruleSqlList){
-					bean.setSQL(bean.getSQL().replace("#userid#", String.valueOf(user)));
-					bean.setSQL(bean.getSQL().replace("#orderCode#", orderCode));
+					bean.setSQL(bean.getSQL().replaceAll("#userid#", String.valueOf(user)));
+					bean.setSQL(bean.getSQL().replaceAll("#orderCode#", orderCode));
+					bean.setSQL(bean.getSQL().replaceAll("#openid#", openid));
 					int count = couponRuleSQLCounValue(bean.getSQL());						//执行该优惠卷对应规则表中sql判断是否有返回数据
 					if(count ==  SupplierCouponRuleBean.RULE_SQL_COUNT_MIN_VALUE ){
 						whetherReceiveCoupon = false ;
@@ -628,10 +647,6 @@ ISupplierCouponService {
 			
 			return whetherReceiveCoupon;
 		}
-	
-	
-	
-	
 	
 	/**
 	 * 查询优惠卷记录表中记录
@@ -874,11 +889,6 @@ ISupplierCouponService {
 //		return supplierCouponDao.queryCouponRuleById(bean);
 //	}
 	
-	//把规则表中的sql把一些变量带入在重新计算一次	
-	private List<SupplierProductBean> queryProductByCouponRuleSQL(String couponRuleSql){
-		return supplierCouponDao.queryProductByCouponRuleSQL(couponRuleSql);
-	}
-	
 
 	/**
 	 * 根据优惠卷表中的定义判断此优惠卷是否可以展示
@@ -919,7 +929,6 @@ ISupplierCouponService {
 		bean.setStatus_description(SupplierCouponRecordBean.USERED_STATUS_DESCRIPTION);
 		supplierCouponDao.changeCouponRecodeUserd(bean);
 	}
-	
 	
 	
 	/**
@@ -1244,51 +1253,18 @@ ISupplierCouponService {
 					int money =  user.getBalance() - orderLog.getLucky_money();
 					user.setBalance(money);
 					userWechatService.update(user);
-					
 				}
 			}
 			//更新订单表的是否发送红包(发送失败)
 			orderLog.setIs_sended(OrderProductLogBean.IS_SENDED_FAILD);
 			orderProductLogService.createOrUpdateOrderProductLog(orderLog);
 		}
-
-		
-
-		
-	
-		
 	
 		//根据规则表中的sql在数据中在此执行，看返回的count值是多少
 		private  int  couponRuleSQLCounValue(String CouponRuleSQl){
 			return supplierCouponDao.couponRuleSQLCounValue(CouponRuleSQl);
 		}
-
 		
-		
-		
-		
-	/**
-	 * 判断领取优惠卷的规则是否满足
-	 * */
-		private boolean judgeReceiveCouponRuleSQL(List<SupplierCouponRuleBean> ruleSqlList,UserWechatBean user){
-			boolean whetherReceiveCoupon = true ;
-			try{
-				for(SupplierCouponRuleBean bean : ruleSqlList){
-					bean.setSQL(bean.getSQL().replace("#userid#", String.valueOf(user.getId())));
-					bean.setSQL(bean.getSQL().replace("#openid#", String.valueOf(user.getOpenid())));
-					int count = couponRuleSQLCounValue(bean.getSQL());						//执行该优惠卷对应规则表中sql判断是否有返回数据
-					if(count ==  SupplierCouponRuleBean.RULE_SQL_COUNT_MIN_VALUE ){
-						whetherReceiveCoupon = false ;
-						break;
-					}
-				}
-				
-			}catch(Exception e){
-				log.error(e, e);
-			}
-			
-			return whetherReceiveCoupon;
-		}
 		
 		/**
 		 * 用户根据优惠卷id使优惠卷的数量自减一,当优惠卷的数量已经变成0的时候,将不会在减少
@@ -1319,7 +1295,6 @@ ISupplierCouponService {
 			
 		}
 		
-		
 		/**
 		 * 查询该用户已经领取几个该优惠卷
 		 */
@@ -1330,11 +1305,6 @@ ISupplierCouponService {
 			bean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
 			return 	supplierCouponDao.UserReceiveCouponCount(bean);
 		}
-		
-		
-
-
-		
 		
 		
 		public boolean checkCouponProduct(Integer customer_id,String phone,Integer coupon_id){

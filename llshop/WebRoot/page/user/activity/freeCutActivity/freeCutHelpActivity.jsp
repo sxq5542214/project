@@ -1,6 +1,6 @@
+<%@page import="com.yd.business.activity.bean.ActivityPrize"%>
 <%@page import="com.yd.basic.framework.context.BaseContext"%>
 <%@page import="com.yd.business.user.bean.UserQrCodeBean"%>
-<%@page import="com.yd.business.supplier.bean.SupplierCouponConfigBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierEventCodeBean"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
@@ -13,20 +13,20 @@ List<SupplierEventCodeBean> list = (List<SupplierEventCodeBean>)request.getAttri
 Integer supplierEventId = (Integer)request.getAttribute("supplierEventId");
 UserQrCodeBean qrCode = (UserQrCodeBean)request.getAttribute("qrCode");
 
-SupplierCouponConfigBean[] coupon = new SupplierCouponConfigBean[]{new SupplierCouponConfigBean(),new SupplierCouponConfigBean(),new SupplierCouponConfigBean(),new SupplierCouponConfigBean()};
-coupon[0].setId(1);
-coupon[0].setCoupon_name("盐焗腰果125g");
-coupon[0].setCoupon_count(7); //复用字段，代表参与人数要求
-coupon[1].setId(114);
-coupon[1].setCoupon_name("杏仁250g");
-coupon[1].setCoupon_count(15); //复用字段，代表参与人数要求
-coupon[2].setId(3);
-coupon[2].setCoupon_name("开心果250g");
-coupon[2].setCoupon_count(20); //复用字段，代表参与人数要求
-coupon[3].setId(4);
-coupon[3].setCoupon_name("山核桃仁250g");
-coupon[3].setCoupon_count(40); //复用字段，代表参与人数要求
-								
+ActivityPrize[] prize = new ActivityPrize[]{new ActivityPrize(),new ActivityPrize(),new ActivityPrize(),new ActivityPrize()};
+prize[0].setId(115);
+prize[0].setPrize_name("腰果200g");
+prize[0].setTotalcount(5); //复用字段，代表参与人数要求
+prize[1].setId(116);
+prize[1].setPrize_name("碧根果200g");
+prize[1].setTotalcount(10); //复用字段，代表参与人数要求
+prize[2].setId(117);
+prize[2].setPrize_name("开心果200g");
+prize[2].setTotalcount(15); //复用字段，代表参与人数要求
+prize[3].setId(118);
+prize[3].setPrize_name("山核桃仁200g");
+prize[3].setTotalcount(30); //复用字段，代表参与人数要求
+int maxCount = prize[3].getTotalcount();
 %>
 <html class="plat-pc not-native">
 <head>
@@ -97,7 +97,7 @@ coupon[3].setCoupon_count(40); //复用字段，代表参与人数要求
 							</p>
 						<p data-v-fbc5d9ba="" class="order-price">
 							价值可达 <small data-v-fbc5d9ba="" class="mtfin">￥</small><b
-								data-v-fbc5d9ba="" class="mtfin">60</b>
+								data-v-fbc5d9ba="" class="mtfin">80</b>
 						</p>
 						<!---->
 						<!---->
@@ -114,32 +114,33 @@ coupon[3].setCoupon_count(40); //复用字段，代表参与人数要求
 								int level = 0;
 								int size = list.size() ;
 								int needNum = 10 - size;
-								String prize = "杏仁150g";
-								int persent = size *100 / 40;
-								if(size < coupon[0].getCoupon_count()){
+								String prizeName = "杏仁150g";
+								int persent = size *100 / maxCount;
+								if(size < prize[0].getTotalcount()){
 									level = 1;
-									needNum = coupon[0].getCoupon_count() - size;
-									prize = coupon[0].getCoupon_name();
-									persent = 5;
-								}else if(size < coupon[1].getCoupon_count()){
+									needNum = prize[0].getTotalcount() - size;
+									prizeName = prize[0].getPrize_name();
+									persent = size * 10 / prize[0].getTotalcount();
+								}else if(size < prize[1].getTotalcount()){
 									level = 2;
-									needNum = coupon[1].getCoupon_count() - size;
-									prize = coupon[1].getCoupon_name();
-								}else if(size < coupon[2].getCoupon_count()){
-									needNum = coupon[2].getCoupon_count() - size;
-									prize = coupon[2].getCoupon_name();
-									persent = persent +8;
+									needNum = prize[1].getTotalcount() - size;
+									prizeName = prize[1].getPrize_name();
+									persent = size *34 /  prize[1].getTotalcount();
+								}else if(size < prize[2].getTotalcount()){
 									level = 3;
-								}else if(size < coupon[3].getCoupon_count()){
-									needNum = coupon[3].getCoupon_count() - size;
-									prize = coupon[3].getCoupon_name();
-									persent = persent + 15;
+									needNum = prize[2].getTotalcount() - size;
+									prizeName = prize[2].getPrize_name();
+									persent = size * 60 /  prize[2].getTotalcount();
+								}else if(size <= prize[3].getTotalcount()){
 									level =4;
+									needNum = prize[3].getTotalcount() - size;
+									prizeName = prize[3].getPrize_name();
+									persent = size * 100 /  prize[3].getTotalcount();
+									if(persent < 65) persent = 65;
 								}
-								String needStr = "已有"+size+"位好友助力，快来帮帮忙！";
-								
-								if(size >= 40){
-									needStr = "恭喜TA已经拿走大奖啦！";
+								String needStr = "已有"+size+"个助力，再邀请"+needNum+"人可得"+prizeName;
+								if(size >= maxCount){
+									needStr = "恭喜您可以拿走大奖啦！";
 									level =4;
 								}
 								
@@ -157,28 +158,28 @@ coupon[3].setCoupon_count(40); //复用字段，代表参与人数要求
 								<li data-v-b3bd69c2=""><img style="width: .507rem; height: .627rem;"
 									src="page/user/activity/freeCutActivity/resource/redbag1.png"
 									alt="红包">
-									<p data-v-b3bd69c2=""><%=coupon[0].getCoupon_count() %>个助力</p>
-									<p data-v-b3bd69c2=""><%=coupon[0].getCoupon_name() %></p>
+									<p data-v-b3bd69c2=""><%=prize[0].getTotalcount() %>个助力</p>
+									<p data-v-b3bd69c2=""><%=prize[0].getPrize_name() %></p>
 									
 								</li>
 								<li data-v-b3bd69c2=""><img data-v-b3bd69c2=""
 									src="page/user/activity/freeCutActivity/resource/redbag1.png"
 									alt="红包">
-									<p data-v-b3bd69c2=""><%=coupon[1].getCoupon_count() %>个助力</p>
-									<p data-v-b3bd69c2=""><%=coupon[1].getCoupon_name() %></p>
+									<p data-v-b3bd69c2=""><%=prize[1].getTotalcount() %>个助力</p>
+									<p data-v-b3bd69c2=""><%=prize[1].getPrize_name() %></p>
 								</li>
 								<li data-v-b3bd69c2=""><img data-v-b3bd69c2=""
 									src="page/user/activity/freeCutActivity/resource/redbag2.png"
 									alt="红包">
-									<p data-v-b3bd69c2=""><%=coupon[2].getCoupon_count() %>个助力</p>
-									<p data-v-b3bd69c2=""><%=coupon[2].getCoupon_name() %></p>
+									<p data-v-b3bd69c2=""><%=prize[2].getTotalcount() %>个助力</p>
+									<p data-v-b3bd69c2=""><%=prize[2].getPrize_name() %></p>
 								
 								</li>
 								<li data-v-b3bd69c2=""><img data-v-b3bd69c2=""
 									src="page/user/activity/freeCutActivity/resource/redbag3.png"
 									alt="红包">
-									<p data-v-b3bd69c2=""><%=coupon[3].getCoupon_count() %>个助力</p>
-									<p data-v-b3bd69c2=""><%=coupon[3].getCoupon_name() %></p>
+									<p data-v-b3bd69c2=""><%=prize[3].getTotalcount() %>个助力</p>
+									<p data-v-b3bd69c2=""><%=prize[3].getPrize_name() %></p>
 								
 								</li>
 							</ul>

@@ -31,6 +31,8 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	 */
 	public static final int TYPE_EXPERIENCE = 5;			//体验卷
 	
+	public static final int DISPLAY_YES = 1;
+	public static final int DISPLAY_NO = 0;
 	
 	public static final int MATCH_TO_PRODUCT = 99;  //该优惠卷匹配到可以展示的产品
 	
@@ -64,6 +66,7 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	private Integer coupon_discount;	//优惠卷折扣
 	private Integer coupon_offsetmoney;	//优惠卷抵扣金钱	
 	private Integer status;				//状态
+	private Integer display;			//是否展示
 	private Integer number;				//目前优惠卷剩余的数量
 	private Integer receive_limit_num;	//用户领取数量限制
 	private Integer coupon_count;	//优惠卷总数
@@ -209,6 +212,12 @@ public class SupplierCouponConfigBean  extends BaseBean {
 	}
 	public void setUseful_lift(Integer useful_lift) {
 		this.useful_lift = useful_lift;
+	}
+	public Integer getDisplay() {
+		return display;
+	}
+	public void setDisplay(Integer display) {
+		this.display = display;
 	}
 	
 }

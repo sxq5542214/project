@@ -11,6 +11,7 @@
 			<if test="begin_time !=null and begin_time !=''"> and  #{begin_time} >= b.begin_time </if>
 			<if test="end_time !=null and end_time !=''"> and b.end_time >= #{end_time} </if>
 			<if test="type !=null "> and a.type >= #{type} </if>
+			<if test="display !=null "> and b.display = #{display} </if>
 		</where>
 			<if test="orderby != null"> ${orderby}</if>
 		
@@ -24,7 +25,9 @@
 			<if test="status !=null "> and status = #{status} </if>
 			<if test="begin_time !=null and begin_time !=''"> and  #{begin_time} >= begin_time </if>
 			<if test="end_time !=null and end_time !=''"> and end_time >= #{end_time} </if>
-			<if test="type !=null "> and a.type >= #{type} </if>
+			<if test="type !=null "> and type >= #{type} </if>
+			<if test="display !=null "> and display = #{display} </if>
+			
 		</where>
 		
 			<if test="orderby != null"> ${orderby}</if>
@@ -80,11 +83,8 @@
 		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
-	<select id="queryProductByCouponRuleSQL" parameterType="String" resultType="supplierProduct">
-		${value}
-	</select>
 	
-		<update id="changeCouponRecodeUserd" parameterType="supplierCouponRecord">
+	<update id="changeCouponRecodeUserd" parameterType="supplierCouponRecord">
 		update ll_coupon_record
 		<set>
 		<if test="status != null"> status = #{status} ,</if>
@@ -240,9 +240,9 @@
 
 	<insert id="insertCouponConfig" parameterType="supplierCouponConfig"   keyProperty="id">
 		insert into ll_coupon_config(supplier_id,supplier_name,code,type,coupon_name,coupon_discount,coupon_offsetmoney,status,number,
-		receive_limit_num,coupon_count,begin_time,end_time,remark,coupon_backgroup,coupon_spid) values 
+		receive_limit_num,coupon_count,begin_time,end_time,remark,coupon_backgroup,coupon_spid,display) values 
 		(#{supplier_id},#{supplier_name},#{code},#{type},#{coupon_name},#{coupon_discount},#{coupon_offsetmoney},#{status},#{number},
-		#{receive_limit_num},#{coupon_count},#{begin_time},#{end_time},#{remark},#{coupon_backgroup},#{coupon_spid})
+		#{receive_limit_num},#{coupon_count},#{begin_time},#{end_time},#{remark},#{coupon_backgroup},#{coupon_spid},#{display})
 	</insert>
 	
 	<update id="updateCouponConfig" parameterType="supplierCouponConfig">
@@ -256,6 +256,7 @@
 			<if test="coupon_discount != null ">coupon_discount = #{coupon_discount},</if>
 			<if test="coupon_offsetmoney != null">coupon_offsetmoney = #{coupon_offsetmoney},</if>
 			<if test="status != null">status = #{status},</if>
+			<if test="display != null">display = #{display},</if>
 			<if test="number != null">number = #{number},</if>
 			<if test="receive_limit_num != null">receive_limit_num = #{receive_limit_num},</if>
 			<if test="coupon_count != null">coupon_count = #{coupon_count},</if>
