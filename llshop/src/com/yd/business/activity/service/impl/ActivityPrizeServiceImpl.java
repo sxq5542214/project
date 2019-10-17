@@ -139,16 +139,18 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 			boolean canGet = checkUserCanGetPrize(user, relation.getId());
 			if(canGet){
 				ActivityPrize prize = findActivityPrizeByID(relation.getActivity_prize_id());
-				
+				prize.setRemark(user.getNick_name());
 				String taleName = prize.getProduct_table();
 				switch (taleName) {
 				case ActivityPrize.PRODUCT_TABLE_COUPONCONFIG:
 					int couponId = prize.getProduct_id();
 					//获取优惠卷
 					result = supplierCouponService.reveiveCouponResult(couponId, user);
-					//保存并处理用户动作
-					msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ACTIVITY_GET_PRIZE , null, prize);
 					
+					if(result.indexOf("成功") >=0){
+						//保存并处理用户动作
+						msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ACTIVITY_GET_PRIZE , null, prize);
+					}
 					break;
 				case ActivityPrize.PRODUCT_TABLE_SUPPLIERPRODUCT:
 					
