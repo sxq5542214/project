@@ -138,7 +138,7 @@ public class UserSupplierProductController extends BaseController {
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			if(user == null){
 				//跳转至关注公众号界面
-				writeJson(response, "<script>alert(\"请先关注公众号!\");</script>");
+				writeJson(response, "<script>alert(\"请先关注公众号!如已关注，请重新打开\");</script>");
 				return null;
 			}
 			

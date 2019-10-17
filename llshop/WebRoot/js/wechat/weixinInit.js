@@ -150,7 +150,7 @@ wx.ready(function() {
 			wx.updateTimelineShareData({
 				title : shareTitle, // 分享标题
 				desc : shareDesc, // 分享描述
-				link : shareLink, // 分享链接
+				link : shareLink +'&share_type=2', // 分享链接
 				imgUrl : shareImg, // 分享图标
 				success : function() {
 					// 成功设置后的回调，不是用户成功分享后的回调
@@ -158,11 +158,11 @@ wx.ready(function() {
 //					onUpdateTimelineShareDataSuccess();
 				}
 			});
-			//新版微信分享到朋友圈
+			//新版微信分享到朋友
 			wx.updateAppMessageShareData({
 				title : shareTitle, // 分享标题
 				desc : shareDesc, // 分享描述
-				link : shareLink, // 分享链接
+				link : shareLink +'&share_type=1', // 分享链接
 				imgUrl : shareImg, // 分享图标
 				success : function() {
 					// 成功设置后的回调，不是用户成功分享后的回调

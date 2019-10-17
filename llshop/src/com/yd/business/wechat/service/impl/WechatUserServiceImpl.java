@@ -87,9 +87,8 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 		UserWechatBean uBean = userWechatService.findUserWechatByOpenId(weixin_id);
 		//有eventkey 代表是二维码扫描过来的,反之，则是普通关注的用户
 		//若库中已经存在该用户。说明用户之前已经关注过。判断该用户的parentId是否于扫码获取
-		if(uBean == null){
+		if(uBean == null ){
 			createWechatUser(weixin_id, parentId,senceType,senceId,eventBean.getToUserName());
-			handleSenceCode(senceValue,weixin_id,parentId);
 		}else{
 			uBean.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
 			userWechatService.update(uBean);
@@ -97,6 +96,9 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 		//创建用户好友关系
 		userWechatService.createUserWechatFriend(NumberUtil.toInt(parentId) ,weixin_id );
 		
+		//处理场景事件
+		handleSenceCode(senceValue,weixin_id,parentId);
+
 		TextBean result = null;
 //		result = new TextBean();
 //		result.setToUserName(eventBean.getFromUserName());

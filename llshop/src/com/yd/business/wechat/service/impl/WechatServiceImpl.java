@@ -180,6 +180,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 					UserWechatBean user = userWechatService.findUserWechatByOpenId(eventBean.getFromUserName());
 					if(user == null){
 						createWechatUser(eventBean.getFromUserName(), parentId,senceType,senceId,eventBean.getToUserName());
+						
 					}
 					// 子类有重写此方法
 					handleSenceCode(senceValue,eventBean.getFromUserName(),parentId);

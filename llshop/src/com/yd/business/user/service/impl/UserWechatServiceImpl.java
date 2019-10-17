@@ -461,20 +461,21 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		if(IS_OPEN_SENCE_LOG){
 			
 			//先查询，如果有就更新，没有就创建
-			if(StringUtil.isNotNull(share_time_ms)){
-				UserSenceLog condition = new UserSenceLog();
-				condition.setShare_type(share_type);
-				condition.setShare_from(share_from);
-				condition.setShare_time_ms(share_time_ms);
-				condition.setOpenid(user.getOpenid());
-				List<UserSenceLog> list =userWechatDao.queryUserSenceLog(condition);
-				if(list.size()>0){
-					UserSenceLog bean = list.get(0);
-					bean.setShare_time(DateUtil.getNowDateStr());
-					bean.setShare_num(bean.getShare_num() +1);
-					userWechatDao.updateUserSenceLog(bean);
-					return bean.getId();
-				}
+			UserSenceLog condition = new UserSenceLog();
+			condition.setShare_type(share_type);
+			condition.setShare_from(share_from);
+			condition.setSence_type(senceType);
+			condition.setSenceid(senceId);
+			condition.setOpenid(user.getOpenid());
+			List<UserSenceLog> list =userWechatDao.queryUserSenceLog(condition);
+			if(list.size()>0){
+				UserSenceLog bean = list.get(0);
+				bean.setShare_time(DateUtil.getNowDateStr());
+				bean.setShare_num(bean.getShare_num() +1);
+				bean.setRead_num(bean.getRead_num() + 1);
+				bean.setLast_read_time(DateUtil.getNowDateStr());
+				userWechatDao.updateUserSenceLog(bean);
+				return bean.getId();
 			}
 			
 			//没有update 的记录，就创建新的

@@ -93,7 +93,7 @@ int maxCount = prize[3].getTotalcount();
 						src="images/user/supplierProductShop/coupon/lipingjuan.png"
 						alt="礼品图片" class="order-cover">
 					<div data-v-fbc5d9ba="" class="order-content">
-						<p data-v-fbc5d9ba="" class="order-title">【坚果赠送卷】<br>腰果、核桃、开心果<br>杏仁、山核桃仁等免费送啦！
+						<p data-v-fbc5d9ba="" class="order-title">【坚果赠送卷】<br>腰果、碧根果、开心果、<br>山核桃仁等免费送啦！
 							</p>
 						<p data-v-fbc5d9ba="" class="order-price">
 							价值可达 <small data-v-fbc5d9ba="" class="mtfin">￥</small><b
@@ -138,7 +138,7 @@ int maxCount = prize[3].getTotalcount();
 									persent = size * 100 /  prize[3].getTotalcount();
 									if(persent < 65) persent = 65;
 								}
-								String needStr = "已有"+size+"个助力，再邀请"+needNum+"人可得"+prizeName;
+								String needStr = "已有"+size+"个助力，TA还差"+needNum+"个助力可得"+prizeName;
 								if(size >= maxCount){
 									needStr = "恭喜您可以拿走大奖啦！";
 									level =4;

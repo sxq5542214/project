@@ -1010,6 +1010,7 @@ public class ActivityController extends BaseController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
 			String toOpenId = request.getParameter("toOpenid");
+			String share_type = request.getParameter("share_type");
 			Integer supplierEventId = Integer.parseInt(request.getParameter("supplierEventId")); //也是activityconfigid ,需要保持一致
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(toOpenId);
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
@@ -1019,7 +1020,7 @@ public class ActivityController extends BaseController {
 			String code = request.getParameter("code");
 			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
 				// 没有缓存，也没有传code过来，则跳转至微信授权
-				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toFreeCutHelpActivity.html?toOpenid="+ toOpenId +"&supplierEventId="+ supplierEventId , "utf-8");
+				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toFreeCutHelpActivity.html?toOpenid="+ toOpenId +"&supplierEventId="+ supplierEventId + "&share_type="+share_type , "utf-8");
 				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 				return null;
 			}else if(StringUtil.isNull(openid)){
@@ -1032,6 +1033,9 @@ public class ActivityController extends BaseController {
 			}
 			
 			UserQrCodeBean qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(toOpenId, WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId);
+			
+			//创建用户分享后打开的阅读日志
+			userWechatService.createUserSenceLog(user, qrCode.getSenceCode(), qrCode.getSenceId(), NumberUtil.toInt(share_type), "FreeCutActivity", null);
 			
 			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
 
