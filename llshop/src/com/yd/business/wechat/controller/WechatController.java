@@ -345,6 +345,10 @@ public class WechatController extends BaseController {
 		
 		//根据用户表中originalid 在ll_wechat_original_info表中信息 ,主要用于查询来自哪个公众号
 		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+		int payCount = 1;
+		UserConsumeInfoBean consume = new UserConsumeInfoBean();
+		consume.setOut_trade_code(order_code);
+		payCount = userConsumeInfoService.queryUserConsumeInfo(consume ).size() + 1;
 		
 		//wx26a55db19faf530f
 		String appidStr = originalInfo.getAppid();
@@ -359,7 +363,7 @@ public class WechatController extends BaseController {
 		String body = "body=支付商品";
 		//商户订单号
 //		String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_WXPAY, user.getId());
-		String out_trade_no = "out_trade_no="+ order_code;
+		String out_trade_no = "out_trade_no="+ order_code + "-"+payCount;
 		//需要支付的总金额,以分为单位
 		int rmb = (int) (Double.parseDouble(cost_money)  * 100);
 		String total_fee = "total_fee="+ rmb;
@@ -405,20 +409,20 @@ public class WechatController extends BaseController {
 					interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHATANDBALANCE;
 				}
 				
-				UserConsumeInfoBean consume ;
+//				UserConsumeInfoBean consume ;
 				//如果优惠卷记录id为不为空
 				if(!StringUtil.isNull(coupon_record_id) ){
 					//根据优惠卷记录表中的id,在优惠卷优惠卷记录表中添加订单号
 					supplierCouponService.updateOrderCodeCouponRecordById(Integer.parseInt(coupon_record_id),order_code);
 				}
 				//保存充值记录     在ll_user_consume_info表中加入充值记录
-				consume = userConsumeInfoService.createConsumeInfo(phone,rmb, (Integer)null, user.getId(), resultBean.getPrepay_id(), order_code,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
+				consume = userConsumeInfoService.createConsumeInfo(phone,rmb, (Integer)null, user.getId(), resultBean.getPrepay_id(), out_trade_no,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
 				
 				
 				//返回界面需要支付的信息
 				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
 				data.setTransactionId(resultBean.getPrepay_id());
-				data.setOutTradeNo(order_code);
+				data.setOutTradeNo(out_trade_no);
 				writeJson(response, data);
 				return null;
 			}else{
@@ -473,7 +477,7 @@ public class WechatController extends BaseController {
 		String transactionId = request.getParameter("transactionId");
 		String openid = request.getParameter("openid");
 		
-		ShopOrderInfoBean order = shopOrderService.findShopOrderInfoByCode(outTradeNo);
+		ShopOrderInfoBean order = shopOrderService.findShopOrderInfoByCode(outTradeNo.split("-")[0]);
 		//保存并处理用户动作
 		msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_CANCEL , null, order);
 		
@@ -607,7 +611,7 @@ public class WechatController extends BaseController {
 		//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
 		userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
 		//通过订单号在订购表中更改状态为更新支付成功状态
-		shopOrderService.updateShopOrderPaySuccess(Integer.parseInt(result.getCash_fee()), result.getOut_trade_no());
+		shopOrderService.updateShopOrderPaySuccess(Integer.parseInt(result.getCash_fee()), result.getOut_trade_no().split("-")[0]);
 		
 				
 		

@@ -56,6 +56,7 @@ function pay(){
 									 openid : openid
 									},
 							success : function(d) {
+								$("#payButton").html('立即支付');
 								$("#payButton").show();
 								$("#payButton").on('click','pay()');
 							}
