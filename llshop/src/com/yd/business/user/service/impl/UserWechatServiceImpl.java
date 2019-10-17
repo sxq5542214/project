@@ -470,8 +470,6 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 			List<UserSenceLog> list =userWechatDao.queryUserSenceLog(condition);
 			if(list.size()>0){
 				UserSenceLog bean = list.get(0);
-				bean.setShare_time(DateUtil.getNowDateStr());
-				bean.setShare_num(bean.getShare_num() +1);
 				bean.setRead_num(bean.getRead_num() + 1);
 				bean.setLast_read_time(DateUtil.getNowDateStr());
 				userWechatDao.updateUserSenceLog(bean);
@@ -490,6 +488,8 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 			senceLog.setShare_from(share_from);
 			senceLog.setShare_time_ms(share_time_ms);
 			senceLog.setShare_num(1);
+			senceLog.setRead_num(1);
+			senceLog.setFirst_read_time(DateUtil.getNowDateStr());
 			senceLog.setShare_type(share_type);
 			
 			senceLog = userWechatDao.createUserSenceLog(senceLog);
