@@ -197,11 +197,11 @@ public class SupplierEventServiceImpl extends BaseService implements
 
 		SupplierEventCodeBean bean = new SupplierEventCodeBean();
 		bean.setEventId(eventId);
-		bean.setFromUserId(fromUser.getId());
+		bean.setUserId(userId);
 		int count = supplierEventDao.queryEventCodeCount(bean);
 		bean.setTotalcount(count+1);//记录当前有多少用户助力了
 		
-		bean.setUserId(userId);
+		bean.setFromUserId(fromUser.getId());
 		count = supplierEventDao.queryEventCodeCount(bean);
 		//如果已经助力过，直接返回了
 		if(count > 0)return;

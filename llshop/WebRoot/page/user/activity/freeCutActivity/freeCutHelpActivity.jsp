@@ -310,6 +310,6 @@ int maxCount = prize[3].getTotalcount();
 				
 		</div>
 	</div>
-	<img alt="" src="http://120.24.62.58:8080/images/img2019_28.do" style="display: none;">
+ 	<!-- <img alt="" src="http://120.24.62.58:8080/images/img2019_28.do" style="display: none;"> -->
 </body>
 </html>

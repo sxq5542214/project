@@ -113,9 +113,9 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 				userWechatDao.addUser(userBean);
 			}
 		}catch(Exception e){
-			log.error("微信用户创建失败，重置用户名再创建！" + userBean.getNick_name(), e);
-			userBean.setNick_name("微信用户"+ DateUtil.java2phpDate(System.currentTimeMillis()) );
-			userWechatDao.addUser(userBean);
+			log.error(e, e);
+//			userBean.setNick_name("微信用户"+ DateUtil.java2phpDate(System.currentTimeMillis()) );
+//			userWechatDao.addUser(userBean);
 		}
 	}
 	

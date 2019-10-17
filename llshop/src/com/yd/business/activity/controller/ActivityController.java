@@ -1010,9 +1010,9 @@ public class ActivityController extends BaseController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
 			String toOpenId = request.getParameter("toOpenid");
-			String share_type = request.getParameter("share_type");
+			final String share_type = request.getParameter("share_type");
 			Integer supplierEventId = Integer.parseInt(request.getParameter("supplierEventId")); //也是activityconfigid ,需要保持一致
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(toOpenId);
+			final UserWechatBean user = userWechatService.findUserWechatByOpenId(toOpenId);
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String originalid = original.getOriginalid();
 			
@@ -1032,10 +1032,15 @@ public class ActivityController extends BaseController {
 				userWechatService.createUserWechatFriend(user,friendUser);
 			}
 			
-			UserQrCodeBean qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(toOpenId, WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId);
+			final UserQrCodeBean qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(toOpenId, WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId);
 			
-			//创建用户分享后打开的阅读日志
-			userWechatService.createUserSenceLog(user, qrCode.getSenceCode(), qrCode.getSenceId(), NumberUtil.toInt(share_type), "FreeCutActivity", null);
+			taskExecutor.execute(new Runnable() {
+				@Override
+				public void run() {
+					//创建用户分享后打开的阅读日志
+					userWechatService.createUserSenceLog(user, qrCode.getSenceCode(), qrCode.getSenceId(), NumberUtil.toInt(share_type), "FreeCutActivity", null);
+				}
+			});
 			
 			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
 
