@@ -416,13 +416,13 @@ public class WechatController extends BaseController {
 					supplierCouponService.updateOrderCodeCouponRecordById(Integer.parseInt(coupon_record_id),order_code);
 				}
 				//保存充值记录     在ll_user_consume_info表中加入充值记录
-				consume = userConsumeInfoService.createConsumeInfo(phone,rmb, (Integer)null, user.getId(), resultBean.getPrepay_id(), out_trade_no,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
+				consume = userConsumeInfoService.createConsumeInfo(phone,rmb, (Integer)null, user.getId(), resultBean.getPrepay_id(), order_code + "-"+payCount ,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
 				
 				
 				//返回界面需要支付的信息
 				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
 				data.setTransactionId(resultBean.getPrepay_id());
-				data.setOutTradeNo(out_trade_no);
+				data.setOutTradeNo(order_code + "-"+payCount );
 				writeJson(response, data);
 				return null;
 			}else{
