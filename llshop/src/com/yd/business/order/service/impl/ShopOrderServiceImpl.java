@@ -338,7 +338,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		// 判断订单金额与用户实际支付金额是否一致
 		if(order.getCost_money().intValue() == payMoney){
 			updateShopOrderStatus(orderCode,ShopOrderInfoBean.STATUS_PAYSUCCESS);
-			List<SupplierCouponRecordBean> recordList = supplierCouponService.queryCouponRecordByOrderCode(orderCode);
+			List<SupplierCouponRecordBean> recordList = supplierCouponService.queryCouponRecordByOrderCode(orderCode,order.getUser_id());
 			
 			//处理订单的优惠卷为已使用，并创建赠送的订单商品
 			handleOrderCouponToUsed(order, recordList);

@@ -231,7 +231,7 @@ public class UserSupplierProductController extends BaseController {
 			}
 			
 			// 找之前已经选择过的优惠卷
-			List<SupplierCouponRecordBean> couponList = supplierCouponService.queryCouponRecordByOrderCode(order_code);
+			List<SupplierCouponRecordBean> couponList = supplierCouponService.queryCouponRecordByOrderCode(order_code,order.getUser_id());
 			if(couponList.size() == 0 && order.getStatus() == ShopOrderInfoBean.STATUS_WAIT)
 			{	//如果没有，则找目前可用的优惠卷
 				couponList = supplierCouponService.queryUserCanUseCouponByOrderCode(order.getUser_id(), order_code);

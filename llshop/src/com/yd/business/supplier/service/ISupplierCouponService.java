@@ -229,7 +229,7 @@ public interface ISupplierCouponService {
 	 * @param orderCode
 	 * @return
 	 */
-	public List<SupplierCouponRecordBean> queryCouponRecordByOrderCode(String orderCode);
+	List<SupplierCouponRecordBean> queryCouponRecordByOrderCode(String orderCode, int userid);
 
 
 

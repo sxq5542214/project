@@ -1421,9 +1421,10 @@ ISupplierCouponService {
 	 * @return
 	 */
 	@Override
-	public List<SupplierCouponRecordBean> queryCouponRecordByOrderCode(String orderCode){
+	public List<SupplierCouponRecordBean> queryCouponRecordByOrderCode(String orderCode,int userid){
 		SupplierCouponRecordBean bean = new SupplierCouponRecordBean();
 		bean.setOrder_code(orderCode);
+		bean.setUserid(userid);
 		bean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
 		List<SupplierCouponRecordBean> list = queryCouponRecord(bean );
 		return list;
