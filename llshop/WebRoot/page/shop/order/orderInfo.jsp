@@ -311,11 +311,12 @@
 		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_DISCOUNT%>)
 		{
 			coupon_offsetmoney = Number(coupon.coupon_offsetmoney/100).toFixed(2) ;
+			
 			var discount = Number(coupon.coupon_discount) ;
 			var new_price = cost_money * discount / 100;
-			var value = Number(cost_money - new_price).toFixed(2) ;  // 折扣后的差值
 			
-			if(value > coupon_offsetmoney){
+			var value = Number(cost_money - new_price).toFixed(2) ;  // 折扣后的差值
+			if(Number(value) > Number(coupon_offsetmoney) ){
 				value = coupon_offsetmoney ;
 			}else{
 				
