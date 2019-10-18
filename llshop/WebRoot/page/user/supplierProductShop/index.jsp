@@ -103,20 +103,21 @@
             </div>
             <div class="swiper-pagination"></div>
         </div>
-
+        
+<a href="javascript:;"><img class="db margin-b-s" src="images/user/supplierProductShop/home_banner.jpg" width="100%" alt="" /></a>
+            
         <div class="home-fashion ui-box ui-border-t">
             <img class="home-imgtit" src="images/user/supplierProductShop/hometit2.jpg" alt="" />
             
-           <a href="javascript:;"><img class="db margin-b-s" src="images/user/supplierProductShop/t4.jpg" width="100%" alt="" /></a>
-            
+           
             <div class="fastion-plist mui-row">
             <% for(int i = 0 ; i <list.size();i++){
             	SupplierProductBean prod = list.get(i);
              %>
             
-                <div class="mui-col-xs-6">
+                <div class="mui-col-xs-6" >
                     <a class="item" href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=prod.getId()%>&openid=<%=openid%>">
-                        <img src="<%=prod.getHead_img() %>" alt="" class="figure" />
+                        <img src="<%=prod.getHead_img() %>" alt="" class="figure"  />
                         <span class="tit2"><span style="color: red;font-size:0.5rem;">	<%=prod.getProduct_price()/100d %>元 </span> / <del style="color: #999;"><%=prod.getProduct_real_price()/100d %>元</del><br>
                         <%=prod.getProduct_title() %>
                         
@@ -197,6 +198,10 @@
         });
 
     });
+    
+     var width = $('.figure').css('width');
+     var heig = parseInt(width) - 1; 
+     $(".figure").css('height',heig + "px");
     
 /*     function initSlider(data){
     	var sliderDiv = document.getElementById("sliderDiv");
