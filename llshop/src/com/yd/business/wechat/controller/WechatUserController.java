@@ -584,10 +584,10 @@ public class WechatUserController extends BaseController {
 				openid = cachedOpenid;
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			user = checkUserExists(user,openid,originalid);
+//			user = checkUserExists(user,openid,originalid);
 			
 			
-			if(user != null ){
+			if(user != null  ){
 				UserInfoCenterPageBean userInfoPage = userWechatService.queryActivityFriendLevelCount(user.getId());
 				userInfoPage.setUserWechat(user);
 				boolean isShop = configAttributeService.getBooleanValueByCode(AttributeConstant.CODE_SYSTEM_IS_SHOP_ORDER);
@@ -1119,6 +1119,7 @@ public class WechatUserController extends BaseController {
 		}else if(StringUtil.isNotNull(cachedOpenid)){
 			openid = cachedOpenid;
 		}
+		
 		return supplierCouponController.toUserCouponCenterPage(openid);
 	}
 	

@@ -20,6 +20,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.controller.BaseController;
@@ -306,7 +308,14 @@ public class SupplierCouponController extends BaseController{
 		try{
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			List<SupplierCouponConfigBean> list = supplierCouponService.querySureShowCoupon(user);
-
+			
+			if(user == null || user.getStatus() == UserWechatBean.STATUS_UNSUBSCRIBE){
+				ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+				HttpServletResponse response = attributes.getResponse();
+				writeJson(response , "<script>alert('请先关注公众号！如已关注请重新打开')</script>");
+				return null;
+			}
+			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("list", list);
 			map.put("openid", openid);
@@ -357,6 +366,13 @@ public class SupplierCouponController extends BaseController{
 	public ModelAndView toMycouponPage(String openid) throws IOException{
 		try{
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user == null || user.getStatus() == UserWechatBean.STATUS_UNSUBSCRIBE){
+				ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+				HttpServletResponse response = attributes.getResponse();
+				writeJson(response , "<script>alert('请先关注公众号！如已关注请重新打开')</script>");
+				return null;
+			}
+			
 			SupplierCouponRecordBean bean = new  SupplierCouponRecordBean();
 			bean.setUserid(user.getId());
 			List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryUserAllCoupon(user.getId(),null);
