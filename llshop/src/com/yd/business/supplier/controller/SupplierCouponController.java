@@ -311,13 +311,13 @@ public class SupplierCouponController extends BaseController{
 				openid = (String) request.getAttribute("openid");
 			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			List<SupplierCouponConfigBean> list = supplierCouponService.querySureShowCoupon(user);
 			
 			if(user == null || user.getStatus() == UserWechatBean.STATUS_UNSUBSCRIBE){
 				writeJson(response , "<script>alert('请先关注公众号！如已关注请重新打开')</script>");
 				return null;
 			}
-			
+
+			List<SupplierCouponConfigBean> list = supplierCouponService.querySureShowCoupon(user);
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("list", list);
 			map.put("openid", openid);

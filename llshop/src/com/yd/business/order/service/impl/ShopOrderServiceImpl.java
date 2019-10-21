@@ -346,6 +346,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
 			//保存并处理用户购买成功的动作
 			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
+			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY_NOTIFY_FRIENDS , null, order);
 			
 			
 		}else{

@@ -106,10 +106,13 @@ ISupplierCouponService {
 					if(StringUtil.isNull(ruleSqlList) || ruleSqlList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){
 						returnlist.add(bean);
 					}else{
-						boolean whetherCanShow = judgeCouponRuleSQL(ruleSqlList, user.getId(), user.getOpenid(), null);
+						for(SupplierCouponRuleBean rule : ruleSqlList){
+							boolean whetherCanShow = judgeCouponRuleSQL(rule, user.getId(), user.getOpenid(), null);
 							if(whetherCanShow){
 								returnlist.add(bean);
 							}
+						}
+						
 				}
 				}
 				return returnlist;
@@ -251,13 +254,6 @@ ISupplierCouponService {
 //
 //	}
 	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * 根据优惠卷规则表中该优惠卷规则，返回领取结果
 	 */	
@@ -269,35 +265,39 @@ ISupplierCouponService {
 
 		try{
 			List<SupplierCouponRuleBean> ruleSqlList = queryReceiveCouponRuleSQLById(coupon_id,SupplierCouponRuleBean.TYPE_RECEIVE);		//把所有的sql条件通过list方式给查出来
-		if(StringUtil.isNull(ruleSqlList) || ruleSqlList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){				//如果从优惠卷规则表中查询领取优惠卷的规则为空
-			reveiveResult = receiveCoupon(coupon_id,user);	
-			return reveiveResult;
-		}else{
-			boolean whetherReceiveCoupon = judgeCouponRuleSQL(ruleSqlList, user.getId(), user.getOpenid(), null);		//如果有领取规则判断领取规则的条件是否成立
-			if(whetherReceiveCoupon){															//满足领取规则
+			if(StringUtil.isNull(ruleSqlList) || ruleSqlList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){				//如果从优惠卷规则表中查询领取优惠卷的规则为空
 				reveiveResult = receiveCoupon(coupon_id,user);	
 				return reveiveResult;
 			}else{
-				//根据优惠卷id到规则表中查询该优惠卷的规则信息
-				reveiveResult = findCouponRuleName(coupon_id,SupplierCouponRuleBean.TYPE_RECEIVE);
-				return reveiveResult;
+				
+				for(SupplierCouponRuleBean rule : ruleSqlList){
+					boolean whetherReceiveCoupon = judgeCouponRuleSQL(rule, user.getId(), user.getOpenid(), null);		//如果有领取规则判断领取规则的条件是否成立
+					if(whetherReceiveCoupon){															//满足领取规则
+						reveiveResult = receiveCoupon(coupon_id,user);	
+						return reveiveResult;
+					}else{
+						//根据优惠卷id到规则表中查询该优惠卷的规则信息
+	//					SupplierCouponRuleBean rule = findCouponRuleName(coupon_id,SupplierCouponRuleBean.TYPE_RECEIVE);
+						reveiveResult = rule.getMismatch_desc();
+						return reveiveResult;
+					}
+				}
 			}
-		}
-			}catch(Exception e){
+		}catch(Exception e){
 			log.error(e, e);
-			return reveiveResult;														//如果前面报错,返回网络原因的错误信息s
 		}
+		return reveiveResult;	
 	}
 	
 	/**
 	 * 根据优惠卷id和type到优惠卷规则表中查询该优惠卷的规则名称
 	 * */
-	public String findCouponRuleName(Integer coupon_id, Integer type){
+	public SupplierCouponRuleBean findCouponRuleName(Integer coupon_id, Integer type){
 		SupplierCouponRuleBean bean = new SupplierCouponRuleBean();
 		bean.setCoupon_id(coupon_id);
 		bean.setType(type);
 		bean = supplierCouponDao.findCouponRule(bean);
-		return bean.getRule_name();
+		return bean;
 	}
 	
 	
@@ -578,26 +578,29 @@ ISupplierCouponService {
 		//设置"网络原因领取失败,请稍后在试"返回结果,如果后面方法报错,界面将会弹出此结果
 		String	reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.USE_COUPON_INTERNET_BAD);
 		try{
-		List<SupplierCouponRuleBean> ruleSqlList = queryReceiveCouponRuleSQLById(coupon_id,SupplierCouponRuleBean.TYPE_USE);		//把所有的sql条件通过list方式给查出来
-		if(StringUtil.isNull(ruleSqlList) || ruleSqlList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){				//如果从优惠卷规则表中查询领取优惠卷的规则为空
-			reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_CAN_USE);
-			return reveiveResult;
-		}else{
-			boolean whetherReceiveCoupon = judgeCouponRuleSQL(ruleSqlList,userid,null,orderCode);			//如果有使用规则判断领取规则的条件是否成立
-			if(whetherReceiveCoupon){															//满足领取规则
+			List<SupplierCouponRuleBean> ruleSqlList = queryReceiveCouponRuleSQLById(coupon_id,SupplierCouponRuleBean.TYPE_USE);		//把所有的sql条件通过list方式给查出来
+			if(StringUtil.isNull(ruleSqlList) || ruleSqlList.size() == SupplierCouponRuleBean.COUPON_RULE_LIST_IS_ZERO ){				//如果从优惠卷规则表中查询领取优惠卷的规则为空
 				reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_CAN_USE);
 				return reveiveResult;
-			}else{  
-				//根据优惠卷id到规则表中查询该优惠卷的规则信息  
-				reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_NO_CAN_USE);
-				return reveiveResult;
+			}else{
+				for(SupplierCouponRuleBean rule : ruleSqlList){
+					boolean whetherReceiveCoupon = judgeCouponRuleSQL(rule, userid, null, orderCode);		//如果有领取规则判断领取规则的条件是否成立
+					if(whetherReceiveCoupon){	
+						reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_CAN_USE);
+						return reveiveResult;
+					}else{  
+					//根据优惠卷id到规则表中查询该优惠卷的规则信息  
+//						reveiveResult=	configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_NO_CAN_USE);
+						reveiveResult = rule.getMismatch_desc();
+						return reveiveResult;
+					}
+				}
 			}
-		}
 			}catch(Exception e){
 			log.error(e, e);
-			return reveiveResult;														//如果前面报错,返回网络原因的错误信息s
+															//如果前面报错,返回网络原因的错误信息s
 		}
-		
+			return reveiveResult;	
 	}
 	
 	/**
@@ -613,10 +616,13 @@ ISupplierCouponService {
 		for(SupplierCouponRecordBean record : recordList){
 			// 查询当前拥有优惠卷的使用规则
 			List<SupplierCouponRuleBean> ruleList = queryEnableCouponRuleByCouponid(record.getCoupon_id(),SupplierCouponRuleBean.TYPE_USE);
-			// 执行使用条件规则的SQL，返回成功为可使用
-			boolean flag = judgeCouponRuleSQL(ruleList, userid,null, orderCode);
-			if(flag){
-				canUseList.add(record);
+			
+			for(SupplierCouponRuleBean rule : ruleList){
+				// 执行使用条件规则的SQL，返回成功为可使用
+				boolean flag = judgeCouponRuleSQL(rule, userid,null, orderCode);
+				if(flag){
+					canUseList.add(record);
+				}
 			}
 		}
 		return canUseList;
@@ -628,18 +634,15 @@ ISupplierCouponService {
 	/**
 	 * 判断优惠卷的规则是否满足
 	 * */
-		private boolean judgeCouponRuleSQL(List<SupplierCouponRuleBean> ruleSqlList,Integer user,String openid,String orderCode){
+		private boolean judgeCouponRuleSQL(SupplierCouponRuleBean bean,Integer user,String openid,String orderCode){
 			boolean whetherReceiveCoupon = true ;
 			try{
-				for(SupplierCouponRuleBean bean : ruleSqlList){
-					bean.setSQL(bean.getSQL().replaceAll("#userid#", String.valueOf(user)));
-					bean.setSQL(bean.getSQL().replaceAll("#orderCode#", orderCode));
-					bean.setSQL(bean.getSQL().replaceAll("#openid#", openid));
-					int count = couponRuleSQLCounValue(bean.getSQL());						//执行该优惠卷对应规则表中sql判断是否有返回数据
-					if(count ==  SupplierCouponRuleBean.RULE_SQL_COUNT_MIN_VALUE ){
-						whetherReceiveCoupon = false ;
-						break;
-					}
+				bean.setSQL(bean.getSQL().replaceAll("#userid#", String.valueOf(user)));
+				bean.setSQL(bean.getSQL().replaceAll("#orderCode#", orderCode));
+				bean.setSQL(bean.getSQL().replaceAll("#openid#", openid));
+				int count = couponRuleSQLCounValue(bean.getSQL());						//执行该优惠卷对应规则表中sql判断是否有返回数据
+				if(count ==  SupplierCouponRuleBean.RULE_SQL_COUNT_MIN_VALUE ){
+					whetherReceiveCoupon = false ;
 				}
 				
 			}catch(Exception e){

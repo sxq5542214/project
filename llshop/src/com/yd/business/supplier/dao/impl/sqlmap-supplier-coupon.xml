@@ -306,8 +306,8 @@
 	
 	
 	<insert id="insertCouponRule" parameterType="supplierCouponRule"   keyProperty="id">
-		insert into ll_coupon_rule(coupon_id,rule_name,`explain`,`status`,type,begin_time,end_time,`SQL`) values 
-		(#{coupon_id},#{rule_name},#{explain},#{status},#{type},#{begin_time},#{end_time},#{SQL} )
+		insert into ll_coupon_rule(coupon_id,rule_name,mismatch_desc,`explain`,`status`,type,begin_time,end_time,`SQL`) values 
+		(#{coupon_id},#{rule_name},#{mismatch_desc},#{explain},#{status},#{type},#{begin_time},#{end_time},#{SQL} )
 	</insert>
 	
 	<update id="updateCouponRule" parameterType="supplierCouponRule">
@@ -315,6 +315,7 @@
 		<set>
 			<if test="coupon_id != null">coupon_id = #{coupon_id},</if>
 			<if test="rule_name != null and rule_name !=''">rule_name = #{rule_name},</if>
+			<if test="mismatch_desc != null and mismatch_desc !=''">mismatch_desc = #{mismatch_desc},</if>
 			<if test="explain != null and explain !=''">`explain` = #{explain},</if>
 			<if test="status != null ">`status` = #{status},</if>
 			<if test="type != null ">type = #{type},</if>

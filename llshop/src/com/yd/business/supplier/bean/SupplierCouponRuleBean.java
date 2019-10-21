@@ -43,6 +43,7 @@ public class SupplierCouponRuleBean  extends BaseBean {
 	private Integer id;
 	private Integer coupon_id;		//优惠卷id
 	private String rule_name;	//规则名称
+	private String mismatch_desc;  //规则不匹配描述
 	private String explain;		//规则解释
 	private Integer status;		//状态
 	private Integer type;		//标注是领用还是使用
@@ -112,6 +113,12 @@ public class SupplierCouponRuleBean  extends BaseBean {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getMismatch_desc() {
+		return mismatch_desc;
+	}
+	public void setMismatch_desc(String mismatch_desc) {
+		this.mismatch_desc = mismatch_desc;
 	}
 	
 	
