@@ -279,7 +279,7 @@ ISupplierCouponService {
 				return reveiveResult;
 			}else{
 				//根据优惠卷id到规则表中查询该优惠卷的规则信息
-				reveiveResult = findCouponRuleName(coupon_id,SupplierCouponRuleBean.TYPE_SHOW);
+				reveiveResult = findCouponRuleName(coupon_id,SupplierCouponRuleBean.TYPE_RECEIVE);
 				return reveiveResult;
 			}
 		}
@@ -1316,8 +1316,6 @@ ISupplierCouponService {
 			condition.setCustomer_id(customer_id);
 			condition.setStatus(SupplierProductBean.STATUS_UP);
 			condition.setNow_time(DateUtil.getNowDateStr());
-			
-			List<CustomerSupplierProductBean> listCsp = new ArrayList<CustomerSupplierProductBean>();
 			
 			//查询客户下有多少商户
 			List<SupplierBean> suppliers = supplierService.querySupplierByCustomerId(customer_id);
