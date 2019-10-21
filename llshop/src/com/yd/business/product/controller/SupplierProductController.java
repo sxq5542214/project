@@ -280,6 +280,10 @@ public class SupplierProductController extends BaseController {
 		try{
 			String id = request.getParameter("id");
 			String openid = request.getParameter("openid");
+			if(id == null){
+				writeJson(response , "<script>alert('界面加载出错！请重新打开界面')</script>");
+				return null;
+			}
 			SupplierProductBean bean = supplierProductService.findSupplierProductById(Integer.parseInt(id));
 			
 			Map<String,Object> map = new HashMap<String, Object>();

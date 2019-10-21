@@ -28,12 +28,14 @@
 		<img alt="" src="images/user/supplierProductShop/left.png" style="width: 10px;height: 20px;">
 	</div>
 	<div class="header">
+		<a href="supplier/coupon/toUserCouponCenterPage.do?openid=<%=openid%>">
 		<img alt="" height="100%" width="100%"
-			src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=4118960086,2125569760&fm=27&gp=0.jpg">
+			src="images/user/supplierProductShop/coupon/get_coupon.jpg">
+		</a>
 	</div>
 	<div class="swiper-container">
 		<ul class="swiper-container-ul">
-			<li class="swiper-container-ul-li actives" style="width: 100%;">商品分类</li>
+			<li class="swiper-container-ul-li actives" style="width: 100%;color:black;border-color:gray;">商品分类</li>
 			<!--       <li class="swiper-container-ul-li">店铺</li>
  -->
 		</ul>

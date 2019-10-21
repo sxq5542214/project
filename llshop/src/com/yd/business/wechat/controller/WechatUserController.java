@@ -1119,8 +1119,8 @@ public class WechatUserController extends BaseController {
 		}else if(StringUtil.isNotNull(cachedOpenid)){
 			openid = cachedOpenid;
 		}
-		
-		return supplierCouponController.toUserCouponCenterPage(openid);
+		request.setAttribute("openid", openid);
+		return supplierCouponController.toUserCouponCenterPage(request, response);
 	}
 	
 	/**

@@ -304,14 +304,16 @@ public class SupplierCouponController extends BaseController{
 	 * 查询目前配置的优惠卷
 	 */
 	@RequestMapping("**/supplier/coupon/toUserCouponCenterPage.do")
-	public ModelAndView toUserCouponCenterPage(String openid){
+	public ModelAndView toUserCouponCenterPage(HttpServletRequest request,HttpServletResponse response){
 		try{
+			String openid = request.getParameter("openid");
+			if(openid == null){
+				openid = (String) request.getAttribute("openid");
+			}
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			List<SupplierCouponConfigBean> list = supplierCouponService.querySureShowCoupon(user);
 			
 			if(user == null || user.getStatus() == UserWechatBean.STATUS_UNSUBSCRIBE){
-				ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-				HttpServletResponse response = attributes.getResponse();
 				writeJson(response , "<script>alert('请先关注公众号！如已关注请重新打开')</script>");
 				return null;
 			}

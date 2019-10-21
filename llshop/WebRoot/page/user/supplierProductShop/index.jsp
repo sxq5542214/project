@@ -38,10 +38,10 @@
     </style>
 </head>
 <body>
-    <header class="mui-bar mui-bar-nav" id="header">
+    <header class="mui-bar mui-bar-nav" id="header" style="background:#e19a53;">
         <div class="top-sch-box flex-col">
             <div class="centerflex">
-                <i class="fdj iconfont icon-search"></i>
+                <i class="fdj iconfont icon-search" style="color:chocolate;"></i>
                 <div class="sch-txt">每天吃点坚果，享受健康生活</div>
                 <span class="shaomiao"><i class="iconfont icon-saoma"></i></span>
             </div>
@@ -58,14 +58,14 @@
 	 <!-- 搜索层 -->
     <div class="pop-schwrap">
         <div class="ui-scrollview">
-            <div class="mui-bar mui-bar-nav clone">
+            <div class="mui-bar mui-bar-nav clone" style="background:#e19a53;">
                 <a class="btn btn-back" href="javascript:;"></a>
                 <div class="top-sch-box flex-col">
                     <div class="centerflex">
-                        <input class="sch-input mui-input-clear" type="text" name="" id="" placeholder="连衣裙就是你的女人味儿" />
+                        <input class="sch-input mui-input-clear" type="text" name="" id="" placeholder="每天吃点坚果，享受健康生活" />
                     </div>
                 </div>
-                <a class="mui-btn mui-btn-primary sch-submit" href="search.html">搜索</a>
+                <a class="mui-btn mui-btn-primary sch-submit" href="user/supplier/toSupplierProductCategoryPage.do?openid=<%=openid%>" style="background-color:chocolate;">搜索</a>
             </div>
             <div class="scroll-wrap">
                 <div class="mui-scroll">
@@ -73,8 +73,10 @@
                         <div class="section ui-border-b">
                             <div class="tit"><i class="iconfont icon-hot"></i>热门搜索</div>
                             <div class="tags">
+                            	<a href="user/supplier/toSupplierProductCategoryPage.do?openid=<%=openid%>" style="color:#666">
                                 <span class="tag actice">山核桃仁</span><span class="tag">手剥山核桃</span><span class="tag">碧根果</span><span class="tag">杏仁</span>
                                 <span class="tag actice">开心果</span><span class="tag">夏威夷果</span><span class="tag">开口松子</span>
+                            	</a>
                             </div>
                         </div>
                      <!--    <div class="section">
