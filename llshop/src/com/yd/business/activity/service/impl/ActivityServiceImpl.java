@@ -162,12 +162,20 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 	 * @return
 	 * @throws Exception
 	 */
-	public ActivityWinHisBean saveActivityWinHis(ActivityBean bean) throws Exception{
+	@Override
+	public ActivityWinHisBean createActivityWinHis(Integer activityId,UserWechatBean user,ActivityPrize prize){
 		ActivityWinHisBean win = new ActivityWinHisBean();
-		AutoInvokeGetSetMethod.autoInvoke(bean, win);
-		win.setWin_id(bean.getId());
+//		AutoInvokeGetSetMethod.autoInvoke(activity, win);
+		win.setActivity_config_id(activityId);
+		win.setUser_id(user.getId());
+		win.setOpenid(user.getOpenid());
+		win.setUser_name(user.getNick_name());
+		win.setHead_img(user.getHead_img());
 		win.setId(null);
+		win.setPrize_id(prize.getId());
+		win.setPrize_name(prize.getPrize_name());
 		win.setStatus(ActivityWinHisBean.STATUS_WINED);
+		win.setCreate_time(DateUtil.getNowDateStr());
 		activityDao.saveActivityWinHis(win);
 		return win;
 	}

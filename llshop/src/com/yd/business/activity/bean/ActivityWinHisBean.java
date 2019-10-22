@@ -24,6 +24,10 @@ public class ActivityWinHisBean extends ActivityBean {
 	private Date win_time;
 	private Integer win_id;
 	private Integer status;
+	private Integer prize_id;
+	private String prize_name;
+	private Integer user_money;
+	
 	private String arrstatus;//用于批量查询
 	private Date beginWinTime;
 	private Date endWinTime;
@@ -64,5 +68,22 @@ public class ActivityWinHisBean extends ActivityBean {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	
+	public Integer getPrize_id() {
+		return prize_id;
+	}
+	public void setPrize_id(Integer prize_id) {
+		this.prize_id = prize_id;
+	}
+	public String getPrize_name() {
+		return prize_name;
+	}
+	public void setPrize_name(String prize_name) {
+		this.prize_name = prize_name;
+	}
+	public Integer getUser_money() {
+		return user_money;
+	}
+	public void setUser_money(Integer user_money) {
+		this.user_money = user_money;
+	}
 }

@@ -20,6 +20,7 @@ import com.yd.business.activity.dao.IActivityDao;
 import com.yd.business.activity.dao.IActivityPrizeDao;
 import com.yd.business.activity.service.IActivitConfigService;
 import com.yd.business.activity.service.IActivityPrizeService;
+import com.yd.business.activity.service.IActivityService;
 import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.dictionary.service.IDictionaryService;
 import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
@@ -39,6 +40,8 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 	private IActivityDao activityDao;
 	@Resource
 	private IActivitConfigService activityConfigService;
+	@Resource
+	private IActivityService activityService;
 	@Resource
 	private IDictionaryService dictionaryService;
 	@Resource
@@ -161,7 +164,9 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 				default:
 					break;
 				}
-				
+
+				//创建活动获奖历史
+				activityService.createActivityWinHis(activityId, user, prize);
 			}
 		}
 		

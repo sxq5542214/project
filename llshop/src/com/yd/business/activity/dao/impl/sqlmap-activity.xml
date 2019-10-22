@@ -98,9 +98,9 @@
 	</insert>
 	
 	<insert id="saveActivityWinHis" parameterType="activityWinHis">
-		insert into ll_activity_win_his(user_id,weixin_id,user_name,user_type,img_url,create_time,
+		insert into ll_activity_win_his(user_id,openid,user_name,user_type,head_img,create_time,prize_id,prize_name,
 		user_money,bonus_money,category,modify_time,activity_name,activity_time,activity_config_id,win_time,win_id,status) 
-		values(#{user_id},#{weixin_id},#{user_name},#{user_type},#{img_url},sysdate(),
+		values(#{user_id},#{openid},#{user_name},#{user_type},#{head_img},sysdate(),#{prize_id},#{prize_name},
 		#{user_money},#{bonus_money},#{category},sysdate(),#{activity_name},#{activity_time},#{activity_config_id}
 		,sysdate(),#{win_id},#{status})
 		
@@ -113,6 +113,10 @@
 	<select id="queryActivityHis" parameterType="activityWinHis" resultType="activityWinHis">
 		select * from ll_activity_win_his
 		<where>
+			<if test="user_id != null ">and user_id=#{user_id}</if>
+			<if test="openid != null and openid != ''">and openid=#{openid}</if>
+			<if test="activity_config_id !=null and activity_config_id != ''">and activity_config_id=#{activity_config_id}</if>
+			<if test="prize_id !=null and prize_id != ''">and prize_id=#{prize_id}</if>
 			<if test="activity_name!=null and activity_name!=''">and activity_name=#{activity_name}</if>
 			<if test="user_name!=null and user_name!=''">and user_name=#{user_name}</if>
 			<if test="category!=null">and category = #{category}</if>

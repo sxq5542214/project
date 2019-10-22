@@ -74,5 +74,7 @@ public interface IActivityService {
 	ActivityRemindBean remindUserJoinActivity(String openid,String instanceid);
 	
 	String checkLimitParams(ActivityConfigBean activityConfigBean,UserWechatBean user);
+
+	ActivityWinHisBean createActivityWinHis(Integer activityId, UserWechatBean user, ActivityPrize prize);
 	
 }

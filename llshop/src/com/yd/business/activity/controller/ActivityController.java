@@ -107,6 +107,7 @@ public class ActivityController extends BaseController {
 	public static final String PAGE_USER_ACTIVITY_OLYMPIC_ADDPHONE = "/page/user/activity/olympicActivity/olympicAddPhone.jsp";
 	public static final String PAGE_USER_ACTIVITY_FREECUTACTIVITY = "/page/user/activity/freeCutActivity/freeCutActivity.jsp";
 	public static final String PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpActivity.jsp";
+	public static final String PAGE_USER_ACTIVITY_FREECUTHELFRIENDCIRCLEPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpFriendCircleActivity.jsp";
 
 	
 	public static final String PAGE_USER_ACTIVITY_LISTHOME = "/page/user/activity/signActivity/index.jsp";
@@ -1016,7 +1017,8 @@ public class ActivityController extends BaseController {
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String originalid = original.getOriginalid();
 			
-			String openid = (String)request.getSession().getAttribute("code_openid");
+//			String openid = (String)request.getSession().getAttribute("code_openid");
+			String openid ="123";
 			String code = request.getParameter("code");
 			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
 				// 没有缓存，也没有传code过来，则跳转至微信授权
@@ -1042,12 +1044,24 @@ public class ActivityController extends BaseController {
 				}
 			});
 			
-			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
-
+			
 			model.put("user", user);
 			model.put("qrCode", qrCode);
-			model.put("list", list);
 			model.put("supplierEventId", supplierEventId);
+			
+			if("2".equals(share_type)){
+				//查询中奖纪录
+				ActivityWinHisBean bean = new ActivityWinHisBean();
+				bean.setActivity_config_id(supplierEventId);
+				bean.setUser_id(user.getId());
+				List<ActivityWinHisBean> activityWinHisList = activityService.queryActivityWinHis(bean);
+
+				model.put("activityWinHisList", activityWinHisList);
+				return new ModelAndView(PAGE_USER_ACTIVITY_FREECUTHELFRIENDCIRCLEPACTIVITY, model);
+			}
+			
+			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
+			model.put("list", list);
 			
 			return new ModelAndView(PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY, model);
 
