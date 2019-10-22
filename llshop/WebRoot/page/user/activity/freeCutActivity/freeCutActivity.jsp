@@ -141,7 +141,7 @@ rotate
 								
 								String str = "";
 								int level = 0;
-								int size = list.size() +30;
+								int size = list.size() ;
 								int needNum = 10 - size;
 								String prizeName = "杏仁150g";
 								int persent = size *100 / maxCount;

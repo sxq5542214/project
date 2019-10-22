@@ -28,9 +28,9 @@
 		
 	<insert id="insertWechatOriginalInfo" parameterType="wechatOriginalInfo" keyProperty="id">
 		insert into ll_wechat_original_info(originalid,original_name,method_name,appid,secret,server_domain,weight,access_token,
-		expires_in,token,mch_name,mch_id,pay_cert_file_path,server_url,jsapi_ticket,pay_wechat_sign_key,modify_time)
+		expires_in,token,mch_name,mch_id,pay_cert_file_path,server_url,server_url2,jsapi_ticket,pay_wechat_sign_key,modify_time)
 		values(#{originalid},#{original_name},#{method_name},#{appid},#{secret},#{server_domain},#{weight},#{access_token}
-		,#{expires_in},#{token},#{mch_name},#{mch_id},#{pay_cert_file_path},#{server_url},#{jsapi_ticket},#{pay_wechat_sign_key},#{modify_time})
+		,#{expires_in},#{token},#{mch_name},#{mch_id},#{pay_cert_file_path},#{server_url},#{server_url2},#{jsapi_ticket},#{pay_wechat_sign_key},#{modify_time})
 	</insert>
 	
 	<update id="updateWechatOriginalInfo" parameterType="wechatOriginalInfo">
@@ -50,6 +50,7 @@
 	        <if test="mch_id !=null and mch_id !=''">mch_id = #{mch_id},</if>
 	        <if test="pay_cert_file_path !=null and pay_cert_file_path !=''">pay_cert_file_path = #{pay_cert_file_path},</if>
 	        <if test="server_url !=null and server_url !=''">server_url = #{server_url},</if>
+	        <if test="server_url2 !=null and server_url2 !=''">server_url2 = #{server_url2},</if>
 	        <if test="jsapi_ticket !=null and jsapi_ticket !=''">jsapi_ticket = #{jsapi_ticket},</if>
 	        <if test="pay_wechat_sign_key !=null and pay_wechat_sign_key !=''">pay_wechat_sign_key = #{pay_wechat_sign_key},</if>
 	        <if test="modify_time !=null and modify_time !=''">modify_time = #{modify_time},</if>

@@ -969,12 +969,22 @@ public class ActivityController extends BaseController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
 			String openid = request.getParameter("openid");
+			String code = request.getParameter("code");
+			//用第二域名展示界面，避免第一域名被封
+			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
+			String serverName = request.getServerName();
+			if(original.getServer_url2() != null && original.getServer_url2().indexOf(serverName)< 0){
+				String url = original.getServer_url2()+"activity/user/toFreeCutActivity.html?openid="+openid+"&code="+code;
+				response.sendRedirect(url);
+				return null;
+			}
+			
+			
 			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
 			String originalid = null;
 			//先查缓存
 			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-				String code = request.getParameter("code");
-				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
+				originalid = original.getOriginalid();
 				openid = wechatUserService.getOpenId(code,originalid);
 				request.getSession().setAttribute("cachedOpenid", openid);
 			}else if(StringUtil.isNotNull(cachedOpenid)){
@@ -1017,12 +1027,11 @@ public class ActivityController extends BaseController {
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String originalid = original.getOriginalid();
 			
-//			String openid = (String)request.getSession().getAttribute("code_openid");
-			String openid ="123";
+			String openid = (String)request.getSession().getAttribute("code_openid");
 			String code = request.getParameter("code");
 			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
-				// 没有缓存，也没有传code过来，则跳转至微信授权
-				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toFreeCutHelpActivity.html?toOpenid="+ toOpenId +"&supplierEventId="+ supplierEventId + "&share_type="+share_type , "utf-8");
+				// 没有缓存，也没有传code过来，则跳转至微信授权，用第二域名展示界面
+				String enCodeUrl = URLEncoder.encode(original.getServer_url2() +"activity/user/toFreeCutHelpActivity.html?toOpenid="+ toOpenId +"&supplierEventId="+ supplierEventId + "&share_type="+share_type , "utf-8");
 				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 				return null;
 			}else if(StringUtil.isNull(openid)){
@@ -1049,7 +1058,7 @@ public class ActivityController extends BaseController {
 			model.put("qrCode", qrCode);
 			model.put("supplierEventId", supplierEventId);
 			
-			if("2".equals(share_type)){
+//			if("2".equals(share_type)){
 				//查询中奖纪录
 				ActivityWinHisBean bean = new ActivityWinHisBean();
 				bean.setActivity_config_id(supplierEventId);
@@ -1058,12 +1067,12 @@ public class ActivityController extends BaseController {
 
 				model.put("activityWinHisList", activityWinHisList);
 				return new ModelAndView(PAGE_USER_ACTIVITY_FREECUTHELFRIENDCIRCLEPACTIVITY, model);
-			}
-			
-			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
-			model.put("list", list);
-			
-			return new ModelAndView(PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY, model);
+//			}
+//			
+//			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
+//			model.put("list", list);
+//			
+//			return new ModelAndView(PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY, model);
 
 		}catch (Exception e) {
 			log.error(e,e);

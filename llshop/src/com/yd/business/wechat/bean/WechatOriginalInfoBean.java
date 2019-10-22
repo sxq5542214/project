@@ -30,6 +30,7 @@ public class WechatOriginalInfoBean extends BaseBean {
 	private String mch_id;
 	private String pay_cert_file_path;
 	private String server_url;
+	private String server_url2;
 	private String jsapi_ticket;
 	private String pay_wechat_sign_key;
 	private String modify_time;
@@ -173,6 +174,12 @@ public class WechatOriginalInfoBean extends BaseBean {
 	}
 	public void setFrom_originalid(String from_originalid) {
 		this.from_originalid = from_originalid;
+	}
+	public String getServer_url2() {
+		return server_url2;
+	}
+	public void setServer_url2(String server_url2) {
+		this.server_url2 = server_url2;
 	}
 	
 	
