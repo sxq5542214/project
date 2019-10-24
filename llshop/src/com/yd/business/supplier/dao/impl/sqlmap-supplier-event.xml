@@ -118,10 +118,11 @@
 		select *,(select head_img from ll_wechat_user x where x.id = fromUserId ) head_img from ll_supplier_event_code 
 		<where>
 			<if test="id != null"> and id = #{id} </if>
-			<if test="eventId != null"> and eventId = #{eventId} </if><!-- 
-			<if test="userId != null"> and userId = #{userId} </if> -->
-			<if test="userId != null"> and userId in (select u2.id from ll_wechat_user u1,ll_wechat_user u2 where u1.id = #{userId} 
+			<if test="eventId != null"> and eventId = #{eventId} </if>
+			<if test="userId != null"> and userId = #{userId} </if>
+	<!-- 		<if test="userId != null"> and userId in (select u2.id from ll_wechat_user u1,ll_wechat_user u2 where u1.id = #{userId} 
 									and (u2.unionid = u1.unionid  or u2.id = #{userId} ))</if> 
+	 -->
 			<if test="fromUserId != null"> and fromUserId = #{fromUserId} </if>
 			<if test="code != null"> and code = #{code} </if>
 		</where>

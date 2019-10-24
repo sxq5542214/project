@@ -105,8 +105,8 @@ rotate
 				<img data-v-163c7539="" data-v-49b8e837=""
 					src="<%=user.getHead_img() %>"
 					alt="头像" class="avatar">
-				<p data-v-49b8e837="">ice_river</p>
-				<p data-v-49b8e837="">“我想要的坚果，就差你这一下助力啦！”</p>
+				<p data-v-49b8e837=""><%=user.getNick_name() %></p>
+				<p data-v-49b8e837="">“好友助力可得免费坚果，快和小伙伴约起来！”</p>
 			</div>
 			<div data-v-fbc5d9ba="" data-v-49b8e837="" class="order-card card">
 				<div data-v-fbc5d9ba="" class="timer">
@@ -241,11 +241,11 @@ rotate
 						src="page/user/activity/freeCutActivity/resource/tag.7b4ea60e.svg"
 						alt="*">
 				</p>
-				<div data-v-0f850d4c="" data-v-7faf502c="" class="list-wrapper">
+				<div data-v-0f850d4c="" data-v-7faf502c="" class="list-wrapper" style="height: <%=list.size()%>rem;">
 					<%
 						for(SupplierEventCodeBean bean : list){
 					 %>
-					<div data-v-0f850d4c="" mode="out-in" class="item-wrapper">
+					<div data-v-0f850d4c="" mode="out-in" class="item-wrapper" style="position: relative;top: 0;margin-bottom: 2px;">
 						<div data-v-0f850d4c="">
 							<div data-v-7faf502c="" class="item">
 								<img data-v-163c7539="" data-v-7faf502c=""
