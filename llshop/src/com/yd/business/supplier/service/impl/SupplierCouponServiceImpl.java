@@ -463,6 +463,7 @@ ISupplierCouponService {
 		bean.setStatus(SupplierCouponRuleBean.STATUS_ENABLE);
 		bean.setBegin_time(DateUtil.getNowDateStr());
 		bean.setEnd_time(DateUtil.getNowDateStr());
+		bean.setType(type);
 		return supplierCouponDao.queryCouponRuleSQLByCouponId(bean);
 	}
 		
@@ -617,13 +618,21 @@ ISupplierCouponService {
 			// 查询当前拥有优惠卷的使用规则
 			List<SupplierCouponRuleBean> ruleList = queryEnableCouponRuleByCouponid(record.getCoupon_id(),SupplierCouponRuleBean.TYPE_USE);
 			
-			for(SupplierCouponRuleBean rule : ruleList){
-				// 执行使用条件规则的SQL，返回成功为可使用
-				boolean flag = judgeCouponRuleSQL(rule, userid,null, orderCode);
-				if(flag){
-					canUseList.add(record);
+			//没有规则，则可以直接用
+			if(ruleList.size() == 0){
+				canUseList.add(record);
+			}else{
+				//有规则，则需要满足条件
+				for(SupplierCouponRuleBean rule : ruleList){
+					// 执行使用条件规则的SQL，返回成功为可使用
+					boolean flag = judgeCouponRuleSQL(rule, userid,null, orderCode);
+					if(flag){
+						canUseList.add(record);
+					}
 				}
 			}
+			
+			
 		}
 		return canUseList;
 	}
