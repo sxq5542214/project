@@ -48,9 +48,9 @@
 </header>-->
 	<div id="wrapper" style="height: 689px;">
 		<div class="viewport" id="scroller"
-			style="-webkit-transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transform: translate(0px, 0px) translateZ(0px);">
+			style="-webkit-transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); transition: 0ms cubic-bezier(0.1, 0.57, 0.1, 1); -webkit-transform: translate(0px, 0px) translateZ(0px);max-height: 90%;overflow-y: scroll;min-height: 90%">
 			<section class="content">
-
+ 
 				<div class="block">
 					<div class="cart_list">
 						<div class="shop_title" shop_id="6860">
@@ -285,6 +285,8 @@
 					json_temp += "{spid:" + spid +",num:"+ num +"}" ;
 					isEmpty = false;
 			//		deleteProductToCart(spid);
+				}else{
+					continue;
 				}
 				if(i != prods.length - 1){
 					json_temp +=",";
@@ -297,9 +299,24 @@
 				return ;
 			}
 			json_temp += "],time:" + time.getTime() +"}";
-			location.href= "<%=basePath%>user/supplier/toSupplierShopUserOrderPage.do?openid="+openid+"&time="+time.getTime() ;
+			var url = "<%=basePath%>user/supplier/toSupplierShopUserOrderPage.do?openid="+openid+"&time="+time.getTime();
+			standardPost(url,{'productInfos':json_temp});
+	//		alert(json_temp);
 		};
-		
+function standardPost(url,args){
+	var body = $(document.body),form = $("<form method='post'></form>"),input;
+	form.attr({"action":url});
+	$.each(args,function(key,value){
+		input = $("<input type='hidden'>");
+		input.attr({"name":key});
+		input.val(value);
+		form.append(input);
+	});
+	form.appendTo(document.body);
+	form.submit();
+	document.body.removeChild(form[0]);
+
+}
 	</script>
 </body>
 </html>

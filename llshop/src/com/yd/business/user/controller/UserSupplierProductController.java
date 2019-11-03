@@ -212,6 +212,7 @@ public class UserSupplierProductController extends BaseController {
 			String openid = request.getParameter("openid");
 			String order_code = request.getParameter("order_code");
 			String timeString = request.getParameter("time");
+			String productInfos = request.getParameter("productInfos");
 			Long time = null;
 			if(StringUtil.isNotNull(timeString)){
 				time = Long.parseLong(timeString);
@@ -225,7 +226,9 @@ public class UserSupplierProductController extends BaseController {
 				List<ShopOrderProductBean> productList = shopOrderService.queryShopOrderProduct(condition );
 				order.setProductList(productList);
 				
-			}else{ //没有定单号,则根据cookie里的数据创建订单
+			}else if(StringUtil.isNotNull(productInfos)){ // 根据传参过来的数据创建订单
+				order = shopOrderService.createOrderLogByUserCartList(openid,productInfos,time);
+			}else{//没有定单号、没有传参数据,则根据cookie里的数据创建订单
 				String data = CookieUtil.getValueByCookie(request, "productInfo");
 				order = shopOrderService.createOrderLogByUserCartList(openid,data,time);
 			}
