@@ -99,8 +99,13 @@
 						<small>￥<%=order.getCost_price().doubleValue()/100d %>/￥<%=(order.getCost_money()==null?0:order.getCost_money().doubleValue())/100d %></small>
 						
 						<p class="order-footer fixed-footer" style="position: relative;width: 100%;">
-							
-							<span id="express_mode">圆通速递</span> ： <input type="submit" value="扫码运单号发货" onclick="scanDeliver('<%=order.getOrder_code() %>');" />
+							<span style="margin-left: -15px;">请选择：</span> 
+							<select id="express_mode" style="color: black;font-size: 1.34rem;" >
+								<option value="圆通速递" selected="selected" >【圆通速递】</option>
+								<option value="中通速递" >【中通速递】 </option>
+								<option value="邮政包裹" > 【邮政包裹】  </option>
+							</select>
+							<input type="submit" value="扫码运单号发货" onclick="scanDeliver('<%=order.getOrder_code() %>');" />
 						</p>
 					</li>
 				</ul>
@@ -166,7 +171,7 @@ function getOrderProductList(item){
 function scanDeliver(orderCode){
 	//调用微信扫码
 	var openid = '<%=openid %>';
-	var express_mode = $('#express_mode').html() ;
+	var express_mode = $('#express_mode').val();
 	wx.scanQRCode({
 	  needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
 	  scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
@@ -180,7 +185,7 @@ function scanDeliver(orderCode){
 	  		result = strCode.split(',')[1];
 	  	}
 	  	
-	    if(confirm('确定运单号为：'+ result +"?")){
+	    if(confirm('确定运单号为：'+express_mode+"的"+ result +"?")){
 	    	$.ajax({
 				url:"order/shop/updateShopOrderExpressByWechatUser.do",
 				data:{openid : openid, order_code:orderCode , express_order_code: result ,express_mode : express_mode },
