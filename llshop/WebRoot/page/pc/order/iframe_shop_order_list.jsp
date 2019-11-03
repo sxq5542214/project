@@ -335,7 +335,7 @@
 		}); */  
 		
 		function aaa(order_code){
-			window.showModalDialog('<%=basePath%>user/toUserShopOrderPage.do?order_code='+order_code);
+			window.showModalDialog('<%=basePath%>user/supplier/toSupplierShopUserOrderPage.do?order_code='+order_code);
 		}
 		
 		
