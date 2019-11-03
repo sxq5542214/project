@@ -40,6 +40,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.yd.basic.framework.pageination.PageinationData;
 import com.yd.basic.framework.runable.BaseRunable;
@@ -123,9 +125,8 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	@Resource
 	protected IWechatOriginalInfoService wechatOriginalInfoService;
 	
-	private Map<String,String> wechatCodeMap = new HashMap<String, String>();
+	private static Map<String,String> wechatCodeMap = new HashMap<String, String>();
 	private HashMap<Long,String> codeTimeMap = new HashMap<Long, String>();
-	
 	
 	@Override
 	public BaseMessage handlerWechatMessage(Document doc) throws Exception{
@@ -1057,7 +1058,8 @@ log.debug("userTicketResponse:"+response);
 		}
 		
 		//先查缓存，如果没有再去微信服器查询
-		String cachedCode = wechatCodeMap.get(code);
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();  
+		String cachedCode = (String)request.getSession().getAttribute("cachedOpenid");
 		if(StringUtil.isNull(cachedCode)){
 
 			String url =getOauthUrl(code,originalid);
@@ -1065,7 +1067,13 @@ log.debug("userTicketResponse:"+response);
 			try {
 				String result = HttpUtil.get(url);
 				JSONObject jso = new JSONObject(result);
-				openId = jso.getString("openid");
+				int errcode = jso.optInt("errcode",-9999);
+				if(errcode == 40163){ // 返回code been used，代表已用过,从request中找
+					openId = (String)request.getSession().getAttribute("cachedOpenid");
+				}else{
+					openId = jso.getString("openid");
+					request.getSession().setAttribute("cachedOpenid", openId);
+				}
 				
 //				long time = System.currentTimeMillis();
 //				wechatCodeMap.put(code, openId);
