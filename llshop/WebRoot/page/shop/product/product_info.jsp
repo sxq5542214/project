@@ -204,8 +204,9 @@
 <!-- 猜你喜欢结束 -->
 <!-- 购物车开始 -->
 <section class="shopping_cart">
-	<div class="btn_con">
-		<button class="add" dd_name="加入购物车" onclick="addToCart(<%=bean.getId()%>);">加入购物车</button><button  onclick="gotoCart(<%=bean.getId()%>);" class="buy J_buy" dd_name="直接购买">立即购买</button>		
+	<div class="btn_con" style="margin-right: 0px;">
+		<button class="add" dd_name="加购物车" onclick="addToCart(<%=bean.getId()%>);" style="width: 45%;">加购物车</button>
+		<button  onclick="gotoCart(<%=bean.getId()%>);" class="buy J_buy" dd_name="直接购买" style="width: 45%;">立即购买</button>		
 	</div>
 	<!-- <a href="javascript: void(0);" class="cart" dd_name="查看购物车">
 		<span>购物车<i></i></span>

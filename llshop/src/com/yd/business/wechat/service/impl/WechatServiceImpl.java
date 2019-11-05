@@ -1097,21 +1097,28 @@ log.debug("userTicketResponse:"+response);
 			return null;
 		}
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest(); 
-		WechatWebAuthBean code_auth = (WechatWebAuthBean) request.getSession().getAttribute("code_auth");
+		WechatWebAuthBean code_auth = (WechatWebAuthBean) request.getSession().getAttribute(code);
 		WechatWebAuthBean bean = new WechatWebAuthBean();
 
-		if(code_auth != null){
+		if(code_auth == null){
 			String url =getOauthUrl(code,originalid);
 			try {
 				String result = HttpUtil.get(url);
 				JSONObject jso = new JSONObject(result);
-				bean.setAccess_token(jso.optString("access_token"));
-				bean.setExpires_in(jso.optInt("expires_in"));
-				bean.setOpenid(jso.optString("openid"));
-				bean.setRefresh_token(jso.optString("refresh_token"));
-				bean.setScope(jso.optString("scope"));
 				
-				request.getSession().setAttribute("code_auth", bean);
+				int errcode = jso.optInt("errcode",-9999);
+				if(errcode == 40163){ // 返回code been used，代表已用过,从session中找
+					bean = (WechatWebAuthBean)request.getSession().getAttribute(code);
+				}else{
+					bean.setAccess_token(jso.optString("access_token"));
+					bean.setExpires_in(jso.optInt("expires_in"));
+					bean.setOpenid(jso.optString("openid"));
+					bean.setRefresh_token(jso.optString("refresh_token"));
+					bean.setScope(jso.optString("scope"));
+					
+					request.getSession().setAttribute(code, bean);
+				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				log.error(e,e);
