@@ -1,3 +1,4 @@
+<%@page import="com.yd.util.StringUtil"%>
 <%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.product.bean.SupplierProductBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
@@ -9,7 +10,9 @@
 	boolean hasDiscount = false;
 	SupplierProductBean bean = (SupplierProductBean) request.getAttribute("bean");
 	String openid = (String) request.getAttribute("openid");
-	
+	if(StringUtil.isNull(openid)){
+		openid = request.getParameter("openid");
+	}
 	%>
 <!DOCTYPE html>
 <html class="">

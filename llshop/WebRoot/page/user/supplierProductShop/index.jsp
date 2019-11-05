@@ -62,7 +62,7 @@
                 <a class="btn btn-back" href="javascript:;"></a>
                 <div class="top-sch-box flex-col">
                     <div class="centerflex">
-                        <input class="sch-input mui-input-clear" type="text" name="" id="" placeholder="每天吃点坚果，享受健康生活" />
+                        <input class="sch-input mui-input-clear" type="text" name="" id="" placeholder="每天吃点坚果，享受健康生活" style="width: 85%;" />
                     </div>
                 </div>
                 <a class="mui-btn mui-btn-primary sch-submit" href="user/supplier/toSupplierProductCategoryPage.do?openid=<%=openid%>" style="background-color:chocolate;">搜索</a>

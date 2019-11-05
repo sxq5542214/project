@@ -122,7 +122,7 @@
 									couponStr = " （优惠卷抵扣）";
 								}
 							%>
-							<li class="border-bottom"><a href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getSupplier_product_id()%>">
+							<li class="border-bottom"><a href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getSupplier_product_id()%>&openid=<%=user.getOpenid()%>">
 									<div class="order-msg">
 										<img src="<%=product.getHead_img() %>" class="img_ware">
 										<div class="order-msg">
