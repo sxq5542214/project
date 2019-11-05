@@ -93,7 +93,7 @@ int maxCount = prize[3].getTotalcount();
 						src="images/user/supplierProductShop/coupon/lipingjuan.png"
 						alt="礼品图片" class="order-cover">
 					<div data-v-fbc5d9ba="" class="order-content">
-						<p data-v-fbc5d9ba="" class="order-title">【坚果赠送卷】<br>腰果、碧根果、开心果、<br>山核桃仁等免费送啦！
+						<p data-v-fbc5d9ba="" class="order-title">【坚果赠送券】<br>腰果、碧根果、开心果、<br>山核桃仁等免费送啦！
 							</p>
 						<p data-v-fbc5d9ba="" class="order-price">
 							价值可达 <small data-v-fbc5d9ba="" class="mtfin">￥</small><b
@@ -258,10 +258,10 @@ int maxCount = prize[3].getTotalcount();
 					<p data-v-ab1c5a10="">
 						1.人人免单攻略： <br data-v-ab1c5a10="">1）长按二维码识别并关注完成助力； <br
 							data-v-ab1c5a10="">2）公众号底部菜单优惠活动； <br data-v-ab1c5a10="">3）打开界面后即可参与活动；
-						<br data-v-ab1c5a10="">4）达到规则要求，即可领取赠送的礼品卷； <br data-v-ab1c5a10="">5）商城中下单并填写地址，等待收货；
+						<br data-v-ab1c5a10="">4）达到规则要求，即可领取赠送的礼品券； <br data-v-ab1c5a10="">5）商城中下单并填写地址，等待收货；
 					</p>
 					<p data-v-ab1c5a10="">
-						2.活动期间，用户可领取各类礼品卷一份（同品类仅可领一份）；
+						2.活动期间，用户可领取各类礼品券一份（同品类仅可领一份）；
 					</p>
 					<p data-v-ab1c5a10="">3.每个好友可助力一次，同一手机号、移动设备、微信号视为同一用户；</p>
 					<p data-v-ab1c5a10="">

@@ -122,7 +122,7 @@ rotate
 						src="images/user/supplierProductShop/coupon/lipingjuan.png"
 						alt="礼品图片" class="order-cover">
 					<div data-v-fbc5d9ba="" class="order-content">
-						<p data-v-fbc5d9ba="" class="order-title">【坚果赠送卷】<br>邀请好友帮忙助力<br>积累后可免费得坚果礼品！
+						<p data-v-fbc5d9ba="" class="order-title">【坚果赠送券】<br>邀请好友帮忙助力<br>积累后可免费得坚果礼品！
 							</p>
 						<p data-v-fbc5d9ba="" class="order-price">
 							价值可达 <small data-v-fbc5d9ba="" class="mtfin">￥</small><b
@@ -273,10 +273,10 @@ rotate
 					<p data-v-ab1c5a10="">
 						1.免单攻略： <br data-v-ab1c5a10="">1）点击邀请好友助力； <br
 							data-v-ab1c5a10="">2）按界面提示发送给未关注过公众号的好友或朋友圈； <br data-v-ab1c5a10="">3）好友打开界面后，长按二维码识别并关注完成助力；
-						<br data-v-ab1c5a10="">4）达到规则要求，即可领取赠送的礼品卷； <br data-v-ab1c5a10="">5）商城中下单并填写地址，等待收货；
+						<br data-v-ab1c5a10="">4）达到规则要求，即可领取赠送的礼品券； <br data-v-ab1c5a10="">5）商城中下单并填写地址，等待收货；
 					</p>
 					<p data-v-ab1c5a10="">
-						2.活动期间，用户可领取各类礼品卷一份（同品类仅可领一份）；
+						2.活动期间，用户可领取各类礼品券一份（同品类仅可领一份）；
 					</p>
 					<p data-v-ab1c5a10="">3.每个好友可助力一次，同一手机号、移动设备、微信号视为同一用户；</p>
 					<p data-v-ab1c5a10="">
@@ -355,7 +355,7 @@ rotate
 			
 			<div class="get-prize" onclick="getPrize(<%=prize[i-1].getId()%>,'<%=prize[i-1].getPrize_name() %>')">
 				<span style="font-size: .4rem; color: rgb(213,36,34); ">
-				&nbsp;<br><b>礼品卷<br>&nbsp; <br> <%=prize[i-1].getPrize_name() %><br> </b> 
+				&nbsp;<br><b>礼品券<br>&nbsp; <br> <%=prize[i-1].getPrize_name() %><br> </b> 
 				</span>
 			</div>
 			
