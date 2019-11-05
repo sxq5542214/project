@@ -120,7 +120,7 @@ function addProductToCart(spid, num) {
 		addProductToCart(spid, num);
 	}
 	
-	successMSGBox.showMsg();
+//	successMSGBox.showMsg();
 }
 
 function deleteProductToCart(spid) {

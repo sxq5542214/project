@@ -48,7 +48,10 @@
 	function addToCart(spid){
 		var val = parseInt($("#buy_num").val());
 		addProductToCart(spid,val);
-		location.href = 'user/supplier/toSupplierProductCategoryPage.do?openid=<%=openid%>';
+		
+		if(confirm('成功加入购物车，是否跳转至分类页继续选购其他商品？')){
+			location.href = 'user/supplier/toSupplierProductCategoryPage.do?openid=<%=openid%>';
+		}
 	}
 	
 	function gotoCart(spid){
