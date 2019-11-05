@@ -113,7 +113,7 @@ left:30px " href="javascript:;()" id="xiugainicheng" onclick="xiugai();">修改�
 </div>
 <div style="width: 95%;margin: 0 auto;">
 	<span style="font-size: 14px; color: red;"><strong>积分能用来做什么？</strong><br></span>
-	<span style="font-size: 14px;">积分就是现金！譬如8折特惠时，当您购买50元的商品时，只需要支付40元现金，剩余部分用积分付款10元就可以啦！</span>
+	<span style="font-size: 14px;">积分就是现金！譬如部分商品支持积分抵扣时，当您购买50元的商品时，只需要支付40元现金，剩余部分用积分付款10元就可以啦！</span>
 	<p><br></p>
 	<span style="font-size: 14px; color: red;"><strong>怎么使用积分抵扣现金？</strong><br></span>
 	<span style="font-size: 14px;">和在淘宝上购物一样，在您支付的时候选择使用积分抵扣就可以啦，非常简单！</span>
