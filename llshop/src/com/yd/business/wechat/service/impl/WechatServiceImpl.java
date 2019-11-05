@@ -1093,28 +1093,34 @@ log.debug("userTicketResponse:"+response);
 	
 	@Override
 	public WechatWebAuthBean getOpenIdByWebAuthCode(String code,String originalid) {
-
 		if(StringUtil.isNull(code)){
 			return null;
 		}
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest(); 
+		WechatWebAuthBean code_auth = (WechatWebAuthBean) request.getSession().getAttribute("code_auth");
 		WechatWebAuthBean bean = new WechatWebAuthBean();
 
-		String url =getOauthUrl(code,originalid);
-		
-		try {
-			String result = HttpUtil.get(url);
-			JSONObject jso = new JSONObject(result);
-			bean.setAccess_token(jso.optString("access_token"));
-			bean.setExpires_in(jso.optInt("expires_in"));
-			bean.setOpenid(jso.optString("openid"));
-			bean.setRefresh_token(jso.optString("refresh_token"));
-			bean.setScope(jso.optString("scope"));
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e,e);
+		if(code_auth != null){
+			String url =getOauthUrl(code,originalid);
+			try {
+				String result = HttpUtil.get(url);
+				JSONObject jso = new JSONObject(result);
+				bean.setAccess_token(jso.optString("access_token"));
+				bean.setExpires_in(jso.optInt("expires_in"));
+				bean.setOpenid(jso.optString("openid"));
+				bean.setRefresh_token(jso.optString("refresh_token"));
+				bean.setScope(jso.optString("scope"));
+				
+				request.getSession().setAttribute("code_auth", bean);
+			} catch (Exception e) {
+				e.printStackTrace();
+				log.error(e,e);
+			}
+		}else{
+			bean = code_auth;
 		}
+		
+		
 		
 		
 		return bean;
