@@ -193,8 +193,8 @@
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
                                 <p >
                                    <%=order.getOrder_name() %>           </p>
-                                   <p>收货人：<%=order.getContact_name() %>  </p>
-                                   <p>号码：<%=order.getContact_phone() %>  </p>
+                                   <p>收货人：<%=StringUtil.convertNull(order.getContact_name()) %>  </p>
+                                   <p>号码：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
                                    <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
 	    </a> 
@@ -250,8 +250,8 @@
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
                                 <p >
                                    <%=order.getOrder_name() %></p>
-                                   <p>收货人：<%=order.getContact_name() %>  </p>
-                                   <p>号码：<%=order.getContact_phone() %>  </p>
+                                   <p>收货人：<%=StringUtil.convertNull(order.getContact_name()) %>  </p>
+                                   <p>号码：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
                                    <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
 	    </a> 

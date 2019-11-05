@@ -46,6 +46,7 @@
 	}
 	
 	function addToCart(spid){
+		//加入购物车
 		var val = parseInt($("#buy_num").val());
 		addProductToCart(spid,val);
 		
@@ -55,7 +56,9 @@
 	}
 	
 	function gotoCart(spid){
-		addToCart(spid);
+		// 先加购物车，再跳转界面
+		var val = parseInt($("#buy_num").val());
+		addProductToCart(spid,val);
 		location.href = 'user/cart/toMycartPage.do?openid=<%=openid%>';
 	}
 	
