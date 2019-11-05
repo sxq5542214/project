@@ -91,7 +91,7 @@ Toast.prototype = {
 
 function addProductToCart(spid, num) {
 
-	var successMSGBox = new Toast({context:$('body'),message:'成功修改购物车'});
+	var successMSGBox = new Toast({context:$('body'),message:'成功加入购物车'});
 	var productInfo = getCookie("productInfo");
 
 	if (productInfo != null) {

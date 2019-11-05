@@ -125,8 +125,8 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	@Resource
 	protected IWechatOriginalInfoService wechatOriginalInfoService;
 	
-	private static Map<String,String> wechatCodeMap = new HashMap<String, String>();
-	private HashMap<Long,String> codeTimeMap = new HashMap<Long, String>();
+	private static Map<String,Object> wechatCodeMap = new HashMap<String, Object>();
+	private static HashMap<Long,String> codeTimeMap = new HashMap<Long, String>();
 	
 	@Override
 	public BaseMessage handlerWechatMessage(Document doc) throws Exception{
@@ -1058,8 +1058,7 @@ log.debug("userTicketResponse:"+response);
 		}
 		
 		//先查缓存，如果没有再去微信服器查询
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();  
-		String cachedCode = (String)request.getSession().getAttribute("cachedOpenid");
+		String cachedCode = (String)wechatCodeMap.get(code);
 		if(StringUtil.isNull(cachedCode)){
 
 			String url =getOauthUrl(code,originalid);
@@ -1069,15 +1068,14 @@ log.debug("userTicketResponse:"+response);
 				JSONObject jso = new JSONObject(result);
 				int errcode = jso.optInt("errcode",-9999);
 				if(errcode == 40163){ // 返回code been used，代表已用过,从request中找
-					openId = (String)request.getSession().getAttribute("cachedOpenid");
+					openId = (String)wechatCodeMap.get(code);
 				}else{
 					openId = jso.getString("openid");
-					request.getSession().setAttribute("cachedOpenid", openId);
+					long time = System.currentTimeMillis();
+					wechatCodeMap.put(code, openId);
+					codeTimeMap.put(time, code);
 				}
 				
-//				long time = System.currentTimeMillis();
-//				wechatCodeMap.put(code, openId);
-//				codeTimeMap.put(time, code);
 			} catch (Exception e) {
 				e.printStackTrace();
 				log.error(e,e);
@@ -1086,7 +1084,7 @@ log.debug("userTicketResponse:"+response);
 			openId = cachedCode;
 		}
 		
-//		checkCacheCodeTimeOut();
+		checkCacheCodeTimeOut();
 		
 		return openId;
 	}
@@ -1096,8 +1094,7 @@ log.debug("userTicketResponse:"+response);
 		if(StringUtil.isNull(code)){
 			return null;
 		}
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest(); 
-		WechatWebAuthBean code_auth = (WechatWebAuthBean) request.getSession().getAttribute(code);
+		WechatWebAuthBean code_auth = (WechatWebAuthBean) wechatCodeMap.get(code);
 		WechatWebAuthBean bean = new WechatWebAuthBean();
 
 		if(code_auth == null){
@@ -1108,7 +1105,7 @@ log.debug("userTicketResponse:"+response);
 				
 				int errcode = jso.optInt("errcode",-9999);
 				if(errcode == 40163){ // 返回code been used，代表已用过,从session中找
-					bean = (WechatWebAuthBean)request.getSession().getAttribute(code);
+					bean = (WechatWebAuthBean) wechatCodeMap.get(code);
 				}else{
 					bean.setAccess_token(jso.optString("access_token"));
 					bean.setExpires_in(jso.optInt("expires_in"));
@@ -1116,7 +1113,8 @@ log.debug("userTicketResponse:"+response);
 					bean.setRefresh_token(jso.optString("refresh_token"));
 					bean.setScope(jso.optString("scope"));
 					
-					request.getSession().setAttribute(code, bean);
+					wechatCodeMap.put(code, bean);
+					codeTimeMap.put(System.currentTimeMillis(), code);
 				}
 				
 			} catch (Exception e) {
@@ -1127,8 +1125,7 @@ log.debug("userTicketResponse:"+response);
 			bean = code_auth;
 		}
 		
-		
-		
+		checkCacheCodeTimeOut();
 		
 		return bean;
 	}
@@ -1167,7 +1164,7 @@ log.debug("userTicketResponse:"+response);
 		}
 		log.debug("codeTimeMap:" + codeTimeMap);
 		log.debug("wechatCodeMap:" + wechatCodeMap);
-		log.debug("checkCacheCodeTimeOut cost:" + (System.currentTimeMillis() - thisTime));
+		log.info("checkCacheCodeTimeOut  cost:" + (System.currentTimeMillis() - thisTime) +"ms , be left size:"+wechatCodeMap.size() );
 	}
 
 	@Override

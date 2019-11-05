@@ -48,7 +48,7 @@
 	function addToCart(spid){
 		var val = parseInt($("#buy_num").val());
 		addProductToCart(spid,val);
-		
+		location.href = 'user/supplier/toSupplierProductCategoryPage.do.do?openid=<%=openid%>';
 	}
 	
 	function gotoCart(spid){
