@@ -113,9 +113,11 @@ public class UserInterceptor extends BaseInterceptor {
 	 * @param openid
 	 */
 	private void addOpenidToCookie(HttpServletResponse response,String openid){
-		Cookie cookie = new Cookie("openid", openid);
-		cookie.setPath("/");
-		response.addCookie(cookie);
+		if(StringUtil.isNotNull(openid)){
+			Cookie cookie = new Cookie("openid", openid);
+			cookie.setPath("/");
+			response.addCookie(cookie);
+		}
 	}
 	
 	

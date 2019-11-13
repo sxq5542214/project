@@ -1035,12 +1035,18 @@ public class ActivityController extends BaseController {
 				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 				return null;
 			}else if(StringUtil.isNull(openid)){
-				//好友信息，创建用户及好友关系
+				// 微信认证
 				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, originalid);
-
-				request.getSession().setAttribute("code_openid",auth.getOpenid());
-				UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), user.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId, originalid , auth.getAccess_token());
-				userWechatService.createUserWechatFriend(user,friendUser);
+				//好友信息，创建用户及好友关系
+				if( StringUtil.isNotNull(auth.getAccess_token())){
+					request.getSession().setAttribute("code_openid",auth.getOpenid());
+					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), user.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, supplierEventId, originalid , auth.getAccess_token());
+					userWechatService.createUserWechatFriend(user,friendUser);
+				}else{ // 没有accessstoken 则重新访问
+					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toFreeCutHelpActivity.html?toOpenid="+ toOpenId +"&supplierEventId="+ supplierEventId + "&share_type="+share_type , "utf-8");
+					response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+					return null;
+				}
 			}
 			
 			//用第二域名展示界面，避免第一域名被封

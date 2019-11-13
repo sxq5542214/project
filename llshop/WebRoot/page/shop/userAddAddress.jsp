@@ -83,28 +83,22 @@
 		if($("#province").val() == ''){
 			alert('请选择省份');
 			flag = false;
-		}
-		if($("#city").val() == ''){
+		}else if($("#city").val() == ''){
 			alert('请选择城市');
 			flag = false;
-		}
-		if($("#district").val() == ''){
+		}else if($("#district").val() == ''){
 			alert('请选择区县');
 			flag = false;
-		}
-		if($("#street_name").val() == ''){
+		}else if($("#street_name").val() == ''){
 			alert('请填写街道地址');
 			flag = false;
-		}
-		if($("#post_code").val() == ''){
+		}else if($("#post_code").val() == ''){
 			alert('请填写邮编');
 			flag = false;
-		}
-		if($("#contact_name").val() == ''){
+		}else if($("#contact_name").val() == ''){
 			alert('请填写收货人名称');
 			flag = false;
-		}
-		if($("#contact_phone").val() == ''){
+		}else if($("#contact_phone").val() == ''){
 			alert('请填写联系电话');
 			flag = false;
 		}

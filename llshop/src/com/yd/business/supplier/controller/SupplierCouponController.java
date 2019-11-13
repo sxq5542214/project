@@ -378,8 +378,7 @@ public class SupplierCouponController extends BaseController{
 			SupplierCouponRecordBean bean = new  SupplierCouponRecordBean();
 			bean.setUserid(user.getId());
 			List<SupplierCouponRecordBean> myCouponList = supplierCouponService.queryUserAllCoupon(user.getId(),null);
-			if(myCouponList == null || myCouponList.size() != 0)
-			{
+			if(myCouponList.size() >= 0){
 				Map<String, Object> model = new HashMap<String, Object>();
 				model.put("openid",user.getOpenid());
 				model.put("list", myCouponList);
