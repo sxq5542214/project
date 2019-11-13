@@ -606,7 +606,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		
 		String date = DateUtil.getNowDateStr();
 		userBean.setCreate_time(date);
-		userBean.setLast_access_time(date);
+//		userBean.setLast_access_time(date);    //区别下，未关注则最后访问时间为空
 		if(StringUtil.isNull(userBean.getNick_name())){
 			userBean.setNick_name("用户未设置昵称");
 		}

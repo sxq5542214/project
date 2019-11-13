@@ -40,9 +40,7 @@ public class UserAddressServiceImpl extends BaseService implements IUserAddressS
 		}
 		
 		AddressBean address = addressService.findAddressById(bean.getAddress_id());
-		if(StringUtil.isNotNull(bean.getStreet_name())){
-			bean.setStreet_name( bean.getStreet_name().replaceAll("\n", " ") ); //有输入回车的，导致报错
-		}
+		bean.setStreet_name( StringUtil.convertNull(bean.getStreet_name()).replaceAll("\n", " ") ); //有输入回车的，导致报错
 		bean.setContact_address(address.getFull_name() + bean.getStreet_name());
 		bean.setStatus(UserAddressBean.STATUS_DEFAULT);
 		bean.setCreate_time(DateUtil.getNowDateStr());
