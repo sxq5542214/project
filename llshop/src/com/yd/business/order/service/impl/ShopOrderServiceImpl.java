@@ -287,7 +287,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 									}
 								}
 								//生成订单商品信息
-								ShopOrderProductBean spb = createShopOrderProductBySpid(sp.getId(), num, ShopOrderProductBean.TYPE_NORMAL, offset_points, sp_total_price, order_code);
+								ShopOrderProductBean spb = createShopOrderProductBySpid(sp.getId(), num, ShopOrderProductBean.TYPE_NORMAL, offset_points, payPrice, order_code);
 								productList.add(spb);
 
 								order.setCost_money(order.getCost_money() + payPrice);
@@ -396,7 +396,11 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 				}
 				break;
 			case SupplierCouponConfigBean.TYPE_DISCOUNT:
-				// 暂无商品要处理
+				// 修改订单商品价格
+//				coupon = supplierCouponService.findCouponInfoByCouponid(record.getCoupon_id());
+//				int newMoney = costMoney * coupon.getCoupon_discount() / 100;
+				
+				
 				break;
 			case SupplierCouponConfigBean.TYPE_EXPERIENCE:
 				// 待补充
