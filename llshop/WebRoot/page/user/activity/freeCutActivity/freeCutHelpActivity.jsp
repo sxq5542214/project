@@ -76,7 +76,7 @@ int maxCount = prize[3].getTotalcount();
 				<img data-v-163c7539="" data-v-49b8e837=""
 					src="<%=user.getHead_img() %>"
 					alt="头像" class="avatar">
-				<p data-v-49b8e837="">ice_river</p>
+				<p data-v-49b8e837=""><%=user.getNick_name() %></p>
 				<p data-v-49b8e837="">“我想要的坚果，就差你这一下助力啦！”</p>
 			</div>
 			<div data-v-fbc5d9ba="" data-v-49b8e837="" class="order-card card">
