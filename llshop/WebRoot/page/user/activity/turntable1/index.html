@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>抽奖</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 移动端适配 -->
+    <script>
+        var html = document.querySelector('html');
+        changeRem();
+        window.addEventListener('resize', changeRem);
+
+        function changeRem() {
+            var width = html.getBoundingClientRect().width;
+            html.style.fontSize = width / 10 + 'px';
+        }
+    </script>
+</head>
+
+<body style="background-color:#fce243">
+<div class="banner"><img src="image/banner2.jpg"/></div>
+<div class="activity">
+  <div class="activity-amin">
+    <input type="text" class="wt1" id="text1" placeholder="请输入手机账号"/>
+    <input type="text" class="wt1 " id="text2" placeholder="密码"/>
+    <div class="prompt1"></div>
+    <button class="wt1 wt4">确定</button>
+    <a href="activity-rules.html" class="wt1 wt5">活动规则</a>
+  </div>
+  
+
+ 
+</div>
+
+ <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+ <script type="text/javascript">
+ /*判断手机号不为空和是否是正确的手机号，给验证码按钮添加样式*/
+
+    $(".wt4").click(function(){
+        var text1=$("#text1").val();
+	    var text2=$("#text2").val();
+		if(text1 !="" && text2 !="" && /^1[34578]\d{9}$/.test(text1)){
+		     
+			$(location).attr('href', 'zhuanpan.html');
+			return true;
+		}else if(text1 =="" ){
+			$(".prompt1").show();
+			$(".prompt1").text("请输手机号码");
+			return false;
+	    }else if(text2 =="" ){
+			$(".prompt1").show();
+			$(".prompt1").text("请输入密码");
+			return false;
+	    }else{
+			$(".prompt1").show();
+			$(".prompt1").text("手机号码错误");
+		    return false;
+	    }
+		
+		})
+		
+
+ </script>   
+</body>
+</html>

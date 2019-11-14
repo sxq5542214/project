@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>抽奖</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 移动端适配 -->
+    <script>
+        var html = document.querySelector('html');
+        changeRem();
+        window.addEventListener('resize', changeRem);
+
+        function changeRem() {
+            var width = html.getBoundingClientRect().width;
+            html.style.fontSize = width / 10 + 'px';
+        }
+    </script>
+</head>
+
+<body style="background-color:#fce243">
+<div class="banner"><img src="image/banner2.jpg"/></div>
+<div class="activity activity2">
+ <div class="activity-amin">
+ <h2>活动规则</h2>
+         <p>1.活动时间：2018年10月18日——2018年12月31日。<br/>
+2.本次活动为福建某某公司专属特权活动，仅针对目标用户参与。<br/>
+3.活动期间，福建某某公司专属客户每天可参与抽奖一次。<br/>
+4.本次活动奖品为20元话费、50元话费、300M省内加餐包、500M省内加餐包、1G省内加餐包。<br/>
+5.每个用户当月获得话费和流量奖品将于次月到账。</p>
+ <a href="index.html" class="a-main2 a3">返回</a>
+ </div>
+</div>
+
+</body>
+</html>
