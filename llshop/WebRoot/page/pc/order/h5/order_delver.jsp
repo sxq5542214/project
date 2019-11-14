@@ -24,7 +24,7 @@
 	<script	src="page/user/supplierEvent/common/jquery-1.10.2-min.js"></script>
 	<script type="text/javascript" src="<%=request.getScheme()  %>://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 	<script type="text/javascript" src="js/wechat/weixinInit.js"></script>
-	
+	<script type="text/javascript" src="js/clipboard.min.js"></script>
     <script type="text/javascript">
     	$(window).load(function(){
     		$(".loading").addClass("loader-chanage")
@@ -76,7 +76,7 @@
 					</li>
 					<li>
 						<span>收货人姓名：</span>
-						<small><%=order.getContact_name() %></small>
+						<small><%=order.getContact_name() %>  <button class="copy"  data-clipboard-text="<%=order.getContact_name() %>,<%=order.getContact_phone() %>,<%=order.getContact_address() %>" >复制收货信息</button></small>
 					</li>
 					<li>
 						<span>联系方式：</span>
@@ -121,8 +121,6 @@
 		
 	</footer> -->
 	
-	
-
 </body>
 <script type="text/javascript">
 var lastItem=0;
@@ -132,7 +130,6 @@ $(document).ready(function () {
         displayProduct();
     });
 });
-
 function displayProduct(){
 	var lis= $('.order-shop');
     //swHeight=滚动的高度+窗体的高度；当li的offset高度<=swHeight,那么说明当前li显示在可视区域了
@@ -204,6 +201,13 @@ function scanDeliver(orderCode){
 	})
 	
 }
-
+ var clipboard = new ClipboardJS('.copy');
+     // 显示用户反馈/捕获复制/剪切操作后选择的内容
+     clipboard.on('success', function (e) {
+         alert('姓名、电话、地址 复制成功！');
+     })
+     clipboard.on('error', function (e) {
+         alert('复制失败');
+     });
 </script>
 </html>
