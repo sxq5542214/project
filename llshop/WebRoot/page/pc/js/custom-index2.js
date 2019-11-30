@@ -319,7 +319,7 @@ $(function () {
   chartOptions = {
     xaxis: {
       min: (new Date(2011, 11, 15)).getTime(),
-      max: (new Date(2012, 04, 18)).getTime(),
+      max: (new Date(2012, 4, 18)).getTime(),
       mode: "time",
       tickSize: [2, "month"],
       monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
