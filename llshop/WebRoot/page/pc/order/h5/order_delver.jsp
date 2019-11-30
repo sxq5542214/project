@@ -50,7 +50,7 @@
 		<a class="icona" href="javascript:history.go(-1)">
 				<img src="page/pc/order/h5/img/left.png"/>
 			</a>
-		<h3>待发货列表（<%=orderList.size() %>）</h3>
+		<h3>待发货列表（<%=orderList.size() %>）  |    <a style="display: inline-block;" href="order/shop/toAdminShopOrderListPage.do?openid=<%=openid%>">已支付列表</a></h3>
 			<!-- <a class="iconb" href="shopcar.html">
 			</a> -->
 	</header>

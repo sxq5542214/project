@@ -53,7 +53,7 @@
 		<a class="icona" href="javascript:history.go(-1)">
 				<img src="page/pc/order/h5/img/left.png"/>
 			</a>
-		<h3>订单列表</h3>
+		<h3>已支付列表  |  <a style="display: inline-block;" href="order/shop/toShopOrderDeliverPage.do?openid=<%=openid%>">待发货列表</a></h3>
 			 
 	</header>
 	<form action="order/shop/toAdminShopOrderListPage.do" method="post">
@@ -123,7 +123,7 @@
 						<small>￥<%=order.getCost_price().doubleValue()/100d %>/￥<%=(order.getCost_money()==null?0:order.getCost_money().doubleValue())/100d %></small>
 						
 						<p class="order-footer fixed-footer" style="position: relative;width: 100%;">
-							<span style="margin-left: -15px;">快递单号：<%=order.getExpress_code() %> ，<%=order.getExpress_mode() %> </span> 
+							<span style="margin-left: -15px;">快递单号：<%=order.getExpress_order_code() %> ，<%=order.getExpress_mode() %> </span> 
 							<%-- <select id="express_mode" style="color: black;font-size: 1.34rem;" >
 								<option value="圆通速递" selected="selected" >【圆通速递】</option>
 								<option value="中通速递" >【中通速递】 </option>
