@@ -239,6 +239,44 @@ public class ShopOrderController extends BaseController {
 		}
 		return null;
 	}
+
+	@RequestMapping("**/order/shop/toAdminShopOrderListPage.do")
+	public ModelAndView toAdminShopOrderListPage(HttpServletRequest request,HttpServletResponse response){
+		try {
+			String openid = request.getParameter("openid");
+			
+			if(openid == null){
+				String code = request.getParameter("code");
+				openid = wechatService.getOpenidByWechatCode(code, request);
+			}
+			
+			String contactPhone = StringUtil.convertNull(request.getParameter("contact_phone"));
+			String contactName = StringUtil.convertNull(request.getParameter("contact_name"));
+			
+			
+			//查询所有支付过的订单
+			ShopOrderInfoBean bean = new ShopOrderInfoBean();
+			bean.setContact_name(contactName);
+			bean.setContact_phone(contactPhone);
+			
+//			String condition = StringUtil.isNull(contactName) && StringUtil.isNull(contactPhone) ? " where " : " and ";
+			
+			bean.setOrderby(" and status >= 3 order by id desc  limit 50");
+			List<ShopOrderInfoBean> list = shopOrderService.queryShopOrderInfo(bean);
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("list", list);
+			map.put("openid", openid);
+			map.put("contactPhone", contactPhone);
+			map.put("contactName", contactName);
+			
+			return new ModelAndView("/page/pc/order/h5/order_list.jsp",map);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
 	
 	@RequestMapping("**/order/shop/queryShopOrderProductList.do")
 	public ModelAndView queryShopOrderProductList(HttpServletRequest request,HttpServletResponse response){
