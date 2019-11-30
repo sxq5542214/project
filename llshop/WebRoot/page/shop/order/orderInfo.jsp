@@ -128,9 +128,9 @@
 										<div class="order-msg">
 											<p class="title"><%=product.getSupplier_product_name() %></p>
 											<p class="price">
-												单价：￥<%=product.getOriginal_price() /100d %> 元   &nbsp;&nbsp;&nbsp;&nbsp; X <%=product.getNum() + couponStr %> <span></span>
+												单价：￥<%=product.getOriginal_price() /100d %> 元   &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  数量：* <%=product.getNum() + couponStr %> <span></span>
 											</p>
-											<p class="order-data" style="font-size: 0.5rem">可叠加积分抵扣：<%=product.getCost_points() / 100d %>元</p>
+											<p class="order-data" style="font-size: 0.7rem">可叠加积分抵扣：<%=product.getCost_points() / 100d %>元</p>
 										</div>
 									</div> </a></li>
 							<%} %>
@@ -195,11 +195,7 @@
 								运费(满<%=expressBottomPrice/100d %>元免运费):   <span class="fr red">￥ <%if(order.getExpress_price() == null || order.getExpress_price() == 0){ %>  <del> <span id="express_price"><%=order.getExpress_price()/100d %></span>&nbsp;元 </del> <%}else{ %> <span id="express_price"><%=order.getExpress_price()/100d %></span>&nbsp;元 <%} %> </span>
 							</p>
 							<p>
-<<<<<<< HEAD
 								积分抵扣(您有<%=user.getPoints() /100d %>元积分):<span class="fr red" >￥ -<span id="points"><%=order.getCost_points() / 100d %></span>&nbsp;元</span>
-=======
-								积分抵扣:<span class="fr red" >￥ -<span id="points"><%=order.getCost_points() / 100d %></span>&nbsp;元</span>
->>>>>>> refs/remotes/origin/master
 							</p>
 							<p class="border-bottom">
 								优惠卷:<span class="fr red">￥ -<span id="coupon_price"><%=order.getCoupon_total_price() / 100d %></span>&nbsp;元</span>
@@ -261,10 +257,6 @@
 	<input type="hidden" id="cost_balance" value="0">
 
 <script type="text/javascript">
-<<<<<<< HEAD
-=======
-	delCookie('productInfo');
->>>>>>> refs/remotes/origin/master
 	var coupon = eval('<%=JsonUtil.convertObjectToJsonString(couponList) %>');
 	var currentCoupon = findCouponById(<%=checkCouponId %>);
 	var orderStatus = <%=order.getStatus()%>;

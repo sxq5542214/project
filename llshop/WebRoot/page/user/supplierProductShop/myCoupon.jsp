@@ -45,10 +45,12 @@
             	<% for(SupplierCouponRecordBean bean : list){
             		String rightTitle = "";
             		String imageName = "type"+bean.getCoupon_type()+".png";
-            		if(bean.getCoupon_offsetmoney() != null){
+            	
+            		if(bean.getCoupon_discount() != null && bean.getCoupon_discount() != 0){
+            			rightTitle = bean.getCoupon_discount()/10d +"折";
+            		}else if(bean.getCoupon_offsetmoney() != null ){
             			rightTitle = "￥" + bean.getCoupon_offsetmoney()/100d ;
             		}else{
-            			rightTitle = bean.getCoupon_discount()/10d +"折";
             		}
             		String buttonClass = "use";
             		String divClass = "right bg2";
