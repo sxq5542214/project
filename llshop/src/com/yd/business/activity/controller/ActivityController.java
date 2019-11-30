@@ -28,6 +28,7 @@ import com.yd.business.activity.bean.ActivityConfigBean;
 import com.yd.business.activity.bean.ActivityInstanceBean;
 import com.yd.business.activity.bean.ActivityOlympicGuessBean;
 import com.yd.business.activity.bean.ActivityPrize;
+import com.yd.business.activity.bean.ActivityPrizeRelationBean;
 import com.yd.business.activity.bean.ActivityRemindBean;
 import com.yd.business.activity.bean.ActivityRule;
 import com.yd.business.activity.bean.ActivityUserRelationBean;
@@ -108,6 +109,10 @@ public class ActivityController extends BaseController {
 	public static final String PAGE_USER_ACTIVITY_FREECUTACTIVITY = "/page/user/activity/freeCutActivity/freeCutActivity.jsp";
 	public static final String PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpActivity.jsp";
 	public static final String PAGE_USER_ACTIVITY_FREECUTHELFRIENDCIRCLEPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpFriendCircleActivity.jsp";
+<<<<<<< HEAD
+	public static final String PAGE_USER_ACTIVITY_TURNTABLEACTIVITY = "/page/user/activity/turntable1/zhuanpan.jsp";
+=======
+>>>>>>> refs/remotes/origin/master
 
 	
 	public static final String PAGE_USER_ACTIVITY_LISTHOME = "/page/user/activity/signActivity/index.jsp";
@@ -655,8 +660,8 @@ public class ActivityController extends BaseController {
 			model.put("code", activityConfigBean.getCode());
 			model.put("instanceActivityId", instanceActivityId);
 			
-			String category = prize.getCategory();
-			if(ActivityPrize.ACTIVITY_PRIZE_FAIL.equals(category)){
+			String errorCode = prize.getErrorCode();
+			if(ActivityPrize.ERROR_CODE_FAIL.equals(errorCode)){
 				return new ModelAndView(PAGE_USER_ACTIVITY_JOIN_FAIL, model);
 			}else{
 				return new ModelAndView("redirect:"+activityConfigBean.getActivity_jump_url(), model);
@@ -700,8 +705,8 @@ public class ActivityController extends BaseController {
 				model.put("user", user);
 				model.put("activityConfigBean", activityConfigBean);
 				model.put("prize", prize);
-				String category = prize.getCategory();
-				if(ActivityPrize.ACTIVITY_PRIZE_FAIL.equals(category) || ActivityPrize.ACTIVITY_PRIZE_NO_WINNER.equals(category)){
+				String errorCode = prize.getErrorCode();
+				if(ActivityPrize.ERROR_CODE_FAIL.equals(errorCode) || ActivityPrize.ERROR_CODE_NO_WINNER.equals(errorCode)){
 					return new ModelAndView(PAGE_USER_ACTIVITY_JOIN_FAIL, model);
 				}
 			}			
@@ -792,12 +797,12 @@ public class ActivityController extends BaseController {
 			}
 			ActivityInstanceBean bean = activityService.findActivityInstanceByIdAndCode(instanceActivityId, null);
 			ActivityPrize  prize = activityService.checkActivityParamsEasy(new ActivityPrize(),activityConfigBean,user,bean);
-			String category = prize.getCategory();
+			String errorCode = prize.getErrorCode();
 			model.put("user", user);
 			model.put("activityConfigBean", activityConfigBean);
 			model.put("prize", prize);
 			if(StringUtil.isNotNull(prize.getRemark())){
-				if(ActivityPrize.ACTIVITY_PRIZE_FAIL.equals(category) || ActivityPrize.ACTIVITY_PRIZE_NO_WINNER.equals(category)){
+				if(ActivityPrize.ERROR_CODE_FAIL.equals(errorCode) || ActivityPrize.ERROR_CODE_NO_WINNER.equals(errorCode)){
 					return new ModelAndView(PAGE_USER_ACTIVITY_JOIN_FAIL, model);
 				}
 			}
@@ -863,8 +868,8 @@ public class ActivityController extends BaseController {
 			model.put("relation", relation);
 			model.put("activityConfigBean", activityConfigBean);
 			model.put("prize", prize);
-			String category = prize.getCategory();
-			if(ActivityPrize.ACTIVITY_PRIZE_FAIL.equals(category)){
+			String errorCode = prize.getErrorCode();
+			if(ActivityPrize.ERROR_CODE_FAIL.equals(errorCode)){
 				return new ModelAndView(PAGE_USER_ACTIVITY_JOIN_FAIL, model);
 			}			
 			return new ModelAndView(PAGE_USER_ACTIVITY_JOIN_SUCCESS, model);
@@ -1123,6 +1128,68 @@ public class ActivityController extends BaseController {
 	
 	
 	
+<<<<<<< HEAD
+
+	/**
+	 * 免费得坚果活动
+	 */
+	@RequestMapping("/activity/user/toTurntable1Activity.html")
+	public ModelAndView toTurntable1Activity(HttpServletRequest request,HttpServletResponse response){
+		Map<String, Object> model = new HashMap<String, Object>();
+		try{
+			String openid = request.getParameter("openid");
+			String code = request.getParameter("code");
+			//用第二域名展示界面，避免第一域名被封
+			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
+			String serverName = request.getServerName();
+			if(original.getServer_url2() != null && original.getServer_url2().indexOf(serverName)< 0){
+				String url = original.getServer_url2()+"activity/user/toTurntable1Activity.html?openid="+openid+"&code="+code;
+				response.sendRedirect(url);
+				return null;
+			}
+			
+			 
+			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
+			String originalid = null;
+			//先查缓存
+			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
+				originalid = original.getOriginalid();
+				openid = wechatUserService.getOpenId(code,originalid);
+				request.getSession().setAttribute("cachedOpenid", openid);
+			}else if(StringUtil.isNotNull(cachedOpenid)){
+				openid = cachedOpenid;
+			}
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user == null){
+				//跳转至关注公众号界面
+				writeJson(response, "<script>alert(\"请先关注公众号!\");</script>");
+				return null;
+			}
+			
+//			Integer supplierEventId = 12; //本次活动ID，也是activityconfigid ,需要保持一致
+//			SupplierEventBean supplierEvent = supplierEventService.queryByid(supplierEventId);
+//			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
+			Integer activityConfigId = 12;
+			ActivityConfigBean activity = activityConfigService.findActivityConfigByActivityIdAndCode(activityConfigId, "turntable_activity");
+			
+			//查询活动的奖品
+			
+			List<ActivityPrizeRelationBean> prizeList = activityPrizeService.queryActivityPrizeRelationByActivityId(activityConfigId);
+			
+			model.put("user", user);
+			model.put("activity", activity);
+			model.put("prizeList", prizeList);
+			
+			return new ModelAndView(PAGE_USER_ACTIVITY_TURNTABLEACTIVITY, model);
+
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	
+=======
+>>>>>>> refs/remotes/origin/master
 	
 	
 }
