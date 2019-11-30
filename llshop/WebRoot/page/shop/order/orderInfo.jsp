@@ -130,11 +130,7 @@
 											<p class="price">
 												单价：￥<%=product.getOriginal_price() /100d %> 元   &nbsp;&nbsp;&nbsp;&nbsp; X <%=product.getNum() + couponStr %> <span></span>
 											</p>
-<<<<<<< HEAD
 											<p class="order-data" style="font-size: 0.5rem">可叠加积分抵扣：<%=product.getCost_points() / 100d %>元</p>
-=======
-											<p class="order-data">X<%=product.getNum() + couponStr %></p>
->>>>>>> refs/remotes/origin/master
 										</div>
 									</div> </a></li>
 							<%} %>
