@@ -28,7 +28,7 @@ import com.yd.util.CookieUtil;
 @Controller
 public class UserCartController extends BaseController {
 	
-	private static final String COOKIE_KEY_PRODUCTINFO = "productInfo";
+	public static final String COOKIE_KEY_PRODUCTINFO = "productInfo";
 	
 	public static final String PAGE_MYCART = "/page/shop/product/myCart.jsp";
 	

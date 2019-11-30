@@ -43,6 +43,7 @@ function pay(){
 			       },
 			       function(res){
 			           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+			        	delCookie('productInfo'); 
 			           	alert('已支付成功！我们将会尽快安排发货！');
 			           
 			           	$("#payButton").hide();

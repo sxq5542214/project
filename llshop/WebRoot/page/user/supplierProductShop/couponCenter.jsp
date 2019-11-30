@@ -47,10 +47,12 @@
             		String time = "使用期限："+bean.getUseful_lift()/24+"天内";
             		String rightTitle = "";
             		String imageName = "type"+bean.getType()+".png";
-            		if(bean.getCoupon_offsetmoney() != null){
+            		
+            		if(bean.getCoupon_discount() != null && bean.getCoupon_discount() != 0){
+            			rightTitle = bean.getCoupon_discount()/10d +"折";
+            		}else if(bean.getCoupon_offsetmoney() != null ){
             			rightTitle = "￥" + bean.getCoupon_offsetmoney()/100d ;
             		}else{
-            			rightTitle = bean.getCoupon_discount()/10d +"折";
             		}
             		
             	 %>

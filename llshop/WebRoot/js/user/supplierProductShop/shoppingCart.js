@@ -5,7 +5,7 @@ function addProductToCart(spid, num) {
 
 	var productInfo = getCookie("productInfo");
 
-	if (productInfo != null) {
+	if (productInfo != null && productInfo != '') {
 		var productJson = eval('(' + productInfo + ')');
 
 		var productInfos = productJson.productInfos;
