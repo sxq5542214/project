@@ -283,7 +283,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 									order_name = sp.getProduct_name();
 									order.setOrder_img(sp.getHead_img());
 									if(spList.size() > 1){
-										order_name += "等"+spList.size()+"件商品";
+										order_name += "等"+spList.size()+"类商品";
 									}
 								}
 								//生成订单商品信息
@@ -344,9 +344,19 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			handleOrderCouponToUsed(order, recordList);
 			
 			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
+			//扣减用户积分
+			int costPoints = order.getCost_points();   // 用户还没有付款呢
+			if(costPoints >0){
+				user.setPoints(user.getPoints() - costPoints);
+				userWechatService.update(user);
+				userCommissionPointsService.createUserPointLog(user.getId(), -costPoints, "购买"+ order.getOrder_name()+" 扣减积分" );
+			}
+			
+			
 			//保存并处理用户购买成功的动作
 			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
 			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY_NOTIFY_FRIENDS , null, order);
+			
 			
 			
 		}else{
@@ -388,9 +398,9 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 						ShopOrderProductBean bean = new ShopOrderProductBean();
 						bean.setOrder_code(order.getOrder_code());
 						List<ShopOrderProductBean> products = shopOrderDao.queryShopOrderProduct(bean );
-						orderName = orderName.split("等")[0] + "等" + (products.size() + spids.length )+ "件商品";
+						orderName = orderName.split("等")[0] + "等" + (products.size() + spids.length )+ "类商品";
 					}else{
-						orderName = orderName+"等"+ (spids.length + 1 ) +"件商品";
+						orderName = orderName+"等"+ (spids.length + 1 ) +"类商品";
 					}
 					
 				}
