@@ -70,6 +70,7 @@ public class ActivityPrize extends BaseBean {
 	private String prize_name;
 	private String remark;
 	private Integer status;
+	private String create_date;
 	/**
 	 * 对应产品的表名
 	 */
@@ -161,6 +162,12 @@ public class ActivityPrize extends BaseBean {
 	}
 	public void setErrorCode(String errorCode) {
 		this.errorCode = errorCode;
+	}
+	public String getCreate_date() {
+		return create_date;
+	}
+	public void setCreate_date(String create_date) {
+		this.create_date = create_date;
 	}
 	
 }
