@@ -156,7 +156,7 @@ function getOrderProductList(item){
 				var html = '<span>订购商品清单：</span><br>';
 				for(var i = 0 ; i < result.length; i++){
 					var data = result[i];    
-					html +='<span>'+ data.supplier_product_name +'</span><small>*'+ data.num +'</small><br>' ;
+					html +='<span>'+ data.supplier_product_name +' &nbsp;&nbsp; *'+ data.num+'</span><small>'+ '份' +'</small><br>' ;
 				}
 				$('#'+orderCode+'_productList').html( html );
 			}

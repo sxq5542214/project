@@ -61,9 +61,9 @@
 			</span>
 		</p>
 		</div>
-
-
 	</div>
+	
+	
 	<div class="banner">
 		<img src="page/user/activity/turntable1/image/banner2.jpg" />
 	</div>

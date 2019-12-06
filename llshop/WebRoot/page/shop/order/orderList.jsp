@@ -78,7 +78,23 @@
         </script>
 </head>
     <body style="overflow: scroll;">        
-       
+       <div id="customerServiceDiv" style="display: none;">
+		<div id="shadowDiv" onclick="showOrHideCustomerService()"
+			style="width:100%;height:100%;position:fixed;left:0;top:0;z-index:2;background-color:#000;opacity:0.6;">
+			
+		</div>
+		<div style="position: fixed;margin-top: 50%;text-align: center;z-index: 99;">
+			<img width="80%" style="height: 100%;margin: 0 auto;"
+				src="<%=basePath%>images/qrcode/qrcode_for_kefu.png" alt="">
+    	<p style="height: auto;">
+			<span style="font-size: 16px;color: white;">温馨提示：<br>
+				请长按二维码添加客服微信号，或直接搜索【yoyoyo1105】添加！
+			</span>
+		</p>
+		</div>
+	</div>
+	
+	
         <label class="list_order" id="info_f304ba748b4cc1faa1cdc419651b5c17_0_0__1_0"></label>
 
         <div class="viewport">  
@@ -150,7 +166,10 @@
 	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
 	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
 	        	<%}else if(order.getStatus() == ShopOrderInfoBean.STATUS_ALREADY_DELIVERY) { %>
+	        	
+	        	
 	        	<a href="https://m.kuaidi100.com/app/query/?com==<%=order.getExpress_mode() %>&nu=<%=order.getExpress_order_code() %>" >查看物流</a>
+	        	<a href="javascript:;" onclick="showOrHideCustomerService()" >联系客服</a>
 	        	
 	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
@@ -257,7 +276,7 @@
 	    </a> 
 	    <!--数量价格信息-->
 	    <div class="detail2">
-	    	<span style="color:black; ">总价：<%= ( order.getCost_price() ) /100d %>元 &nbsp;</span>
+	   		<span style="color:black; ">总价：<%= ( order.getCost_price() ) /100d %>元 &nbsp;</span>
 			<span style="color: #ff463c;">优惠抵扣：<%=NumberUtil.addtion(order.getCost_points(),order.getCoupon_total_price())   /100d %>元&nbsp;</span>
 	        <span class="order_price" style="font-size: 1.6rem;">优惠后实付：￥<%=order.getCost_money() /100d %>元</span>
 	    </div>
@@ -266,7 +285,11 @@
 	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
 	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
 	        	<%}else if(order.getStatus() == ShopOrderInfoBean.STATUS_ALREADY_DELIVERY) { %>
+	        	
+	        	
 	        	<a href="https://m.kuaidi100.com/app/query/?com==<%=order.getExpress_mode() %>&nu=<%=order.getExpress_order_code() %>" >查看物流</a>
+	        	<a href="javascript:;" onclick="showOrHideCustomerService()" >联系客服</a>
+	        	
 	        	
 	        	<%}else{ %>
 	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
@@ -403,7 +426,17 @@
 </footer>
 </div>
 
-  
+  <script type="text/javascript">
+  	function showOrHideCustomerService(){
+  	
+  		var str = document.getElementById("customerServiceDiv").style.display;
+  		if(str == 'block'){
+  			document.getElementById("customerServiceDiv").style.display = 'none';
+  		}else{
+  			document.getElementById("customerServiceDiv").style.display = 'block';
+  		}
+  	}
+  </script>
 
 
 <!-- <script src="js/zepto.min.js"></script>
@@ -415,5 +448,7 @@
         <div class="gwd_toolbar_control_small" gwd-subject="open" title="无比价" style="background-image:url()">
 
         </div>
+
+
     </body>
 </html><!--LHC-2015-10-06-->
