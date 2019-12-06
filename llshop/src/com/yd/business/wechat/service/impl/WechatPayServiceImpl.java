@@ -193,7 +193,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		}
 		String client_ip = "client_ip="+spbill_create_ip;
 		//活动名称
-		String act_name = "act_name=美味坚果和现金红包等你来，快关注【"+ mch_name +"】公众号吧！22";
+		String act_name = "act_name=快关注【"+ mch_name +"】吧";
 		//备注
 		String remark = "remark=美味坚果和现金红包等你来，快关注【"+ mch_name +"】公众号吧！33";
 		

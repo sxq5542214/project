@@ -1028,9 +1028,9 @@ public class ActivityController extends BaseController {
 			final UserWechatBean user = userWechatService.findUserWechatByOpenId(toOpenId);
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String originalid = original.getOriginalid();
+			String code = request.getParameter("code");
 			
 			String openid = (String)request.getSession().getAttribute("code_openid");
-			String code = request.getParameter("code");
 			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
 				// 没有缓存，也没有传code过来，则跳转至微信授权
 				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toFreeCutHelpActivity.html?toOpenid="+ toOpenId +"&supplierEventId="+ supplierEventId + "&share_type="+share_type , "utf-8");
@@ -1156,38 +1156,52 @@ public class ActivityController extends BaseController {
 	public ModelAndView toTurntable1Activity(HttpServletRequest request,HttpServletResponse response){
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
-			String openid = request.getParameter("openid");
+			
+			String fromOpenid = request.getParameter("fromOpenid");
 			String code = request.getParameter("code");
 			String activityId = request.getParameter("activityId");
 			Integer activityConfigId = activityId == null ?12:Integer.parseInt(activityId);
-			//用第二域名展示界面，避免第一域名被封
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
+			
+
+			String openid = (String)request.getSession().getAttribute("code_openid");
+			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
+				// 没有缓存，也没有传code过来，则跳转至微信授权
+				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId  , "utf-8");
+				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+				return null;
+			}else if(StringUtil.isNull(openid)){
+				// 微信认证
+				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, original.getOriginalid());
+				//好友信息，创建用户及好友关系
+				if( StringUtil.isNotNull(auth.getAccess_token())){
+					request.getSession().setAttribute("code_openid",auth.getOpenid());
+					
+					UserWechatBean parentUser = userWechatService.findUserWechatByOpenId(fromOpenid);
+					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentUser.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, Integer.parseInt(activityId), original.getOriginalid() , auth.getAccess_token());
+					userWechatService.createUserWechatFriend(parentUser,friendUser);
+				}else{ // 没有accessstoken 则重新访问
+					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId  , "utf-8");
+					response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+					return null;
+				}
+			}
+			
+			
+			//用第二域名展示界面，避免第一域名被封
 			String serverName = request.getServerName();
 			if(original.getServer_url2() != null && original.getServer_url2().indexOf(serverName)< 0){
 				String url = original.getServer_url2()+"activity/user/toTurntable1Activity.html?openid="+openid+"&code="+code;
 				response.sendRedirect(url);
 				return null;
 			}
-			
-			 
-			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-			String originalid = null;
-			//先查缓存
-			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-				originalid = original.getOriginalid();
-				openid = wechatUserService.getOpenId(code,originalid);
-				request.getSession().setAttribute("cachedOpenid", openid);
-			}else if(StringUtil.isNotNull(cachedOpenid)){
-				openid = cachedOpenid;
-			}
+		
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			if(user == null){
 				//跳转至关注公众号界面
 				writeJson(response, "<script>alert(\"请先关注公众号!\");</script>");
 				return null;
 			}
-
-			
 			
 			ActivityConfigBean activity = activityConfigService.findActivityConfigByActivityIdAndCode(activityConfigId, "turntable_activity");
 			

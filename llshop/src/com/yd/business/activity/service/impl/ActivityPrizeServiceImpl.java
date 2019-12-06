@@ -274,9 +274,11 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 		}else {
 			result = userWinGetPrize(user,bean.getActivity_config_id(),bean.getPrize_id());
 			
-			//更新奖品发送状态和时间
-			bean.setStatus(ActivityWinHisBean.STATUS_ALREADYSEND);
-			updateActivityWinHis(bean);
+			if(result.indexOf("成功") >=0){
+				//更新奖品发送状态和时间
+				bean.setStatus(ActivityWinHisBean.STATUS_ALREADYSEND);
+				updateActivityWinHis(bean);
+			}
 		}
 		return result;
 	}
