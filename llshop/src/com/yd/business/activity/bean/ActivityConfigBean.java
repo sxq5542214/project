@@ -58,6 +58,10 @@ public class ActivityConfigBean extends BaseBean {
 	 */
 	public static final int ACTIVITY_TYPE_USERSIGN = 3;
 	
+	/**
+	 * 红包加优惠卷活动
+	 */
+	public static final int ACTIVITY_TYPE_BONUS_AND_COUPON = 5;
 	
 	/**
 	 * 启用

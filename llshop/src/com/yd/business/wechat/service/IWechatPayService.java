@@ -8,8 +8,8 @@ public interface IWechatPayService {
 
 	WechatSendRedPackLogBean getLastTimeSendPackLog(String openid);
 
-	Boolean payBonusLimit200(String openId, int payMoney, String ipAddr);
-	
 	List<WechatSendRedPackLogBean> getAllSendPackLog(String openid);
+
+	Boolean payBonusLimit200(String openId, int payMoney, String ipAddr, String remark, int bonusNum);
 
 }

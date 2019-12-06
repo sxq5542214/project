@@ -327,7 +327,8 @@ ISupplierCouponService {
 				int count = reduceCouponNum(coupon_id);						//减少此优惠卷数量
 				if(count > SupplierCouponRuleBean.UPDATE_COUPON_MIN_NUMBER){						//判断表中是否还有剩余的优惠卷
 					InsertGetCouponRecord(bean);			//领取优惠卷,在优惠卷记录表中加一条记录
-					return  configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.RECEIVE_COUPON_SUCCESS_RESULT);
+//					return  configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.RECEIVE_COUPON_SUCCESS_RESULT);
+					return  configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.RECEIVE_COUPON_SUCCESS_RESULT) + bean.getCoupon_name();
 				}else{
 					return  configCruxService.getValueByTypeAndKey(SupplierCouponRuleBean.COUPON_POP_TYPE,SupplierCouponRuleBean.COUPON_ZERO);
 

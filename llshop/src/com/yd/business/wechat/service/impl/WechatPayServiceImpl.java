@@ -92,21 +92,21 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 	 * @return
 	 */
 	@Override
-	public Boolean payBonusLimit200(String openId,int payMoney,String ipAddr){
+	public Boolean payBonusLimit200(String openId,int payMoney,String ipAddr,String remark,int bonusNum){
 		
 		
 		int seq = countSendRedPackByOpenId(openId);
 		
 		UserWechatBean user = userWechatService.findUserWechatByOpenId(openId);
-		int balance = user.getBalance() ; // 以分为单位
+//		int balance = user.getBalance() ; // 以分为单位
 		//不能超过200元
 		if(payMoney > 200 * 100){
 			payMoney = 200 * 100;
 		}
 		//不能超过用户的余额
-		if(payMoney > balance ){
-			payMoney = balance;
-		}
+//		if(payMoney > balance ){
+//			payMoney = balance;
+//		}
 		//要付款的金额小于0，直接返回失败
 		if( payMoney <= 0 ){
 			return false;
@@ -114,12 +114,12 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		String orderCode = userConsumeInfoService.createOutTradeNo( IUserConsumeInfoService.OUTTRADE_TYPE_WECHATBONUS , user.getId());
 		
 //		orderCode = orderCode.replaceAll("_", "X");
-		log.info("GO Send user luckymoney");
-		boolean flag = createWechatPayBonus(user,seq, user.getOpenid(),payMoney,ipAddr,orderCode);
+		log.info("GO Send user payBonus:"+ payMoney);
+		boolean flag = createWechatPayBonus(user,seq, user.getOpenid(),payMoney,ipAddr,orderCode,bonusNum);
 		
 		if(flag){//成功扣减用户余额
-			userConsumeInfoService.createConsumeInfo("提现无号码", -payMoney, null, user.getId(), null, orderCode, UserConsumeInfoBean.INTERFACETYPE_WECHATBONUS_CH,UserConsumeInfoBean.EVENT_TYPE_USER_WECHAT_BOUNS);
-			userWechatService.updateUserBalance(orderCode, null);
+			userConsumeInfoService.createConsumeInfo(remark, -payMoney, null, user.getId(), null, orderCode, UserConsumeInfoBean.INTERFACETYPE_WECHATBONUS_CH,UserConsumeInfoBean.EVENT_TYPE_USER_WECHAT_BOUNS);
+//			userWechatService.updateUserBalance(orderCode, null);  //此处扣减余额方法并发大时有问题
 		}
 		
 		return flag;
@@ -142,9 +142,10 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 	/**
 	 * 微信创建和发送红包
 	 * @param openId
-	 * @param price  单位，元
+	 * @param price  单位，分
+	 * @param bounsNum   红包数量，大于1则是裂变红包，1位普通红包
 	 */
-	private boolean createWechatPayBonus(UserWechatBean user ,int seq, String openId,int price,String spbill_create_ip,String order_code){
+	private boolean createWechatPayBonus(UserWechatBean user ,int seq, String openId,int price,String spbill_create_ip,String order_code,int bonusNum){
 		boolean flag = false;
 		
 		int userId = user.getId();
@@ -173,7 +174,8 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		String mch_name = originalInfo.getMch_name();
 		//商户名称
 		String send_name = "send_name=" + mch_name;
-		
+		String amt_type = "";
+		String scene_id = "scene_id=PRODUCT_1";
 
 		//用户ID //oiRcFuKHjk9_V8-eWwHA1W4x1XWc
 		String openid = "re_openid=" + openId;
@@ -183,20 +185,32 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		//红包发放总人数
 		String total_num = "total_num=1";
 		//红包祝福语
-		String wishing = "wishing=感谢您参与" + mch_name + "，祝您好运多多！";
+		String wishing = "wishing=快关注【" + mch_name + "】公众号，更多现金红包等你来拿！11";
 		//Ip地址
 //		String spbill_create_ip = Struts2Utils.getRequest().getRemoteAddr();
-		if(spbill_create_ip == null){ spbill_create_ip = "115.28.43.16"; }
+		if(spbill_create_ip == null){
+			spbill_create_ip = HttpUtil.getIpAddressByRequest();
+		}
 		String client_ip = "client_ip="+spbill_create_ip;
 		//活动名称
-		String act_name = "act_name=提现红包";
+		String act_name = "act_name=美味坚果和现金红包等你来，快关注【"+ mch_name +"】公众号吧！22";
 		//备注
-		String remark = "remark=感谢您参与" + mch_name + "，祝您好运多多！";
+		String remark = "remark=美味坚果和现金红包等你来，快关注【"+ mch_name +"】公众号吧！33";
 		
 		String key = "key=" + originalInfo.getPay_wechat_sign_key();
 
-		Object[] params={appid,mch_id,nonce_str,send_name,total_amount,out_trade_no,total_num,
-				wishing,client_ip,act_name,openid,remark};
+		
+		String callUrl ;
+		if(bonusNum >1) {
+			callUrl = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_GROUP_BONUS_URL);
+			total_num = "total_num=" + bonusNum;
+			amt_type = "amt_type=ALL_RAND";
+		}else {
+			callUrl = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_BONUS_URL);
+
+		}
+		Object[] params={appid,amt_type,mch_id,nonce_str,send_name,total_amount,out_trade_no,total_num,
+				wishing,client_ip,act_name,openid,remark,scene_id};
 		String tempStr = concatParam(params);
 		//签名,需要把key放在最后
 		tempStr += "&"+key;
@@ -205,7 +219,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		Object[] newParam = ArrayUtils.addAll(params, new String[]{sign});
 		String xml = convertToXML(newParam);
 		
-		String callUrl = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_BONUS_URL);
+		
 		long time = System.currentTimeMillis();
 		try {
 			//调用微信的红包接口

@@ -484,7 +484,7 @@ public class UserController extends BaseController {
 				return null;
 			}
 			
-			boolean flag = wechatPayService.payBonusLimit200(openid, getCash, ip);
+			boolean flag = wechatPayService.payBonusLimit200(openid, getCash, ip,"用户余额提现",1);
 //			boolean flag = true;
 			if(flag){
 				writeJson(response, "success");

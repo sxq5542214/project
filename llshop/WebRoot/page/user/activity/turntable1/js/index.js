@@ -1,5 +1,7 @@
+// var prizes = ["订单8折优惠卷", "10元兑换券", "1元现金红包", "5元现金红包", "开心果兑换卷","谢谢参与~"];
+var prizes = window.prizes ; 
 $(function () {
-    var tips = ["订单8折优惠卷", "10元兑换券", "1元现金红包", "5元现金红包", "开心果兑换卷","谢谢参与~"],//中奖提示
+    var tips = prizes,//中奖提示
         $ring = $(".ring"),
         $prize = $(".prize"),//转盘
         $btn = $("#btn"),//按钮
@@ -8,7 +10,7 @@ $(function () {
         $sNum = $(".start-num"),//手机头号，三位数
         $eNum = $(".end-num"),//手机尾号，四位数
         $info = $(".info"),//中奖提示信息
-        data = {count: 1},//次数
+        data = {count: $change.html() },//次数
         bool = false,//判断是否在旋转，true表示是，false表示否
         timer;//定时器
 
@@ -32,13 +34,32 @@ $(function () {
             data.count <= 0 && (data.count = 0);
             $change.html(data.count);//显示剩余次数
             $prize.removeClass("running");
-            clickFn();
+            
+        	$.ajax({
+        		type : "POST",
+        		url : "activity/user/dealTurnTablePrize.html",
+        		data : {"openid": openid,"activityId": activityId,"activityCode": activityCode },
+        		success : function(result) {
+//         			var result = eval("(" + data + ")");
+         			alert(result +","+tips);
+         			
+         			for(var i = 0 ; i <tips.length; i++){
+         				if(tips[i] == result){
+                            clickFn(i+1);
+             				break;
+         				}
+         			}
+        		}
+        	});
+            
+            
         }
     });
 
     //随机概率
-    function clickFn() {
-        var data = [1, 2, 3, 4, 5, 6];//抽奖概率
+    function clickFn(prizeIndex) {
+//        var data = [1, 2, 3, 4, 5, 6];//抽奖概率
+        var data = [prizeIndex];//抽奖概率
         //data为随机出来的结果，根据概率后的结果
         data = data[Math.floor(Math.random() * data.length)];//1-6的随机数
         switch (data) {//中奖概率，可控。根据得到的随机数控制奖品
@@ -47,24 +68,24 @@ $(function () {
                 rotateFn(1, 0, tips[0]);
                 break;
             case 2:
-			
-                rotateFn(2, 60, tips[5]);
+
+                rotateFn(5, -60, tips[1]);
                 break;
             case 3:
-			 
-                rotateFn(3, 180, tips[4]);
+
+                rotateFn(4, -120, tips[2]);
                 break;
             case 4:
 			
-                rotateFn(4, 120, tips[1]);
+                rotateFn(6, -180, tips[3]);
                 break;
             case 5:
-			
-                rotateFn(5, -60, tips[2]);
+			 
+                rotateFn(3, 120, tips[4]);
                 break;
             case 6:
 			
-                rotateFn(6, -120, tips[3]);
+                rotateFn(2, 60, tips[5]);
                 break;
         }
     }

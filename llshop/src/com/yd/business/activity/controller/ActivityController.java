@@ -109,10 +109,7 @@ public class ActivityController extends BaseController {
 	public static final String PAGE_USER_ACTIVITY_FREECUTACTIVITY = "/page/user/activity/freeCutActivity/freeCutActivity.jsp";
 	public static final String PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpActivity.jsp";
 	public static final String PAGE_USER_ACTIVITY_FREECUTHELFRIENDCIRCLEPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpFriendCircleActivity.jsp";
-<<<<<<< HEAD
 	public static final String PAGE_USER_ACTIVITY_TURNTABLEACTIVITY = "/page/user/activity/turntable1/zhuanpan.jsp";
-=======
->>>>>>> refs/remotes/origin/master
 
 	
 	public static final String PAGE_USER_ACTIVITY_LISTHOME = "/page/user/activity/signActivity/index.jsp";
@@ -1126,9 +1123,31 @@ public class ActivityController extends BaseController {
 		return null;
 	}
 	
+	/**
+	 * 领取免费得坚果活动的奖品
+	 */
+	@RequestMapping("/activity/user/dealTurnTablePrize.html")
+	public ModelAndView dealTurnTablePrize(HttpServletRequest request,HttpServletResponse response){
+		try{
+			String openId = request.getParameter("openid");
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openId);
+			Integer activityId = Integer.parseInt(request.getParameter("activityId"));
+			String activityCode = request.getParameter("activityCode");
+			
+			
+			String result = activityPrizeService.dealUserActivityPrize(user, activityId, activityCode);
+			writeJson(response, result);
+			
+			return null;
+
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
 	
 	
-<<<<<<< HEAD
+	
 
 	/**
 	 * 免费得坚果活动
@@ -1139,6 +1158,8 @@ public class ActivityController extends BaseController {
 		try{
 			String openid = request.getParameter("openid");
 			String code = request.getParameter("code");
+			String activityId = request.getParameter("activityId");
+			Integer activityConfigId = activityId == null ?12:Integer.parseInt(activityId);
 			//用第二域名展示界面，避免第一域名被封
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String serverName = request.getServerName();
@@ -1165,20 +1186,35 @@ public class ActivityController extends BaseController {
 				writeJson(response, "<script>alert(\"请先关注公众号!\");</script>");
 				return null;
 			}
+
 			
-//			Integer supplierEventId = 12; //本次活动ID，也是activityconfigid ,需要保持一致
-//			SupplierEventBean supplierEvent = supplierEventService.queryByid(supplierEventId);
-//			List<SupplierEventCodeBean> list = supplierEventService.queryEventCode(supplierEventId, user.getId(), null);
-			Integer activityConfigId = 12;
+			
 			ActivityConfigBean activity = activityConfigService.findActivityConfigByActivityIdAndCode(activityConfigId, "turntable_activity");
 			
 			//查询活动的奖品
-			
 			List<ActivityPrizeRelationBean> prizeList = activityPrizeService.queryActivityPrizeRelationByActivityId(activityConfigId);
+			
+			//查询最近中奖名单
+			ActivityWinHisBean winHis = new ActivityWinHisBean();
+			winHis.setActivity_config_id(activityConfigId);
+			winHis.setOrderby(" order by id desc limit 10 ");
+			List<ActivityWinHisBean> winHisList = activityService.queryActivityWinHis(winHis);
+			
+			//查询自己当前是否中奖过
+			ActivityWinHisBean myWinInfo = null;
+			winHis.setUser_id(user.getId());
+			winHis.setActivity_config_id(activityConfigId);
+			
+			List<ActivityWinHisBean> myWinHisList = activityService.queryActivityWinHis(winHis);
+			if(myWinHisList.size() > 0) {
+				myWinInfo = myWinHisList.get(0);
+			}
 			
 			model.put("user", user);
 			model.put("activity", activity);
 			model.put("prizeList", prizeList);
+			model.put("winHisList", winHisList);
+			model.put("myWinInfo", myWinInfo);
 			
 			return new ModelAndView(PAGE_USER_ACTIVITY_TURNTABLEACTIVITY, model);
 
@@ -1188,8 +1224,6 @@ public class ActivityController extends BaseController {
 		return null;
 	}
 	
-=======
->>>>>>> refs/remotes/origin/master
 	
 	
 }

@@ -84,7 +84,14 @@ public interface AttributeConstant {
 	public static final String CODE_WECHAT_LONGTIME_NOACCESS = "wechat_longtime_noaccess";
 
 	public static final String CODE_WECHAT_NOTIFY_MANAGER_SENDREDPACK = "wechat_notify_manager_sendredpack";
+	/**
+	 * 普通红包的请求URL
+	 */
 	public static final String CODE_PAY_WECHAT_BONUS_URL = "pay_wechat_bonus_url";
+	/**
+	 * 裂变红包的请求URL
+	 */
+	public static final String CODE_PAY_WECHAT_GROUP_BONUS_URL = "pay_wechat_group_bonus_url";
 
 	public static final String CODE_WECHAT_DEFAULT_SHARE_URL = "wechat_default_share_url";
 	public static final String CODE_WECHAT_DEFAULT_SHARE_TITLE = "wechat_default_share_title";

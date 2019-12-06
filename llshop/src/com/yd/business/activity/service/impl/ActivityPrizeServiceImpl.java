@@ -15,6 +15,7 @@ import com.yd.business.activity.bean.ActivityPrize;
 import com.yd.business.activity.bean.ActivityPrizeRelationBean;
 import com.yd.business.activity.bean.ActivityPrizeRuleBean;
 import com.yd.business.activity.bean.ActivityProductBean;
+import com.yd.business.activity.bean.ActivityWinHisBean;
 import com.yd.business.activity.dao.IActivityConfigDao;
 import com.yd.business.activity.dao.IActivityDao;
 import com.yd.business.activity.dao.IActivityPrizeDao;
@@ -28,7 +29,9 @@ import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
+import com.yd.business.wechat.service.IWechatPayService;
 import com.yd.util.AutoInvokeGetSetMethod;
+import com.yd.util.RandomUtil;
 import com.yd.util.StringUtil;
 
 @Service("activityPrizeService")
@@ -50,13 +53,24 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 	private ISupplierCouponService supplierCouponService;
 	@Resource
 	private IMsgCenterActionService msgCenterActionService;
-	
+	@Resource
+	private IWechatPayService wechatPayService;
 	
 	@Override
 	public List<ActivityPrize> queryActivityPrizeByBean(ActivityPrize bean) {
 		return activityPrizeDao.queryActivityPrize(bean);
 	}
-
+	
+	@Override
+	public List<ActivityPrizeRelationBean> queryActivityPrizeRelationByActivityId(int activityId){
+		
+		ActivityPrizeRelationBean bean = new ActivityPrizeRelationBean();
+		bean.setActivity_id(activityId);
+		List<ActivityPrizeRelationBean> listRelation = activityPrizeDao.queryActivityPrizeRelation(bean );
+		return listRelation;
+	}
+	
+	
 	@Override
 	public ActivityPrize findActivityPrizeByID(int id){
 		ActivityPrize prize = new ActivityPrize();
@@ -67,6 +81,18 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 		}
 		return null;
 	}
+	
+	@Override
+	public ActivityWinHisBean findActivityWinHisById(int id) {
+		ActivityWinHisBean bean = new ActivityWinHisBean();
+		bean.setId(id);
+		List<ActivityWinHisBean> list = activityDao.queryActivityWinHis(bean );
+		if(list.size() > 0 ) {
+			return list.get(0);
+		}
+		return null;
+	}
+	
 	
 	@Override
 	public ActivityPrize commitActivityPrizeForJson(String json) {
@@ -172,6 +198,125 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 		
 		return result;
 	}
+	
+	
+	/**
+	 * 处理用户获得奖品
+	 * @param userId
+	 * @param activityId
+	 */
+	@Override
+	public String dealUserActivityPrize(UserWechatBean user,int activityId,String activityCode){
+//		String result = "";
+		
+		ActivityWinHisBean winHis = new ActivityWinHisBean();
+		winHis.setActivity_config_id(activityId);
+		winHis.setOpenid(user.getOpenid());
+		
+		//查询用户是否已中奖
+		List<ActivityWinHisBean> winHisList = activityService.queryActivityWinHis(winHis );
+		if(winHisList.size() > 0) {
+			return winHisList.get(0).getPrize_name();
+		}else {
+			
+			//待完善 参加但未中奖的情况
+			
+			
+			//未参加过
+			ActivityPrizeRelationBean bean = new ActivityPrizeRelationBean();
+			bean.setActivity_id(activityId);
+			List<ActivityPrizeRelationBean> relationList = activityPrizeDao.queryActivityPrizeRelation(bean );
+			
+			//通过权重计算中的奖品
+			int weightSum = 0;
+			for(ActivityPrizeRelationBean relation : relationList){
+				weightSum += relation.getWeight();
+			}
+			
+			if(weightSum <= 0) {
+				return null;
+			}
+			
+			int n = RandomUtil.nextInt(weightSum);
+			int m = 0;
+			Integer prizeId = null ;
+			String prizeName = "没有中奖";
+			for(ActivityPrizeRelationBean relation : relationList){
+				 if (m <= n && n < m + relation.getWeight()) {  
+					 prizeId = relation.getActivity_prize_id();
+					 prizeName = relation.getPrize_name();
+	                 break;  
+	               }  
+	               m += relation.getWeight();  
+			}
+
+			//创建活动获奖历史
+			ActivityPrize prize = findActivityPrizeByID(prizeId);
+			prize.setPrize_name(prizeName);
+			activityService.createActivityWinHis(activityId, user, prize);
+
+			return prizeName;
+			
+		}
+		
+	}
+	
+	
+	@Override
+	public String userReceiveWinHisPrize(UserWechatBean user,int winHisId ) {
+		String result = "";
+		ActivityWinHisBean bean = findActivityWinHisById(winHisId);
+		if(bean == null || user == null || bean.getUser_id().intValue() != user.getId().intValue()) {
+			result = "您没有获取该奖品";
+		}else if(bean.getStatus() == ActivityWinHisBean.STATUS_ALREADYSEND) {
+			result = "您已成功领取过该奖品";
+		}else {
+			result = userWinGetPrize(user,bean.getActivity_config_id(),bean.getPrize_id());
+		}
+		return result;
+	}
+	
+	
+	private String userWinGetPrize(UserWechatBean user,int activityId,Integer prizeId) {
+		String result = "成功";
+		if(prizeId == null || prizeId == 0) {
+			return result;
+		}
+		
+		ActivityPrize prize = findActivityPrizeByID(prizeId);
+		prize.setRemark(user.getNick_name());
+		int category = prize.getCategory();
+		switch (category) {
+		case ActivityPrize.CATEGORY_COUPON:
+			int couponId = prize.getProduct_id();
+			//获取优惠卷
+			result = supplierCouponService.reveiveCouponResult(couponId, user);
+			
+			break;
+		case ActivityPrize.CATEGORY_CASH_BONUS:
+			// 现金红包 
+			int money = prize.getBonus_money();
+			Boolean flag = wechatPayService.payBonusLimit200(user.getOpenid(), money, null,prize.getRemark(),prize.getProduct_id());
+			if(flag) {
+				result = "红包已派发成功，请返回公众号菜单界面领取";
+			}else {
+				result = "红包派发失败，请联系客服人员";
+			}
+			break;
+		default:
+			break;
+		}
+
+		if(result.indexOf("成功") >=0){
+			//保存并处理用户动作
+			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ACTIVITY_GET_PRIZE , null, prize);
+			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ACTIVITY_GET_PRIZE_HELP_FRIEND_FRIENDS , null, prize);
+			
+		}
+//		result = prize.getPrize_name();
+		return result;
+	}
+	
 	
 	/**
 	 * 判断用户是否能获取这个奖品

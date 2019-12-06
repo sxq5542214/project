@@ -30,6 +30,7 @@
 			<if test="order_code != null"> and order_code = #{order_code}	</if>
 			<if test="phone != null"> and phone = #{phone}	</if>
 		</where>
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 		<select id="findRelationByInstanceBean" resultType="activityUserRelation">
@@ -45,6 +46,7 @@
 			<if test="order_code != null"> and order_code = #{order_code}	</if>
 			<if test="phone != null"> and phone = #{phone}	</if>
 		</where>
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 	<select id="queryActivityRelation" parameterType="activityUserRelation" resultType="activityUserRelation">
@@ -62,6 +64,7 @@
 			<if test="order_code != null"> and order_code = #{order_code}	</if>
 			<if test="phone != null"> and phone = #{phone}	</if>
 		</where>
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 	<select id="findActivityBean" parameterType="map" resultType="activity">
@@ -111,9 +114,10 @@
 	</delete>
 	
 	<select id="queryActivityHis" parameterType="activityWinHis" resultType="activityWinHis">
-		select * from ll_activity_win_his
+		select *,(select remark from ll_activity_prize p where p.id =  prize_id ) remark from ll_activity_win_his
 		<where>
 			<if test="user_id != null ">and user_id=#{user_id}</if>
+			<if test="id != null ">and id=#{id}</if>
 			<if test="openid != null and openid != ''">and openid=#{openid}</if>
 			<if test="activity_config_id !=null and activity_config_id != ''">and activity_config_id=#{activity_config_id}</if>
 			<if test="prize_id !=null and prize_id != ''">and prize_id=#{prize_id}</if>
@@ -125,6 +129,7 @@
 			<if test="beginWinTime!=null and beginWinTime!=''">and win_time>=#{beginWinTime}</if>
 			<if test="endWinTime!=null and endWinTime!=''">and win_time<![CDATA[<]]>=#{endWinTime}</if>
 		</where>
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 	
 	<select id="queryActivityProductList" parameterType="activityProduct" resultType="activityProduct" >
@@ -142,6 +147,7 @@
 			<if test="dff_time != null"> and dff_time = #{dff_time}</if>
 			<if test="weight != null"> and weight = #{weight}</if>
 		</where>
+			<if test="orderby != null"> ${orderby} </if>
 		
 	</select>
 	
@@ -289,6 +295,7 @@
 		<if test="instance_id != null"> and  instance_id = #{instance_id} </if>
 		<if test="openid != null">  and openid = #{openid} </if>
 	</where>
+			<if test="orderby != null"> ${orderby} </if>
 	</select>
 
 

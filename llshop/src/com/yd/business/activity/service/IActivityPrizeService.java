@@ -3,6 +3,8 @@ package com.yd.business.activity.service;
 import java.util.List;
 
 import com.yd.business.activity.bean.ActivityPrize;
+import com.yd.business.activity.bean.ActivityPrizeRelationBean;
+import com.yd.business.activity.bean.ActivityWinHisBean;
 import com.yd.business.user.bean.UserWechatBean;
 
 public interface IActivityPrizeService {
@@ -42,5 +44,13 @@ public interface IActivityPrizeService {
 	 * @return
 	 */
 	String dealUserActivityPrize(UserWechatBean user, int activityId, int prizeId);
+
+	List<ActivityPrizeRelationBean> queryActivityPrizeRelationByActivityId(int activityId);
+
+	String dealUserActivityPrize(UserWechatBean user, int activityId, String activityCode);
+
+	ActivityWinHisBean findActivityWinHisById(int id);
+
+	String userReceiveWinHisPrize(UserWechatBean user, int winHisId);
 	
 }

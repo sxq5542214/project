@@ -305,7 +305,7 @@ public class OrderProductLogServiceImpl extends BaseService implements IOrderPro
 			if (orderBean.getLucky_money() >= WechatPayInfoBean.LUCKY_MONEY_MIN_WECHAT) {
 				// Go 微信
 				log.info("GO Send user luckymoney start;openId:"+openId+",orderBean.getLucky_money():"+orderBean.getLucky_money()+",ip:"+ip);
-				isPaied = wechatPayService.payBonusLimit200(openId,orderBean.getLucky_money(), ip);
+				isPaied = wechatPayService.payBonusLimit200(openId,orderBean.getLucky_money(), ip,"购后返现金红包",1);
 				log.info("GO Send user luckymoney end;isPaied:"+isPaied);
 				if (isPaied) {
 					is_sended = OrderProductLogBean.IS_SENDED_SUCCESS_HONBAO;

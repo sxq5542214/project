@@ -161,7 +161,7 @@ public class SupplierEventServiceImpl extends BaseService implements
 				user.setBalance(user.getBalance() + event.getBonusNum());
 				userWechatService.updateUserWechat(user);
 				
-				wechatPayService.payBonusLimit200(user.getOpenid(), event.getBonusNum(), null);
+				wechatPayService.payBonusLimit200(user.getOpenid(), event.getBonusNum(), null,"活动【"+event.getTitle()+"】派奖",1);
 			}
 		}
 	}

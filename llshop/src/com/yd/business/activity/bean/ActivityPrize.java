@@ -33,15 +33,31 @@ public class ActivityPrize extends BaseBean {
 	/**
 	 * 未中奖奖品
 	 */
-	public static final String ACTIVITY_PRIZE_NO_WINNER = "noWinner";
+	public static final String ERROR_CODE_NO_WINNER = "noWinner";
 	/**
 	 * 获取失败
 	 */
-	public static final String ACTIVITY_PRIZE_FAIL = "FAIL";
+	public static final String ERROR_CODE_FAIL = "FAIL";
 	/**
 	 * 重复参与
 	 */
-	public static final String ACTIVITY_PRIZE_REPEAT = "REPEAT";
+	public static final String ERROR_CODE_REPEAT = "REPEAT";
+	
+
+	/**
+	 * 优惠卷
+	 */
+	public static final int CATEGORY_COUPON = 1;
+	/**
+	 * 现金红包
+	 */
+	public static final int CATEGORY_CASH_BONUS = 2;
+	/**
+	 * 商品
+	 */
+	public static final int CATEGORY_CASH_PRODUCT = 3;
+	
+	
 
 	private Integer id;
 	/**
@@ -61,13 +77,17 @@ public class ActivityPrize extends BaseBean {
 	/**
 	 * 奖品种类
 	 */
-	private String category;
+	private Integer category;
 	/**
 	 * 奖品剩余数
 	 */
 	private int remain_num;
 	
 	private String prize_img_url;
+	
+	private Integer bonus_money;
+	
+	private String errorCode;
 	
 	private Map<String,List<DictionaryBean>> dicMap;
 	public Integer getId() {
@@ -106,10 +126,10 @@ public class ActivityPrize extends BaseBean {
 	public void setProduct_table(String product_table) {
 		this.product_table = product_table;
 	}
-	public String getCategory() {
+	public Integer getCategory() {
 		return category;
 	}
-	public void setCategory(String category) {
+	public void setCategory(Integer category) {
 		this.category = category;
 	}
 	public int getRemain_num() {
@@ -124,11 +144,23 @@ public class ActivityPrize extends BaseBean {
 	public void setPrize_img_url(String prize_img_url) {
 		this.prize_img_url = prize_img_url;
 	}
+	public Integer getBonus_money() {
+		return bonus_money;
+	}
+	public void setBonus_money(Integer bonus_money) {
+		this.bonus_money = bonus_money;
+	}
 	public Map<String, List<DictionaryBean>> getDicMap() {
 		return dicMap;
 	}
 	public void setDicMap(Map<String, List<DictionaryBean>> dicMap) {
 		this.dicMap = dicMap;
+	}
+	public String getErrorCode() {
+		return errorCode;
+	}
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
 	}
 	
 }

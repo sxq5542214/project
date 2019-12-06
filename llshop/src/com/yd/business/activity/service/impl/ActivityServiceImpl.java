@@ -167,11 +167,13 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 		ActivityWinHisBean win = new ActivityWinHisBean();
 //		AutoInvokeGetSetMethod.autoInvoke(activity, win);
 		win.setActivity_config_id(activityId);
+		win.setCategory(prize.getCategory());
 		win.setUser_id(user.getId());
 		win.setOpenid(user.getOpenid());
 		win.setUser_name(user.getNick_name());
 		win.setHead_img(user.getHead_img());
 		win.setId(null);
+		win.setBonus_money(prize.getBonus_money());
 		win.setPrize_id(prize.getId());
 		win.setPrize_name(prize.getPrize_name());
 		win.setStatus(ActivityWinHisBean.STATUS_WINED);
@@ -628,7 +630,7 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 				//校验活动的前提条件
 				prize = checkActivityParams(prize,bean,user,instanceBean);	
 				if(StringUtil.isNotNull(prize.getRemark())){
-//					if(prize.getCategory() == ActivityPrize.ACTIVITY_PRIZE_REPEAT){
+//					if(prize.getErrorCode() == ActivityPrize.ACTIVITY_PRIZE_REPEAT){
 //						prize.setRemark("您已经参与过该活动了！请勿重复参与！");
 //					}
 					return prize;
@@ -670,7 +672,7 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 			log.error(e, e);
 			prize = new ActivityPrize();
 			prize.setRemark("活动失效！");
-			prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+			prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 			return prize;
 		}
 		
@@ -687,17 +689,17 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 		String remark = "";
 		boolean to_relation = false;
 		//不可重复参与的
-		if(bean.getIs_repeat() ==  ActivityConfigBean.ACTIVITY_IS_REPEAT_NO || (!StringUtil.isNull(prize) && !prize.getCategory().equals(ActivityPrize.ACTIVITY_PRIZE_NO_WINNER))){
+		if(bean.getIs_repeat() ==  ActivityConfigBean.ACTIVITY_IS_REPEAT_NO || (!StringUtil.isNull(prize) && !prize.getErrorCode().equals(ActivityPrize.ERROR_CODE_NO_WINNER))){
 			to_relation = true;
 		}
 		//获得奖品为空，或者奖品为未中奖
-		if(StringUtil.isNull(prize) || ((!StringUtil.isNull(prize) && prize.getCategory().equals(ActivityPrize.ACTIVITY_PRIZE_NO_WINNER)) && bean.getIs_repeat() ==  ActivityConfigBean.ACTIVITY_IS_REPEAT_YES)){
+		if(StringUtil.isNull(prize) || ((!StringUtil.isNull(prize) && prize.getErrorCode().equals(ActivityPrize.ERROR_CODE_NO_WINNER)) && bean.getIs_repeat() ==  ActivityConfigBean.ACTIVITY_IS_REPEAT_YES)){
 			remark = "您已经成功参与秒杀活动！";
 			if(StringUtil.isNull(prize) ){
 				prize = new ActivityPrize();
 			}
 //			prize = new ActivityPrize();
-			prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_NO_WINNER);
+			prize.setErrorCode(ActivityPrize.ERROR_CODE_NO_WINNER);
 			prize.setRemark(remark);
 			newRelationBean.setProduct_name(prize.getPrize_name()+"[数量为0]");
 			newRelationBean.setProduct_id(prize.getId());
@@ -720,7 +722,7 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 				activityDao.saveActivityUserRelateionNoPrize(newRelationBean);
 			}
 			//更新活动实例的实际中奖人数
-			if(!prize.getCategory().equals(ActivityPrize.ACTIVITY_PRIZE_NO_WINNER)){
+			if(!prize.getErrorCode().equals(ActivityPrize.ERROR_CODE_NO_WINNER)){
 				instanceBean.setReal_win_num(instanceBean.getReal_win_num()+1);
 			}
 //			activityDao.createOrUpdateActivityInstance(instanceBean);
@@ -781,19 +783,19 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 			if(StringUtil.isNull(instanceBean)){
 				returnMag = "实例不可用!";
 				prize.setRemark(returnMag);
-				prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+				prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 				return prize;
 			}
 			if(instanceBean.getLife_status() != ActivityInstanceBean.ACTIVITYINSTANCE_LIFE_STATUS_ACTIVE){
 				returnMag = "实例不可用!";
 				prize.setRemark(returnMag);
-				prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+				prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 				return prize;
 			}
 			//用户已经参与活动并且活动不可重复参加
 			if(relationBean.size() > 0 && activityConfigBean.getIs_repeat() == ActivityConfigBean.ACTIVITY_IS_REPEAT_NO){
 				if(StringUtil.isNull(relationBean.get(0).getProduct_id())){
-					prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_REPEAT);
+					prize.setErrorCode(ActivityPrize.ERROR_CODE_REPEAT);
 					prize.setRemark("您已经参与该活动了，请勿重复参与！");
 					return prize;
 				}else{
@@ -805,7 +807,7 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 			if(!checkActivityIsInLifeCycle(activityConfigBean)){
 				returnMag = "非正在进行活动！不初始化实例";
 				prize.setRemark(returnMag);
-				prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+				prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 				return prize;
 			}
 
@@ -813,21 +815,21 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 			if(instanceBean.getMax_join_num() <= instanceBean.getReal_join_num()){
 				returnMag = "活动太火爆了，本轮活动名额已满，欢迎关注下一阶段活动！";
 				prize.setRemark(returnMag);
-				prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+				prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 				return prize;
 			}
 			//活动有没有超过最大中奖人数
 			if(instanceBean.getMax_win_num() <= instanceBean.getReal_win_num()){
 				returnMag = "活动太火爆了，本轮奖品已被领完，欢迎关注下一阶段活动！";
 				prize.setRemark(returnMag);
-				prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+				prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 				return prize;
 			}
 
 			if(instanceBean.getActivity_id().intValue() != activityConfigBean.getId().intValue()){
 				returnMag = "实例非法！";
 				prize.setRemark(returnMag);
-				prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+				prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 				return prize;
 			}
 			int userPoints = user.getPoints();
@@ -835,13 +837,13 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 			if(userPoints < activityConfigBean.getCost_points()){
 				returnMag ="您的积分不足，您可以每日签到获得积分！";
 				prize.setRemark(returnMag);
-				prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+				prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 				return prize;
 			}
 
 		}
 		prize.setRemark(returnMag);
-		prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+		prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 		return prize;
 	}
 	
@@ -857,13 +859,13 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 		if(!checkActivityIsInLifeCycle(activityConfigBean)){
 			String remark = "活动还未开始，开始时间:"+activityConfigBean.getStart_date();
 			prize.setRemark(remark);
-			prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+			prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 			return prize;
 		}
 		if(activityConfigBean.getStatus() == ActivityConfigBean.ACTIVITY_STATUS_DISABLE){
 			String remark = "活动需要是可用状态！";
 			prize.setRemark(remark);
-			prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+			prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 			return prize;
 		}
 		String returnMag = checkLimitParams(activityConfigBean,user);
@@ -876,7 +878,7 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 			//用户已经参与活动并且活动不可重复参加
 			if(relationBean.size() > 0 && activityConfigBean.getIs_repeat() == ActivityConfigBean.ACTIVITY_IS_REPEAT_NO){
 				if(StringUtil.isNull(relationBean.get(0).getProduct_id())){
-					prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_REPEAT);
+					prize.setErrorCode(ActivityPrize.ERROR_CODE_REPEAT);
 					prize.setRemark("您已经参与该活动了，请勿重复参与！");
 					return prize;
 				}else{
@@ -886,7 +888,7 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 			}
 		}
 		prize.setRemark(returnMag);
-		prize.setCategory(ActivityPrize.ACTIVITY_PRIZE_FAIL);
+		prize.setErrorCode(ActivityPrize.ERROR_CODE_FAIL);
 		return prize;
 	}
 	

@@ -14,9 +14,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.activity.bean.ActivityPrize;
+import com.yd.business.activity.bean.ActivityWinHisBean;
 import com.yd.business.activity.service.IActivityPrizeService;
+import com.yd.business.activity.service.IActivityService;
 import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.dictionary.service.IDictionaryService;
+import com.yd.business.user.bean.UserWechatBean;
+import com.yd.business.user.service.IUserWechatService;
 
 /**
  * 系统奖品管理
@@ -30,7 +34,12 @@ public class ActivityPrizeManagerController extends BaseController {
 	private IActivityPrizeService activityPrizeService;
 	@Resource
 	private IDictionaryService dictionaryService;
+	@Resource
+	private IUserWechatService userWechatService;
+	@Resource
+	private IActivityService activityService;
 	
+	public static final String PAGE_RECEIVE_ACTIVITY_PRIZE = "/page/user/activity/turntable1/receive_activity_prize.jsp";
 	public static final String PAGE_ACTIVITY_PRIZE_LIST_QUERY = "/page/pc/prize/iframe_config_prize_mgr.jsp";
 	
 	/**
@@ -74,7 +83,7 @@ public class ActivityPrizeManagerController extends BaseController {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 提交奖品信息
 	 * @param request
@@ -93,5 +102,69 @@ public class ActivityPrizeManagerController extends BaseController {
 		}
 		return null;
 	}
+	
+	
+
+	/**
+	 * 跳转至领奖奖品界面
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/activity/prize/toReceivePrizePage.html")
+	public ModelAndView toReceivePrizePage(HttpServletRequest request ,HttpServletResponse response){
+		try {
+			String openid = request.getParameter("openid");
+			String activityId = request.getParameter("activityId");
+			
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			
+			
+			//查询已获得的奖品
+			ActivityWinHisBean bean = new ActivityWinHisBean();
+			bean.setActivity_config_id(Integer.parseInt(activityId));
+			bean.setUser_id(user.getId());
+			List<ActivityWinHisBean> prizeList = activityService.queryActivityWinHis(bean);
+			
+			
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("user", user);
+			model.put("prizeList", prizeList);
+			return new ModelAndView(PAGE_RECEIVE_ACTIVITY_PRIZE, model );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
+
+
+	/**
+	 * 领奖
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/activity/prize/receivePrize.html")
+	public ModelAndView receivePrize(HttpServletRequest request ,HttpServletResponse response){
+		try {
+			String openid = request.getParameter("openid");
+			String winHisId = request.getParameter("winHisId");
+			
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			
+			//查询已获得的奖品
+			String result = activityPrizeService.userReceiveWinHisPrize(user, Integer.parseInt(winHisId));
+			
+			writeJson(response, result);
+			
+		} catch (Exception e) {
+			writeJson(response, "领奖失败");
+			log.error(e, e);
+		}
+		return null;
+	}
+	
+	
 	
 }
