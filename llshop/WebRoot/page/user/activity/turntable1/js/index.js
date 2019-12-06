@@ -40,8 +40,7 @@ $(function () {
         		url : "activity/user/dealTurnTablePrize.html",
         		data : {"openid": openid,"activityId": activityId,"activityCode": activityCode },
         		success : function(result) {
-//         			var result = eval("(" + data + ")");
-         			alert(result +","+tips);
+//         			alert(result +","+tips);
          			
          			for(var i = 0 ; i <tips.length; i++){
          				if(tips[i] == result){

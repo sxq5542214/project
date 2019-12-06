@@ -31,6 +31,7 @@ import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.service.IWechatPayService;
 import com.yd.util.AutoInvokeGetSetMethod;
+import com.yd.util.DateUtil;
 import com.yd.util.RandomUtil;
 import com.yd.util.StringUtil;
 
@@ -272,6 +273,10 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 			result = "您已成功领取过该奖品";
 		}else {
 			result = userWinGetPrize(user,bean.getActivity_config_id(),bean.getPrize_id());
+			
+			//更新奖品发送状态和时间
+			bean.setStatus(ActivityWinHisBean.STATUS_ALREADYSEND);
+			updateActivityWinHis(bean);
 		}
 		return result;
 	}
@@ -336,6 +341,12 @@ public class ActivityPrizeServiceImpl extends BaseService implements IActivityPr
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public void updateActivityWinHis(ActivityWinHisBean bean) {
+		bean.setModify_time(DateUtil.getNowDateStr());
+		activityPrizeDao.updateActivityWinHis(bean);
 	}
 	
 }

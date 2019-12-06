@@ -140,11 +140,14 @@ function showShareDiv(){
          			
         		}
         	});
-		
-		
 	}
+	function needSharePYQ(){
+		alert('要告知到朋友圈才可以哟！');
+	}
+	alert(1);
+	weixinInit.setOnShareAppMessageSuccess(needSharePYQ);
 	weixinInit.setOnShareTimelineSuccess(shareSucess);
-	weixinInit.setOnShareAppMessageSuccess(function(){ alert('要告知到朋友圈才可以哟！'); });
+	alert(2);
 	
 </script>
 </body>

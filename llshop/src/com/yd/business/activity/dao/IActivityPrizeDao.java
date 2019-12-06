@@ -6,6 +6,7 @@ import com.yd.business.activity.bean.ActivityPrize;
 import com.yd.business.activity.bean.ActivityPrizeRelationBean;
 import com.yd.business.activity.bean.ActivityPrizeRuleBean;
 import com.yd.business.activity.bean.ActivityProductBean;
+import com.yd.business.activity.bean.ActivityWinHisBean;
 
 public interface IActivityPrizeDao {
 
@@ -89,4 +90,6 @@ public interface IActivityPrizeDao {
 	 * @return
 	 */
 	List<ActivityPrizeRelationBean> queryActivityPrizeRelation(ActivityPrizeRelationBean bean);
+
+	void updateActivityWinHis(ActivityWinHisBean bean);
 }

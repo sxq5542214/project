@@ -52,5 +52,7 @@ public interface IActivityPrizeService {
 	ActivityWinHisBean findActivityWinHisById(int id);
 
 	String userReceiveWinHisPrize(UserWechatBean user, int winHisId);
+
+	void updateActivityWinHis(ActivityWinHisBean bean);
 	
 }

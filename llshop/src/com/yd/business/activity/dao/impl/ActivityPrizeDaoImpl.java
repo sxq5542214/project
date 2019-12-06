@@ -10,6 +10,7 @@ import com.yd.business.activity.bean.ActivityPrizeRelationBean;
 import com.yd.business.activity.bean.ActivityPrizeRuleBean;
 import com.yd.business.activity.bean.ActivityProductBean;
 import com.yd.business.activity.bean.ActivityRule;
+import com.yd.business.activity.bean.ActivityWinHisBean;
 import com.yd.business.activity.dao.IActivityPrizeDao;
 import com.yd.business.activity.dao.IActivityRuleDao;
 import com.yd.util.StringUtil;
@@ -94,6 +95,9 @@ public class ActivityPrizeDaoImpl extends BaseDao implements IActivityPrizeDao {
 	}
 	
 	
-	
+	@Override 
+	public void updateActivityWinHis(ActivityWinHisBean bean) {
+		sqlSessionTemplate.update(NAMESPACE +"updateActivityWinHis", bean);
+	}
 	
 }

@@ -103,6 +103,18 @@
 	
 </select>
 
+<update id="updateActivityWinHis" parameterType="activityWinHis">
+	update ll_activity_win_his 
+	<set>
+		<if test="status != null">status = #{status},</if>
+		<if test="modify_time != null">modify_time = #{modify_time},</if>
+		<if test="bonus_money != null">bonus_money = #{bonus_money},</if>
+	</set>
+	<where>
+		id = #{id}
+	</where>
+</update>
+
 
 <select id="execActivityPrizeRule">
 	${value}
