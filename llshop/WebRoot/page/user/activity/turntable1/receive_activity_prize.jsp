@@ -12,6 +12,7 @@
 
 	UserWechatBean user = (UserWechatBean) request.getAttribute("user");
 	List<ActivityWinHisBean> prizeList = (List<ActivityWinHisBean>) request.getAttribute("prizeList");
+	String prizeName = null;
 %>
 <!DOCTYPE html>
 <html>
@@ -56,7 +57,7 @@
 				src="<%=basePath%>images/event/weixin-sharepic-friends.jpg" alt="">
     	<p style="height: auto;">
 			<span style="font-size: 16px;color:white;">温馨提示：<br>
-				快去告知好友吧，奖品将会立刻发放到账！
+				<span style="font-size: 16px;color:white;" id="tips">快去告知好友吧，奖品将会立刻发放到账！</span>
 			</span>
 		</p>
 		</div>
@@ -78,6 +79,7 @@
 
 				<%
 					for (ActivityWinHisBean bean : prizeList) {
+						prizeName = bean.getPrize_name();
 				%>
 				<tr>
 					<td><%=bean.getCreate_time()%></td>
@@ -124,24 +126,30 @@ function showShareDiv(){
 
 	function shareSucess(){
 		var winHisId = document.getElementById('winHisId').value ;
-		
 		$.ajax({
         		type : "POST",
         		url : "activity/prize/receivePrize.html",
         		data : {"openid": openid,"winHisId": winHisId  },
         		success : function(result) {
-         		//	var result = eval("(" + data + ")");
          			alert(result );
+					$("#tips").html(result);
          			
         		}
         	});
 	}
 	function needSharePYQ(){
 		alert('要告知到朋友圈才可以哟！');
+		$("#tips").html('要告知到朋友圈才可以哟！');
 	}
 	weixinInit.setOnShareTimelineSuccess(shareSucess);
 	weixinInit.setOnShareAppMessageSuccess(needSharePYQ);
-	weixinInit.setShareTitle("<%="必中！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
+	<% 
+		if(prizeName != null){
+	 %>
+		weixinInit.setShareTitle("<%="必中！【美味坚果】和【现金红包】免费送啦，【"+user.getNick_name()+"】抽中了【"+prizeName+"】，快看看你的运气吧！" %>");
+	 <%}else{%>
+		weixinInit.setShareTitle("<%="必中！【美味坚果】和【现金红包】免费送啦，限量1000份，再迟就没有了！" %>");
+	<%}%>
 	weixinInit.setShareDesc("<%="必中！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
 	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>activity/user/toTurntable1Activity.html?fromOpenid=<%=user.getOpenid()%>");
 	weixinInit.setShareImg("http://m.jg-shop.cn/jgshop/page/user/activity/freeCutActivity/resource/share_img.jpg");

@@ -25,9 +25,13 @@ String prizeNameStr = "[";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>【美味坚果】和【现金红包】，你想要啥？</title>
+    <title>【美味坚果】和【现金红包】，祝您好运</title>
     <link rel="stylesheet" href="page/user/activity/turntable1/css/common.css">
     <link rel="stylesheet" href="page/user/activity/turntable1/css/index.css">
+    
+<script	src="page/user/supplierEvent/common/jquery-1.10.2-min.js"></script>
+<script type="text/javascript" src="<%=request.getScheme()  %>://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script type="text/javascript" src="js/wechat/weixinInit.js"></script>
     <!-- 移动端适配 -->
     <script>
         var html = document.querySelector('html');
@@ -159,6 +163,12 @@ var activityCode = '<%=activity.getCode()%>';
 
 var prizeStr = <%=prizeNameStr + "'谢谢参与~' ]"%> ;
 window.prizes = prizeStr;
+
+	weixinInit.setShareTitle("<%="必中！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
+	weixinInit.setShareDesc("<%="必中！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
+	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>activity/user/toTurntable1Activity.html?fromOpenid=<%=user.getOpenid()%>");
+	weixinInit.setShareImg("http://m.jg-shop.cn/jgshop/page/user/activity/freeCutActivity/resource/share_img.jpg");
+	
 </script>
 </body>
 </html>
