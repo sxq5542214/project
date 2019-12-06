@@ -183,7 +183,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		String total_amount = "total_amount="+ price;
 		System.out.println("_+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++total_amount="+ price);
 		//红包发放总人数
-		String total_num = "total_num=1";
+		String total_num = "total_num="+bonusNum;
 		//红包祝福语
 		String wishing = "wishing=快关注【" + mch_name + "】公众号，更多现金红包等你来拿！11";
 		//Ip地址
@@ -236,7 +236,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 				log.setRe_openid(openId);
 				log.setSeq(seq);
 				log.setTotal_amount(Integer.parseInt(resultBean.getCash_fee()));
-				log.setTotal_num(1);
+				log.setTotal_num(bonusNum);
 				log.setReturn_msg(resultBean.getReturn_msg());
 				log.setSend_listid(resultBean.getTransaction_id());
 				log.setSend_time(DateUtil.getNowDateStr());

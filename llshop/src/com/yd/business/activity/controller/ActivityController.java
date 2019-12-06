@@ -1162,9 +1162,12 @@ public class ActivityController extends BaseController {
 			String activityConfigId = request.getParameter("activityId");
 			Integer activityId = StringUtil.isNull(activityConfigId) ?12:Integer.parseInt(activityConfigId);
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
-			
+			String openid = request.getParameter("openid");
 
-			String openid = (String)request.getSession().getAttribute("code_openid");
+			
+			if(StringUtil.isNull(openid)) {
+				openid = (String)request.getSession().getAttribute("code_openid");
+			}
 			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
 				// 没有缓存，也没有传code过来，则跳转至微信授权
 				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId  , "utf-8");
@@ -1176,7 +1179,7 @@ public class ActivityController extends BaseController {
 				//好友信息，创建用户及好友关系
 				if( StringUtil.isNotNull(auth.getAccess_token())){
 					request.getSession().setAttribute("code_openid",auth.getOpenid());
-					
+					openid = auth.getOpenid();
 					UserWechatBean parentUser = userWechatService.findUserWechatByOpenId(fromOpenid);
 					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentUser.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, activityId, original.getOriginalid() , auth.getAccess_token());
 					userWechatService.createUserWechatFriend(parentUser,friendUser);
@@ -1191,7 +1194,7 @@ public class ActivityController extends BaseController {
 			//用第二域名展示界面，避免第一域名被封
 			String serverName = request.getServerName();
 			if(original.getServer_url2() != null && original.getServer_url2().indexOf(serverName)< 0){
-				String url = original.getServer_url2()+"activity/user/toTurntable1Activity.html?openid="+openid+"&code="+code;
+				String url = original.getServer_url2()+"activity/user/toTurntable1Activity.html?fromOpenid="+fromOpenid+"&openid="+openid+"&code="+code;
 				response.sendRedirect(url);
 				return null;
 			}
