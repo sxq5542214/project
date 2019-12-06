@@ -10,6 +10,7 @@
 			<if test="original_name != null and original_name !=''"> and sp.original_name like concat('%', #{original_name}, '%')</if>
 			<if test="server_domain != null and server_domain !=''"> and sp.server_domain like concat('%', #{server_domain}, '%')</if>
 			<if test="originalid != null and originalid !=''"> and sp.originalid = #{originalid}</if>
+			<if test="server_url != null "> and (sp.server_url like concat('%', #{server_url}, '%') or  server_url2 like concat('%', #{server_url}, '%')) </if>
 		</where>
 		<if test="orderby != null "> ${orderby}</if>
 		

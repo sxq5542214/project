@@ -1159,8 +1159,8 @@ public class ActivityController extends BaseController {
 			
 			String fromOpenid = request.getParameter("fromOpenid");
 			String code = request.getParameter("code");
-			String activityId = request.getParameter("activityId");
-			Integer activityConfigId = activityId == null ?12:Integer.parseInt(activityId);
+			String activityConfigId = request.getParameter("activityId");
+			Integer activityId = StringUtil.isNull(activityConfigId) ?12:Integer.parseInt(activityConfigId);
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			
 
@@ -1178,7 +1178,7 @@ public class ActivityController extends BaseController {
 					request.getSession().setAttribute("code_openid",auth.getOpenid());
 					
 					UserWechatBean parentUser = userWechatService.findUserWechatByOpenId(fromOpenid);
-					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentUser.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, Integer.parseInt(activityId), original.getOriginalid() , auth.getAccess_token());
+					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentUser.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, activityId, original.getOriginalid() , auth.getAccess_token());
 					userWechatService.createUserWechatFriend(parentUser,friendUser);
 				}else{ // 没有accessstoken 则重新访问
 					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId  , "utf-8");
@@ -1203,21 +1203,21 @@ public class ActivityController extends BaseController {
 				return null;
 			}
 			
-			ActivityConfigBean activity = activityConfigService.findActivityConfigByActivityIdAndCode(activityConfigId, "turntable_activity");
+			ActivityConfigBean activity = activityConfigService.findActivityConfigByActivityIdAndCode(activityId, "turntable_activity");
 			
 			//查询活动的奖品
-			List<ActivityPrizeRelationBean> prizeList = activityPrizeService.queryActivityPrizeRelationByActivityId(activityConfigId);
+			List<ActivityPrizeRelationBean> prizeList = activityPrizeService.queryActivityPrizeRelationByActivityId(activityId);
 			
 			//查询最近中奖名单
 			ActivityWinHisBean winHis = new ActivityWinHisBean();
-			winHis.setActivity_config_id(activityConfigId);
+			winHis.setActivity_config_id(activityId);
 			winHis.setOrderby(" order by id desc limit 10 ");
 			List<ActivityWinHisBean> winHisList = activityService.queryActivityWinHis(winHis);
 			
 			//查询自己当前是否中奖过
 			ActivityWinHisBean myWinInfo = null;
 			winHis.setUser_id(user.getId());
-			winHis.setActivity_config_id(activityConfigId);
+			winHis.setActivity_config_id(activityId);
 			
 			List<ActivityWinHisBean> myWinHisList = activityService.queryActivityWinHis(winHis);
 			if(myWinHisList.size() > 0) {
