@@ -1183,7 +1183,8 @@ public class ActivityController extends BaseController {
 					request.getSession().setAttribute("code_openid",auth.getOpenid());
 					openid = auth.getOpenid();
 					UserWechatBean parentUser = userWechatService.findUserWechatByOpenId(fromOpenid);
-					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentUser.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, activityId, original.getOriginalid() , auth.getAccess_token());
+					Integer parentId = parentUser == null? null : parentUser.getId();
+					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentId,  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, activityId, original.getOriginalid() , auth.getAccess_token());
 					userWechatService.createUserWechatFriend(parentUser,friendUser);
 				}else{ // 没有accessstoken 则重新访问
 					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId +"&shareType="+shareType , "utf-8");
