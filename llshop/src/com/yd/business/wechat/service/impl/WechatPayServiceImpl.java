@@ -155,7 +155,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		//wx26a55db19faf530f
 		String appidStr = originalInfo.getAppid();
 		String appid = "wxappid=" + appidStr; 
-		String mch_idStr = originalInfo.getMch_id();
+		String mch_idStr = originalInfo.getBonus_mch_id();
 		//商户号
 		String mch_id = "mch_id="+ mch_idStr;
 		//随机码
@@ -197,7 +197,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		//备注
 		String remark = "remark=美味坚果和现金红包等你来，快关注【"+ mch_name +"】公众号吧！33";
 		
-		String key = "key=" + originalInfo.getPay_wechat_sign_key();
+		String key = "key=" + originalInfo.getBonus_pay_wechat_sign_key();
 
 		
 		String callUrl ;
@@ -223,7 +223,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		long time = System.currentTimeMillis();
 		try {
 			//调用微信的红包接口
-			CloseableHttpClient client = createWechatCertPostClient(originalInfo);
+			CloseableHttpClient client = createWechatCertPostClient(originalInfo,true);
 			String response = HttpUtil.post(client,callUrl, xml);
 			WechatPayResultBean resultBean = parseWechatBonusResult(response);
 			log.info("调用微信的红包接口 cost:"+ (System.currentTimeMillis() - time) +", mch_billno:"+mch_billno);
@@ -358,17 +358,22 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 	
 	/**
 	 * 创建微信支付带签名的请求
+	 * @param isSend  是否发送红包 true为是
 	 * @return
 	 */
-	private CloseableHttpClient createWechatCertPostClient(WechatOriginalInfoBean originalInfo){
+	private CloseableHttpClient createWechatCertPostClient(WechatOriginalInfoBean originalInfo,boolean isSend){
 		CloseableHttpClient httpclient = null;
 		try{
 			SSLConnectionSocketFactory sslsf = map_sslsf.get(originalInfo.getOriginalid());
 			
 			if(sslsf == null){
 				KeyStore keyStore  = KeyStore.getInstance("PKCS12");
-				String mch_id = originalInfo.getMch_id();
-				String certFilePath = originalInfo.getPay_cert_file_path();
+				String mch_id = originalInfo.getBonus_mch_id();
+				String certFilePath = originalInfo.getBonus_pay_cert_file_path();
+				if(!isSend) {
+					mch_id = originalInfo.getMch_id();
+					certFilePath = originalInfo.getPay_cert_file_path();
+				}
 		        FileInputStream instream = new FileInputStream(new File(certFilePath));
 		        try {
 		            keyStore.load(instream, mch_id.toCharArray());

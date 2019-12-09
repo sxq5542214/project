@@ -35,6 +35,11 @@ public class WechatOriginalInfoBean extends BaseBean {
 	private String pay_wechat_sign_key;
 	private String modify_time;
 	
+	private String bonus_mch_id;
+	private String bonus_mch_name;
+	private String bonus_pay_cert_file_path;
+	private String bonus_pay_wechat_sign_key;
+	
 	private String from_originalid;
 	
 
@@ -180,6 +185,30 @@ public class WechatOriginalInfoBean extends BaseBean {
 	}
 	public void setServer_url2(String server_url2) {
 		this.server_url2 = server_url2;
+	}
+	public String getBonus_mch_id() {
+		return bonus_mch_id;
+	}
+	public void setBonus_mch_id(String bonus_mch_id) {
+		this.bonus_mch_id = bonus_mch_id;
+	}
+	public String getBonus_mch_name() {
+		return bonus_mch_name;
+	}
+	public void setBonus_mch_name(String bonus_mch_name) {
+		this.bonus_mch_name = bonus_mch_name;
+	}
+	public String getBonus_pay_cert_file_path() {
+		return bonus_pay_cert_file_path;
+	}
+	public void setBonus_pay_cert_file_path(String bonus_pay_cert_file_path) {
+		this.bonus_pay_cert_file_path = bonus_pay_cert_file_path;
+	}
+	public String getBonus_pay_wechat_sign_key() {
+		return bonus_pay_wechat_sign_key;
+	}
+	public void setBonus_pay_wechat_sign_key(String bonus_pay_wechat_sign_key) {
+		this.bonus_pay_wechat_sign_key = bonus_pay_wechat_sign_key;
 	}
 	
 	
