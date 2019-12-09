@@ -28,7 +28,7 @@ $(function () {
         if (data.count <= 0) { //当抽奖次数为0时
             $change.html(0);//次数显示为0
             bool = false;
-            alert("没有次数了");
+            alert("您已经抽过奖啦，快点击右上角【我的奖品】领奖吧！");
         } else { //还有次数就执行
             data.count--;
             data.count <= 0 && (data.count = 0);

@@ -551,6 +551,9 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 	@Override
 	public Integer readUserSenceLog(String openid,Integer senceId,Integer senceType, String share_type){
 		Integer num = null;
+		if(StringUtil.isNull(openid)) {
+			return num;
+		}
 		//先查询，如果有就更新，没有就创建
 		UserSenceLog condition = new UserSenceLog();
 		condition.setSence_type(senceType);

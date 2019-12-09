@@ -1166,7 +1166,7 @@ public class ActivityController extends BaseController {
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String openid = request.getParameter("openid");
 
-log.warn(request.getParameter("openid")+"," +request.getParameter("code")+",");
+			
 			if(StringUtil.isNull(openid)) {
 				openid = (String)request.getSession().getAttribute("code_openid");
 			}
@@ -1212,8 +1212,9 @@ log.warn(request.getParameter("openid")+"," +request.getParameter("code")+",");
 			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			if(user == null){
+				log.warn(" activityController 1215 Line ; user is null!,openid:"+openid);
 				//跳转至关注公众号界面
-				writeJson(response, "<script>alert(\"请先关注公众号!\");</script>");
+				writeJson(response, "<script>alert(\"请先关注【WE坚果汇】公众号!\");</script>");
 				return null;
 			}
 			
