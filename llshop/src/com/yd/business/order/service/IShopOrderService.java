@@ -52,5 +52,7 @@ public interface IShopOrderService {
 
 	ShopOrderRemindBean createShopOrderRemind(String remind, UserWechatBean user, ShopOrderInfoBean order);
 
+	int updateRabbishOrderStatus(Integer userId);
+
 
 }

@@ -130,6 +130,7 @@ public class ActivityPrizeManagerController extends BaseController {
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("user", user);
 			model.put("prizeList", prizeList);
+			model.put("winHis", bean);
 			return new ModelAndView(PAGE_RECEIVE_ACTIVITY_PRIZE, model );
 		} catch (Exception e) {
 			log.error(e, e);

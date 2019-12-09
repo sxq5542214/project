@@ -31,4 +31,8 @@ public interface IShopOrderDao {
 
 	int createShopOrderRemind(ShopOrderRemindBean bean);
 
+	int updateOrderToFinishBy30DayAgo();
+
+	int updateRabbishOrderStatus(int userId);
+
 }

@@ -11,6 +11,7 @@
 			+ path + "/";
 
 	UserWechatBean user = (UserWechatBean) request.getAttribute("user");
+	ActivityWinHisBean winHis = (ActivityWinHisBean) request.getAttribute("winHis");
 	List<ActivityWinHisBean> prizeList = (List<ActivityWinHisBean>) request.getAttribute("prizeList");
 	String prizeName = null;
 %>
@@ -136,8 +137,21 @@ function showShareDiv(){
          			
         		}
         	});
+        	
+		$.ajax({
+        		type : "POST",
+        		url : "user/handleUserShare.do",
+        		data : {"openid": openid,"share_from": "activity","param": '<%=winHis.getActivity_config_id()%>',"share_type": 2 },
+        		success : function(result) { }
+        	});
 	}
 	function needSharePYQ(){
+		$.ajax({
+        		type : "POST",
+        		url : "user/handleUserShare.do",
+        		data : {"openid": openid,"share_from": "activity","param": '<%=winHis.getActivity_config_id()%>',"share_type": 1 },
+        		success : function(result) { }
+        	});
 		alert('要告知到朋友圈才可以哟！');
 		$("#tips").html('要告知到朋友圈才可以哟！');
 	}
@@ -151,7 +165,7 @@ function showShareDiv(){
 		weixinInit.setShareTitle("<%="必中！【美味坚果】和【现金红包】免费送啦，限量1000份，再迟就没有了！" %>");
 	<%}%>
 	weixinInit.setShareDesc("<%="必中！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
-	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>activity/user/toTurntable1Activity.html?fromOpenid=<%=user.getOpenid()%>");
+	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>activity/user/toTurntable1Activity.html?fromOpenid=<%=user.getOpenid()%>&shareType=2");
 	weixinInit.setShareImg("http://m.jg-shop.cn/jgshop/page/user/activity/freeCutActivity/resource/share_img.jpg");
 	
 </script>

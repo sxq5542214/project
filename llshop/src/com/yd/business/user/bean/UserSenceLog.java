@@ -24,7 +24,7 @@ public class UserSenceLog extends BaseBean {
 
 	public static final String SHARE_FROM_INVITE_FIRENDS = "invite_firends";
 	public static final String SHARE_FROM_USER_SIGN = "user_sign";
-	public static final String SHARE_FROM_LIULIANG1G_ACTIVITY = "liuliang1G_activity";
+	public static final String SHARE_FROM_ACTIVITY = "activity";
 	public static final String SHARE_FROM_SIGN_ACTIVITY_ORDER_PRODUCT = "sign_activity_order_product";
 	public static final String SHARE_FROM_MYSUPPLIER_EVENT = "mysupplier_event";
 	public static final String SHARE_FROM_SUPPLIER_EVENT = "supplier_event";

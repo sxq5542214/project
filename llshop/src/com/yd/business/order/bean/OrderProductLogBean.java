@@ -53,6 +53,7 @@ public class OrderProductLogBean extends InterfaceBean {
 	public static final int STATUS_ORDERING = 4;
 	public static final int STATUS_ALREADY_DELIVERY = 5; //已发货，待收货
 	public static final int STATUS_NEED_AGAIN_ORDER = 6; //余额不足,链接超时类似情况需要在此订购
+	public static final int STATUS_FINISH = 8; //订单结束
 	public static final int STATUS_FAILD = -1;
 	public static final int STATUS_UNFIND_CHANNEL = -2; //未找到通道
 	public static final int STATUS_USER_DELETE = -3; //用户删除

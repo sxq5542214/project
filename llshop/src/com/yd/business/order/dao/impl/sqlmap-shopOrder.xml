@@ -80,6 +80,17 @@
 	</update>
 	
 	
+	<update id="updateOrderToFinishBy30DayAgo">
+		update ll_shop_order_info set status = 8 where express_date is not null 
+		and DATE_ADD(SYSDATE(),INTERVAL -30 day) >  express_date  and status = 5;
+	</update>
+	
+	<update id="updateRabbishOrderStatus" parameterType="int">
+		update ll_shop_order_info a set a.status = -3 where  a.status in (0,2) and a.user_id = #{value} and a.id not in (
+			select id from ( select MAX(id) as id from ll_shop_order_info b where b.status in (0,2) and b.user_id = #{value} ) c
+		)
+	</update>
+	
 	<insert id="createShopOrderProduct" parameterType="shopOrderProduct" useGeneratedKeys="true" keyProperty="id">
 		insert into ll_shop_order_product(order_info_id,order_code,user_id,nick_name,
 		supplier_id,supplier_name,supplier_product_id,supplier_product_name,

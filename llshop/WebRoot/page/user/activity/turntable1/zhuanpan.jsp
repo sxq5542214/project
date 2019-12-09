@@ -29,9 +29,14 @@ String prizeNameStr = "[";
     <link rel="stylesheet" href="page/user/activity/turntable1/css/common.css">
     <link rel="stylesheet" href="page/user/activity/turntable1/css/index.css">
     
-<script	src="page/user/supplierEvent/common/jquery-1.10.2-min.js"></script>
+    
+<script src="page/user/activity/turntable1/js/jquery-1.11.3.min.js"></script>
+<script src="page/user/activity/turntable1/js/jquery.rotate.js"></script>
+<script src="page/user/activity/turntable1/js/h5_game_common.js"></script>
+<script src="page/user/activity/turntable1/js/jquery.SuperSlide.2.1.1.js"></script>
 <script type="text/javascript" src="<%=request.getScheme()  %>://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <script type="text/javascript" src="js/wechat/weixinInit.js"></script>
+<script src="page/user/activity/turntable1/js/index.js"></script>
     <!-- 移动端适配 -->
     <script>
         var html = document.querySelector('html');
@@ -150,11 +155,6 @@ String prizeNameStr = "[";
     
 </div>
 
-<script src="page/user/activity/turntable1/js/jquery-1.11.3.min.js"></script>
-<script src="page/user/activity/turntable1/js/jquery.rotate.js"></script>
-<script src="page/user/activity/turntable1/js/h5_game_common.js"></script>
-<script src="page/user/activity/turntable1/js/index.js"></script>
-<script src="page/user/activity/turntable1/js/jquery.SuperSlide.2.1.1.js"></script>
 <script type="text/javascript">
 jQuery("#txtMarqueeTop").slide({ mainCell:"ul",autoPlay:true,effect:"topMarquee",interTime:50,vis:3  });
 

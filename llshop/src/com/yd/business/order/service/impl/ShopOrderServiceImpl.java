@@ -85,7 +85,23 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 
 	@Override
 	public List<ShopOrderInfoBean> queryShopOrderInfo(ShopOrderInfoBean bean){
+		
+		// 历史一个月以上的订单，状态修改为已成交
+		updateOrderToFinishBy30DayAgo();
+		
+		
 		return shopOrderDao.queryShopOrderInfo(bean);
+	}
+	
+	private int updateOrderToFinishBy30DayAgo() {
+		return shopOrderDao.updateOrderToFinishBy30DayAgo();
+	}
+	@Override
+	public int updateRabbishOrderStatus(Integer userId) {
+		if(userId != null) {
+			return shopOrderDao.updateRabbishOrderStatus(userId);
+		}
+		return -1;
 	}
 	
 	@Override

@@ -529,6 +529,7 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		}
 		return num;
 	}
+	@Deprecated
 	@Override
 	public Integer readUserSenceLog(String openid,Integer share_type,String share_time_ms){
 		Integer num = null;
@@ -542,6 +543,25 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 			if(list.size()>0){
 				num = readUserSenceLog(list.get(0));
 			}
+		}
+		return num;
+	}
+	
+
+	@Override
+	public Integer readUserSenceLog(String openid,Integer senceId,Integer senceType, String share_type){
+		Integer num = null;
+		//先查询，如果有就更新，没有就创建
+		UserSenceLog condition = new UserSenceLog();
+		condition.setSence_type(senceType);
+		condition.setOpenid(openid);
+		condition.setSenceid(senceId);
+		condition.setShare_type(Integer.parseInt(share_type));
+		List<UserSenceLog> list =userWechatDao.queryUserSenceLog(condition);
+		if(list.size()>0){
+			num = readUserSenceLog(list.get(0));
+		}else {
+			createUserSenceLog(openid, senceType, senceId, Integer.parseInt(share_type), null, null);
 		}
 		return num;
 	}
@@ -622,7 +642,7 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 			}
 		}
 		
-		if(UserSenceLog.SHARE_FROM_LIULIANG1G_ACTIVITY.equalsIgnoreCase(share_from)){
+		if(UserSenceLog.SHARE_FROM_ACTIVITY.equalsIgnoreCase(share_from)){
 			senceType = WechatConstant.TICKET_SENCE_CODE_ACTIVITY;
 			if(StringUtil.isNotNull(param)){
 				senceId = Integer.parseInt(param);

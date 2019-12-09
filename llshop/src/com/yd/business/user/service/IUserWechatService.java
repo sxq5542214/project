@@ -152,4 +152,6 @@ public interface IUserWechatService {
 	 * @return
 	 */
 	UserWechatFriendBean createUserWechatFriend(Integer userId, String friendOpenId);
+
+	Integer readUserSenceLog(String openid, Integer senceId, Integer senceType, String share_type);
 }

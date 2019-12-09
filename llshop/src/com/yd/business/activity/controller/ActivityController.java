@@ -47,6 +47,7 @@ import com.yd.business.supplier.bean.SupplierEventBean;
 import com.yd.business.supplier.bean.SupplierEventCodeBean;
 import com.yd.business.supplier.service.ISupplierEventService;
 import com.yd.business.user.bean.UserQrCodeBean;
+import com.yd.business.user.bean.UserSenceLog;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.controller.UserController;
 import com.yd.business.user.service.IUserCommissionPointsService;
@@ -1157,10 +1158,11 @@ public class ActivityController extends BaseController {
 		Map<String, Object> model = new HashMap<String, Object>();
 		try{
 			
-			String fromOpenid = request.getParameter("fromOpenid");
+			final String fromOpenid = request.getParameter("fromOpenid");
 			String code = request.getParameter("code");
 			String activityConfigId = request.getParameter("activityId");
-			Integer activityId = StringUtil.isNull(activityConfigId) ?12:Integer.parseInt(activityConfigId);
+			final String shareType = request.getParameter("shareType");
+			final Integer activityId = StringUtil.isNull(activityConfigId) ?12:Integer.parseInt(activityConfigId);
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String openid = request.getParameter("openid");
 
@@ -1198,7 +1200,16 @@ public class ActivityController extends BaseController {
 				response.sendRedirect(url);
 				return null;
 			}
-		
+			
+
+			taskExecutor.execute(new Runnable() {
+				@Override
+				public void run() {
+					//创建用户分享后打开的阅读日志
+					userWechatService.readUserSenceLog(fromOpenid, activityId, WechatConstant.TICKET_SENCE_CODE_ACTIVITY,shareType);
+				}
+			});
+			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			if(user == null){
 				//跳转至关注公众号界面

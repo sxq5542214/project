@@ -57,6 +57,15 @@ public class ShopOrderDaoImpl extends BaseDao implements IShopOrderDao {
 	public int createShopOrderRemind(ShopOrderRemindBean bean){
 		return sqlSessionTemplate.insert(NAMESPACE +"createShopOrderRemind", bean);
 	}
+
+	@Override
+	public int updateOrderToFinishBy30DayAgo() {
+		return sqlSessionTemplate.update(NAMESPACE+"updateOrderToFinishBy30DayAgo");
+	}
 	
+	@Override
+	public int updateRabbishOrderStatus(int userId) {
+		return sqlSessionTemplate.update(NAMESPACE+"updateRabbishOrderStatus", userId);
+	}
 	
 }

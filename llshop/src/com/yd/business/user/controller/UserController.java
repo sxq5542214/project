@@ -967,6 +967,9 @@ public class UserController extends BaseController {
 			}
 			
 			
+			//删除自己的垃圾订单，只保留最近一次未支付的订单
+			shopOrderService.updateRabbishOrderStatus(user.getId());
+			
 			ShopOrderInfoBean bean = new ShopOrderInfoBean();
 			bean.setUser_id(user.getId());
 			bean.setNotInStatus(""+ShopOrderInfoBean.STATUS_USER_DELETE);
