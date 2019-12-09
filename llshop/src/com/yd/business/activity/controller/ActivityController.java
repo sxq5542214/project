@@ -1172,7 +1172,7 @@ public class ActivityController extends BaseController {
 			}
 			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
 				// 没有缓存，也没有传code过来，则跳转至微信授权
-				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId  , "utf-8");
+				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId +"&shareType="+shareType , "utf-8");
 				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 				return null;
 			}else if(StringUtil.isNull(openid)){
@@ -1186,7 +1186,7 @@ public class ActivityController extends BaseController {
 					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentUser.getId(),  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, activityId, original.getOriginalid() , auth.getAccess_token());
 					userWechatService.createUserWechatFriend(parentUser,friendUser);
 				}else{ // 没有accessstoken 则重新访问
-					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId  , "utf-8");
+					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTurntable1Activity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId +"&shareType="+shareType , "utf-8");
 					response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 					return null;
 				}
@@ -1196,7 +1196,7 @@ public class ActivityController extends BaseController {
 			//用第二域名展示界面，避免第一域名被封
 			String serverName = request.getServerName();
 			if(original.getServer_url2() != null && original.getServer_url2().indexOf(serverName)< 0){
-				String url = original.getServer_url2()+"activity/user/toTurntable1Activity.html?fromOpenid="+fromOpenid+"&openid="+openid+"&code="+code;
+				String url = original.getServer_url2()+"activity/user/toTurntable1Activity.html?fromOpenid="+fromOpenid+"&openid="+openid+"&code="+code +"&activityId="+ activityId +"&shareType="+shareType;
 				response.sendRedirect(url);
 				return null;
 			}

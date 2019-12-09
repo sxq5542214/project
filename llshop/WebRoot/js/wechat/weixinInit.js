@@ -258,6 +258,7 @@ wx.ready(function() {
 							alert("QQ空间分享失败");
 						}
 					});
+			document.body.style.display = 'block';
 		});
 wx.error(function(res) {
 			alert("微信错误提示：" + res.errMsg);
