@@ -64,6 +64,7 @@ public interface AttributeConstant {
 	public static final String CODE_WECHAT_USER_UNSUBSCRIBE = "user_unsubscribe";
 	public static final String CODE_WECHAT_USER_ORDER_NOPAY_REFOUND = "user_order_nopay_refound";
 	public static final String CODE_WECHAT_USER_ACCESS_WITHIN_48HOUR= "user_access_within_48hour";
+	public static final String CODE_WECHAT_BONUS_TIPS= "wechat_bonus_tips";
 	public static final String CODE_WECHAT_USER_ORDER_ERROR = "user_order_error";
 	public static final String CODE_WECHAT_TEMPLATE_MSG_USER_SIGN = "wechat_template_msg_user_sign";
 	

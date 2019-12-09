@@ -1166,7 +1166,7 @@ public class ActivityController extends BaseController {
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String openid = request.getParameter("openid");
 
-			
+log.warn(request.getParameter("openid")+"," +request.getParameter("code")+",");
 			if(StringUtil.isNull(openid)) {
 				openid = (String)request.getSession().getAttribute("code_openid");
 			}

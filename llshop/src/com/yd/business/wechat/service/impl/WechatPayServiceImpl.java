@@ -28,6 +28,7 @@ import org.dom4j.Element;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.other.bean.ConfigAttributeBean;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.user.bean.UserConsumeInfoBean;
@@ -185,7 +186,8 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		//红包发放总人数
 		String total_num = "total_num="+bonusNum;
 		//红包祝福语
-		String wishing = "wishing=快关注【" + mch_name + "】公众号，更多现金红包等你来拿！11";
+		String bonusTips = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_BONUS_TIPS);
+		String wishing = "wishing="+ bonusTips.replaceAll("#mch_name#", mch_name) ;
 		//Ip地址
 //		String spbill_create_ip = Struts2Utils.getRequest().getRemoteAddr();
 		if(spbill_create_ip == null){
