@@ -174,7 +174,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		String mch_name = originalInfo.getMch_name();
 		//商户名称
 		String send_name = "send_name=" + mch_name;
-		String amt_type = "";
+		String amt_type = "amt_type=ALL_RAND";
 		String scene_id = "scene_id=PRODUCT_1";
 
 		//用户ID //oiRcFuKHjk9_V8-eWwHA1W4x1XWc
