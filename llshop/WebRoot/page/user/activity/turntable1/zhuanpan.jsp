@@ -150,9 +150,13 @@ String prizeNameStr = "[";
         </div>
     </div>
     
-    
 </div>
-
+<% if(user.getStatus() != UserWechatBean.STATUS_SUBSCRIBE){ %>
+<div style="text-align: center;margin-bottom: 20px;"> 
+    <img alt="请长按二维码" src="images/qrcode/qrcode_for_WEjianguohui.jpg">
+	<br> <span class="a-main2 a3" style="font-size: 0.4rem;color: white;">请长按上方二维码，关注公众号后即可领奖</span>
+</div>
+<%} %>
 <script src="page/user/activity/turntable1/js/jquery.rotate.js"></script>
 <script src="page/user/activity/turntable1/js/h5_game_common.js"></script>
 <script src="page/user/activity/turntable1/js/jquery.SuperSlide.2.1.1.js"></script>
