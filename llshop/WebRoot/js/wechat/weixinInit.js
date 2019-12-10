@@ -1,14 +1,14 @@
 
 
 //请使用 weixinInit的各类set方法来重写以下方法
-var onShareQQSuccess; 	//分享QQ成功  	weixinInit.setOnShareQQSuccess
-var onShareQQFail;		//分享QQ失败	weixinInit.setOnShareQQFail
-var onShareTimelineSuccess;		//分享朋友圈成功
-var onShareTimelineFail;		//分享朋友圈失败
-var onShareAppMessageSuccess;	//分享朋友成功
-var onShareAppMessageFail;		//分享朋友失败
-var onUpdateTimelineShareDataSuccess; //新版分享到朋友圈
-var onUpdateAppMessageShareDataSuccess; //新版分享给朋友
+var onShareQQSuccess; 	//发送QQ成功  	weixinInit.setOnShareQQSuccess
+var onShareQQFail;		//发送QQ失败	weixinInit.setOnShareQQFail
+var onShareTimelineSuccess;		//发送朋友圈成功
+var onShareTimelineFail;		//发送朋友圈失败
+var onShareAppMessageSuccess;	//发送朋友成功
+var onShareAppMessageFail;		//发送朋友失败
+var onUpdateTimelineShareDataSuccess; //新版发送到朋友圈
+var onUpdateAppMessageShareDataSuccess; //新版发送给朋友
 var servAppName = "";
 
 // 微信统一初始化
@@ -146,116 +146,116 @@ wx.ready(function() {
 			var shareImg = weixinInit.getShareImg();
 			// alert(shareTitle);
 			
-			//新版微信分享到朋友圈
+			//新版微信发送到朋友圈
 			wx.updateTimelineShareData({
-				title : shareTitle, // 分享标题
-				desc : shareDesc, // 分享描述
-				link : shareLink +'&share_type=2', // 分享链接
-				imgUrl : shareImg, // 分享图标
+				title : shareTitle, // 发送标题
+				desc : shareDesc, // 发送描述
+				link : shareLink +'&share_type=2', // 发送链接
+				imgUrl : shareImg, // 发送图标
 				success : function() {
-					// 成功设置后的回调，不是用户成功分享后的回调
-//					alert("分享到朋友圈数据更新成功");
+					// 成功设置后的回调，不是用户成功发送后的回调
+//					alert("发送到朋友圈数据更新成功");
 //					onUpdateTimelineShareDataSuccess();
 				}
 			});
-			//新版微信分享到朋友
+			//新版微信发送到朋友
 			wx.updateAppMessageShareData({
-				title : shareTitle, // 分享标题
-				desc : shareDesc, // 分享描述
-				link : shareLink +'&share_type=1', // 分享链接
-				imgUrl : shareImg, // 分享图标
+				title : shareTitle, // 发送标题
+				desc : shareDesc, // 发送描述
+				link : shareLink +'&share_type=1', // 发送链接
+				imgUrl : shareImg, // 发送图标
 				success : function() {
-					// 成功设置后的回调，不是用户成功分享后的回调
-//					alert("分享给朋友数据更新成功");
+					// 成功设置后的回调，不是用户成功发送后的回调
+//					alert("发送给朋友数据更新成功");
 //					onUpdateAppMessageShareDataSuccess();
 				}
 			});
 			
 			
 			
-			// QQ分享
+			// QQ发送
 			wx.onMenuShareQQ({
-						title : shareTitle, // 分享标题
-						desc : shareDesc, // 分享描述
-						link : shareLink, // 分享链接
-						imgUrl : shareImg, // 分享图标
+						title : shareTitle, // 发送标题
+						desc : shareDesc, // 发送描述
+						link : shareLink, // 发送链接
+						imgUrl : shareImg, // 发送图标
 						success : function() {
-							// 用户确认分享后执行的回调函数
-							// alert("QQ分享成功");
+							// 用户确认发送后执行的回调函数
+							// alert("QQ发送成功");
 							onShareQQSuccess();
 						},
 						cancel : function() {
-							// 用户取消分享后执行的回调函数
-							// alert("QQ分享失败");
+							// 用户取消发送后执行的回调函数
+							// alert("QQ发送失败");
 							onShareQQFail();
 
 						}
 					});
 
-			// 朋友圈分享
+			// 朋友圈发送
 			wx.onMenuShareTimeline({
-						title : shareTitle, // 分享标题
-						link : shareLink, // 分享链接
-						imgUrl : shareImg, // 分享图标
+						title : shareTitle, // 发送标题
+						link : shareLink, // 发送链接
+						imgUrl : shareImg, // 发送图标
 						success : function() {
-							// 用户确认分享后执行的回调函数
+							// 用户确认发送后执行的回调函数
 							onShareTimelineSuccess();
-							alert("朋友圈分享成功");
+							alert("朋友圈发送成功");
 						},
 						cancel : function() {
-							// 用户取消分享后执行的回调函数
+							// 用户取消发送后执行的回调函数
 							onShareTimelineFail();
-							alert("朋友圈分享失败");
+							alert("朋友圈发送失败");
 						}
 					});
-			// 朋友分享
+			// 朋友发送
 			wx.onMenuShareAppMessage({
-						title : shareTitle, // 分享标题
-						desc : shareDesc, // 分享描述
-						link : shareLink, // 分享链接
-						imgUrl : shareImg, // 分享图标
-						type : '', // 分享类型,music、video或link，不填默认为link
+						title : shareTitle, // 发送标题
+						desc : shareDesc, // 发送描述
+						link : shareLink, // 发送链接
+						imgUrl : shareImg, // 发送图标
+						type : '', // 发送类型,music、video或link，不填默认为link
 						dataUrl : '', // 如果type是music或video，则要提供数据链接，默认为空
 						success : function() {
 							onShareAppMessageSuccess();
 
-							// 用户确认分享后执行的回调函数
-//							alert("朋友分享成功");
+							// 用户确认发送后执行的回调函数
+//							alert("朋友发送成功");
 						},
 						cancel : function() {
-							// 用户取消分享后执行的回调函数
+							// 用户取消发送后执行的回调函数
 							onShareAppMessageFail();
-							alert("朋友分享失败");
+							alert("朋友发送失败");
 						}
 					});
-			// 腾讯微博分享
+			// 腾讯微博发送
 			wx.onMenuShareWeibo({
-						title : shareTitle, // 分享标题
-						desc : shareDesc, // 分享描述
-						link : shareLink, // 分享链接
-						imgUrl : shareImg, // 分享图标
+						title : shareTitle, // 发送标题
+						desc : shareDesc, // 发送描述
+						link : shareLink, // 发送链接
+						imgUrl : shareImg, // 发送图标
 						success : function() {
-							// 用户确认分享后执行的回调函数
-							alert("腾讯微博分享成功");
+							// 用户确认发送后执行的回调函数
+							alert("腾讯微博发送成功");
 						},
 						cancel : function() {
-							// 用户取消分享后执行的回调函数
-							alert("腾讯微博分享失败");
+							// 用户取消发送后执行的回调函数
+							alert("腾讯微博发送失败");
 						}
 					});
-			// QQ空间分享
+			// QQ空间发送
 			wx.onMenuShareQZone({
-						title : shareTitle, // 分享标题
-						desc : shareDesc, // 分享描述
-						link : shareLink, // 分享链接
-						imgUrl : shareImg, // 分享图标
+						title : shareTitle, // 发送标题
+						desc : shareDesc, // 发送描述
+						link : shareLink, // 发送链接
+						imgUrl : shareImg, // 发送图标
 						success : function() {
-							// 用户确认分享后执行的回调函数
-							alert("QQ空间分享成功");
+							// 用户确认发送后执行的回调函数
+							alert("QQ空间发送成功");
 						},
 						cancel : function() {
-							// 用户取消分享后执行的回调函数
-							alert("QQ空间分享失败");
+							// 用户取消发送后执行的回调函数
+							alert("QQ空间发送失败");
 						}
 					});
 			document.body.style.display = 'block';
