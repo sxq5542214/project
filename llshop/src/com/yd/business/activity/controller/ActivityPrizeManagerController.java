@@ -146,12 +146,12 @@ public class ActivityPrizeManagerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("**/activity/prize/receivePrize.html")
+	@RequestMapping({"**/activity/prize/receivePrize.html","**/activity/prize/receivePrize.do"})
 	public ModelAndView receivePrize(HttpServletRequest request ,HttpServletResponse response){
 		try {
 			String openid = request.getParameter("openid");
 			String winHisId = request.getParameter("winHisId");
-			
+log.warn("activity/prize/receivePrize.html......  openid:"+openid +",winHisId:" + winHisId);			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			
 			//查询已获得的奖品

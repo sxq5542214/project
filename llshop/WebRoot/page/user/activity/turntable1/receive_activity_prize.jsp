@@ -127,22 +127,22 @@ function showShareDiv(){
 
 	function shareSucess(){
 		var winHisId = document.getElementById('winHisId').value ;
-		$.ajax({
-        		type : "POST",
-        		url : "activity/prize/receivePrize.html",
-        		data : {"openid": openid,"winHisId": winHisId  },
-        		success : function(result) {
-         			alert(result );
-					$("#tips").html(result);
-         			
-        		}
-        	});
         	
 		$.ajax({
         		type : "POST",
         		url : "user/handleUserShare.do",
         		data : {"openid": openid,"share_from": "activity","param": '<%=winHis.getActivity_config_id()%>',"share_type": 2 },
         		success : function(result) { }
+        	});
+        
+		$.ajax({
+        		type : "POST",
+        		url : "activity/prize/receivePrize.do",
+        		data : {"openid": openid,"winHisId": winHisId },
+        		success : function(result) {
+					$("#tips").html(result);
+         			alert(result );
+        		}
         	});
 	}
 	function needSharePYQ(){
