@@ -160,9 +160,9 @@ function showShareDiv(){
 	<% 
 		if(prizeName != null){
 	 %>
-		weixinInit.setShareTitle("<%="必中！【美味坚果】和【现金红包】免费送啦，【"+user.getNick_name()+"】抽中了【"+prizeName+"】，快看看你的运气吧！" %>");
+		weixinInit.setShareTitle("<%="预热双12！【美味坚果】和【现金红包】免费送啦，【"+user.getNick_name()+"】抽中了【"+prizeName+"】，快看看你的运气吧！" %>");
 	 <%}else{%>
-		weixinInit.setShareTitle("<%="必中！【美味坚果】和【现金红包】免费送啦，限量1000份，再迟就没有了！" %>");
+		weixinInit.setShareTitle("<%="预热双12！【美味坚果】和【现金红包】免费送啦，限量1000份，再迟就没有了！" %>");
 	<%}%>
 	weixinInit.setShareDesc("<%="必中！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
 	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>activity/user/toTurntable1Activity.html?fromOpenid=<%=user.getOpenid()%>&shareType=2");

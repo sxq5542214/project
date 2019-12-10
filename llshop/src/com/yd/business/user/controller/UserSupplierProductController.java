@@ -234,10 +234,10 @@ public class UserSupplierProductController extends BaseController {
 			}
 			
 			// 找之前已经选择过的优惠卷
-			List<SupplierCouponRecordBean> couponList = supplierCouponService.queryCouponRecordByOrderCode(order_code,order.getUser_id());
+			List<SupplierCouponRecordBean> couponList = supplierCouponService.queryCouponRecordByOrderCode(order.getOrder_code(),order.getUser_id());
 			if(couponList.size() == 0 && order.getStatus() == ShopOrderInfoBean.STATUS_WAIT)
 			{	//如果没有，则找目前可用的优惠卷
-				couponList = supplierCouponService.queryUserCanUseCouponByOrderCode(order.getUser_id(), order_code);
+				couponList = supplierCouponService.queryUserCanUseCouponByOrderCode(order.getUser_id(), order.getOrder_code());
 			}
 			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
 			int expressBottomPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);

@@ -165,8 +165,8 @@ var activityCode = '<%=activity.getCode()%>';
 var prizeStr = <%=prizeNameStr + "'谢谢参与~' ]"%> ;
 window.prizes = prizeStr;
 
-	weixinInit.setShareTitle("<%="必中！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
-	weixinInit.setShareDesc("<%="必中！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
+	weixinInit.setShareTitle("<%="预热双12！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
+	weixinInit.setShareDesc("<%="预热双12！【美味坚果】和【现金红包】免费送，限量1000份，再迟就没有了！" %>");
 	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>activity/user/toTurntable1Activity.html?fromOpenid=<%=user.getOpenid()%>&shareType=2");
 	weixinInit.setShareImg("http://m.jg-shop.cn/jgshop/page/user/activity/freeCutActivity/resource/share_img.jpg");
 	
