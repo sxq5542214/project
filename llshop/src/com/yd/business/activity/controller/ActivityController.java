@@ -111,6 +111,7 @@ public class ActivityController extends BaseController {
 	public static final String PAGE_USER_ACTIVITY_FREECUTHELPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpActivity.jsp";
 	public static final String PAGE_USER_ACTIVITY_FREECUTHELFRIENDCIRCLEPACTIVITY = "/page/user/activity/freeCutActivity/freeCutHelpFriendCircleActivity.jsp";
 	public static final String PAGE_USER_ACTIVITY_TURNTABLEACTIVITY = "/page/user/activity/turntable1/zhuanpan.jsp";
+	public static final String PAGE_USER_ACTIVITY_TELFREEACTIVITY = "/page/user/activity/telFree/index.jsp";
 
 	
 	public static final String PAGE_USER_ACTIVITY_LISTHOME = "/page/user/activity/signActivity/index.jsp";
@@ -1255,5 +1256,89 @@ public class ActivityController extends BaseController {
 	}
 	
 	
+
+
+	/**
+	 * 免费得坚果活动
+	 */
+	@RequestMapping("/activity/user/toTelFreeActivity.html")
+	public ModelAndView toTeleFreeActivity(HttpServletRequest request,HttpServletResponse response){
+		Map<String, Object> model = new HashMap<String, Object>();
+		try{
+			
+			final String fromOpenid = request.getParameter("fromOpenid");
+			String code = request.getParameter("code");
+			String activityConfigId = request.getParameter("activityId");
+			final String shareType = request.getParameter("shareType");
+			final Integer activityId = StringUtil.isNull(activityConfigId) ?13:Integer.parseInt(activityConfigId);
+			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
+			String openid = request.getParameter("openid");
+
+			
+			if(StringUtil.isNull(openid)) {
+				openid = (String)request.getSession().getAttribute("code_openid");
+			}
+			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
+				// 没有缓存，也没有传code过来，则跳转至微信授权
+				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTelFreeActivity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId +"&shareType="+shareType , "utf-8");
+				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+				return null;
+			}else if(StringUtil.isNull(openid)){
+				// 微信认证
+				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, original.getOriginalid());
+				//好友信息，创建用户及好友关系
+				if( StringUtil.isNotNull(auth.getAccess_token())){
+					request.getSession().setAttribute("code_openid",auth.getOpenid());
+					openid = auth.getOpenid();
+					UserWechatBean parentUser = userWechatService.findUserWechatByOpenId(fromOpenid);
+					Integer parentId = parentUser == null? null : parentUser.getId();
+					UserWechatBean friendUser = wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentId,  WechatConstant.TICKET_SENCE_CODE_SUPPLIEREVENT, activityId, original.getOriginalid() , auth.getAccess_token());
+					userWechatService.createUserWechatFriend(parentUser,friendUser);
+				}else{ // 没有accessstoken 则重新访问
+					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"activity/user/toTelFreeActivity.html?fromOpenid="+ fromOpenid +"&activityId="+ activityId +"&shareType="+shareType , "utf-8");
+					response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+					return null;
+				}
+			}
+			
+			
+			//用第二域名展示界面，避免第一域名被封
+			String serverName = request.getServerName();
+			if(original.getServer_url2() != null && original.getServer_url2().indexOf(serverName)< 0){
+				String url = original.getServer_url2()+"activity/user/toTelFreeActivity.html?fromOpenid="+fromOpenid+"&openid="+openid+"&code="+code +"&activityId="+ activityId +"&shareType="+shareType;
+				response.sendRedirect(url);
+				return null;
+			}
+			
+
+			taskExecutor.execute(new Runnable() {
+				@Override
+				public void run() {
+					//创建用户分享后打开的阅读日志
+					userWechatService.readUserSenceLog(fromOpenid, activityId, WechatConstant.TICKET_SENCE_CODE_ACTIVITY,shareType);
+				}
+			});
+			
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user == null){
+				log.warn(" activityController 1215 Line ; user is null!,openid:"+openid);
+				//跳转至关注公众号界面
+				writeJson(response, "<script>alert(\"请先关注【WE坚果汇】公众号!\");</script>");
+				return null;
+			}
+			
+			ActivityConfigBean activity = activityConfigService.findActivityConfigByActivityIdAndCode(activityId, "telFree_activity");
+			
+			
+			model.put("user", user);
+			model.put("activity", activity);
+			
+			return new ModelAndView(PAGE_USER_ACTIVITY_TELFREEACTIVITY, model);
+
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
 	
 }

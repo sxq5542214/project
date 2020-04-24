@@ -8,12 +8,11 @@
         {
             "name": "优惠活动", 
             "sub_button": [
-            
-            	{
-            		"type": "click", 
-                    "name": "免费得坚果", 
-                    "key": "mianfeijianguo"
-                },
+//            	{
+//            		"type": "click", 
+//                    "name": "话费20减3", 
+//                   "key": "huafei20jian3"
+//                },
              	{
 		            "type": "view", 
                     "name": "我的优惠券", 
