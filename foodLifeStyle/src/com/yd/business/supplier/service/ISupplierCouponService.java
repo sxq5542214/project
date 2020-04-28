@@ -193,13 +193,6 @@ public interface ISupplierCouponService {
 	public void changeCouponRecodeUserd(Integer userid ,Integer coupon_id,Integer coupon_record_id);
 
 	/**
-	 *用户支付方法
-	 */
-	OrderProductLogBean orderProductByUser(String out_trade_no, String param,Integer coupon_id,Integer coupon_record_id);
-	
-
-	
-	/**
 	 * 检查该优惠卷是否支持这个商品,支持返回的为true,不支持返回的是false
 	 */
 	public boolean checkCouponProduct(Integer customer_id,String phone,Integer coupon_id);

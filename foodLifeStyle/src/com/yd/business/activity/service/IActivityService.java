@@ -21,12 +21,6 @@ public interface IActivityService {
 
 	String userGrabActivity(UserWechatBean user, Integer activity_config_id);
 
-	ActivityUserRelationBean joinFirstShakeActivity(UserWechatBean user);
-
-	ActivityUserRelationBean firstShakeAddPhone(String openid, int relationId, String phone);
-
-	ActivityUserRelationBean firstShakeShareSuccessToOrderProduct(String openid, int share_type, int relation_id);
-
 	ActivityUserRelationBean findUserRelation(String activity_code, String openid);
 
 	ActivityUserRelationBean findUserRelation(String openid, int relation_id);

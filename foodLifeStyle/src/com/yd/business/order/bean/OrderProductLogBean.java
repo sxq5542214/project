@@ -5,7 +5,7 @@ package com.yd.business.order.bean;
 
 import org.apache.ibatis.type.Alias;
 
-import com.yd.business.isp.bean.InterfaceBean;
+import com.yd.basic.framework.bean.BaseBean;
 import com.yd.business.user.bean.UserConsumeInfoBean;
 
 /**
@@ -13,7 +13,7 @@ import com.yd.business.user.bean.UserConsumeInfoBean;
  *
  */
 @Alias("orderProductLog")
-public class OrderProductLogBean extends InterfaceBean {
+public class OrderProductLogBean extends BaseBean {
 	
 	public static final String DICT_FIELD_STATUS = "status";
 
@@ -91,7 +91,9 @@ public class OrderProductLogBean extends InterfaceBean {
 	private String share_time;//分享时间
 	private Integer share_type;//分享类型
 	private Integer is_sended;//红包是否发送
-	
+
+	private Integer status;
+	private String remark;
 	private String notInStatus;
 	private String money;
 	private String nick_name;
@@ -268,5 +270,17 @@ public class OrderProductLogBean extends InterfaceBean {
 	public void setLastmonthend(String lastmonthend) {
 		this.lastmonthend = lastmonthend;
 	}
-	
+
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

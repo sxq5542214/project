@@ -1246,7 +1246,6 @@ public class SupplierCouponController extends BaseController{
 					
 				}else{
 					//没有预约，直接订购
-					orderLog = supplierCouponService.orderProductByUser(out_trade_code, null,Integer.parseInt(coupon_id),Integer.parseInt(coupon_record_id));
 				}
 				//处理打包商品订单，其余的商品同一走预订流程，生成预订订单
 				orderService.createPackageOrderProduct(orderLog,consumeInfo);

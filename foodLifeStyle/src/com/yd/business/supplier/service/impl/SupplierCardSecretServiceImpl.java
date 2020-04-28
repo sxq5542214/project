@@ -130,66 +130,8 @@ public class SupplierCardSecretServiceImpl extends BaseService implements ISuppl
 	
 	@Override
 	public OrderProductLogBean useCardSecret(String secret_key,String phone,boolean isNow){
-		OrderProductLogBean log = new OrderProductLogBean();
-		SupplierCardSecretBean sc = findSupplierCardSecret(secret_key);
-		if(sc != null ){
-			
-			if(sc.getStatus() == SupplierCardSecretBean.STATUS_USED){
-
-				log.setStatus(OrderProductLogBean.STATUS_SUCCESS);
-				log.setRemark("此卡密已被使用过了！");
-			}else{
-				
-				sc.setPhone(phone);
-				int monthCount = sc.getMonth_count();
-				//是否立刻使用
-				if(isNow){
-					log = orderService.orderProductBySupplierCardSecret(sc, phone);
-					monthCount--;
-					if(log.getStatus() != OrderProductLogBean.STATUS_SUCCESS){
-						return log;
-					}
-				}
-
-				Calendar c = Calendar.getInstance();
-				c.set(Calendar.DAY_OF_MONTH, 1);
-				c.set(Calendar.HOUR_OF_DAY, 1);
-				c.set(Calendar.MINUTE, 1);
-				//生成每个月初的预约订购记录
-				if(monthCount >0){
-					for(int i = 1; i <= monthCount; i++){
-						
-						OrderProductEffBean eff = new OrderProductEffBean();
-						eff.setCreate_time(DateUtil.getNowDateStr());
-						eff.setCustomer_id(sc.getCustomer_id());
-						eff.setEff_id(sc.getId());
-						
-						c.add(Calendar.MONTH, 1);
-						
-						eff.setEff_time(DateUtil.formatDate(c.getTime()));
-						eff.setOrder_account(sc.getPhone());
-						eff.setProduct_id(sc.getProduct_id());
-						eff.setStatus(OrderProductEffBean.STATUS_WAIT);
-						eff.setSupplier_id(sc.getSupplier_id());
-						eff.setSupplier_product_id(sc.getSupplier_product_id());
-						eff.setType(OrderProductEffBean.TYPE_CARD_SECRET);
-						
-						orderService.createOrderProductEff(eff);
-					}
-				}
-				
-				sc.setStatus(SupplierCardSecretBean.STATUS_USED);
-				sc.setUsed_time(DateUtil.getNowDateStr());
-				udpateCardSecret(sc);
-				log.setStatus(OrderProductLogBean.STATUS_SUCCESS);
-				log.setRemark("卡密成功使用！");
-			}
-			
-		}else{
-			log.setStatus(OrderProductLogBean.STATUS_FAILD);
-			log.setRemark("卡密不正确！");
-		}
-		return log;
+		
+		return null;
 	}
 	
 	

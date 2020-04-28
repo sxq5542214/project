@@ -3,10 +3,8 @@
  */
 package com.yd.business.order.service.impl;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,21 +12,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
-import com.yd.business.activity.bean.ActivityUserRelationBean;
 import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
-import com.yd.business.channel.bean.ChannelBean;
-import com.yd.business.channel.service.IChannelProductService;
-import com.yd.business.channel.service.IChannelService;
 import com.yd.business.customer.bean.CustomerAdminBean;
 import com.yd.business.customer.service.ICustomerAdminService;
-import com.yd.business.isp.bean.ISPInterfaceBean;
 import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.order.bean.OrderProductEffBean;
@@ -36,17 +28,12 @@ import com.yd.business.order.bean.OrderProductEffShowPageBean;
 import com.yd.business.order.bean.OrderProductLogBean;
 import com.yd.business.order.bean.PartnerOrderProductBean;
 import com.yd.business.order.dao.IOrderDao;
-import com.yd.business.isp.service.IAccessISPOrderInterfaceService;
 import com.yd.business.order.service.IOrderProductLogService;
 import com.yd.business.order.service.IOrderService;
 import com.yd.business.other.bean.ConfigCruxBean;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
-import com.yd.business.partner.bean.PartnerInterfaceBean;
-import com.yd.business.product.bean.ProductBean;
-import com.yd.business.product.bean.ProductTypeBean;
-import com.yd.business.product.bean.SupplierProductAttachBean;
 import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.IProductService;
 import com.yd.business.product.service.IProductTypeService;
@@ -54,8 +41,6 @@ import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.sms.service.ISmsService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCardSecretBean;
-import com.yd.business.supplier.bean.SupplierCouponConfigBean;
-import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.service.ISupplierCardSecretService;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierService;
@@ -94,8 +79,6 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 	@Resource
 	private IUserCommissionPointsService userCommissionPointsService;
 	@Resource
-	private IAccessISPOrderInterfaceService accessISPOrderInterfaceService;
-	@Resource
 	private IUserWechatService userWechatService;
 	@Resource
 	private IWechatService wechatService;
@@ -106,11 +89,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 	@Resource
 	private IProductTypeService productTypeService;
 	@Resource
-	private IChannelProductService channelProductService;
-	@Resource
 	private IAreaDataService areaDataService;
-	@Resource
-	private IChannelService channelService;
 	@Resource
 	private ISmsService smsService;
 	@Resource
@@ -163,210 +142,6 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 			log.error(" phone not found! "+ phone);
 		}
 		return ad;
-	}
-	
-	/**
-	 * 处理用户的订购商品逻辑
-	 */
-	@Override
-	public OrderProductLogBean orderProductByUser(String out_trade_code,String param){
-
-		//订购日志信息
-		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogByCode(out_trade_code);
-//		ChannelBean channel = null;
-//		if(orderLog != null ){
-//			channel = channelService.findChannelById(orderLog.getChannel_id());
-//		}
-		if(runningCacheMap.get(out_trade_code) == null) { //只有不在runningCacheMap  中的定单号才去定购
-			runningCacheMap.put(out_trade_code, "running");
-			//只有是同步的，才需要在支付成功后，再次调用时，去订购
-			if(orderLog == null ||  orderLog.getStatus() == OrderProductLogBean.STATUS_PAYSUCCESS
-			|| orderLog.getStatus() == OrderProductLogBean.STATUS_NEED_AGAIN_ORDER ){
-				UserConsumeInfoBean consumeInfo = userConsumeInfoService.findUserConsumeInfo(out_trade_code);
-				
-				if(orderLog == null){
-					orderLog = new OrderProductLogBean();
-					orderLog.setOrder_account(consumeInfo.getPhone());
-					orderLog.setCreate_time(DateUtil.getNowDateStrSSS());
-					orderLog.setOrder_code(out_trade_code);
-					orderLog.setStatus(OrderProductLogBean.STATUS_WAIT);
-					orderLog.setUser_id(consumeInfo.getUser_id());
-					orderLog.setSupplier_product_id(consumeInfo.getSupplier_product_id());
-					orderLog.setEvent_type(consumeInfo.getEvent_type());
-				}
-				orderLog.setStatus(OrderProductLogBean.STATUS_ORDERING);
-				//更新订购日志表，正在订购中
-				orderProductLogService.createOrUpdateOrderProductLog(orderLog);
-				
-				//支付已经成功
-				if(consumeInfo.getStatus() == UserConsumeInfoBean.STATUS_SUCCESS){
-					
-					SupplierProductBean sp = supplierProductService.findSupplierProductById(consumeInfo.getSupplier_product_id());
-					UserWechatBean user = userWechatService.findUserWechatById(consumeInfo.getUser_id());
-					
-					//根据订单号查询是否该用户是否有可以使用的优惠卷
-					SupplierCouponRecordBean couponRecordBean  = supplierCouponService.findCouponRecordByOrderCode(out_trade_code); //根据订单号到优惠卷记录表中
-
-					int price = (int) (sp.getProduct_price() * sp.getDiscount()/100d - orderLog.getCost_points()  );
-					int userBalance = user.getBalance() + user.getPoints();
-					
-					//如果该用户优惠卷的记录信息不为空
-					if(!StringUtil.isNull(couponRecordBean)){								//如果在优惠卷记录表查询出来的为空	
-						SupplierCouponConfigBean couponConfigBean = new SupplierCouponConfigBean();
-						couponConfigBean.setId(couponRecordBean.getCoupon_id());
-						//查询用户使用优惠卷的信息
-						couponConfigBean =  supplierCouponService.findCouponConfigInfo(couponConfigBean);
-
-						//如果使用的是抵扣卷
-						if(couponConfigBean.getCoupon_discount() == SupplierCouponConfigBean.COUPON_DISCOUNT_ZERO){
-							price = price - couponConfigBean.getCoupon_offsetmoney() ;
-							if(price < SupplierCouponConfigBean.PRICE_IS_ZERO){
-								price = SupplierCouponConfigBean.PRICE_IS_ZERO;
-							}
-						}else{
-							price = price * couponConfigBean.getCoupon_discount()/SupplierCouponConfigBean.COUPON_DISCOUNT_DIVIDE_ONE_HUNDRED;
-							if(price < SupplierCouponConfigBean.PRICE_IS_ZERO){
-								price = SupplierCouponConfigBean.PRICE_IS_ZERO;
-							}
-						}
-					}
-					
-					
-					
-					//用户的钱+积分够付，才能订购(或者是无需校验金额的订单，打包商品的订单)
-					if(userBalance >= price || orderLog.getEvent_type() == OrderProductLogBean.EVENT_TYPE_USER_ORDER_EFF){
-						
-//						ispBean.setOrder_code(out_trade_code);
-						if(orderLog.getEvent_type() != OrderProductLogBean.EVENT_TYPE_USER_ORDER_EFF){
-							//扣减用户的余额和积分
-							int costBalance = user.getBalance() - price ;
-							
-							user.setBalance( costBalance );
-							user.setPoints(user.getPoints() - orderLog.getCost_points());
-						}
-						
-						
-						//访问订购商品的具体接口
-//						ISPInterfaceBean ispBean = accessISPOrderInterfaceService.accessISPOrderInterface(out_trade_code, consumeInfo.getPhone(), sp.getProduct_id());
-						ISPInterfaceBean ispBean = channelProductService.orderProductByChannel(sp.getCustomer_id(), out_trade_code, consumeInfo.getPhone(), param, sp.getProduct_id());
-					
-						
-						if(ispBean.getStatus() == ISPInterfaceBean.STATUS_SUCCESS){
-							//判断是否有附加商品，如果有的话，一起订购
-							List<SupplierProductAttachBean> attachs = supplierProductService.querySupplierAttachProductBySpid(sp.getId());
-							for(int i = 0;i < attachs.size() ; i++){
-								SupplierProductAttachBean attach = attachs.get(i);
-								if(attach.getAttach_supplier_product_id() != null){
-									SupplierProductBean attachSp = supplierProductService.findSupplierProductById(attach.getAttach_supplier_product_id());
-									if(attachSp != null){
-//										accessISPOrderInterfaceService.accessISPOrderInterface(out_trade_code+"G"+i, consumeInfo.getPhone(), attachSp.getProduct_id());
-										channelProductService.orderProductByChannel(attachSp.getCustomer_id(), out_trade_code+"G"+i, consumeInfo.getPhone(), param, attachSp.getProduct_id());
-									}
-								}
-							}
-						}
-						
-//						orderLog.setCost_points(temp);
-//						orderLog.setCost_money(0);
-//						orderLog.setCost_balance(costBalance);
-//						orderLog.setCost_price(price);
-						orderLog.setSupplier_id(sp.getSupplier_id());
-						orderLog.setProduct_name(sp.getProduct_name());
-						orderLog.setProduct_price(sp.getProduct_price());
-
-						orderLog.setChannel_id(ispBean.getChannel_id());
-						if( (ispBean.getStatus() == ISPInterfaceBean.STATUS_SUCCESS && ispBean.getChannel_type() == ChannelBean.TYPE_SYNC )
-								|| (ispBean.getStatus() == ISPInterfaceBean.STATUS_WAIT && ispBean.getChannel_type() == ChannelBean.TYPE_ASYNC )){
-							switch (ispBean.getChannel_type()) {
-							//同步的通道
-							case ChannelBean.TYPE_SYNC:
-								orderLog.setStatus(OrderProductLogBean.STATUS_SUCCESS);
-								orderLog.setRemark("充值成功");
-								
-								
-								handlerOrderProductByUserResult(user, orderLog, sp, orderLog.getStatus());
-								
-//								下面已不用，封装到上面的方法里了
-//								user.setLast_order_time(DateUtil.getNowDateStr());
-//								//生成扣减积分记录
-//								userCommissionPointsService.createUserPointLog(user.getId(), -orderLog.getCost_points(), "订购商品【"+sp.getProduct_name()+"】支付积分");
-//								//订购成功，扣减用户信息
-//								userWechatService.update(user);
-//								//订购成功，自己和上级添加积分
-//								userWechatService.updateUserBalanceByOrderProduct(sp.getProduct_id(), user);
-//								//订购成功，给用户发消息
-//								sendMessageByOrderSuccess(user, out_trade_code ,orderLog);
-								break;
-							
-							//异步的通道
-							case ChannelBean.TYPE_ASYNC:
-
-								orderLog.setStatus(OrderProductLogBean.STATUS_PAYSUCCESS);
-								orderLog.setRemark("下单成功，待充值");
-								
-								//更新用户信息，主要是得把钱给扣了
-								userWechatService.update(user);
-
-								//保存并处理用户动作
-								msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_ASYNC , null, orderLog);
-								
-//								//下单成功，给用户发消息
-//								sendMessageByOrderASyncSuccess(user, out_trade_code, orderLog);
-								break;
-							default:
-								break;
-							}
-							
-						}else{
-							if(!orderLog.getStatus().equals(OrderProductLogBean.STATUS_NEED_AGAIN_ORDER)){			//如果不是再次订购给状态更改为-1
-								orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-							}
-							orderLog.setReason(ispBean.getResMsg());
-							orderLog.setRemark(ispBean.getResMsg()+",由于运营商系统原因，造成本次流量充值失败。我们已将您本次支付的金额自动存入您的现金账户，您可以选择提现或再次消费。");
-							boolean MatchingSuccessed = matchingErrorOrder(ispBean.getResMsg(),out_trade_code);
-							//匹配到错误,判断是否还需要再次订购
-							if(MatchingSuccessed){				
-								//如果不需要再次订购,，直接给用户发消息，然后结束
-								orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-								handlerOrderProductByUserResult(user, orderLog, sp, orderLog.getStatus());
-
-							}else{//如果需要再次订购
-								if(orderLog.getStatus() == OrderProductLogBean.STATUS_NEED_AGAIN_ORDER){				//判断是否是第二次再次订购
-									orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-									handlerOrderProductByUserResult(user, orderLog, sp, orderLog.getStatus());
-								}else{																					//一旦订购失败,初始化给状态改为-6
-									orderLog.setStatus(OrderProductLogBean.STATUS_NEED_AGAIN_ORDER);
-								}
-							}
-						}
-						
-						//订购成功，添加积分，这里的已废弃不用了
-//						ProductBean product = productService.findProductById(sp.getProduct_id());
-//						int givePoints = product.getGive_points();
-//						user.setPoints(user.getPoints() + givePoints);
-//						userCommissionPointsService.createUserPointLog(user.getId(), givePoints, "订购商品【"+sp.getProduct_name()+"】赠送积分");
-						
-					}else{
-						
-						orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-						orderLog.setRemark("充值失败，账户总额不足以支付！");
-						
-					}
-					
-				}else{
-					orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-					orderLog.setRemark("原订单支付未完成，充值失败！");
-				}
-				
-				//创建订购日志
-				orderProductLogService.createOrUpdateOrderProductLog(orderLog);
-			}
-			//移除缓存
-			runningCacheMap.remove(out_trade_code);
-		}
-		log.debug("orderProductByUser,runningCacheMap:" + runningCacheMap);
-		return orderLog;
-		
 	}
 	
 	/**
@@ -596,374 +371,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 		
 	}
 	
-	/**
-	 * 通过活动来订购商品
-	 * @param activityUserRelation
-	 * @return
-	 */
-	@Override
-	public OrderProductLogBean orderProductByActivity(ActivityUserRelationBean activityUserRelation){
-		
-		String out_no = activityUserRelation.getOrder_code();
-		String phone = activityUserRelation.getPhone();
-		SupplierProductBean sp = supplierProductService.findSupplierProductById(activityUserRelation.getProduct_id());
-		//订购日志信息
-		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogByCode(out_no);
-		
-		//访问订购商品的具体接口
-//		ISPInterfaceBean ispBean = accessISPOrderInterfaceService.accessISPOrderInterface(out_no, phone, sp.getProduct_id());
-		ISPInterfaceBean ispBean = channelProductService.orderProductByChannel(sp.getCustomer_id(), out_no, phone, null, sp.getProduct_id());
-
-		UserWechatBean user = userWechatService.findUserWechatById(activityUserRelation.getUser_id());
-
-		orderLog.setChannel_id(ispBean.getChannel_id());
-		if(ispBean.getStatus() == ISPInterfaceBean.STATUS_SUCCESS){
-			switch (ispBean.getChannel_type()) {
-			//同步的通道
-			case ChannelBean.TYPE_SYNC:
-				orderLog.setStatus(OrderProductLogBean.STATUS_SUCCESS);
-				orderLog.setRemark("充值成功");
-				
-				handlerOrderProductByActivityResult(user, orderLog, orderLog.getStatus());
-				break;
-			
-			//异步的通道
-			case ChannelBean.TYPE_ASYNC:
-
-				orderLog.setStatus(OrderProductLogBean.STATUS_PAYSUCCESS);
-				orderLog.setRemark("下单成功，待充值");
-				
-
-				//保存并处理用户动作
-				msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_ASYNC , null, orderLog);
-				
-//				//下单成功，给用户发消息
-//				sendMessageByOrderASyncSuccess(user, out_no, orderLog);
-				break;
-			default:
-				break;
-			}
-			
-		}else{
-			orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-			orderLog.setReason(ispBean.getResMsg());
-			orderLog.setRemark(ispBean.getResMsg()+",由于运营商系统原因，造成本次流量充值失败。我们已将您本次支付的金额自动存入您的现金账户，您可以选择提现或再次消费。");
-			//订购失败，给用户发消息
-			handlerOrderProductByActivityResult(user, orderLog, orderLog.getStatus());
-		
-		}
-		//创建订购日志
-		orderProductLogService.createOrUpdateOrderProductLog(orderLog);
-		
-		return orderLog;
-	}
 	
-	
-	/**
-	 * 商户侧订购商品，使用库存
-	 */
-	@Override
-	public OrderProductLogBean orderProductBySupplierStoreNum(String adminid,String spid,String phone){
-		
-		CustomerAdminBean admin = customerAdminService.findCustomerAdminById(Integer.parseInt(adminid));
-		SupplierProductBean sp = supplierProductService.findSupplierProductById(Integer.parseInt(spid));
-		OrderProductLogBean orderLog = null;
-		
-		//校验admin的客户ID 与  商品的客户ID是相同的
-		if(sp.getCustomer_id().intValue() == admin.getCustomer_id()){
-
-			orderLog = new OrderProductLogBean();
-			
-			orderLog.setOrder_account(phone);
-			orderLog.setCreate_time(DateUtil.getNowDateStr());
-
-			//商户订单号
-			String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_STORE, admin.getCustomer_id());
-			orderLog.setOrder_code(out_no);
-			orderLog.setStatus(OrderProductLogBean.STATUS_WAIT);
-			orderLog.setAdmin_id(admin.getId());
-			orderLog.setSupplier_product_id(Integer.parseInt(spid));
-			orderLog.setSupplier_id(sp.getSupplier_id());
-			orderLog.setProduct_name(sp.getProduct_name());
-			orderLog.setProduct_price(sp.getProduct_price());
-			orderLog.setEvent_type(UserConsumeInfoBean.EVENT_TYPE_SUPPLIER_STORENUM);
-
-			//有库存
-			if(sp.getStore_num() > 0){
-			
-				//访问订购商品的具体接口
-//				ISPInterfaceBean ispBean = accessISPOrderInterfaceService.accessISPOrderInterface(out_no, phone, sp.getProduct_id());
-				ISPInterfaceBean ispBean = channelProductService.orderProductByChannel(sp.getCustomer_id(), out_no, phone, null, sp.getProduct_id());
-
-				orderLog.setChannel_id(ispBean.getChannel_id());
-				if(ispBean.getStatus() == ISPInterfaceBean.STATUS_SUCCESS){
-					
-					switch (ispBean.getChannel_type()) {
-					//同步的通道
-					case ChannelBean.TYPE_SYNC:
-
-						orderLog.setStatus(OrderProductLogBean.STATUS_SUCCESS);
-						orderLog.setRemark("充值成功");
-						
-						//成功减库存
-						sp.setStore_num(sp.getStore_num() - 1);
-						supplierProductService.updateSupplierProduct(sp);
-						
-						break;
-					
-					//异步的通道
-					case ChannelBean.TYPE_ASYNC:
-
-						orderLog.setStatus(OrderProductLogBean.STATUS_PAYSUCCESS);
-						orderLog.setRemark("下单成功，待充值");
-
-						break;
-					default:
-						break;
-					}
-					
-				}else{
-					orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-					orderLog.setRemark(ispBean.getResMsg());
-				}
-			
-			}else{
-				orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-				orderLog.setRemark("剩余库存不足，无法订购此商品");
-			}
-			
-			//创建订购日志
-			orderProductLogService.createOrUpdateOrderProductLog(orderLog);
-		}
-		
-		return orderLog;
-	}
-
-	
-
-	/**
-	 * 商户侧订购商品，使用卡密
-	 */
-	@Override
-	public OrderProductLogBean orderProductBySupplierCardSecret(SupplierCardSecretBean cardSecret,String phone){
-		
-		ProductBean product = productService.findProductById(cardSecret.getProduct_id());
-		OrderProductLogBean orderLog = new OrderProductLogBean();
-		
-		if(runningCacheMap.get(cardSecret.getSecret_key()) == null) { //只有不在runningCacheMap  中的定单号才去定购
-			runningCacheMap.put(cardSecret.getSecret_key(), "running");
-		
-			AreaDataBean ad = getAreaDataByPhone(phone);
-			if(ad != null){
-				
-				//查询品牌是否一致
-				ProductTypeBean pt = productTypeService.findProductType(ad.getBrand(), ProductTypeBean.TYPE_BRA);
-				if(product.getProduct_brand().intValue() == pt.getId()){
-					
-					orderLog.setOrder_account(phone);
-					orderLog.setCreate_time(DateUtil.getNowDateStrSSS());
-		
-					//商户订单号
-					String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_CARDSECRET, cardSecret.getCustomer_id());
-					orderLog.setOrder_code(out_no);
-					orderLog.setStatus(OrderProductLogBean.STATUS_WAIT);
-					orderLog.setAdmin_id(null);
-					orderLog.setSupplier_product_id(cardSecret.getSupplier_product_id());
-					orderLog.setSupplier_id(cardSecret.getSupplier_id());
-					orderLog.setProduct_name(cardSecret.getProduct_name());
-					orderLog.setProduct_price(product.getProduct_price());
-					orderLog.setCost_balance(0);
-					orderLog.setCost_money(0);
-					orderLog.setCost_points(0);
-					orderLog.setCost_price(0);
-					orderLog.setEvent_type(UserConsumeInfoBean.EVENT_TYPE_SUPPLIER_CARDSECRET);
-					
-					//访问订购商品的具体接口
-//					ISPInterfaceBean ispBean = accessISPOrderInterfaceService.accessISPOrderInterface(out_no, phone, cardSecret.getProduct_id());
-					ISPInterfaceBean ispBean = channelProductService.orderProductByChannel(cardSecret.getCustomer_id(), out_no, phone, null, cardSecret.getProduct_id());
-					orderLog.setChannel_id(ispBean.getChannel_id());
-					
-					if(ispBean.getStatus() == ISPInterfaceBean.STATUS_SUCCESS){
-
-						switch (ispBean.getChannel_type()) {
-						//同步的通道
-						case ChannelBean.TYPE_SYNC:
-
-							orderLog.setStatus(OrderProductLogBean.STATUS_SUCCESS);
-							orderLog.setRemark("充值成功");
-							
-							handlerOrderProductBySupplierCardSecretResult(cardSecret, orderLog, orderLog.getStatus());
-//							成功减库存
-//							cardSecret.setStatus(SupplierCardSecretBean.STATUS_USED);
-//							cardSecret.setPhone(phone);
-//							cardSecret.setOrder_code(out_no);
-							break;
-						
-						//异步的通道
-						case ChannelBean.TYPE_ASYNC:
-
-							orderLog.setStatus(OrderProductLogBean.STATUS_PAYSUCCESS);
-							orderLog.setRemark("下单成功，待充值");
-
-							break;
-						default:
-							break;
-						}
-					}else{
-						orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-						orderLog.setRemark(ispBean.getResMsg());
-					}
-					//创建订购日志
-					orderProductLogService.createOrUpdateOrderProductLog(orderLog);
-				
-				}else{
-					orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-					orderLog.setRemark("手机号与充值的品牌不符！");
-				}
-				
-			}else{
-				orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-				orderLog.setRemark("该号码不支持订购！");
-			}
-			
-			runningCacheMap.remove(cardSecret.getSecret_key()); //从订购的缓存中去除
-		}else{
-			orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-			orderLog.setRemark("正在充值中，请不要重复提交！");
-		}
-		
-		return orderLog;
-	}
-
-	
-
-//	/**
-//	 * 订购商品，根据订购日志
-//	 */
-//	@Override
-//	public OrderProductLogBean orderProductByOrderProductLog(OrderProductLogBean orderLog){
-//		
-//		String phone = orderLog.getOrder_account();
-//		AreaData ad = getAreaDataByPhone(phone );
-//		if(ad != null ){
-//				if(orderLog.getStatus() == OrderProductLogBean.STATUS_PAYSUCCESS )
-//				{
-//					//商户订单号
-//					SupplierProductBean sp = supplierProductService.findSupplierProductById(orderLog.getSupplier_product_id());
-//					//访问订购商品的具体接口
-//					ISPInterfaceBean ispBean = accessISPOrderInterfaceService.accessISPOrderInterface(orderLog.getOrder_code(), phone, sp.getProduct_id());
-//					
-//					if(ispBean.getStatus() == ISPInterfaceBean.STATUS_SUCCESS){
-//						orderLog.setStatus(OrderProductLogBean.STATUS_SUCCESS);
-//						orderLog.setRemark("订购成功");
-//						
-//					}else{
-//						orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-//						orderLog.setRemark(ispBean.getResMsg());
-//					}
-//					//创建订购日志
-//					orderProductLogService.createOrUpdateOrderProductLog(orderLog);
-//				}
-//			
-//		}else{
-//			orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-//			orderLog.setRemark("该号码不支持订购！");
-//		}
-//		
-//		return orderLog;
-//	}
-
-	
-	
-	/**
-	 * 商户订购商品，使用支付余额
-	 */
-	@Override
-	public OrderProductLogBean orderProductBySupplierBalance(String out_trade_code,Integer adminId) {
-		//订购日志信息
-		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogByCode(out_trade_code);
-		
-		if(orderLog == null ){
-			orderLog = new OrderProductLogBean();
-			UserConsumeInfoBean consumeInfo = userConsumeInfoService.findUserConsumeInfo(out_trade_code);
-			
-			orderLog.setOrder_account(consumeInfo.getPhone());
-			orderLog.setCreate_time(DateUtil.getNowDateStr());
-			orderLog.setOrder_code(out_trade_code);
-			orderLog.setStatus(OrderProductLogBean.STATUS_WAIT);
-			orderLog.setUser_id(consumeInfo.getUser_id());
-			orderLog.setAdmin_id(adminId);
-			orderLog.setSupplier_product_id(consumeInfo.getSupplier_product_id());
-			orderLog.setEvent_type(consumeInfo.getEvent_type());
-
-			SupplierProductBean sp = supplierProductService.findSupplierProductById(consumeInfo.getSupplier_product_id());
-			SupplierBean supplier = supplierService.findSupplierById(sp.getSupplier_id());
-			int price = sp.getProduct_price() ;
-			int userBalance = supplier.getBalance() ;
-			
-			//支付已经成功,或者余额大于需要支付的价格
-			if(consumeInfo.getStatus() == UserConsumeInfoBean.STATUS_SUCCESS || (consumeInfo.getStatus() == UserConsumeInfoBean.STATUS_WAIT && userBalance >= price)){
-				
-				orderLog.setSupplier_id(sp.getSupplier_id());
-				orderLog.setProduct_name(sp.getProduct_name());
-				orderLog.setProduct_price(sp.getProduct_price());
-				orderLog.setCost_money(0 );
-				orderLog.setCost_balance(price);
-				orderLog.setCost_price(price );
-				
-				//用户的钱够付，才能订购
-				if(userBalance >= price){
-					
-					//访问订购商品的具体接口
-//					ISPInterfaceBean ispBean = accessISPOrderInterfaceService.accessISPOrderInterface(out_trade_code, consumeInfo.getPhone(), sp.getProduct_id());
-//					ispBean.setOrder_code(out_trade_code);
-					ISPInterfaceBean ispBean = channelProductService.orderProductByChannel(sp.getCustomer_id(), out_trade_code, consumeInfo.getPhone(), null, sp.getProduct_id());
-					orderLog.setChannel_id(ispBean.getChannel_id());
-					
-					if(ispBean.getStatus() == ISPInterfaceBean.STATUS_SUCCESS){
-
-						switch (ispBean.getChannel_type()) {
-						//同步的通道
-						case ChannelBean.TYPE_SYNC:
-							
-							orderLog.setStatus(OrderProductLogBean.STATUS_SUCCESS);
-							orderLog.setRemark("充值成功");
-							
-							handlerOrderProductBySupplierBalanceResult(sp, orderLog, orderLog.getStatus());
-							
-							break;
-						
-						//异步的通道
-						case ChannelBean.TYPE_ASYNC:
-
-							orderLog.setStatus(OrderProductLogBean.STATUS_PAYSUCCESS);
-							orderLog.setRemark("下单成功，待充值");
-
-							break;
-						default:
-							break;
-						}
-						
-					}else{
-						orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-						orderLog.setRemark(ispBean.getResMsg());
-						
-					}
-					
-				}else{
-					orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-					orderLog.setRemark("充值失败，账户总额不足以支付！");
-				}
-			}else{
-				orderLog.setStatus(OrderProductLogBean.STATUS_FAILD);
-				orderLog.setRemark("原订单支付未完成，充值失败！");
-			}
-			//创建订购日志
-			orderProductLogService.createOrUpdateOrderProductLog(orderLog);
-		}
-		
-		return orderLog;
-	}
 
 	@Override
 	public String createUnifiedOrder(Integer adminid,String phone,Integer spid,String interfaceType,Integer event_type){
@@ -1087,82 +495,6 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 		
 	}
 	
-	/**
-	 * 处理订购订单的回调
-	 * @param orderCode
-	 * @return
-	 */
-	@Override
-	public OrderProductLogBean handlerOrderProductCallBack(String orderCode,int status,String remark){
-		
-		//不同的订单号，处理逻辑不同
-		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogByCode(orderCode);
-		if(orderLog == null){
-			orderLog = new OrderProductLogBean();
-			orderLog.setStatus(PartnerInterfaceBean.STATUS_FAILD);
-			orderLog.setRemark("订单号未找到！" + orderCode);
-			return orderLog;
-		}
-		
-		if(orderLog.getStatus() == OrderProductLogBean.STATUS_PAYSUCCESS || orderLog.getStatus() == OrderProductLogBean.STATUS_ORDERING
-				|| orderLog.getStatus() == OrderProductLogBean.STATUS_NEED_AGAIN_ORDER){
-
-			orderLog.setStatus(status);
-			orderLog.setRemark(remark);
-			//通过微信支付和余额支付订购的
-			if(orderCode.startsWith(IUserConsumeInfoService.OUTTRADE_TYPE_WXPAY) || orderCode.startsWith(IUserConsumeInfoService.OUTTRADE_TYPE_USERBALANCE) ){
-				UserWechatBean user = userWechatService.findUserWechatById(orderLog.getUser_id());
-				SupplierProductBean sp = supplierProductService.findSupplierProductById(orderLog.getSupplier_product_id());
-				
-				
-				handlerOrderProductByUserResult(user, orderLog, sp, status);
-				
-				if(status != OrderProductLogBean.STATUS_SUCCESS){
-					//订购失败，退还用户余额
-					user.setBalance(user.getBalance() + orderLog.getCost_balance() + orderLog.getCost_money());
-					user.setPoints(user.getPoints() + orderLog.getCost_points());
-					userWechatService.update(user);
-					//检查通道情况
-					channelProductService.checkChannelAlive(orderLog.getChannel_id(), sp.getProduct_id());
-				}
-			}
-			
-			//通过摇一摇活动的
-			if(orderCode.startsWith(IUserConsumeInfoService.OUTTRADE_TYPE_SHAKE_GIFT)){
-				UserWechatBean user = userWechatService.findUserWechatById(orderLog.getUser_id());
-				//订购成功，给用户发消息
-				handlerOrderProductByActivityResult(user, orderLog, orderLog.getStatus());
-			}
-			
-			//通过卡密的
-			if(orderCode.startsWith(IUserConsumeInfoService.OUTTRADE_TYPE_CARDSECRET)){
-				
-				handlerOrderProductBySupplierCardSecretResult(new SupplierCardSecretBean(), orderLog, status);
-			}
-			
-			//通过库存的
-			if(orderCode.startsWith(IUserConsumeInfoService.OUTTRADE_TYPE_STORE)){
-				SupplierProductBean sp = supplierProductService.findSupplierProductById(orderLog.getSupplier_product_id());
-
-				//成功减库存
-				sp.setStore_num(sp.getStore_num() - 1);
-				supplierProductService.updateSupplierProduct(sp);
-			}
-			
-			//创建订购日志
-			orderProductLogService.createOrUpdateOrderProductLog(orderLog);
-			
-
-			//异步订购成功后，扣减通道余额
-			if(orderLog.getStatus() == ISPInterfaceBean.STATUS_SUCCESS){
-				SupplierProductBean sp = supplierProductService.findSupplierProductById(orderLog.getSupplier_product_id());
-				channelProductService.minusChannelBalance(orderLog.getChannel_id(), sp.getProduct_id(),orderCode);
-			}
-		}
-		
-		
-		return orderLog;
-	}
 
 	/**
 	 * 更新可预约订单的生效时间,扫描用户的预约表,可更新预约订单的预约时间
@@ -1205,44 +537,6 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 		return eff;
 	}
 
-	/**
-	 * 直接生效订单，（用户操作可预约订单里，选择直接生效）
-	 */
-	@Override
-	public OrderProductEffBean dealEffOrderProduct(OrderProductEffBean effOrder,OrderProductLogBean orderLog) {
-		//还原用户订购时的余额和积分，然后去订购
-		//复用 OrderEffCrons 65行
-		UserWechatBean user = userWechatService.findUserWechatById(orderLog.getUser_id());
-		user.setBalance(user.getBalance() + orderLog.getCost_balance() + orderLog.getCost_money());
-		user.setPoints(user.getPoints() + orderLog.getCost_points());
-		userWechatService.update(user);
-		//调用外部服务订购商品
-		orderLog = this.effUserOrder(orderLog.getId());
-		//生效订单，修改预约订单状态
-		if(orderLog != null && orderLog.getStatus() == OrderProductLogBean.STATUS_SUCCESS){
-			effOrder.setExecute_time(DateUtil.getNowDateStr());
-			effOrder.setStatus(OrderProductEffBean.STATUS_SUCCESS);
-			effOrder.setRemark(orderLog.getRemark());
-		}else{
-			effOrder.setExecute_time(DateUtil.getNowDateStr());
-			effOrder.setStatus(OrderProductEffBean.STATUS_FAILD);
-			effOrder.setRemark(orderLog.getRemark());
-			
-		}
-		this.updateOrderProductEff(effOrder);
-		try {
-			if(StringUtil.isNotNull(effOrder.getExecute_time())){
-				effOrder.setExecute_time(DateUtil.formatDateOnlyDate(DateUtil.parseDate(effOrder.getExecute_time())));
-			}
-			if(StringUtil.isNotNull(effOrder.getEff_time())){
-				effOrder.setEff_time(DateUtil.formatDateOnlyDate(DateUtil.parseDate(effOrder.getEff_time())));
-			}
-		} catch (ParseException e) {
-			log.error(e, e);
-		}
-		return effOrder;
-	}
-
 	@Override
 	public OrderProductEffBean queryOrderProductEffById(long id) {
 		return orderDao.queryOrderProductEffById(id);
@@ -1280,66 +574,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 		return list;
 	}
 	
-	/**
-	 * 产品订购方法
-	 * @param id
-	 * @return
-	 */
-	public OrderProductLogBean effUserOrder(int id){
-		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogById(id);
-		//还原用户订购时的余额和积分，然后去订购
-		UserWechatBean user = userWechatService.findUserWechatById(orderLog.getUser_id());
-		user.setBalance(user.getBalance() + orderLog.getCost_balance() + orderLog.getCost_money());
-		user.setPoints(user.getPoints() + orderLog.getCost_points());
-		userWechatService.update(user);
-		orderLog = this.orderProductByUser(orderLog.getOrder_code(), null);
-		return orderLog;
-	}
 
-	@Override
-	public Map<String, Object> modifyEffOrderProduct(int nextNum, int id) {
-		Map<String,Object> returnMap = new HashMap<String,Object>();
-		//获取预约订单
-		OrderProductEffBean effOrder = this.queryOrderProductEffById(id);
-		//获取订单
-		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogById(effOrder.getEff_id());
-		//可预约订单
-		if(effOrder.getStatus() == OrderProductEffBean.STATUS_WAIT){
-			//获取客户信息
-			UserConsumeInfoBean consumeInfo = userConsumeInfoService.findUserConsumeInfo(effOrder.getOrder_code());
-			//需要预约生效时间
-			if(nextNum != 0){
-				OrderProductEffBean bean = this.updateOrderProductEffDate(id,orderLog, nextNum);
-				consumeInfo.setEff_num(nextNum);
-				userConsumeInfoService.updateUserConsumeInfo(consumeInfo);
-				try{
-					if(StringUtil.isNotNull(bean.getExecute_time())){
-						bean.setExecute_time(DateUtil.formatDateOnlyDate(DateUtil.parseDate(bean.getExecute_time())));
-					}
-					if(StringUtil.isNotNull(bean.getEff_time())){
-						bean.setEff_time(DateUtil.formatDateOnlyDate(DateUtil.parseDate(bean.getEff_time())));
-					}
-				}catch(Exception e){
-					log.error(e,e);
-				}
-				returnMap.put("RESULT", true);
-				returnMap.put("OBJ", bean);
-			}
-			//直接生效
-			else{
-				//预订订单直接生效
-				effOrder = this.dealEffOrderProduct(effOrder,orderLog);
-				returnMap.put("RESULT", true);
-				returnMap.put("OBJ", effOrder);
-			}
-		}else{
-			Map<String,String> mm = new HashMap<String,String>();
-			mm.put("empty", "failed");
-			returnMap.put("RESULT", false);
-			returnMap.put("OBJ", mm);
-		}
-		return returnMap;
-	}
 
 	/**
 	 * 订购失败，将用户所获得的红包金额从余额里扣除

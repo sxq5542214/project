@@ -36,7 +36,7 @@ public class OrderFailAgainOrderCrons extends BaseCrons {
 
 			try{
 				for(OrderProductLogBean bean : list){
-				orderService.orderProductByUser(bean.getOrder_code(),null);
+					
 				}
 //				List<OrderProductLogBean> listAgain = orderProductLogService.queryOrderProductLog(beanIn);
 //				for(OrderProductLogBean beanAgain : listAgain){

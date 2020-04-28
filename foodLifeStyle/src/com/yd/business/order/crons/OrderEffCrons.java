@@ -49,35 +49,6 @@ public class OrderEffCrons extends BaseCrons {
 		for(OrderProductEffBean bean : list){
 			try{
 
-				OrderProductLogBean orderLog = null;
-				Integer id = bean.getEff_id();
-				switch (bean.getType()) {
-				case OrderProductEffBean.TYPE_CARD_SECRET:
-					
-					SupplierCardSecretBean scs = supplierCardSecretService.findSupplierCardSecret(id);
-					orderLog = orderService.orderProductBySupplierCardSecret(scs, scs.getPhone());
-					
-					
-					break;
-	
-				case OrderProductEffBean.TYPE_USER_EFF:
-					orderLog = orderService.effUserOrder(id);
-					break;
-				}
-				
-				
-				if(orderLog != null && orderLog.getStatus() == OrderProductLogBean.STATUS_SUCCESS){
-					bean.setExecute_time(DateUtil.getNowDateStr());
-					bean.setStatus(OrderProductEffBean.STATUS_SUCCESS);
-					bean.setRemark(orderLog.getRemark());
-				}else{
-					bean.setExecute_time(DateUtil.getNowDateStr());
-					bean.setStatus(OrderProductEffBean.STATUS_FAILD);
-					bean.setRemark(orderLog.getRemark());
-					
-				}
-				orderService.updateOrderProductEff(bean);
-				
 			}catch (Exception e) {
 				log.error(e, e);
 			}

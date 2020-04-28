@@ -514,12 +514,7 @@ public class WechatController extends BaseController {
 					result.getReturn_code().equalsIgnoreCase("SUCCESS") ){
 				validateNotifySign(result);
 				
-				boolean isShop = configAttributeService.getBooleanValueByCode(AttributeConstant.CODE_SYSTEM_IS_SHOP_ORDER);
-				if(isShop){
-					notifyShopOrderProduct(result);
-				}else{
-					notifyOrderProduct(result);
-				}
+				notifyShopOrderProduct(result);
 				
 			}
 			
@@ -538,66 +533,6 @@ public class WechatController extends BaseController {
 		}
 		return null;
 	}
-	
-	/**
-	 * 普通定购成功通知
-	 * @param result
-	 */
-	private void notifyOrderProduct(final WechatPayResultBean result){
-
-		//更新用户余额
-		userWechatService.updateUserBalance(result.getOut_trade_no(),result.getAttach());
-		//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
-		userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
-		//通过订单号在订购表中更改状态为更新成功状态
-		orderProductLogService.updateOrderProductLogStatusToPaySuccess(result.getOut_trade_no());
-		
-		UserConsumeInfoBean consumeInfo = userConsumeInfoService.findUserConsumeInfo(result.getOut_trade_no());
-		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogByCode(result.getOut_trade_no());
-		//随机生成用户红包
-		orderProductLogService.dealOrderProductLuckyMoney(orderLog);
-		//判断是否是预定的订单
-		if(consumeInfo.getEff_num() != null && consumeInfo.getEff_num() >0){
-			
-			OrderProductEffBean condition = new OrderProductEffBean();
-			condition.setType(OrderProductEffBean.TYPE_USER_EFF);
-			condition.setEff_id(orderLog.getId());
-			//有预定记录的，就是预定单，不去再次生成了
-			List<OrderProductEffBean> effs = orderService.queryOrderProductEff(condition);
-			if(effs.size() == 0){
-				orderService.createOrderProductEffByOrderProductLog(orderLog,consumeInfo.getEff_num());
-			}
-		}else{
-			//启动线程去进行订购
-			taskExecutor.execute(new Runnable() {
-				@Override
-				public void run() {
-					try{
-						orderService.orderProductByUser(result.getOut_trade_no(), result.getAttach());
-					}catch (Exception e) {
-						log.error(e, e);
-					}
-				}
-			});
-		}
-		
-//		Consumetable consumeTable = consumetableService.findByOutTradeNo(result.getOut_trade_no());
-//		if(consumeTable != null && consumeTable.getMoney() <0){
-//			//微信是以分为单位的，所以需要除100 或 乘0.01
-//			double recMoney = Double.valueOf(result.getTotal_fee()) ;
-//			consumeTable.setMoney(recMoney);
-//			consumeTable.setInterfaceType(Consumetable.INTERFACETYPE_WEICHAT_AFTER);
-//			
-//			User user = userService.findUserByOpenid(result.getOpenid());
-//			Double temp = user.getBalance() + recMoney;
-//			user.setBalance(temp);
-//			userService.add(user);
-//			
-//			//资金池的修改 已不用，在mycartaction中用户用户余额支付才修改，因为此处微信通知，不知道用户买了哪几个商品
-//			consumetableService.add(consumeTable);
-//		}
-	}
-	
 	
 
 	/**

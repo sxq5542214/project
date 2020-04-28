@@ -298,7 +298,6 @@ public class AlipayServiceImpl extends BaseService implements IAlipayService {
 				try {
 					Thread.sleep(100);
 					//定购业务
-					orderService.orderProductBySupplierBalance(out_trade_code, adminId);
 					
 				} catch (Exception e) {
 					log.error(e, e);

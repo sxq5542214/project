@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.context.BaseContext;
@@ -23,8 +22,6 @@ import com.yd.basic.framework.pageination.PageinationData;
 import com.yd.basic.framework.runable.BaseRunable;
 import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
-import com.yd.business.customer.bean.CustomerBean;
-import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.msgcenter.bean.MsgCenterUserSubscribeBean;
 import com.yd.business.msgcenter.service.IMsgCenterArticleService;
 import com.yd.business.order.bean.OrderProductEffBean;
@@ -32,7 +29,6 @@ import com.yd.business.order.bean.OrderProductEffShowPageBean;
 import com.yd.business.order.bean.OrderProductLogBean;
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
-import com.yd.business.order.controller.OrderController;
 import com.yd.business.order.service.IOrderProductLogService;
 import com.yd.business.order.service.IOrderService;
 import com.yd.business.order.service.IShopOrderService;
@@ -43,10 +39,7 @@ import com.yd.business.other.service.IAddressService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.product.bean.SupplierProductBean;
-import com.yd.business.product.service.IProductService;
 import com.yd.business.product.service.ISupplierProductService;
-import com.yd.business.supplier.bean.CustomerSupplierProductBean;
-import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierEventBean;
 import com.yd.business.supplier.bean.SupplierTopicBean;
@@ -113,7 +106,6 @@ public class UserController extends BaseController {
 	@Resource
 	private IShopOrderService shopOrderService;
 	
-	public static final String PAGE_ORDERPRODUCT = "/page/user/activity/signActivity/orderProduct/orderProduct.jsp";
 	public static final String PAGE_ORDERPRODUCTLOG = "/page/user/orderProductLog.jsp";
 	public static final String PAGE_OWNERORDERLOG = "/page/user/ownerOrderLog.jsp";
 	public static final String PAGE_ORDERCONFIRM = "/page/user/orderConfirm.jsp";
@@ -125,19 +117,8 @@ public class UserController extends BaseController {
 	public static final String PAGE_USERSIGN = "/page/user/userSign.jsp";
 	public static final String PAGE_USERSIGNANDTOPIC = "/page/user/userSignAndTopic.jsp";
 	
-	public static final String PAGE_FIRST_ORDERPRODUCT = "/page/user/first-orderProduct.jsp";
-	public static final String PAGE_FIRST_ORDERCONFIRM = "/page/user/first-orderConfirm.jsp";
 	public static final String PAGE_GETBALANCECASH = "/page/user/getBalanceCashPage.jsp";
 
-	public static final String PAGE_LIULIANG1GACTIVITY = "/page/activity/liuliang1GActivity.jsp";
-	public static final String PAGE_ACTIVITY_VOLTECALL = "/page/activity/volteCallActivity.jsp";
-	public static final String PAGE_ACTIVITY_QIANG1G = "/page/activity/qiang1GActivity.jsp";
-	public static final String PAGE_ACTIVITY_SCRATCHACTIVITY = "/page/user/activity/scratch/scratchActivity.jsp";
-	public static final String PAGE_ACTIVITY_FREE_ORDER= "/page/activity/freeOrderActivity.jsp";
-	public static final String PAGE_ACTIVITY_SIGN_ORDERPRODUCT = "/page/user/activity/signActivity/orderProduct/orderProduct.jsp";
-	//买一赠一活动页面
-	public static final String PAGE_BUYGIVEONE_ORDERPRODUCT = "/page/user/activity/buyGiveOne/orderProduct.jsp";
-	
 	public static final String PAGE_ACTIVYTY_GETLIST = "activity/user/getSignActivityList.do";
 	
 	public static final String PAGE_USER_ADD_ADDRESS = "/page/shop/userAddAddress.jsp";
@@ -165,122 +146,6 @@ public class UserController extends BaseController {
 		return null;
 	}
 	
-	
-	@RequestMapping("**/user/queryPlatformProduct.do")
-	public ModelAndView queryPlatformProduct(HttpServletRequest request,HttpServletResponse response){
-		try{
-			
-//			List<CustomerSupplierProductBean> list= supplierProductService.queryPlatformSupplierProduct();
-			
-			UserWechatBean user = userWechatService.findUserWechatById(5000);
-			Map<String, Object> model = new HashMap<String, Object>();
-			model = new HashMap<String, Object>();
-			model.put("user", user);
-			model.put("customer_id", 1);
-			model.put("openid", "123");
-			//调用数据库查询是否有历史的号码,获得直接在页面展示
-			OrderProductLogBean beanout = null;
-			beanout=orderProductLogService.findOrderProductLogByUseridDesc(5000);
-			if(beanout!=null){
-			if(!"null".equals(beanout.getOrder_account())){
-				model.put("order_account",beanout.getOrder_account());
-			}
-			}
-//			List<OrderProductLogBean> logList = orderProductLogService.queryOrderProductLogByUserId(user.getId(),OrderProductLogBean.STATUS_SUCCESS);
-//			if(StringUtil.isNull(user.getLast_order_time())){
-//				return new ModelAndView(UserController.PAGE_FIRST_ORDERPRODUCT, model);
-//			}
-//			return new ModelAndView(PAGE_BUYGIVEONE_ORDERPRODUCT, model);	//返回特价活动界面
-//			return new ModelAndView(PAGE_FIRST_ORDERPRODUCT, model);	//返回第一次购买页面
-			return new ModelAndView(PAGE_ORDERPRODUCT, model);			//返回第二次购买页面
-		}catch (Exception e) {
-			log.error(e,e);
-		}
-		return null;
-	}
-	
-
-	
-	
-	@RequestMapping("**/user/toOrderConfirm.do")
-	public ModelAndView toOrderConfirm(String phone,String spid,String openid){
-		try{
-			Map<String, Object> model = new HashMap<String, Object>();
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			SupplierProductBean sp = supplierProductService.findSupplierProductBySpid(Integer.parseInt(spid));
-			
-			//查询自己拥有的优惠卷
-			SupplierCouponRecordBean couponRuleBean = new SupplierCouponRecordBean();
-			couponRuleBean.setUserid(user.getId());
-			Integer couponRuleCount = supplierCouponService.queryUserCouponCount(null,user.getId(),null); 	
-			
-			model = new HashMap<String, Object>();
-			model.put("user", user);
-			model.put("supplierProduct", sp);
-			model.put("phone", phone);
-			model.put("couponRuleCount", couponRuleCount);
-			return new ModelAndView(PAGE_ORDERCONFIRM, model);
-		}catch (Exception e) {
-			log.error(e,e);
-		}
-		return null;
-	}
-	
-	@RequestMapping("**/user/toFirstOrderConfirm.do")
-	public ModelAndView toFirstOrderConfirm(String phone,String spid,String openid){
-		try{
-			
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			SupplierProductBean sp = supplierProductService.findSupplierProductBySpid(Integer.parseInt(spid));
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("user", user);
-			model.put("supplierProduct", sp);
-			model.put("phone", phone);
-			
-			if(StringUtil.isNull(user.getLast_order_time())){
-				return new ModelAndView(PAGE_FIRST_ORDERCONFIRM, model);
-			}else{
-				return new ModelAndView(PAGE_ORDERCONFIRM, model);
-			}
-		}catch (Exception e) {
-			log.error(e,e);
-		}
-		return null;
-	}
-	
-
-	@RequestMapping("**/user/toOrderConfirmByOrderLog.do")
-	public ModelAndView toOrderConfirmByOrderLog(HttpServletRequest request,HttpServletResponse response){
-		try{
-			
-			String order_code = request.getParameter("order_code");
-			OrderProductLogBean orderProductLog = orderProductLogService.findOrderProductLogByCode(order_code);
-			
-			
-			UserWechatBean user = userWechatService.findUserWechatById(orderProductLog.getUser_id());
-			SupplierProductBean sp = supplierProductService.findSupplierProductBySpid(orderProductLog.getSupplier_product_id());
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("user", user);
-			model.put("supplierProduct", sp);
-			model.put("phone", orderProductLog.getOrder_account());
-			if(orderProductLog.getStatus() == OrderProductLogBean.STATUS_SUCCESS){
-				model.put("orderLog", orderProductLog);
-				//如果已经订购成功，直接返回订购结果的界面
-				return new ModelAndView(OrderController.PAGE_USER_ORDER_PRODUCT_RESULT, model);
-			}
-			
-			if(StringUtil.isNull(user.getLast_order_time()) 
-					&& StringUtil.isNotNull(user.getShare_time())
-					&& orderProductLog.getSupplier_id() == SupplierBean.PLATFROM_SUPPLIER_ID){
-				return new ModelAndView(PAGE_FIRST_ORDERCONFIRM, model);
-			}else{
-				return new ModelAndView(PAGE_ORDERCONFIRM, model);
-			}
-		}catch (Exception e) {
-			log.error(e,e);
-		}
-		return null;
-	}
 	
 	@RequestMapping("**/user/queryFriendLevelOne.do")
 	public ModelAndView queryFriendLevelOne(HttpServletRequest request,HttpServletResponse response){
