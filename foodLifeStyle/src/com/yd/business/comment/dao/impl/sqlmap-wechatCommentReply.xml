@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wechatCommentReply">
+
+	<insert id="insertReplyWechatCommentInfo" parameterType="commentInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_reply_wechatcomment_info(comment_conf_id,comment_parentid,createtime,modifytime,user_id,status,reCount,agreeCount,type,msgtext,is_adminre,openid)
+		values(#{comment_conf_id},#{comment_parentid},#{createtime},#{modifytime},#{user_id},#{status},#{reCount},#{agreeCount},#{type},#{msgtext},#{is_adminre},#{openid})
+	</insert>
+
+	<select id="queryMsgCenterUserComment" resultType="wechatComment">
+		select info.original_name,u.head_img,a.* from ll_msg_center_user_action a,ll_wechat_user u left JOIN ll_wechat_original_info info on info.originalid = u.originalid 
+		<where>
+			a.action_type = 'wechat_user_input' and u.id = a.user_id
+			<if test="openid != null"> and u.openid = #{openid}</if>
+			<if test="id != null"> and a.id = #{id}</if>
+		</where>
+		order by a.create_time desc
+	</select>
+	
+		<select id="queryWechatCommentInfoByParentId" parameterType="list" resultType="commentInfo">
+		select comment.*,user.* from ll_reply_wechatcomment_info comment left join ll_wechat_user user on   user.openid = comment.openid  where  comment.comment_parentid in 
+		<foreach collection="list" index="" item="item" separator="," open="(" close=")">
+			#{item.id} 
+		</foreach>
+		order by comment.type asc
+	</select>
+	
+	
+	<select id="queryNewMsgCenterUserComment" resultType="wechatComment">
+		select info.original_name,u.head_img,a.* from ll_msg_center_user_action a,ll_wechat_user u left JOIN ll_wechat_original_info info on info.originalid = u.originalid 
+		<where>
+			a.action_type = 'wechat_user_input' and u.id = a.user_id
+			<if test="create_time != null"> and a.create_time > #{create_time}</if>
+			<if test="openid != null"> and u.openid = #{openid}</if>
+		</where>
+		order by a.create_time desc
+	</select>
+	
+</mapper>

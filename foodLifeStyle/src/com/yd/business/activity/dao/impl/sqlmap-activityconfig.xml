@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="activityConfig">
+	
+	<select id="queryAllActivityConfig" parameterType="map" resultType="activityConfig">
+		select * from ll_activity_conf t 
+		<where>
+			<if test=" status != null "> and t.status = #{status} </if>
+		</where>
+	</select>
+	<select id="queryActivityConfigByActivity" parameterType="activityConfig" resultType="activityConfig">
+		select t.* from ll_activity_conf t
+		<where>
+			<if test=" status != null "> and t.status = #{status} </if>
+			<if test=" id != null "> and t.id = #{id} </if>
+			<if test=" code != null "> and t.code = #{code} </if>
+		</where>
+	</select>
+	
+	<select id="queryActivityConfigByReferenceId" parameterType="int" resultType="activityConfig">
+		select * from ll_activity_conf t where reference_id = #{reference_id}
+	</select>
+	
+	<insert id="createActivityConfig" parameterType="activityConfig" useGeneratedKeys="true"  keyProperty="id">
+		insert into ll_activity_conf(name,code,activity_type,start_date,start_hour,start_minute,max_join_num,max_win_num,
+		total_money,single_max,single_min,outside_join_num,outside_win_num,outside_total_money,status,create_time,
+		reference_id,start_times,frequency,end_date,life_age,cost_points,is_repeat,description,description_img,activity_jump_url,show_list_img,activity_img,activity_img_jump_url,is_show_detail,activity_img_jump_url_code,activity_jump_url_code)
+		values (#{name},#{code},#{activity_type},#{start_date},#{start_hour},#{start_minute},#{max_join_num},#{max_win_num},#{total_money},
+		#{single_max},#{single_min},#{outside_join_num},#{outside_win_num},#{outside_total_money},#{status},#{create_time},
+		#{reference_id},#{start_times},#{frequency},#{end_date},#{life_age},#{cost_points},#{is_repeat},#{description},#{description_img},#{activity_jump_url},#{show_list_img},#{activity_img},#{activity_img_jump_url},#{is_show_detail},#{activity_img_jump_url_code},#{activity_jump_url_code})
+	</insert>
+		
+	<update id="updateActivityConfigStatus" parameterType="map">
+		update ll_activity_conf set status = #{status} ,modify_time = sysdate() where id = #{activity_id}
+	</update>	
+	
+	<select id="findActivityConfigByCode" parameterType="string" resultType="activityConfig">
+	select * from ll_activity_conf t   where t.code = #{value}
+	</select>
+	
+	<select id="queryBySQL" parameterType="string" resultType="int">
+		${value}
+	</select>
+	
+	<select id="activityLimitParam" parameterType="activityLimitParam" resultType="activityLimitParam">
+		select * from ll_activity_params
+		<where>
+			<if test=" status != null "> and status = #{status} </if>
+			<if test=" activity_id != null "> and activity_id = #{activity_id} </if>
+			<if test=" type != null "> and type = #{type} </if>
+		</where> 
+	</select>
+	
+	<delete id="deleteActivityConfig" parameterType="activityConfig" >
+		delete from ll_activity_conf where id=#{id}
+	</delete>
+		
+	<update id="updateActivityConfig" parameterType="activityConfig" >
+		update ll_activity_conf 
+		<set>
+			<if test="name != null">  name = #{name},</if>
+			<if test="code != null">  code = #{code},</if>
+			<if test="activity_type != null">  activity_type = #{activity_type},</if>
+			<if test="start_date != null">  start_date = #{start_date},</if>
+			<if test="start_hour != null">  start_hour = #{start_hour},</if>
+			<if test="start_minute != null">  start_minute = #{start_minute},</if>
+			<if test="max_join_num != null">  max_join_num = #{max_join_num},</if>
+			<if test="max_win_num != null">  max_win_num = #{max_win_num},</if>
+			<if test="total_money != null">  total_money = #{total_money},</if>
+			<if test="single_max != null">  single_max = #{single_max},</if>
+			<if test="single_min != null">  single_min = #{single_min},</if>
+			<if test="outside_join_num != null">  outside_join_num = #{outside_join_num},</if>
+			<if test="outside_win_num != null">  outside_win_num = #{outside_win_num},</if>
+			<if test="outside_total_money != null">  outside_total_money = #{outside_total_money},</if>
+			<if test="status != null">  status = #{status},</if>
+			<if test="modify_time != null">  modify_time = #{modify_time},</if>
+			<if test="reference_id != null">  reference_id = #{reference_id},</if>
+			<if test="start_times != null">  start_times = #{start_times},</if>
+			<if test="frequency != null">  frequency = #{frequency},</if>
+			<if test="end_date != null">  end_date = #{end_date},</if>
+			<if test="life_age != null">  life_age = #{life_age},</if>
+			<if test="cost_points != null">  cost_points = #{cost_points},</if>
+			<if test="is_repeat != null">  is_repeat = #{is_repeat},</if>
+			<if test="description != null">  description = #{description},</if>
+			<if test="description_img != null">  description_img = #{description_img},</if>
+			<if test="activity_jump_url != null">  activity_jump_url = #{activity_jump_url},</if>
+			<if test="activity_jump_url_code != null">  activity_jump_url_code = #{activity_jump_url_code},</if>
+			<if test="show_list_img != null">  show_list_img = #{show_list_img},</if>
+			<if test="activity_img != null">  activity_img = #{activity_img},</if>
+			<if test="activity_img_jump_url != null">  activity_img_jump_url = #{activity_img_jump_url},</if>
+			<if test="activity_img_jump_url_code != null">  activity_img_jump_url_code = #{activity_img_jump_url_code},</if>
+			<if test="is_show_detail != null">  is_show_detail = #{is_show_detail},</if>
+		</set>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+</mapper>
+
+

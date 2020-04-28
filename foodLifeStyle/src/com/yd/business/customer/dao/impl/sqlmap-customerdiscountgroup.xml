@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="customerDiscountGroup">
+	<select id="queryCustomerDiscountGroupById" resultType="customerDiscountGroup" parameterType="customerDiscountGroup">
+		select * from ll_customer_discount_group t where t.id = #{value}
+	</select>
+	<select id="queryCustomerDiscountGroup" resultType="customerDiscountGroup" parameterType="map">
+		SELECT * FROM (SELECT
+	t.*, GROUP_CONCAT(
+		'[',
+		(
+			SELECT
+				NAME
+			FROM
+				ll_product_type
+			WHERE
+				id = lll.product_brand
+		),
+		'-',
+		lll.min_price,
+		'-',
+		lll.max_price,
+		'/',
+		lll.discount,
+		']'
+	) disinfo
+FROM
+	ll_customer_discount_group t,ll_customer_discount lll where t.id = lll.group_id group by t.id,t.name,t.customer_id,t.customer_name,t.remark) s
+		<where>
+			<if test="name!=null and name!=''">
+				and s.name = #{name}
+			</if>
+			<if test="customer_id!=null and customer_id!=''">
+				and s.customer_id=#{customer_id}
+			</if>
+		</where>
+	</select>
+	<select id="queryCustomerDisGroupInfo" resultType="customerDiscountGroup" parameterType="map">
+	    select ll.discount_group_id id,ll.customer_name,ll.group_name name,GROUP_CONCAT('[',(select name from ll_product_type where id = lll.product_brand),'-',lll.min_price,'-',lll.max_price,'/',lll.discount,']') disinfo 
+	    from ll_supplier_discount_relation ll,ll_customer_discount lll where 1=1
+	    <if test="customer_id!=null"> and ll.customer_id=#{customer_id} </if>
+	    <if test="id!=null"> and ll.id=#{id} </if>
+and ll.parent_discount_group_id = lll.group_id group by ll.group_name,ll.discount_group_id,ll.customer_name
+	</select>
+	<insert id="insertCustomerDiscountGroup" parameterType="customerDiscountGroup" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_customer_discount_group(name,customer_id,customer_name,remark)
+		values(#{name},#{customer_id},#{customer_name},#{remark})
+	</insert>
+	<update id="updateCustomerDiscountGroup" parameterType="customerDiscountGroup">
+		update ll_customer_discount_group 
+		<set>
+			<if test="name!=null and name!=''">name=#{name},</if>
+			<if test="remark!=null and remark!=''">remark=#{remark},</if>
+		</set>
+		where id=#{id}
+	</update>
+	<delete id="deleteCustomerDiscountGroup" parameterType="customerDiscountGroup">
+		delete from ll_customer_discount_group where id = #{id} 
+	</delete>
+	<delete id="batchDeleteCustomerDiscountGroup" parameterType="list">
+		delete from ll_customer_discount_group where id in 
+		<foreach collection="list" index="" item="item" separator="," open="(" close=")">
+			#{item.id} 
+		</foreach>
+	</delete>
+</mapper>

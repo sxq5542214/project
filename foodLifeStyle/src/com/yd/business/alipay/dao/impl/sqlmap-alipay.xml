@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="alipay">
+	
+	<insert id="createAliPayLog" parameterType="alipayLog">
+		insert into ll_alipay_log(out_trade_no,notify_time,notify_type,notify_id,sign_type,sign,subject,payment_type
+		,trade_no,trade_status,gmt_create,gmt_payment,gmt_close,seller_email,buyer_email,seller_id,buyer_id,price,total_fee,
+		quantity,body,discount,is_total_fee_adjust,use_coupon,refund_status,gmt_refund,status) values(#{out_trade_no},#{notify_time},
+		#{notify_type},#{notify_id},#{sign_type},#{sign},#{subject},#{payment_type},#{trade_no},#{trade_status},#{gmt_create},
+		#{gmt_payment},#{gmt_close},#{seller_email},#{buyer_email},#{seller_id},#{buyer_id},#{price},#{total_fee},#{quantity},
+		#{body},#{discount},#{is_total_fee_adjust},#{use_coupon},#{refund_status},#{gmt_refund},#{status})
+	</insert>
+	
+	<select id="queryAlipayLog" parameterType="alipayLog" resultType="alipayLog">
+		select * from ll_alipay_log
+		<where>
+			<if test="out_trade_no != null"> and out_trade_no = #{out_trade_no}</if>
+			<if test="trade_no != null"> and trade_no = #{trade_no}</if>
+			<if test="seller_email != null"> and seller_email = #{seller_email}</if>
+			<if test="buyer_email != null"> and buyer_email = #{buyer_email}</if>
+			<if test="subject != null"> and subject = #{subject}</if>
+			<if test="trade_status != null"> and trade_status = #{trade_status}</if>
+			<if test="status != null"> and status = #{status}</if>
+		</where>
+		order by id desc
+	</select>
+
+</mapper>
+
+

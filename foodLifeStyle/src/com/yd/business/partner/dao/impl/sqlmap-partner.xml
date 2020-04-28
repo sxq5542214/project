@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="partner">
+	<select id="getPartnerByCode" parameterType="string" resultType="partner">
+		select * from ll_partner where partner_code = #{value}
+	</select>
+	<insert id="insertPartner" parameterType="partner" useGeneratedKeys="true" keyProperty="id">
+	    insert into ll_partner(partner_code,customer_id,customer_name,secret_key,notify_url,create_time,modify_time,sign_type,status,remark,balance,deposit_money,allow_ips,eff_date,dff_date,day_limit,month_limit)
+	    values(#{partner_code},#{customer_id},#{customer_name},#{secret_key},#{notify_url},#{create_time},#{modify_time},#{sign_type},#{status},#{remark},#{balance},#{deposit_money},#{allow_ips},#{eff_date},#{dff_date},#{day_limit},#{month_limit})
+	</insert>
+	
+	<select id="queryPartner" parameterType="partner" resultType="partner">
+		select * from ll_partner 
+		<where>
+			<if test="id != null ">and id = #{id}</if>
+			<if test="partner_code != null ">and partner_code = #{partner_code}</if>
+			<if test="customer_id != null ">and customer_id = #{customer_id}</if>
+			<if test="status != null ">and status = #{status}</if>
+		</where>
+	</select>
+	
+	<update id="updatePartner" parameterType="partner">
+	    update ll_partner
+	    <set>
+	        <if test="partner_code!=null and partner_code!=''">partner_code=#{partner_code},</if>
+	        <if test="customer_id!=null">customer_id=#{customer_id},</if>
+	        <if test="customer_name!=null and customer_name!=''">customer_name=#{customer_name},</if>
+	        <if test="secret_key!=null and secret_key!=''">secret_key=#{secret_key},</if>
+	        <if test="notify_url!=null and notify_url!=''">notify_url=#{notify_url},</if>
+	        <if test="create_time!=null and create_time!=''">create_time=#{create_time},</if>
+	        <if test="modify_time!=null and modify_time!=''">modify_time=#{modify_time},</if>
+	        <if test="sign_type!=null">sign_type=#{sign_type},</if>
+	        <if test="status!=null">status=#{status},</if>
+	        <if test="remark!=null and remark!=''">remark=#{remark},</if>
+	        <if test="balance!=null">balance=#{balance},</if>
+	        <if test="deposit_money!=null">deposit_money=#{deposit_money},</if>
+	        <if test="allow_ips!=null and allow_ips!=''">allow_ips=#{allow_ips},</if>
+	        <if test="eff_date!=null and eff_date!=''">eff_date=#{eff_date},</if>
+	        <if test="dff_date!=null and dff_date!=''">dff_date=#{dff_date},</if>
+	        <if test="day_limit!=null">day_limit=#{day_limit},</if>
+	        <if test="month_limit!=null">month_limit=#{month_limit},</if>
+	    </set>
+	    where id=#{id}
+	</update>
+	
+	<select id="getPartnerCallOfDayCount" parameterType="map" resultType="int">
+		select count(1) from ll_partner_order_product 
+		<where>
+			<if test="partner_id != null">and partner_id = #{partner_id} </if>
+		
+			<if test="dayStr != null"> and create_time like '${dayStr}%' </if>
+		
+		</where>
+	</select>
+	
+	<select id="findPartnerById" parameterType="int" resultType="partner">
+		select * from ll_partner 
+		where id = #{value}
+	</select>
+</mapper>
+
+

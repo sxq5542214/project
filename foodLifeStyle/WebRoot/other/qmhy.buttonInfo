@@ -1,0 +1,54 @@
+{
+    "button": [
+        {
+        	"name": "流量充值", 
+        	 "type": "click", 
+		     "key": "traffic"
+        }, 
+        {
+            "name": "免费福利", 
+            "sub_button": [
+            	{
+            		"type": "click", 
+                    "name": "免费抽奖系列活动", 
+                    "key": "mianfeichoujiang"
+                },
+             	{
+		            "type": "click", 
+                    "name": "有奖评论系列互动", 
+                    "key": "youjianghuati"
+                },
+ 				{
+		            "type": "view", 
+                    "name": "最新电影大片免费看", 
+                    "url": "http://ym.lemon95.com/lacel/index/video?secretKey=C0B1C410858D8370D5C45599A615B55818DA4A789CFC9FA05A19507810937E57F0A05C41D199EF78631909ACC6BA5E08D5ED3B32AFB4E5B0E6D319025F933776A8DFCBCBED1D9E44E3DE5299969033CE"
+                }
+            ]
+        },
+        {
+            "name": "个人中心", 
+            "sub_button": [
+               {
+		            "type": "click", 
+                    "name": "今日签到", 
+                    "key": "userSign"
+                },
+                {
+                    "type": "view", 
+                    "name": "个人中心", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3cf33f26aeb77236&redirect_uri=http://www.quanguoliuliang.net/llshop/wechat/user/toUserInfoCenter.do&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                },
+                {
+                    "type": "view", 
+                    "name": "常见问题", 
+                    "url": "http://mp.weixin.qq.com/s?__biz=MzI3NjMzMzYxOQ==&mid=100000003&idx=1&sn=00cc1cfc226103a305b87cbbceb3ba0b#rd"
+                } ,
+                {
+                    "type": "view", 
+                    "name": "关于我们", 
+                    "url": "http://www.quanguoliuliang.net/mIndex.shtml"
+                } 
+            ]
+        } 
+    ]
+}

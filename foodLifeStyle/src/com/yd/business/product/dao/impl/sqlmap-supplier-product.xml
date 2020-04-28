@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="supplierProduct">
+	<select id="querySupplierProductById" resultType="supplierProduct" parameterType="Integer">
+		select sp.*,p.product_limit_points,p.give_points,p.head_img ,p.product_title, p.product_desc from ll_supplier_product sp, ll_product p where sp.product_id = p.id 
+		and sp.id = #{value} 
+	</select>
+	<insert id="insertSupplierProduct" parameterType="supplierProduct" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_supplier_product(product_id,supplier_id,customer_id,store_num,product_name,product_price,product_real_price,product_type,product_type_name,product_brand,
+		product_brand_name,discount,create_time,eff_time,dff_time,modify_time,modify_admin,min_luckymoney,max_luckymoney,product_offset_points,package_num,seq,hot_flag,home_flag,prime_cost_price)
+		values(#{product_id},#{supplier_id},#{customer_id},#{store_num},#{product_name},#{product_price},#{product_real_price},#{product_type},#{product_type_name},#{product_brand},
+		#{product_brand_name},#{discount},#{create_time},#{eff_time},#{dff_time},#{modify_time},#{modify_admin},#{min_luckymoney},#{max_luckymoney},#{product_offset_points},#{package_num},#{seq},#{hot_flag},#{home_flag},#{prime_cost_price})
+	</insert>
+	<update id="updateSupplierProduct" parameterType="supplierProduct">
+		update ll_supplier_product 
+		<set>
+			<if test="store_num != null and store_num!=''">store_num=#{store_num},</if>
+			<if test="product_price!=null and product_price!=''">product_price=#{product_price},</if>
+			<if test="product_name !=null and product_name !=''">product_name=#{product_name},</if>
+			<if test="product_real_price!=null and product_real_price!=''">product_real_price=#{product_real_price},</if>
+			<if test="product_type!=null and product_type!=''">product_type=#{product_type},</if>
+			<if test="product_type_name!=null and product_type_name!=''">product_type_name=#{product_type_name},</if>
+			<if test="product_brand!=null and product_brand!=''">product_brand=#{product_brand},</if>
+			<if test="product_brand_name!=null and product_brand_name!=''">product_brand_name=#{product_brand_name},</if>
+			<if test="discount!=null and discount!=''">discount=#{discount},</if>
+			<if test="eff_time!=null and eff_time!=''">eff_time=#{eff_time},</if>
+			<if test="dff_time!=null and dff_time!=''">dff_time=#{dff_time},</if>
+			<if test="modify_time!= null and modify_time!=''">modify_time=#{modify_time},</if>
+			<if test="modify_admin!= null and modify_admin!=''">modify_admin=#{modify_admin},</if>
+			<if test="min_luckymoney != null ">min_luckymoney = #{min_luckymoney},</if>
+			<if test="max_luckymoney != null ">max_luckymoney = #{max_luckymoney},</if>
+			<if test="product_offset_points != null ">product_offset_points = #{product_offset_points},</if>
+			<if test="package_num != null ">package_num = #{package_num},</if>
+			<if test="seq != null ">seq = #{seq},</if>
+			<if test="hot_flag != null ">hot_flag = #{hot_flag},</if>
+			<if test="home_flag != null ">home_flag = #{home_flag},</if>
+			<if test="prime_cost_price != null ">prime_cost_price = #{prime_cost_price},</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteSupplierProduct" parameterType="supplierProduct">
+		delete from ll_supplier_product where id = #{id}
+	</delete>
+	
+	<delete id="batchDeleteSupplierProduct" parameterType="list">
+		delete from ll_supplier_product where id in 
+		<foreach collection="list" index="" item="item" separator="," open="(" close=")">
+			#{item.id} 
+		</foreach>
+	</delete>
+	<select id="querySupplierProduct" parameterType="supplierProduct" resultType="supplierProduct">
+		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title from ll_supplier_product sp, ll_product p 
+		<where>
+			sp.product_id = p.id 
+			<if test="supplier_id != null"> and sp.supplier_id = #{supplier_id}</if>
+			<if test="customer_id != null"> and sp.customer_id = #{customer_id}</if>
+			<if test="status != null"> and exists( select 1 from ll_product p where p.status = #{status} and p.id = sp.product_id )</if>
+			<if test="product_brand_name != null"> and #{product_brand_name} = sp.product_brand_name </if>
+			<if test="product_brand != null"> and #{product_brand} = sp.product_brand </if>
+			<if test="product_type_name != null"> and #{product_type_name} = sp.product_type_name </if>
+			<if test="product_type != null"> and #{product_type} = sp.product_type </if>
+			<if test="product_province != null"> and #{product_province} = p.product_province </if>
+			<if test="store_num != null"> and sp.store_num >= ${store_num} </if>
+			<if test="product_id != null"> and sp.product_id = #{product_id}</if>
+			<if test="id != null"> and sp.id = #{id}</if>
+			<if test="home_flag != null"> and sp.home_flag = #{home_flag}</if>
+			<if test="hot_flag != null"> and sp.hot_flag = #{hot_flag}</if>
+			<if test="now_time != null"> and #{now_time} >= sp.eff_time and sp.dff_time >= #{now_time}</if>
+		</where>
+			<if test="orderby != null"> ${orderby} </if>
+	</select>
+	
+	<select id="queryPlatfromProduct"  parameterType="supplierProduct" resultType="supplierProduct">
+		select * from ll_supplier_product sp
+		<where>
+			<if test="supplier_id != null"> and sp.supplier_id = #{supplier_id}</if>
+			<if test="customer_id != null"> and sp.customer_id = #{customer_id}</if>
+			<if test="status != null"> and exists( select 1 from ll_product p where p.status = #{status} and p.id = sp.product_id )</if>
+			<if test="product_brand_name != null"> and #{product_brand_name} = sp.product_brand_name </if>
+			<if test="product_type_name != null"> and #{product_type_name} = sp.product_type_name </if>
+			<if test="store_num != null"> and sp.store_num >= #{store_num} </if>
+			<if test="product_id != null"> and sp.product_id = #{product_id}</if>
+			<if test="id != null"> and sp.id = #{id}</if>
+			<if test="home_flag != null"> and sp.home_flag = #{home_flag}</if>
+			<if test="hot_flag != null"> and sp.hot_flag = #{hot_flag}</if>
+		</where>
+			<if test="orderby != null"> ${orderby} </if>
+	</select>
+	
+	<select id="findSupplierProductBySpid" parameterType="supplierProduct" resultType="supplierProduct">
+		select sp.*,p.product_limit_points ,p.give_points from ll_supplier_product sp, ll_product p where sp.product_id = p.id 
+		and sp.id = #{value}
+	</select>
+	<select id="querySupplierProductBySupplierParentCustomerId" parameterType="map" resultType="supplierProduct">
+		select p.* from ll_supplier l,ll_supplier_product p where l.parent_customer_id = #{parentcustomerid} and l.id = p.supplier_id and l.customer_id!=#{customerid}
+	</select>
+	
+	<select id="queryAttachProduct" parameterType="supplierProductAttach" resultType="supplierProductAttach">
+		select * from ll_supplier_product_attach
+		<where>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="supplier_product_id != null"> and supplier_product_id = #{supplier_product_id} </if>
+			<if test="attach_supplier_product_id != null"> and attach_supplier_product_id = #{attach_supplier_product_id} </if>
+			<if test="customer_id != null"> and customer_id = #{customer_id} </if>
+		</where>
+			<if test="orderby != null"> ${orderby} </if>
+	</select>
+	
+	<select id="querySupplierProductByIdList" resultType="supplierProduct">
+		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title  from ll_supplier_product sp, ll_product p
+		where p.id = sp.product_id and sp.id in
+		<foreach collection="list" item="id" index="index"
+            open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+		
+	</select>	
+	<select id="querySupplierProductByIdsString" parameterType="string" resultType="supplierProduct">
+		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title  from ll_supplier_product sp, ll_product p
+		where p.id = sp.product_id and sp.id in (${value})
+		
+	</select>
+	
+</mapper>

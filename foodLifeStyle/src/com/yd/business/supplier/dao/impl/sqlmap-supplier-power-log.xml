@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="supplierPowerLog">
+	
+	<select id="querySupplierPowerLog" resultType="supplierPowerLog" parameterType="supplierPowerLog">
+		select * from ll_supplier_power_log t 
+		<where>
+			<if test="customer_id!=null and customer_id!=''">
+				and customer_id =#{customer_id}
+			</if>
+			<if test="supplier_id!=null and supplier_id!=''">
+				and supplier_id = #{supplier_id}
+			</if>
+		</where>
+	</select>
+	<insert id="insertSupplierPowerLog" parameterType="supplierPowerLog" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_supplier_power_log(customer_id,supplier_id,customer_name,supplier_name,product_id,product_name,power_time,dff_time,eff_time,power_num,use_num,store_num)
+		values(#{customer_id},#{supplier_id},#{customer_name},#{supplier_name},#{product_id},#{product_name},#{power_time},#{dff_time},#{eff_time},#{power_num},#{use_num},#{store_num})
+	</insert>
+</mapper>

@@ -1,0 +1,11 @@
+.tfrom{ width:80%; margin:0 auto; background:#fff; border-radius:5px; display:none;z-index:999;position:absolute;margin-left:10%;}
+.tfrom-name{ width:100%; height:40px; line-height:40px; background:#33a7f2; color:#fff; box-sizing:border-box; padding-left:15px; border-radius:5px 5px 0 0; }
+.tfrom-con{ width:100%; box-sizing:border-box;text-align:center; }
+.tfrom-con li{ padding:10px; box-sizing:border-box; }
+.tfrom-con li.click{ background:#eef8ff; }
+.tfrom-con li input[type="radio"]{ margin-right:7px; }
+.tfrom-close{ width:100%; text-align:center; }
+.tfrom-close input[type="button"]{ width:100px; height:35px; background:#34a7f2; line-height:35px; color:#fff; border-radius:5px; border:none; cursor:pointer; margin:10px 0; }
+.tfrom-close input[type="button"]:hover{ background:#2ea2ed; }
+.tfrom-picture{width:10%;height:60%;margin-top:-13%;margin-left:85%;}
+.tfrom-mask{position:absolute;left:0;top:0;z-index:998;background:black;opacity:0.4;filter:alpha(opacity=40);display:none;}

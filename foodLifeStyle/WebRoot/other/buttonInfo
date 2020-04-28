@@ -1,0 +1,62 @@
+{
+    "button": [
+        {
+        	"name": "流量充值", 
+        	 "type": "view", 
+		     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7329bf5b447065a0&redirect_uri=http://www.anhuiliuliang.com/llshop/wechat/user/showActivityList.do&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+        }, 
+        {
+            "name": "免费福利", 
+            "sub_button": [
+            	{
+		            "type": "view", 
+                    "name": "合肥万达乐园免费门票", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7329bf5b447065a0&redirect_uri=http://www.anhuiliuliang.com/llshop/wechat/user/toUserSupplierEventInfoPage.do?eventId=1&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                },
+             	{
+		            "type": "view", 
+                    "name": "其它免费/天天更新", 
+                    "url": "http://mp.weixin.qq.com/mp/getmasssendmsg?__biz=MzI2NjM1Mjc3NQ==#wechat_webview_type=1&wechat_redirect"
+                },
+ 				{
+		            "type": "view", 
+                    "name": "一定会让你爱上我", 
+                    "url": "http://mp.weixin.qq.com/s?__biz=MzI3NjMzMzYxOQ==&mid=100000059&idx=1&sn=524f6e43c01162d1a9fa3c7641694f09#rd"
+                }
+            ]
+        },
+        {
+            "name": "个人中心", 
+            "sub_button": [
+                {
+                    "type": "view", 
+                    "name": "个人中心", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7329bf5b447065a0&redirect_uri=http://www.anhuiliuliang.com/llshop/wechat/user/toUserInfoCenter.do&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                },
+                {
+		            "type": "view", 
+                    "name": "邀请好友", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7329bf5b447065a0&redirect_uri=http://www.anhuiliuliang.com/llshop/wechat/user/toInviteFriendsShare.do&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                },
+   
+              {
+		            "type": "view", 
+                    "name": "签到赚积分", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7329bf5b447065a0&redirect_uri=http://www.anhuiliuliang.com/llshop/wechat/user/toUserSignPage.do&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                },
+	             
+                
+                {
+                    "type": "view", 
+                    "name": "常见问题", 
+                    "url": "http://mp.weixin.qq.com/s?__biz=MzI3NjMzMzYxOQ==&mid=100000003&idx=1&sn=00cc1cfc226103a305b87cbbceb3ba0b#rd"
+                } ,
+                {
+                    "type": "view", 
+                    "name": "关于我们", 
+                    "url": "http://www.anhuiliuliang.com/mIndex.html"
+                } 
+            ]
+        } 
+    ]
+}

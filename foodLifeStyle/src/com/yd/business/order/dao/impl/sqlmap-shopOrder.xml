@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shopOrder">
+	
+	<resultMap id="shopOrderInfoMap" type="shopOrderInfo" >
+		<collection property="productList" ofType="shopOrderProduct" select="queryShopOrderProduct" column="order_info_id">
+		</collection>
+	</resultMap>
+
+	
+	
+	<insert id="createShopOrderInfo" parameterType="shopOrderInfo" useGeneratedKeys="true" keyProperty="id" >
+		insert into ll_shop_order_info(user_id,nick_name,order_code,order_name,order_img,create_time,
+		modify_time,cost_price,cost_points,cost_money,cost_balance,coupon_total_price,status,remark,
+		event_type,lucky_money,share_time,share_type,is_sended,express_price,
+		contact_name,contact_phone,contact_address,express_mode,express_date,
+		express_time,express_order_code,invoice_type,invoice_info) values(#{user_id},
+		#{nick_name},#{order_code},#{order_name},#{order_img},#{create_time},#{modify_time},#{cost_price},
+		#{cost_points},#{cost_money},#{cost_balance},#{coupon_total_price},#{status},#{remark},#{event_type},
+		#{lucky_money},#{share_time},#{share_type},#{is_sended},#{express_price},
+		#{contact_name},#{contact_phone},#{contact_address},#{express_mode},
+		#{express_date},#{express_time},#{express_order_code},#{invoice_type},#{invoice_info})
+	</insert>
+	
+	<select id="queryShopOrderInfo" parameterType="shopOrderInfo" resultType="shopOrderInfo">
+		select * from ll_shop_order_info 
+		<where>
+			<if test=" id != null"> and id = #{id} </if>
+			<if test=" user_id != null"> and user_id = #{user_id} </if>
+			<if test=" order_code != null"> and order_code like concat('%', #{order_code} ,'%')  </if>
+			<if test=" status != null"> and status = #{status} </if>
+			<if test=" event_type != null"> and event_type = #{event_type} </if>
+			<if test=" is_sended != null"> and is_sended = #{is_sended} </if>
+			<if test=" contact_phone != null"> and contact_phone like concat('%', #{contact_phone} ,'%') </if>
+			<if test=" contact_name != null"> and contact_name like concat('%', #{contact_name} ,'%')  </if>
+			<if test=" invoice_type != null"> and invoice_type = #{invoice_type} </if>
+			<if test=" notInStatus != null"> and status not in (${notInStatus})</if>
+			
+		</where>
+			<if test=" orderby != null">  ${orderby}</if>
+	</select>
+	
+	<update id="updateShopOrderInfo" parameterType="shopOrderInfo" useGeneratedKeys="true" >
+		update ll_shop_order_info 
+		<set>
+			<if test=" user_id != null"> user_id = #{user_id} ,</if>
+			<if test=" nick_name != null"> nick_name = #{nick_name} ,</if>
+			<if test=" modify_time != null"> modify_time = #{modify_time} ,</if>
+			<if test=" order_name != null"> order_name = #{order_name} ,</if>
+			<if test=" order_img != null"> order_img = #{order_img} ,</if>
+			<if test=" cost_price != null"> cost_price = #{cost_price} ,</if>
+			<if test=" cost_points != null"> cost_points = #{cost_points} ,</if>
+			<if test=" cost_money != null"> cost_money = #{cost_money} ,</if>
+			<if test=" cost_balance != null"> cost_balance = #{cost_balance} ,</if>
+			<if test=" coupon_total_price != null"> coupon_total_price = #{coupon_total_price} ,</if>
+			<if test=" status != null"> status = #{status} ,</if>
+			<if test=" remark != null"> remark = #{remark} ,</if>
+			<if test=" event_type != null"> event_type = #{event_type} ,</if>
+			<if test=" lucky_money != null"> lucky_money = #{lucky_money} ,</if>
+			<if test=" share_time != null"> share_time = #{share_time} ,</if>
+			<if test=" share_type != null"> share_type = #{share_type} ,</if>
+			<if test=" is_sended != null"> is_sended = #{is_sended} ,</if>
+			<if test=" express_price != null"> express_price = #{express_price} ,</if>
+			<if test=" contact_name != null"> contact_name = #{contact_name} ,</if>
+			<if test=" contact_phone != null"> contact_phone = #{contact_phone} ,</if>
+			<if test=" contact_address != null"> contact_address = #{contact_address} ,</if>
+			<if test=" express_mode != null"> express_mode = #{express_mode} ,</if>
+			<if test=" express_date != null"> express_date = #{express_date} ,</if>
+			<if test=" express_time != null"> express_time = #{express_time} ,</if>
+			<if test=" express_order_code != null"> express_order_code = #{express_order_code} ,</if>
+			<if test=" invoice_type != null"> invoice_type = #{invoice_type} ,</if>
+			<if test=" invoice_info != null"> invoice_info = #{invoice_info} ,</if>
+		</set>
+		<where>
+			<if test=" id != null"> and id = #{id} </if>
+			<if test=" order_code != null"> and order_code = #{order_code} </if>
+		</where>
+	</update>
+	
+	
+	<update id="updateOrderToFinishBy30DayAgo">
+		update ll_shop_order_info set status = 8 where express_date is not null 
+		and DATE_ADD(SYSDATE(),INTERVAL -30 day) >  express_date  and status = 5;
+	</update>
+	
+	<update id="updateRabbishOrderStatus" parameterType="int">
+		update ll_shop_order_info a set a.status = -3 where  a.status in (0,2) and a.user_id = #{value} and a.id not in (
+			select id from ( select MAX(id) as id from ll_shop_order_info b where b.status in (0,2) and b.user_id = #{value} ) c
+		)
+	</update>
+	
+	<insert id="createShopOrderProduct" parameterType="shopOrderProduct" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_shop_order_product(order_info_id,order_code,user_id,nick_name,
+		supplier_id,supplier_name,supplier_product_id,supplier_product_name,
+		original_price,real_price,cost_points,discount,num,create_time,type,prime_cost_price) values(#{order_info_id},
+		#{order_code},#{user_id},#{nick_name},#{supplier_id},#{supplier_name},
+		#{supplier_product_id},#{supplier_product_name},#{original_price},#{real_price},
+		#{cost_points},#{discount},#{num},#{create_time},#{type},#{prime_cost_price})
+	</insert>
+	
+	<select id="queryShopOrderProduct" parameterType="shopOrderProduct" resultType="shopOrderProduct">
+		select sop.*,p.head_img from ll_shop_order_product sop ,ll_supplier_product sp, ll_product p
+		where sop.supplier_product_id = sp.id and sp.product_id = p.id
+			
+			<if test="id != null "> and sop.id = #{id} </if>
+			<if test="order_info_id != null "> and sop.order_info_id = #{order_info_id} </if>
+			<if test="order_code != null "> and sop.order_code = #{order_code} </if>
+			<if test="user_id != null "> and sop.user_id = #{user_id} </if>
+			<if test="supplier_id != null "> and sop.supplier_id = #{supplier_id} </if>
+			<if test="supplier_product_id != null "> and sop.supplier_product_id = #{supplier_product_id} </if>
+			
+			<if test=" orderby != null">  ${orderby}</if>
+	</select>
+	
+	<delete id="delteShopOrderById" parameterType="int">
+		delete from ll_shop_order_info where id = #{value}
+	</delete>
+	
+	<select id="queryShopOrderAndProductList" resultMap="shopOrderInfoMap" parameterType="shopOrderInfo">
+		select * from ll_shop_order_info 
+		<where>
+			<if test=" id != null"> and id = #{id} </if>
+			<if test=" user_id != null"> and user_id = #{user_id} </if>
+			<if test=" order_code != null"> and order_code like concat('%', #{order_code} ,'%')  </if>
+			<if test=" status != null"> and status = #{status} </if>
+			<if test=" event_type != null"> and event_type = #{event_type} </if>
+			<if test=" is_sended != null"> and is_sended = #{is_sended} </if>
+			<if test=" contact_phone != null"> and contact_phone like concat('%', #{contact_phone} ,'%') </if>
+			<if test=" contact_name != null"> and contact_name like concat('%', #{contact_name} ,'%')  </if>
+			<if test=" invoice_type != null"> and invoice_type = #{invoice_type} </if>
+			<if test=" notInStatus != null"> and status not in (${notInStatus})</if>
+		</where>
+		<if test=" orderby != null">  ${orderby}</if>
+	</select>
+	
+	<insert id="createShopOrderRemind" parameterType="shopOrderRemind">
+		insert into ll_shop_order_remind(orderId,orderCode,remind,createDate,readFlag,userId,nickName,contactName,contactPhone,orderName)
+		values(#{orderId},#{orderCode},#{remind},#{createDate},#{readFlag},#{userId},#{nickName},#{contactName},#{contactPhone},#{orderName})
+	</insert>
+	
+</mapper>
+
+

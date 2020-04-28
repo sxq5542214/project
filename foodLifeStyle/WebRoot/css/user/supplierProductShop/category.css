@@ -1,0 +1,107 @@
+*{
+  padding: 0;
+  margin: 0;
+  font-family:"PingFangSC-Regular", "Hiragino Sans GB", Arial, Helvetica, "\5B8B\4F53", sans-serif;
+}
+.header{
+  width: 100%;
+  height: 150px;
+  background: #555;
+}
+.swiper-container-ul{
+  list-style: none;
+  overflow: hidden;
+  width: 100%;
+  background: #fff;
+  top: 0;
+}
+.swiper-container-ul-li{
+  width: 50%;
+  height: 40px;
+  line-height: 40px;
+  float: left;
+  text-align: center;
+}
+.actives{
+  border-bottom: 1px solid #3190e8;
+  color: #3190e8;
+}
+.content{
+  width: 100%;
+  overflow: hidden;
+}
+.left{
+  top: 41px;
+  float: left;
+  width: 25%;
+  height: 100%;
+  background: #eee;
+}
+.left ul{
+  list-style: none;
+}
+.left ul li{
+  padding: 15px 5px;
+  text-align: center;
+}
+.active{
+  background: #fff;
+  border-left: 2px solid #3190e8;
+}
+.right{
+  float: left;
+  width: 75%;
+  height: 100%;
+}
+.right ul{
+  list-style: none;
+}
+.class-title{
+  padding: 7px 10px;
+#  background: #eee;
+}
+.item{
+  overflow: hidden;
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.item-left{
+  float: left;
+}
+.item-right{
+  float: left;
+  padding: 0 10px;
+}
+.item-img{
+  width: 100px;
+  height: 100px;
+  background: #eee;
+}
+.title{
+  width: 100%;
+  height: 20px;
+  margin-top: 5px;
+  font-family: "PingFangSC-Medium", "Hiragino Sans GB", Arial, Helvetica, "\5B8B\4F53", sans-serif;
+  font-weight: bold;
+#  background: #eee;
+}
+.subtitle{
+  width: 150px;
+  height: 20px;
+  margin-top: 5px;
+  font-size: 0.7rem;
+  text-overflow:ellipsis;
+  
+#  background: #eee;
+}
+.price{
+  width: 150px;
+  height: 20px;
+  margin-top: 25px;
+  color: #fb4e44;
+  font-family: "PingFangSC-Medium", "Hiragino Sans GB", Arial, Helvetica, "\5B8B\4F53", sans-serif;
+  font-size: 1.2rem;
+#  background: #eee;
+}
