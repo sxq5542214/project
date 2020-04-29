@@ -49,6 +49,7 @@ import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.HttpUtil;
 import com.yd.util.MD5Util;
 import com.yd.util.StringUtil;
+import com.yd.util.WebUtil;
 
 /**
  * @author ice
@@ -247,7 +248,7 @@ public class WechatController extends BaseController {
 
 		Object[] params={appid,mch_id,nonce_str,attach,body,out_trade_no,device_info,
 				total_fee,spbill_create_ip,notify_url,trade_type,openid,limit_pay};
-		String tempStr = concatParam(params);
+		String tempStr = WebUtil.concatParam(params);
 		//签名,需要把key放在最后
 		tempStr += "&"+key;
 		String sign = "sign="+MD5Util.encode16(tempStr,"UTF-8").toUpperCase();
@@ -388,7 +389,7 @@ public class WechatController extends BaseController {
 
 		Object[] params={appid,mch_id,nonce_str,attach,body,out_trade_no,device_info,
 				total_fee,spbill_create_ip,notify_url,trade_type,openid};
-		String tempStr = concatParam(params);
+		String tempStr = WebUtil.concatParam(params);
 		//签名,需要把key放在最后
 		tempStr += "&"+key;
 		String sign = "sign="+MD5Util.encode16(tempStr,"UTF-8").toUpperCase();
@@ -615,7 +616,7 @@ public class WechatController extends BaseController {
 //		Object[] strParams =  list.toArray();
 //		Arrays.sort(strParams);
 		
-		String tempStr = concatParam(list.toArray());
+		String tempStr = WebUtil.concatParam(list.toArray());
 		//签名,需要把key放在最后
 		tempStr += "&"+key;
 		String sign = MD5Util.encode16(tempStr,"UTF-8").toUpperCase();
@@ -629,20 +630,6 @@ public class WechatController extends BaseController {
 		return null;
 	}
 	
-	
-	
-	protected static String concatParam(Object... params){
-		
-		Arrays.sort(params);
-
-		StringBuffer str = new StringBuffer();
-		
-		for(Object s : params){
-			str.append("&" + s);
-		}
-		
-		return str.substring(1);
-	}
 	
 
 	private static String convertToXML(Object... params){

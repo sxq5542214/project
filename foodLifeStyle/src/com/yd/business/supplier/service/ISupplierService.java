@@ -3,6 +3,7 @@ package com.yd.business.supplier.service;
 import java.util.List;
 
 import com.yd.business.supplier.bean.SupplierBean;
+import com.yd.business.supplier.bean.SupplierTypeBean;
 
 public interface ISupplierService {
 
@@ -49,4 +50,5 @@ public interface ISupplierService {
 	 */
 	public String designSupplierProduct(String params);
 	public List<SupplierBean> querySupplierByMinus(int customerid,int productid,int storenum);
+	List<SupplierTypeBean> querySupplierType(SupplierTypeBean bean);
 }

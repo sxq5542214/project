@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
 import com.yd.business.supplier.bean.SupplierBean;
+import com.yd.business.supplier.bean.SupplierTypeBean;
 import com.yd.business.supplier.dao.ISupplierDao;
 /**
  * 
@@ -90,6 +91,12 @@ public class SupplierDaoImpl extends BaseDao implements ISupplierDao {
 		map.put("product_id", productid);
 		map.put("store_num", storenum);
 		return sqlSessionTemplate.selectList(NAMESPACE+"querySupplierByMinus", map);
+	}
+
+	@Override
+	public List<SupplierTypeBean> querySupplierType(SupplierTypeBean bean) {
+
+		return sqlSessionTemplate.selectList(NAMESPACE+"querySupplierType", bean);
 	}
 
 }

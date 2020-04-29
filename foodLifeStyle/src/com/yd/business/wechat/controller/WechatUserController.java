@@ -6,6 +6,7 @@ package com.yd.business.wechat.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +66,7 @@ import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.BaseMessage;
 import com.yd.business.wechat.bean.SignServerBean;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.bean.WechatWebAuthBean;
 import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.business.wechat.util.Sign;
@@ -74,6 +76,7 @@ import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.CookieUtil;
 import com.yd.util.HttpUtil;
 import com.yd.util.StringUtil;
+import com.yd.util.WebUtil;
 
 /**
  * @author ice
@@ -166,19 +169,6 @@ public class WechatUserController extends BaseController {
 			return null;
 		}
 	}
-	
-	@RequestMapping("/wechat/user/updateUserSenceShareInfo.do")
-	public ModelAndView updateUserSenceShareInfo(HttpServletRequest request,HttpServletResponse response){
-		try{
-			String userSenceLogId = request.getParameter("userSenceLogId");
-			String shareType = request.getParameter("shareType");
-			
-			userWechatService.shareUserSenceLog(Integer.parseInt(userSenceLogId), Integer.parseInt(shareType));
-		}catch (Exception e) {
-			log.error(e,e);
-		}
-		return null;
-	}
 
 	@RequestMapping("**/wechat/user/toAdminUserSSOPage.do")
 	public ModelAndView toAdminUserSSOPage(HttpServletRequest request,HttpServletResponse response){
@@ -266,140 +256,64 @@ public class WechatUserController extends BaseController {
 		return null;
 	}
 	
-	
-	@RequestMapping("**/wechat/user/toUserInfoCenter.do")
-	public ModelAndView toUserInfoCenter(HttpServletRequest request,HttpServletResponse response){
+
+	/**
+	 * 	所有微信界面跳转的分发服务
+	 */
+	@RequestMapping("/wechat/user/toReopenTips.html")
+	public ModelAndView toReopenTips(HttpServletRequest request,HttpServletResponse response){
+		
+		writeJson(response, "<script>登录失效，请通过公众号重新打开界面！</script>");
+		return null;
+	}
+	/**
+	 * 	所有微信界面跳转的分发服务
+	 */
+	@RequestMapping("/wechat/user/toDistributeControll.do")
+	public ModelAndView toDistributeControll(HttpServletRequest request,HttpServletResponse response){
 		try{
 			String openid = request.getParameter("openid");
-			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-			String originalid = null;
-			//先查缓存
-			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-				String code = request.getParameter("code");
-				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-				openid = wechatService.getOpenId(code,originalid);
-				request.getSession().setAttribute("cachedOpenid", openid);
-			}else if(StringUtil.isNotNull(cachedOpenid)){
-				openid = cachedOpenid;
+			String code = request.getParameter("code");
+			String conName = request.getParameter("conName");
+			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
+			String originalid = original.getOriginalid();
+			if(StringUtil.isNull(openid)) {
+				openid = (String)request.getSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
 			}
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-//			user = checkUserExists(user,openid,originalid);
-			
-			
-			if(user != null  ){
-				UserInfoCenterPageBean userInfoPage = userWechatService.queryActivityFriendLevelCount(user.getId());
-				userInfoPage.setUserWechat(user);
-				boolean isShop = configAttributeService.getBooleanValueByCode(AttributeConstant.CODE_SYSTEM_IS_SHOP_ORDER);
 
-				Map<String, Object> model = new HashMap<String, Object>();
-				model.put("userInfoPage", userInfoPage);
-				model.put("isShop", isShop);
-				return new ModelAndView(UserController.PAGE_USERINFOCENTER, model);
-			}else{
-				writeJson(response, "<script>alert('请先关注公众号！如已关注请重新进入')</script>");
+			Map<String,String> param = getRequestParamsMap(request);
+			String paramStr = WebUtil.concatParam( param);
+			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
+				// 没有缓存，也没有传code过来，则跳转至微信授权
+				String enCodeUrl = URLEncoder.encode(original.getServer_url() +"wechat/user/toDistributeControll.do?"+ paramStr , "utf-8");
+				response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+				return null;
+			}else if(StringUtil.isNull(openid)){
+				// 微信认证
+				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, originalid);
+				//好友信息，创建用户及好友关系
+				if( StringUtil.isNotNull(auth.getAccess_token())){
+					//当前用户openid 添加到session
+					WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,auth.getOpenid());
+					wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), null,  WechatConstant.TICKET_SENCE_CODE_WXMENU, null, originalid , auth.getAccess_token());
+					openid = auth.getOpenid();
+				}else{ // 没有accessstoken 则重新访问
+					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"wechat/user/toDistributeControll.do?"+ paramStr , "utf-8");
+					response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+					return null;
+				}
 			}
+			param.put("openid", openid);
+			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,openid);
+			return new ModelAndView("/"+conName.replaceAll("\\.", "/")+".html",param);
+			
 		}catch (Exception e) {
 			log.error(e,e);
-		}
-		return null;
-	}
-
-	@RequestMapping("**/wechat/user/toUserSignPage.do")
-	public ModelAndView toUserSignPage(HttpServletRequest request,HttpServletResponse response){
-		
-		try {
-			String openid = request.getParameter("openid");
-			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-			String originalid = null;
-			//先查缓存
-			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-				String code = request.getParameter("code");
-				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-				openid = wechatService.getOpenId(code,originalid);
-				request.getSession().setAttribute("cachedOpenid", openid);
-			}else if(StringUtil.isNotNull(cachedOpenid)){
-				openid = cachedOpenid;
-			}
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			if(user == null){
-				writeJson(response, " <script>alert('请先关注公众号！如果已关注，请重新打开界面 '); </script> ");
-				return null;
-			}
-			UserSignBean sign = userSignService.whetherSign(openid);
-
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("openid", openid);
-			model.put("sign", sign);
-			model.put("user", user);
-			return new ModelAndView(UserController.PAGE_USERSIGN, model);
-		} catch (Exception e) {
-			log.error(e, e);
-		}
-		
-		return null;
-	}
-	
-	@RequestMapping("**/wechat/user/toUserSupplierEventInfoPage.do")
-	public ModelAndView toUserSupplierEventInfoPage(HttpServletRequest request,HttpServletResponse response){
-		
-		try{
-			String openid = request.getParameter("openid");
-			String eventId = request.getParameter("eventId");
-			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-			String originalid = null;
-			//先查缓存
-			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-				String code = request.getParameter("code");
-				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-				openid = wechatService.getOpenId(code,originalid);
-				request.getSession().setAttribute("cachedOpenid", openid);
-			}else if(StringUtil.isNotNull(cachedOpenid)){
-				openid = cachedOpenid;
-			}
-			
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("openid", openid);
-			model.put("eventId", eventId);
-			return new ModelAndView("redirect:supplierEvent/userRead/toMyEventPage.do",model);
-		}catch (Exception e) {
-			log.error(e, e);
+			writeJson(response, "服务出错，请联系客服人员检查");
 		}
 		return null;
 	}
 	
-	@RequestMapping("**/wechat/user/queryOrderProductLog.do")
-	public ModelAndView queryOrderProductLog(HttpServletRequest request,HttpServletResponse response){
-		
-		try{
-
-			String openid = request.getParameter("openid");
-			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-			String originalid = null;
-			//先查缓存
-			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-				String code = request.getParameter("code");
-				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-				openid = wechatService.getOpenId(code,originalid);
-				request.getSession().setAttribute("cachedOpenid", openid);
-			}else if(StringUtil.isNotNull(cachedOpenid)){
-				openid = cachedOpenid;
-			}
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			user = checkUserExists(user,openid,originalid);
-			if(user != null){
-			
-				List<OrderProductLogBean> list = orderProductLogService.queryOrderProductLogByUserId(user.getId());
-				
-				Map<String, Object> model = new HashMap<String, Object>();
-				model.put("list", list);
-				return new ModelAndView(UserController.PAGE_ORDERPRODUCTLOG, model);
-			}
-			
-		}catch (Exception e) {
-			log.error(e, e);
-		}
-		return null;
-	}
 	
 	/**
 	 * 检查用户是否存在，不存在 就创建，或者 不创建
@@ -508,171 +422,5 @@ public class WechatUserController extends BaseController {
 		return null;
 	}
 	
-	
-	
-	/**
-	 * 活动入口
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping("/wechat/user/showActivityList.do")
-	public ModelAndView showActivityList(HttpServletRequest request,HttpServletResponse response){
-		try {
-			String openid = request.getParameter("openid");
-			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-			String originalid = null;
-			//先查缓存
-			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-				String code = request.getParameter("code");
-				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-				openid = wechatService.getOpenId(code,originalid);
-				request.getSession().setAttribute("cachedOpenid", openid);
-			}else if(StringUtil.isNotNull(cachedOpenid)){
-				openid = cachedOpenid;
-			}
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			user = checkUserExists(user,openid,originalid);
-			if(!StringUtil.isNull(user)){
-				Map<String, Object> model = new HashMap<String, Object>();
-				model.put("openid", user.getOpenid());
-				
-				return new ModelAndView("redirect:"+UserController.PAGE_ACTIVYTY_GETLIST, model);
-			}
-		} catch (Exception e) {
-			log.error(e, e);
-		}
-		return null;
-	}
-	
-	@RequestMapping("**/wechat/user/queryWechatUserCommentInfo.do")
-	public ModelAndView queryWechatUserCommentInfo(HttpServletRequest request,HttpServletResponse response){
-		
-		try{
-
-			String openid = request.getParameter("openid");
-			String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-			String originalid = null;
-			//先查缓存
-			if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-				String code = request.getParameter("code");
-				originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-				openid = wechatService.getOpenId(code,originalid);
-				request.getSession().setAttribute("cachedOpenid", openid);
-			}else if(StringUtil.isNotNull(cachedOpenid)){
-				openid = cachedOpenid;
-			}
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			user = checkUserExists(user,openid,originalid);
-			if(user != null){
-				if(wechatCommentReplyService.isShowCommentList(openid)){
-					Map<String, Object> model = new HashMap<String, Object>();
-					model.put("openid", user.getOpenid());
-					return new ModelAndView(WechatCommentReplyContorller.PAGE_COMMENT_INFO_INDEX, model);
-				}else{
-					return null;
-				}
-			}
-		}catch (Exception e) {
-			log.error(e, e);
-		}
-		return null;
-	}
-	
-
-	@RequestMapping("/wechat/user/toDefaultPlatformSupplierProduct.do")
-	public ModelAndView toDefaultPlatformSupplierProduct(HttpServletRequest request,HttpServletResponse response){
-
-		String openid = request.getParameter("openid");
-		String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-		String originalid = null;
-		//先查缓存
-		if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-			String code = request.getParameter("code");
-			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-			openid = wechatService.getOpenId(code,originalid);
-			request.getSession().setAttribute("cachedOpenid", openid);
-		}else if(StringUtil.isNotNull(cachedOpenid)){
-			openid = cachedOpenid;
-		}
-		//获取 参数解析后，访问用户的控制层
-		try {
-			response.sendRedirect(request.getServletContext().getContextPath()+"/user/supplier/queryPlatformSupplierProduct.do?openid="+openid);
-		} catch (IOException e) {
-			log.error(e, e);
-		}
-		return null;
-//		这种方式用户刷新会有code 重复问题，改为跳转链接
-//		return userSupplierProductController.queryPlatformSupplierProduct(null, openid);
-	}
-	  
-
-	/**
-	 * 查询目前配置的优惠卷
-	 */
-	@RequestMapping("/wechat/user/toCouponCenterPage.do")
-	public ModelAndView toCouponCenterPage(HttpServletRequest request,HttpServletResponse response){
-		String openid = request.getParameter("openid");
-		//微信公众号菜单直接打开界面，要获取CODE为OPENID
-		String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-		String originalid = null;
-		//先查缓存
-		if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-			String code = request.getParameter("code");
-			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-			openid = wechatService.getOpenId(code,originalid);
-			request.getSession().setAttribute("cachedOpenid", openid);
-		}else if(StringUtil.isNotNull(cachedOpenid)){
-			openid = cachedOpenid;
-		}
-		request.setAttribute("openid", openid);
-		return supplierCouponController.toUserCouponCenterPage(request, response);
-	}
-	
-	/**
-	 *  打开商城分类界面
-	 */
-	@RequestMapping("/wechat/user/toSupplierProductCategoryPage.do")
-	public ModelAndView toSupplierProductCategoryPage(HttpServletRequest request,HttpServletResponse response){
-
-		String openid = request.getParameter("openid");
-		String sid = request.getParameter("sid");
-		String originalid = null;
-		//微信公众号菜单直接打开界面，要获取CODE为OPENID
-		String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-		//先查缓存
-		if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-			String code = request.getParameter("code");
-			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-			openid = wechatService.getOpenId(code,originalid);
-			request.getSession().setAttribute("cachedOpenid", openid);
-		}else if(StringUtil.isNotNull(cachedOpenid)){
-			openid = cachedOpenid;
-		}
-		
-		return userSupplierProductController.toSupplierProductCategoryPage(sid, openid);
-	}
-	
-	
-	/**
-	 * 查询自己拥有的优惠卷,跳到转查询自己优惠卷界面
-	 */
-	@RequestMapping("/wechat/user/toUserCouponPage.do")
-	public ModelAndView toUserCouponPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
-		String openid = request.getParameter("openid");
-		//微信公众号菜单直接打开界面，要获取CODE为OPENID
-		String cachedOpenid = (String)request.getSession().getAttribute("cachedOpenid");
-		String originalid = null;
-		//先查缓存
-		if(StringUtil.isNull(cachedOpenid) && StringUtil.isNull(openid)){
-			String code = request.getParameter("code");
-			originalid = wechatOriginalInfoService.getOriginalidByServerDomain(request);
-			openid = wechatService.getOpenId(code,originalid);
-			request.getSession().setAttribute("cachedOpenid", openid);
-		}else if(StringUtil.isNotNull(cachedOpenid)){
-			openid = cachedOpenid;
-		}
-		return supplierCouponController.toMycouponPage(openid);
-	}
 	
 }

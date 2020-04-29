@@ -24,6 +24,7 @@ import com.yd.business.product.service.IProductService;
 import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierDiscountRelationBean;
+import com.yd.business.supplier.bean.SupplierTypeBean;
 import com.yd.business.supplier.dao.ISupplierDao;
 import com.yd.business.supplier.service.ISupplierDiscountRelationService;
 import com.yd.business.supplier.service.ISupplierPowerLogService;
@@ -532,5 +533,10 @@ public class SupplierServiceImpl extends BaseService implements
 			int productid, int storenum) {
 		// TODO Auto-generated method stub
 		return supplierDao.querySupplierByMinus(customerid, productid, storenum);
+	}
+	
+	@Override
+	public List<SupplierTypeBean> querySupplierType(SupplierTypeBean bean){
+		return supplierDao.querySupplierType(bean);
 	}
 }

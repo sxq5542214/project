@@ -1,7 +1,13 @@
+<%@page import="com.yd.business.supplier.bean.SupplierTypeBean"%>
+<%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+UserWechatBean user = (UserWechatBean)request.getAttribute("user");
+List<SupplierTypeBean> parentTypeList = (List<SupplierTypeBean>)request.getAttribute("parentTypeList");
+List<SupplierTypeBean> typeList = (List<SupplierTypeBean>)request.getAttribute("typeList");
+
 %>
 
 <!DOCTYPE HTML>
@@ -19,6 +25,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <title>商户免费入驻</title>
 	<link rel="stylesheet" href="css/supplier/signup.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+	
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js" type="text/javascript" ></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-zh_CN.min.js"></script>
   </head>
   <body style="background-color: #eee">
 
@@ -26,21 +38,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <h2 class="form-signup-heading" style="text-align: center;">店铺免费入驻</h2>
 
       <form class="form-signup" action="" method="post">
-        <label class="form-signup-heading">【昵称】请填：</label>
+        <label class="form-signup-heading">【<%=user.getNick_name() %>】请填：</label>
         
-        <label for="supplierName" class="sr-only">店铺名称</label>
-        <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="请输入店铺名称" required="required" autofocus="">
+        <label for="userName" class="sr-only">真实姓名</label>
+        <input type="text" id="userName" name="userName" class="form-control" placeholder="请输入真实姓名" required="required">
         <label for="phoneNo" class="sr-only">手机号</label>
         <input type="number" id="phoneNo" name="phoneNo" class="form-control" placeholder="请输入手机号" required="required">
+        <label for="supplierName" class="sr-only">店铺名称</label>
+        <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="请输入店铺名称" required="required" autofocus="">
+        
+    
+		<select class="selectpicker form-control show-tick"  data-live-search="true" title="请选择店铺分类">
+			<% for(SupplierTypeBean parentType : parentTypeList){ %>
+			<optgroup label="<%=parentType.getName()%>">
+				<%for(SupplierTypeBean type : typeList){
+					if(type.getParentid().intValue() == parentType.getId()){
+				 %>
+					<option value="<%=type.getId()%>"><%=type.getName() %></option>
+				<%}} %>
+			</optgroup>
+			<%} %>
+		</select>	
+        
         
 <!--         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me" checked="checked"> 同意入驻协议
           </label>
         </div> -->
-        <button class="btn btn-lg btn-primary btn-block" type="submit">确定提交</button>
+        <button class="btn btn-lg btn-primary btn-block" style="margin-top: 15px;" type="submit">确定提交</button>
       </form>
 
+		
     </div> <!-- /container -->
 
 </body>

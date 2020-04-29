@@ -8,9 +8,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.yd.basic.framework.context.BaseContext;
+import com.yd.basic.framework.context.WebContext;
 import com.yd.business.customer.service.impl.CustomerServiceImpl;
+import com.yd.util.StringUtil;
 
 
 public class TokenFilter extends BaseFilter {
@@ -25,21 +28,31 @@ public class TokenFilter extends BaseFilter {
 			FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
+		HttpSession session = req.getSession();
 		request.setCharacterEncoding("utf-8");
 		
 		if( req.getRequestURI().indexOf("/admin/") >0 ){
 			Object user = req.getSession().getAttribute(CustomerServiceImpl._CURRENT_USER);
 			if(user == null){
 				String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+req.getContextPath()+"/";
-				resp.sendRedirect(basePath+"login.htm");
+				resp.sendRedirect(basePath+"wxLogin.htm");
 			}
 		}else if( req.getRequestURI().indexOf("/app/") >0 ){
 			Object user = req.getSession().getAttribute(CustomerServiceImpl._CURRENT_USER);
 			if(user == null){
 				resp.sendRedirect(BaseContext.getServerUrl()+"page/wechat/login.jsp");
 			}
+		}else if( req.getRequestURI().indexOf("/wx/") >0 ){
+			Object openid = req.getSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+			if(openid == null){
+				resp.sendRedirect(BaseContext.getServerUrl()+"wechat/user/toDistributeControll.do?conName=wechat.user.toReopenTips");
+			}
 		}
 		
+		String openid = req.getParameter("openid");
+		if(StringUtil.isNotNull(req.getParameter("openid")) && session.getAttribute("openid") != null) {
+			req.getSession().setAttribute("openid", openid);
+		}
 		
 //		HttpServletResponse resp = (HttpServletResponse) response;
 //		ICustomerService service = (ICustomerService) BaseContext.getBeanOfType(ICustomerService.class);

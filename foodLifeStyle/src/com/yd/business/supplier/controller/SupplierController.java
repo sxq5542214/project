@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.ICustomerService;
@@ -26,9 +27,13 @@ import com.yd.business.product.service.IProductTypeService;
 import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierPowerLogBean;
+import com.yd.business.supplier.bean.SupplierTypeBean;
 import com.yd.business.supplier.service.ISupplierPowerLogService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.user.bean.UserWechatBean;
+import com.yd.business.user.service.IUserWechatService;
 import com.yd.util.AutoInvokeGetSetMethod;
+import com.yd.util.DateUtil;
 import com.yd.util.MD5;
 import com.yd.util.NumberUtil;
 /**
@@ -39,6 +44,7 @@ import com.yd.util.NumberUtil;
 @Controller
 public class SupplierController extends BaseController {
 
+	private String PAGE_SUPPLIER_SIGNUP_PAGE = "/page/supplier/signup/signup.jsp";
 	@Autowired
 	private ISupplierService supplierService;
 	@Autowired
@@ -49,6 +55,9 @@ public class SupplierController extends BaseController {
 	private IProductTypeService productTypeService;
 	@Autowired
 	private ISupplierPowerLogService supplierPowerLogService;
+	@Autowired
+	private IUserWechatService userWechatService;
+	
 
 	/**
 	 * 充值
@@ -348,7 +357,7 @@ public class SupplierController extends BaseController {
 	 */
 	public String insertSupplier(SupplierBean bean,String disGroupIds,int type,int iscreate){
 		CustomerBean custBean = new CustomerBean();
-		String currentDate = NumberUtil.toString(new Date());
+		String currentDate = DateUtil.getNowDateStr();
 		CustomerBean customer = customerService.findCustomerByPhone(bean.getContacts_phone());//这里判断当前客户是否已经生成，如果没有生成则新增加一个
 		if(customer==null){
 			custBean.setName(bean.getName());
@@ -544,5 +553,36 @@ public class SupplierController extends BaseController {
 			writeJson(response, "数据处理失败！");
 		}
 		return null;
+	}
+	
+
+	/**
+	 * 跳转至我的商户
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping("/wx/supplier/toSupplierSignupPage.html")
+	public ModelAndView toSupplierSignupPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			String openid = (String) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			
+			SupplierTypeBean bean = new SupplierTypeBean();
+			bean.setLevel(SupplierTypeBean.LEVEL_TWO);
+			List<SupplierTypeBean> parentTypeList = supplierService.querySupplierType(bean );
+			
+			bean.setLevel(SupplierTypeBean.LEVEL_THREE);
+			List<SupplierTypeBean> typeList = supplierService.querySupplierType(bean );
+
+			map.put("user", user);
+			map.put("parentTypeList", parentTypeList);
+			map.put("typeList", typeList);
+		} catch (Exception e) {
+			log.error(e,e);
+		} 
+		return new ModelAndView(PAGE_SUPPLIER_SIGNUP_PAGE,map);
 	}
 }

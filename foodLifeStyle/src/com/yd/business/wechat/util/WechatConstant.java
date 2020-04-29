@@ -54,6 +54,7 @@ public interface WechatConstant {
 	
 	public static final int TYPE_USERINFO = 14;
 
+	public static final int TICKET_SENCE_CODE_WXMENU = -1;
 	public static final int TICKET_SENCE_CODE_UNDEFINE = 1;
 	public static final int TICKET_SENCE_CODE_LOTTERY = 2;
 	public static final int TICKET_SENCE_CODE_SUPPLIEREVENT = 3;

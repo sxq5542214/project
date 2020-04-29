@@ -74,4 +74,14 @@
 			#{item.id} 
 		</foreach>
 	</delete>
+	
+	<select id="querySupplierType" parameterType="supplierType" resultType="supplierType">
+		select t.*,(select name from ll_supplier_type where id = t.parentid) parentName from ll_supplier_type t 
+		<where>
+			<if test="id != null">and t.id = #{id}</if>
+			<if test="parentid != null">and t.parentid = #{parentid}</if>
+			<if test="level != null">and t.level = #{level}</if>
+		</where>
+		order by t.seq desc
+	</select>
 </mapper>

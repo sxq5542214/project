@@ -3,6 +3,7 @@ package com.yd.business.supplier.dao;
 import java.util.List;
 
 import com.yd.business.supplier.bean.SupplierBean;
+import com.yd.business.supplier.bean.SupplierTypeBean;
 /**
  * 商户
  * @author Anlins
@@ -26,4 +27,5 @@ public interface ISupplierDao {
 	 */
 	public SupplierBean queryMealSupplier(int customerid);
 	public List<SupplierBean> querySupplierByMinus(int customerid,int productid,int storenum);
+	public List<SupplierTypeBean> querySupplierType(SupplierTypeBean bean);
 }

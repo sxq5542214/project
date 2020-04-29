@@ -331,4 +331,9 @@ public abstract class BaseController extends MultiActionController {
 		return (CustomerBean) WebContext.getHttpSession().getAttribute(_CURRENT_USER);
 	}
 	
+	protected String getCurrentOpenid() {
+
+		return (String) WebContext.getHttpSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+	}
+	
 }
