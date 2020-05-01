@@ -1,7 +1,7 @@
 <%@page import="com.yd.util.DateUtil"%>
 <%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
-<%@page import="com.yd.business.product.bean.SupplierProductBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierCouponConfigBean"%>
 
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>

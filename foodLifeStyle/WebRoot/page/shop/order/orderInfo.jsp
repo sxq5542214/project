@@ -7,7 +7,7 @@
 <%@page import="com.yd.util.StringUtil"%>
 <%@page import="com.yd.business.order.bean.ShopOrderInfoBean"%>
 <%@page import="com.yd.business.order.bean.ShopOrderProductBean"%>
-<%@page import="com.yd.business.product.bean.SupplierProductBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();

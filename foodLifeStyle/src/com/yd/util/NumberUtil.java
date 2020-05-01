@@ -65,6 +65,13 @@ public class NumberUtil {
 		return date == null ? "" : toString(date, true);
 	}
 	
+	public static int convertNull(Integer num) {
+		if(num == null) {
+			return 0;
+		}
+		return num;
+	}
+	
 	/**
 	 * <p>�?单格�?:yyyy-MM-dd
 	 * <p>复杂格式:yyyy-MM-dd HH:mm:ss

@@ -2,7 +2,7 @@
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@page import="com.yd.basic.framework.context.BaseContext"%>
 <%@page import="com.yd.basic.framework.context.WebContext"%>
-<%@page import="com.yd.business.product.bean.SupplierProductBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 
 <%

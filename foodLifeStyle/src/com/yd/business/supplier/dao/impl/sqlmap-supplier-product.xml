@@ -3,14 +3,13 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="supplierProduct">
 	<select id="querySupplierProductById" resultType="supplierProduct" parameterType="Integer">
-		select sp.*,p.product_limit_points,p.give_points,p.head_img ,p.product_title, p.product_desc from ll_supplier_product sp, ll_product p where sp.product_id = p.id 
-		and sp.id = #{value} 
+		select * from ll_supplier_product  where id = #{value} 
 	</select>
 	<insert id="insertSupplierProduct" parameterType="supplierProduct" useGeneratedKeys="true" keyProperty="id">
-		insert into ll_supplier_product(product_id,supplier_id,customer_id,store_num,product_name,product_price,product_real_price,product_type,product_type_name,product_brand,
-		product_brand_name,discount,create_time,eff_time,dff_time,modify_time,modify_admin,min_luckymoney,max_luckymoney,product_offset_points,package_num,seq,hot_flag,home_flag,prime_cost_price)
-		values(#{product_id},#{supplier_id},#{customer_id},#{store_num},#{product_name},#{product_price},#{product_real_price},#{product_type},#{product_type_name},#{product_brand},
-		#{product_brand_name},#{discount},#{create_time},#{eff_time},#{dff_time},#{modify_time},#{modify_admin},#{min_luckymoney},#{max_luckymoney},#{product_offset_points},#{package_num},#{seq},#{hot_flag},#{home_flag},#{prime_cost_price})
+		insert into ll_supplier_product(product_id,supplier_id,supplier_name,customer_id,store_num,product_name,product_title,status,product_price,product_real_price,product_img,product_type,product_type_name,product_category_id,product_category_name,product_brand,
+		product_brand_name,discount,create_time,eff_time,dff_time,modify_time,modify_admin,min_luckymoney,max_luckymoney,product_offset_points,package_num,seq,hot_flag,home_flag,prime_cost_price,delete_flag)
+		values(#{product_id},#{supplier_id},#{supplier_name},#{customer_id},#{store_num},#{product_name},#{product_title},#{status},#{product_price},#{product_real_price},#{product_img},#{product_type},#{product_type_name},#{product_category_id},#{product_category_name},#{product_brand},
+		#{product_brand_name},#{discount},#{create_time},#{eff_time},#{dff_time},#{modify_time},#{modify_admin},#{min_luckymoney},#{max_luckymoney},#{product_offset_points},#{package_num},#{seq},#{hot_flag},#{home_flag},#{prime_cost_price},#{delete_flag})
 	</insert>
 	<update id="updateSupplierProduct" parameterType="supplierProduct">
 		update ll_supplier_product 
@@ -18,9 +17,13 @@
 			<if test="store_num != null and store_num!=''">store_num=#{store_num},</if>
 			<if test="product_price!=null and product_price!=''">product_price=#{product_price},</if>
 			<if test="product_name !=null and product_name !=''">product_name=#{product_name},</if>
+			<if test="product_title !=null and product_title !=''">product_title = #{product_title},</if>
+			<if test="product_img !=null and product_img !=''">product_img = #{product_img},</if>
 			<if test="product_real_price!=null and product_real_price!=''">product_real_price=#{product_real_price},</if>
 			<if test="product_type!=null and product_type!=''">product_type=#{product_type},</if>
 			<if test="product_type_name!=null and product_type_name!=''">product_type_name=#{product_type_name},</if>
+			<if test="product_category_id != null">product_category_id=#{product_category_id},</if>
+			<if test="product_category_name != null">product_category_name=#{product_category_name},</if>
 			<if test="product_brand!=null and product_brand!=''">product_brand=#{product_brand},</if>
 			<if test="product_brand_name!=null and product_brand_name!=''">product_brand_name=#{product_brand_name},</if>
 			<if test="discount!=null and discount!=''">discount=#{discount},</if>
@@ -36,6 +39,9 @@
 			<if test="hot_flag != null ">hot_flag = #{hot_flag},</if>
 			<if test="home_flag != null ">home_flag = #{home_flag},</if>
 			<if test="prime_cost_price != null ">prime_cost_price = #{prime_cost_price},</if>
+			<if test="status != null ">status = #{status},</if>
+			<if test="product_img != null ">product_img = #{product_img},</if>
+			<if test="delete_flag != null ">delete_flag = #{delete_flag},</if>
 		</set>
 		where id = #{id}
 	</update>
@@ -50,20 +56,19 @@
 		</foreach>
 	</delete>
 	<select id="querySupplierProduct" parameterType="supplierProduct" resultType="supplierProduct">
-		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title from ll_supplier_product sp, ll_product p 
+		select pc.name product_category_name, sp.*  from ll_supplier_product sp ,ll_supplier_product_category pc
 		<where>
-			sp.product_id = p.id 
+			pc.id = sp.product_category_id
+			<if test="id != null"> and sp.id = #{id}</if>
 			<if test="supplier_id != null"> and sp.supplier_id = #{supplier_id}</if>
 			<if test="customer_id != null"> and sp.customer_id = #{customer_id}</if>
-			<if test="status != null"> and exists( select 1 from ll_product p where p.status = #{status} and p.id = sp.product_id )</if>
 			<if test="product_brand_name != null"> and #{product_brand_name} = sp.product_brand_name </if>
 			<if test="product_brand != null"> and #{product_brand} = sp.product_brand </if>
 			<if test="product_type_name != null"> and #{product_type_name} = sp.product_type_name </if>
 			<if test="product_type != null"> and #{product_type} = sp.product_type </if>
-			<if test="product_province != null"> and #{product_province} = p.product_province </if>
 			<if test="store_num != null"> and sp.store_num >= ${store_num} </if>
 			<if test="product_id != null"> and sp.product_id = #{product_id}</if>
-			<if test="id != null"> and sp.id = #{id}</if>
+			<if test="product_category_id != null"> and sp.product_category_id = #{product_category_id}</if>
 			<if test="home_flag != null"> and sp.home_flag = #{home_flag}</if>
 			<if test="hot_flag != null"> and sp.hot_flag = #{hot_flag}</if>
 			<if test="now_time != null"> and #{now_time} >= sp.eff_time and sp.dff_time >= #{now_time}</if>
@@ -74,6 +79,7 @@
 	<select id="queryPlatfromProduct"  parameterType="supplierProduct" resultType="supplierProduct">
 		select * from ll_supplier_product sp
 		<where>
+			<if test="id != null"> and sp.id = #{id}</if>
 			<if test="supplier_id != null"> and sp.supplier_id = #{supplier_id}</if>
 			<if test="customer_id != null"> and sp.customer_id = #{customer_id}</if>
 			<if test="status != null"> and exists( select 1 from ll_product p where p.status = #{status} and p.id = sp.product_id )</if>
@@ -81,7 +87,7 @@
 			<if test="product_type_name != null"> and #{product_type_name} = sp.product_type_name </if>
 			<if test="store_num != null"> and sp.store_num >= #{store_num} </if>
 			<if test="product_id != null"> and sp.product_id = #{product_id}</if>
-			<if test="id != null"> and sp.id = #{id}</if>
+			<if test="product_category_id != null"> and sp.product_category_id = #{product_category_id}</if>
 			<if test="home_flag != null"> and sp.home_flag = #{home_flag}</if>
 			<if test="hot_flag != null"> and sp.hot_flag = #{hot_flag}</if>
 		</where>
@@ -89,8 +95,7 @@
 	</select>
 	
 	<select id="findSupplierProductBySpid" parameterType="supplierProduct" resultType="supplierProduct">
-		select sp.*,p.product_limit_points ,p.give_points from ll_supplier_product sp, ll_product p where sp.product_id = p.id 
-		and sp.id = #{value}
+		select sp.* from ll_supplier_product sp where sp.id = #{value}
 	</select>
 	<select id="querySupplierProductBySupplierParentCustomerId" parameterType="map" resultType="supplierProduct">
 		select p.* from ll_supplier l,ll_supplier_product p where l.parent_customer_id = #{parentcustomerid} and l.id = p.supplier_id and l.customer_id!=#{customerid}
@@ -108,8 +113,7 @@
 	</select>
 	
 	<select id="querySupplierProductByIdList" resultType="supplierProduct">
-		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title  from ll_supplier_product sp, ll_product p
-		where p.id = sp.product_id and sp.id in
+		select sp.* from ll_supplier_product sp	where sp.id in
 		<foreach collection="list" item="id" index="index"
             open="(" close=")" separator=",">
             #{id}
@@ -117,9 +121,36 @@
 		
 	</select>	
 	<select id="querySupplierProductByIdsString" parameterType="string" resultType="supplierProduct">
-		select sp.*,(select name from ll_supplier where id = sp.supplier_id) supplier_name,p.product_limit_points ,p.give_points ,p.head_img,p.product_title  from ll_supplier_product sp, ll_product p
-		where p.id = sp.product_id and sp.id in (${value})
+		select sp.*  from ll_supplier_product sp
+		where sp.id in (${value})
 		
+	</select>
+	
+	<insert id="createSupplierProductCategory" parameterType="supplierProductCategory">
+		insert into ll_supplier_product_category(supplier_id,supplier_type_id,name,code,create_time,seq,tag_flag,status,modify_time) 
+		values(#{supplier_id},#{supplier_type_id},#{name},#{code},#{create_time},#{seq},#{tag_flag},#{status},#{modify_time})
+	</insert>
+	
+	<update id="updateSupplierProductCategory" parameterType="supplierProductCategory">
+		update ll_supplier_product_category 
+		<set>
+			<if test="name != null">name = #{name} ,</if>
+			<if test="status != null">status = #{status} ,</if>
+			<if test="seq != null">seq = #{seq} ,</if>
+			<if test="tag_flag != null">tag_flag = #{tag_flag} ,</if>
+			<if test="modify_time != null">modify_time = #{modify_time} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="querySupplierProductCategory" parameterType="supplierProductCategory" resultType="supplierProductCategory">
+		select * from ll_supplier_product_category
+		<where>
+			<if test="supplier_id != null">and supplier_id = #{supplier_id}  </if>
+			<if test="status != null">and status = #{status}  </if>
+			<if test="id != null">and id = #{id}  </if>
+		</where>
+		order by tag_flag,seq 
 	</select>
 	
 </mapper>

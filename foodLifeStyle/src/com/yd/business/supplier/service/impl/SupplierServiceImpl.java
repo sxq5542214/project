@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.bean.CustomerDiscountBean;
 import com.yd.business.customer.bean.CustomerDiscountGroupBean;
 import com.yd.business.customer.service.ICustomerDiscountGroupService;
@@ -19,15 +20,15 @@ import com.yd.business.customer.service.ICustomerDiscountService;
 import com.yd.business.customer.service.ICustomerService;
 import com.yd.business.other.dao.IConfigAttributeDao;
 import com.yd.business.product.bean.ProductBean;
-import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.IProductService;
-import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierDiscountRelationBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.supplier.bean.SupplierTypeBean;
 import com.yd.business.supplier.dao.ISupplierDao;
 import com.yd.business.supplier.service.ISupplierDiscountRelationService;
 import com.yd.business.supplier.service.ISupplierPowerLogService;
+import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
 import com.yd.util.DateUtil;
 import com.yd.util.NumberUtil;
@@ -67,6 +68,31 @@ public class SupplierServiceImpl extends BaseService implements
 		return supplierDao.querySupplierByCustomerId(customerId);
 	}
 
+	/**
+	 * 
+	 * @param customer
+	 * @param name
+	 * @param type
+	 */
+	@Override
+	public void createSupplier(CustomerBean customer,String openid,String name,Integer type) {
+		SupplierBean bean = new SupplierBean();
+		bean.setCustomer_id(customer.getId());
+		bean.setName(name);
+		bean.setContacts_name(customer.getContacts_name());
+		bean.setContacts_phone(customer.getContacts_phone());
+		bean.setOpenid(openid);
+		bean.setCreate_time(DateUtil.getNowDateStr());
+		bean.setExpired_day(0);
+		bean.setBalance(0);
+		bean.setPoints(0);
+		bean.setType(type);
+		bean.setStatus(SupplierBean.STATUS_Y);
+		
+		supplierDao.insertSupplier(bean);
+		
+	}
+	
 	@Override
 	public String insertSupplier(SupplierBean bean,String disGroupIds) {
 		// TODO Auto-generated method stub
@@ -165,8 +191,18 @@ public class SupplierServiceImpl extends BaseService implements
 
 	@Override
 	public SupplierBean findSupplierById(Integer id) {
-		// TODO Auto-generated method stub
 		return supplierDao.findSupplierById(id);
+	}
+	@Override
+	public SupplierBean findSupplier(Integer id,String openid) {
+		SupplierBean bean = new SupplierBean();
+		bean.setOpenid(openid);
+		bean.setId(id);
+		List<SupplierBean> list = supplierDao.listSupplier(bean);
+		if(list.size()> 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 	@Override

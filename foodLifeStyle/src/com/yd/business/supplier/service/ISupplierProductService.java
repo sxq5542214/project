@@ -1,10 +1,11 @@
-package com.yd.business.product.service;
+package com.yd.business.supplier.service;
 
 import java.util.List;
 
-import com.yd.business.product.bean.SupplierProductAttachBean;
-import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.supplier.bean.CustomerSupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductAttachBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductCategoryBean;
 
 public interface ISupplierProductService {
 	public int insertSupplierProduct(SupplierProductBean bean);
@@ -29,4 +30,8 @@ public interface ISupplierProductService {
 	void createOrUpdateSupplierProduct(SupplierProductBean bean);
 	List<SupplierProductBean> querySupplierProductByIds(String ids);
 	List<SupplierProductBean> querySupplierProductByIds(List<Integer> ids);
+	void createSupplierProductCategory(SupplierProductCategoryBean bean);
+	void updateSupplierProductCategory(SupplierProductCategoryBean bean);
+	SupplierProductCategoryBean findSupplierProductCategoryById(Integer id);
+	List<SupplierProductCategoryBean> querySupplierProductCategoryBySupplierId(int supplierId, Integer status);
 }

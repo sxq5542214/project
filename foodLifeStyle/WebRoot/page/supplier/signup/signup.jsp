@@ -37,18 +37,18 @@ List<SupplierTypeBean> typeList = (List<SupplierTypeBean>)request.getAttribute("
     <div class="container">
         <h2 class="form-signup-heading" style="text-align: center;">店铺免费入驻</h2>
 
-      <form class="form-signup" action="" method="post">
+      <form class="form-signup" action="wx/supplier/supplierSignup.html" method="post" onsubmit="return checkRequir()">
         <label class="form-signup-heading">【<%=user.getNick_name() %>】请填：</label>
-        
-        <label for="userName" class="sr-only">真实姓名</label>
-        <input type="text" id="userName" name="userName" class="form-control" placeholder="请输入真实姓名" required="required">
+        <input type="hidden" name="openid" value="<%=user.getOpenid()%>">
+        <label for="custName" class="sr-only">真实姓名</label>
+        <input type="text" id="custName" name="custName" class="form-control" placeholder="请输入真实姓名" required="required">
         <label for="phoneNo" class="sr-only">手机号</label>
         <input type="number" id="phoneNo" name="phoneNo" class="form-control" placeholder="请输入手机号" required="required">
         <label for="supplierName" class="sr-only">店铺名称</label>
         <input type="text" id="supplierName" name="supplierName" class="form-control" placeholder="请输入店铺名称" required="required" autofocus="">
         
     
-		<select class="selectpicker form-control show-tick"  data-live-search="true" title="请选择店铺分类">
+		<select id="supplierType" name="supplierType" class="selectpicker form-control show-tick"  data-live-search="true" title="请选择店铺分类"   >
 			<% for(SupplierTypeBean parentType : parentTypeList){ %>
 			<optgroup label="<%=parentType.getName()%>">
 				<%for(SupplierTypeBean type : typeList){
@@ -66,11 +66,21 @@ List<SupplierTypeBean> typeList = (List<SupplierTypeBean>)request.getAttribute("
             <input type="checkbox" value="remember-me" checked="checked"> 同意入驻协议
           </label>
         </div> -->
-        <button class="btn btn-lg btn-primary btn-block" style="margin-top: 15px;" type="submit">确定提交</button>
+        <button  class="btn btn-lg btn-primary btn-block" style="margin-top: 15px;" type="submit">确定提交</button>
       </form>
 
 		
     </div> <!-- /container -->
+<script type="text/javascript">
+function checkRequir(){
+	var supplierType = $("#supplierType").val() ;
+	if(supplierType == ''){
+		alert("请选择店铺分类");
+		return false;
+	}
+	return true;
+}
 
+</script>
 </body>
 </html>

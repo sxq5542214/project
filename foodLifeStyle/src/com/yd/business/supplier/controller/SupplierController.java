@@ -22,13 +22,13 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.ICustomerService;
 import com.yd.business.product.bean.ProductTypeBean;
-import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.IProductTypeService;
-import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierPowerLogBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.supplier.bean.SupplierTypeBean;
 import com.yd.business.supplier.service.ISupplierPowerLogService;
+import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
@@ -36,6 +36,7 @@ import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
 import com.yd.util.MD5;
 import com.yd.util.NumberUtil;
+import com.yd.util.StringUtil;
 /**
  * 
  * @author Anlins
@@ -557,7 +558,7 @@ public class SupplierController extends BaseController {
 	
 
 	/**
-	 * 跳转至我的商户
+	 * 跳转至商户注册界面
 	 * @param request
 	 * @param response
 	 * @return
@@ -584,5 +585,40 @@ public class SupplierController extends BaseController {
 			log.error(e,e);
 		} 
 		return new ModelAndView(PAGE_SUPPLIER_SIGNUP_PAGE,map);
+	}
+	
+
+	/**
+	 *	商户注册
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping("/wx/supplier/supplierSignup.html")
+	public ModelAndView supplierSignup(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		
+		try {
+			String openid = request.getParameter("openid");
+			String custName = request.getParameter("custName");
+			String phoneNo = request.getParameter("phoneNo");
+			String supplierName = request.getParameter("supplierName");
+			String supplierType = request.getParameter("supplierType");
+			
+			if(StringUtil.isNotNull(phoneNo)) {
+				customerService.createCustomer(custName, phoneNo, openid);
+			}
+			
+			CustomerBean customer = customerService.findCustomerByPhone(phoneNo);
+			supplierService.createSupplier(customer,openid, supplierName, Integer.parseInt(supplierType));
+			
+			//创建成功后跳转至商户主页
+			return new ModelAndView();
+			
+		} catch (Exception e) {
+			log.error(e,e);
+			writeJson(response, ERROR_TIPS_STRING);
+		} 
+		return null;
 	}
 }

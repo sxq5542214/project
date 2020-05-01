@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
-import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.supplier.bean.SupplierCouponConfigBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierCouponRuleBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.supplier.dao.ISupplierCouponDao;
 
 @Repository("supplierCouponDao")

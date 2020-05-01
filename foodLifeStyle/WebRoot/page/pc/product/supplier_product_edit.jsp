@@ -1,5 +1,5 @@
 <%@page import="com.yd.business.supplier.bean.SupplierBean"%>
-<%@page import="com.yd.business.product.bean.SupplierProductBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@page import="com.yd.business.product.bean.ProductBean"%>
 <%@page import="com.yd.util.DateUtil"%>
 <%@page import="com.yd.util.StringUtil"%>

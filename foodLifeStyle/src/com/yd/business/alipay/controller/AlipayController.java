@@ -21,8 +21,8 @@ import com.yd.business.customer.bean.CustomerAdminBean;
 import com.yd.business.customer.bean.CustomerConsumeInfoBean;
 import com.yd.business.customer.service.ICustomerAdminService;
 import com.yd.business.customer.service.ICustomerConsumeInfoService;
-import com.yd.business.product.bean.SupplierProductBean;
-import com.yd.business.product.service.ISupplierProductService;
+import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.user.bean.UserConsumeInfoBean;
 import com.yd.business.user.service.IUserConsumeInfoService;
 

@@ -238,23 +238,29 @@ public class CustomerServiceImpl extends BaseService implements
 		customerDao.updateCustomerBalance(id, balance);
 	}
 	
+	/**
+	 * 如果号码已存在，则使用已有的客户
+	 */
 	@Override
-	public CustomerBean findCustomerByOrderCode(String orderCode){
-		CustomerBean customer = null;
-		if(StringUtil.isNotNull(orderCode)){
-			
-			if(orderCode.startsWith(IUserConsumeInfoService.OUTTRADE_TYPE_PARTNER)){
-				//到合作伙伴的定单表中查找
-				
-				
-			}else {
-				
-			}
-			
-			
+	public void createCustomer(String custName,String phoneNo,String openid) {
+		CustomerBean bean ;
+		bean = findCustomerByPhone(phoneNo);
+		if(bean == null) {
+			//没有客户才新建
+			bean = new CustomerBean();
+			bean.setOpenid(openid);
+			bean.setName(custName);
+			bean.setUsername(phoneNo);
+			bean.setContacts_name(custName);
+			bean.setContacts_phone(phoneNo);
+			bean.setBalance(0);
+			bean.setRecharge_balance(0);
+			bean.setPoints(0);
+			bean.setType(CustomerBean.TYPE_REG);
+			bean.setCreate_time(DateUtil.getNowDateStr());
+			insertCustomer(bean);
 		}
 		
-		return customer;
 	}
 	
 }

@@ -28,7 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -36,11 +38,22 @@ import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 public class ImageUtils {
 	private static Logger log = Logger.getLogger(ImageUtils.class);
@@ -54,6 +67,11 @@ public class ImageUtils {
 	public static String IMAGE_TYPE_PNG = "png";// 可移植网络图形
 	public static String IMAGE_TYPE_PSD = "psd";// Photoshop的专用格式Photoshop
 
+	private static String TEMP_FOLDER = "/temp";
+
+	private static DiskFileItemFactory factory = null;
+	private static ServletFileUpload upload = null;
+	
 	public final static void scale(String srcImageFile, String result, int scale, boolean flag) {
 		try {
 			BufferedImage src = ImageIO.read(new File(srcImageFile)); // 读入文件
@@ -76,7 +94,108 @@ public class ImageUtils {
 			log.error(e, e);
 		}
 	}
+	
+	/**
+	 * 用给定的宽高生成图片
+	 * @param fi
+	 * @param targetSrc
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	public final static boolean compressPic(FileItem fi,String targetSrc,int width,int height) {
+		try {
+			Thumbnails.of(fi.getInputStream()).size(width, height).toFile(targetSrc);
+			return true;
+		} catch (IOException e) {
+			log.error(e,e);
+			return false;
+		}
+	}
+	
+	/**
+	 * 上传文件，并按指定的宽高存储
+	 * @param request
+	 * @param targetSrc
+	 * @param width
+	 * @param height
+	 * @return	写入文件的具体目录
+	 * @throws Exception
+	 */
+	public final static String uploadFileByRequest(HttpServletRequest request,String targetDir,int width,int height) throws Exception {
+		File file = new File(targetDir);
+		if (!file.exists())
+			file.mkdirs();
+		// 获得磁盘文件条目工厂
+		if(factory == null) {
 
+			// 如果没以下两行设置的话，上传大的 文件 会占用 很多内存，
+			// 设置暂时存放的 存储室 , 这个存储室，可以和 最终存储文件 的目录不同
+			/**
+			 * 原理 它是先存到 暂时存储室，然后在真正写到 对应目录的硬盘上， 按理来说 当上传一个文件时，其实是上传了两份，第一个是以 .tem
+			 * 格式的 然后再将其真正写到 对应目录的硬盘上
+			 */
+			factory = new DiskFileItemFactory();
+			factory.setRepository(new File(TEMP_FOLDER ));
+			// 设置 缓存的大小，当上传文件的容量超过该缓存时，直接放到 暂时存储室
+			factory.setSizeThreshold(1024 * 1024);
+
+			// 高水平的API文件上传处理
+			upload = new ServletFileUpload(factory);
+		}
+
+		boolean flag = false;
+		try {
+			// 提交上来的信息都在这个list里面
+			// 这意味着可以上传多个文件
+//			List<FileItem> list = upload.parseRequest(request);
+			MultiValueMap<String, MultipartFile> map = ((DefaultMultipartHttpServletRequest)request).getMultiFileMap();
+			List<CommonsMultipartFile> mfList = null;
+			FileItem item = null;
+			for(String key : map.keySet()) {
+				CommonsMultipartFile cmf = (CommonsMultipartFile) map.get(key).get(0);
+				if(cmf != null) {
+					item = cmf.getFileItem();
+					break;
+				}
+			}
+			
+			// 获取上传的文件
+			if(item != null && StringUtil.isNotNull(item.getName())) {
+				
+				String fileName = item.getName();
+				String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+				String targetFileSrc = targetDir + DateUtil.formatDatePure(new Date()) + "." + fileExt;
+				
+				System.out.println("存放目录:" + file.getAbsolutePath());
+				System.out.println("文件名:" + file.getName());
+				System.out.println("文件大小:" + item.getSize());
+				System.out.println("文件上传名称:"+item.getName().substring(item.getName().indexOf(".")+1));
+				
+				// 真正写到磁盘上
+				flag = compressPic(item, targetFileSrc, width, height);
+				
+				if(flag) {
+					return targetFileSrc;
+				}
+
+			}
+		}catch (Exception e) {
+			log.error(e,e);
+			throw new Exception("图片上传失败！");
+		}
+		return null;
+	}
+	
+	private static FileItem getUploadFileItem(List<FileItem> list) {
+		for (FileItem fileItem : list) {
+			if (!fileItem.isFormField()) {
+				return fileItem;
+			}
+		}
+		return null;
+	}
+	
 	public final static void scale2(String srcImageFile, String result, int height, int width, boolean bb) {
 		try {
 			double ratio = 0.0; // 缩放比例
@@ -588,19 +707,23 @@ public class ImageUtils {
 
 	public static void main(String[] args) {
 
+		System.out.println("E:\\Program Files\\apache\\tomcat-8.5.37\\webapps\\foodLifeStyle\\/images/upload/thumb/6/20200501222817.jpg".lastIndexOf("/"+1));
+		
+		
 //		String srcFilePath = "D:\\Documents\\Pictures\\16a8e4bda0e5a5bde982b1e69e97e5928cd71b.jpg";
-		 String srcFilePath = "https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=1497772711,3850772681&fm=85&s=D6391BC74A1268D46A29C0A90300A002";
-		String descFilePath = "D:\\Documents\\Pictures\\newfload\\8k4k_1.jpg";
-		float quality = 0.8f;
-		try {
-			long time = System.currentTimeMillis();
-			boolean flag = compressPic(srcFilePath, descFilePath, quality);
-
-			System.out.println(flag + ",cost:" + (System.currentTimeMillis() - time));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+//		String srcFilePath = "https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=1497772711,3850772681&fm=85&s=D6391BC74A1268D46A29C0A90300A002";
+//		String descFilePath = "D:\\Documents\\Pictures\\newfload\\8k4k_1.jpg";
+//		float quality = 0.8f;
+//		try {
+//			long time = System.currentTimeMillis();
+//			boolean flag = compressPic(srcFilePath, descFilePath, quality);
+//
+//			System.out.println(flag + ",cost:" + (System.currentTimeMillis() - time));
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 		// // 1-缩放图像：
 		// // 方法一：按比例缩放

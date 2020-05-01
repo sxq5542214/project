@@ -1,9 +1,11 @@
 /**
  * 
  */
-package com.yd.business.product.bean;
+package com.yd.business.supplier.bean;
 
 import org.apache.ibatis.type.Alias;
+
+import com.yd.business.product.bean.ProductBean;
 
 /**
  * @author ice
@@ -12,14 +14,17 @@ import org.apache.ibatis.type.Alias;
 @Alias("supplierProduct")
 public class SupplierProductBean extends ProductBean {
 	
-	public static int PACKAGE_NUM_DEFAULT = 1;
+	public static final int PACKAGE_NUM_DEFAULT = 1;
 	
-	public static int COUPON_SHOW_PRODUCT = 1;
+	public static final int COUPON_SHOW_PRODUCT = 1;
 
-	public static int NO_MATCHING_PRODUCT = 0;
+	public static final int NO_MATCHING_PRODUCT = 0;
 	
-	public static int HOME_FLAG_YES = 1;
-	public static int HOME_FLAG_NO = 0;
+	public static final int HOME_FLAG_YES = 1;
+	public static final int HOME_FLAG_NO = 0;
+	public static final int DELETE_FLAG_YES = 1;
+	public static final int DELETE_FLAG_NO = 0;
+	
 	
 	
 	public static Integer ZERO = 0;
@@ -35,11 +40,14 @@ public class SupplierProductBean extends ProductBean {
 	private String modify_time;
 	private Integer modify_admin;
 	private String supplier_name;
+	private Integer product_category_id;
+	private String product_category_name;
+	private String product_img;
 	private Integer min_luckymoney;//最小红包金额
 	private Integer max_luckymoney;//最大红包金额
 	private String  now_time;	   //当前时间
 	private Integer product_offset_points;//可以抵用的积分
-	
+	private Integer delete_flag;
 	//此字段目前用于优惠卷
 	private Integer coupon_discount_product;	//优惠卷可以抵扣的商品
 	
@@ -53,6 +61,12 @@ public class SupplierProductBean extends ProductBean {
 	private Integer home_flag;
 	private Integer prime_cost_price;
 	
+	public Integer getDelete_flag() {
+		return delete_flag;
+	}
+	public void setDelete_flag(Integer delete_flag) {
+		this.delete_flag = delete_flag;
+	}
 	public String getSupplier_name() {
 		return supplier_name;
 	}
@@ -137,6 +151,12 @@ public class SupplierProductBean extends ProductBean {
 	public void setNow_time(String now_time) {
 		this.now_time = now_time;
 	}
+	public String getProduct_img() {
+		return product_img;
+	}
+	public void setProduct_img(String product_img) {
+		this.product_img = product_img;
+	}
 	public Integer getProduct_offset_points() {
 		return product_offset_points;
 	}
@@ -178,5 +198,17 @@ public class SupplierProductBean extends ProductBean {
 	}
 	public void setPrime_cost_price(Integer prime_cost_price) {
 		this.prime_cost_price = prime_cost_price;
+	}
+	public Integer getProduct_category_id() {
+		return product_category_id;
+	}
+	public void setProduct_category_id(Integer product_category_id) {
+		this.product_category_id = product_category_id;
+	}
+	public String getProduct_category_name() {
+		return product_category_name;
+	}
+	public void setProduct_category_name(String product_category_name) {
+		this.product_category_name = product_category_name;
 	}
 }

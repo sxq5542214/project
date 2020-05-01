@@ -1,6 +1,6 @@
 <%@page import="com.yd.business.supplier.bean.SupplierCouponConfigBean"%>
 <%@page import="com.yd.basic.framework.pageination.PageinationData"%>
-<%@page import="com.yd.business.product.bean.SupplierProductBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@page import="com.yd.util.*"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%

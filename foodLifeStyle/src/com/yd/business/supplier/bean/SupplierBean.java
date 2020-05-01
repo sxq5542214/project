@@ -26,6 +26,7 @@ public class SupplierBean extends BaseBean {
 	private Integer level;
 	private String parent_name;
 	private String name;
+	private String openid;
 	private Integer status;
 	private Integer type;
 	private Integer issale;
@@ -43,6 +44,12 @@ public class SupplierBean extends BaseBean {
 	private String discount_name;
 	private String disinfo;
 	
+	public String getOpenid() {
+		return openid;
+	}
+	public void setOpenid(String openid) {
+		this.openid = openid;
+	}
 	public String getDisinfo() {
 		return disinfo;
 	}

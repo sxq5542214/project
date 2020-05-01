@@ -18,6 +18,9 @@ public class ImageBean extends BaseBean {
 	public static final int STATUS_DISABLE = 0;
 	public static final int STATUS_FAILD = -1;
 	
+	public static final int thumb_width = 100;
+	public static final int thumb_height = 100;
+	public static final String THUMB_IMG_DIR = "images/upload/thumb/";
 	
 	
 	private Integer id;

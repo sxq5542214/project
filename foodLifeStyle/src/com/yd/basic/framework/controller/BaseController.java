@@ -52,6 +52,7 @@ public abstract class BaseController extends MultiActionController {
 	public static final String PAGESIZE = "pageSize";
 	public static final String NOWPAGE = "nowPage";
 	private static final String _CURRENT_USER = CustomerServiceImpl._CURRENT_USER;
+	protected static final String ERROR_TIPS_STRING = "<h1>界面出错，请联系客服微信：yoyoyo1105  处理</h1>";
 //	protected Map<String, Object> model = new HashMap<String, Object>();
 //	@Override
 //	protected ModelAndView handleRequestInternal(HttpServletRequest request,

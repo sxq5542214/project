@@ -3,7 +3,7 @@
 <%@page import="com.yd.business.activity.bean.ActivityInstanceBean"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@page import="com.yd.business.supplier.bean.CustomerSupplierProductBean"%>
-<%@page import="com.yd.business.product.bean.SupplierProductBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@page import="com.yd.business.activity.bean.ActivityConfigBean"%>
 <%@page import="com.yd.util.StringUtil"%>
 

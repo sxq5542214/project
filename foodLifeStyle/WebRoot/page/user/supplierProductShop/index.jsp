@@ -1,5 +1,5 @@
 <%@page import="com.yd.business.other.bean.AdvertisingBean"%>
-<%@page import="com.yd.business.product.bean.SupplierProductBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@page import="com.yd.business.user.bean.UserWechatBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%

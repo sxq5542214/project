@@ -5,7 +5,7 @@ package com.yd.business.user.service;
 
 import java.util.List;
 
-import com.yd.business.product.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.user.bean.UserCartBean;
 
 /**

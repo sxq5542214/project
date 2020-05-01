@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.controller.BaseController;
-import com.yd.business.product.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.user.bean.UserCartBean;
 import com.yd.business.user.service.IUserCartService;
 import com.yd.util.CookieUtil;

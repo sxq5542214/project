@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.yd.basic.framework.bean.BaseBean;
 import com.yd.business.area.bean.AreaDataBean;
-import com.yd.business.product.bean.SupplierProductBean;
 
 /**
  * @author ice

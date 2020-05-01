@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.customer.service.ICustomerService;
-import com.yd.business.product.bean.SupplierProductBean;
-import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierPowerLogBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.supplier.dao.ISupplierPowerLogDao;
 import com.yd.business.supplier.service.ISupplierPowerLogService;
+import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
 import com.yd.util.DateUtil;
 @Service("supplierPowerLogService")

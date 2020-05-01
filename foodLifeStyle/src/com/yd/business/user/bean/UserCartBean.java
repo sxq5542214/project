@@ -6,7 +6,7 @@ package com.yd.business.user.bean;
 import java.util.List;
 
 import com.yd.basic.framework.bean.BaseBean;
-import com.yd.business.product.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
 
 /**
  * @author ice

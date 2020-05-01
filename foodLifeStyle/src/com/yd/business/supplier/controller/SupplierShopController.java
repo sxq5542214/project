@@ -21,12 +21,13 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.ICustomerService;
 import com.yd.business.product.bean.ProductTypeBean;
-import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.IProductTypeService;
-import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierPowerLogBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductCategoryBean;
 import com.yd.business.supplier.service.ISupplierPowerLogService;
+import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
@@ -40,6 +41,7 @@ import com.yd.util.StringUtil;
  */
 @Controller
 public class SupplierShopController extends BaseController {
+	public static final String PAGE_SUPPLIERSHOPMANAGER_CATEGORY = "/page/supplier/shop/manager/category.jsp";
 	public static final String PAGE_SUPPLIERSHOP_CATEGORY = "/page/supplier/shop/category.jsp";
 
 	@Autowired
@@ -73,7 +75,7 @@ public class SupplierShopController extends BaseController {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 跳转至商户商城界面
 	 * @param request
@@ -119,4 +121,52 @@ public class SupplierShopController extends BaseController {
 		}
 		return null;
 	}
+	/**
+	 * 跳转至商户商城界面
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping("/wx/supplier/shop/toManagerCategoryPage.html")
+	public ModelAndView toManagerCategoryPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		String sid = request.getParameter("sid");
+		String openid = request.getParameter("openid");
+		try{
+			Integer supplier_id = SupplierBean.PLATFROM_SUPPLIER_ID;
+			if(StringUtil.isNotNull(sid)){
+				supplier_id = Integer.parseInt(sid);
+			}
+			
+			//判断openid 和 商户ID是否一致，不一致可能是被改了商户id
+			SupplierBean supplier = supplierService.findSupplier(supplier_id,openid);
+			if(supplier != null) {
+				List<SupplierProductCategoryBean> productCategoryList = supplierProductService.querySupplierProductCategoryBySupplierId(supplier_id,SupplierProductCategoryBean.STATUS_YES);
+				
+				SupplierProductBean condition = new SupplierProductBean();
+				condition.setSupplier_id(supplier_id);
+				condition.setStatus(SupplierProductBean.STATUS_UP);
+				condition.setNow_time(DateUtil.getNowDateStr());
+				condition.setOrderby(" order by pc.seq , product_category_id,sp.seq  asc ");
+				List<SupplierProductBean> productList = supplierProductService.listSupplierProduct(condition );
+				
+//					UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+				Map<String, Object> model = new HashMap<String, Object>();
+//					model.put("user", user);
+				model.put("productCategoryList", productCategoryList);
+				model.put("productList", productList);
+				model.put("openid", openid);
+				model.put("supplier", supplier);
+
+				return new ModelAndView(PAGE_SUPPLIERSHOPMANAGER_CATEGORY, model);	
+			}else {
+				writeJson(response, "您没有权限访问他人的店铺信息");
+			}
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	
+	
 }

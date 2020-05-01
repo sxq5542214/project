@@ -29,14 +29,20 @@
 			<if test="customer_id!=null and customer_id!=''">
 				and customer_id=#{customer_id}
 			</if>
+			<if test="id != null ">
+				and id = #{id}
+			</if>
+			<if test="openid !=null ">
+				and openid = #{openid}
+			</if>
 		</where>
 	</select>
 	<select id="querySupplierByPower" resultType="supplier" parameterType="int">
 		select l.*,GROUP_CONCAT('[',(select distinct s.group_name from ll_supplier_discount_relation s where s.supplier_id = l.id),']') disinfo from ll_supplier l where l.parent_customer_id = #{value} and exists (select 1 from ll_supplier_discount_relation where supplier_id = l.id) group by l.name
 	</select>
 	<insert id="insertSupplier" parameterType="supplier" useGeneratedKeys="true" keyProperty="id">
-		insert into ll_supplier(customer_id,parent_customer_id,level,parent_name,name,status,type,issale,address,balance,points,deposit_money,create_time,contacts_name,contacts_phone,remark,modify_time,discount)
-		values(#{customer_id},#{parent_customer_id},#{level},#{parent_name},#{name},#{status},#{type},#{issale},#{address},#{balance},#{points},#{deposit_money},#{create_time},#{contacts_name},#{contacts_phone},#{remark},#{modify_time},#{discount})
+		insert into ll_supplier(customer_id,parent_customer_id,level,parent_name,name,openid,status,type,issale,address,balance,points,deposit_money,create_time,contacts_name,contacts_phone,remark,modify_time,discount)
+		values(#{customer_id},#{parent_customer_id},#{level},#{parent_name},#{name},#{openid},#{status},#{type},#{issale},#{address},#{balance},#{points},#{deposit_money},#{create_time},#{contacts_name},#{contacts_phone},#{remark},#{modify_time},#{discount})
 	</insert>
 	<update id="updateSupplier" parameterType="supplier">
 		update ll_supplier 

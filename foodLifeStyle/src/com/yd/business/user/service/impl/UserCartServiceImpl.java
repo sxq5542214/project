@@ -16,9 +16,9 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
-import com.yd.business.product.bean.SupplierProductBean;
 import com.yd.business.product.service.IProductService;
-import com.yd.business.product.service.ISupplierProductService;
+import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.user.bean.UserCartBean;
 import com.yd.business.user.bean.UserCartBean.CartInfo;
 import com.yd.business.user.service.IUserCartService;

@@ -1,4 +1,4 @@
-package com.yd.business.product.dao.impl;
+package com.yd.business.supplier.dao.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,9 +7,10 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
-import com.yd.business.product.bean.SupplierProductAttachBean;
-import com.yd.business.product.bean.SupplierProductBean;
-import com.yd.business.product.dao.ISupplierProductDao;
+import com.yd.business.supplier.bean.SupplierProductAttachBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductCategoryBean;
+import com.yd.business.supplier.dao.ISupplierProductDao;
 @Repository("supplierProductDao")
 public class SupplierProductDaoImpl extends BaseDao implements
 		ISupplierProductDao {
@@ -91,4 +92,17 @@ public class SupplierProductDaoImpl extends BaseDao implements
 		return sqlSessionTemplate.selectList(NAMESPACE +"querySupplierProductByIdsString", ids);
 	}
 
+	@Override
+	public void createSupplierProductCategory(SupplierProductCategoryBean bean) {
+		sqlSessionTemplate.insert(NAMESPACE +"createSupplierProductCategory", bean);
+	}
+	@Override
+	public List<SupplierProductCategoryBean> querySupplierProductCategory(SupplierProductCategoryBean bean){
+		return sqlSessionTemplate.selectList(NAMESPACE + "querySupplierProductCategory", bean);
+	}
+	@Override
+	public void updateSupplierProductCategory(SupplierProductCategoryBean bean) {
+		sqlSessionTemplate.update(NAMESPACE +"updateSupplierProductCategory", bean);
+	}
+	
 }

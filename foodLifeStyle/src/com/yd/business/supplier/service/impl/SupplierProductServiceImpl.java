@@ -1,4 +1,4 @@
-package com.yd.business.product.service.impl;
+package com.yd.business.supplier.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +11,13 @@ import com.yd.basic.framework.service.BaseService;
 import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.order.service.IOrderService;
-import com.yd.business.product.bean.SupplierProductAttachBean;
-import com.yd.business.product.bean.SupplierProductBean;
-import com.yd.business.product.dao.ISupplierProductDao;
-import com.yd.business.product.service.ISupplierProductService;
 import com.yd.business.supplier.bean.CustomerSupplierProductBean;
 import com.yd.business.supplier.bean.SupplierBean;
+import com.yd.business.supplier.bean.SupplierProductAttachBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductCategoryBean;
+import com.yd.business.supplier.dao.ISupplierProductDao;
+import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
 import com.yd.util.DateUtil;
 import com.yd.util.RandomUtil;
@@ -40,8 +41,14 @@ public class SupplierProductServiceImpl extends BaseService implements
 
 	@Override
 	public void updateSupplierProduct(SupplierProductBean bean) {
+		
+//		SupplierProductBean old = supplierProductDao.findSupplierProductById(bean.getId());
+//		//都不为空,且不一样
+//		if(StringUtil.isNotNull(bean.getProduct_img()) && StringUtil.isNotNull(old.getProduct_img()) && !bean.getProduct_img().equalsIgnoreCase(old.getProduct_img())){
+//			//单机服务可以删除文件。。。。。。  但是如果用图片服务器，则不用删了
+//		}
+		
 		bean.setModify_time(DateUtil.getNowDateStr());
-		// TODO Auto-generated method stub
 		supplierProductDao.updateSupplierProduct(bean);
 	}
 
@@ -70,6 +77,19 @@ public class SupplierProductServiceImpl extends BaseService implements
 	public SupplierProductBean findSupplierProductById(Integer id) {
 		// TODO Auto-generated method stub
 		return supplierProductDao.findSupplierProductById(id);
+	}
+	@Override
+	public SupplierProductCategoryBean findSupplierProductCategoryById(Integer id) {
+		SupplierProductCategoryBean bean = null;
+		if(id != null) {
+			bean = new SupplierProductCategoryBean();
+			bean.setId(id);
+			List<SupplierProductCategoryBean> list = querySupplierProductCategory(bean );
+			if(list.size()>0) {
+				bean = list.get(0);
+			}
+		}
+		return bean;
 	}
 	
 	@Override
@@ -241,6 +261,30 @@ public class SupplierProductServiceImpl extends BaseService implements
 			return 0;
 		}
 		return RandomUtil.nextInt(max_luckMoney, min_luckMoney);
+	}
+	
+	@Override
+	public void createSupplierProductCategory(SupplierProductCategoryBean bean) {
+		bean.setCreate_time(DateUtil.getNowDateStr());
+		bean.setStatus(SupplierProductCategoryBean.STATUS_YES);
+		supplierProductDao.createSupplierProductCategory(bean);
+	}
+	
+	private List<SupplierProductCategoryBean> querySupplierProductCategory(SupplierProductCategoryBean bean){
+		return supplierProductDao.querySupplierProductCategory(bean);
+	}
+	@Override
+	public List<SupplierProductCategoryBean> querySupplierProductCategoryBySupplierId(int supplierId,Integer status){
+		SupplierProductCategoryBean bean = new SupplierProductCategoryBean();
+		bean.setSupplier_id(supplierId);
+		bean.setStatus(status);
+		return querySupplierProductCategory(bean );
+	}
+	
+	@Override
+	public void updateSupplierProductCategory(SupplierProductCategoryBean bean) {
+		bean.setModify_time(DateUtil.getNowDateStr());
+		supplierProductDao.updateSupplierProductCategory(bean);
 	}
 	
 }

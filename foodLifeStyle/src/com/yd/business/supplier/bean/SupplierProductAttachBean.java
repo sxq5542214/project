@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yd.business.product.bean;
+package com.yd.business.supplier.bean;
 
 import org.apache.ibatis.type.Alias;
 

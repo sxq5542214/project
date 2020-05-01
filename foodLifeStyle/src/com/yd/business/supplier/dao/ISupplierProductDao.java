@@ -1,9 +1,10 @@
-package com.yd.business.product.dao;
+package com.yd.business.supplier.dao;
 
 import java.util.List;
 
-import com.yd.business.product.bean.SupplierProductAttachBean;
-import com.yd.business.product.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductAttachBean;
+import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierProductCategoryBean;
 
 public interface ISupplierProductDao {
 
@@ -19,4 +20,7 @@ public interface ISupplierProductDao {
 	List<SupplierProductAttachBean> queryAttachProduct(SupplierProductAttachBean bean);
 	public List<SupplierProductBean> querySupplierProductByIds(List<Integer> ids);
 	public List<SupplierProductBean> querySupplierProductByIds(String ids);
+	public void createSupplierProductCategory(SupplierProductCategoryBean bean);
+	List<SupplierProductCategoryBean> querySupplierProductCategory(SupplierProductCategoryBean bean);
+	void updateSupplierProductCategory(SupplierProductCategoryBean bean);
 }

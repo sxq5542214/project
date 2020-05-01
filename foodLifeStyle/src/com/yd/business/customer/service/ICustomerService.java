@@ -87,5 +87,5 @@ public interface ICustomerService {
 	public CustomerBean queryAdminCustomer();
 	void addCustomerBalanceLog(CustomerBalanceLogBean bean);
 	public void updateCustomerBalance(Integer id, int balance);
-	CustomerBean findCustomerByOrderCode(String orderCode);
+	void createCustomer(String custName, String phoneNo, String openid);
 }
