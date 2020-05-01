@@ -23,4 +23,5 @@ public interface ISupplierProductDao {
 	public void createSupplierProductCategory(SupplierProductCategoryBean bean);
 	List<SupplierProductCategoryBean> querySupplierProductCategory(SupplierProductCategoryBean bean);
 	void updateSupplierProductCategory(SupplierProductCategoryBean bean);
+	void updateSupplierProductsCategoryName(SupplierProductCategoryBean bean);
 }

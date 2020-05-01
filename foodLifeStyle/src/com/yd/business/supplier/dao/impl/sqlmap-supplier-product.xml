@@ -152,5 +152,9 @@
 		</where>
 		order by tag_flag,seq 
 	</select>
+	<update id="updateSupplierProductsCategoryName" parameterType="supplierProductCategory">
+		update ll_supplier_product  set product_category_name = #{name} where product_category_id = #{id}
+	</update>
+	
 	
 </mapper>

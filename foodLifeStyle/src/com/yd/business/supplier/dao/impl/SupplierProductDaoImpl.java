@@ -104,5 +104,9 @@ public class SupplierProductDaoImpl extends BaseDao implements
 	public void updateSupplierProductCategory(SupplierProductCategoryBean bean) {
 		sqlSessionTemplate.update(NAMESPACE +"updateSupplierProductCategory", bean);
 	}
+	@Override
+	public void updateSupplierProductsCategoryName(SupplierProductCategoryBean bean) {
+		sqlSessionTemplate.update(NAMESPACE +"updateSupplierProductsCategoryName", bean);
+	}
 	
 }

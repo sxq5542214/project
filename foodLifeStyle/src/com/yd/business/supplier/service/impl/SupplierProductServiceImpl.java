@@ -284,7 +284,10 @@ public class SupplierProductServiceImpl extends BaseService implements
 	@Override
 	public void updateSupplierProductCategory(SupplierProductCategoryBean bean) {
 		bean.setModify_time(DateUtil.getNowDateStr());
+		//更新分类信息
 		supplierProductDao.updateSupplierProductCategory(bean);
+		//更新所有商户商品里的分类名称
+		supplierProductDao.updateSupplierProductsCategoryName(bean);
 	}
 	
 }
