@@ -1,3 +1,4 @@
+<%@page import="com.yd.basic.framework.context.BaseContext"%>
 <%@page import="com.yd.util.StringUtil"%>
 <%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.supplier.bean.SupplierBean"%>
@@ -11,6 +12,7 @@
 			+ path + "/";
 	String openid = (String)request.getAttribute("openid");
 	SupplierBean supplier = (SupplierBean)request.getAttribute("supplier"); 
+	UserWechatBean user = (UserWechatBean)request.getAttribute("user"); 
 	List<SupplierProductBean> productList = (List<SupplierProductBean>) request.getAttribute("productList");
 	List<SupplierProductCategoryBean> productCategoryList = (List<SupplierProductCategoryBean>) request.getAttribute("productCategoryList");
 	
@@ -27,19 +29,16 @@
 	href="css/user/supplierProductShop/category.css">
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js" type="text/javascript" ></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
-	
-	<script type="text/javascript" src="js/user/supplierProductShop/shoppingCart.js"></script>
-	<script src="js/common/cookieUtil.js"></script>
+	<script type="text/javascript" src="<%=request.getScheme()  %>://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+	<script type="text/javascript" src="js/wechat/weixinInit.js"></script>
 <head>
-<body>
+<body style="">
 	<div style="position: absolute;margin-left: 15px;margin-top: 15px;padding-right: 15px;" onclick="history.go(-1)">
 		<img alt="" src="images/user/supplierProductShop/left.png" style="width: 10px;height: 20px;">
 	</div>
 	<div class="header">
-		<a href="supplier/coupon/toUserCouponCenterPage.do?openid=<%=openid%>">
 		<img alt="" height="100%" width="100%"
 			src="images/shop/topBannerFree.png">
-		</a>
 	</div>
 	<div class="swiper-container">
 <!-- 		<ul class="swiper-container-ul">
@@ -63,7 +62,8 @@
 									<div class="item">
 											<a :href="ite.productUrl" style="text-decoration:none;color: black;">
 										<div class="item-left">
-												<div class="item-img">
+												<div class="item-img" style="position: relative;">
+													<div class="item-corner">{{ite.statusStr}}</div>
 													<img :src="ite.imgUrl" alt="" width="100%" height="100%">
 												</div>
 										</div>
@@ -93,7 +93,15 @@
 				</div>
 		</div>
 			
-			
+			<div id="cartBottom_div" style="position: fixed; background: #3b3b3c; height: 50px; left: 0;right: 0;bottom: 0;display: flex;align-items:center; z-index: 2;">
+				<div style="flex: 1 1 auto;">
+					<div style="width: 100%;color: white;font-size: 1.5rem;">&nbsp;&nbsp;&nbsp;&nbsp;共计：
+						<span style=""><%=productList.size() %>件商品</span>
+					</div>
+				</div>
+				<div style="height: 50px;padding: 0 30px; font-size: 1.2rem;font-weight:bold; line-height:50px; color:#333; position: relative;background-image: linear-gradient(-135deg, #FFBD27 0%, #FFD161 100%);" onclick="gotoRelease();">
+					去发布</div>
+			</div>
 			<div class="swiper-slide" style="display:none;">店铺介绍</div>
 	</div>
 	<script type="text/javascript">
@@ -163,18 +171,20 @@
     data: {
       items: [
       { class : '编辑内容',list : [ { id:'', name:'添加/修改分类', title : '如需添加/修改左侧商品分类导航请点击这里' ,price:'0' , real_price:'无价格', imgUrl:'images/shop/addShopItem.png', productUrl:'supplierProduct/toCreateOrUpdateProductCategoryPage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>' } ,
-      							 { id:'', name:'添加商品', title : '如需添加右侧商品展示信息请点击这里' ,price:'无价格', real_price:'', imgUrl:'images/shop/addShopItem.png', productUrl:'supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>'  }
+      							 { id:'', name:'添加商品', title : '如需添加右侧商品展示信息请点击这里' ,price:'0', real_price:'无价格', imgUrl:'images/shop/addShopItem.png', productUrl:'supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>'  }
       	
       <% String typeName = "";
 			for (int i = 0; i < productList.size(); i++) {
+				String statusStr = "";
 				SupplierProductBean product = productList.get(i);
 				if(StringUtil.isNull(product.getProduct_img() )){	product.setProduct_img("images/shop/noUploadShop.png");	}
-				if (!typeName.equalsIgnoreCase(product.getProduct_category_name())) {
+				if(product.getStatus() == SupplierProductBean.STATUS_UP){statusStr = "上架";}else{statusStr = "已下架";}
+				if(!typeName.equalsIgnoreCase(product.getProduct_category_name())) {
 					%>
-       ]}, { class : '<%=product.getProduct_category_name()%>',list : [ {id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>', real_price:'<%=NumberUtil.convertNull(product.getProduct_real_price())/100d%>', imgUrl:'<%=product.getProduct_img()%>', productUrl:'supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>&id=<%=product.getId()%>' } 
+       ]}, { class : '<%=product.getProduct_category_name()%>',list : [ {id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>',statusStr:'<%=statusStr%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>', real_price:'<%=NumberUtil.convertNull(product.getProduct_real_price())/100d%>', imgUrl:'<%=product.getProduct_img()%>', productUrl:'supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>&id=<%=product.getId()%>' } 
         
         <%} else {%>
-        		,{ id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>' , real_price:'<%=NumberUtil.convertNull(product.getProduct_real_price())/100d %>', imgUrl:'<%=product.getProduct_img()%>', productUrl:'supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>&id=<%=product.getId()%>' }
+        		,{ id:'<%=product.getId()%>', name:'<%=product.getProduct_name()%>',statusStr:'<%=statusStr%>', title : '<%=product.getProduct_title()%>' ,price:'<%=product.getProduct_price()/100d%>' , real_price:'<%=NumberUtil.convertNull(product.getProduct_real_price())/100d %>', imgUrl:'<%=product.getProduct_img()%>', productUrl:'supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>&id=<%=product.getId()%>' }
         <%}  typeName = product.getProduct_category_name();  }%>  ]}
       ]
     }
@@ -183,33 +193,14 @@
   <script type="text/javascript">
   	var isClickMask = true;
   	
-  	function findItem(spid){
-  		var array = right.items;
-  		
-  		for(var i =0 ; i < array.length;i++){
-  			for(var x =0;x < array[i].list.length; x++){
-  				var item = array[i].list[x];
-  				if(item.id == spid){
-  					return item;
-  				}
-  			}
-  		}
+  	function gotoRelease(){
+  		alert("您可以直接分享当前页面至好友/客户群，即可正式生效！<br> 您发布的是预订单（不收用户费用），注意在后台查看订单信息！");
   	}
-  	
-  	function gotoOrder(){
-  		var span = document.getElementById("totalNum");
-  		var num = Number(span.innerHTML);
-  		if(num > 0){
-  		
-	  		var time = new Date();
-	  		var gotoUrl = '<%=basePath%>user/supplier/toSupplierShopUserOrderPage.do?openid=<%=openid%>&time='+time.getTime();
-	  		location.href = gotoUrl;
-  		}else{
-  			alert('小主，您还没有选择商品呢');
-  		}
-  	}
-  	
-  	
+  	weixinInit.setShareTitle("我的小店【<%=supplier.getName()%>】快来看看吧！");
+	weixinInit.setShareDesc("我的小店【<%=supplier.getName()%>】快来看看吧！");
+	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>activity/user/toTurntable1Activity.html?fromOpenid=<%=openid%>&sid=<%=supplier.getId()%>");
+	weixinInit.setShareImg("<%=BaseContext.getServerUrl()%>images/foods/food_share_img.jpg");
+	
 	
   </script>
   

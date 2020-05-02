@@ -54,4 +54,5 @@ public interface ISupplierService {
 	List<SupplierTypeBean> querySupplierType(SupplierTypeBean bean);
 	void createSupplier(CustomerBean customer, String openid, String supplierName, Integer type);
 	SupplierBean findSupplier(Integer id, String openid);
+	List<SupplierBean> querySupplierByOpenid(String openid);
 }

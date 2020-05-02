@@ -71,6 +71,8 @@
 			<if test="product_category_id != null"> and sp.product_category_id = #{product_category_id}</if>
 			<if test="home_flag != null"> and sp.home_flag = #{home_flag}</if>
 			<if test="hot_flag != null"> and sp.hot_flag = #{hot_flag}</if>
+			<if test="status != null"> and sp.status = #{status}</if>
+			<if test="delete_flag != null"> and sp.delete_flag = #{delete_flag}</if>
 			<if test="now_time != null"> and #{now_time} >= sp.eff_time and sp.dff_time >= #{now_time}</if>
 		</where>
 			<if test="orderby != null"> ${orderby} </if>

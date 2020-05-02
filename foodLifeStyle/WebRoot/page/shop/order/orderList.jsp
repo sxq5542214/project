@@ -135,7 +135,7 @@
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
             </div> --%>
                 <!--分包商品信息-->
-        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserOrderPage.do?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
+        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserEffOrderPage.html?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">
@@ -150,8 +150,8 @@
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
                                 <p >
                                    <%=order.getOrder_name() %>           </p>
-                                   <p>收货人：<%=StringUtil.convertNull(order.getContact_name()) %>  </p>
-                                   <p>号码：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
+                                   <p>联系人：<%=StringUtil.convertNull(order.getContact_name()) %> &nbsp;&nbsp;联系方式：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
+                                   <p>预约时间：<%=StringUtil.convertNull(order.getExpress_date()) %></p> 
                                    <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
 	    </a> 
@@ -159,7 +159,7 @@
 	    <div class="detail2">
 	    	<span style="color:black; ">总价：<%= (order.getCost_price() ) /100d %>元 &nbsp;</span>
 			<span style="color: #ff463c;">优惠抵扣：<%=NumberUtil.addtion(order.getCost_points(),order.getCoupon_total_price())   /100d %>元&nbsp;</span>
-	        <span class="order_price" style="font-size: 1.6rem;">优惠后实付：￥<%=order.getCost_money() /100d %>元</span>
+	        <span class="order_price" style="font-size: 1.6rem;">共计：￥<%=order.getCost_money() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
@@ -172,8 +172,9 @@
 	        	<a href="javascript:;" onclick="showOrHideCustomerService()" >联系客服</a>
 	        	
 	        	<%}else{ %>
-	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
+	        	
 	        	<%} %>
+	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
 	        </div>
 	    </div>
     </div>
@@ -197,7 +198,7 @@
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
             </div> --%>
                 <!--分包商品信息-->
-        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserOrderPage.do?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
+        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserEffOrderPage.html?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">
@@ -212,8 +213,8 @@
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
                                 <p >
                                    <%=order.getOrder_name() %>           </p>
-                                   <p>收货人：<%=StringUtil.convertNull(order.getContact_name()) %>  </p>
-                                   <p>号码：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
+                                   <p>联系人：<%=StringUtil.convertNull(order.getContact_name()) %> &nbsp;&nbsp;联系方式：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
+                                   <p>预约时间：<%=StringUtil.convertNull(order.getExpress_date()) %></p> 
                                    <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
 	    </a> 
@@ -221,15 +222,15 @@
 	    <div class="detail2">
 	    	<span style="color:black; ">总价：<%= (order.getCost_price() ) /100d %>元 &nbsp;</span>
 			<span style="color: #ff463c;">优惠抵扣：<%=NumberUtil.addtion(order.getCost_points(),order.getCoupon_total_price())   /100d %>元&nbsp;</span>
-	        <span class="order_price" style="font-size: 1.6rem;">优惠后实付：￥<%=order.getCost_money() /100d %>元</span>
+	        <span class="order_price" style="font-size: 1.6rem;">共计：￥<%=order.getCost_money() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
 	        	<% if(order.getStatus() == ShopOrderInfoBean.STATUS_PAYSUCCESS){ %>
 	        	<a href="javascript:;" onclick="remindOrder(<%=order.getId()%>);">催促订单</a>
 	        	<%}else{ %>
-	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
 	        	<%} %>
+	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
 	        </div>
 	    </div>
     </div>
@@ -254,7 +255,7 @@
                 <div class="fl"> <%=BaseContext.getMchName(null)%> </div>
             </div> --%>
                 <!--分包商品信息-->
-        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserOrderPage.do?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
+        <div class="cart_item prd_ebook" id="<%=order.getId() %>"><a href="user/supplier/toSupplierShopUserEffOrderPage.html?openid=<%=user.getOpenid() %>&order_code=<%=order.getOrder_code()%>">
                 <!--电子书加签-->
                                 <!--包裹图片-->
                 <img src="<%=order.getOrder_img() %>" class="fl pro_pic">
@@ -267,10 +268,9 @@
                             <%=order.getDictValueByField("status") %> </div>
                     </div>
                 <!--包裹名称显示，多件产品，显示包裹编号，一件产品显示产品名称-->
-                                <p >
-                                   <%=order.getOrder_name() %></p>
-                                   <p>收货人：<%=StringUtil.convertNull(order.getContact_name()) %>  </p>
-                                   <p>号码：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
+                                <p ><%=order.getOrder_name() %></p>
+                                   <p>联系人：<%=StringUtil.convertNull(order.getContact_name()) %> &nbsp;&nbsp;联系方式：<%=StringUtil.convertNull(order.getContact_phone()) %>  </p>
+                                   <p>预约时间：<%=StringUtil.convertNull(order.getExpress_date()) %></p> 
                                    <p>下单时间：<%=order.getCreate_time() %></p> 
             </div>
 	    </a> 
@@ -278,7 +278,7 @@
 	    <div class="detail2">
 	   		<span style="color:black; ">总价：<%= ( order.getCost_price() ) /100d %>元 &nbsp;</span>
 			<span style="color: #ff463c;">优惠抵扣：<%=NumberUtil.addtion(order.getCost_points(),order.getCoupon_total_price())   /100d %>元&nbsp;</span>
-	        <span class="order_price" style="font-size: 1.6rem;">优惠后实付：￥<%=order.getCost_money() /100d %>元</span>
+	        <span class="order_price" style="font-size: 1.6rem;">共计：￥<%=order.getCost_money() /100d %>元</span>
 	    </div>
 	    <!--操作按键-->
 	        <div class="detail3">
@@ -292,8 +292,9 @@
 	        	
 	        	
 	        	<%}else{ %>
-	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
+	        	
 	        	<%} %>
+	        	<a href="javascript:;" onclick="deleteOrder(<%=order.getId()%>);">删除订单</a>
 	        </div>
 	    </div>
     </div>

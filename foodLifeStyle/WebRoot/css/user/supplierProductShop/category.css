@@ -33,9 +33,10 @@
 .left{
   top: 41px;
   float: left;
-  width: 25%;
+  width: 20%;
   height: 100%;
   background: #eee;
+  font-size: 14px;
 }
 .left ul{
   list-style: none;
@@ -78,6 +79,13 @@
   width: 100px;
   height: 100px;
   background: #eee;
+}
+.item-corner{
+	position: absolute;
+	top: 0;
+	font-size: 13px;
+	background-color: gray;
+	color: white;
 }
 .title{
   width: 100%;

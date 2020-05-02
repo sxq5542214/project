@@ -175,6 +175,8 @@ public class SupplierProductController extends BaseController {
 			}
 			if(StringUtil.isNotNull(prime_cost_price)) {
 				bean.setPrime_cost_price(Integer.parseInt(prime_cost_price));
+			}else {
+				bean.setPrime_cost_price(-1);
 			}
 			bean.setProduct_category_id(category.getId());
 			bean.setProduct_category_name(category.getName());
@@ -188,8 +190,11 @@ public class SupplierProductController extends BaseController {
 				bean.setId(Integer.parseInt(id));
 				supplierProductService.updateSupplierProduct(bean);
 			}else {
-				bean.setStore_num(-1);
+				bean.setStore_num(99999);
 				bean.setDiscount(100);
+				bean.setProduct_offset_points(0);
+				bean.setMin_luckymoney(0);
+				bean.setMax_luckymoney(0);
 				bean.setEff_time(DateUtil.getNowDateStr());
 				bean.setDff_time("2099-12-31");
 				supplierProductService.insertSupplierProduct(bean);

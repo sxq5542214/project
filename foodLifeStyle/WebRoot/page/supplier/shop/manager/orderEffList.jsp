@@ -1,3 +1,4 @@
+<%@page import="com.yd.business.order.bean.ShopOrderEffInfoBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@page import="com.yd.util.JsonUtil"%>
 <%@page import="org.json.JSONObject"%>
@@ -11,12 +12,10 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 String openid = request.getParameter("openid");
 String sid = request.getParameter("sid");
-SupplierProductBean bean = (SupplierProductBean) request.getAttribute("bean");
-List<SupplierProductCategoryBean> productCategoryList = (List<SupplierProductCategoryBean>)request.getAttribute("productCategoryList");
-String jsoStr = JsonUtil.convertObjectToJsonString(productCategoryList);
-if(bean == null){
-	bean = new SupplierProductBean();
-}
+String date = request.getParameter("queryDate");
+List<ShopOrderEffInfoBean> listOrder = (List<ShopOrderEffInfoBean>)request.getAttribute("listOrder");
+
+
 %>
 
 <!DOCTYPE HTML>
@@ -31,25 +30,21 @@ if(bean == null){
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
 
-    <title>商品信息管理</title>
+    <title>预订清单</title>
 	<link rel="stylesheet" href="css/supplier/signup.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-fileinput@5.0.8/css/fileinput.min.css">
 	
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js" type="text/javascript" ></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-zh_CN.min.js"></script>
-  	<script src="https://cdn.jsdelivr.net/npm/bootstrap-fileinput@5.0.8/js/fileinput.min.js"></script>
   	<script src="js/bootstrap/fileinput/i18n/zh.js" type="text/javascript"></script>
   </head>
   <body style="background-color: #eee">
 
     <div class="container">
-        <h2 class="form-signup-heading" style="text-align: center;">添加/修改商品信息</h2>
 	
-      <form class="form-signup" action="supplierProduct/createOrUpdateProduct.html" method="post" enctype="multipart/form-data" onsubmit="return checkRequire()">
         <input type="hidden" name="openid" value="<%=openid%>">
         <input type="hidden" name="sid" value="<%=sid%>">
         <input type="hidden" name="id" value="<%=StringUtil.convertNull(bean.getId())%>">
@@ -112,7 +107,6 @@ if(bean == null){
 		<button id="deleteBTN" class="btn btn-lg btn-danger btn-block" style="margin-top: 15px;display: none;" type="button" onclick="deleteProduct()">删除商品</button>
 		<%} %>
 		<button  class="btn btn-lg btn-info btn-block" style="margin-top: 15px;" type="button" onclick="history.go(-1)">返回</button>
-      </form>
 
 		
     </div> <!-- /container -->

@@ -16,6 +16,7 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	
 	
 	private Integer id;
+	private Integer supplier_id;
 	private Integer user_id;
 	private String nick_name;
 	private String order_code;
@@ -47,12 +48,12 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	private Integer invoice_type;
 	private String invoice_info;
 	
-	private List<ShopOrderProductBean> productList;
-	public List<ShopOrderProductBean> getProductList() {
+	private List<? extends ShopOrderProductBean> productList;
+	public List<? extends ShopOrderProductBean> getProductList() {
 		return productList;
 	}
-	public void setProductList(List<ShopOrderProductBean> productList) {
-		this.productList = productList;
+	public void setProductList(List<? extends ShopOrderProductBean> productList2) {
+		this.productList = productList2;
 	}
 	public Integer getId() {
 		return id;
@@ -239,5 +240,11 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	}
 	public void setExpress_code(String express_code) {
 		this.express_code = express_code;
+	}
+	public Integer getSupplier_id() {
+		return supplier_id;
+	}
+	public void setSupplier_id(Integer supplier_id) {
+		this.supplier_id = supplier_id;
 	}
 }

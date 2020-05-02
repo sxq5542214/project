@@ -5,6 +5,8 @@ package com.yd.business.order.service;
 
 import java.util.List;
 
+import com.yd.business.order.bean.ShopOrderEffInfoBean;
+import com.yd.business.order.bean.ShopOrderEffProductBean;
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
 import com.yd.business.order.bean.ShopOrderRemindBean;
@@ -53,6 +55,29 @@ public interface IShopOrderService {
 	ShopOrderRemindBean createShopOrderRemind(String remind, UserWechatBean user, ShopOrderInfoBean order);
 
 	int updateRabbishOrderStatus(Integer userId);
+
+	ShopOrderEffInfoBean findShopOrderEffInfoByCode(String order_code);
+
+	List<ShopOrderEffInfoBean> queryShopOrderEffInfo(ShopOrderEffInfoBean bean);
+
+	List<ShopOrderEffProductBean> queryShopOrderEffProduct(ShopOrderEffProductBean bean);
+
+	ShopOrderInfoBean createOrderLogByUserCartList(String openid, String productJson, Long time, String effDate);
+
+	void createShopOrderEffInfo(ShopOrderEffInfoBean bean);
+
+	void createShopOrderEffProduct(ShopOrderEffProductBean bean);
+
+	void updateShopOrderEffInfo(ShopOrderEffInfoBean bean);
+
+	boolean updateShopOrderToEff(String orderCode, String effDate, String openid, String remark, String contactName, String contactPhone) throws Exception;
+
+	void updateOrderStatusToCancel(String orderCode, String openid, String remark);
+
+	void updateShopOrderEffStatus(String order_code, int status);
+
+	List<ShopOrderEffInfoBean> queryShopOrderEffAndProductList(ShopOrderEffInfoBean bean);
+
 
 
 }

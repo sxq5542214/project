@@ -182,6 +182,14 @@ public class SupplierServiceImpl extends BaseService implements
 		// TODO Auto-generated method stub
 		return supplierDao.listSupplier(bean);
 	}
+	
+	@Override
+	public List<SupplierBean> querySupplierByOpenid(String openid){
+		
+		SupplierBean bean = new SupplierBean();
+		bean.setOpenid(openid);
+		return listSupplier(bean );
+	}
 
 	@Override
 	public void batchDeleteSupplier(List<SupplierBean> list) {

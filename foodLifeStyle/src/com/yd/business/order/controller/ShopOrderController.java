@@ -20,16 +20,20 @@ import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.dictionary.service.IDictionaryService;
 import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
+import com.yd.business.order.bean.ShopOrderEffInfoBean;
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
 import com.yd.business.order.bean.ShopOrderRemindBean;
 import com.yd.business.order.service.IShopOrderService;
 import com.yd.business.order.service.impl.ShopOrderServiceImpl;
+import com.yd.business.supplier.bean.SupplierBean;
+import com.yd.business.supplier.service.ISupplierService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserCartService;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.AutoInvokeGetSetMethod;
+import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
 
 /**
@@ -38,7 +42,8 @@ import com.yd.util.StringUtil;
  */
 @Controller
 public class ShopOrderController extends BaseController {
-	
+	public static final String PAGE_SUPPLIER_ORDER_EFFORDERLIST = "/page/supplier/order/effOrderList.jsp";
+
 	@Resource
 	private IShopOrderService shopOrderService;
 	@Resource
@@ -51,6 +56,8 @@ public class ShopOrderController extends BaseController {
 	private IWechatService wechatService;
 	@Resource
 	private IMsgCenterActionService msgCenterActionService;
+	@Resource
+	private ISupplierService supplierService;
 	
 	@RequestMapping("**/order/shop/setupOrderAddress.do")
 	public ModelAndView setupOrderAddress(HttpServletRequest request, HttpServletResponse response){
@@ -84,7 +91,8 @@ public class ShopOrderController extends BaseController {
 				shopOrderService.updateShopOrderStatusToDelete(order.getOrder_code());
 			}
 			
-			
+			msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_CANCEL, "delete", order);
+
 		} catch (Exception e) {
 			log.error(e, e);
 		}
@@ -294,4 +302,42 @@ public class ShopOrderController extends BaseController {
 		}
 		return null;
 	}
+	
+
+	@RequestMapping("**/order/shop/toShopOrderEffListPage.html")
+	public ModelAndView toShopOrderEffListPage(HttpServletRequest request,HttpServletResponse response){
+		try {
+			//查询所有待发货的订单
+			String queryDate = request.getParameter("queryDate");
+			String sid = request.getParameter("sid");
+			String openid = getCurrentOpenid();
+			
+			SupplierBean supplier = supplierService.findSupplier(Integer.parseInt(sid), openid);
+			if(supplier == null) {
+				writeJson(response, TIPS_STRING_DENIED); 
+				return null;
+			}
+			if(StringUtil.isNull(queryDate)) {
+				queryDate = DateUtil.getNowOnlyDateStr();
+			}
+			ShopOrderEffInfoBean bean = new ShopOrderEffInfoBean();
+			bean.setEff_date(queryDate);
+			bean.setSupplier_id(Integer.parseInt(sid));
+//			bean.setStatus(ShopOrderEffInfoBean.STATUS_ORDERING);
+			bean.setNotInStatus( ShopOrderEffInfoBean.STATUS_WAIT +"," + ShopOrderEffInfoBean.STATUS_FINISH );
+			bean.setOrderby(" group by i.order_code  order by i.status desc, i.eff_date asc ");
+			List<ShopOrderEffInfoBean> listOrder = shopOrderService.queryShopOrderEffAndProductList(bean);
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("listOrder", listOrder);
+			
+			return new ModelAndView(PAGE_SUPPLIER_ORDER_EFFORDERLIST ,map );
+		} catch (Exception e) {
+			log.error(e, e);
+			writeJson(response, TIPS_STRING_ERROR);
+		}
+		return null;
+	}
+	
+	
 }

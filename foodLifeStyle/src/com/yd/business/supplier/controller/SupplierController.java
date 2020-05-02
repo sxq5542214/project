@@ -613,11 +613,11 @@ public class SupplierController extends BaseController {
 			supplierService.createSupplier(customer,openid, supplierName, Integer.parseInt(supplierType));
 			
 			//创建成功后跳转至商户主页
-			return new ModelAndView();
+			return new ModelAndView("redirect:/wx/supplier/shop/toMySupplierShopManagerPage.html?openid="+openid);
 			
 		} catch (Exception e) {
 			log.error(e,e);
-			writeJson(response, ERROR_TIPS_STRING);
+			writeJson(response, TIPS_STRING_ERROR);
 		} 
 		return null;
 	}

@@ -172,9 +172,13 @@ public class DateUtil {
 		if(date == null) return "";
 		return sf_sss.format(date);
 	}
-	
+
 	public static String formatDateOnlyDate(Date date){
 		return sf_date.format(date);
+	}
+	
+	public static String formatDateOnlyDate(long time){
+		return sf_date.format(new Date(time));
 	}
 	
 	public static String formatDateOnlyTime(Date date){
@@ -246,15 +250,54 @@ public class DateUtil {
 	 * @return
 	 * @throws ParseException 
 	 */
-	public static String plusDate(String date,int plusDate){
+	public static String plusDate(String time,int plusDate){
+		return plusDate(time, plusDate, true);
+	}
+	
+	/**
+	 * 将一个时间增加多少天
+	 * @param date
+	 * @param plusDate 增加天数
+	 * @return
+	 * @throws ParseException 
+	 */
+	public static String plusDate(String date,int plusDate,boolean hasTime){
 		String result = "";
 		try {
-			Date d = sf.parse(date);
+			SimpleDateFormat format = hasTime ? sf : sf_date;
+			Date d = format.parse(date);
 			Calendar c = Calendar.getInstance();
 			c.setTime(d);
 			c.add(Calendar.DAY_OF_YEAR, plusDate);
 			Date resultDate = c.getTime();
-			result = sf.format(resultDate);
+			result = format.format(resultDate);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error(e, e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 将一个时间增加多少天
+	 * @param date
+	 * @param plusDate 增加天数
+	 * @return
+	 * @throws ParseException 
+	 */
+	public static String plusDate(long time,int plusDate,boolean hasTime){
+		String result = "";
+		try {
+			Date d = new Date(time);
+			Calendar c = Calendar.getInstance();
+			c.setTime(d);
+			c.add(Calendar.DAY_OF_YEAR, plusDate);
+			Date resultDate = c.getTime();
+			if(hasTime) {
+				result = sf.format(resultDate);
+			}else {
+				result = sf_date.format(resultDate);
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			log.error(e, e);

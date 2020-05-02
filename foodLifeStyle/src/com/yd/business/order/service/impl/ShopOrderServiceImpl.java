@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
 import com.yd.business.msgcenter.service.IMsgCenterActionService;
+import com.yd.business.order.bean.ShopOrderEffInfoBean;
+import com.yd.business.order.bean.ShopOrderEffProductBean;
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
 import com.yd.business.order.bean.ShopOrderRemindBean;
@@ -72,15 +74,78 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	@Resource
 	private IConfigAttributeService configAttributeService;
 	
-	
+
 	@Override
 	public void createShopOrderInfo(ShopOrderInfoBean bean){
 		shopOrderDao.createShopOrderInfo(bean);
 	}
+	@Override
+	public void createShopOrderEffInfo(ShopOrderEffInfoBean bean){
+		shopOrderDao.createShopOrderEffInfo(bean);
+	}
 
 	@Override
 	public void updateShopOrderInfo(ShopOrderInfoBean bean){
+		bean.setModify_time(DateUtil.getNowDateStr());
 		shopOrderDao.updateShopOrderInfo(bean);
+	}
+	@Override
+	public void updateShopOrderEffInfo(ShopOrderEffInfoBean bean){
+		bean.setModify_time(DateUtil.getNowDateStr());
+		shopOrderDao.updateShopOrderEffInfo(bean);
+	}
+	
+	
+	
+	@Override
+	public boolean updateShopOrderToEff(String orderCode,String effDate,String openid,String remark,String concatName,String concatPhone) throws Exception {
+		ShopOrderEffInfoBean effBean = findShopOrderEffInfoByCode(orderCode);
+		ShopOrderInfoBean order = findShopOrderInfoByCode(orderCode);
+		order.setStatus(ShopOrderInfoBean.STATUS_ORDERING);
+		order.setExpress_date(effDate);
+		order.setRemark(remark);
+		order.setEvent_type(ShopOrderEffInfoBean.EVENT_TYPE_USER_ORDER_EFF);
+		order.setContact_name(concatName);
+		order.setContact_phone(concatPhone);
+		if(effBean == null) {
+			//创建
+			effBean = new ShopOrderEffInfoBean(order);
+			effBean.setId(null);
+			effBean.setOld_order_id(order.getId());
+			//创建预约订单
+			createShopOrderEffInfo(effBean);
+			
+			ShopOrderEffInfoBean effOrder = findShopOrderEffInfoByCode(orderCode);
+			
+			//创建预约订单商品
+			ShopOrderProductBean bean = new ShopOrderEffProductBean();
+			bean.setOrder_code(orderCode);
+			List<ShopOrderProductBean> prodList = queryShopOrderProduct(bean );
+			for(ShopOrderProductBean prod : prodList) {
+				ShopOrderEffProductBean effProd = new ShopOrderEffProductBean(prod);
+				effProd.setId(null);
+				effProd.setOrder_info_id(effOrder.getId());
+				
+				createShopOrderEffProduct(effProd );
+			}
+			//消息中心发送事件
+			msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_EFF, "create", effOrder);
+		}else {
+			//修改
+			effBean.setEff_date(effDate);
+			effBean.setExpress_date(effDate);
+			effBean.setRemark(remark);
+			effBean.setStatus(ShopOrderInfoBean.STATUS_ORDERING);
+			effBean.setContact_name(concatName);
+			effBean.setContact_phone(concatPhone);
+			//修改预订表的状态
+			updateShopOrderEffInfo(effBean);
+			//消息中心发送事件
+			msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_EFF, "update", effBean);
+		}
+		//修改基础订单
+		updateShopOrderInfo(order);
+		return true;
 	}
 
 	@Override
@@ -91,6 +156,16 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		
 		
 		return shopOrderDao.queryShopOrderInfo(bean);
+	}
+	
+	@Override
+	public List<ShopOrderEffInfoBean> queryShopOrderEffInfo(ShopOrderEffInfoBean bean){
+		
+		// 历史一个月以上的订单，状态修改为已成交
+//		updateOrderToFinishBy30DayAgo();
+		
+		
+		return shopOrderDao.queryShopOrderEffInfo(bean);
 	}
 	
 	private int updateOrderToFinishBy30DayAgo() {
@@ -135,6 +210,16 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		return null;
 	}
 	
+	@Override
+	public ShopOrderEffInfoBean findShopOrderEffInfoByCode(String order_code) {
+		ShopOrderEffInfoBean bean = new ShopOrderEffInfoBean();
+		bean.setOrder_code(order_code);
+		List<ShopOrderEffInfoBean> list = queryShopOrderEffInfo(bean);
+		if(list.size() > 0){
+			return list.get(0);
+		}
+		return null;
+	}
 
 	@Override
 	public ShopOrderInfoBean findShopOrderInfoById(int id) {
@@ -152,6 +237,10 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	public void createShopOrderProduct(ShopOrderProductBean bean){
 		shopOrderDao.createShopOrderProduct(bean);
 	}
+	@Override
+	public void createShopOrderEffProduct(ShopOrderEffProductBean bean){
+		shopOrderDao.createShopOrderEffProduct(bean);
+	}
 	
 	/**
 	 * 根据商户商品ID创建 订单商品
@@ -162,14 +251,14 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	 * @param sp_total_price
 	 * @param orderCode
 	 */
-	public ShopOrderProductBean createShopOrderProductBySpid(int spid,int num,int sopType, int offset_points, int sp_total_price,String orderCode){
-		
+	public ShopOrderEffProductBean createShopOrderProductBySpid(int spid,int num,int sopType, int offset_points, int sp_total_price,String orderCode){
+		boolean isEff = orderCode.indexOf(UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOPEFF) >= 0;
 		SupplierProductBean sp = supplierProductService.findSupplierProductById(spid);
-		ShopOrderInfoBean order = findShopOrderInfoByCode(orderCode);
+		ShopOrderInfoBean order = isEff ? findShopOrderEffInfoByCode(orderCode) : findShopOrderInfoByCode(orderCode);
 		UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
 		
-		ShopOrderProductBean spb = new ShopOrderProductBean();
-		spb.setHead_img(sp.getHead_img());
+		ShopOrderEffProductBean spb = new ShopOrderEffProductBean();
+		spb.setHead_img(sp.getProduct_img());
 		spb.setOrder_info_id(order.getId());
 		spb.setOrder_code(order.getOrder_code());
 		spb.setUser_id(user.getId());
@@ -187,22 +276,34 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		spb.setCreate_time(DateUtil.getNowDateStrSSS());
 		spb.setPrime_cost_price(sp.getPrime_cost_price() * num);
 		
-		createShopOrderProduct(spb);
+		if(isEff) {
+			createShopOrderEffProduct(spb);
+		}else {
+			createShopOrderProduct(spb);
+		}
 		return spb;
 	}
-	
+
 	@Override
 	public List<ShopOrderProductBean> queryShopOrderProduct(ShopOrderProductBean bean){
 		return shopOrderDao.queryShopOrderProduct(bean);
 	}
-	
+	@Override
+	public List<ShopOrderEffProductBean> queryShopOrderEffProduct(ShopOrderEffProductBean bean){
+		return shopOrderDao.queryShopOrderEffProduct(bean);
+	}
+
 	@Override
 	public List<ShopOrderInfoBean> queryShopOrderAndProductList(ShopOrderInfoBean bean){
 		
 		return shopOrderDao.queryShopOrderAndProductList(bean);
 	}
-	
-	
+	@Override
+	public List<ShopOrderEffInfoBean> queryShopOrderEffAndProductList(ShopOrderEffInfoBean bean){
+		
+		return shopOrderDao.queryShopOrderEffAndProductList(bean);
+	}
+
 	/**
 	 * 从cookie的值中查询商品列表
 	 * 入参格式为：{"productInfos":[{"spid":29,"num":1},{"spid":30,"num":2}]}
@@ -211,15 +312,30 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	 */
 	@Override
 	public ShopOrderInfoBean createOrderLogByUserCartList(String openid,String productJson,Long time){
+		return createOrderLogByUserCartList(openid, productJson, time,null);
+	}
+	
+	/**
+	 * 从cookie的值中查询商品列表
+	 * 入参格式为：{"productInfos":[{"spid":29,"num":1},{"spid":30,"num":2}]}
+	 * @param productJson
+	 * @return
+	 */
+	@Override
+	public ShopOrderInfoBean createOrderLogByUserCartList(String openid,String productJson,Long time,String effDate){
 
-		ShopOrderInfoBean order = new ShopOrderInfoBean();
-		List<ShopOrderProductBean> productList = new ArrayList<ShopOrderProductBean>();
+		boolean isEff = StringUtil.isNotNull(effDate);
+		ShopOrderInfoBean order = new ShopOrderEffInfoBean();
+		List<? extends ShopOrderProductBean> productList =  new ArrayList<ShopOrderEffProductBean>();
 		order.setProductList(productList);
 		order.setCost_points(0);
 		order.setCost_price(0);
 		order.setCost_money(0);
 		order.setCost_balance(0);
 		order.setCoupon_total_price(0);
+		((ShopOrderEffInfoBean)order).setEff_date(effDate);
+		
+		
 		try{
 			if(StringUtil.isNull(productJson)){
 				return order;
@@ -239,16 +355,18 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 				time = jso.optLong("time",System.currentTimeMillis());
 			}
 			Date date = new Date(time);
-			String order_code = userConsumeInfoService.createOutTradeNo(UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOP, user.getId().toString(),date);
+			//预订单的前缀不同
+			String prefix = isEff ? UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOPEFF : UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOP;
+			String order_code = userConsumeInfoService.createOutTradeNo(prefix, user.getId().toString(),date);
 
 			order.setOrder_code(order_code);
-			List<ShopOrderInfoBean> list = queryShopOrderInfo(order);
+			List<? extends ShopOrderInfoBean> list =  isEff ? queryShopOrderEffInfo((ShopOrderEffInfoBean) order) :queryShopOrderInfo(order);
 			if(list.size() > 0){
 				order = list.get(0);
 				
-				ShopOrderProductBean condition = new ShopOrderProductBean();
+				ShopOrderEffProductBean condition = new ShopOrderEffProductBean();
 				condition.setOrder_code(order_code);
-				productList = queryShopOrderProduct(condition );
+				productList = isEff?   queryShopOrderEffProduct(condition ): queryShopOrderProduct(condition );
 				order.setProductList(productList);
 				
 			}else{
@@ -256,10 +374,14 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 				order.setNick_name(user.getNick_name());
 				order.setCreate_time(DateUtil.getNowDateStr());
 				order.setStatus(ShopOrderInfoBean.STATUS_WAIT);
-				order.setEvent_type(ShopOrderInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
+				order.setEvent_type(isEff? ShopOrderInfoBean.EVENT_TYPE_USER_ORDER_EFF :ShopOrderInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
 				order.setOrder_code(order_code);
 				//创建定单
-				createShopOrderInfo(order);
+				if(isEff) {
+					createShopOrderEffInfo((ShopOrderEffInfoBean) order);
+				}else {
+					createShopOrderInfo(order);
+				}
 			
 				JSONArray array = jso.getJSONArray("productInfos");
 				List<Integer> ids = new ArrayList<Integer>();
@@ -275,7 +397,6 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 					List<SupplierProductBean> spList = supplierProductService.querySupplierProductByIds(ids);
 					//查出数据后，要对比是否有大于库存的，并封装成对象
 					for(SupplierProductBean sp : spList){
-						
 						for(int i = 0 ; i < array.length(); i++){
 							
 							JSONObject prodJson = array.getJSONObject(i);
@@ -297,23 +418,27 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 								int payPrice = sp_total_price - offset_points;
 								if(order_name.length() == 0){
 									order_name = sp.getProduct_name();
-									order.setOrder_img(sp.getHead_img());
+									order.setOrder_img(sp.getProduct_img());
 									if(spList.size() > 1){
 										order_name += "等"+spList.size()+"类商品";
 									}
 								}
 								//生成订单商品信息
-								ShopOrderProductBean spb = createShopOrderProductBySpid(sp.getId(), num, ShopOrderProductBean.TYPE_NORMAL, offset_points, payPrice, order_code);
-								productList.add(spb);
+								ShopOrderEffProductBean spb = createShopOrderProductBySpid(sp.getId(), num, ShopOrderProductBean.TYPE_NORMAL, offset_points, payPrice, order_code);
+								((ArrayList<ShopOrderEffProductBean>)productList).add(spb);
 
 								order.setCost_money(order.getCost_money() + payPrice);
 								order.setCost_price(order.getCost_price() + sp_total_price);
 								order.setCost_points(order.getCost_points() + offset_points);
 								order.setOrder_name(order_name);
+
+								order.setSupplier_id(sp.getSupplier_id());
 								
-								
-								
-								updateShopOrderInfo(order);
+								if(isEff) {
+									updateShopOrderEffInfo((ShopOrderEffInfoBean) order);
+								}else {
+									updateShopOrderInfo(order);
+								}
 	//							int give_points = sp.getGive_points() * num;   // 用户还没有付款呢
 	//							if(offset_points >0){
 	//								user.setPoints(user.getPoints() - offset_points);
@@ -325,16 +450,21 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 					}
 					
 					//判断是否需要运费
-					int needExpressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
-					if(needExpressPrice > order.getCost_money()){
-						int expressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_EXPRESS_PRICE);
-						order.setExpress_price(expressPrice);
-						order.setCost_money(order.getCost_money() + expressPrice);
-						order.setCost_price(order.getCost_price() + expressPrice);
-					}else{
+//					int needExpressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
+//					if(needExpressPrice > order.getCost_money()){
+//						int expressPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_EXPRESS_PRICE);
+//						order.setExpress_price(expressPrice);
+//						order.setCost_money(order.getCost_money() + expressPrice);
+//						order.setCost_price(order.getCost_price() + expressPrice);
+//					}else{
 						order.setExpress_price(0);
+//					}
+						
+					if(isEff) {
+						updateShopOrderEffInfo((ShopOrderEffInfoBean) order);
+					}else {
+						updateShopOrderInfo(order);
 					}
-					updateShopOrderInfo(order);
 				}
 			}
 		}catch(Exception e) {
@@ -493,11 +623,39 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	}
 	
 	@Override
+	public void updateOrderStatusToCancel(String orderCode,String openid,String remark) {
+		
+		ShopOrderEffInfoBean effOrder = findShopOrderEffInfoByCode(orderCode);
+		ShopOrderInfoBean order = findShopOrderInfoByCode(orderCode);
+
+		effOrder.setStatus(ShopOrderInfoBean.STATUS_CANCEL);
+		effOrder.setRemark(remark);
+		order.setStatus(ShopOrderInfoBean.STATUS_CANCEL);
+		order.setRemark(remark);
+		
+		updateShopOrderEffInfo(effOrder);
+		updateShopOrderInfo(order);
+		
+		msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_CANCEL, "cancel", effOrder);
+
+		
+	}
+	
+
+	@Override
 	public void updateShopOrderStatus(String order_code,int status) {
 		ShopOrderInfoBean order = new ShopOrderInfoBean();
 		order.setOrder_code(order_code);
 		order.setStatus(status);
 		updateShopOrderInfo(order);
+	}
+
+	@Override
+	public void updateShopOrderEffStatus(String order_code,int status) {
+		ShopOrderEffInfoBean order = new ShopOrderEffInfoBean();
+		order.setOrder_code(order_code);
+		order.setStatus(status);
+		updateShopOrderEffInfo(order);
 	}
 	@Override
 	public void delteShopOrderById(int id){
@@ -506,7 +664,9 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	
 	@Override
 	public void updateShopOrderStatusToDelete(String order_code){
+		//多个订单表一起更新
 		updateShopOrderStatus(order_code, ShopOrderInfoBean.STATUS_USER_DELETE);
+		updateShopOrderEffStatus(order_code, ShopOrderInfoBean.STATUS_USER_DELETE);
 	}
 	
 	

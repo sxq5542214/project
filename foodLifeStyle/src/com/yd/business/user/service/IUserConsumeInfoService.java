@@ -9,7 +9,8 @@ public interface IUserConsumeInfoService {
 	
 	public static final String OUTTRADE_TYPE_PARTNER = "Partner";	//合作伙伴
 	public static final String OUTTRADE_TYPE_WXPAY = "WXPay";	//微信支付
-	public static final String OUTTRADE_TYPE_SHOP = "Shop";	//微信支付
+	public static final String OUTTRADE_TYPE_SHOP = "Ord";	//定单
+	public static final String OUTTRADE_TYPE_SHOPEFF = "Eff";	//预订单
 	public static final String OUTTRADE_TYPE_ALIPAY = "AliPay"; //阿里支付
 	public static final String OUTTRADE_TYPE_STORE = "Store"; //库存
 	public static final String OUTTRADE_TYPE_CARDSECRET = "CardSecret"; //卡密
