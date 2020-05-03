@@ -64,6 +64,7 @@ public interface WechatConstant {
 //	public static final int TICKET_SENCE_CODE_ACTIVITY_VOLTE = 6;//8月活动，volte语音主叫免费
 //	public static final int TICKET_SENCE_CODE_ACTIVITY_OLYMPIC= 7;//8月活动，奥运会
 //	public static final int TICKET_SENCE_CODE_ACTIVITY_FREEORDER = 5;//8月活动，免单
+	public static final int TICKET_SENCE_CODE_SUPPLIERSHOP = 7;
 
 	public static final int TICKET_SENCE_ID_ACTIVITY_LIULIANG1G = 1;
 	public static final int TICKET_SENCE_ID_ACTIVITY_FREEORDER = 2;

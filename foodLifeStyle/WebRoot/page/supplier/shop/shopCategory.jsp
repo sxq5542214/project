@@ -1,3 +1,5 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="com.yd.business.user.bean.UserQrCodeBean"%>
 <%@page import="com.yd.util.StringUtil"%>
 <%@page import="com.yd.business.supplier.bean.SupplierProductCategoryBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierBean"%>
@@ -14,7 +16,7 @@
 	UserWechatBean user = (UserWechatBean)request.getAttribute("user"); 
 	List<SupplierProductBean> productList = (List<SupplierProductBean>) request.getAttribute("productList");
 	List<SupplierProductCategoryBean> productCategoryList = (List<SupplierProductCategoryBean>) request.getAttribute("productCategoryList");
-
+	UserQrCodeBean qrCode = (UserQrCodeBean)request.getAttribute("qrCode");
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -153,6 +155,23 @@
 			<div class="swiper-slide" style="display:none;">店铺介绍</div>
 		</div>
 	</div>
+	
+	<div id="shareDiv" style="display: none;">
+		<div id="shadowDiv"
+			style="width:100%;height:100%;position:absolute;left:0;top:0;z-index:2;background-color:#000;opacity:0.6;">
+
+		</div>
+		<div style="position: fixed;margin-top: 50%;text-align: center;z-index: 99;">
+			<img width="80%" style="height: 100%;margin: 0 auto;"
+				src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=<%=URLEncoder.encode(qrCode.getTicket(), "utf8") %>" alt="">
+    	<p style="height: auto;">
+			<span style="font-size: 16px;color:white;">温馨提示：<br>
+				<span style="font-size: 16px;color:white;" id="tips">请长按上方二维码，关注公众号后即可下单！</span>
+			</span>
+		</p>
+		</div>
+	</div>
+	
 	<script type="text/javascript">
 		$(function() {
 			$('.content').css('height', $('.right').height());
@@ -307,6 +326,14 @@
   	}
   	
   	function gotoOrder(){
+  		var isSubscribe = <%=user.getStatus() == UserWechatBean.STATUS_SUBSCRIBE %> ;
+  		if(!isSubscribe){
+  			
+  			$("#shareDiv").show();
+  			return false;
+  		}
+  		
+  	
   		var span = document.getElementById("totalNum");
   		var num = Number(span.innerHTML);
   		if(num > 0){

@@ -39,8 +39,11 @@ import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierPowerLogService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.ISupplierUserService;
+import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
+import com.yd.business.wechat.util.WechatConstant;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.CookieUtil;
 import com.yd.util.DateUtil;
@@ -72,7 +75,8 @@ public class SupplierShopController extends BaseController {
 	private ISupplierPowerLogService supplierPowerLogService;
 	@Autowired
 	private IUserWechatService userWechatService;
-
+	@Resource
+	private ISupplierUserService supplierUserService;
 	@Resource
 	private ISupplierCouponService supplierCouponService;
 	@Resource
@@ -84,8 +88,8 @@ public class SupplierShopController extends BaseController {
 	 * @return
 	 * @throws IOException 
 	 */
-	@RequestMapping("/wx/supplier/shop/toMySupplierShopManagerPage.html")
-	public ModelAndView toMySupplierShopManagerPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+	@RequestMapping("/wx/supplier/shop/toMySupplierShopManagerFramePage.html")
+	public ModelAndView toMySupplierShopManagerFramePage(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		try {
 			String openid = request.getParameter("openid");
 			List<SupplierBean> list = supplierService.querySupplierByOpenid(openid);
@@ -99,12 +103,12 @@ public class SupplierShopController extends BaseController {
 			case 1:
 				//注册过，只有一个，进入管理界面
 				supplier = list.get(0);
-				modelView = "redirect:/wx/supplier/shop/toManagerCategoryPage.html?openid="+openid+"&sid="+supplier.getId();
+				modelView = "page/supplier/shop/manager/frameIndex.jsp?openid="+openid+"&sid="+supplier.getId();
 				break;
 			default:
 				//注册过多个
 				supplier = list.get(0);
-				modelView = "redirect:/wx/supplier/shop/toManagerCategoryPage.html?openid="+openid+"&sid="+supplier.getId();
+				modelView = "page/supplier/shop/manager/frameIndex.jsp?openid="+openid+"&sid="+supplier.getId();
 				// 要改
 				break;
 			}
@@ -128,14 +132,18 @@ public class SupplierShopController extends BaseController {
 	@RequestMapping("/wx/supplier/shop/toSupplierShopPage.html")
 	public ModelAndView toSupplierShopPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		String sid = request.getParameter("sid");
+		String fromOpenid = request.getParameter("fromOpenid");
 		String openid = getCurrentOpenid();
 		try{
 			Integer supplier_id = SupplierBean.PLATFROM_SUPPLIER_ID;
 			if(StringUtil.isNotNull(sid)){
 				supplier_id = Integer.parseInt(sid);
 			}
-			
+
 			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
+			//创建商户的用户
+//			supplierUserService.createOrUpdateSupplierUser(openid,supplier_id);
+			
 			List<SupplierProductCategoryBean> productCategoryList = supplierProductService.querySupplierProductCategoryBySupplierId(supplier_id,SupplierProductCategoryBean.STATUS_YES);
 			
 			SupplierProductBean condition = new SupplierProductBean();
@@ -147,14 +155,18 @@ public class SupplierShopController extends BaseController {
 			List<SupplierProductBean> productList = supplierProductService.listSupplierProduct(condition );
 			
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			UserQrCodeBean qrCode = null;
+			if(user.getStatus() != UserWechatBean.STATUS_SUBSCRIBE) {
+				qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(fromOpenid, WechatConstant.TICKET_SENCE_CODE_SUPPLIERSHOP, supplier_id);
+			}
+
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("productCategoryList", productCategoryList);
 			model.put("productList", productList);
 			model.put("openid", openid);
 			model.put("supplier", supplier);
 			model.put("user", user);
-
-
+			model.put("qrCode", qrCode);
 			
 			return new ModelAndView(PAGE_SUPPLIERSHOP_SHOPCATEGORY, model);			
 		}catch (Exception e) {
