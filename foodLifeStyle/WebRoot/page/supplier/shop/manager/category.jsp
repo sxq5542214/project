@@ -196,12 +196,15 @@
   	function gotoRelease(){
   		alert("您可以直接分享当前页面至好友/客户群，即可正式生效！<br> 您发布的是预订单（不收用户费用），注意在后台查看订单信息！");
   	}
-  	weixinInit.setShareTitle("我的小店【<%=supplier.getName()%>】快来看看吧！");
-	weixinInit.setShareDesc("我的小店【<%=supplier.getName()%>】快来看看吧！");
-	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>activity/user/toTurntable1Activity.html?fromOpenid=<%=openid%>&sid=<%=supplier.getId()%>");
+  	weixinInit.setShareTitle("我的小店【<%=supplier.getName()%>】快来下单吧！");
+	weixinInit.setShareDesc("我的小店【<%=supplier.getName()%>】快来下单吧！");
+	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>wechat/user/toDistributeControll.do?conName=wx.supplier.shop.toSupplierShopPage&fromOpenid=<%=openid%>&sid=<%=supplier.getId()%>");
 	weixinInit.setShareImg("<%=BaseContext.getServerUrl()%>images/foods/food_share_img.jpg");
 	
-	
+	if(top!=self){
+          if(top.location != self.location)
+               top.location = self.location;
+	}
   </script>
   
 </body>

@@ -106,10 +106,11 @@ function updateData(){
 	var id = $("#id").val();
 	
 	if(id == ''){
-		$("#seq").val(0) ;
+		$("#seq").val(16) ;
 		$("#name").val('');
 		$("#deleteBTN").hide();
 	}else{
+		
 		for(var i = 0 ; i < listData.length ;i++){
 			if(listData[i].id == id){
 				$("#seq").val(listData[i].seq) ;
