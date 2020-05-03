@@ -103,12 +103,12 @@ public class SupplierShopController extends BaseController {
 			case 1:
 				//注册过，只有一个，进入管理界面
 				supplier = list.get(0);
-				modelView = "page/supplier/shop/manager/frameIndex.jsp?openid="+openid+"&sid="+supplier.getId();
+				modelView = "/page/supplier/shop/manager/frameIndex.jsp?openid="+openid+"&sid="+supplier.getId();
 				break;
 			default:
 				//注册过多个
 				supplier = list.get(0);
-				modelView = "page/supplier/shop/manager/frameIndex.jsp?openid="+openid+"&sid="+supplier.getId();
+				modelView = "/page/supplier/shop/manager/frameIndex.jsp?openid="+openid+"&sid="+supplier.getId();
 				// 要改
 				break;
 			}

@@ -66,9 +66,6 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
  <script type="text/javascript">
  	var openid = '<%=openid%>';
  	var sid = '<%=supplier.getId()%>';
- 	var xs = [];
- 	var ys = [];
- 	var ds = [];
     // 基于准备好的dom，初始化echarts实例
     var effOrderChart = echarts.init(document.getElementById('effOrderChart'));
     var productChart = echarts.init(document.getElementById('productChart'));
@@ -83,7 +80,7 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
         },
         yAxis: {},
         series: [{
-            name: '单量',
+            name: '当日单量',
             type: 'bar',
             data: [0]
         }]
@@ -103,15 +100,15 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
     	tooltip: {show:true,showContent:true},
     	grid:{top:10,bottom:20},
         xAxis: {
-            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            data: []
         },
         yAxis: {},
         series: [{
-            name: '销量',
+            name: '累计客户数',
             type: 'bar',
             data: [5, 25, 40, 50, 60, 80]
         },{
-            name: '销量',
+            name: '日新增客户',
             type: 'line',
             data: [5, 25, 40, 50, 60, 80]
         }]
@@ -119,19 +116,23 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
     
     effOrderChart.showLoading();
     productChart.showLoading();
+    consumerChart.showLoading();
 	updateEffOrderChart();
 	updateProductChart();
-	
+	updateConsumerChart();
 	updateShopOrderEffLatelyData();
 	
     // 使用刚指定的配置项和数据显示图表。
-    productChart.setOption(productChartOption);
-    consumerChart.setOption(consumerChartOption);
+//    productChart.setOption(productChartOption);
+//    consumerChart.setOption(consumerChartOption);
     
     function toCategoryPage(){
     	location.href = "wx/supplier/shop/toManagerCategoryPage.html?openid="+openid+"&sid="+supplierId ;
     }
     function updateEffOrderChart(){
+	 	var xs = [];
+	 	var ys = [];
+	 	var ds = [];
 		$.ajax({
             type : "POST",
             //请求地址
@@ -149,6 +150,10 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
                 		 xs.push(result.dataList[i].date);
                 		 ds.push(result.dataList[i].num);
                 	}
+                	if(result.dataList.length == 0){
+                		xs = ['无数据'];
+                		ds = [0];
+                	}
                 	effOrderChartOption.xAxis.data = xs;
                 	effOrderChartOption.series[0].data = ds;
     				effOrderChart.setOption(effOrderChartOption);
@@ -162,6 +167,9 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
         });
     }
     function updateProductChart(){
+	 	var xs = [];
+	 	var ys = [];
+	 	var ds = [];
 		$.ajax({
             type : "POST",
             //请求地址
@@ -177,6 +185,9 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
                 }else{
                 	for(var i = 0 ; i < result.dataList.length;i++){
                 		 ds.push(result.dataList[i]);
+                	}
+                	if(result.dataList.length == 0){
+                		ds = [{name: '无数据' ,value:0}];
                 	}
                 	productChartOption.series[0].data = ds;
     				productChart.setOption(productChartOption);
@@ -223,5 +234,50 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
             }
         });
     }
+    
+    
+    function updateConsumerChart(){
+	 	var xs = [];
+	 	var ys = [];
+	 	var ds = [];
+    	var code = "supplier.chart.ajaxShopConsumerLatelyData";
+		$.ajax({
+            type : "POST",
+            //请求地址
+            url : "supplier/chart/ajaxCommonChartDataByCode.html",
+            //数据，json字符串
+            data : { openid:openid , sid : sid , code:code},
+            //请求成功
+            success : function(resultstr) {
+            	var result = eval('('+resultstr+")");
+            	if(resultstr == 'error')
+            	{
+                	alert("数据查询失败！" + resultstr);
+                }else{
+                	for(var i = 0 ; i < result.dataList.length;i++){
+                		 ds.push(result.dataList[i].date);
+                		 xs.push(result.dataList[i].numsum);
+                		 ys.push(result.dataList[i].numday);
+                		 
+                	}
+                	if(result.dataList.length == 0){
+                		ds = ['无数据'];
+                		xs = [0];
+                		ys = [0];
+                	}
+                	consumerChartOption.xAxis.data = ds;
+                	consumerChartOption.series[0].data = xs;
+                	consumerChartOption.series[1].data = ys;
+    				consumerChart.setOption(consumerChartOption);
+    				consumerChart.hideLoading();
+                }
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                alert("数据查询失败！" + e.responseText);
+            }
+        });
+    }
+    
 </script>
 </html>
