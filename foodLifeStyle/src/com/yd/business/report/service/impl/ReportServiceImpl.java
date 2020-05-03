@@ -38,6 +38,24 @@ public class ReportServiceImpl extends BaseService implements IReportService {
 	}
 
 	@Override
+	public ReportSimpleBean querySimpleReportAndDataByCode(String code,Map<String,String> params){
+		ReportSimpleBean condition = new ReportSimpleBean();
+		condition.setCode(code);
+		List<ReportSimpleBean> list = queryReportSimpleList(condition);
+		for(ReportSimpleBean bean : list) {
+			String execSql = convertActionParameter(bean.getData_sql(), params);
+			
+			List<Map<String, Object>> dataList = querySingleReportData(execSql);
+			bean.setDataList(dataList);
+			bean.setData_sql(null);
+			return bean;
+		}
+		
+		return null;
+	}
+	
+	
+	@Override
 	public ReportSimpleBean findReportSimpleById(int id) {
 		ReportSimpleBean bean = new ReportSimpleBean();
 		bean.setId(id);
@@ -49,6 +67,20 @@ public class ReportServiceImpl extends BaseService implements IReportService {
 		return null;
 	}
 	
-	
+
+	/**
+	 * 转换参数数据
+	 * @param content
+	 * @param action
+	 */
+	private String convertActionParameter(String content,Map<String,String> params){
+		
+		if(params != null) {
+			for(String key : params.keySet()) {
+				content = content.replaceAll("#"+ key +"#", params.get(key));
+			}
+		}
+		return content;
+	}
 	
 }

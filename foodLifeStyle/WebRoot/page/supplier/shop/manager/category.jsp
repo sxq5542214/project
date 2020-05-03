@@ -49,7 +49,7 @@
 		<div class="swiper-wrapper">
 			<div class="swiper-slide" style="margin-bottom: 52px;">
 				<div class="content">
-					<div class="left" id="left">
+					<div class="left" id="left" style="top:1px;">
 						<ul>
 							<li v-for="item in items">{{item.seq}}{{item.name}}</li>
 						</ul>
@@ -132,7 +132,7 @@
 			$('.left ul li').click(function() {
 				var i = $(this).index('.left ul li');
 				$('body, html').animate({
-					scrollTop : $('.right ul li').eq(i).offset().top - 40
+					scrollTop : $('.right ul li').eq(i).offset().top - 1
 				}, 500);
 			});
 			$('.swiper-container-ul-li').click(function() {

@@ -26,24 +26,31 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
 	<script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js" type="text/javascript"></script>
   </head>
   <body>
-  
-  <h2 class="form-signup-heading" style="text-align: center;">商铺主页</h2>
-<div class="panel panel-primary">
-	<div class="panel-heading">店铺近期预订单</div>
+ <div class="panel panel-primary">
+  <div class="panel-heading">我的店铺【<%=supplier.getName() %>】重要信息总览</div>
+  <div class="panel-body">
+    昨日新增客户XX个，昨日新增订单XX个，昨日营收XX元，当前客户总量XX位。
+  </div>
+  <ul class="list-group" id="shopOrderEffLatelyData">
+    <li class="list-group-item">【时间】【姓名】【商品】【备注】</li>
+  </ul>
+</div>
+<div class="panel panel-info">
+	<div class="panel-heading">店铺近期预订单统计</div>
 	<div class="panel-body">
 		
-		<div id="latelyChart" style="width: 100%;height:250px;"></div>
+		<div id="effOrderChart" style="width: 100%;height:250px;"></div>
 	</div>
 </div>
-<div class="panel panel-info" onclick="toCategoryPage()">
-	<div class="panel-heading">店铺商品分类</div>
+<div class="panel panel-success" >
+	<div class="panel-heading">店铺分类下商品统计</div>
 	<div class="panel-body">
 		
 		<div id="productChart" style="width: 100%;height:250px;"></div>
 	</div>
 </div>
-<div class="panel panel-success">
-	<div class="panel-heading">客户清单</div>
+<div class="panel panel-danger">
+	<div class="panel-heading">客户清单统计</div>
 	<div class="panel-body">
 		
 		<div id="consumerChart" style="width: 100%;height:250px;"></div>
@@ -58,42 +65,43 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
 </body>
  <script type="text/javascript">
  	var openid = '<%=openid%>';
- 	var supplierId = '<%=supplier.getId()%>';
+ 	var sid = '<%=supplier.getId()%>';
+ 	var xs = [];
+ 	var ys = [];
+ 	var ds = [];
     // 基于准备好的dom，初始化echarts实例
-    var latelyChart = echarts.init(document.getElementById('latelyChart'));
+    var effOrderChart = echarts.init(document.getElementById('effOrderChart'));
     var productChart = echarts.init(document.getElementById('productChart'));
     var consumerChart = echarts.init(document.getElementById('consumerChart'));
 
     // 指定图表的配置项和数据
-    var latelyChartOption = {
+    var effOrderChartOption = {
     	tooltip: {show:true,showContent:true},
+    	grid:{top:10,bottom:20},
         xAxis: {
-            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            data: ["待加载"]
         },
         yAxis: {},
         series: [{
-            name: '销量',
+            name: '单量',
             type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
+            data: [0]
         }]
     };
     // 指定图表的配置项和数据
     var productChartOption = {
         
     	tooltip: {show:true,showContent:true},
+    	grid:{top:10,bottom:20},
         series: [{
             type: 'pie',
-            data: [ {name: 'A', value: 1212},
-            		{name: 'B', value: 1212},
-            		{name: 'C', value: 1212},
-            		{name: 'D', value: 1212},
-            		{name: 'E', value: 1212}
-            	  ]
+            data: []
         }]
     };
     // 指定图表的配置项和数据
     var consumerChartOption = {
     	tooltip: {show:true,showContent:true},
+    	grid:{top:10,bottom:20},
         xAxis: {
             data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
         },
@@ -108,14 +116,112 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
             data: [5, 25, 40, 50, 60, 80]
         }]
     };
-
+    
+    effOrderChart.showLoading();
+    productChart.showLoading();
+	updateEffOrderChart();
+	updateProductChart();
+	
+	updateShopOrderEffLatelyData();
+	
     // 使用刚指定的配置项和数据显示图表。
-    latelyChart.setOption(latelyChartOption);
     productChart.setOption(productChartOption);
     consumerChart.setOption(consumerChartOption);
     
     function toCategoryPage(){
     	location.href = "wx/supplier/shop/toManagerCategoryPage.html?openid="+openid+"&sid="+supplierId ;
+    }
+    function updateEffOrderChart(){
+		$.ajax({
+            type : "POST",
+            //请求地址
+            url : "supplier/chart/ajaxShopEffOrderLatelyData.html",
+            //数据，json字符串
+            data : { openid:openid , sid : sid},
+            //请求成功
+            success : function(resultstr) {
+            	var result = eval('('+resultstr+")");
+            	if(resultstr == 'error')
+            	{
+                	alert("数据查询失败！" + resultstr);
+                }else{
+                	for(var i = 0 ; i < result.dataList.length;i++){
+                		 xs.push(result.dataList[i].date);
+                		 ds.push(result.dataList[i].num);
+                	}
+                	effOrderChartOption.xAxis.data = xs;
+                	effOrderChartOption.series[0].data = ds;
+    				effOrderChart.setOption(effOrderChartOption);
+    				effOrderChart.hideLoading();
+                }
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                alert("数据查询失败！" + e.responseText);
+            }
+        });
+    }
+    function updateProductChart(){
+		$.ajax({
+            type : "POST",
+            //请求地址
+            url : "supplier/chart/ajaxShopProductCountData.html",
+            //数据，json字符串
+            data : { openid:openid , sid : sid},
+            //请求成功
+            success : function(resultstr) {
+            	var result = eval('('+resultstr+")");
+            	if(resultstr == 'error')
+            	{
+                	alert("数据查询失败！" + resultstr);
+                }else{
+                	for(var i = 0 ; i < result.dataList.length;i++){
+                		 ds.push(result.dataList[i]);
+                	}
+                	productChartOption.series[0].data = ds;
+    				productChart.setOption(productChartOption);
+    				productChart.hideLoading();
+                }
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                alert("数据查询失败！" + e.responseText);
+            }
+        });
+    }
+    
+    function updateShopOrderEffLatelyData(){
+    	var code = "supplier.chart.ajaxShopOrderEffLatelyData";
+		$.ajax({
+            type : "POST",
+            //请求地址
+            url : "supplier/chart/ajaxCommonChartDataByCode.html",
+            //数据，json字符串
+            data : { openid:openid , sid : sid ,code: code},
+            //请求成功
+            success : function(resultstr) {
+            	var result = eval('('+resultstr+")");
+            	if(resultstr == 'error')
+            	{
+                	alert("数据查询失败！" + resultstr);
+                }else{
+                	var shopOrderEffLatelyData = $("#shopOrderEffLatelyData");
+                	var str = '';
+                	for(var i = 0 ; i < result.dataList.length;i++){
+                		var da = result.dataList[i];
+                		var remark = da.remark;
+                		if(typeof(remark) == "undefined") remark = '无备注';
+                		str += '<li class="list-group-item">【'+ da.contact_name +'】预约【'+ 
+                		da.eff_date +'】【 '+ da.order_name+'】【'+ remark +'】</li>';
+                	}
+                	shopOrderEffLatelyData.html(str);
+                }
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                alert("数据查询失败！" + e.responseText);
+            }
+        });
     }
 </script>
 </html>

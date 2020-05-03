@@ -57,6 +57,7 @@ public class SupplierShopController extends BaseController {
 	public static final String PAGE_SUPPLIERSHOPMANAGER_CATEGORY = "/page/supplier/shop/manager/category.jsp";
 	public static final String PAGE_SUPPLIERSHOP_SHOPCATEGORY = "/page/supplier/shop/shopCategory.jsp";
 	public static final String PAGE_SUPPLIER_SHOP_ORDER_EFF = "/page/supplier/shop/orderEffInfo.jsp";
+	public static final String PAGE_SUPPLIERSHOPMANAGER_INDEX = "/page/supplier/shop/manager/index.jsp";
 
 
 	@Autowired
@@ -213,6 +214,44 @@ public class SupplierShopController extends BaseController {
 	
 
 	/**
+	 * 跳转至商户商城界面
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping("/wx/supplier/shop/toShopManagerIndexPage.html")
+	public ModelAndView toShopManagerIndexPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
+		String sid = request.getParameter("sid");
+		String openid = request.getParameter("openid");
+		if(StringUtil.isNull(openid)) {
+			openid = getCurrentOpenid();
+		}
+		try{
+			Integer supplier_id = SupplierBean.PLATFROM_SUPPLIER_ID;
+			if(StringUtil.isNotNull(sid)){
+				supplier_id = Integer.parseInt(sid);
+			}
+			
+			//判断openid 和 商户ID是否一致，不一致可能是被改了商户id
+			SupplierBean supplier = supplierService.findSupplier(supplier_id,openid);
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(supplier != null) {
+				
+
+				Map<String, Object> model = new HashMap<String, Object>();
+				model.put("supplier", supplier);
+				return new ModelAndView(PAGE_SUPPLIERSHOPMANAGER_INDEX, model );	
+			}else {
+				writeJson(response, "您没有权限访问他人的店铺信息");
+			}
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	
+	/**
 	 * 跳转到用户定单界面
 	 * @return
 	 */
@@ -298,6 +337,32 @@ public class SupplierShopController extends BaseController {
 
 	@RequestMapping("**order/shop/cancelOrderEffDate.html")
 	public ModelAndView cancelOrderEffDate(HttpServletRequest request,HttpServletResponse response) {
+		
+		try {
+			String openid = getCurrentOpenid();
+			String orderCode = request.getParameter("orderCode");
+			String remark = request.getParameter("remark");
+			
+			shopOrderService.updateOrderStatusToCancel(orderCode, openid, remark);
+			
+			writeJson(response, "success");
+
+		} catch (Exception e) {
+			log.error(e,e);
+			writeJson(response, e.toString());
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 查询近期订单数据
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("supplier/shop/ajaxShopEffOrderLatelyData.html")
+	public ModelAndView ajaxShopEffOrderLatelyData(HttpServletRequest request,HttpServletResponse response) {
 		
 		try {
 			String openid = getCurrentOpenid();

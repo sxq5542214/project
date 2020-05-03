@@ -20,4 +20,6 @@ public interface IReportService {
 
 	List<Map<String, Object>> querySingleReportData(String sql);
 
+	ReportSimpleBean querySimpleReportAndDataByCode(String code, Map<String, String> params);
+
 }

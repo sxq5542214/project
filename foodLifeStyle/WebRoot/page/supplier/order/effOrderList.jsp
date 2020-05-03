@@ -46,42 +46,7 @@ List<ShopOrderEffInfoBean> listOrder = (List<ShopOrderEffInfoBean>)request.getAt
   </head>
  
   <body style="background-color: #eee;padding-top: 0px;">
-	<nav class="navbar navbar-inverse navbar-static-top" style="margin-bottom : 0px;">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" ><%=queryDate %>预订清单</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">店铺首页</a></li>
-            <li><a href="#about">About</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="../navbar/">Default</a></li>
-            <li class="active"><a href="./">Static top <span class="sr-only">(current)</span></a></li>
-            <li><a href="../navbar-fixed-top/">Fixed top</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+
 	
     <div class="container-fluid" style="padding: 0;"><!-- 
       <div class="table-responsive"> -->
@@ -127,5 +92,6 @@ List<ShopOrderEffInfoBean> listOrder = (List<ShopOrderEffInfoBean>)request.getAt
 </body>
 <script type="text/javascript">
 	$(".cancel-3").attr("class","panel panel-danger");
+	window.parent.setTitle('<%=queryDate%>预订清单');
 </script>
 </html>

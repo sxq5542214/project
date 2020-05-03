@@ -637,7 +637,6 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		updateShopOrderInfo(order);
 		
 		msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_CANCEL, "cancel", effOrder);
-
 		
 	}
 	
