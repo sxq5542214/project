@@ -124,7 +124,7 @@ public class SupplierProductController extends BaseController {
 			}else {
 				supplierProductService.createSupplierProductCategory(bean);
 			}
-			return new ModelAndView("redirect:/wx/supplier/shop/toManagerCategoryPage.html?openid="+openid+"&sid="+sid);
+			return new ModelAndView("redirect:/wx/supplier/shop/toManagerCategoryPage.html?openid="+openid+"&sid="+sid+"&fromOpenid="+openid);
 		}catch (Exception e) {
 			log.error(e,e);
 		}
@@ -176,7 +176,7 @@ public class SupplierProductController extends BaseController {
 			if(StringUtil.isNotNull(prime_cost_price)) {
 				bean.setPrime_cost_price(Integer.parseInt(prime_cost_price));
 			}else {
-				bean.setPrime_cost_price(-1);
+				bean.setPrime_cost_price(0);
 			}
 			bean.setProduct_category_id(category.getId());
 			bean.setProduct_category_name(category.getName());
@@ -199,7 +199,7 @@ public class SupplierProductController extends BaseController {
 				bean.setDff_time("2099-12-31");
 				supplierProductService.insertSupplierProduct(bean);
 			}
-			return new ModelAndView("redirect:/wx/supplier/shop/toManagerCategoryPage.html?openid="+openid+"&sid="+sid);
+			return new ModelAndView("redirect:/wx/supplier/shop/toManagerCategoryPage.html?openid="+openid+"&sid="+sid+"&fromOpenid="+openid);
 		}catch (Exception e) {
 			log.error(e,e);
 		}

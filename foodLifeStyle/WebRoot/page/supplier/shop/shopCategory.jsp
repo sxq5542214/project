@@ -1,3 +1,4 @@
+<%@page import="com.yd.business.wechat.bean.QrCodeBean"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.yd.business.user.bean.UserQrCodeBean"%>
 <%@page import="com.yd.util.StringUtil"%>
@@ -51,7 +52,7 @@
 		<div class="swiper-wrapper">
 			<div class="swiper-slide" style="margin-bottom: 52px;">
 				<div class="content">
-					<div class="left" id="left">
+					<div class="left" id="left" style="top:1px;">
 						<ul>
 							<li v-for="item in items">{{item.name}}</li>
 						</ul>
@@ -155,21 +156,21 @@
 			<div class="swiper-slide" style="display:none;">店铺介绍</div>
 		</div>
 	</div>
-	
+	<% if(qrCode == null){ qrCode = new UserQrCodeBean(); qrCode.setTicket(""); } %>
 	<div id="shareDiv" style="display: none;">
 		<div id="shadowDiv"
-			style="width:100%;height:100%;position:absolute;left:0;top:0;z-index:2;background-color:#000;opacity:0.6;">
-
+			style="width:100%;height:100%;position: fixed;left:0;top:0;z-index:2;background-color:#000;opacity:0.6;">
+			
 		</div>
-		<div style="position: fixed;margin-top: 50%;text-align: center;z-index: 99;">
-			<img width="80%" style="height: 100%;margin: 0 auto;"
-				src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=<%=URLEncoder.encode(qrCode.getTicket(), "utf8") %>" alt="">
-    	<p style="height: auto;">
-			<span style="font-size: 16px;color:white;">温馨提示：<br>
-				<span style="font-size: 16px;color:white;" id="tips">请长按上方二维码，关注公众号后即可下单！</span>
-			</span>
-		</p>
-		</div>
+		<div style="position: fixed;top:25%;text-align: center;z-index: 99;">
+				<img width="80%" style="height: 100%;margin: 0 auto;"
+					src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=<%=URLEncoder.encode(qrCode.getTicket(), "utf8") %>" alt="">
+		    	<p style="height: auto;">
+					<span style="font-size: 16px;color:white;">温馨提示：<br>
+						<span style="font-size: 16px;color:white;" id="tips">请长按上方二维码，关注公众号后即可下单！</span>
+					</span>
+				</p>
+			</div>
 	</div>
 	
 	<script type="text/javascript">

@@ -68,7 +68,7 @@ public class SupplierUserServiceImpl extends BaseService implements ISupplierUse
 	}
 	
 	@Override
-	public void createOrUpdateSupplierUser(String openid,Integer sid) throws Exception {
+	public void createOrUpdateSupplierUser(String openid,Integer sid) {
 		
 		SupplierUserBean su = findSupplierUser(openid, sid);
 		

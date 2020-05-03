@@ -16,7 +16,7 @@ import com.yd.factory.ServiceFactory;
  *
  */
 public class BaseBean extends PageinationData {
-	private Logger log = Logger.getLogger(getClass());
+	protected Logger log = Logger.getLogger(getClass());
 //	protected HashMap<String,Object> dictMap = new HashMap<String, Object>();
 	
 //	public HashMap<String, Object> getDictMap() {

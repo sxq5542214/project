@@ -157,7 +157,7 @@ public class SupplierShopController extends BaseController {
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			UserQrCodeBean qrCode = null;
 			if(user.getStatus() != UserWechatBean.STATUS_SUBSCRIBE) {
-				qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(fromOpenid, WechatConstant.TICKET_SENCE_CODE_SUPPLIERSHOP, supplier_id);
+				qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(fromOpenid, WechatConstant.TICKET_SENCE_CODE_SUPPLIERSHOPEFF, supplier_id);
 			}
 
 			Map<String, Object> model = new HashMap<String, Object>();

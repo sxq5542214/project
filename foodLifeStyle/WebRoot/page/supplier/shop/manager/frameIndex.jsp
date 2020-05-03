@@ -53,7 +53,7 @@ String openid = request.getParameter("openid");
                 	新增商品分类（轻松分类）</a></li>
                 <li><a onclick="changeIframe('supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid %>&sid=<%=sid%>')">
                 	新增商品信息（简单便捷）</a></li>
-                <li><a href="wx/supplier/shop/toManagerCategoryPage.html?openid=<%=openid %>&sid=<%=sid%>">
+                <li><a href="wx/supplier/shop/toManagerCategoryPage.html?openid=<%=openid %>&sid=<%=sid%>&fromOpenid=<%=openid %>">
                 	预览/修改/发布（快速及时）</a></li>
               </ul>
             </li>

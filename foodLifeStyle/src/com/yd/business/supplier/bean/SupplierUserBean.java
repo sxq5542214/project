@@ -8,6 +8,8 @@ import org.apache.ibatis.type.Alias;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.util.AutoInvokeGetSetMethod;
 
+import sun.util.logging.resources.logging;
+
 /**
  * @author ice
  *
@@ -19,8 +21,19 @@ public class SupplierUserBean extends UserWechatBean {
 	
 	public SupplierUserBean() {}
 	
-	public SupplierUserBean(UserWechatBean user) throws Exception {
-		AutoInvokeGetSetMethod.autoInvoke(user, this);
+	public SupplierUserBean(UserWechatBean user) {
+		try {
+			AutoInvokeGetSetMethod.autoInvoke(user, this);
+		} catch (Exception e) {
+			log.error(e,e);
+			
+			this.setOpenid(user.getOpenid());
+			this.setHead_img(user.getHead_img());
+			this.setNick_name(user.getNick_name());
+			this.setOriginalid(user.getOriginalid());
+			this.setStatus(user.getStatus());
+			this.setPhone(user.getPhone());
+		}
 		this.setId(null);
 	}
 	

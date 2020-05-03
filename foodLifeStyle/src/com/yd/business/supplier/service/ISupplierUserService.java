@@ -12,7 +12,7 @@ public interface ISupplierUserService {
 
 	List<SupplierUserBean> querySupplierUser(SupplierUserBean bean);
 
-	void createOrUpdateSupplierUser(String openid, Integer sid) throws Exception;
+	void createOrUpdateSupplierUser(String openid, Integer sid) ;
 
 	SupplierUserBean findSupplierUser(String openid, int sid);
 	

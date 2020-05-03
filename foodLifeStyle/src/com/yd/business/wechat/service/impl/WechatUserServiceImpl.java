@@ -3,7 +3,9 @@
  */
 package com.yd.business.wechat.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -16,6 +18,7 @@ import com.yd.business.other.bean.ConfigCruxBean;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.supplier.service.ISupplierEventService;
+import com.yd.business.supplier.service.ISupplierUserService;
 import com.yd.business.user.bean.UserSignBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
@@ -52,6 +55,8 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 	private ISupplierEventService supplierEventService;
 	@Resource
 	private IConfigAttributeService configAttributeService;
+	@Resource
+	private ISupplierUserService supplierUserService;
 	
 	@Override
 	protected BaseMessage handleUserSubscribeMessage(EventBean eventBean) throws Exception {
@@ -226,6 +231,17 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 //				//没有父用户的，并且省份不是安徽的直接送给自己一个幸运号
 //				supplierEventService.createEventCode(idValue, user.getId(), weixin_id);
 //			}
+			break;
+		case WechatConstant.TICKET_SENCE_CODE_SUPPLIERSHOPEFF:
+			supplierUserService.createOrUpdateSupplierUser(weixin_id, idValue);
+			
+			Map<String,Object> map = new HashMap<String, Object>();
+			map.put("idValue", idValue);
+			map.put("senceCode", senceCode);
+			map.put("parentId", parentId);
+			
+			msgCenterActionService.saveAndHandleUserAction(weixin_id, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_SUBSCRIBE_SHOP_EFF, null, map);
+
 			break;
 		case WechatConstant.TICKET_SENCE_CODE_INVITEFRIENDS:
 			

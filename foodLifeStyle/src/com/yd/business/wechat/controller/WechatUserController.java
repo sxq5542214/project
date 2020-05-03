@@ -275,6 +275,13 @@ public class WechatUserController extends BaseController {
 			String openid = request.getParameter("openid");
 			String code = request.getParameter("code");
 			String conName = request.getParameter("conName");
+			String fromOpenid = request.getParameter("fromOpenid");
+			Integer parentId = null;
+			if(StringUtil.isNotNull(fromOpenid)) {
+				UserWechatBean parent = userWechatService.findUserWechatByOpenId(fromOpenid);
+				parentId = parent == null ? null:parent.getId();
+			}
+			
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String originalid = original.getOriginalid();
 			if(StringUtil.isNull(openid)) {
@@ -295,7 +302,7 @@ public class WechatUserController extends BaseController {
 				if( StringUtil.isNotNull(auth.getAccess_token())){
 					//当前用户openid 添加到session
 					WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,auth.getOpenid());
-					wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), null,  WechatConstant.TICKET_SENCE_CODE_WXMENU, null, originalid , auth.getAccess_token());
+					wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentId,  WechatConstant.TICKET_SENCE_CODE_WXMENU, null, originalid , auth.getAccess_token());
 					openid = auth.getOpenid();
 				}else{ // 没有accessstoken 则重新访问
 					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"wechat/user/toDistributeControll.do?"+ paramStr , "utf-8");
