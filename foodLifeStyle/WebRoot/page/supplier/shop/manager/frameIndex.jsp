@@ -40,18 +40,18 @@ String openid = request.getParameter("openid");
         </div>
         <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
           <ul class="nav navbar-nav">
-            <li class="active"><a onclick="changeIframe('wx/supplier/shop/toShopManagerIndexPage.html?sid=<%=sid%>')">
+            <li class="active"><a onclick="changeIframe('wx/supplier/shop/toShopManagerIndexPage.html?sid=<%=sid%>',this)">
             		店铺首页</a></li>
           <!--   <li><a href="#about">About</a></li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              		商品中心 <span class="caret"></span></a>
+              		商品发布中心 <span class="caret"></span></a>
               <ul class="dropdown-menu">
         <!--         <li role="separator" class="divider"></li>
                 <li class="dropdown-header">商品管理</li> -->
-                <li><a onclick="changeIframe('supplierProduct/toCreateOrUpdateProductCategoryPage.html?openid=<%=openid %>&sid=<%=sid%>')">
+                <li><a onclick="changeIframe('supplierProduct/toCreateOrUpdateProductCategoryPage.html?openid=<%=openid %>&sid=<%=sid%>',this)">
                 	新增商品分类（轻松分类）</a></li>
-                <li><a onclick="changeIframe('supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid %>&sid=<%=sid%>')">
+                <li><a onclick="changeIframe('supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid %>&sid=<%=sid%>',this)">
                 	新增商品信息（简单便捷）</a></li>
                 <li><a href="wx/supplier/shop/toManagerCategoryPage.html?openid=<%=openid %>&sid=<%=sid%>&fromOpenid=<%=openid %>">
                 	预览/修改/发布（快速及时）</a></li>
@@ -63,7 +63,7 @@ String openid = request.getParameter("openid");
               <ul class="dropdown-menu">
        <!--          <li role="separator" class="divider"></li>
                 <li class="dropdown-header">客户管理</li> -->
-                <li><a href="#">客户清单</a></li>
+                <li><a onclick="changeIframe('supplier/user/toSupplierUserListPage.html?sid=<%=sid %>',this)">客户清单</a></li>
               </ul>
             </li>
              <li class="dropdown">
@@ -71,13 +71,13 @@ String openid = request.getParameter("openid");
               <ul class="dropdown-menu">
              <!--    <li role="separator" class="divider"></li>
                 <li class="dropdown-header">订单管理</li> -->
-                <li><a onclick="changeIframe('order/shop/toShopOrderEffListPage.html?openid=<%=openid %>&sid=<%=sid%>')">
+                <li><a onclick="changeIframe('order/shop/toShopOrderEffListPage.html?openid=<%=openid %>&sid=<%=sid%>',this)">
                 	预约订单列表（每日详情）</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              		数据中心（暂未开放） <span class="caret"></span></a>
+              		数据中心（敬请期待） <span class="caret"></span></a>
               <ul class="dropdown-menu">
              <!--    <li role="separator" class="divider"></li>
                 <li class="dropdown-header">订单管理</li> -->
@@ -97,25 +97,27 @@ String openid = request.getParameter("openid");
               </ul>
             </li> -->
           </ul>
-          <ul class="nav navbar-nav navbar-right">
+   <!--        <ul class="nav navbar-nav navbar-right">
             <li><a href="../navbar/">Default</a></li>
             <li class="active"><a href="./">Static top <span class="sr-only">(current)</span></a></li>
             <li><a href="../navbar-fixed-top/">Fixed top</a></li>
-          </ul>
+          </ul> -->
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 	    <div style="background-color: grey;" class="embed-responsive" id="iframeDiv" >  
 	        <iframe src="wx/supplier/shop/toShopManagerIndexPage.html?sid=<%=sid%>" id="iframPage" class="embed-responsive-item" width="100%" scrolling="yes" ></iframe>  
-	    </div>  
+	    </div>
   </body>
   <script type="text/javascript">
   	function setTitle(title){
   		$("#navTitle").html(title) ;
   	}
-  	function changeIframe(srcUrl){
+  	function changeIframe(srcUrl , ele){
+  		var title = ele.innerHTML ;
   		document.getElementById("iframPage").src = srcUrl ;
   		$('.navbar-collapse').collapse('hide');
+  		$("#navTitle").html(title) ;
   	}
   
   	//设定frame的高度，少1像素，不出现双重滚动条

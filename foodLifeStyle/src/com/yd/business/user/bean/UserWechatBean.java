@@ -50,7 +50,7 @@ public class UserWechatBean extends BaseBean {
 	private String openid;
 	private String create_time;
 	private String nick_name;
-	private Integer phone;
+	private String phone;
 	private String sex;
 	private String province;
 	private String city;
@@ -108,10 +108,10 @@ public class UserWechatBean extends BaseBean {
 	public void setNick_name(String nick_name) {
 		this.nick_name = nick_name;
 	}
-	public Integer getPhone() {
+	public String getPhone() {
 		return phone;
 	}
-	public void setPhone(Integer phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 	public String getSex() {

@@ -210,6 +210,7 @@ public class WechatUserController extends BaseController {
 	/**
 	 * 客户端查询商户商品
 	 */
+	@Deprecated
 	@RequestMapping("/wechat/user/queryPlatformProductByShop.do")
 	public ModelAndView queryPlatformProductByShop(HttpServletRequest request,HttpServletResponse response){
 		try{

@@ -3,6 +3,8 @@
  */
 package com.yd.business.supplier.service.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -82,6 +84,7 @@ public class SupplierUserServiceImpl extends BaseService implements ISupplierUse
 			su.setCreate_time(DateUtil.getNowDateStr());
 			su.setPoints(0);
 			su.setBalance(0);
+			su.setLevel(0);
 			su.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
 			
 			createSupplierUser(su);
@@ -93,6 +96,32 @@ public class SupplierUserServiceImpl extends BaseService implements ISupplierUse
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @param openid
+	 * @return
+	 */
+	@Override
+	public List<SupplierBean> queryUserVisitSupplierListByOpenid(String openid){
+		
+		SupplierUserBean user = new SupplierUserBean();
+		List<SupplierBean> list = Collections.EMPTY_LIST;
+		user.setOpenid(openid);
+		List<SupplierUserBean> listUser = querySupplierUser(user);
+		String ids = "";
+		
+		for(SupplierUserBean sup : listUser) {
+			ids += sup.getSupplier_id() +",";
+		}
+		
+		if(ids.length() >= 1) {
+			ids = ids.substring(0, ids.length() -1);
+			SupplierBean bean = new SupplierBean();
+			bean.setIds(ids);;
+			list = supplierService.listSupplier(bean );
+			
+		}
+		return list;
+	}
 	
 }

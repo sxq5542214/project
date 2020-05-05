@@ -2,6 +2,7 @@ package com.yd.business.supplier.service;
 
 import java.util.List;
 
+import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierUserBean;
 
 public interface ISupplierUserService {
@@ -15,5 +16,7 @@ public interface ISupplierUserService {
 	void createOrUpdateSupplierUser(String openid, Integer sid) ;
 
 	SupplierUserBean findSupplierUser(String openid, int sid);
+
+	List<SupplierBean> queryUserVisitSupplierListByOpenid(String openid);
 	
 }

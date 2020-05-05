@@ -325,7 +325,7 @@ public class ShopOrderController extends BaseController {
 			bean.setSupplier_id(Integer.parseInt(sid));
 //			bean.setStatus(ShopOrderEffInfoBean.STATUS_ORDERING);
 			bean.setNotInStatus( ShopOrderEffInfoBean.STATUS_WAIT +"," + ShopOrderEffInfoBean.STATUS_FINISH );
-			bean.setOrderby(" group by i.order_code  order by i.status desc, i.eff_date asc ");
+			bean.setOrderby(" order by i.status desc, i.eff_date asc ");
 			List<ShopOrderEffInfoBean> listOrder = shopOrderService.queryShopOrderEffAndProductList(bean);
 
 			Map<String, Object> map = new HashMap<String, Object>();

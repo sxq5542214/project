@@ -572,10 +572,10 @@ public class SupplierController extends BaseController {
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			
 			SupplierTypeBean bean = new SupplierTypeBean();
-			bean.setLevel(SupplierTypeBean.LEVEL_TWO);
+			bean.setLevel(SupplierTypeBean.LEVEL_ONE);
 			List<SupplierTypeBean> parentTypeList = supplierService.querySupplierType(bean );
 			
-			bean.setLevel(SupplierTypeBean.LEVEL_THREE);
+			bean.setLevel(SupplierTypeBean.LEVEL_TWO);
 			List<SupplierTypeBean> typeList = supplierService.querySupplierType(bean );
 
 			map.put("user", user);

@@ -115,9 +115,9 @@
 <%-- 										<a href="<%=basePath %>product/showProductDescById.do?id=<%=prod.getProduct_id() %>"> 
  --%>										
  										<a href="<%=basePath %>supplierProduct/toSupplierProductShopInfo.do?id=<%=prod.getId() %>&openid=<%=user.getOpenid()%>">
- 											<img alt="<%=prod.getProduct_name() %>" src="<%=prod.getHead_img()%>" >
+ 											<img alt="<%=prod.getProduct_name() %>" src="<%=prod.getProduct_img()%>" >
 										</a>
-									</div>
+									</div> 
 									<div class="w-goods-info" onclick="btnClick('cartBtn<%=prod.getId()%>')">
 									<marquee direction="left" behavior="scroll" scrollamount="5" >
 										<p class="w-goods-title f-txtabb" style="overflow:visible;">

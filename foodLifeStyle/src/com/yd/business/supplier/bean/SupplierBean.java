@@ -44,6 +44,38 @@ public class SupplierBean extends BaseBean {
 	private String discount_name;
 	private String disinfo;
 	
+	private String supplier_img;
+	private String supplier_title;
+	private Integer avg_price; 
+	
+	//查询条件,非数据库字段
+	private String ids;
+	
+	
+	public String getIds() {
+		return ids;
+	}
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+	public String getSupplier_img() {
+		return supplier_img;
+	}
+	public void setSupplier_img(String supplier_img) {
+		this.supplier_img = supplier_img;
+	}
+	public String getSupplier_title() {
+		return supplier_title;
+	}
+	public void setSupplier_title(String supplier_title) {
+		this.supplier_title = supplier_title;
+	}
+	public Integer getAvg_price() {
+		return avg_price;
+	}
+	public void setAvg_price(Integer avg_price) {
+		this.avg_price = avg_price;
+	}
 	public String getOpenid() {
 		return openid;
 	}

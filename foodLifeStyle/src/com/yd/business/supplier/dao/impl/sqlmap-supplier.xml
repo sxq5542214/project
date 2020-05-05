@@ -32,10 +32,14 @@
 			<if test="id != null ">
 				and id = #{id}
 			</if>
+			<if test="ids != null ">
+				and id in (${ids})
+			</if>
 			<if test="openid !=null ">
 				and openid = #{openid}
 			</if>
 		</where>
+		<if test="orderby != null"> ${orderby} </if>
 	</select>
 	<select id="querySupplierByPower" resultType="supplier" parameterType="int">
 		select l.*,GROUP_CONCAT('[',(select distinct s.group_name from ll_supplier_discount_relation s where s.supplier_id = l.id),']') disinfo from ll_supplier l where l.parent_customer_id = #{value} and exists (select 1 from ll_supplier_discount_relation where supplier_id = l.id) group by l.name

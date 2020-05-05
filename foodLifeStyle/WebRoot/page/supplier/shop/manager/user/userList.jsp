@@ -1,3 +1,5 @@
+<%@page import="com.yd.util.NumberUtil"%>
+<%@page import="com.yd.business.supplier.bean.SupplierUserBean"%>
 <%@page import="com.yd.util.DateUtil"%>
 <%@page import="com.yd.business.order.bean.ShopOrderProductBean"%>
 <%@page import="com.yd.business.order.bean.ShopOrderEffProductBean"%>
@@ -9,16 +11,9 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 String openid = request.getParameter("openid");
 String sid = request.getParameter("sid");
-String queryDate = request.getParameter("queryDate");
-if(StringUtil.isNull(queryDate)){
-	queryDate = DateUtil.getNowOnlyDateStr();
-}
-String tomorrow = DateUtil.plusDate(queryDate, 1,false);
-String yesterday = DateUtil.plusDate(queryDate, -1,false);
-
-
-List<ShopOrderEffInfoBean> listOrder = (List<ShopOrderEffInfoBean>)request.getAttribute("listOrder");
-
+String phone = request.getParameter("phone");
+List<SupplierUserBean> userList = (List<SupplierUserBean>)request.getAttribute("userList");
+ 
 %>
 
 <!DOCTYPE HTML>
@@ -46,63 +41,66 @@ List<ShopOrderEffInfoBean> listOrder = (List<ShopOrderEffInfoBean>)request.getAt
   </head>
  
   <body style="background-color: #eee;padding-top: 0px;">
-
+	<form class="form-signup form-inline " action="supplier/user/toSupplierUserListPage.html" style="max-width: 90%; ">
+		<div class="container row">
+			<input type="hidden" name="sid" value="<%=sid%>">
+	        <input type="number" id="phone" name="phone" value="<%=StringUtil.convertNull(phone) %>" class="form-control " placeholder="请输入手机号" >
+			<select id="level" name="level" class="form-control show-tick" title="请选择会员等级"   >
+		      	 <option value="">全部会员</option>
+		      	 <option value="0">普通会员</option>
+		      	 <option value="1">一级会员</option>
+		      	 <option value="2">二级会员</option>
+		      	 <option value="3">三级会员</option>
+		      	 <option value="4">四级会员</option>
+		      	 <option value="5">五级会员</option>
+			</select>	
+        </div>
+        <button  class="btn btn-lg btn-primary btn-block" style="margin-top: 0px;" type="submit">确定查询</button>
+      </form> 
 	
     <div class="container-fluid" style="padding: 0;"><!-- 
       <div class="table-responsive"> -->
       <div class="">
       				<%  int i = 0; String classStr = "";
-      					for(ShopOrderEffInfoBean order : listOrder){ 
-      					String name = StringUtil.isNotNull(order.getContact_name())?order.getContact_name():order.getNick_name();
-      					boolean cancel = false;
-      					if(order.getStatus() != ShopOrderEffInfoBean.STATUS_ORDERING){
-      						cancel = true;
-      					}
-      					switch(i++ % 3){
-      						case 0:	classStr = "primary";
-      						break;
-      						case 1: classStr = "success";
-      						break;
-      						case 2: classStr = "warning";
-      						break;
-      					}
+      					for(SupplierUserBean user : userList){
+      						switch( NumberUtil.convertNull(user.getLevel())){
+	      						case 0:	classStr = "defalut";
+	      						break;
+	      						case 1:	classStr = "primary";
+	      						break;
+	      						case 2: classStr = "success";
+	      						break;
+	      						case 3: classStr = "warning";
+	      						break;
+	      						case 4: classStr = "info";
+	      						break;
+	      						case 5: classStr = "danger";
+	      						break;
+      						}
       				%>
-      				<div class="panel panel-<%=classStr %> cancel<%=order.getStatus() %>">
-      					<div class="panel-heading">【<%=StringUtil.convertNull(order.getEff_date()).substring(5, 16) %>】【<%=name %>】【<%=StringUtil.convertNull(order.getContact_phone()) %>】
-      						<br>【<%=order.getDictValueByField("status") %>】  备注【<%=StringUtil.convertNull(order.getRemark()) %>】
+      				<div class="panel panel-<%=classStr %> ">
+      					<div class="panel-heading">【<%=StringUtil.convertNull(user.getCreate_time()).substring(0, 10) %>】名称【<%=user.getNick_name() %>】号码【<%=StringUtil.convertNull(user.getPhone()) %>】 
       					</div>
 						  <div class="panel-body">
-						    <%=order.getProduct_name_str() %>
-						<!--   <a href=""  role="button" class="btn btn-success pull-right btn-xs"  >确定</a> -->
+						    	【<%=user.getDictValueByField("level") %>】【积分：<%=user.getPoints() %>】
+						   <a role="button" class="btn btn-success pull-right btn-xs"  >修改信息</a> 
 						  </div>
       				</div>
       				
       				
       				<%}		//如果没有数据
-      				if(listOrder.size() == 0 ){
+      				if(userList.size() == 0 ){
       				 %>
       				 <div class="panel panel-primary ">
-      					<div class="panel-heading">【今日无数据】
+      					<div class="panel-heading">【暂无客户数据】
       					</div>
 						  <div class="panel-body">
-						  	  【无订单数据】
+						  	  【无客户数据】
 						<!--   <a href=""  role="button" class="btn btn-success pull-right btn-xs"  >确定</a> -->
 						  </div>
       				</div>
       				 <%} %>
       </div>
     </div> <!-- /container -->
-    <div class="navbar navbar-fixed-bottom container-fluid">
-    	<div class="row">
-	    	<div style="text-align: center;">
-				<a href="order/shop/toShopOrderEffListPage.html?sid=<%=sid %>&queryDate=<%=yesterday %>" style="width: 40%;" role="button" class="btn btn-info "  >前一天</a>&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="order/shop/toShopOrderEffListPage.html?sid=<%=sid %>&queryDate=<%=tomorrow %>" style="width: 40%;" role="button" class="btn btn-primary " >后一天</a>
-	    	</div>
-    	</div>
-	</div>
 </body>
-<script type="text/javascript">
-	$(".cancel-3").attr("class","panel panel-danger");
-	window.parent.setTitle('<%=queryDate%>预订清单');
-</script>
 </html>

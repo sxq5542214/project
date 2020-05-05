@@ -128,7 +128,7 @@ public class UserWechatController extends BaseController {
 			bean.setNick_name(request.getParameter("nick_name"));
 			String phone = request.getParameter("phone");
 			if(!StringUtil.isNull(phone)){
-				bean.setPhone(Integer.parseInt(phone));
+				bean.setPhone(phone);
 			}
 			bean.setSex((request.getParameter("sex")));
 			bean.setProvince(request.getParameter("province"));

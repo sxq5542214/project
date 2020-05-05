@@ -16,8 +16,13 @@ public class AdvertisingBean extends BaseBean {
 		public static final int STATUS_NO_USE = 0;
 
 		public static String EDIT_SUCCESS = "edit_success";
-		
-		public static String CODE_USERINDEXPAGE = "userIndexPage";
+
+		//商户主页
+		public static String CODE_SUPPLIERINDEXPAGE = "supplierIndexPage";
+		//商户分类页
+		public static String CODE_SUPPLIERCAGEGORYPAGE = "supplierCagegoryPage";
+		//平台主页
+		public static String CODE_PLATFORMINDEXPAGE = "platformIndexPage";
 		
 		
 		private Integer id ; 

@@ -113,7 +113,7 @@
 								String couponStr = "";
 								String pointsStr = "暂无积分";
 								if(product.getType() == ShopOrderProductBean.TYPE_COUPON){
-									couponStr = " （优惠卷抵扣）";
+									couponStr = " （优惠券抵扣）";
 								}
 								if(product.getCost_points() > 0){
 									pointsStr = "可使用积分抵扣："+product.getCost_points() / 100d+"元";
@@ -146,17 +146,17 @@
 							</p>
 							<div>
 								</div>
-							<p >
+							<p class="border-bottom">
 									日期：<input id="eff_day" type="date" value=""> &nbsp;&nbsp;&nbsp;
 									时间：<input id="eff_time" type="time" value="08:00:00">
 									<span class="fr">&nbsp;</span>
 							</p>  
 								<p class="border-bottom">
-									预约人：<input type="text" id="contact_name" name="contact_name" style="width: 70%;" value="<%=StringUtil.convertNull(order.getContact_name()) %>" maxlength="30">
+									姓名：<input type="text" id="contact_name" name="contact_name" style="width: 70%;" value="<%=StringUtil.convertNull(order.getContact_name()) %>" maxlength="30">
 									<span class="fr">&nbsp;</span>
 								</p>
 								<p class="border-bottom">
-									联系方式：<input type="number" id="contact_phone" name="contact_phone" style="width: 70%;" value="<%=StringUtil.convertNull(order.getContact_phone()) %>" maxlength="30">
+									电话：<input type="number" id="contact_phone" name="contact_phone" style="width: 70%;" value="<%=StringUtil.convertNull(order.getContact_phone()) %>" maxlength="30">
 									<span class="fr">&nbsp;</span>
 								</p>
 								<p class="border-bottom">
@@ -172,7 +172,7 @@
 					<div class="order-box">
 						<div class="order-width">
 							<p class="border-bottom usr-name">
-								当前订单可用优惠卷：
+								当前订单可用优惠券：
 							</p>
 							<%-- <p class="usr-addr" style="text-align: center;"> 
 								<a class="add-address" id="do_checkout" href="user/toUserAddressListPage.do?user_id=<%=order.getUser_id() %>&order_code=<%=order.getOrder_code()%>" onclick="toSetupAddress()">设置收货地址</a>
@@ -205,7 +205,7 @@
 								积分抵扣(暂无积分):<span class="fr red" >￥ -<span id="points"><%=order.getCost_points() / 100d %></span>&nbsp;元</span>
 							</p>
 							<p class="border-bottom">
-								优惠卷:<span class="fr red">￥ -<span id="coupon_price"><%=order.getCoupon_total_price() / 100d %></span>&nbsp;元</span>
+								优惠券:<span class="fr red">￥ -<span id="coupon_price"><%=order.getCoupon_total_price() / 100d %></span>&nbsp;元</span>
 							</p>
 							<p>
 								待支付金额:<span class="fr red">￥ <span id="cost_money"><%=(order.getCost_money()) / 100d %></span>&nbsp;元</span>
@@ -283,7 +283,7 @@
 	function calcPayPrice(coupon){
 		
 		var coupon_offsetmoney;
-		//还原为未选择优惠卷时的数据
+		//还原为未选择优惠券时的数据
 		if(currentCoupon != null ){
 			$("#cost_price").html(<%=order.getCost_price()/100d %>);
 			$("#cost_money").html(<%= (order.getCost_price() - order.getCost_points()) / 100d %>);
@@ -293,13 +293,13 @@
 		var cost_price = Number($("#cost_price").html());
 		var points =  Number($("#points").html());
 		
-		//新选择的优惠卷
-		//代金卷
+		//新选择的优惠券
+		//代金券
 		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_CASH%>)
 		{
 			coupon_offsetmoney = Number(coupon.coupon_offsetmoney)/100 ;
 		}
-		//折扣卷
+		//折扣券
 		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_DISCOUNT%>)
 		{
 			coupon_offsetmoney = Number(coupon.coupon_offsetmoney/100).toFixed(2) ;
@@ -316,7 +316,7 @@
 			coupon_offsetmoney = value ;
 			
 		}
-		//礼品卷、 换购卷
+		//礼品券、 换购券
 		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_GIFT%> || coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_CHANGE%>)
 		{
 			coupon_offsetmoney = Number(coupon.coupon_offsetmoney)/100 ; //礼品价值
@@ -324,7 +324,7 @@
 			cost_price = cost_price + coupon_offsetmoney;	// 商品总价也要相应的增加
 			coupon_offsetmoney = coupon_offsetmoney;		// 礼品同等价值的优惠
 		}
-		//体验卷、待补充
+		//体验券、待补充
 		if(coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_GIFT%> || coupon.coupon_type == <%=SupplierCouponConfigBean.TYPE_EXPERIENCE%>)
 		{
 			

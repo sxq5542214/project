@@ -28,7 +28,7 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
   <body>
  <div class="panel panel-primary">
   <div class="panel-heading">我的店铺【<%=supplier.getName() %>】重要信息总览</div>
-  <div class="panel-body">
+  <div class="panel-body" id="shopYesterdayInfo">
     昨日新增客户XX个，昨日新增订单XX个，昨日营收XX元，当前客户总量XX位。
   </div>
   <ul class="list-group" id="shopOrderEffLatelyData">
@@ -36,21 +36,21 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
   </ul>
 </div>
 <div class="panel panel-info">
-	<div class="panel-heading">店铺近期预订单统计</div>
+	<div class="panel-heading">店铺近期预订单总览</div>
 	<div class="panel-body">
 		
 		<div id="effOrderChart" style="width: 100%;height:250px;"></div>
 	</div>
 </div>
 <div class="panel panel-success" >
-	<div class="panel-heading">店铺分类下商品统计</div>
+	<div class="panel-heading">店铺分类下商品总览</div>
 	<div class="panel-body">
 		
 		<div id="productChart" style="width: 100%;height:250px;"></div>
 	</div>
 </div>
 <div class="panel panel-danger">
-	<div class="panel-heading">客户清单统计</div>
+	<div class="panel-heading">客户数据总览</div>
 	<div class="panel-body">
 		
 		<div id="consumerChart" style="width: 100%;height:250px;"></div>
@@ -121,6 +121,7 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
 	updateProductChart();
 	updateConsumerChart();
 	updateShopOrderEffLatelyData();
+	updateShopYesterdayInfo();
 	
     // 使用刚指定的配置项和数据显示图表。
 //    productChart.setOption(productChartOption);
@@ -201,41 +202,6 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
         });
     }
     
-    function updateShopOrderEffLatelyData(){
-    	var code = "supplier.chart.ajaxShopOrderEffLatelyData";
-		$.ajax({
-            type : "POST",
-            //请求地址
-            url : "supplier/chart/ajaxCommonChartDataByCode.html",
-            //数据，json字符串
-            data : { openid:openid , sid : sid ,code: code},
-            //请求成功
-            success : function(resultstr) {
-            	var result = eval('('+resultstr+")");
-            	if(resultstr == 'error')
-            	{
-                	alert("数据查询失败！" + resultstr);
-                }else{
-                	var shopOrderEffLatelyData = $("#shopOrderEffLatelyData");
-                	var str = '';
-                	for(var i = 0 ; i < result.dataList.length;i++){
-                		var da = result.dataList[i];
-                		var remark = da.remark;
-                		if(typeof(remark) == "undefined") remark = '无备注';
-                		str += '<li class="list-group-item">【'+ da.contact_name +'】预约【'+ 
-                		da.eff_date +'】【 '+ da.order_name+'】【'+ remark +'】</li>';
-                	}
-                	shopOrderEffLatelyData.html(str);
-                }
-            },
-            //请求失败，包含具体的错误信息
-            error : function(e){
-                alert("数据查询失败！" + e.responseText);
-            }
-        });
-    }
-    
-    
     function updateConsumerChart(){
 	 	var xs = [];
 	 	var ys = [];
@@ -270,6 +236,77 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
                 	consumerChartOption.series[1].data = ys;
     				consumerChart.setOption(consumerChartOption);
     				consumerChart.hideLoading();
+                }
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                alert("数据查询失败！" + e.responseText);
+            }
+        });
+    }
+    
+    function updateShopOrderEffLatelyData(){
+    	var code = "supplier.chart.ajaxShopOrderEffLatelyData";
+		$.ajax({
+            type : "POST",
+            //请求地址
+            url : "supplier/chart/ajaxCommonChartDataByCode.html",
+            //数据，json字符串
+            data : { openid:openid , sid : sid ,code: code},
+            //请求成功
+            success : function(resultstr) {
+            	var result = eval('('+resultstr+")");
+            	if(resultstr == 'error')
+            	{
+                	alert("数据查询失败！" + resultstr);
+                }else{
+                	var shopOrderEffLatelyData = $("#shopOrderEffLatelyData");
+                	var str = '';
+                	for(var i = 0 ; i < result.dataList.length;i++){
+                		var da = result.dataList[i];
+                		var remark = da.remark;
+                		if(typeof(remark) == "undefined") remark = '无备注';
+                		str += '<li class="list-group-item">【'+ da.contact_name +'】预约【'+ 
+                		da.eff_date +'】【 '+ da.order_name+'】【'+ remark +'】</li>';
+                	}
+                	shopOrderEffLatelyData.html(str);
+                }
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                alert("数据查询失败！" + e.responseText);
+            }
+        });
+    }
+    
+    function updateShopYesterdayInfo(){
+    	var code = "supplier.chart.ajaxShopYesterdayData";
+		$.ajax({
+            type : "POST",
+            //请求地址
+            url : "supplier/chart/ajaxCommonChartDataByCode.html",
+            //数据，json字符串
+            data : { openid:openid , sid : sid ,code: code},
+            //请求成功
+            success : function(resultstr) {
+            	var result = eval('('+resultstr+")");
+            	if(resultstr == 'error')
+            	{
+                	alert("数据查询失败！" + resultstr);
+                }else{
+                	var shopYesterdayInfo = $("#shopYesterdayInfo");
+                	var str = '';    
+                	for(var i = 0 ; i < result.dataList.length;i++){
+                		str += result.dataList[i].day;
+                		str += '新增客户【' + result.dataList[i].daycustomer + '】个，';
+                		str += '累计客户【' + result.dataList[i].customercount + '】个，';
+                		str += '新增订单【' + result.dataList[i].dayordercount + '】个，';
+                		str += '营收【' + (result.dataList[i].daymoney / 100).toFixed(2) + '】元<br>';
+                	}
+                	
+                	str += '以下是最近5笔预约订单信息：';
+                	shopYesterdayInfo.html(str);
+                	
                 }
             },
             //请求失败，包含具体的错误信息

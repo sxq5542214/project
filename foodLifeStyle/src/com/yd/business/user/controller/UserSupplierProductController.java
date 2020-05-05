@@ -38,6 +38,7 @@ import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
 import com.yd.business.supplier.service.ISupplierTopicService;
+import com.yd.business.supplier.service.ISupplierUserService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserAddressService;
 import com.yd.business.user.service.IUserCommissionPointsService;
@@ -77,6 +78,8 @@ public class UserSupplierProductController extends BaseController {
 	@Resource
 	private ISupplierTopicService supplierTopicService; 
 	@Resource
+	private ISupplierUserService supplierUserService; 
+	@Resource
 	private ISupplierService supplierService; 
 	@Resource
 	private IMsgCenterArticleService msgCenterArticleService;
@@ -100,8 +103,9 @@ public class UserSupplierProductController extends BaseController {
 	public static final String PAGE_USERSUPPLIERPRODUCT = "/page/user/supplierProductShop/index.jsp";
 	public static final String PAGE_USERSUPPLIERCATEGORY = "/page/user/supplierProductShop/category.jsp";
 	public static final String PAGE_USER_SHOP_ORDER = "/page/shop/order/orderInfo.jsp";
+	public static final String PAGE_USER_PLATFORM_INDEXPAGE = "/page/user/platform/index.jsp";
 	
-	
+	@Deprecated
 	@RequestMapping("**/user/supplier/queryPlatformSupplierProduct.do")
 	public ModelAndView queryPlatformSupplierProduct(HttpServletRequest request,HttpServletResponse response){
 		try{
@@ -115,7 +119,7 @@ public class UserSupplierProductController extends BaseController {
 			}
 			
 			List<SupplierProductBean> list= supplierProductService.queryPlatformSupplierProduct();
-			List<AdvertisingBean> advertList = advertisingService.queryAdvertisingInfo(AdvertisingBean.CODE_USERINDEXPAGE);
+			List<AdvertisingBean> advertList = advertisingService.queryAdvertisingInfo(AdvertisingBean.CODE_SUPPLIERINDEXPAGE);
 			
 			Map<String, Object> model = new HashMap<String, Object>();
 			model = new HashMap<String, Object>();
@@ -130,6 +134,46 @@ public class UserSupplierProductController extends BaseController {
 		}
 		return null;
 	}
+	
+	
+	@RequestMapping("**/user/supplier/toPlatformSupplierListPage.html")
+	public ModelAndView toPlatformSupplierListPage(HttpServletRequest request,HttpServletResponse response){
+		try{
+//			String spid = request.getParameter("spid");
+			String openid = request.getParameter("openid");
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			if(user == null){
+				//跳转至关注公众号界面
+				writeJson(response, "<script>alert(\"请先关注公众号!如已关注，请重新打开\");</script>");
+				return null;
+			}
+			
+			List<SupplierBean> listMyVisit= supplierUserService.queryUserVisitSupplierListByOpenid(openid);
+			
+			if(listMyVisit.size() == 1) {
+				// 用户只访问过一个，则直接进入商户页
+				
+				return new ModelAndView("/wx/supplier/shop/toSupplierShopPage.html?sid="+ listMyVisit.get(0).getId() +"&fromOpenid="+openid);
+				
+			}else {
+
+				List<AdvertisingBean> advertList = advertisingService.queryAdvertisingInfo(AdvertisingBean.CODE_PLATFORMINDEXPAGE);
+				
+				Map<String, Object> model = new HashMap<String, Object>();
+				model = new HashMap<String, Object>();
+				model.put("user", user);
+				model.put("listMyVisit", listMyVisit);
+				model.put("advertList", advertList);
+				
+				return new ModelAndView(PAGE_USER_PLATFORM_INDEXPAGE, model);		// 用户访问的主页面
+			}
+				
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	
 	
 	/**
 	 *  打开商城分类界面

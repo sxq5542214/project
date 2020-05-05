@@ -239,8 +239,9 @@
 	</select>
 	
 	<select id="queryShopOrderEffAndProductList" resultType="shopOrderEffInfo" parameterType="shopOrderEffInfo">
-		select  GROUP_CONCAT(CONCAT(p.supplier_product_name,'*',p.num) SEPARATOR ',') product_name_str,i.* from ll_shop_order_eff_info i , ll_shop_order_eff_product p
-		where i.id = p.order_info_id 
+		select  (select GROUP_CONCAT(CONCAT(p.supplier_product_name,'*',p.num) SEPARATOR ',')  from ll_shop_order_eff_product p where p.order_info_id = i.id  )  product_name_str,
+				i.* from ll_shop_order_eff_info i 
+		<where>
 			<if test=" id != null"> and i.id = #{id} </if>
 			<if test=" supplier_id != null"> and i.supplier_id = #{supplier_id} </if>
 			<if test=" user_id != null"> and i.user_id = #{user_id} </if>
@@ -253,7 +254,7 @@
 			<if test=" invoice_type != null"> and i.invoice_type = #{invoice_type} </if>
 			<if test=" notInStatus != null"> and i.status not in (${notInStatus})</if>
 			<if test=" eff_date != null"> and i.eff_date like concat( #{eff_date} ,'%') </if>
-		
+		</where>
 		<if test=" orderby != null">  ${orderby}</if>
 	</select>
 	
