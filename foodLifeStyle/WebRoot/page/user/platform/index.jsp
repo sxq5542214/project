@@ -61,7 +61,7 @@ String openid = request.getParameter("openid");
             
             	<ul class="idxPdtLst2">
             		<%for(SupplierBean supplier : listMyVisit){
-            			String img = "images/shop/noUploadShop.png";
+            			String img = "images/shop/noimg.png";
             			if(StringUtil.isNotNull(supplier.getSupplier_img())){ img = supplier.getSupplier_img(); }
             		 %>
                 	<li>
@@ -70,6 +70,16 @@ String openid = request.getParameter("openid");
                             <div class="tNm"><%=supplier.getName() %></div>
                         	<div class="tTit"><%=StringUtil.convertNull(supplier.getSupplier_title()) %></div>
                             <div class="tPrc">平均消费 &nbsp;&nbsp;&nbsp;&nbsp; &yen;<b><%=NumberUtil.convertNull(supplier.getAvg_price())/100d %></b> </div>
+                        </a>
+                    </li>
+                	<%}
+                	if(listMyVisit.size() == 0){ %>
+                		<li>
+                    	<a style="width: 160px;" class="tImg" ><img src="images/shop/noimg.png" style="width: 100%;height: 100%;"/></a>
+                        <a style="width: 50%;margin-left: 5px;background-image: none;" class="tLnk" >
+                            <div class="tNm">您还没有访问过的店铺！</div>
+                        	<div class="tTit"></div>
+                            <div class="tPrc"></div>
                         </a>
                     </li>
                 	<%} %>
@@ -92,7 +102,7 @@ String openid = request.getParameter("openid");
             <a href="bt.shtml@id=37">美容工具</a>
 		</div> -->
     
-    	<div class="phone" style="width: 100%;position: fixed;bottom: 5px;">指尖店铺，为您提供生活周边的小美好</div>
+    	<div class="phone" style="width: 100%;position: fixed;bottom: 5px;">为您提供生活周边的小美好</div>
         
   <!--       <div class="copyright">
             <a  class="logo"><img src="images/wap/touch/logo.png"/></a>
