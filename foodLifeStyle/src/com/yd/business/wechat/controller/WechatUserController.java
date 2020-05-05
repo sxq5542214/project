@@ -312,8 +312,9 @@ public class WechatUserController extends BaseController {
 				}
 			}
 			param.put("openid", openid);
+System.out.println("============================================toDistributeControll: "+ conName +"  " + openid);
 			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,openid);
-			return new ModelAndView("/"+conName.replaceAll("\\.", "/")+".html",param);
+			return new ModelAndView("/"+conName.replaceAll("\\.", "/")+".html?openid="+ StringUtil.convertNull(openid),param);
 			
 		}catch (Exception e) {
 			log.error(e,e);

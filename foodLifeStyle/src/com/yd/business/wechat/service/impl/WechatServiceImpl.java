@@ -127,6 +127,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 	
 	private static Map<String,Object> wechatCodeMap = new HashMap<String, Object>();
 	private static HashMap<Long,String> codeTimeMap = new HashMap<Long, String>();
+	private static Map<String,Object> wechatAuthMap = new HashMap<String, Object>();
 	
 	@Override
 	public BaseMessage handlerWechatMessage(Document doc) throws Exception{
@@ -1094,7 +1095,7 @@ log.debug("userTicketResponse:"+response);
 		if(StringUtil.isNull(code)){
 			return null;
 		}
-		WechatWebAuthBean code_auth = (WechatWebAuthBean) wechatCodeMap.get(code);
+		WechatWebAuthBean code_auth = (WechatWebAuthBean) wechatAuthMap.get(code);
 		WechatWebAuthBean bean = new WechatWebAuthBean();
 
 		if(code_auth == null){
@@ -1105,7 +1106,7 @@ log.debug("userTicketResponse:"+response);
 				
 				int errcode = jso.optInt("errcode",-9999);
 				if(errcode == 40163){ // 返回code been used，代表已用过,从session中找
-					bean = (WechatWebAuthBean) wechatCodeMap.get(code);
+					bean = (WechatWebAuthBean) wechatAuthMap.get(code);
 				}else{
 					bean.setAccess_token(jso.optString("access_token"));
 					bean.setExpires_in(jso.optInt("expires_in"));
@@ -1113,7 +1114,7 @@ log.debug("userTicketResponse:"+response);
 					bean.setRefresh_token(jso.optString("refresh_token"));
 					bean.setScope(jso.optString("scope"));
 					
-					wechatCodeMap.put(code, bean);
+					wechatAuthMap.put(code, bean);
 					codeTimeMap.put(System.currentTimeMillis(), code);
 				}
 				
@@ -1159,6 +1160,7 @@ log.debug("userTicketResponse:"+response);
 			if(key < minTime){
 				String code = codeTimeMap.get(key);
 				wechatCodeMap.remove(code);
+				wechatAuthMap.remove(code);
 				codeTimeMap.remove(key);
 			}
 		}
