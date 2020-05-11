@@ -60,7 +60,8 @@ List<SupplierPackageBean> listPackage = (List<SupplierPackageBean>)request.getAt
       					<div class="panel-heading">【<%=pack.getName() %>】  </div>
 						  <div class="panel-body">
 						    <%=pack.getTitle() %>
-						   <a href=""  role="button" class="btn btn-success pull-right btn-xs"  >分配客户</a>
+						   <a href="supplier/package/toPackageAssignUserPage.html?packageid=<%=pack.getId()%>"  role="button" class="btn btn-info pull-right btn-xs"  >分配客户</a>&nbsp;&nbsp;
+						   <a href="supplier/package/toAddSupplierPackagPage.html?id=<%=pack.getId() %>" style="margin-right: 5px;"  role="button" class="btn btn-info pull-right btn-xs"  >修改套餐</a>&nbsp;&nbsp;
 						  </div>
       				</div>
       				
@@ -69,7 +70,7 @@ List<SupplierPackageBean> listPackage = (List<SupplierPackageBean>)request.getAt
       				if(listPackage.size() == 0 ){
       				 %>
       				 <div class="panel panel-primary ">
-      					<div class="panel-heading">【目前无数据】
+      					<div class="panel-heading">【目前无数据】  请先创建产品和产品分类，再创建套餐
       					</div>
 						  <div class="panel-body">
 						  	  请点击下方按钮新增产品套餐。<br>以理发店为例，可实现如：用户预交100元，获得10次精剪+洗头+吹发的产品 

@@ -20,4 +20,10 @@ public interface ISupplierPackageDao {
 
 	List<SupplierPackageProductRecordBean> querySupplierPackageProductRecord(SupplierPackageProductRecordBean bean);
 
+	void updateSupplierPackage(SupplierPackageBean bean);
+
+	void deleteSupplierPackageProduct(SupplierPackageProductBean bean);
+
+	int updateSupplierPackageProductRecord(SupplierPackageProductRecordBean bean);
+
 }

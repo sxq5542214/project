@@ -69,6 +69,35 @@ public class SupplierUserServiceImpl extends BaseService implements ISupplierUse
 		return null;
 	}
 	
+
+	
+	@Override
+	public SupplierUserBean findSupplierUser(Integer userid,int sid) {
+		if(userid != null) {
+			SupplierUserBean bean = new SupplierUserBean();
+			bean.setUser_id(userid);
+			bean.setSupplier_id(sid);
+			List<SupplierUserBean> list = querySupplierUser(bean);
+			if(list.size()>0) {
+				return list.get(0);
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public SupplierUserBean findSupplierUserById(Integer id) {
+		
+		SupplierUserBean bean = new SupplierUserBean();
+		bean.setId(id);
+		List<SupplierUserBean> list = querySupplierUser(bean);
+		if(list.size()>0) {
+			return list.get(0);
+		}
+		return null;
+	}
+	
+	
 	@Override
 	public void createOrUpdateSupplierUser(String openid,Integer sid) {
 		

@@ -18,5 +18,9 @@ public interface ISupplierUserService {
 	SupplierUserBean findSupplierUser(String openid, int sid);
 
 	List<SupplierBean> queryUserVisitSupplierListByOpenid(String openid);
+
+	SupplierUserBean findSupplierUserById(Integer id);
+
+	SupplierUserBean findSupplierUser(Integer userid, int sid);
 	
 }

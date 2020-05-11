@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.ICustomerService;
@@ -103,6 +104,8 @@ public class SupplierShopController extends BaseController {
 			case 1:
 				//注册过，只有一个，进入管理界面
 				supplier = list.get(0);
+				//设置session
+				WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER, supplier);
 				modelView = "/page/supplier/shop/manager/frameIndex.jsp?openid="+openid+"&sid="+supplier.getId();
 				break;
 			default:

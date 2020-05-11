@@ -27,6 +27,11 @@ public class SupplierPackageDaoImpl extends BaseDao implements ISupplierPackageD
 	}
 	
 	@Override
+	public void updateSupplierPackage(SupplierPackageBean bean) {
+		sqlSessionTemplate.update(NAMESPACE+"updateSupplierPackage", bean);
+	}
+	
+	@Override
 	public List<SupplierPackageBean> querySupplierPackage(SupplierPackageBean bean){
 		return sqlSessionTemplate.selectList(NAMESPACE + "querySupplierPackage", bean);
 	}
@@ -46,6 +51,16 @@ public class SupplierPackageDaoImpl extends BaseDao implements ISupplierPackageD
 	@Override
 	public List<SupplierPackageProductRecordBean> querySupplierPackageProductRecord(SupplierPackageProductRecordBean bean){
 		return sqlSessionTemplate.selectList(NAMESPACE + "querySupplierPackageProductRecord", bean);
+	}
+	
+	@Override
+	public void deleteSupplierPackageProduct(SupplierPackageProductBean bean) {
+		sqlSessionTemplate.delete(NAMESPACE +"deleteSupplierPackageProduct", bean);
+	}
+
+	@Override
+	public int updateSupplierPackageProductRecord(SupplierPackageProductRecordBean bean) {
+		return sqlSessionTemplate.update(NAMESPACE +"updateSupplierPackageProductRecord", bean);
 	}
 	
 }

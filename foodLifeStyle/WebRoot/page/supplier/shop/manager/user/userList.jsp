@@ -41,7 +41,7 @@ List<SupplierUserBean> userList = (List<SupplierUserBean>)request.getAttribute("
   </head>
  
   <body style="background-color: #eee;padding-top: 0px;">
-	<form class="form-signup form-inline " action="supplier/user/toSupplierUserListPage.html" style="max-width: 90%; ">
+	<form class="form-signup form-inline " action="supplier/user/toSupplierUserListPage.html" style="max-width: 100%; ">
 		<div class="container row">
 			<input type="hidden" name="sid" value="<%=sid%>">
 	        <input type="number" id="phone" name="phone" value="<%=StringUtil.convertNull(phone) %>" class="form-control " placeholder="请输入手机号" >
@@ -58,7 +58,7 @@ List<SupplierUserBean> userList = (List<SupplierUserBean>)request.getAttribute("
         <button  class="btn btn-lg btn-primary btn-block" style="margin-top: 0px;" type="submit">确定查询</button>
       </form> 
 	
-    <div class="container-fluid" style="padding: 0;"><!-- 
+    <div class="container-fluid" style="padding-left: 15px;"><!-- 
       <div class="table-responsive"> -->
       <div class="">
       				<%  int i = 0; String classStr = "";

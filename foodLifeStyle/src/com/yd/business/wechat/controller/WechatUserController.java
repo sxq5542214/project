@@ -286,7 +286,7 @@ public class WechatUserController extends BaseController {
 			WechatOriginalInfoBean original = wechatOriginalInfoService.getOriginalInfoByServerDomain(request);
 			String originalid = original.getOriginalid();
 			if(StringUtil.isNull(openid)) {
-				openid = (String)request.getSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+				openid = (String)WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
 			}
 
 			Map<String,String> param = getRequestParamsMap(request);

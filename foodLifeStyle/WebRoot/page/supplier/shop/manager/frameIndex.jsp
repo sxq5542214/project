@@ -45,21 +45,22 @@ String openid = request.getParameter("openid");
           <!--   <li><a href="#about">About</a></li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              		商品发布中心 <span class="caret"></span></a>
+              		商品发布中心【简单三步】 <span class="caret"></span></a>
               <ul class="dropdown-menu">
         <!--         <li role="separator" class="divider"></li>
                 <li class="dropdown-header">商品管理</li> -->
                 <li><a onclick="changeIframe('supplierProduct/toCreateOrUpdateProductCategoryPage.html?openid=<%=openid %>&sid=<%=sid%>',this)">
-                	新增商品分类（轻松分类）</a></li>
+                	新增商品分类（轻松分类）【第一步】</a></li>
                 <li><a onclick="changeIframe('supplierProduct/toCreateOrUpdateProductPage.html?openid=<%=openid %>&sid=<%=sid%>',this)">
-                	新增商品信息（简单便捷）</a></li>
+                	新增商品信息（简单便捷）【第二步】</a></li>
                 <li><a href="wx/supplier/shop/toManagerCategoryPage.html?openid=<%=openid %>&sid=<%=sid%>&fromOpenid=<%=openid %>">
-                	预览/修改/发布（快速及时）</a></li>
+                	预览/修改/发布（快速及时）【第三步】</a></li>
+                
               </ul>
             </li>
              <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              		客户中心 <span class="caret"></span></a>
+              		客户中心（会员管理） <span class="caret"></span></a>
               <ul class="dropdown-menu">
        <!--          <li role="separator" class="divider"></li>
                 <li class="dropdown-header">客户管理</li> -->
@@ -67,12 +68,23 @@ String openid = request.getParameter("openid");
               </ul>
             </li>
              <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">订单中心 <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              		订单中心（每日详情） <span class="caret"></span></a>
               <ul class="dropdown-menu">
              <!--    <li role="separator" class="divider"></li>
                 <li class="dropdown-header">订单管理</li> -->
                 <li><a onclick="changeIframe('order/shop/toShopOrderEffListPage.html?openid=<%=openid %>&sid=<%=sid%>',this)">
                 	预约订单列表（每日详情）</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              		服务营销中心（留存拉新） <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+             <!--    <li role="separator" class="divider"></li>
+                <li class="dropdown-header">订单管理</li> -->
+                <li><a onclick="changeIframe('supplier/package/toSupplierPackageManagerPage.html?openid=<%=openid %>&sid=<%=sid%>&fromOpenid=<%=openid %>',this)">
+                	产品套餐管理（客户留存）</a></li>
               </ul>
             </li>
             <li class="dropdown">

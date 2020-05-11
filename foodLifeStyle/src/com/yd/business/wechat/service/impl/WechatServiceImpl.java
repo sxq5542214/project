@@ -1107,6 +1107,16 @@ log.debug("userTicketResponse:"+response);
 				int errcode = jso.optInt("errcode",-9999);
 				if(errcode == 40163){ // 返回code been used，代表已用过,从session中找
 					bean = (WechatWebAuthBean) wechatAuthMap.get(code);
+					int i = 0;
+					while(bean == null) {
+						Thread.sleep(100);
+						bean = (WechatWebAuthBean) wechatAuthMap.get(code);
+						log.warn( i + " wechatAuthMap.get(code) is null! code :"+ code);
+						if(i++ > 100) {
+							break;
+						}
+					}
+					
 				}else{
 					bean.setAccess_token(jso.optString("access_token"));
 					bean.setExpires_in(jso.optInt("expires_in"));

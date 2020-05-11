@@ -30,8 +30,9 @@ public class WebContext extends BaseFilter {
 	private static Map<String,HttpSession> sessions = new HashMap<String, HttpSession>();
 	//存放进行中的定单号，线程同步的，避免同一时刻多次重复定购
 	private static ConcurrentHashMap<String,Object> runningCacheMap = new ConcurrentHashMap<String, Object>();
-	
+
 	public static final String SESSION_ATTRIBUTE_USER_OPENID = "wechat_user_openid";
+	public static final String SESSION_ATTRIBUTE_CURRENT_SUPPLIER = "current_supplier";
 	
 
 	@Override

@@ -18,6 +18,7 @@ public class SupplierPackageProductRecordBean extends BaseBean {
 	private String openid;
 	private Integer supplier_id;
 	private Integer supplier_package_id;
+	private String supplier_package_name;
 	private Integer supplier_product_id;
 	private String supplier_product_name;
 	private String create_time;
@@ -42,6 +43,12 @@ public class SupplierPackageProductRecordBean extends BaseBean {
 	}
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+	public String getSupplier_package_name() {
+		return supplier_package_name;
+	}
+	public void setSupplier_package_name(String supplier_package_name) {
+		this.supplier_package_name = supplier_package_name;
 	}
 	public Integer getSupplier_id() {
 		return supplier_id;

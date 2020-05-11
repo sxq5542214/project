@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="supplierPackage">
-	<insert id="createSupplierPackage" parameterType="supplierPackage">
+	<insert id="createSupplierPackage" parameterType="supplierPackage" useGeneratedKeys="true" keyProperty="id">
 		insert into ll_supplier_package(supplier_id,name,title,code,create_time,modify_time,
-		status,delete_flag,useful_lift,remark,seq,product_price,product_real_price)
+		status,delete_flag,useful_lift,remark,seq,product_price,product_real_price,prime_cost_price)
 		values(#{supplier_id},#{name},#{title},#{code},#{create_time},#{modify_time},#{status},
-		#{delete_flag},#{useful_lift},#{remark},#{seq},#{product_price},#{product_real_price})
+		#{delete_flag},#{useful_lift},#{remark},#{seq},#{product_price},#{product_real_price},#{prime_cost_price})
 	</insert>
 	
 	<select id="querySupplierPackage" parameterType="supplierPackage" resultType="supplierPackage">
@@ -22,6 +22,24 @@
 		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
+	<update id="updateSupplierPackage" parameterType="supplierPackage">
+		update ll_supplier_package
+		<set>
+			<if test="title != null">title = #{title} ,</if>
+			<if test="name != null">name = #{name} ,</if>
+			<if test="code != null">code = #{code} ,</if>
+			<if test="modify_time != null">modify_time = #{modify_time} ,</if>
+			<if test="status != null">status = #{status} ,</if>
+			<if test="delete_flag != null">delete_flag = #{delete_flag} ,</if>
+			<if test="useful_lift != null">useful_lift = #{useful_lift} ,</if>
+			<if test="remark != null">remark = #{remark} ,</if>
+			<if test="seq != null">seq = #{seq} ,</if>
+			<if test="product_price != null">product_price = #{product_price} ,</if>
+			<if test="product_real_price != null">product_real_price = #{product_real_price} ,</if>
+			<if test="prime_cost_price != null">prime_cost_price = #{prime_cost_price} ,</if>
+		</set>
+		where id = #{id}
+	</update>
 	
 	<insert id="createSupplierPackageProduct" parameterType="supplierPackageProduct">
 		insert into ll_supplier_package_product(supplier_id,supplier_package_id,supplier_product_id,
@@ -43,9 +61,9 @@
 	
 	
 	<insert id="createSupplierPackageProductRecord" parameterType="supplierPackageProductRecord">
-		insert into ll_supplier_package_product_record(user_id,openid,supplier_id,supplier_package_id,
+		insert into ll_supplier_package_product_record(user_id,openid,supplier_id,supplier_package_id,supplier_package_name,
 		supplier_product_id,supplier_product_name,create_time,modify_time,num,eff_time,dff_time)
-		values(#{user_id},#{openid},#{supplier_id},#{supplier_package_id},#{supplier_product_id},
+		values(#{user_id},#{openid},#{supplier_id},#{supplier_package_id},#{supplier_package_name},#{supplier_product_id},
 		#{supplier_product_name},#{create_time},#{modify_time},#{num},#{eff_time},#{dff_time})
 	</insert>
 	
@@ -62,4 +80,19 @@
 		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
+	<update id="updateSupplierPackageProductRecord" parameterType="supplierPackageProductRecord" >
+		update ll_supplier_package_product_record
+		<set>
+			<if test="modify_time != null"> modify_time = #{modify_time} ,</if>
+			<if test="num != null"> num = #{num} ,</if>
+			<if test="dff_time != null"> dff_time = #{dff_time} ,</if>
+			<if test="eff_time != null"> eff_time = #{eff_time} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	<delete id="deleteSupplierPackageProduct" parameterType="supplierPackageProduct">
+		delete from ll_supplier_package_product  where
+			<if test="id != null"> id = #{id}</if>
+			<if test="supplier_package_id != null"> supplier_package_id = #{supplier_package_id}</if>
+	</delete>
 </mapper>

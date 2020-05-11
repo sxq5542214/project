@@ -164,6 +164,15 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	public static final String ACTION_TYPE_SUPPLIER_GET_CODE = "supplier_get_code";
 
 	/**
+	 * 	商户给用户分配产品套餐
+	 */
+	public static final String ACTION_TYPE_SUPPLIER_PACKAGE_ASSIGN = "supplier_package_assign";
+	/**
+	 * 	商户给用户分配产品套餐
+	 */
+	public static final String ACTION_TYPE_SUPPLIER_PACKAGE_UPDATE_RECORD = "supplier_package_update_record";
+
+	/**
 	 * 一元购开奖通知的动作
 	 */
 	public static final String ACTION_TYPE_YYG_LOTTERY_USER_MSG = "yyg_lottery_user_msg";

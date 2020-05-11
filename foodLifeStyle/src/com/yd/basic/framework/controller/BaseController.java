@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import com.yd.basic.framework.context.WebContext;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.impl.CustomerServiceImpl;
+import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.util.DateUtil;
 import com.yd.util.JsonUtil;
 import com.yd.util.StringUtil;
@@ -336,6 +337,9 @@ public abstract class BaseController extends MultiActionController {
 	protected String getCurrentOpenid() {
 
 		return (String) WebContext.getHttpSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+	}
+	protected SupplierBean getCurrentSupplier() {
+		return (SupplierBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER);
 	}
 	
 }

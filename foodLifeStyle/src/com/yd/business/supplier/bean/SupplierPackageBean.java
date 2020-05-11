@@ -13,6 +13,10 @@ import com.yd.basic.framework.bean.BaseBean;
  */
 @Alias("supplierPackage")
 public class SupplierPackageBean extends BaseBean {
+	public static final int DELETE_FLAG_NO = 0;
+	public static final int DELETE_FLAG_YES = 1;
+	
+	
 	private Integer id;
 	private Integer supplier_id;
 	private String name;
@@ -27,8 +31,15 @@ public class SupplierPackageBean extends BaseBean {
 	private Integer seq;
 	private Integer product_price;
 	private Integer product_real_price;
+	private Integer prime_cost_price;
 	public Integer getId() {
 		return id;
+	}
+	public Integer getPrime_cost_price() {
+		return prime_cost_price;
+	}
+	public void setPrime_cost_price(Integer prime_cost_price) {
+		this.prime_cost_price = prime_cost_price;
 	}
 	public void setId(Integer id) {
 		this.id = id;
