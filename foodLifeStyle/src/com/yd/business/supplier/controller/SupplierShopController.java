@@ -145,7 +145,7 @@ public class SupplierShopController extends BaseController {
 
 			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
 			//创建商户的用户
-//			supplierUserService.createOrUpdateSupplierUser(openid,supplier_id);
+			supplierUserService.createOrUpdateSupplierUser(openid,supplier_id);
 			
 			List<SupplierProductCategoryBean> productCategoryList = supplierProductService.querySupplierProductCategoryBySupplierId(supplier_id,SupplierProductCategoryBean.STATUS_YES);
 			

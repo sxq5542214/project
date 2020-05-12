@@ -224,8 +224,11 @@ public class SupplierPackageServiceImpl extends BaseService implements ISupplier
 		List<SupplierPackageProductRecordBean> list = querySupplierPackageProductRecord(bean );
 		if(list.size()>0) {
 			bean = list.get(0);
+			int subNum = bean.getNum() - num;
 			bean.setNum(num);
 			int total = updatePackageProductRecord(bean);
+			bean.setEff_time(supplier.getName());
+			bean.setTotalcount(subNum);
 			if(total > 0) {
 				msgCenterActionService.saveAndHandleUserAction(bean.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_PACKAGE_UPDATE_RECORD, null, bean);
 				return true;

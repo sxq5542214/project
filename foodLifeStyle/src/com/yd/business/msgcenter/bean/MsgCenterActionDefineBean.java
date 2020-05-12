@@ -168,7 +168,7 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	 */
 	public static final String ACTION_TYPE_SUPPLIER_PACKAGE_ASSIGN = "supplier_package_assign";
 	/**
-	 * 	商户给用户分配产品套餐
+	 * 	商户给用户分配套餐内产品
 	 */
 	public static final String ACTION_TYPE_SUPPLIER_PACKAGE_UPDATE_RECORD = "supplier_package_update_record";
 
