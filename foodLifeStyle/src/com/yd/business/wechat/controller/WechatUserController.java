@@ -300,7 +300,7 @@ public class WechatUserController extends BaseController {
 				// 微信认证
 				WechatWebAuthBean auth = wechatUserService.getOpenIdByWebAuthCode(code, originalid);
 				//好友信息，创建用户及好友关系
-				if( StringUtil.isNotNull(auth.getAccess_token())){
+				if(StringUtil.isNotNull(auth.getAccess_token())){
 					//当前用户openid 添加到session
 					WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,auth.getOpenid());
 					wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentId,  WechatConstant.TICKET_SENCE_CODE_WXMENU, null, originalid , auth.getAccess_token());

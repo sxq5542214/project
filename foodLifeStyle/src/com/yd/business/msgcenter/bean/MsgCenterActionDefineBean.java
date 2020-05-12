@@ -171,6 +171,10 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	 * 	商户给用户分配套餐内产品
 	 */
 	public static final String ACTION_TYPE_SUPPLIER_PACKAGE_UPDATE_RECORD = "supplier_package_update_record";
+	/**
+	 * 	商户了新增用户
+	 */
+	public static final String ACTION_TYPE_SUPPLIER_USER_ADD = "supplier_user_add";
 
 	/**
 	 * 一元购开奖通知的动作

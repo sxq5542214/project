@@ -12,6 +12,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
+import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierEventBean;
 import com.yd.business.supplier.bean.SupplierTopicBean;
@@ -39,6 +41,8 @@ public class SupplierUserServiceImpl extends BaseService implements ISupplierUse
 	private IUserWechatService userWechatService;
 	@Resource
 	private ISupplierService supplierService;
+	@Resource
+	private IMsgCenterActionService msgCenterActionService;
 	
 	@Override
 	public void createSupplierUser(SupplierUserBean bean) {
@@ -115,8 +119,12 @@ public class SupplierUserServiceImpl extends BaseService implements ISupplierUse
 			su.setBalance(0);
 			su.setLevel(0);
 			su.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
+			su.setNick_name(user.getNick_name());
+			su.setPhone(user.getPhone());
 			
 			createSupplierUser(su);
+			
+			msgCenterActionService.saveAndHandleUserAction(su.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_USER_ADD, null, su);
 			
 		}else {
 			//修改
