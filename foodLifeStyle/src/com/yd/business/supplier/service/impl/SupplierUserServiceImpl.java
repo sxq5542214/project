@@ -110,21 +110,25 @@ public class SupplierUserServiceImpl extends BaseService implements ISupplierUse
 		if(su == null) {
 			//创建
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			su = new SupplierUserBean(user);
-			su.setUser_id(user.getId());
-			su.setSupplier_id(sid);
-			su.setLast_access_time(DateUtil.getNowDateStr());
-			su.setCreate_time(DateUtil.getNowDateStr());
-			su.setPoints(0);
-			su.setBalance(0);
-			su.setLevel(0);
-			su.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
-			su.setNick_name(user.getNick_name());
-			su.setPhone(user.getPhone());
 			
-			createSupplierUser(su);
-			
-			msgCenterActionService.saveAndHandleUserAction(su.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_USER_ADD, null, su);
+			// 关注的用户才给商户创建
+			if(user.getStatus() == UserWechatBean.STATUS_SUBSCRIBE) {
+				su = new SupplierUserBean(user);
+				su.setUser_id(user.getId());
+				su.setSupplier_id(sid);
+				su.setLast_access_time(DateUtil.getNowDateStr());
+				su.setCreate_time(DateUtil.getNowDateStr());
+				su.setPoints(0);
+				su.setBalance(0);
+				su.setLevel(0);
+				su.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
+				su.setNick_name(user.getNick_name());
+				su.setPhone(user.getPhone());
+				
+				createSupplierUser(su);
+				
+				msgCenterActionService.saveAndHandleUserAction(su.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_USER_ADD, null, su);
+			}
 			
 		}else {
 			//修改
