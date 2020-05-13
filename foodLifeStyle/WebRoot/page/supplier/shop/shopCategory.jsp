@@ -35,12 +35,12 @@
 	<script src="js/common/cookieUtil.js"></script>
 <head>
 <body>
-	<div style="position: absolute;margin-left: 15px;margin-top: 15px;padding-right: 15px;" onclick="history.go(-1)">
+<!-- 	<div style="position: absolute;margin-left: 15px;margin-top: 15px;padding-right: 15px;" onclick="history.go(-1)">
 		<img alt="" src="images/user/supplierProductShop/left.png" style="width: 10px;height: 20px;">
-	</div>
+	</div> -->
 	<div class="header">
 		<img alt="" height="100%" width="100%"
-			src="images/foods/food_share_img.jpg">
+			src="images/shop/shopOpen.jpg">
 	</div>
 	<div style="width: 100%;height: 1px;background-color: gray;"></div>
 	<div class="swiper-container">
@@ -167,7 +167,7 @@
 					src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=<%=URLEncoder.encode(qrCode.getTicket(), "utf8") %>" alt="">
 		    	<p style="height: auto;">
 					<span style="font-size: 16px;color:white;">温馨提示：<br>
-						<span style="font-size: 16px;color:white;" id="tips">请长按上方二维码，关注公众号后即可下单！</span>
+						<span style="font-size: 16px;color:white;" id="tips">请长按上方二维码，关注公众号后即可继续操作！</span>
 					</span>
 				</p>
 			</div>
@@ -243,7 +243,7 @@
 			for (int i = 0; i < productList.size(); i++) {
 				SupplierProductBean product = productList.get(i);
 				//  	 String img = "<img width=\"100%\" height=\"100%\" alt=\"\" src=\"" + product.getHead_img() +  "\">";
-				if(StringUtil.isNull(product.getProduct_img() )){	product.setProduct_img("images/shop/noUploadShop.png");	}
+				if(StringUtil.isNull(product.getProduct_img() )){	product.setProduct_img("images/shop/noimg.png");	}
 				if (!typeName.equalsIgnoreCase(product.getProduct_category_name())) {
 					if (i != 0) {%> ] }, <%}%>
         
@@ -266,6 +266,14 @@
   </script>
   <script type="text/javascript">
   	var isClickMask = true;
+  	
+  	
+  	var isSubscribe = <%=user.getStatus() == UserWechatBean.STATUS_SUBSCRIBE %> ;
+	if(!isSubscribe){
+		$("#shareDiv").show();
+	}
+		
+  	
   	function addToCart(div,num){
   		var parentDiv = div.parentNode; 
  		var span = parentDiv.children[1].children[0];
@@ -327,12 +335,6 @@
   	}
   	
   	function gotoOrder(){
-  		var isSubscribe = <%=user.getStatus() == UserWechatBean.STATUS_SUBSCRIBE %> ;
-  		if(!isSubscribe){
-  			
-  			$("#shareDiv").show();
-  			return false;
-  		}
   		
   	
   		var span = document.getElementById("totalNum");

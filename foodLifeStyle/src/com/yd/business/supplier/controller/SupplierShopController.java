@@ -135,6 +135,7 @@ public class SupplierShopController extends BaseController {
 	@RequestMapping("/wx/supplier/shop/toSupplierShopPage.html")
 	public ModelAndView toSupplierShopPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		String sid = request.getParameter("sid");
+		String isEff = request.getParameter("isEff");
 		String fromOpenid = request.getParameter("fromOpenid");
 		String openid = getCurrentOpenid();
 		try{
@@ -160,7 +161,12 @@ public class SupplierShopController extends BaseController {
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
 			UserQrCodeBean qrCode = null;
 			if(user.getStatus() != UserWechatBean.STATUS_SUBSCRIBE) {
-				qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(fromOpenid, WechatConstant.TICKET_SENCE_CODE_SUPPLIERSHOPEFF, supplier_id);
+				// 如果openid为空，则取商户创建人的
+				if(fromOpenid == null) {
+					fromOpenid = supplier.getOpenid();
+				}
+				int senceCode = "1".equals(isEff) ? WechatConstant.TICKET_SENCE_CODE_SUPPLIERSHOPEFF : WechatConstant.TICKET_SENCE_CODE_SUPPLIERSHOP ;
+				qrCode = userWechatService.queryQrCodeTicketByUserIdAndSence(fromOpenid, senceCode , supplier_id);
 			}
 
 			Map<String, Object> model = new HashMap<String, Object>();

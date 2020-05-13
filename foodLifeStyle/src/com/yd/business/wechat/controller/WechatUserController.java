@@ -264,7 +264,7 @@ public class WechatUserController extends BaseController {
 	@RequestMapping("/wechat/user/toReopenTips.html")
 	public ModelAndView toReopenTips(HttpServletRequest request,HttpServletResponse response){
 		
-		writeJson(response, "<script>登录失效，请通过公众号重新打开界面！</script>");
+		writeJson(response, "<script>alert('登录失效，请通过公众号重新打开界面！')</script>");
 		return null;
 	}
 	/**

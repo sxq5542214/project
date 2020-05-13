@@ -129,7 +129,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 				createShopOrderEffProduct(effProd );
 			}
 			//消息中心发送事件
-			msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_EFF, "create", effOrder);
+			msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_SUBSCRIBE_SHOP_EFF , "create", effOrder);
 		}else {
 			//修改
 			effBean.setEff_date(effDate);

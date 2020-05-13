@@ -40,6 +40,10 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_SUBSCRIBE_SHOP_EFF = "wechat_user_subscribe_shop_eff";
 	/**
+	 * 用户关注,通过商户店铺
+	 */
+	public static final String ACTION_TYPE_WECHAT_USER_SUBSCRIBE_SHOP = "wechat_user_subscribe_shop";
+	/**
 	 * 已关注用户再次扫码
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_SCAN = "wechat_user_scan";

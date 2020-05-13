@@ -17,7 +17,9 @@ import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.other.bean.ConfigCruxBean;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.service.ISupplierEventService;
+import com.yd.business.supplier.service.ISupplierService;
 import com.yd.business.supplier.service.ISupplierUserService;
 import com.yd.business.user.bean.UserSignBean;
 import com.yd.business.user.bean.UserWechatBean;
@@ -57,6 +59,8 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 	private IConfigAttributeService configAttributeService;
 	@Resource
 	private ISupplierUserService supplierUserService;
+	@Resource
+	private ISupplierService supplierService;
 	
 	@Override
 	protected BaseMessage handleUserSubscribeMessage(EventBean eventBean) throws Exception {
@@ -241,6 +245,13 @@ public class WechatUserServiceImpl extends WechatServiceImpl {
 			map.put("parentId", parentId);
 			
 			msgCenterActionService.saveAndHandleUserAction(weixin_id, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_SUBSCRIBE_SHOP_EFF, null, map);
+
+			break;
+		case WechatConstant.TICKET_SENCE_CODE_SUPPLIERSHOP:
+			supplierUserService.createOrUpdateSupplierUser(weixin_id, idValue);
+			
+			SupplierBean supplier = supplierService.findSupplierById(idValue);
+			msgCenterActionService.saveAndHandleUserAction(weixin_id, MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_SUBSCRIBE_SHOP, null, supplier);
 
 			break;
 		case WechatConstant.TICKET_SENCE_CODE_INVITEFRIENDS:

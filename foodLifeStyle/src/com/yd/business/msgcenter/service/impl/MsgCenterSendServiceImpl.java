@@ -369,12 +369,14 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(action.getOpenid());
 			ArticleBean article = new ArticleBean();
 			article.setToUserName(action.getOpenid());
-			article.setTitle(supplierTopic.getTitle());
-			article.setDescription(supplierTopic.getDescrip());
 			
 			String url = supplierTopic.getUrl();
 
 			WechatOriginalInfoBean info = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+			url = convertActionParameter(url, action);
+			String title = convertActionParameter(supplierTopic.getTitle(), action);
+			String desc = convertActionParameter(supplierTopic.getDescrip(), action);
+			String imgUrl = convertActionParameter(supplierTopic.getImg_url(), action);
 			url = convertActionParameter(url, action);
 			url = url.replaceAll("#server_domain#", info.getServer_domain());
 			url = url.replaceAll("#server_url#", info.getServer_url());
@@ -389,7 +391,9 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 
 			
 			article.setUrl(url);
-			article.setPicurl(supplierTopic.getImg_url());
+			article.setTitle(title);
+			article.setDescription(desc);
+			article.setPicurl(imgUrl);
 			
 			article.setFromUserName(user.getOriginalid());
 			//发送给用户

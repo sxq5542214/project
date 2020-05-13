@@ -198,7 +198,7 @@
   	}
   	weixinInit.setShareTitle("我的小店【<%=supplier.getName()%>】快来下单吧！");
 	weixinInit.setShareDesc("我的小店【<%=supplier.getName()%>】快来下单吧！");
-	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>wechat/user/toDistributeControll.do?conName=wx.supplier.shop.toSupplierShopPage&fromOpenid=<%=openid%>&sid=<%=supplier.getId()%>");
+	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>wechat/user/toDistributeControll.do?conName=wx.supplier.shop.toSupplierShopPage&fromOpenid=<%=openid%>&sid=<%=supplier.getId()%>&isEff=1");
 	weixinInit.setShareImg("<%=BaseContext.getServerUrl()%>images/foods/food_share_img.jpg");
 	
 	if(top!=self){
