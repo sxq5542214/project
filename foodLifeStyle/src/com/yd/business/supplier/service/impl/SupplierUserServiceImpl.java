@@ -126,8 +126,8 @@ public class SupplierUserServiceImpl extends BaseService implements ISupplierUse
 				su.setPhone(user.getPhone());
 				
 				createSupplierUser(su);
-				
-				msgCenterActionService.saveAndHandleUserAction(su.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_USER_ADD, null, su);
+				SupplierBean supplier = supplierService.findSupplierById(sid);
+				msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_USER_ADD, null, su);
 			}
 			
 		}else {

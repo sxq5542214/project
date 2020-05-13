@@ -327,28 +327,31 @@ public class MsgCenterSendServiceImpl extends BaseService implements IMsgCenterS
 		if(supplierEvent != null){
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(action.getOpenid());
 			ArticleBean article = new ArticleBean();
-			article.setToUserName(action.getOpenid());
-			article.setTitle(supplierEvent.getTitle());
-			article.setDescription(supplierEvent.getDescrip());
 			
 			String url = supplierEvent.getUrl();
 
 			WechatOriginalInfoBean info = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 			url = convertActionParameter(url, action);
+			String title = convertActionParameter(supplierEvent.getTitle(), action);
+			String desc = convertActionParameter(supplierEvent.getDescrip(), action);
+			String imgUrl = convertActionParameter(supplierEvent.getImg_url(), action);
+			url = convertActionParameter(url, action);
 			url = url.replaceAll("#server_domain#", info.getServer_domain());
 			url = url.replaceAll("#server_url#", info.getServer_url());
-			url = url.replaceAll("#openid#", user.getOpenid());
 			url = url.replaceAll("#appid#", info.getAppid());
-
+			url = url.replaceAll("#openid#", action.getOpenid());
+			
 			if(url.indexOf("#wildcard#") >= 0){
 				for(int i = 0 ; i < 8;i++){
 					url = url.replace("#wildcard#", RandomUtil.randomString(3));
 				}
 			}
 
-			
+			article.setToUserName(action.getOpenid());
+			article.setTitle(title);
+			article.setDescription(desc);
 			article.setUrl(url);
-			article.setPicurl(supplierEvent.getImg_url());
+			article.setPicurl(imgUrl);
 			
 			article.setFromUserName(user.getOriginalid());
 			//发送给用户
