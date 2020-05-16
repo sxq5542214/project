@@ -290,6 +290,7 @@ public class WechatUserController extends BaseController {
 			}
 
 			Map<String,String> param = getRequestParamsMap(request);
+			param.remove("code");
 			String paramStr = WebUtil.concatParam( param);
 			if(StringUtil.isNull(openid) && StringUtil.isNull(code)){
 				// 没有缓存，也没有传code过来，则跳转至微信授权
@@ -314,7 +315,6 @@ public class WechatUserController extends BaseController {
 			param.put("openid", openid);
 System.out.println("============================================toDistributeControll: "+ conName +"  " + openid);
 			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,openid);
-			param.remove("code");
 			return new ModelAndView("/"+conName.replaceAll("\\.", "/")+".html?openid="+ StringUtil.convertNull(openid),param);
 			
 		}catch (Exception e) {
