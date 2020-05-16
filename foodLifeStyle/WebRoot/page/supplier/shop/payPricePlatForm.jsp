@@ -1,11 +1,15 @@
-﻿<%@page import="com.yd.business.supplier.bean.SupplierBean"%>
+﻿<%@page import="com.yd.util.DateUtil"%>
+<%@page import="com.yd.business.user.service.impl.UserConsumeInfoServiceImpl"%>
+<%@page import="com.yd.business.user.bean.UserConsumeInfoBean"%>
+<%@page import="com.yd.business.user.bean.UserWechatBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 	SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");		
-	
+	UserWechatBean user = (UserWechatBean)request.getAttribute("user");
 %>			
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +74,7 @@
       </div>
       <div class="row">
         <div class="_submit col-xs-10 col-sm-10 col-md-10 col-lg-10">
-          <input type="submit" value="支付" class="btn btn-primary  submit-amount btn-lg">
+          <input onclick="pay()" id="payBTN"  type="submit" value="立即支付" class="btn btn-primary  submit-amount btn-lg">
         </div>
       </div>
   
@@ -94,7 +98,7 @@
       </div>
     </div>
 </div>
-<div class="mask"></div>
+<div class="mask"></div> 
 <script>
  var $amountInput = $('[type="number"]');
 var amount = '';
@@ -121,7 +125,73 @@ $(".quick_amount button").off("click").on("click", function () {
   }
  document.getElementById("price").value = value;
 	lastChar = amount;
-})
+});
+
+function pay(){
+
+	$("#payBTN").val('加载中...');
+	$("#payBTN").on('click', '' );
+	var order_code = '<%=UserConsumeInfoServiceImpl.OUTTRADE_TYPE_WXPAY + "_" + user.getId() +"_"+DateUtil.formatDateToPureSSS(new Date())%>';
+	var cost_money = Number($("#price").val()) ;
+	var cost_balance = 0;
+	var openid = '<%=user.getOpenid() %>';
+	var phone = '';
+	var points = 0;
+	var coupon_record_id = '';
+	
+	$.ajax({
+		url : "wechat/createUnifiedOrderByShop.do",
+		data : { cost_money : cost_money.toFixed(2),
+				 cost_balance : (cost_balance * 100).toFixed(0),
+				 openid : openid,
+				 order_code : order_code,
+				 phone : phone ,
+				 points : points,
+				 coupon_record_id : coupon_record_id
+		},
+		success : function(result) {
+			if(result == 'false'){
+				alert('调用支付失败');
+				$("#payBTN").val('立即支付');
+				$("#payBTN").on('click','pay()');
+			}else{
+				result = eval('('+result+')');
+				
+				WeixinJSBridge.invoke(
+			       'getBrandWCPayRequest', {
+			           "appId" : result.appId,     //公众号名称，由商户传入     
+			           "timeStamp": result.timeStamp,         //时间戳，自1970年以来的秒数     
+			           "nonceStr" : result.nonceStr, //随机串     
+			           "package" : result.packages,     
+			           "signType" : result.signType,         //微信签名方式：     
+			           "paySign" : result.paySign //微信签名 
+			       },
+			       function(res){
+			           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+			           	alert('支付成功！');
+			           
+			           	$("#payButton").hide();
+			         	location.href = "user/toUserShopOrderListPage.do?openid="+openid;			           	
+			           }else{
+			           	$.ajax({
+							url : "wechat/deleteUnifiedOrderByShop.do",
+							data : { outTradeNo : result.outTradeNo,
+									 transactionId : result.transactionId,
+									 openid : openid
+									},
+							success : function(d) {
+								$("#payBTN").val('立即支付');
+								$("#payBTN").show();
+								$("#payBTN").on('click','pay()');
+							}
+			           	});
+			           }
+			       }
+			   ); 
+			}
+		}
+	});
+}
 
 // $('#exampleModal').modal('show');
 </script>

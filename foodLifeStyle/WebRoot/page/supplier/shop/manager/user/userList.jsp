@@ -83,7 +83,7 @@ List<SupplierUserBean> userList = (List<SupplierUserBean>)request.getAttribute("
       					</div>
 						  <div class="panel-body">
 						    	【<%=user.getDictValueByField("level") %>】【积分：<%=user.getPoints() %>】
-						   <a role="button" class="btn btn-success pull-right btn-xs"  >修改信息</a> 
+						   <a href="supplier/package/toUserPackageManagerPage.html?openid=<%=user.getOpenid() %>" role="button" class="btn btn-success pull-right btn-xs"  >消费套餐</a> 
 						  </div>
       				</div>
       				

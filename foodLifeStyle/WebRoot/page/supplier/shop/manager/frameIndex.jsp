@@ -55,7 +55,9 @@ String openid = request.getParameter("openid");
                 	新增商品信息（简单便捷）【第二步】</a></li>
                 <li><a href="wx/supplier/shop/toManagerCategoryPage.html?openid=<%=openid %>&sid=<%=sid%>&fromOpenid=<%=openid %>">
                 	预览/修改/发布（快速及时）【第三步】</a></li>
-                
+                	
+                <li><a onclick="changeIframe('supplier/package/toSupplierPackageManagerPage.html?openid=<%=openid %>&sid=<%=sid%>&fromOpenid=<%=openid %>',this)">
+                	产品套餐管理（增加客户留存）</a></li>
               </ul>
             </li>
              <li class="dropdown">
@@ -85,16 +87,19 @@ String openid = request.getParameter("openid");
                 <li class="dropdown-header">订单管理</li> -->
                 <li><a >
                 	优惠券管理（暂未开放）</a></li>
+                <li><a >
+                	优惠券发放（暂未开放）</a></li>
+                
+                	
               </ul>
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              		服务中心（服务客户） <span class="caret"></span></a>
+              		服务中心（暂未开放） <span class="caret"></span></a>
               <ul class="dropdown-menu">
              <!--    <li role="separator" class="divider"></li>
                 <li class="dropdown-header">订单管理</li> -->
-                <li><a onclick="changeIframe('supplier/package/toSupplierPackageManagerPage.html?openid=<%=openid %>&sid=<%=sid%>&fromOpenid=<%=openid %>',this)">
-                	产品套餐管理（客户留存）</a></li>
+              
               </ul>
             </li>
             <li class="dropdown">

@@ -361,7 +361,7 @@
   	}
   	
   	function gotoPayPrice(){
-	  		var gotoUrl = '<%=basePath%>/supplier/shop/toPayPricePage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>';
+	  		var gotoUrl = '<%=basePath%>supplier/shop/toPayPricePage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>';
 	  		location.href = gotoUrl;
   	}
   	
