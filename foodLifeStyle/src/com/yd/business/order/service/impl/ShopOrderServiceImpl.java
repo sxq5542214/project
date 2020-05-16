@@ -31,10 +31,13 @@ import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponConfigBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierUserBean;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.ISupplierUserService;
 import com.yd.business.supplier.service.impl.SupplierServiceImpl;
+import com.yd.business.supplier.service.impl.SupplierUserServiceImpl;
 import com.yd.business.user.bean.UserAddressBean;
 import com.yd.business.user.bean.UserCartBean;
 import com.yd.business.user.bean.UserCartBean.CartInfo;
@@ -78,6 +81,9 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	private IConfigAttributeService configAttributeService;
 	@Resource
 	private ISupplierService supplierService;
+	@Resource
+	private ISupplierUserService supplierUserService;
+	
 
 	@Override
 	public void createShopOrderInfo(ShopOrderInfoBean bean){
@@ -494,16 +500,26 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			//处理订单的优惠卷为已使用，并创建赠送的订单商品
 			handleOrderCouponToUsed(order, recordList);
 			
-			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
+			SupplierUserBean user = supplierUserService.findSupplierUser(order.getUser_id(), order.getSupplier_id());
 			//扣减用户积分
 			int costPoints = order.getCost_points();   // 用户还没有付款呢
 			if(costPoints >0){
 				user.setPoints(user.getPoints() - costPoints);
-				userWechatService.update(user);
-				userCommissionPointsService.createUserPointLog(user.getId(), -costPoints, "购买"+ order.getOrder_name()+" 扣减积分" );
+				supplierUserService.updateSupplierUser(user);
+				userCommissionPointsService.createUserPointLog(user.getUser_id(), -costPoints, "购买"+ order.getOrder_name()+" 扣减积分" );
 			}
 			
 			SupplierBean supplier = supplierService.findSupplierById(order.getSupplier_id());
+
+			if(StringUtil.isNull(order.getContact_name())) {
+				order.setContact_name(user.getNick_name());
+			}
+			if(StringUtil.isNull(order.getContact_phone())) {
+				order.setContact_phone("无");
+			}
+			if(StringUtil.isNull(order.getContact_address())) {
+				order.setContact_address("店铺内下单，无需配送");
+			}
 			//保存并处理用户购买成功的动作
 			msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
 			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY_NOTIFY_FRIENDS , null, order);

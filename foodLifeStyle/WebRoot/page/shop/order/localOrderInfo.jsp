@@ -121,8 +121,9 @@
 									couponStr = " （优惠券抵扣）";
 								}
 							%>
-							<li class="border-bottom"><a href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getSupplier_product_id()%>&openid=<%=user.getOpenid()%>">
-									<div class="order-msg">
+							<li class="border-bottom">
+<%-- 								<a href="product/supplierProduct/toSupplierProductShopInfo.do?id=<%=product.getSupplier_product_id()%>&openid=<%=user.getOpenid()%>">
+ --%>									<div class="order-msg">
 										<img src="<%=product.getHead_img() %>" class="img_ware">
 										<div class="order-msg">
 											<p class="title"><%=product.getSupplier_product_name() %></p>
@@ -131,7 +132,9 @@
 											</p>
 											<p class="order-data" style="font-size: 0.7rem">可叠加积分抵扣：<%=product.getCost_points() / 100d %>元</p>
 										</div>
-									</div> </a></li>
+									</div>
+		<!-- 						</a> -->
+							</li>
 							<%} %>
 						</ul>
 					</div></li>

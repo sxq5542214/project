@@ -46,7 +46,7 @@
 </body>
 <script type="text/javascript">
 function goHistory(){
-	window.history.go(-1);
+	window.history.go(-2);
 }
 </script>
 </html>
