@@ -39,12 +39,13 @@
 		<div >
 			<a >
 					<img src="images/supplier/huiyuanzhuanxiang.png" style="width: 100%">
-			</a>				<div class="logo-dbs">
+			</a>
+			<!-- <div class="logo-dbs">
 				<div class="dbs-img">
 					<img src="images/icon/logo.png">
 				</div>
 				<p>全球低价，满足你的梦！</p>
-			</div> 
+			</div>  -->
 		</div>
 
 		<div class="favorable" style="text-align: center;margin: 0 auto;">

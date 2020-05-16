@@ -83,9 +83,9 @@ List<SupplierPackageBean> listPackage = (List<SupplierPackageBean>)request.getAt
     <div class="navbar navbar-fixed-bottom container-fluid">
     	<div class="row">
 	    	<div style="text-align: center;">
-				<a href="supplier/package/toAddSupplierPackagPage.html?sid=<%=sid %>" style="width: 40%;" role="button" class="btn btn-info "  >新增产品套餐</a>&nbsp;&nbsp;&nbsp;&nbsp;
-				<a  style="width: 40%;" role="button" class="btn btn-primary " >删除产品套餐</a>
-	    	</div>
+				<a href="supplier/package/toAddSupplierPackagPage.html?sid=<%=sid %>" style="width: 80%;" role="button" class="btn btn-info "  >新增产品套餐</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<!-- 				<a  style="width: 40%;" role="button" class="btn btn-primary " >删除产品套餐</a>
+ -->	    	</div>
     	</div>
 	</div>
 </body>
