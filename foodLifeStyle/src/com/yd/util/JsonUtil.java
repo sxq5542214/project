@@ -100,6 +100,9 @@ public class JsonUtil {
 			return json.toString();
 		}else if(obj instanceof Integer){
 			return String.valueOf(obj);
+		}else if(obj instanceof Map){
+			JSONObject json = new JSONObject((Map)obj);
+			return json.toString();
 		}else{
 			JSONObject json = new JSONObject(obj);
 			return json.toString();
@@ -108,12 +111,13 @@ public class JsonUtil {
 	  
 	  
 	  public static void main(String[] args) {
-		  OrderProductLogBean bean = new OrderProductLogBean();
-		  bean.setId(123);
-		  bean.setProduct_name("adsfasdf");
-		  JSONObject jso = new JSONObject(bean);
-		  
-		  System.out.println(parseJSON2Map(jso.toString()));
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("nick_name","123321");
+		  JSONObject jso = new JSONObject(map);
+		  System.out.println(jso);
+		  System.out.println(jso.toString());
+		  System.out.println(convertObjectToJsonString(map));
 		  
 		  
 	}

@@ -104,7 +104,7 @@
 	
 	<insert id="createSupplierBalanceLog" parameterType="supplierBalanceLog">
 		insert into ll_supplier_balance_log(supplier_id,order_code,openid,add_balance,total_balance,service_fee,charge_rate,type,create_time,remark)
-		values(#{supplier_id},#{order_code},{openid},{add_balance},{total_balance},{service_fee},{charge_rate},{type},{create_time},{remark})
+		values(#{supplier_id},#{order_code},#{openid},#{add_balance},#{total_balance},#{service_fee},#{charge_rate},#{type},#{create_time},#{remark})
 	</insert>
 	
 	<select id="querySupplierBalanceLog" parameterType="supplierBalanceLog" resultType="supplierBalanceLog">

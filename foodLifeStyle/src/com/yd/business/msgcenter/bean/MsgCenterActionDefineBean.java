@@ -76,7 +76,7 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_ORDER_EFF = "wechat_user_order_eff";
 	/**
-	 * 用户支付现金至商户
+	 * 用户直接支付现金至商户，未选商品
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_PAY_DIRECT = "wechat_user_pay_direct";
 	/**
