@@ -79,7 +79,17 @@ String openid = request.getParameter("openid");
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              		服务营销中心（留存拉新） <span class="caret"></span></a>
+              		营销中心（拉新利器） <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+             <!--    <li role="separator" class="divider"></li>
+                <li class="dropdown-header">订单管理</li> -->
+                <li><a >
+                	优惠券管理（暂未开放）</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              		服务中心（服务客户） <span class="caret"></span></a>
               <ul class="dropdown-menu">
              <!--    <li role="separator" class="divider"></li>
                 <li class="dropdown-header">订单管理</li> -->
@@ -96,6 +106,16 @@ String openid = request.getParameter("openid");
                 <li><a >近一周营业数据（暂未开放）</a></li>
                 <li><a >近一月营业数据（暂未开放）</a></li>
                 <li><a >近一周客户数据（暂未开放）</a></li>
+              </ul>
+            </li>
+              <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              		店铺设置 <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+             <!--    <li role="separator" class="divider"></li>
+                <li class="dropdown-header">订单管理</li> -->
+                <li><a onclick="changeIframe('supplier/shop/toSimpleSetUpPage.html',this)">
+                	收款方式设置</a></li>
               </ul>
             </li>
     <!--         <li class="dropdown">

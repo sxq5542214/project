@@ -148,8 +148,12 @@
 						<span style="" id="totalPrice">0</span>
 					</div>
 				</div>
-				<div
+				<div id="gotoBTN"
 					style="height: 50px;padding: 0 30px; font-size: 1.2rem;font-weight:bold; line-height:50px; color:#333; position: relative;background-image: linear-gradient(-135deg, #FFBD27 0%, #FFD161 100%);"
+					onclick="gotoPayPrice();">
+					不选，直接付款</div>
+				<div id="gotoOrder"
+					style="display:none;height: 50px;padding: 0 30px; font-size: 1.2rem;font-weight:bold; line-height:50px; color:#333; position: relative;background-image: linear-gradient(-135deg, #FFBD27 0%, #FFD161 100%);"
 					onclick="gotoOrder();">
 					选好了</div>
 			</div>
@@ -312,7 +316,16 @@
   		var span = document.getElementById("totalNum");
   		var num = Number(span.innerHTML);
   		span.innerHTML = num + count;
+  		
+  		if(num + count > 0){
+  			$("#gotoBTN").hide();
+  			$("#gotoOrder").show();
+  		}else if(num + count == 0){
+  			$("#gotoOrder").hide();
+  			$("#gotoBTN").show();
+  		}
   	}
+  	
   	
   	function updateTotalPrice(price){
   		var span = document.getElementById("totalPrice");
@@ -335,8 +348,6 @@
   	}
   	
   	function gotoOrder(){
-  		
-  	
   		var span = document.getElementById("totalNum");
   		var num = Number(span.innerHTML);
   		if(num > 0){
@@ -347,6 +358,11 @@
   		}else{
   			alert('小主，您还没有选择商品呢');
   		}
+  	}
+  	
+  	function gotoPayPrice(){
+	  		var gotoUrl = '<%=basePath%>/supplier/shop/toPayPricePage.html?openid=<%=openid%>&sid=<%=supplier.getId()%>';
+	  		location.href = gotoUrl;
   	}
   	
   	function hide_mask(div){

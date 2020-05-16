@@ -154,7 +154,8 @@ public class SupplierProductController extends BaseController {
 			int height = 100;
 			String tempDir = ImageBean.THUMB_IMG_DIR + sid + "/";
 			String targetDir = request.getServletContext().getRealPath("/")+ "/" + tempDir;
-			String targetFileSrc = ImageUtils.uploadFileByRequest(request, targetDir, width, height);
+			List<String> srcList = ImageUtils.uploadFileByRequest(request, targetDir, width, height);
+			String targetFileSrc = srcList.size() > 0 ? srcList.get(0):null;
 			String accessFileURL = null;
 			if(targetFileSrc != null) { //有上传文件才执行
 				String fileName = targetFileSrc.substring(targetFileSrc.lastIndexOf("/")+1);

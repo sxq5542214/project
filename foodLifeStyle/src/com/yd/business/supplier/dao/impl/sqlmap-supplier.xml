@@ -45,8 +45,8 @@
 		select l.*,GROUP_CONCAT('[',(select distinct s.group_name from ll_supplier_discount_relation s where s.supplier_id = l.id),']') disinfo from ll_supplier l where l.parent_customer_id = #{value} and exists (select 1 from ll_supplier_discount_relation where supplier_id = l.id) group by l.name
 	</select>
 	<insert id="insertSupplier" parameterType="supplier" useGeneratedKeys="true" keyProperty="id">
-		insert into ll_supplier(customer_id,parent_customer_id,level,parent_name,name,openid,status,type,issale,address,balance,points,deposit_money,create_time,contacts_name,contacts_phone,remark,modify_time,discount)
-		values(#{customer_id},#{parent_customer_id},#{level},#{parent_name},#{name},#{openid},#{status},#{type},#{issale},#{address},#{balance},#{points},#{deposit_money},#{create_time},#{contacts_name},#{contacts_phone},#{remark},#{modify_time},#{discount})
+		insert into ll_supplier(customer_id,parent_customer_id,level,parent_name,name,openid,status,type,issale,address,balance,points,deposit_money,create_time,contacts_name,contacts_phone,remark,modify_time,discount,pay_where,personal_pay_img,charge_rate)
+		values(#{customer_id},#{parent_customer_id},#{level},#{parent_name},#{name},#{openid},#{status},#{type},#{issale},#{address},#{balance},#{points},#{deposit_money},#{create_time},#{contacts_name},#{contacts_phone},#{remark},#{modify_time},#{discount},#{pay_where},#{personal_pay_img}，#{charge_rate})
 	</insert>
 	<update id="updateSupplier" parameterType="supplier">
 		update ll_supplier 
@@ -69,6 +69,10 @@
 			<if test="remark!=null and remark!=''">remark=#{remark},</if>
 			<if test="modify_time!=null and modify_time!=''">modify_time=#{modify_time},</if>
 			<if test="discount!=null and discount!=''">discount=#{discount},</if>
+			<if test="pay_where != null ">pay_where = #{pay_where},</if>
+			<if test="supplier_img != null ">supplier_img = #{supplier_img},</if>
+			<if test="personal_pay_img != null ">personal_pay_img = #{personal_pay_img},</if>
+			<if test="charge_rate != null ">charge_rate = #{charge_rate},</if>
 		</set>
 		where id=#{id}
 	</update>

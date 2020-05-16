@@ -33,8 +33,10 @@ import com.yd.business.product.bean.ProductTypeBean;
 import com.yd.business.product.service.IProductTypeService;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
+import com.yd.business.supplier.bean.SupplierPackageProductRecordBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.supplier.service.ISupplierCouponService;
+import com.yd.business.supplier.service.ISupplierPackageService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
 import com.yd.business.supplier.service.ISupplierTopicService;
@@ -99,11 +101,14 @@ public class UserSupplierProductController extends BaseController {
 	private IProductTypeService productTypeService;
 	@Resource
 	private IAdvertisingService advertisingService;
+	@Resource
+	private ISupplierPackageService supplierPackageService;
 	
 	public static final String PAGE_USERSUPPLIERPRODUCT = "/page/user/supplierProductShop/index.jsp";
 	public static final String PAGE_USERSUPPLIERCATEGORY = "/page/user/supplierProductShop/category.jsp";
 	public static final String PAGE_USER_SHOP_ORDER = "/page/shop/order/orderInfo.jsp";
 	public static final String PAGE_USER_PLATFORM_INDEXPAGE = "/page/user/platform/index.jsp";
+	public static final String PAGE_USER_SUPPLIERSHOP_PACKAGEPRODUCTLIST = "/page/user/supplierProductShop/userSupplierPackageProductList.jsp";
 	
 	@Deprecated
 	@RequestMapping("**/user/supplier/queryPlatformSupplierProduct.do")
@@ -270,6 +275,37 @@ public class UserSupplierProductController extends BaseController {
 		}
 		return null;
 	}
+	
+
+	/**
+	 * 用户的商户产品套餐详情界面
+	 * @return
+	 */
+	@RequestMapping("/user/supplier/toSupplierPackageProductListPage.html")
+	public ModelAndView toSupplierPackageProductListPage(HttpServletRequest request,HttpServletResponse response){
+		try {
+			
+			String openid = request.getParameter("openid");
+			String sid = request.getParameter("sid");
+			if(StringUtil.isNull(openid)) {
+				openid = getCurrentOpenid();
+			}
+			
+			SupplierPackageProductRecordBean bean = new SupplierPackageProductRecordBean();
+			bean.setOpenid(openid);
+			bean.setSupplier_id(Integer.parseInt(sid));
+			List<SupplierPackageProductRecordBean> list = supplierPackageService.querySupplierPackageProductRecord(bean );
+			
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("list", list);
+			
+			return new ModelAndView(PAGE_USER_SUPPLIERSHOP_PACKAGEPRODUCTLIST,model );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
 	
 	
 }

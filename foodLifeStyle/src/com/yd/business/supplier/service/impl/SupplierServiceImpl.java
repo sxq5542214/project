@@ -88,6 +88,8 @@ public class SupplierServiceImpl extends BaseService implements
 		bean.setPoints(0);
 		bean.setType(type);
 		bean.setStatus(SupplierBean.STATUS_Y);
+		bean.setPay_where(SupplierBean.PAY_WHERE_PLATFROM);
+		bean.setCharge_rate(SupplierBean.CHARGE_RATE_DEFAULT);
 		
 		supplierDao.insertSupplier(bean);
 		

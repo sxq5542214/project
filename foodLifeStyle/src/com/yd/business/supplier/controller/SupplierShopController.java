@@ -11,18 +11,24 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.ICustomerService;
+import com.yd.business.image.bean.ImageBean;
 import com.yd.business.order.bean.ShopOrderEffInfoBean;
 import com.yd.business.order.bean.ShopOrderEffProductBean;
 import com.yd.business.order.bean.ShopOrderInfoBean;
@@ -48,6 +54,7 @@ import com.yd.business.wechat.util.WechatConstant;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.CookieUtil;
 import com.yd.util.DateUtil;
+import com.yd.util.ImageUtils;
 import com.yd.util.MD5;
 import com.yd.util.NumberUtil;
 import com.yd.util.StringUtil;
@@ -62,8 +69,10 @@ public class SupplierShopController extends BaseController {
 	public static final String PAGE_SUPPLIERSHOP_SHOPCATEGORY = "/page/supplier/shop/shopCategory.jsp";
 	public static final String PAGE_SUPPLIER_SHOP_ORDER_EFF = "/page/supplier/shop/orderEffInfo.jsp";
 	public static final String PAGE_SUPPLIERSHOPMANAGER_INDEX = "/page/supplier/shop/manager/index.jsp";
-
-
+	public static final String PAGE_SUPPLIER_SHOP_PAY_PRICE_PLATFORM = "/page/supplier/shop/payPricePlatForm.jsp";
+	public static final String PAGE_SUPPLIER_SHOP_PAY_PRICE_PERSONAL = "/page/supplier/shop/payPricePersonal.jsp";
+	public static final String PAGE_SUPPLIER_SHOP_SIMPLESETUP = "/page/supplier/shop/manager/shopSimpleSetUp.jsp";
+	
 	@Autowired
 	private ISupplierService supplierService;
 	@Autowired
@@ -328,6 +337,112 @@ public class SupplierShopController extends BaseController {
 		}
 		return null;
 	}
+	
+	/**
+	 * 查询近期订单数据
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("supplier/shop/toPayPricePage.html")
+	public ModelAndView toPayPricePage(HttpServletRequest request,HttpServletResponse response) {
+		
+		try {
+			String openid = getCurrentOpenid();
+			String sid = request.getParameter("sid");
+			
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			SupplierBean supplier = supplierService.findSupplierById(Integer.parseInt(sid));
+
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("supplier", supplier);
+			if( (NumberUtil.convertNull(supplier.getPay_where()) == SupplierBean.PAY_WHERE_PERSONAL) && StringUtil.isNotNull(supplier.getPersonal_pay_img())) {
+				
+				return new ModelAndView(PAGE_SUPPLIER_SHOP_PAY_PRICE_PERSONAL,model );
+				
+			}else {
+				model.put("user", user);
+				return new ModelAndView(PAGE_SUPPLIER_SHOP_PAY_PRICE_PLATFORM,model );
+			}
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+
+	
+	
+
+	/**
+	 * 设置店铺属性
+	 */
+	@RequestMapping("/supplier/shop/simpleSetUp.html")
+	public ModelAndView simpleSetUp(HttpServletRequest request,HttpServletResponse response){
+		try{
+			SupplierBean supplier = getCurrentSupplier();
+			String pay_where = request.getParameter("pay_where");
+			String supplier_img = null ;
+			String personal_pay_img = null;
+			
+			//压缩并写入图片到磁盘
+			int width = 160;
+			int height = 90;
+			String tempDir = ImageBean.THUMB_IMG_DIR + supplier.getId() + "/";
+			String targetDir = request.getServletContext().getRealPath("/")+ "/" + tempDir;
+			
+			MultiValueMap<String, MultipartFile> map = ((DefaultMultipartHttpServletRequest)request).getMultiFileMap();
+			FileItem item = null;
+			CommonsMultipartFile cmf = (CommonsMultipartFile) map.get("supplier_img").get(0);
+			if(cmf != null && cmf.getFileItem().getSize() > 0) {
+				String targetFileSrc = ImageUtils.uploadFileByRequest(cmf.getFileItem(), targetDir, width, height);
+				if(StringUtil.isNotNull(targetFileSrc)) {
+					String fileName = targetFileSrc.substring(targetFileSrc.lastIndexOf("/")+1);
+					supplier_img = tempDir + fileName;
+					supplier.setSupplier_img(supplier_img);
+				}
+			}
+			
+			//压缩并写入个人收款图片到磁盘
+			CommonsMultipartFile cmf2 = (CommonsMultipartFile) map.get("personal_pay_img").get(0);
+			if(cmf2 != null && cmf2.getFileItem().getSize() > 0) {
+				String targetFileSrc = ImageUtils.uploadFileByRequest(cmf2.getFileItem(), targetDir, 1080, 1457);
+				if(StringUtil.isNotNull(targetFileSrc)) {
+					String fileName = targetFileSrc.substring(targetFileSrc.lastIndexOf("/")+1);
+					personal_pay_img = tempDir + fileName;
+					supplier.setPersonal_pay_img(personal_pay_img);
+				}
+			}
+			
+			supplier.setPay_where(Integer.parseInt(pay_where));
+			
+			supplierService.updateSupplier(supplier);
+			
+			writeJson(response, "success");
+			
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	
+
+	/**
+	 * 跳转至设置店铺属性的界面
+	 */
+	@RequestMapping("/supplier/shop/toSimpleSetUpPage.html")
+	public ModelAndView toSimpleSetUpPage(HttpServletRequest request,HttpServletResponse response){
+		try{
+			SupplierBean supplier = getCurrentSupplier();
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("supplier", supplier);
+			return new ModelAndView(PAGE_SUPPLIER_SHOP_SIMPLESETUP,map);
+		}catch (Exception e) {
+			log.error(e,e);
+		}
+		return null;
+	}
+	
 	
 	@RequestMapping("**order/shop/updateOrderEffDate.html")
 	public ModelAndView updateOrderEffDate(HttpServletRequest request,HttpServletResponse response) {

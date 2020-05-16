@@ -13,7 +13,6 @@ String openid = request.getParameter("openid");
 String sid = request.getParameter("sid");
 SupplierProductBean bean = (SupplierProductBean) request.getAttribute("bean");
 List<SupplierProductCategoryBean> productCategoryList = (List<SupplierProductCategoryBean>)request.getAttribute("productCategoryList");
-String jsoStr = JsonUtil.convertObjectToJsonString(productCategoryList);
 if(bean == null){
 	bean = new SupplierProductBean();
 }

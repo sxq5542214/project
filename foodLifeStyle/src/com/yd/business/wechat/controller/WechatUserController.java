@@ -314,6 +314,7 @@ public class WechatUserController extends BaseController {
 			param.put("openid", openid);
 System.out.println("============================================toDistributeControll: "+ conName +"  " + openid);
 			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,openid);
+			param.remove("code");
 			return new ModelAndView("/"+conName.replaceAll("\\.", "/")+".html?openid="+ StringUtil.convertNull(openid),param);
 			
 		}catch (Exception e) {

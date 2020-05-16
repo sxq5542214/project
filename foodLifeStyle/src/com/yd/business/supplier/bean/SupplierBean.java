@@ -14,11 +14,12 @@ import com.yd.basic.framework.bean.BaseBean;
 public class SupplierBean extends BaseBean {
 	public static int ISSALE_TRUE = 1;
 	public static int ISSALE_FALSE = 0;
-	
 	public static int STATUS_N = 0;
 	public static int STATUS_Y = 1;
-	
+	public static int PAY_WHERE_PLATFROM = 1;
+	public static int PAY_WHERE_PERSONAL = 2;
 	public static int PLATFROM_SUPPLIER_ID = 1;
+	public static int CHARGE_RATE_DEFAULT = 6;
 
 	private Integer id;
 	private Integer customer_id;
@@ -47,6 +48,9 @@ public class SupplierBean extends BaseBean {
 	private String supplier_img;
 	private String supplier_title;
 	private Integer avg_price; 
+	private Integer pay_where;
+	private String personal_pay_img;
+	private Integer charge_rate;
 	
 	//查询条件,非数据库字段
 	private String ids;
@@ -54,6 +58,18 @@ public class SupplierBean extends BaseBean {
 	
 	public String getIds() {
 		return ids;
+	}
+	public String getPersonal_pay_img() {
+		return personal_pay_img;
+	}
+	public Integer getCharge_rate() {
+		return charge_rate;
+	}
+	public void setCharge_rate(Integer charge_rate) {
+		this.charge_rate = charge_rate;
+	}
+	public void setPersonal_pay_img(String personal_pay_img) {
+		this.personal_pay_img = personal_pay_img;
 	}
 	public void setIds(String ids) {
 		this.ids = ids;
@@ -213,6 +229,12 @@ public class SupplierBean extends BaseBean {
 	}
 	public void setModify_time(String modify_time) {
 		this.modify_time = modify_time;
+	}
+	public Integer getPay_where() {
+		return pay_where;
+	}
+	public void setPay_where(Integer pay_where) {
+		this.pay_where = pay_where;
 	}
 	
 }

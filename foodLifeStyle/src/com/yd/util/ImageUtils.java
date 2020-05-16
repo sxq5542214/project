@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -112,7 +113,7 @@ public class ImageUtils {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 上传文件，并按指定的宽高存储
 	 * @param request
@@ -122,7 +123,44 @@ public class ImageUtils {
 	 * @return	写入文件的具体目录
 	 * @throws Exception
 	 */
-	public final static String uploadFileByRequest(HttpServletRequest request,String targetDir,int width,int height) throws Exception {
+	public final static List<String> uploadFileByRequest(HttpServletRequest request,String targetDir,int width,int height) throws Exception {
+
+		List<String> strList = new ArrayList<String>();
+		boolean flag = false;
+		try {
+			// 提交上来的信息都在这个list里面
+			// 这意味着可以上传多个文件
+//			List<FileItem> list = upload.parseRequest(request);
+			MultiValueMap<String, MultipartFile> map = ((DefaultMultipartHttpServletRequest)request).getMultiFileMap();
+			List<CommonsMultipartFile> mfList = null;
+			FileItem item = null;
+			for(String key : map.keySet()) {
+				CommonsMultipartFile cmf = (CommonsMultipartFile) map.get(key).get(0);
+				if(cmf != null) {
+					item = cmf.getFileItem();
+
+					String str = uploadFileByRequest(item, targetDir, width, height);
+					strList.add(str);
+				}
+			}
+			// 获取上传的文件
+		}catch (Exception e) {
+			log.error(e,e);
+			throw new Exception("图片上传失败！");
+		}
+		return strList;
+	}
+
+	/**
+	 * 上传文件，并按指定的宽高存储
+	 * @param request
+	 * @param targetSrc
+	 * @param width
+	 * @param height
+	 * @return	写入文件的具体目录
+	 * @throws Exception
+	 */
+	public final static String uploadFileByRequest(FileItem item,String targetDir,int width,int height) throws Exception {
 		File file = new File(targetDir);
 		if (!file.exists())
 			file.mkdirs();
@@ -146,20 +184,6 @@ public class ImageUtils {
 
 		boolean flag = false;
 		try {
-			// 提交上来的信息都在这个list里面
-			// 这意味着可以上传多个文件
-//			List<FileItem> list = upload.parseRequest(request);
-			MultiValueMap<String, MultipartFile> map = ((DefaultMultipartHttpServletRequest)request).getMultiFileMap();
-			List<CommonsMultipartFile> mfList = null;
-			FileItem item = null;
-			for(String key : map.keySet()) {
-				CommonsMultipartFile cmf = (CommonsMultipartFile) map.get(key).get(0);
-				if(cmf != null) {
-					item = cmf.getFileItem();
-					break;
-				}
-			}
-			
 			// 获取上传的文件
 			if(item != null && StringUtil.isNotNull(item.getName())) {
 				
