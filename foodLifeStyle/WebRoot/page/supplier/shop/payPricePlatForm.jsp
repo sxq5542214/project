@@ -138,6 +138,7 @@ function pay(){
 	var phone = '';
 	var points = 0;
 	var coupon_record_id = '';
+	var sid = '<%=supplier.getId() %>';
 	
 	$.ajax({
 		url : "wechat/createUnifiedOrderByShop.do",
@@ -147,7 +148,9 @@ function pay(){
 				 order_code : order_code,
 				 phone : phone ,
 				 points : points,
-				 coupon_record_id : coupon_record_id
+				 coupon_record_id : coupon_record_id,
+				 sid : sid,
+				 type : '1'
 		},
 		success : function(result) {
 			if(result == 'false'){
@@ -171,7 +174,7 @@ function pay(){
 			           	alert('支付成功！');
 			           
 			           	$("#payButton").hide();
-			         	location.href = "user/toUserShopOrderListPage.do?openid="+openid;			           	
+			         	location.href = "page/supplier/shop/paySuccess.jsp";			           	
 			           }else{
 			           	$.ajax({
 							url : "wechat/deleteUnifiedOrderByShop.do",

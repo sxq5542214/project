@@ -4,6 +4,7 @@
 package com.yd.business.wechat.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -35,8 +36,10 @@ import com.yd.business.order.service.IOrderService;
 import com.yd.business.order.service.IShopOrderService;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.supplier.bean.SupplierBalanceLogBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.service.ISupplierCouponService;
+import com.yd.business.supplier.service.ISupplierService;
 import com.yd.business.user.bean.UserConsumeInfoBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserConsumeInfoService;
@@ -47,6 +50,7 @@ import com.yd.business.wechat.bean.WechatPayResultBean;
 import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.HttpUtil;
+import com.yd.util.JsonUtil;
 import com.yd.util.MD5Util;
 import com.yd.util.StringUtil;
 import com.yd.util.WebUtil;
@@ -76,6 +80,8 @@ public class WechatController extends BaseController {
 	private IMsgCenterActionService msgCenterActionService;
 	@Resource
 	private ISupplierCouponService supplierCouponService;
+	@Resource
+	private ISupplierService supplierService;
 	@Resource
 	private IShopOrderService shopOrderService;
 	@Resource
@@ -321,7 +327,14 @@ public class WechatController extends BaseController {
 		Integer cost_balance = StringUtil.isNull(balanceStr) ? 0:Integer.parseInt(balanceStr);	//给eff_numStr字段          String类型转换成Integer类型
 		String phone = request.getParameter("phone");											//充值的电话号码			18755171111
 		String order_code = request.getParameter("order_code");				//定单号
+		String sid = request.getParameter("sid");		// 商户号
+		String type = request.getParameter("type");		// 支付分类
 		
+		Map<String,String> attachMap = new HashMap<String, String>();
+		attachMap.put("coupon_record_id", coupon_record_id);
+		attachMap.put("sid", sid);
+		attachMap.put("type", type);
+		String attachStr = JsonUtil.convertObjectToJsonString(attachMap);
 		
 		UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);					//通过openid到user表中查找记录
 		if(user == null){																		//做一个验证,确定此openid能够找到对应的用户
@@ -358,8 +371,8 @@ public class WechatController extends BaseController {
 		String mch_id = "mch_id=" +originalInfo.getMch_id();
 		//随机码
 		String nonce_str = "nonce_str=" + UUID.randomUUID().toString().replaceAll("-", "");
-		//附加数据，微信会原样返回,
-		String attach = "attach="+ "test";
+		//附加数据，微信会原样返回
+		String attach = "attach="+ attachStr;
 		//商品详情
 		String body = "body=支付商品";
 		//商户订单号
@@ -544,12 +557,36 @@ public class WechatController extends BaseController {
 
 		//更新用户余额
 //		userWechatService.updateUserBalance(result.getOut_trade_no(),result.getAttach());
-		//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
-		userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
-		//通过订单号在订购表中更改状态为更新支付成功状态
-		shopOrderService.updateShopOrderPaySuccess(Integer.parseInt(result.getCash_fee()), result.getOut_trade_no().split("-")[0]);
 		
+		String orderCode = result.getOut_trade_no().split("-")[0];
+		String attachStr = result.getAttach();
+		int cash_fee = Integer.parseInt(result.getCash_fee()); //支付金额
+		Map<String, String> attach = JsonUtil.parseJSONToMap(attachStr);
+		
+		String typeStr = attach.get("type");
+		if(typeStr != null) {
+			Integer type = Integer.parseInt(typeStr);
+			Integer sid = Integer.parseInt(attach.get("sid"));
+			String remark = attach.get("remark");
+			switch (type) {
+			case SupplierBalanceLogBean.TYPE_USER_PAYDIRECT:
+				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
 				
+				break;
+
+			default:
+				//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
+				userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
+				//通过订单号在订购表中更改状态为更新支付成功状态
+				shopOrderService.updateShopOrderPaySuccess(cash_fee,orderCode );
+			}
+			
+			
+			
+		}
+		
+		
+		
 		
 		
 		

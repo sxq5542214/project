@@ -55,4 +55,6 @@ public interface ISupplierService {
 	void createSupplier(CustomerBean customer, String openid, String supplierName, Integer type);
 	SupplierBean findSupplier(Integer id, String openid);
 	List<SupplierBean> querySupplierByOpenid(String openid);
+	Integer updateSupplierBalance(Integer sid, Integer cash_fee, String orderCode, String openid, Integer type,
+			String remark);
 }

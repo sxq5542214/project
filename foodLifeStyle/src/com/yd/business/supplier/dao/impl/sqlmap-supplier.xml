@@ -60,7 +60,6 @@
 			<if test="type!=null and type!=''">type=#{type},</if>
 			<if test="issale!=null">issale=#{issale},</if>
 			<if test="address!=null and address!=''">address=#{address},</if>
-			<if test="balance!=null and balance!=''">balance=#{balance},</if>
 			<if test="points!=null and points!=''">points=#{points},</if>
 			<if test="deposit_money!=null and deposit_money!=''">deposit_money=#{deposit_money},</if>
 			<if test="create_time!=null and create_time!=''">create_time=#{create_time},</if>
@@ -98,4 +97,27 @@
 		</where>
 		order by t.seq desc
 	</select>
+	
+	<update id="addSupplierBalance" parameterType="map">
+		update ll_supplier set balance = balance + #{addBalance} where id = #{sid}
+	</update>
+	
+	<insert id="createSupplierBalanceLog" parameterType="supplierBalanceLog">
+		insert into ll_supplier_balance_log(supplier_id,order_code,openid,add_balance,total_balance,service_fee,charge_rate,type,create_time,remark)
+		values(#{supplier_id},#{order_code},{openid},{add_balance},{total_balance},{service_fee},{charge_rate},{type},{create_time},{remark})
+	</insert>
+	
+	<select id="querySupplierBalanceLog" parameterType="supplierBalanceLog" resultType="supplierBalanceLog">
+		select * from ll_supplier_balance_log 
+		<where>
+			<if test="order_code != null"> and order_code = #{order_code}</if>
+			<if test="openid != null"> and openid = #{openid}</if>
+			<if test="supplier_id != null"> and supplier_id = #{supplier_id}</if>
+			<if test="type != null"> and type = #{type}</if>
+			<if test="id != null"> and id = #{id}</if>
+		</where>
+		<if test="orderby != null"> ${orderby}</if>
+	</select>
+	
+	
 </mapper>

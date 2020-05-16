@@ -2,6 +2,7 @@ package com.yd.business.supplier.dao;
 
 import java.util.List;
 
+import com.yd.business.supplier.bean.SupplierBalanceLogBean;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierTypeBean;
 /**
@@ -28,4 +29,7 @@ public interface ISupplierDao {
 	public SupplierBean queryMealSupplier(int customerid);
 	public List<SupplierBean> querySupplierByMinus(int customerid,int productid,int storenum);
 	public List<SupplierTypeBean> querySupplierType(SupplierTypeBean bean);
+	public void addSupplierBalance(Integer sid, int addBalance);
+	void createSupplierBalanceLog(SupplierBalanceLogBean bean);
+	List<SupplierBalanceLogBean> querySupplierBalanceLog(SupplierBalanceLogBean bean);
 }

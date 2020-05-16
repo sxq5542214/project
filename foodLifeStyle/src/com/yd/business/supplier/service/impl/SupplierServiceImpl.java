@@ -2,7 +2,9 @@ package com.yd.business.supplier.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -18,18 +20,24 @@ import com.yd.business.customer.bean.CustomerDiscountGroupBean;
 import com.yd.business.customer.service.ICustomerDiscountGroupService;
 import com.yd.business.customer.service.ICustomerDiscountService;
 import com.yd.business.customer.service.ICustomerService;
+import com.yd.business.msgcenter.bean.MsgCenterActionDefineBean;
+import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.other.dao.IConfigAttributeDao;
 import com.yd.business.product.bean.ProductBean;
 import com.yd.business.product.service.IProductService;
+import com.yd.business.supplier.bean.SupplierBalanceLogBean;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierDiscountRelationBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.supplier.bean.SupplierTypeBean;
+import com.yd.business.supplier.bean.SupplierUserBean;
 import com.yd.business.supplier.dao.ISupplierDao;
 import com.yd.business.supplier.service.ISupplierDiscountRelationService;
 import com.yd.business.supplier.service.ISupplierPowerLogService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.ISupplierUserService;
+import com.yd.business.user.bean.UserWechatBean;
 import com.yd.util.DateUtil;
 import com.yd.util.NumberUtil;
 @Service("supplierService")
@@ -54,13 +62,10 @@ public class SupplierServiceImpl extends BaseService implements
 	private ICustomerDiscountGroupService customerDiscountGroupService;
 	@Resource
 	private ISupplierPowerLogService supplierPowerLogService;
-	public ISupplierDao getSupplierDao() {
-		return supplierDao;
-	}
-	
-	public IConfigAttributeDao getConfigAttributeDao() {
-		return configAttributeDao;
-	}
+	@Resource
+	private IMsgCenterActionService msgCenterActionService;
+	@Resource
+	private ISupplierUserService supplierUserService;
 	
 	@Override
 	public List<SupplierBean> querySupplierByCustomerId(int customerId){
@@ -171,6 +176,48 @@ public class SupplierServiceImpl extends BaseService implements
 	public void updateSupplier(SupplierBean bean) {
 		// TODO Auto-generated method stub
 		supplierDao.updateSupplier(bean);
+	}
+	
+	/**
+	 * 商户收到支付后，扣除费率后，添加商户余额
+	 * @param sid
+	 * @param cash_fee	获得的金额
+	 * @return
+	 */
+	@Override
+	public Integer updateSupplierBalance(Integer sid,Integer cash_fee,String orderCode,String openid,Integer type,String remark) {
+		
+		SupplierBean supplier = findSupplierById(sid);
+		SupplierUserBean su = supplierUserService.findSupplierUser(openid, sid);
+		int rate = supplier.getCharge_rate();	//单位：千分之
+		int subCharge = cash_fee * rate / 1000;
+		int addBalance = cash_fee - subCharge;
+		
+		supplierDao.addSupplierBalance(sid,addBalance);
+		
+		//创建修改日志
+		SupplierBalanceLogBean bean = new SupplierBalanceLogBean();
+		bean.setSupplier_id(sid);
+		bean.setAdd_balance(addBalance);
+		bean.setCharge_rate(supplier.getCharge_rate());
+		bean.setCreate_time(DateUtil.getNowDateStr());
+		bean.setOpenid(openid);
+		bean.setOrder_code(orderCode);
+		bean.setRemark(remark);
+		bean.setService_fee(subCharge);
+		bean.setTotal_balance(supplier.getBalance() + addBalance);
+		bean.setType(type);
+		
+		supplierDao.createSupplierBalanceLog(bean );
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("nick_name", su.getNick_name());
+		map.put("addBalance", addBalance / 100d );
+		map.put("totalBalance",  (supplier.getBalance() + addBalance ) / 100d );
+		map.put("remark",  remark );
+		
+		msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_PAY_DIRECT, null, map);
+		
+		return addBalance;
 	}
 
 	@Override

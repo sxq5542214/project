@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
+import com.yd.business.supplier.bean.SupplierBalanceLogBean;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierTypeBean;
 import com.yd.business.supplier.dao.ISupplierDao;
@@ -99,4 +100,24 @@ public class SupplierDaoImpl extends BaseDao implements ISupplierDao {
 		return sqlSessionTemplate.selectList(NAMESPACE+"querySupplierType", bean);
 	}
 
+	@Override
+	public void addSupplierBalance(Integer sid, int addBalance) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("sid", sid);
+		map.put("addBalance", addBalance);
+		
+		sqlSessionTemplate.update(NAMESPACE + "addSupplierBalance", map);
+	}
+	
+	@Override
+	public void createSupplierBalanceLog(SupplierBalanceLogBean bean) {
+		sqlSessionTemplate.insert(NAMESPACE + "createSupplierBalanceLog", bean);
+	}
+	
+	@Override
+	public List<SupplierBalanceLogBean> querySupplierBalanceLog(SupplierBalanceLogBean bean){
+		return sqlSessionTemplate.selectList(NAMESPACE +"querySupplierBalanceLog", bean);
+	}
+	
 }
