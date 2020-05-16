@@ -573,12 +573,29 @@ public class WechatController extends BaseController {
 				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
 				
 				break;
+			case SupplierBalanceLogBean.TYPE_USER_RECHARGE:
+//				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
+				
+				break;
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER:
 
-			default:
 				//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
 				userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
 				//通过订单号在订购表中更改状态为更新支付成功状态
 				shopOrderService.updateShopOrderPaySuccess(cash_fee,orderCode );
+				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
+				
+				break;
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_LOCAL:
+
+				//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
+				userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
+				//通过订单号在订购表中更改状态为更新支付成功状态
+				shopOrderService.updateShopOrderPaySuccess(cash_fee,orderCode );
+				shopOrderService.updateShopOrderStatus(orderCode, ShopOrderInfoBean.STATUS_FINISH);
+				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
+				
+				break;
 			}
 			
 			

@@ -18,6 +18,8 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.area.service.IAreaDataService;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.msgcenter.service.IMsgCenterArticleService;
+import com.yd.business.order.bean.ShopOrderEffInfoBean;
+import com.yd.business.order.bean.ShopOrderEffProductBean;
 import com.yd.business.order.bean.ShopOrderInfoBean;
 import com.yd.business.order.bean.ShopOrderProductBean;
 import com.yd.business.order.service.IOrderProductLogService;
@@ -35,6 +37,7 @@ import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierPackageProductRecordBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierUserBean;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierPackageService;
 import com.yd.business.supplier.service.ISupplierProductService;
@@ -107,8 +110,11 @@ public class UserSupplierProductController extends BaseController {
 	public static final String PAGE_USERSUPPLIERPRODUCT = "/page/user/supplierProductShop/index.jsp";
 	public static final String PAGE_USERSUPPLIERCATEGORY = "/page/user/supplierProductShop/category.jsp";
 	public static final String PAGE_USER_SHOP_ORDER = "/page/shop/order/orderInfo.jsp";
+	public static final String PAGE_USER_SHOP_LOCAL_ORDER = "/page/shop/order/localOrderInfo.jsp";
 	public static final String PAGE_USER_PLATFORM_INDEXPAGE = "/page/user/platform/index.jsp";
 	public static final String PAGE_USER_SUPPLIERSHOP_PACKAGEPRODUCTLIST = "/page/user/supplierProductShop/userSupplierPackageProductList.jsp";
+	public static final String PAGE_SUPPLIER_SHOP_ORDER_EFF = "/page/supplier/shop/orderEffInfo.jsp";
+
 	
 	@Deprecated
 	@RequestMapping("**/user/supplier/queryPlatformSupplierProduct.do")
@@ -226,7 +232,7 @@ public class UserSupplierProductController extends BaseController {
 	 * 跳转到用户定单界面
 	 * @return
 	 */
-	@RequestMapping("**/user/supplier/toSupplierShopUserOrderPage.do")
+	@RequestMapping("**/user/supplier/toSupplierShopUserOrderPage.html")
 	public ModelAndView toSupplierShopUserOrderPage(HttpServletRequest request,HttpServletResponse response){
 		try {
 			
@@ -234,6 +240,9 @@ public class UserSupplierProductController extends BaseController {
 			String order_code = request.getParameter("order_code");
 			String timeString = request.getParameter("time");
 			String productInfos = request.getParameter("productInfos");
+			String isRemote = request.getParameter("isRemote");
+			String sid = request.getParameter("sid");
+			Integer supplier_id = Integer.parseInt(sid);
 			Long time = null;
 			if(StringUtil.isNotNull(timeString)){
 				time = Long.parseLong(timeString);
@@ -248,10 +257,10 @@ public class UserSupplierProductController extends BaseController {
 				order.setProductList(productList);
 				
 			}else if(StringUtil.isNotNull(productInfos)){ // 根据传参过来的数据创建订单
-				order = shopOrderService.createOrderLogByUserCartList(openid,productInfos,time);
+				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,productInfos,time);
 			}else{//没有定单号、没有传参数据,则根据cookie里的数据创建订单
 				String data = CookieUtil.getValueByCookie(request, "productInfo");
-				order = shopOrderService.createOrderLogByUserCartList(openid,data,time);
+				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,time);
 			}
 			
 			// 找之前已经选择过的优惠卷
@@ -260,16 +269,85 @@ public class UserSupplierProductController extends BaseController {
 			{	//如果没有，则找目前可用的优惠卷
 				couponList = supplierCouponService.queryUserCanUseCouponByOrderCode(order.getUser_id(), order.getOrder_code());
 			}
-			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
+			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
+			SupplierUserBean user = supplierUserService.findSupplierUser(order.getUser_id(), supplier.getId());
 			int expressBottomPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
-			
+
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("order", order);
 			model.put("user", user);
 			model.put("couponList", couponList);
 			model.put("expressBottomPrice", expressBottomPrice);
+			model.put("supplier", supplier);
 			
-			return new ModelAndView(PAGE_USER_SHOP_ORDER,model );
+			if(StringUtil.isNotNull(isRemote) || supplier.getIssale() == SupplierBean.ISSALE_REMOTE ) {
+				return new ModelAndView(PAGE_USER_SHOP_ORDER,model );
+			}else {
+				return new ModelAndView(PAGE_USER_SHOP_LOCAL_ORDER,model );
+			}
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
+
+	/**
+	 * 跳转到用户定单界面
+	 * @return
+	 */
+	@RequestMapping("**/user/supplier/toSupplierShopUserEffOrderPage.html")
+	public ModelAndView toSupplierShopUserEffOrderPage(HttpServletRequest request,HttpServletResponse response){
+		try {
+			
+			String openid = request.getParameter("openid");
+			String order_code = request.getParameter("order_code");
+			String timeString = request.getParameter("time");
+			String eff_date = request.getParameter("eff_date");
+			String productInfos = request.getParameter("productInfos");
+			String sid = request.getParameter("sid");
+			Integer supplier_id = Integer.parseInt(sid);
+			Long time = null;
+			if(StringUtil.isNotNull(timeString)){
+				time = Long.parseLong(timeString);
+			}
+			ShopOrderEffInfoBean order ;
+			if(StringUtil.isNotNull(order_code)){ //已有定单号
+				order = shopOrderService.findShopOrderEffInfoByCode(order_code);
+
+				ShopOrderEffProductBean condition = new ShopOrderEffProductBean();
+				condition.setOrder_code(order_code);
+				List<ShopOrderEffProductBean> productList = shopOrderService.queryShopOrderEffProduct(condition );
+				order.setProductList(productList);
+				
+			}else if(StringUtil.isNotNull(productInfos)){ // 根据传参过来的数据创建订单
+				ShopOrderInfoBean newOrder = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,productInfos,time,eff_date);
+				order = new ShopOrderEffInfoBean(newOrder);
+			}else{//没有定单号、没有传参数据,则根据cookie里的数据创建订单
+				String data = CookieUtil.getValueByCookie(request, "productInfo");
+				ShopOrderInfoBean newOrder =  shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,time,eff_date);
+				order = new ShopOrderEffInfoBean(newOrder);
+			}
+			
+			// 找之前已经选择过的优惠券
+			List<SupplierCouponRecordBean> couponList = supplierCouponService.queryCouponRecordByOrderCode(order.getOrder_code(),order.getUser_id());
+			if(couponList.size() == 0 && order.getStatus() == ShopOrderInfoBean.STATUS_WAIT)
+			{	//如果没有，则找目前可用的优惠券
+				couponList = supplierCouponService.queryUserCanUseCouponByOrderCode(order.getUser_id(), order.getOrder_code());
+			}
+			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());
+//			int expressBottomPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
+			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
+			
+			
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("order", order);
+			model.put("user", user);
+			model.put("couponList", couponList);
+			model.put("supplier", supplier);
+//			model.put("expressBottomPrice", expressBottomPrice);
+			
+			return new ModelAndView(PAGE_SUPPLIER_SHOP_ORDER_EFF,model );
 		} catch (Exception e) {
 			log.error(e, e);
 		}

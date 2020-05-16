@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.bean.CustomerDiscountBean;
@@ -92,6 +93,7 @@ public class SupplierServiceImpl extends BaseService implements
 		bean.setBalance(0);
 		bean.setPoints(0);
 		bean.setType(type);
+		bean.setIssale(SupplierBean.ISSALE_LOCAL);
 		bean.setStatus(SupplierBean.STATUS_Y);
 		bean.setPay_where(SupplierBean.PAY_WHERE_PLATFROM);
 		bean.setCharge_rate(SupplierBean.CHARGE_RATE_DEFAULT);
@@ -176,6 +178,12 @@ public class SupplierServiceImpl extends BaseService implements
 	public void updateSupplier(SupplierBean bean) {
 		// TODO Auto-generated method stub
 		supplierDao.updateSupplier(bean);
+		
+		//更新session中的缓存
+		Object supplier = WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER);
+		if(supplier != null) {
+			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER, bean);
+		}
 	}
 	
 	/**

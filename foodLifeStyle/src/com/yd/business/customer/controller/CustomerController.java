@@ -312,7 +312,8 @@ public class CustomerController extends BaseController {
 				bean.setStatus(CustomerBean.STATUS_YES);
 				bean.setIscreate(CustomerBean.ISCREATE_YES);
 				bean.setBalance(0);
-				bean.setPoints(0);bean.setGet_cash_min(1);
+				bean.setPoints(0);
+				bean.setGet_cash_min(1);
 				bean.setCredit(0);
 				bean.setRemark(remark);
 				bean.setPay_cycle(CustomerBean.PAY_CYCLE_MONTH);
@@ -327,7 +328,7 @@ public class CustomerController extends BaseController {
 				sup.setName(bean.getName());
 				sup.setStatus(CustomerBean.STATUS_YES);
 				sup.setType(-1);
-				sup.setIssale(SupplierBean.ISSALE_TRUE);
+				sup.setIssale(SupplierBean.ISSALE_LOCAL);
 				sup.setAddress(address);
 				sup.setBalance(0);
 				sup.setPoints(0);

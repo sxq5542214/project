@@ -18,6 +18,10 @@
 	List<SupplierProductBean> productList = (List<SupplierProductBean>) request.getAttribute("productList");
 	List<SupplierProductCategoryBean> productCategoryList = (List<SupplierProductCategoryBean>) request.getAttribute("productCategoryList");
 	UserQrCodeBean qrCode = (UserQrCodeBean)request.getAttribute("qrCode");
+	boolean isEff = false;
+	if("1".equals(request.getParameter("isEff"))){
+		isEff = true;
+	}
 %>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -270,7 +274,7 @@
   </script>
   <script type="text/javascript">
   	var isClickMask = true;
-  	
+  	var isEff = <%=isEff%>;
   	
   	var isSubscribe = <%=user.getStatus() == UserWechatBean.STATUS_SUBSCRIBE %> ;
 	if(!isSubscribe){
@@ -353,7 +357,13 @@
   		if(num > 0){
   		
 	  		var time = new Date();
-	  		var gotoUrl = '<%=basePath%>user/supplier/toSupplierShopUserEffOrderPage.html?openid=<%=openid%>&time='+time.getTime();
+	  		
+	  		if(isEff){
+	  			var gotoUrl = '<%=basePath%>user/supplier/toSupplierShopUserEffOrderPage.html?sid=<%=supplier.getId()%>&openid=<%=openid%>&time='+time.getTime();
+	  		}else{
+	  			var gotoUrl = '<%=basePath%>user/supplier/toSupplierShopUserOrderPage.html?sid=<%=supplier.getId()%>&openid=<%=openid%>&time='+time.getTime();
+	  		}
+	  		
 	  		location.href = gotoUrl;
   		}else{
   			alert('小主，您还没有选择商品呢');

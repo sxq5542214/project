@@ -787,6 +787,8 @@ public class UserController extends BaseController {
 			String data = request.getParameter("data");
 			String openid = request.getParameter("openid");
 			String order_code = request.getParameter("order_code");
+			String sid = request.getParameter("sid");
+			Integer supplier_id = Integer.parseInt(sid);
 
 			ShopOrderInfoBean order ;
 			if(StringUtil.isNotNull(order_code)){ //已有定单号
@@ -798,7 +800,7 @@ public class UserController extends BaseController {
 				order.setProductList(productList);
 				
 			}else{ //没有定单号
-				order = shopOrderService.createOrderLogByUserCartList(openid,data,null);
+				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,null);
 			}
 			
 			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());

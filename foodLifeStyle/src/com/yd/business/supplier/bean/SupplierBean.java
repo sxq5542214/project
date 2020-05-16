@@ -12,8 +12,9 @@ import com.yd.basic.framework.bean.BaseBean;
  */
 @Alias("supplier")
 public class SupplierBean extends BaseBean {
-	public static int ISSALE_TRUE = 1;
-	public static int ISSALE_FALSE = 0;
+	public static int ISSALE_NO = 0;
+	public static int ISSALE_LOCAL = 1;
+	public static int ISSALE_REMOTE = 2;
 	public static int STATUS_N = 0;
 	public static int STATUS_Y = 1;
 	public static int PAY_WHERE_PLATFROM = 1;

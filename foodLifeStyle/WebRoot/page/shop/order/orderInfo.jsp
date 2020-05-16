@@ -1,3 +1,5 @@
+<%@page import="com.yd.business.supplier.bean.SupplierUserBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierBean"%>
 <%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.supplier.bean.SupplierCouponConfigBean"%>
 <%@page import="org.json.JSONObject"%>
@@ -16,8 +18,9 @@
 			+ path + "/";
 	
 	ShopOrderInfoBean order = (ShopOrderInfoBean) request.getAttribute("order");
+	SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
 	int expressBottomPrice = (int) request.getAttribute("expressBottomPrice");
-	UserWechatBean user = (UserWechatBean) request.getAttribute("user");
+	SupplierUserBean user = (SupplierUserBean) request.getAttribute("user");
 	List<SupplierCouponRecordBean> couponList = (List<SupplierCouponRecordBean>) request.getAttribute("couponList");
 	List<? extends ShopOrderProductBean> productList = order.getProductList();
 	Integer checkCouponId = 0; 
@@ -98,8 +101,7 @@
 
 	</header>
 
-	<input type="hidden" id="orderId" name="orderId" value="9941788290">
-	<input type="hidden" id="sid" name="sid" value="">
+	<input type="hidden" id="sid" name="sid" value="<%=supplier.getId()%>">
 	<div class="wrap">
 		<section class="order-con">
 			<ul class="order-list">

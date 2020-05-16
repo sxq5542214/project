@@ -847,7 +847,7 @@ ISupplierCouponService {
 		for(SupplierBean sb : suppliers){
 			condition.setSupplier_id(sb.getId());
 			//如果不可以销售，则必须有库存
-			if(sb.getIssale() == SupplierBean.ISSALE_FALSE){
+			if(sb.getIssale() == SupplierBean.ISSALE_NO){
 				condition.setStore_num(1);
 			}else{
 				condition.setStore_num(null);
@@ -1152,7 +1152,7 @@ ISupplierCouponService {
 			for(SupplierBean sb : suppliers){
 				condition.setSupplier_id(sb.getId());
 				//如果不可以销售，则必须有库存
-				if(sb.getIssale() == SupplierBean.ISSALE_FALSE){
+				if(sb.getIssale() == SupplierBean.ISSALE_NO){
 					condition.setStore_num(1);
 				}else{
 					condition.setStore_num(null);

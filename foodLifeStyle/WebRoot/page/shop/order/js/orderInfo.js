@@ -2,8 +2,9 @@ function pay(){
 
 	$("#payButton").html('加载中...');
 	$("#payButton").on('click', '' );
-	
+
 	var order_code = $("#order_code").val();
+	var sid = $("#sid").val();
 	var cost_money = $("#cost_money").html();
 	var cost_balance = $("#cost_balance").val();
 	var openid = $("#openid").val();
@@ -22,7 +23,9 @@ function pay(){
 				 order_code : order_code,
 				 phone : phone ,
 				 points : points,
-				 coupon_record_id : coupon_record_id
+				 coupon_record_id : coupon_record_id,
+				 sid : sid ,
+				 type : 3
 		},
 		success : function(result) {
 			if(result == 'false'){

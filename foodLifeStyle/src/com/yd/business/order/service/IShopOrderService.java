@@ -44,7 +44,7 @@ public interface IShopOrderService {
 
 	void updateShopOrderExpressInfo(ShopOrderInfoBean order, String mode, String code, Integer price);
 
-	ShopOrderInfoBean createOrderLogByUserCartList(String openid, String productJson, Long time);
+	ShopOrderInfoBean createOrderLogByUserCartList(Integer supplier_id,String openid, String productJson, Long time);
 
 	void updateShopOrderPaySuccess(int payMoney, String orderCode);
 
@@ -62,7 +62,7 @@ public interface IShopOrderService {
 
 	List<ShopOrderEffProductBean> queryShopOrderEffProduct(ShopOrderEffProductBean bean);
 
-	ShopOrderInfoBean createOrderLogByUserCartList(String openid, String productJson, Long time, String effDate);
+	ShopOrderInfoBean createOrderLogByUserCartList(Integer supplier_id, String openid, String productJson, Long time,String effDate);
 
 	void createShopOrderEffInfo(ShopOrderEffInfoBean bean);
 
@@ -77,6 +77,7 @@ public interface IShopOrderService {
 	void updateShopOrderEffStatus(String order_code, int status);
 
 	List<ShopOrderEffInfoBean> queryShopOrderEffAndProductList(ShopOrderEffInfoBean bean);
+
 
 
 

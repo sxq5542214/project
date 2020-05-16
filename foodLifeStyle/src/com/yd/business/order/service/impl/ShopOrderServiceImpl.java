@@ -27,11 +27,14 @@ import com.yd.business.order.service.IOrderService;
 import com.yd.business.order.service.IShopOrderService;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponConfigBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierProductService;
+import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.impl.SupplierServiceImpl;
 import com.yd.business.user.bean.UserAddressBean;
 import com.yd.business.user.bean.UserCartBean;
 import com.yd.business.user.bean.UserCartBean.CartInfo;
@@ -73,7 +76,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	private IMsgCenterActionService msgCenterActionService;
 	@Resource
 	private IConfigAttributeService configAttributeService;
-	
+	@Resource
+	private ISupplierService supplierService;
 
 	@Override
 	public void createShopOrderInfo(ShopOrderInfoBean bean){
@@ -311,8 +315,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	 * @return
 	 */
 	@Override
-	public ShopOrderInfoBean createOrderLogByUserCartList(String openid,String productJson,Long time){
-		return createOrderLogByUserCartList(openid, productJson, time,null);
+	public ShopOrderInfoBean createOrderLogByUserCartList(Integer supplier_id,String openid,String productJson,Long time){
+		return createOrderLogByUserCartList(supplier_id,openid, productJson, time,null);
 	}
 	
 	/**
@@ -322,12 +326,13 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	 * @return
 	 */
 	@Override
-	public ShopOrderInfoBean createOrderLogByUserCartList(String openid,String productJson,Long time,String effDate){
+	public ShopOrderInfoBean createOrderLogByUserCartList(Integer supplier_id,String openid,String productJson,Long time,String effDate){
 
 		boolean isEff = StringUtil.isNotNull(effDate);
 		ShopOrderInfoBean order = new ShopOrderEffInfoBean();
 		List<? extends ShopOrderProductBean> productList =  new ArrayList<ShopOrderEffProductBean>();
 		order.setProductList(productList);
+		order.setSupplier_id(supplier_id);
 		order.setCost_points(0);
 		order.setCost_price(0);
 		order.setCost_money(0);
@@ -498,9 +503,9 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 				userCommissionPointsService.createUserPointLog(user.getId(), -costPoints, "购买"+ order.getOrder_name()+" 扣减积分" );
 			}
 			
-			
+			SupplierBean supplier = supplierService.findSupplierById(order.getSupplier_id());
 			//保存并处理用户购买成功的动作
-			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
+			msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
 			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY_NOTIFY_FRIENDS , null, order);
 			
 			
