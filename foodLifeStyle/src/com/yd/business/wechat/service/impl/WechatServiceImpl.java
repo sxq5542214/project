@@ -55,6 +55,7 @@ import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
+import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.user.bean.UserBWCBean;
 import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserWechatBean;
@@ -531,7 +532,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 					//父级添加积分
 					int point = configAttributeService.getIntValueByCode(AttributeConstant.CODE_WECHAT_SUBCRIBE_PARENTADDPOINT);
 					parent.setPoints(parent.getPoints() + point);
-					userCommissionPointsService.createUserPointLog(parent.getId(), point, "推荐用户获得积分");
+					userCommissionPointsService.createUserPointLog(SupplierBean.PLATFROM_SUPPLIER_ID,parent.getId(), point, "推荐用户获得积分");
 					userWechatService.update(parent);
 				}
 				
@@ -570,7 +571,7 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 		userBean.setPoints(point);
 		userWechatService.addUser(userBean);
 		userBean = userWechatService.findUserWechatByOpenId(userBean.getOpenid());
-		userCommissionPointsService.createUserPointLog(userBean.getId(), point, "首次关注赠送积分");
+		userCommissionPointsService.createUserPointLog( SupplierBean.PLATFROM_SUPPLIER_ID ,userBean.getId(), point, "首次关注赠送积分");
 		
 	}
 	

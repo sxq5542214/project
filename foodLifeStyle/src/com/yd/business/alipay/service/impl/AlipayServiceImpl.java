@@ -77,7 +77,7 @@ public class AlipayServiceImpl extends BaseService implements IAlipayService {
 		//商户订单号
 		String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_ALIPAY, admin.getCustomer_id());
 		//保存充值记录
-		userConsumeInfoService.createConsumeInfo(phone,sp.getProduct_price(), sp.getId(), admin.getId(), null, out_no,UserConsumeInfoBean.INTERFACETYPE_ALIPAY,UserConsumeInfoBean.EVENT_TYPE_SUPPLIER_ORDER);
+		userConsumeInfoService.createConsumeInfo(phone,sp.getProduct_price(),sp.getSupplier_id(), sp.getId(), admin.getId(), null, out_no,UserConsumeInfoBean.INTERFACETYPE_ALIPAY,UserConsumeInfoBean.EVENT_TYPE_SUPPLIER_ORDER);
 		
 		
 		return out_no;

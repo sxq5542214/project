@@ -31,6 +31,7 @@ import com.yd.basic.framework.service.BaseService;
 import com.yd.business.other.bean.ConfigAttributeBean;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.user.bean.UserConsumeInfoBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserConsumeInfoService;
@@ -119,7 +120,7 @@ public class WechatPayServiceImpl extends BaseService implements IWechatPayServi
 		boolean flag = createWechatPayBonus(user,seq, user.getOpenid(),payMoney,ipAddr,orderCode,bonusNum);
 		
 		if(flag){//成功扣减用户余额
-			userConsumeInfoService.createConsumeInfo(remark, -payMoney, null, user.getId(), null, orderCode, UserConsumeInfoBean.INTERFACETYPE_WECHATBONUS_CH,UserConsumeInfoBean.EVENT_TYPE_USER_WECHAT_BOUNS);
+			userConsumeInfoService.createConsumeInfo(remark, -payMoney, SupplierBean.PLATFROM_SUPPLIER_ID , null, user.getId(), null, orderCode, UserConsumeInfoBean.INTERFACETYPE_WECHATBONUS_CH,UserConsumeInfoBean.EVENT_TYPE_USER_WECHAT_BOUNS);
 //			userWechatService.updateUserBalance(orderCode, null);  //此处扣减余额方法并发大时有问题
 		}
 		

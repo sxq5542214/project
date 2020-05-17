@@ -10,7 +10,9 @@ public interface IUserConsumeInfoService {
 	public static final String OUTTRADE_TYPE_PARTNER = "Partner";	//合作伙伴
 	public static final String OUTTRADE_TYPE_WXPAY = "WXPay";	//微信支付
 	public static final String OUTTRADE_TYPE_SHOP = "Ord";	//定单
+	public static final String OUTTRADE_TYPE_SHOPONLINE = "Online";	//定单
 	public static final String OUTTRADE_TYPE_SHOPEFF = "Eff";	//预订单
+	public static final String OUTTRADE_TYPE_SHOPOFFLINE = "Offline";	//线下订单
 	public static final String OUTTRADE_TYPE_ALIPAY = "AliPay"; //阿里支付
 	public static final String OUTTRADE_TYPE_STORE = "Store"; //库存
 	public static final String OUTTRADE_TYPE_CARDSECRET = "CardSecret"; //卡密
@@ -31,14 +33,14 @@ public interface IUserConsumeInfoService {
 
 	void updateUserConsumeInfo(UserConsumeInfoBean bean);
 
-	UserConsumeInfoBean createConsumeInfo(String phone, Integer money, Integer spid, Integer user_id,
+	UserConsumeInfoBean createConsumeInfo(String phone, Integer money,Integer sid, Integer spid, Integer user_id,
 			String transactionId, String out_trade_no, String interface_type, Integer event_type);
 
 	void updateUserConsumeInfoStatus(int status, String out_trade_no);
 
 	List<UserConsumeInfoBean> queryUserConsumeInfo(UserConsumeInfoBean bean);
 
-	UserConsumeInfoBean createConsumeInfo(String phone, Integer money, Integer spid, Integer user_id,
+	UserConsumeInfoBean createConsumeInfo(String phone, Integer money,Integer sid, Integer spid, Integer user_id,
 			String transactionId, String out_trade_no, String interface_type, Integer eff_num, Integer event_type);
 
 	void updateUserOrderEffDate(UserConsumeInfoBean bea);

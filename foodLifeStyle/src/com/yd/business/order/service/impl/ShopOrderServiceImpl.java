@@ -27,6 +27,7 @@ import com.yd.business.order.service.IOrderService;
 import com.yd.business.order.service.IShopOrderService;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.supplier.bean.SupplierBalanceLogBean;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponConfigBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
@@ -321,8 +322,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	 * @return
 	 */
 	@Override
-	public ShopOrderInfoBean createOrderLogByUserCartList(Integer supplier_id,String openid,String productJson,Long time){
-		return createOrderLogByUserCartList(supplier_id,openid, productJson, time,null);
+	public ShopOrderInfoBean createOrderLogByUserCartList(Integer supplier_id,String openid,String productJson,Long time,Integer type){
+		return createOrderLogByUserCartList(supplier_id,openid, productJson, time,null,type);
 	}
 	
 	/**
@@ -332,7 +333,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	 * @return
 	 */
 	@Override
-	public ShopOrderInfoBean createOrderLogByUserCartList(Integer supplier_id,String openid,String productJson,Long time,String effDate){
+	public ShopOrderInfoBean createOrderLogByUserCartList(Integer supplier_id,String openid,String productJson,Long time,String effDate,Integer type){
 
 		boolean isEff = StringUtil.isNotNull(effDate);
 		ShopOrderInfoBean order = new ShopOrderEffInfoBean();
@@ -344,6 +345,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		order.setCost_money(0);
 		order.setCost_balance(0);
 		order.setCoupon_total_price(0);
+		order.setType(type);
 		((ShopOrderEffInfoBean)order).setEff_date(effDate);
 		
 		
@@ -367,7 +369,22 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			}
 			Date date = new Date(time);
 			//预订单的前缀不同
-			String prefix = isEff ? UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOPEFF : UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOP;
+			String prefix ;
+			switch (type) {
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_EFF:
+				prefix = UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOPEFF;
+				break;
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE:
+				prefix = UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOPOFFLINE;
+				break;
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE:
+				prefix = UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOPONLINE;
+				break;
+			default:
+				prefix = UserConsumeInfoServiceImpl.OUTTRADE_TYPE_SHOP;
+				break;
+			}
+			
 			String order_code = userConsumeInfoService.createOutTradeNo(prefix, user.getId().toString(),date);
 
 			order.setOrder_code(order_code);
@@ -506,7 +523,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			if(costPoints >0){
 				user.setPoints(user.getPoints() - costPoints);
 				supplierUserService.updateSupplierUser(user);
-				userCommissionPointsService.createUserPointLog(user.getUser_id(), -costPoints, "购买"+ order.getOrder_name()+" 扣减积分" );
+				userCommissionPointsService.createUserPointLog(user.getSupplier_id(), user.getUser_id(), -costPoints, "购买"+ order.getOrder_name()+" 扣减积分" );
 			}
 			
 			SupplierBean supplier = supplierService.findSupplierById(order.getSupplier_id());
@@ -521,7 +538,21 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 				order.setContact_address("店铺内下单，无需配送");
 			}
 			//保存并处理用户购买成功的动作
-			msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
+			int type = NumberUtil.convertNull(order.getType());
+			
+			//不同的订单类型，需要推送不同的消息
+			switch (type) {
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE:
+				msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_NEED_DELIVERY , null, order);
+
+				break;
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE:
+				msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY , null, order);
+				break;
+
+			default:
+				break;
+			}
 			msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_ORDER_PAY_NOTIFY_FRIENDS , null, order);
 			
 			

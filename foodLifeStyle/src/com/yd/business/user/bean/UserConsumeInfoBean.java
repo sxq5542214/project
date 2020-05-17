@@ -96,12 +96,19 @@ public class UserConsumeInfoBean extends BaseBean {
 	private Integer status;
 	private Integer eff_num;
 	private Integer event_type;
+	private Integer supplier_id;
 	
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public Integer getSupplier_id() {
+		return supplier_id;
+	}
+	public void setSupplier_id(Integer supplier_id) {
+		this.supplier_id = supplier_id;
 	}
 	public Integer getMoney() {
 		return money;

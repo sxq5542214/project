@@ -916,7 +916,7 @@ public class SupplierCouponController extends BaseController{
 			String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_USERBALANCE, user.getId());//生成一个订单号
 			//保存充值记录
 			
-			UserConsumeInfoBean consume = userConsumeInfoService.createConsumeInfo(phone,costBalance, product_id, user.getId(), null, out_no,UserConsumeInfoBean.INTERFACETYPE_USERBALANCE,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER);
+			UserConsumeInfoBean consume = userConsumeInfoService.createConsumeInfo(phone,costBalance,sp.getSupplier_id() , product_id, user.getId(), null, out_no,UserConsumeInfoBean.INTERFACETYPE_USERBALANCE,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER);
 			//在ll_user_consume_info保存充值记录，status为0
 			
 			OrderProductLogBean productLog = orderProductLogService.createOrderProductLogByUserConsumeInfo(consume, points, 0,costBalance, null);
@@ -937,113 +937,113 @@ public class SupplierCouponController extends BaseController{
 	}
 	
 	
-	/**
-	 * 获取统一下单接口的预支付交易单号
-	 * @return
-	 */
-	@RequestMapping("**/supplier/wechat/createUnifiedOrderWechat.do")
-	public ModelAndView createUnifiedOrderWechat(HttpServletRequest request,HttpServletResponse response){
-		
-		String openid = request.getParameter("openid");
-		String price = request.getParameter("price");
-		String pointsStr = request.getParameter("points");
-		String balanceStr = request.getParameter("cost_balance");
-		String eff_numStr = request.getParameter("eff_num");
-		Integer eff_num = StringUtil.isNull(eff_numStr) ? 0:Integer.parseInt(eff_numStr);
-		Integer points = StringUtil.isNull(pointsStr) ? 0:Integer.parseInt(pointsStr);
-		Integer cost_balance = StringUtil.isNull(balanceStr) ? 0:Integer.parseInt(balanceStr);
-		String phone = request.getParameter("phone");
-		Integer product_id = Integer.parseInt(request.getParameter("product_id"));
-		
-		
-		UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-		if(user == null){
-			throw new RuntimeException(" createUnifiedOrder user is null!");
-		}
-		
-		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
-		
-		//wx26a55db19faf530f
-		String appidStr = originalInfo.getAppid();
-		String appid = "appid=" + appidStr; 
-		//商户号
-		String mch_id = "mch_id=" +originalInfo.getMch_id();
-		//随机码
-		String nonce_str = "nonce_str=" + UUID.randomUUID().toString().replaceAll("-", "");
-		//附加数据，微信会原样返回,
-		String attach = "attach="+ "test";
-		//商品详情
-		String body = "body=支付商品";
-		//商户订单号
-		String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_WXPAY, user.getId());
-		String out_trade_no = "out_trade_no="+out_no;
-		//需要支付的总金额,以分为单位
-		int rmb = (int) (Double.parseDouble(price)  * 100);
-		String total_fee = "total_fee="+ rmb;
-		//客户IP
-		String spbill_create_ip = request.getRemoteAddr();
-		if(spbill_create_ip == null){ spbill_create_ip = "115.28.43.16"; }
-		spbill_create_ip = "spbill_create_ip="+spbill_create_ip;
-		
-		//回调URL
-		String notify_url = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_NOTIFY_URL);
-		notify_url = "notify_url="+ notify_url ; //+ "wechat/serverNotify.html";
-		
-		//交易类型
-		String trade_type = "trade_type=JSAPI";
-		//用户ID //oiRcFuKHjk9_V8-eWwHA1W4x1XWc
-		openid = "openid=" + user.getOpenid();
-		//设备信息，公众号使用WEB
-		String device_info = "device_info=WEB";
-		//指定支付方式，不可使用信用卡
-		String limit_pay = "limit_pay=no_credit";
-		String key = "key=" + originalInfo.getPay_wechat_sign_key();
-
-		Object[] params={appid,mch_id,nonce_str,attach,body,out_trade_no,device_info,
-				total_fee,spbill_create_ip,notify_url,trade_type,openid,limit_pay};
-		String tempStr = concatParam(params);
-		//签名,需要把key放在最后
-		tempStr += "&"+key;
-		String sign = "sign="+MD5Util.encode16(tempStr,"UTF-8").toUpperCase();
-		
-		Object[] newParam = ArrayUtils.addAll(params, new String[]{sign});
-		String xml = convertToXML(newParam);
-		
-		String callUrl = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_UNIFIED_URL);
-		long time = System.currentTimeMillis();
-		try {
-			//调用微信的预支付接口
-			String responseStr = HttpUtil.post(callUrl, xml);
-			WechatPayResultBean resultBean = parseWechatPayResult(responseStr);
-			System.out.println("调用微信的预支付接口 cost:"+ (System.currentTimeMillis() - time));
-			if(resultBean.getPrepay_id() != null){
-				String interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHAT;
-				if(cost_balance != null && cost_balance >0){
-					interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHATANDBALANCE;
-				}
-				
-				//保存充值记录
-				UserConsumeInfoBean consume = userConsumeInfoService.createConsumeInfo(phone,rmb, product_id, user.getId(), resultBean.getPrepay_id(), out_no,interface_type,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER);
-				orderProductLogService.createOrderProductLogByUserConsumeInfo(consume, points, rmb,cost_balance, null);
-				
-				//返回界面需要支付的信息
-				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
-				data.setOutTradeNo(out_no);
-				writeJson(response, data);
-				return null;
-			}else{
-				log.error("调用微信的预支付接口失败！ requseXML:"+xml+" respXML:"+ response);
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e,e);
-		}
-		writeJson(response, "false");
-		
-		return null;
-	}
+//	/**
+//	 * 获取统一下单接口的预支付交易单号
+//	 * @return
+//	 */
+//	@RequestMapping("**/supplier/wechat/createUnifiedOrderWechat.do")
+//	public ModelAndView createUnifiedOrderWechat(HttpServletRequest request,HttpServletResponse response){
+//		
+//		String openid = request.getParameter("openid");
+//		String price = request.getParameter("price");
+//		String pointsStr = request.getParameter("points");
+//		String balanceStr = request.getParameter("cost_balance");
+//		String eff_numStr = request.getParameter("eff_num");
+//		Integer eff_num = StringUtil.isNull(eff_numStr) ? 0:Integer.parseInt(eff_numStr);
+//		Integer points = StringUtil.isNull(pointsStr) ? 0:Integer.parseInt(pointsStr);
+//		Integer cost_balance = StringUtil.isNull(balanceStr) ? 0:Integer.parseInt(balanceStr);
+//		String phone = request.getParameter("phone");
+//		Integer product_id = Integer.parseInt(request.getParameter("product_id"));
+//		
+//		
+//		UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+//		if(user == null){
+//			throw new RuntimeException(" createUnifiedOrder user is null!");
+//		}
+//		
+//		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+//		
+//		//wx26a55db19faf530f
+//		String appidStr = originalInfo.getAppid();
+//		String appid = "appid=" + appidStr; 
+//		//商户号
+//		String mch_id = "mch_id=" +originalInfo.getMch_id();
+//		//随机码
+//		String nonce_str = "nonce_str=" + UUID.randomUUID().toString().replaceAll("-", "");
+//		//附加数据，微信会原样返回,
+//		String attach = "attach="+ "test";
+//		//商品详情
+//		String body = "body=支付商品";
+//		//商户订单号
+//		String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_WXPAY, user.getId());
+//		String out_trade_no = "out_trade_no="+out_no;
+//		//需要支付的总金额,以分为单位
+//		int rmb = (int) (Double.parseDouble(price)  * 100);
+//		String total_fee = "total_fee="+ rmb;
+//		//客户IP
+//		String spbill_create_ip = request.getRemoteAddr();
+//		if(spbill_create_ip == null){ spbill_create_ip = "115.28.43.16"; }
+//		spbill_create_ip = "spbill_create_ip="+spbill_create_ip;
+//		
+//		//回调URL
+//		String notify_url = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_NOTIFY_URL);
+//		notify_url = "notify_url="+ notify_url ; //+ "wechat/serverNotify.html";
+//		
+//		//交易类型
+//		String trade_type = "trade_type=JSAPI";
+//		//用户ID //oiRcFuKHjk9_V8-eWwHA1W4x1XWc
+//		openid = "openid=" + user.getOpenid();
+//		//设备信息，公众号使用WEB
+//		String device_info = "device_info=WEB";
+//		//指定支付方式，不可使用信用卡
+//		String limit_pay = "limit_pay=no_credit";
+//		String key = "key=" + originalInfo.getPay_wechat_sign_key();
+//
+//		Object[] params={appid,mch_id,nonce_str,attach,body,out_trade_no,device_info,
+//				total_fee,spbill_create_ip,notify_url,trade_type,openid,limit_pay};
+//		String tempStr = concatParam(params);
+//		//签名,需要把key放在最后
+//		tempStr += "&"+key;
+//		String sign = "sign="+MD5Util.encode16(tempStr,"UTF-8").toUpperCase();
+//		
+//		Object[] newParam = ArrayUtils.addAll(params, new String[]{sign});
+//		String xml = convertToXML(newParam);
+//		
+//		String callUrl = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_UNIFIED_URL);
+//		long time = System.currentTimeMillis();
+//		try {
+//			//调用微信的预支付接口
+//			String responseStr = HttpUtil.post(callUrl, xml);
+//			WechatPayResultBean resultBean = parseWechatPayResult(responseStr);
+//			System.out.println("调用微信的预支付接口 cost:"+ (System.currentTimeMillis() - time));
+//			if(resultBean.getPrepay_id() != null){
+//				String interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHAT;
+//				if(cost_balance != null && cost_balance >0){
+//					interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHATANDBALANCE;
+//				}
+//				
+//				//保存充值记录
+//				UserConsumeInfoBean consume = userConsumeInfoService.createConsumeInfo(phone,rmb, product_id, user.getId(), resultBean.getPrepay_id(), out_no,interface_type,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER);
+//				orderProductLogService.createOrderProductLogByUserConsumeInfo(consume, points, rmb,cost_balance, null);
+//				
+//				//返回界面需要支付的信息
+//				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
+//				data.setOutTradeNo(out_no);
+//				writeJson(response, data);
+//				return null;
+//			}else{
+//				log.error("调用微信的预支付接口失败！ requseXML:"+xml+" respXML:"+ response);
+//			}
+//			
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			log.error(e,e);
+//		}
+//		writeJson(response, "false");
+//		
+//		return null;
+//	}
 	
 	protected static String concatParam(Object... params){
 		

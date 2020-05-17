@@ -15,8 +15,10 @@ import com.yd.basic.framework.bean.BaseBean;
 public class SupplierBalanceLogBean extends BaseBean {
 	public static final int TYPE_USER_PAYDIRECT = 1;	//用户直接支付，未选商品
 	public static final int TYPE_USER_RECHARGE = 2;	//用户充值余额支付，获得赠送
-	public static final int TYPE_USER_SHOPORDER = 3;	//用户店铺购买商品支付
-	public static final int TYPE_USER_SHOPORDER_LOCAL = 4;	//用户在本地店铺购买商品支付，无需配送
+	public static final int TYPE_USER_SHOPORDER_ONLINE = 3;	//用户店铺购买商品支付,需配送
+	public static final int TYPE_USER_SHOPORDER_OFFLINE = 4;	//用户在本地店铺购买商品支付，无需配送
+	public static final int TYPE_USER_SHOPORDER_EFF = 5;	//用户预约商品，无需支付
+	
 	public static final int TYPE_SUPPLIER_DEPOSIT = 7;	//添加保证金
 	public static final int TYPE_SUPPLIER_CASHOUT = 9; //商户提现
 	

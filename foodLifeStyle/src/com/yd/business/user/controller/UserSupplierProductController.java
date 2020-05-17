@@ -33,6 +33,7 @@ import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.product.bean.ProductTypeBean;
 import com.yd.business.product.service.IProductTypeService;
+import com.yd.business.supplier.bean.SupplierBalanceLogBean;
 import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierPackageProductRecordBean;
@@ -244,9 +245,17 @@ public class UserSupplierProductController extends BaseController {
 			String sid = request.getParameter("sid");
 			Integer supplier_id = Integer.parseInt(sid);
 			Long time = null;
+			
+			int type = SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE;
+			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
+			if(StringUtil.isNotNull(isRemote) || supplier.getIssale() == SupplierBean.ISSALE_REMOTE ) {
+				type = SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE;
+			}
 			if(StringUtil.isNotNull(timeString)){
 				time = Long.parseLong(timeString);
+				type = SupplierBalanceLogBean.TYPE_USER_SHOPORDER_EFF;
 			}
+			
 			ShopOrderInfoBean order ;
 			if(StringUtil.isNotNull(order_code)){ //已有定单号
 				order = shopOrderService.findShopOrderInfoByCode(order_code);
@@ -257,10 +266,10 @@ public class UserSupplierProductController extends BaseController {
 				order.setProductList(productList);
 				
 			}else if(StringUtil.isNotNull(productInfos)){ // 根据传参过来的数据创建订单
-				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,productInfos,time);
+				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,productInfos,time,type);
 			}else{//没有定单号、没有传参数据,则根据cookie里的数据创建订单
 				String data = CookieUtil.getValueByCookie(request, "productInfo");
-				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,time);
+				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,time,type);
 			}
 			
 			// 找之前已经选择过的优惠卷
@@ -269,7 +278,6 @@ public class UserSupplierProductController extends BaseController {
 			{	//如果没有，则找目前可用的优惠卷
 				couponList = supplierCouponService.queryUserCanUseCouponByOrderCode(order.getUser_id(), order.getOrder_code());
 			}
-			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
 			SupplierUserBean user = supplierUserService.findSupplierUser(order.getUser_id(), supplier.getId());
 			int expressBottomPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
 
@@ -307,6 +315,7 @@ public class UserSupplierProductController extends BaseController {
 			String productInfos = request.getParameter("productInfos");
 			String sid = request.getParameter("sid");
 			Integer supplier_id = Integer.parseInt(sid);
+			int type = SupplierBalanceLogBean.TYPE_USER_SHOPORDER_EFF ;
 			Long time = null;
 			if(StringUtil.isNotNull(timeString)){
 				time = Long.parseLong(timeString);
@@ -321,11 +330,11 @@ public class UserSupplierProductController extends BaseController {
 				order.setProductList(productList);
 				
 			}else if(StringUtil.isNotNull(productInfos)){ // 根据传参过来的数据创建订单
-				ShopOrderInfoBean newOrder = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,productInfos,time,eff_date);
+				ShopOrderInfoBean newOrder = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,productInfos,time,eff_date,type);
 				order = new ShopOrderEffInfoBean(newOrder);
 			}else{//没有定单号、没有传参数据,则根据cookie里的数据创建订单
 				String data = CookieUtil.getValueByCookie(request, "productInfo");
-				ShopOrderInfoBean newOrder =  shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,time,eff_date);
+				ShopOrderInfoBean newOrder =  shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,time,eff_date,type);
 				order = new ShopOrderEffInfoBean(newOrder);
 			}
 			

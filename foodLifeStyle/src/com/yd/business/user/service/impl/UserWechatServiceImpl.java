@@ -30,7 +30,10 @@ import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.product.bean.ProductBean;
 import com.yd.business.product.service.IProductService;
+import com.yd.business.supplier.bean.SupplierUserBean;
 import com.yd.business.supplier.service.ISupplierEventService;
+import com.yd.business.supplier.service.ISupplierUserService;
+import com.yd.business.supplier.service.impl.SupplierUserServiceImpl;
 import com.yd.business.user.bean.ConsumeTableBean;
 import com.yd.business.user.bean.UserBWCBean;
 import com.yd.business.user.bean.UserConsumeInfoBean;
@@ -74,6 +77,8 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 	private IMsgCenterActionService msgCenterActionService;
 	@Resource
 	private ISupplierEventService supplierEventService;
+	@Resource
+	private ISupplierUserService supplierUserService;
 	
 	
 	private static final boolean IS_OPEN_SENCE_LOG = true;
@@ -143,7 +148,7 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 	 * 订购成功后，给各级添加积分
 	 */
 	@Override
-	public void updateUserBalanceByOrderProduct(int product_id,UserWechatBean user){
+	public void updateUserBalanceByOrderProduct(int product_id,SupplierUserBean user){
 		ProductBean product = productService.findProductById(product_id);
 //		int produt_price = product.getProduct_price();
 //		double persent_self = 0.05;
@@ -155,49 +160,49 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		
 		// 自己的更新
 		user.setPoints(user.getPoints() + givePoints);
-		userWechatDao.update(user);
-		userCommissionPointsService.createUserPointLog(user.getId(), givePoints, "订购商品【"+product.getName()+"】赠送积分");
+		supplierUserService.updateSupplierUser(user);
+		userCommissionPointsService.createUserPointLog(user.getSupplier_id(), user.getUser_id(), givePoints, "订购商品【"+product.getName()+"】赠送积分");
 
 		//找 上1级的
-		if(user.getParentid() != null){
-//			givePoints =  (int) (persent_parent1 * produt_price);
-			UserWechatBean p1 = userWechatDao.findUserById(user.getParentid());
-			updateUserPointsOrBalanceByType(p1, 1,product, "您的一级好友【"+ user.getNick_name()+"】订购商品【"+product.getName()+"】", user);
-//				p1.setPoints(p1.getPoints() + givePoints);
-//				userWechatDao.update(p1);
-//				userCommissionPointsService.createUserPointLog(p1.getId(), givePoints,"您的好友【"+ user.getNick_name()+"】订购商品【"+product.getName()+"】赠送积分");
-			//找 上2级的
-			if(p1.getParentid() != null){
-//				givePoints =  (int) (persent_parent2 * produt_price);
-				UserWechatBean p2 = userWechatDao.findUserById(p1.getParentid());
-//				p2.setPoints(p2.getPoints() + givePoints);
-//				userWechatDao.update(p2);
-//				userCommissionPointsService.createUserPointLog(p2.getId(), givePoints,"您好友的好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】赠送积分");
-				updateUserPointsOrBalanceByType(p2, 2,product, "您的二级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】", user);
-
-				//找 上3级的
-				if(p2.getParentid() != null){
-//					givePoints =  (int) (persent_parent3 * produt_price);
-					UserWechatBean p3 = userWechatDao.findUserById(p2.getParentid());
-//					p3.setPoints(p3.getPoints() + givePoints);
-//					userWechatDao.update(p3);
-//					userCommissionPointsService.createUserPointLog(p3.getId(), givePoints, "您的三级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】赠送积分");
-					updateUserPointsOrBalanceByType(p3, 3,product, "您的三级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】", user);
-
-					
-					//找 上4级的
-					if(p3.getParentid() != null){
-//						givePoints =  (int) (persent_parent4 * produt_price);
-						UserWechatBean p4 = userWechatDao.findUserById(p3.getParentid());
-//						p4.setPoints(p4.getPoints() + givePoints);
-//						userWechatDao.update(p4);
-//						userCommissionPointsService.createUserPointLog(p4.getId(), givePoints, "您的四级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】赠送积分");
-						updateUserPointsOrBalanceByType(p4, 4,product, "您的四级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】", user);
-
-					}
-				}
-			}
-		}
+//		if(user.getParentid() != null){
+////			givePoints =  (int) (persent_parent1 * produt_price);
+//			UserWechatBean p1 = userWechatDao.findUserById(user.getParentid());
+//			updateUserPointsOrBalanceByType(p1, 1,product, "您的一级好友【"+ user.getNick_name()+"】订购商品【"+product.getName()+"】", user);
+////				p1.setPoints(p1.getPoints() + givePoints);
+////				userWechatDao.update(p1);
+////				userCommissionPointsService.createUserPointLog(p1.getId(), givePoints,"您的好友【"+ user.getNick_name()+"】订购商品【"+product.getName()+"】赠送积分");
+//			//找 上2级的
+//			if(p1.getParentid() != null){
+////				givePoints =  (int) (persent_parent2 * produt_price);
+//				UserWechatBean p2 = userWechatDao.findUserById(p1.getParentid());
+////				p2.setPoints(p2.getPoints() + givePoints);
+////				userWechatDao.update(p2);
+////				userCommissionPointsService.createUserPointLog(p2.getId(), givePoints,"您好友的好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】赠送积分");
+//				updateUserPointsOrBalanceByType(p2, 2,product, "您的二级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】", user);
+//
+//				//找 上3级的
+//				if(p2.getParentid() != null){
+////					givePoints =  (int) (persent_parent3 * produt_price);
+//					UserWechatBean p3 = userWechatDao.findUserById(p2.getParentid());
+////					p3.setPoints(p3.getPoints() + givePoints);
+////					userWechatDao.update(p3);
+////					userCommissionPointsService.createUserPointLog(p3.getId(), givePoints, "您的三级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】赠送积分");
+//					updateUserPointsOrBalanceByType(p3, 3,product, "您的三级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】", user);
+//
+//					
+//					//找 上4级的
+//					if(p3.getParentid() != null){
+////						givePoints =  (int) (persent_parent4 * produt_price);
+//						UserWechatBean p4 = userWechatDao.findUserById(p3.getParentid());
+////						p4.setPoints(p4.getPoints() + givePoints);
+////						userWechatDao.update(p4);
+////						userCommissionPointsService.createUserPointLog(p4.getId(), givePoints, "您的四级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】赠送积分");
+//						updateUserPointsOrBalanceByType(p4, 4,product, "您的四级好友【" + user.getNick_name()+"】订购商品【"+product.getName()+"】", user);
+//
+//					}
+//				}
+//			}
+//		}
 	}
 	
 	/**
@@ -206,7 +211,7 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 	 * @param pointsOrBalance
 	 * @param remark
 	 */
-	private void updateUserPointsOrBalanceByType(UserWechatBean user,int level,ProductBean product,String remark,UserWechatBean fromUser){
+	private void updateUserPointsOrBalanceByType(SupplierUserBean user,int level,ProductBean product,String remark,UserWechatBean fromUser){
 		String configCode = null;
 		int pointsOrBalance;
 		switch (user.getType()) {
@@ -219,8 +224,8 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 				
 				//普通客户放积分账户里
 				user.setPoints(user.getPoints() + pointsOrBalance);
-				userWechatDao.update(user);
-				userCommissionPointsService.createUserPointLog(user.getId(), pointsOrBalance, remark);
+				supplierUserService.updateSupplierUser(user);
+				userCommissionPointsService.createUserPointLog(user.getSupplier_id(),user.getUser_id(), pointsOrBalance, remark);
 			}
 			break;
 		case UserWechatBean.TYPE_VIP:
@@ -231,7 +236,7 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 				//VIP客户放余额账户里
 				String orderCode = userConsumeInfoService.createOutTradeNo( IUserConsumeInfoService.OUTTRADE_TYPE_SUBCOST , user.getId());
 				//先创建余额明细
-				userConsumeInfoService.createConsumeInfo(remark, pointsOrBalance, null, user.getId(), fromUser.getId().toString(), orderCode, IUserConsumeInfoService.OUTTRADE_TYPE_SUBCOST,UserConsumeInfoBean.EVENT_TYPE_USER_SUBCOST);
+				userConsumeInfoService.createConsumeInfo(remark, pointsOrBalance,user.getSupplier_id() ,null, user.getUser_id(), fromUser.getId().toString(), orderCode, IUserConsumeInfoService.OUTTRADE_TYPE_SUBCOST,UserConsumeInfoBean.EVENT_TYPE_USER_SUBCOST);
 	
 				updateUserBalance(orderCode, null);
 			}
@@ -246,7 +251,7 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 				//滴滴客户放余额账户里
 				String orderCode = userConsumeInfoService.createOutTradeNo( IUserConsumeInfoService.OUTTRADE_TYPE_SUBCOST , user.getId());
 				//先创建余额明细
-				userConsumeInfoService.createConsumeInfo(remark, pointsOrBalance, null, user.getId(), fromUser.getId().toString(), orderCode, IUserConsumeInfoService.OUTTRADE_TYPE_SUBCOST,UserConsumeInfoBean.EVENT_TYPE_USER_SUBCOST);
+				userConsumeInfoService.createConsumeInfo(remark, pointsOrBalance,user.getSupplier_id(), null, user.getUser_id(), fromUser.getId().toString(), orderCode, IUserConsumeInfoService.OUTTRADE_TYPE_SUBCOST,UserConsumeInfoBean.EVENT_TYPE_USER_SUBCOST);
 	
 				updateUserBalance(orderCode, null);
 			}
@@ -687,7 +692,7 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 		user.setPoints(user.getPoints() + shareAddPoints);
 		update(user);
 		
-		userCommissionPointsService.createUserPointLog(user.getId(), shareAddPoints, "分享订购页面获得积分");
+//		userCommissionPointsService.createUserPointLog(user.getId(), shareAddPoints, "分享订购页面获得积分");
 		
 		return null;
 	}

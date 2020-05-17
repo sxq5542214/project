@@ -31,11 +31,13 @@ import com.yd.business.supplier.bean.SupplierCouponConfigBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierCouponRuleBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierUserBean;
 import com.yd.business.supplier.dao.ISupplierCouponDao;
 import com.yd.business.supplier.dao.ISupplierProductDao;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.ISupplierUserService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserCommissionPointsService;
 import com.yd.business.user.service.IUserConsumeInfoService;
@@ -72,6 +74,9 @@ ISupplierCouponService {
 	private ISupplierCouponService supplierCouponService;
 	@Resource
 	private IConfigAttributeService configAttributeService;
+	@Resource
+	private ISupplierUserService supplierUserService;
+	
 	
 	//存放进行中的定单号，线程同步的，避免同一时刻多次重复定购
 		private static ConcurrentHashMap<String,Object> runningCacheMap = new ConcurrentHashMap<String, Object>();
@@ -948,16 +953,18 @@ ISupplierCouponService {
 		
 		if(status == OrderProductLogBean.STATUS_SUCCESS)
 		{
-			user.setLast_order_time(DateUtil.getNowDateStr());
+			SupplierUserBean su = supplierUserService.findSupplierUser(user.getOpenid(), sp.getSupplier_id());
+			
+			su.setLast_order_time(DateUtil.getNowDateStr());
 			//扣除用户优惠卷
 			supplierCouponService.changeCouponRecodeUserd(user.getId(),coupon_id,coupon_record_id);
 			
 			//生成扣减积分记录
-			userCommissionPointsService.createUserPointLog(user.getId(), -orderLog.getCost_points(), "充值【"+sp.getProduct_name()+"】支付积分");
+			userCommissionPointsService.createUserPointLog(sp.getSupplier_id(),user.getId(), -orderLog.getCost_points(), "充值【"+sp.getProduct_name()+"】支付积分");
 			//订购成功，扣减用户信息
-			userWechatService.update(user);
+			supplierUserService.updateSupplierUser(su);
 			//订购成功，自己和上级添加积分
-			userWechatService.updateUserBalanceByOrderProduct(sp.getProduct_id(), user);
+			userWechatService.updateUserBalanceByOrderProduct(sp.getProduct_id(), su);
 			
 //			//订购成功，给用户发微信消息
 			sendMessageByOrderSuccess(user, orderLog.getOrder_code() ,orderLog);

@@ -84,6 +84,10 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_ORDER_PAY = "wechat_user_order_pay";
 	/**
+	 * 订单需要发货
+	 */
+	public static final String ACTION_TYPE_WECHAT_USER_ORDER_NEED_DELIVERY = "wechat_user_order_need_delivery";
+	/**
 	 * 订单支付成功通知用户好友
 	 */
 	public static final String ACTION_TYPE_WECHAT_USER_ORDER_PAY_NOTIFY_FRIENDS = "wechat_user_order_pay_notify_friends";

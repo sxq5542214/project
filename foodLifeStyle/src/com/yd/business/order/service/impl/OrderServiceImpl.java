@@ -44,6 +44,7 @@ import com.yd.business.supplier.service.ISupplierCardSecretService;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.ISupplierUserService;
 import com.yd.business.user.bean.UserConsumeInfoBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserCommissionPointsService;
@@ -100,6 +101,8 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 	private IMsgCenterActionService msgCenterActionService;
 	@Resource
 	private ISupplierCouponService supplierCouponService;
+	@Resource
+	private ISupplierUserService supplierUserService;
 	
 	//存放进行中的定单号，线程同步的，避免同一时刻多次重复定购
 	private static ConcurrentHashMap<String,Object> runningCacheMap = new ConcurrentHashMap<String, Object>();
@@ -160,11 +163,12 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 			
 			user.setLast_order_time(DateUtil.getNowDateStr());
 			//生成扣减积分记录
-			userCommissionPointsService.createUserPointLog(user.getId(), -orderLog.getCost_points(), "充值【"+sp.getProduct_name()+"】支付积分");
-			//订购成功，扣减用户信息
-			userWechatService.update(user);
-			//订购成功，自己和上级添加积分
-			userWechatService.updateUserBalanceByOrderProduct(sp.getProduct_id(), user);
+			userCommissionPointsService.createUserPointLog(sp.getSupplier_id(), user.getId(), -orderLog.getCost_points(), "充值【"+sp.getProduct_name()+"】支付积分");
+			
+//			//订购成功，扣减用户信息
+//			userWechatService.update(user);
+//			//订购成功，自己和上级添加积分
+//			userWechatService.updateUserBalanceByOrderProduct(sp.getProduct_id(), user);
 			
 //			//订购成功，给用户发微信消息
 			sendMessageByOrderSuccess(user, orderLog.getOrder_code() ,orderLog);
@@ -381,7 +385,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 		//商户订单号
 		String out_no = userConsumeInfoService.createOutTradeNo(interfaceType, admin.getCustomer_id());
 		//保存充值记录
-		userConsumeInfoService.createConsumeInfo(phone,sp.getProduct_price(), sp.getId(), admin.getId(), null, out_no,interfaceType,event_type);
+		userConsumeInfoService.createConsumeInfo(phone,sp.getProduct_price(),sp.getSupplier_id(), sp.getId(), admin.getId(), null, out_no,interfaceType,event_type);
 		
 		return out_no;
 	}
@@ -664,7 +668,7 @@ public class OrderServiceImpl extends BaseService implements IOrderService {
 					user.setLast_order_time(DateUtil.getNowDateStr());
 					userWechatService.update(user);
 					//创建付款信息
-					userConsumeInfoService.createConsumeInfo(consumeInfo.getPhone(), 0, consumeInfo.getSupplier_product_id(), consumeInfo.getUser_id(), consumeInfo.getTransaction_id(), orderLog.getOrder_code(), consumeInfo.getInterface_type(), eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_EFF);
+					userConsumeInfoService.createConsumeInfo(consumeInfo.getPhone(), 0, consumeInfo.getSupplier_id(), consumeInfo.getSupplier_product_id(), consumeInfo.getUser_id(), consumeInfo.getTransaction_id(), orderLog.getOrder_code(), consumeInfo.getInterface_type(), eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_EFF);
 					userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, effOrderCode);
 				}
 			}

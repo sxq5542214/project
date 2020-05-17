@@ -31,7 +31,7 @@ public class UserCommissionPointsServiceImpl extends BaseService implements IUse
 	 * @param point
 	 */
 	@Override
-	public void createUserPointLog(int userId,int point,String detail){
+	public void createUserPointLog(Integer supplier_id,int userId,int point,String detail){
 		
 		if(point == 0){
 			return;
@@ -41,6 +41,7 @@ public class UserCommissionPointsServiceImpl extends BaseService implements IUse
 		UserCommissionPointsBean bean = new UserCommissionPointsBean();
 		bean.setCreate_date(DateUtil.formatDate(new Date()));
 		bean.setDetailed(detail);
+		bean.setSupplier_id(supplier_id);
 		if(point > 0){
 			bean.setPay("+"+point);
 		}else{
@@ -52,10 +53,11 @@ public class UserCommissionPointsServiceImpl extends BaseService implements IUse
 	}
 	
 	@Override
-	public List<UserCommissionPointsBean> queryUserCommissionPoints(int userId){
+	public List<UserCommissionPointsBean> queryUserCommissionPoints(Integer supplier_id, int userId){
 		
 		UserCommissionPointsBean bean = new UserCommissionPointsBean();
 		bean.setUser_id(userId);
+		bean.setSupplier_id(supplier_id);
 		
 		return userCommissionPointsDao.queryUserCommissionPoints(bean );
 		

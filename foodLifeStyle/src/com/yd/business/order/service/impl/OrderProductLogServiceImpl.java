@@ -289,7 +289,7 @@ public class OrderProductLogServiceImpl extends BaseService implements IOrderPro
 			if(orderBean.getLucky_money() < WechatPayInfoBean.LUCKY_MONEY_MIN_WECHAT){
 				// 生成流水单,商户订单号
 				String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_SHAREBONUS, orderBean.getUser_id());
-				userConsumeInfoService.createConsumeInfo(orderBean.getOrder_account(), orderBean.getLucky_money(), orderBean.getSupplier_product_id(), orderBean.getUser_id(), null, out_no, UserConsumeInfoBean.INTERFACETYPE_SHARE_LUCKYMONEY, UserConsumeInfoBean.EVENT_TYPE_USER_BALANCE_INCOME);
+				userConsumeInfoService.createConsumeInfo(orderBean.getOrder_account(), orderBean.getLucky_money(),orderBean.getSupplier_id(), orderBean.getSupplier_product_id(), orderBean.getUser_id(), null, out_no, UserConsumeInfoBean.INTERFACETYPE_SHARE_LUCKYMONEY, UserConsumeInfoBean.EVENT_TYPE_USER_BALANCE_INCOME);
 				// 更新流水为支付成功
 				UserConsumeInfoBean customerInfoBean = userConsumeInfoService.findUserConsumeInfo(out_no);
 				customerInfoBean.setStatus(UserConsumeInfoBean.STATUS_SUCCESS);

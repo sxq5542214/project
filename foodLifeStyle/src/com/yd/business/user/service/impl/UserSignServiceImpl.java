@@ -15,6 +15,7 @@ import com.yd.basic.framework.pageination.PageinationData;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.user.bean.UserSignBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.dao.IUserSignDao;
@@ -46,10 +47,10 @@ public class UserSignServiceImpl extends BaseService implements IUserSignService
 	 * @return 签到获得的积分
 	 */
 	@Override
-	public UserSignBean userSignByOpenid(String openid){
+	public UserSignBean userSignByOpenid( String openid){
 		
 		UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-
+		int sid = -1;
 		//查询本月有没有签到过
 		UserSignBean condition = new UserSignBean();
 		String signMonth = DateUtil.getNowMonthStr();
@@ -105,7 +106,7 @@ public class UserSignServiceImpl extends BaseService implements IUserSignService
 			createOrUpdateUserSign(signBean);
 			userWechatService.update(user);
 			//记录用户积分变更信息
-			userCommissionPointsService.createUserPointLog(signBean.getUser_id(), point, "签到赠送积分");
+			userCommissionPointsService.createUserPointLog(sid,signBean.getUser_id(), point, "签到赠送积分");
 		}
 		
 		return signBean;

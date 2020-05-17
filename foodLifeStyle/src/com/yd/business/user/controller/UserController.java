@@ -38,6 +38,7 @@ import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IAddressService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
+import com.yd.business.supplier.bean.SupplierBalanceLogBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierEventBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
@@ -198,11 +199,11 @@ public class UserController extends BaseController {
 		try{
 			String openid = request.getParameter("openid");
 			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			
+			Integer sid = null;
 			
 			if(user != null)
 			{
-				List list = userCommissionPointsService.queryUserCommissionPoints(user.getId());
+				List list = userCommissionPointsService.queryUserCommissionPoints(sid,user.getId());
 				
 				Map<String, Object> model = new HashMap<String, Object>();
 				model = new HashMap<String, Object>();
@@ -307,11 +308,11 @@ public class UserController extends BaseController {
 				
 			//根据优惠卷记录表中的id,在优惠卷优惠卷记录表中添加订单号
 				supplierCouponService.updateOrderCodeCouponRecordById(Integer.parseInt(coupon_record_id),out_no);
-				consume = userConsumeInfoService.createConsumeInfo(phone,costBalance, product_id, user.getId(), null, out_no,UserConsumeInfoBean.INTERFACETYPE_COUPONPAY,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_COUPON);
+				consume = userConsumeInfoService.createConsumeInfo(phone,costBalance,sp.getSupplier_id(), product_id, user.getId(), null, out_no,UserConsumeInfoBean.INTERFACETYPE_COUPONPAY,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_COUPON);
 			}
 			else{
 				//保存充值记录
-				consume = userConsumeInfoService.createConsumeInfo(phone,costBalance, product_id, user.getId(), null, out_no,UserConsumeInfoBean.INTERFACETYPE_USERBALANCE,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER);
+				consume = userConsumeInfoService.createConsumeInfo(phone,costBalance,sp.getSupplier_id(), product_id, user.getId(), null, out_no,UserConsumeInfoBean.INTERFACETYPE_USERBALANCE,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER);
 			}
 
 			OrderProductLogBean productLog = orderProductLogService.createOrderProductLogByUserConsumeInfo(consume, points, 0,costBalance, null);
@@ -789,7 +790,7 @@ public class UserController extends BaseController {
 			String order_code = request.getParameter("order_code");
 			String sid = request.getParameter("sid");
 			Integer supplier_id = Integer.parseInt(sid);
-
+			int type = SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE;
 			ShopOrderInfoBean order ;
 			if(StringUtil.isNotNull(order_code)){ //已有定单号
 				order = shopOrderService.findShopOrderInfoByCode(order_code);
@@ -800,7 +801,7 @@ public class UserController extends BaseController {
 				order.setProductList(productList);
 				
 			}else{ //没有定单号
-				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,null);
+				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,null,type);
 			}
 			
 			UserWechatBean user = userWechatService.findUserWechatById(order.getUser_id());

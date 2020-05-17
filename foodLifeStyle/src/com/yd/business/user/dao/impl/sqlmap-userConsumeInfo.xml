@@ -5,8 +5,8 @@
 <mapper namespace="userConsumeInfo">
 	
 	<insert id="createConsumeInfo" parameterType="userConsumeInfo">
-		insert into ll_user_consume_info(phone,money,create_date,supplier_product_id,user_id,transaction_id,out_trade_code,interface_type,status,eff_num,event_type)
-		values(#{phone},#{money},#{create_date},#{supplier_product_id},#{user_id},#{transaction_id},#{out_trade_code},#{interface_type},#{status},#{eff_num},#{event_type})
+		insert into ll_user_consume_info(phone,money,create_date,supplier_id,supplier_product_id,user_id,transaction_id,out_trade_code,interface_type,status,eff_num,event_type)
+		values(#{phone},#{money},#{create_date},#{supplier_id},#{supplier_product_id},#{user_id},#{transaction_id},#{out_trade_code},#{interface_type},#{status},#{eff_num},#{event_type})
 	</insert>
 	
 	<update id="updateUserConsumeInfoBean" parameterType="userConsumeInfo">
@@ -14,6 +14,7 @@
 		<set>
 			<if test="money != null">money = #{money} ,</if>
 			<if test="phone != null">phone = #{phone} ,</if>
+			<if test="supplier_id != null">supplier_id = #{supplier_id} ,</if>
 			<if test="create_date != null">create_date = #{create_date} ,</if>
 			<if test="supplier_product_id != null">supplier_product_id = #{supplier_product_id} ,</if>
 			<if test="user_id != null">user_id = #{user_id} ,</if>
@@ -42,6 +43,7 @@
 		<where>
 			<if test="money != null"> and money = #{money} </if>
 			<if test="phone != null"> and phone = #{phone} </if>
+			<if test="supplier_id != null"> and supplier_id = #{supplier_id} </if>
 			<if test="supplier_product_id != null"> and supplier_product_id = #{supplier_product_id} </if>
 			<if test="user_id != null"> and user_id = #{user_id} </if>
 			<if test="transaction_id != null"> and transaction_id = #{transaction_id} </if>

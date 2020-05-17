@@ -8,6 +8,7 @@ import com.yd.basic.framework.pageination.PageinationData;
 import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.order.bean.OrderProductLogBean;
 import com.yd.business.product.bean.ProductBean;
+import com.yd.business.supplier.bean.SupplierUserBean;
 import com.yd.business.user.bean.UserBWCBean;
 import com.yd.business.user.bean.UserInfoCenterPageBean;
 import com.yd.business.user.bean.UserQrCodeBean;
@@ -47,7 +48,7 @@ public interface IUserWechatService {
 
 	void updateUserBalance(String out_trade_code, String param);
 
-	void updateUserBalanceByOrderProduct(int product_id, UserWechatBean user);
+	void updateUserBalanceByOrderProduct(int product_id, SupplierUserBean user);
 
 	UserInfoCenterPageBean queryActivityFriendLevelCount(int userId);
 
@@ -154,4 +155,5 @@ public interface IUserWechatService {
 	UserWechatFriendBean createUserWechatFriend(Integer userId, String friendOpenId);
 
 	Integer readUserSenceLog(String openid, Integer senceId, Integer senceType, String share_type);
+
 }

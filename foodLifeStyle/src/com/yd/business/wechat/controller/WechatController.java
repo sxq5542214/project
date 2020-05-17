@@ -183,130 +183,130 @@ public class WechatController extends BaseController {
 	@RequestMapping("**/wechat/createUnifiedOrder.do")
 	public ModelAndView createUnifiedOrder(HttpServletRequest request,HttpServletResponse response){
 		
-		String coupon_record_id = request.getParameter("coupon_record_id");			//优惠卷id
-		String openid = request.getParameter("openid");								//openid 	123
-		String price = request.getParameter("price");								//用户需要支付的价格		14.20
-		String pointsStr = request.getParameter("points");							//该产品可以抵用的积分		100
-		String balanceStr = request.getParameter("cost_balance");					//可以使用的余额			100
-		String eff_numStr = request.getParameter("eff_num");						//预订月份				0
-		Integer eff_num = StringUtil.isNull(eff_numStr) ? 0:Integer.parseInt(eff_numStr);		//给eff_numStr字段         String类型转换成Integer类型
-		Integer points = StringUtil.isNull(pointsStr) ? 0:Integer.parseInt(pointsStr);			//给pointsStrr字段          String类型转换成Integer类型
-		Integer cost_balance = StringUtil.isNull(balanceStr) ? 0:Integer.parseInt(balanceStr);	//给eff_numStr字段          String类型转换成Integer类型
-		String phone = request.getParameter("phone");											//充值的电话号码			18755171111
-		Integer product_id = Integer.parseInt(request.getParameter("product_id"));				//产品id				43
-		
-		
-		UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);					//通过openid到user表中查找记录
-		if(user == null){																		//做一个验证,确定此openid能够找到对应的用户
-			throw new RuntimeException(" createUnifiedOrder user is null!");
-		}
-		
-		
-		//如果优惠卷规记录id不等于空
-		if(!StringUtil.isNull(coupon_record_id) ){
-			SupplierCouponRecordBean couponRecordBean = new SupplierCouponRecordBean();
-			couponRecordBean.setUserid(user.getId());
-			couponRecordBean.setId(Integer.parseInt(coupon_record_id));
-			couponRecordBean  = supplierCouponService.findCouponRecord(couponRecordBean);
-			if(couponRecordBean == null){
-					throw new RuntimeException(" createUnifiedOrder couponRecord is null!");
-			}
-		}
-		
-		//根据用户表中originalid 在ll_wechat_original_info表中信息 ,主要用于查询来自哪个公众号
-		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
-		
-		//wx26a55db19faf530f
-		String appidStr = originalInfo.getAppid();
-		String appid = "appid=" + appidStr; 
-		//商户号
-		String mch_id = "mch_id=" +originalInfo.getMch_id();
-		//随机码
-		String nonce_str = "nonce_str=" + UUID.randomUUID().toString().replaceAll("-", "");
-		//附加数据，微信会原样返回,
-		String attach = "attach="+ "test";
-		//商品详情
-		String body = "body=支付商品";
-		//商户订单号
-		String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_WXPAY, user.getId());
-		String out_trade_no = "out_trade_no="+out_no;
-		//需要支付的总金额,以分为单位
-		int rmb = (int) (Double.parseDouble(price)  * 100);
-		String total_fee = "total_fee="+ rmb;
-		//客户IP
-		String spbill_create_ip = request.getRemoteAddr();
-		if(spbill_create_ip == null){ spbill_create_ip = "115.28.43.16"; }
-		spbill_create_ip = "spbill_create_ip="+spbill_create_ip;
-		
-		//回调URL
-		String notify_url = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_NOTIFY_URL);
-		notify_url = "notify_url="+ notify_url ; //+ "wechat/serverNotify.html";
-		
-		//交易类型
-		String trade_type = "trade_type=JSAPI";
-		//用户ID //oiRcFuKHjk9_V8-eWwHA1W4x1XWc
-		openid = "openid=" + user.getOpenid();
-		//设备信息，公众号使用WEB
-		String device_info = "device_info=WEB";
-		//指定支付方式，不可使用信用卡
-		String limit_pay = "limit_pay=no_credit";
-		String key = "key=" + originalInfo.getPay_wechat_sign_key();
-
-		Object[] params={appid,mch_id,nonce_str,attach,body,out_trade_no,device_info,
-				total_fee,spbill_create_ip,notify_url,trade_type,openid,limit_pay};
-		String tempStr = WebUtil.concatParam(params);
-		//签名,需要把key放在最后
-		tempStr += "&"+key;
-		String sign = "sign="+MD5Util.encode16(tempStr,"UTF-8").toUpperCase();
-		
-		Object[] newParam = ArrayUtils.addAll(params, new String[]{sign});
-		String xml = convertToXML(newParam);
-		
-		String callUrl = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_UNIFIED_URL);
-		long time = System.currentTimeMillis();
-		try {
-			//调用微信的预支付接口
-			String responseStr = HttpUtil.post(callUrl, xml);
-			WechatPayResultBean resultBean = parseWechatPayResult(responseStr);
-			System.out.println("调用微信的预支付接口 cost:"+ (System.currentTimeMillis() - time));
-			if(resultBean.getPrepay_id() != null){
-				String interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHAT;
-				if(cost_balance != null && cost_balance >0){
-					interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHATANDBALANCE;
-				}
-			
-				UserConsumeInfoBean consume = new UserConsumeInfoBean();
-				//如果优惠卷记录id为不为空
-				if(!StringUtil.isNull(coupon_record_id) ){
-					//根据优惠卷记录表中的id,在优惠卷优惠卷记录表中添加订单号
-					supplierCouponService.updateOrderCodeCouponRecordById(Integer.parseInt(coupon_record_id),out_no);
-					interface_type =  UserConsumeInfoBean.INTERFACETYPE_COUPONPAY;
-					//保存充值记录     在ll_user_consume_info表中加入充值记录
-					consume = userConsumeInfoService.createConsumeInfo(phone,rmb, product_id, user.getId(), resultBean.getPrepay_id(), out_no,interface_type,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_COUPON);
-				}else{
-					//保存充值记录     在ll_user_consume_info表中加入充值记录
-					consume = userConsumeInfoService.createConsumeInfo(phone,rmb, product_id, user.getId(), resultBean.getPrepay_id(), out_no,interface_type,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER);
-
-				}
-				
-				//在ll_order_product_log表中增加订购记录表
-				orderProductLogService.createOrderProductLogByUserConsumeInfo(consume, points, rmb,cost_balance, null);
-				
-				//返回界面需要支付的信息
-				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
-				data.setOutTradeNo(out_no);
-				writeJson(response, data);
-				return null;
-			}else{
-				log.error("调用微信的预支付接口失败！ requseXML:"+xml+" respXML:"+ responseStr);
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error(e,e);
-		}
-		writeJson(response, "false");
+//		String coupon_record_id = request.getParameter("coupon_record_id");			//优惠卷id
+//		String openid = request.getParameter("openid");								//openid 	123
+//		String price = request.getParameter("price");								//用户需要支付的价格		14.20
+//		String pointsStr = request.getParameter("points");							//该产品可以抵用的积分		100
+//		String balanceStr = request.getParameter("cost_balance");					//可以使用的余额			100
+//		String eff_numStr = request.getParameter("eff_num");						//预订月份				0
+//		Integer eff_num = StringUtil.isNull(eff_numStr) ? 0:Integer.parseInt(eff_numStr);		//给eff_numStr字段         String类型转换成Integer类型
+//		Integer points = StringUtil.isNull(pointsStr) ? 0:Integer.parseInt(pointsStr);			//给pointsStrr字段          String类型转换成Integer类型
+//		Integer cost_balance = StringUtil.isNull(balanceStr) ? 0:Integer.parseInt(balanceStr);	//给eff_numStr字段          String类型转换成Integer类型
+//		String phone = request.getParameter("phone");											//充值的电话号码			18755171111
+//		Integer product_id = Integer.parseInt(request.getParameter("product_id"));				//产品id				43
+//		
+//		
+//		UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);					//通过openid到user表中查找记录
+//		if(user == null){																		//做一个验证,确定此openid能够找到对应的用户
+//			throw new RuntimeException(" createUnifiedOrder user is null!");
+//		}
+//		
+//		
+//		//如果优惠卷规记录id不等于空
+//		if(!StringUtil.isNull(coupon_record_id) ){
+//			SupplierCouponRecordBean couponRecordBean = new SupplierCouponRecordBean();
+//			couponRecordBean.setUserid(user.getId());
+//			couponRecordBean.setId(Integer.parseInt(coupon_record_id));
+//			couponRecordBean  = supplierCouponService.findCouponRecord(couponRecordBean);
+//			if(couponRecordBean == null){
+//					throw new RuntimeException(" createUnifiedOrder couponRecord is null!");
+//			}
+//		}
+//		
+//		//根据用户表中originalid 在ll_wechat_original_info表中信息 ,主要用于查询来自哪个公众号
+//		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
+//		
+//		//wx26a55db19faf530f
+//		String appidStr = originalInfo.getAppid();
+//		String appid = "appid=" + appidStr; 
+//		//商户号
+//		String mch_id = "mch_id=" +originalInfo.getMch_id();
+//		//随机码
+//		String nonce_str = "nonce_str=" + UUID.randomUUID().toString().replaceAll("-", "");
+//		//附加数据，微信会原样返回,
+//		String attach = "attach="+ "test";
+//		//商品详情
+//		String body = "body=支付商品";
+//		//商户订单号
+//		String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_WXPAY, user.getId());
+//		String out_trade_no = "out_trade_no="+out_no;
+//		//需要支付的总金额,以分为单位
+//		int rmb = (int) (Double.parseDouble(price)  * 100);
+//		String total_fee = "total_fee="+ rmb;
+//		//客户IP
+//		String spbill_create_ip = request.getRemoteAddr();
+//		if(spbill_create_ip == null){ spbill_create_ip = "115.28.43.16"; }
+//		spbill_create_ip = "spbill_create_ip="+spbill_create_ip;
+//		
+//		//回调URL
+//		String notify_url = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_NOTIFY_URL);
+//		notify_url = "notify_url="+ notify_url ; //+ "wechat/serverNotify.html";
+//		
+//		//交易类型
+//		String trade_type = "trade_type=JSAPI";
+//		//用户ID //oiRcFuKHjk9_V8-eWwHA1W4x1XWc
+//		openid = "openid=" + user.getOpenid();
+//		//设备信息，公众号使用WEB
+//		String device_info = "device_info=WEB";
+//		//指定支付方式，不可使用信用卡
+//		String limit_pay = "limit_pay=no_credit";
+//		String key = "key=" + originalInfo.getPay_wechat_sign_key();
+//
+//		Object[] params={appid,mch_id,nonce_str,attach,body,out_trade_no,device_info,
+//				total_fee,spbill_create_ip,notify_url,trade_type,openid,limit_pay};
+//		String tempStr = WebUtil.concatParam(params);
+//		//签名,需要把key放在最后
+//		tempStr += "&"+key;
+//		String sign = "sign="+MD5Util.encode16(tempStr,"UTF-8").toUpperCase();
+//		
+//		Object[] newParam = ArrayUtils.addAll(params, new String[]{sign});
+//		String xml = convertToXML(newParam);
+//		
+//		String callUrl = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_UNIFIED_URL);
+//		long time = System.currentTimeMillis();
+//		try {
+//			//调用微信的预支付接口
+//			String responseStr = HttpUtil.post(callUrl, xml);
+//			WechatPayResultBean resultBean = parseWechatPayResult(responseStr);
+//			System.out.println("调用微信的预支付接口 cost:"+ (System.currentTimeMillis() - time));
+//			if(resultBean.getPrepay_id() != null){
+//				String interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHAT;
+//				if(cost_balance != null && cost_balance >0){
+//					interface_type = UserConsumeInfoBean.INTERFACETYPE_WEICHATANDBALANCE;
+//				}
+//			
+//				UserConsumeInfoBean consume = new UserConsumeInfoBean();
+//				//如果优惠卷记录id为不为空
+//				if(!StringUtil.isNull(coupon_record_id) ){
+//					//根据优惠卷记录表中的id,在优惠卷优惠卷记录表中添加订单号
+//					supplierCouponService.updateOrderCodeCouponRecordById(Integer.parseInt(coupon_record_id),out_no);
+//					interface_type =  UserConsumeInfoBean.INTERFACETYPE_COUPONPAY;
+//					//保存充值记录     在ll_user_consume_info表中加入充值记录
+//					consume = userConsumeInfoService.createConsumeInfo(phone,rmb, product_id, user.getId(), resultBean.getPrepay_id(), out_no,interface_type,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_COUPON);
+//				}else{
+//					//保存充值记录     在ll_user_consume_info表中加入充值记录
+//					consume = userConsumeInfoService.createConsumeInfo(phone,rmb, product_id, user.getId(), resultBean.getPrepay_id(), out_no,interface_type,eff_num,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER);
+//
+//				}
+//				
+//				//在ll_order_product_log表中增加订购记录表
+//				orderProductLogService.createOrderProductLogByUserConsumeInfo(consume, points, rmb,cost_balance, null);
+//				
+//				//返回界面需要支付的信息
+//				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
+//				data.setOutTradeNo(out_no);
+//				writeJson(response, data);
+//				return null;
+//			}else{
+//				log.error("调用微信的预支付接口失败！ requseXML:"+xml+" respXML:"+ responseStr);
+//			}
+//			
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			log.error(e,e);
+//		}
+//		writeJson(response, "false");
 		
 		return null;
 	}
@@ -430,7 +430,7 @@ public class WechatController extends BaseController {
 					supplierCouponService.updateOrderCodeCouponRecordById(Integer.parseInt(coupon_record_id),order_code);
 				}
 				//保存充值记录     在ll_user_consume_info表中加入充值记录
-				consume = userConsumeInfoService.createConsumeInfo(phone,rmb, (Integer)null, user.getId(), resultBean.getPrepay_id(), order_code + "-"+payCount ,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
+				consume = userConsumeInfoService.createConsumeInfo(phone,rmb, Integer.parseInt(sid) , (Integer)null, user.getId(), resultBean.getPrepay_id(), order_code + "-"+payCount ,interface_type,0,UserConsumeInfoBean.EVENT_TYPE_USER_ORDER_SHOP);
 				
 				
 				//返回界面需要支付的信息
@@ -577,7 +577,7 @@ public class WechatController extends BaseController {
 //				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
 				
 				break;
-			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER:
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE:
 
 				//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
 				userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
@@ -586,12 +586,13 @@ public class WechatController extends BaseController {
 				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
 				
 				break;
-			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_LOCAL:
+			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE:
 
 				//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
 				userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
 				//通过订单号在订购表中更改状态为更新支付成功状态
 				shopOrderService.updateShopOrderPaySuccess(cash_fee,orderCode );
+				//修改订单状态为完成
 				shopOrderService.updateShopOrderStatus(orderCode, ShopOrderInfoBean.STATUS_FINISH);
 				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
 				

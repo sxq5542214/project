@@ -8,13 +8,14 @@
 		<where>
 			<if test="user_id != null"> and  p.user_id = #{user_id} </if>
 			<if test="id != null"> and  p.id = #{id} </if>
+			<if test="supplier_id != null"> and  p.supplier_id = #{supplier_id} </if>
 		</where>
 		order by id desc
 	</select>
 	
 	<insert id="createUserCommissionPoint" parameterType="userCommissionPoints">
-		insert into ll_user_commission_points(user_id,create_date,pay,detailed)
-		values(#{user_id},#{create_date},#{pay},#{detailed})
+		insert into ll_user_commission_points(user_id,create_date,pay,detailed,supplier_id)
+		values(#{user_id},#{create_date},#{pay},#{detailed},#{supplier_id})
 	</insert>
 	
 	

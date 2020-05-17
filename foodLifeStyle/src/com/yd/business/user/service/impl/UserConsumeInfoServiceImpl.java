@@ -27,17 +27,18 @@ public class UserConsumeInfoServiceImpl extends BaseService implements IUserCons
 	private IUserConsumeInfoDao userConsumeInfoDao ;
 	
 	@Override
-	public UserConsumeInfoBean createConsumeInfo(String phone,Integer money,Integer spid,Integer user_id, String transactionId,String out_trade_no,String interface_type,Integer event_type){
+	public UserConsumeInfoBean createConsumeInfo(String phone,Integer money,Integer sid, Integer spid,Integer user_id, String transactionId,String out_trade_no,String interface_type,Integer event_type){
 		
-		return createConsumeInfo(phone, money, spid, user_id, transactionId, out_trade_no, interface_type, 0,event_type);
+		return createConsumeInfo(phone, money, sid, spid, user_id, transactionId, out_trade_no, interface_type, 0,event_type);
 	}
 	
 	@Override
-	public UserConsumeInfoBean createConsumeInfo(String phone,Integer money,Integer spid,Integer user_id, String transactionId,String out_trade_no,String interface_type,Integer eff_num,Integer event_type){
+	public UserConsumeInfoBean createConsumeInfo(String phone,Integer money,Integer sid,Integer spid,Integer user_id, String transactionId,String out_trade_no,String interface_type,Integer eff_num,Integer event_type){
 		
 		UserConsumeInfoBean bean = new UserConsumeInfoBean();
 		bean.setMoney(money);
 		bean.setPhone(phone);
+		bean.setSupplier_id(sid);
 		bean.setSupplier_product_id(spid);
 		bean.setUser_id(user_id);
 		bean.setInterface_type(interface_type);

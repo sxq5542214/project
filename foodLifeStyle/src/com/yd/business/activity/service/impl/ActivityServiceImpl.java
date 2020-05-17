@@ -47,6 +47,7 @@ import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.product.bean.ProductBean;
 import com.yd.business.product.service.IProductService;
 import com.yd.business.product.service.IProductTypeService;
+import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
 import com.yd.business.supplier.bean.SupplierVolumBean;
 import com.yd.business.supplier.service.ISupplierProductService;
@@ -477,7 +478,7 @@ public class ActivityServiceImpl extends BaseService implements IActivityService
 					int userPoints = user.getPoints();
 					//剩余积分要大于所需积分
 					//扣除积分
-					userCommissionPointsService.createUserPointLog(user.getId(), -bean.getCost_points(), "秒杀活动【"+instanceBean.getName()+"】支付积分");
+					userCommissionPointsService.createUserPointLog(SupplierBean.PLATFROM_SUPPLIER_ID ,user.getId(), -bean.getCost_points(), "秒杀活动【"+instanceBean.getName()+"】支付积分");
 					user.setPoints(userPoints-bean.getCost_points());
 					userWechatService.update(user);
 					//参与人数+1

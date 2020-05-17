@@ -47,6 +47,7 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	private String express_order_code;
 	private Integer invoice_type;
 	private String invoice_info;
+	private Integer type;
 	
 	private List<? extends ShopOrderProductBean> productList;
 	public List<? extends ShopOrderProductBean> getProductList() {
@@ -66,6 +67,12 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	}
 	public void setUser_id(Integer user_id) {
 		this.user_id = user_id;
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	public String getNick_name() {
 		return nick_name;

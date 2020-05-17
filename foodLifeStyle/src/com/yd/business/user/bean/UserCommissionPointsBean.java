@@ -19,6 +19,14 @@ public class UserCommissionPointsBean extends BaseBean {
 	private String create_date;
 	private String pay;
 	private String detailed;
+	private Integer supplier_id;
+	
+	public Integer getSupplier_id() {
+		return supplier_id;
+	}
+	public void setSupplier_id(Integer supplier_id) {
+		this.supplier_id = supplier_id;
+	}
 	public Integer getId() {
 		return id;
 	}

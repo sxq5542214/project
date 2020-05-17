@@ -13,8 +13,9 @@ import com.yd.business.user.bean.UserCommissionPointsBean;
  */
 public interface IUserCommissionPointsService {
 
-	void createUserPointLog(int userId, int point, String detail);
+	void createUserPointLog(Integer supplier_id ,int userId, int point, String detail);
 
-	List<UserCommissionPointsBean> queryUserCommissionPoints(int userId);
+
+	List<UserCommissionPointsBean> queryUserCommissionPoints(Integer supplier_id, int userId);
 
 }
