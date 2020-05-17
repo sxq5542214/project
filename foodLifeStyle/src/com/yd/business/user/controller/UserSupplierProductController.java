@@ -245,15 +245,14 @@ public class UserSupplierProductController extends BaseController {
 			String sid = request.getParameter("sid");
 			Integer supplier_id = Integer.parseInt(sid);
 			Long time = null;
+			if(StringUtil.isNotNull(timeString)){
+				time = Long.parseLong(timeString);
+			}
 			
 			int type = SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE;
 			SupplierBean supplier = supplierService.findSupplierById(supplier_id);
 			if(StringUtil.isNotNull(isRemote) || supplier.getIssale() == SupplierBean.ISSALE_REMOTE ) {
 				type = SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE;
-			}
-			if(StringUtil.isNotNull(timeString)){
-				time = Long.parseLong(timeString);
-				type = SupplierBalanceLogBean.TYPE_USER_SHOPORDER_EFF;
 			}
 			
 			ShopOrderInfoBean order ;

@@ -47,7 +47,7 @@ SupplierBean supplier = (SupplierBean) request.getAttribute("supplier");
       <form id="addForm" class="form-signup" action="supplier/shop/simpleSetUp.html" method="post" enctype="multipart/form-data" onsubmit="return checkRequire()">
         <input type="hidden" name="id" value="<%=supplier.getId()%>">
      	
-     	店铺展示图：
+     	店铺展示图（建议为门头图片，横屏）：
         <input id="supplier_img" name="supplier_img" type="file" class="file" data-browse-on-zone-click="true">
         
      	<div style="margin-top: 15px;">
@@ -133,7 +133,7 @@ function displayPersonalImg(){
 	if(val == '1'){
 		$("#charge_rate").html('收款费率（百分之）:<input type="number" name="charge_rate" value="<%=NumberUtil.convertNull(supplier.getCharge_rate()) / 10d%>" disabled="disabled" readonly="readonly" class="form-control"  required="required" maxlength="10" >');
 	}else{
-		$("#charge_rate").html('无费率，请上传个人微信收款码。此模式下无法为您通知收款消息、订单信息且营销功能无法使用。');
+		$("#charge_rate").html('无费率，请上传个人微信收款码。<span style="color:red;">此模式下因无法获取支付信息，将无法为您通知收款消息、订单信息且营销功能无法使用。</span>');
 	}
 	
 }

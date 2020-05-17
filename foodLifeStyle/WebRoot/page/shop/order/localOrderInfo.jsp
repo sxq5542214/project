@@ -128,7 +128,7 @@
 										<div class="order-msg">
 											<p class="title"><%=product.getSupplier_product_name() %></p>
 											<p class="price">
-												单价：￥<%=product.getOriginal_price() /100d %> 元   &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  数量：* <%=product.getNum() + couponStr %> <span></span>
+												单价：￥<%=product.getOriginal_price() /100d %> 元   &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  数量：* <%=product.getNum() + couponStr %> <!-- <span></span> -->
 											</p>
 											<p class="order-data" style="font-size: 0.7rem">可叠加积分抵扣：<%=product.getCost_points() / 100d %>元</p>
 										</div>
@@ -333,7 +333,7 @@ function pay(){
 				 points : points,
 				 coupon_record_id : coupon_record_id,
 				 sid : sid ,
-				 type : <%=SupplierBalanceLogBean.TYPE_USER_SHOPORDER_LOCAL%>
+				 type : <%=SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE%>
 		},
 		success : function(result) {
 			if(result == 'false'){

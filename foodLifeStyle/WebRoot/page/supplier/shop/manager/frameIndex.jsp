@@ -89,6 +89,8 @@ String openid = request.getParameter("openid");
                 	优惠券管理（暂未开放）</a></li>
                 <li><a >
                 	优惠券发放（暂未开放）</a></li>
+                <li><a >
+                	潜在用户（暂未开放）</a></li>
                 
                 	
               </ul>
@@ -120,7 +122,9 @@ String openid = request.getParameter("openid");
              <!--    <li role="separator" class="divider"></li>
                 <li class="dropdown-header">订单管理</li> -->
                 <li><a onclick="changeIframe('supplier/shop/toSimpleSetUpPage.html',this)">
-                	收款方式设置</a></li>
+                	收款方式设置（商户账户/个人微信号）</a></li>
+               	<li><a >
+               		店铺余额提现【至店铺创建人微信】（暂未开放）</a></li>
               </ul>
             </li>
     <!--         <li class="dropdown">

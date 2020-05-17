@@ -176,18 +176,9 @@ function pay(){
 			           	$("#payButton").hide();
 			         	location.href = "page/supplier/shop/paySuccess.jsp";			           	
 			           }else{
-			           	$.ajax({
-							url : "wechat/deleteUnifiedOrderByShop.do",
-							data : { outTradeNo : result.outTradeNo,
-									 transactionId : result.transactionId,
-									 openid : openid
-									},
-							success : function(d) {
 								$("#payBTN").val('立即支付');
 								$("#payBTN").show();
 								$("#payBTN").on('click','pay()');
-							}
-			           	});
 			           }
 			       }
 			   ); 
