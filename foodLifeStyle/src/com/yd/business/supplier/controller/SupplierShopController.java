@@ -68,8 +68,6 @@ public class SupplierShopController extends BaseController {
 	public static final String PAGE_SUPPLIERSHOPMANAGER_CATEGORY = "/page/supplier/shop/manager/category.jsp";
 	public static final String PAGE_SUPPLIERSHOP_SHOPCATEGORY = "/page/supplier/shop/shopCategory.jsp";
 	public static final String PAGE_SUPPLIERSHOPMANAGER_INDEX = "/page/supplier/shop/manager/index.jsp";
-	public static final String PAGE_SUPPLIER_SHOP_PAY_PRICE_PLATFORM = "/page/supplier/shop/payPricePlatForm.jsp";
-	public static final String PAGE_SUPPLIER_SHOP_PAY_PRICE_PERSONAL = "/page/supplier/shop/payPricePersonal.jsp";
 	public static final String PAGE_SUPPLIER_SHOP_SIMPLESETUP = "/page/supplier/shop/manager/shopSimpleSetUp.jsp";
 	
 	@Autowired
@@ -279,39 +277,6 @@ public class SupplierShopController extends BaseController {
 		}
 		return null;
 	}
-	
-	/**
-	 * 查询近期订单数据
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping("supplier/shop/toPayPricePage.html")
-	public ModelAndView toPayPricePage(HttpServletRequest request,HttpServletResponse response) {
-		
-		try {
-			String openid = getCurrentOpenid();
-			String sid = request.getParameter("sid");
-			
-			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
-			SupplierBean supplier = supplierService.findSupplierById(Integer.parseInt(sid));
-
-			Map<String, Object> model = new HashMap<String, Object>();
-			model.put("supplier", supplier);
-			if( (NumberUtil.convertNull(supplier.getPay_where()) == SupplierBean.PAY_WHERE_PERSONAL) && StringUtil.isNotNull(supplier.getPersonal_pay_img())) {
-				
-				return new ModelAndView(PAGE_SUPPLIER_SHOP_PAY_PRICE_PERSONAL,model );
-				
-			}else {
-				model.put("user", user);
-				return new ModelAndView(PAGE_SUPPLIER_SHOP_PAY_PRICE_PLATFORM,model );
-			}
-		} catch (Exception e) {
-			log.error(e, e);
-		}
-		return null;
-	}
-
 	
 	
 

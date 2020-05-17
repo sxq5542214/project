@@ -55,9 +55,19 @@ import com.yd.business.wechat.service.IWechatPayService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.CookieUtil;
 import com.yd.util.DateUtil;
+import com.yd.util.NumberUtil;
 import com.yd.util.StringUtil;
 @Controller
 public class UserSupplierProductController extends BaseController {
+	public static final String PAGE_USERSUPPLIERPRODUCT = "/page/user/supplierProductShop/index.jsp";
+	public static final String PAGE_USERSUPPLIERCATEGORY = "/page/user/supplierProductShop/category.jsp";
+	public static final String PAGE_USER_SHOP_ORDER = "/page/shop/order/orderInfo.jsp";
+	public static final String PAGE_USER_SHOP_LOCAL_ORDER = "/page/shop/order/localOrderInfo.jsp";
+	public static final String PAGE_USER_PLATFORM_INDEXPAGE = "/page/user/platform/index.jsp";
+	public static final String PAGE_USER_SUPPLIERSHOP_PACKAGEPRODUCTLIST = "/page/user/supplierProductShop/userSupplierPackageProductList.jsp";
+	public static final String PAGE_SUPPLIER_SHOP_ORDER_EFF = "/page/supplier/shop/orderEffInfo.jsp";
+	public static final String PAGE_SUPPLIER_SHOP_PAY_PRICE_PLATFORM = "/page/supplier/shop/payPricePlatForm.jsp";
+	public static final String PAGE_SUPPLIER_SHOP_PAY_PRICE_PERSONAL = "/page/supplier/shop/payPricePersonal.jsp";
 
 	@Resource
 	private ISupplierProductService supplierProductService;
@@ -108,13 +118,6 @@ public class UserSupplierProductController extends BaseController {
 	@Resource
 	private ISupplierPackageService supplierPackageService;
 	
-	public static final String PAGE_USERSUPPLIERPRODUCT = "/page/user/supplierProductShop/index.jsp";
-	public static final String PAGE_USERSUPPLIERCATEGORY = "/page/user/supplierProductShop/category.jsp";
-	public static final String PAGE_USER_SHOP_ORDER = "/page/shop/order/orderInfo.jsp";
-	public static final String PAGE_USER_SHOP_LOCAL_ORDER = "/page/shop/order/localOrderInfo.jsp";
-	public static final String PAGE_USER_PLATFORM_INDEXPAGE = "/page/user/platform/index.jsp";
-	public static final String PAGE_USER_SUPPLIERSHOP_PACKAGEPRODUCTLIST = "/page/user/supplierProductShop/userSupplierPackageProductList.jsp";
-	public static final String PAGE_SUPPLIER_SHOP_ORDER_EFF = "/page/supplier/shop/orderEffInfo.jsp";
 
 	
 	@Deprecated
@@ -226,6 +229,41 @@ public class UserSupplierProductController extends BaseController {
 		}
 		return null;
 	}
+	
+	
+
+	/**
+	 * 用户支付
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/user/supplier/toPayPricePage.html")
+	public ModelAndView toPayPricePage(HttpServletRequest request,HttpServletResponse response) {
+		
+		try {
+			String openid = getCurrentOpenid();
+			String sid = request.getParameter("sid");
+			
+			UserWechatBean user = userWechatService.findUserWechatByOpenId(openid);
+			SupplierBean supplier = supplierService.findSupplierById(Integer.parseInt(sid));
+
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("supplier", supplier);
+			if( (NumberUtil.convertNull(supplier.getPay_where()) == SupplierBean.PAY_WHERE_PERSONAL) && StringUtil.isNotNull(supplier.getPersonal_pay_img())) {
+				
+				return new ModelAndView(PAGE_SUPPLIER_SHOP_PAY_PRICE_PERSONAL,model );
+				
+			}else {
+				model.put("user", user);
+				return new ModelAndView(PAGE_SUPPLIER_SHOP_PAY_PRICE_PLATFORM,model );
+			}
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+
 	
 	
 

@@ -194,12 +194,12 @@
   	var isClickMask = true;
   	
   	function gotoRelease(){
-  		alert("您可以直接分享当前页面至好友/客户群，即可正式生效！<br> 您发布的是预订单（不收用户费用），注意在后台查看订单信息！");
+  		alert("您可以直接分享当前页面至好友/客户群，即可正式生效！");
   	}
   	weixinInit.setShareTitle("我的小店【<%=supplier.getName()%>】快来下单吧！");
 	weixinInit.setShareDesc("我的小店【<%=supplier.getName()%>】快来下单吧！");
-	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>wechat/user/toDistributeControll.do?conName=wx.supplier.shop.toSupplierShopPage&fromOpenid=<%=openid%>&sid=<%=supplier.getId()%>&isEff=1");
-	weixinInit.setShareImg("<%=BaseContext.getServerUrl()%>images/foods/food_share_img.jpg");
+	weixinInit.setShareLink("<%=BaseContext.getWechatOriginalInfo(user.getOriginalid()).getServer_url() %>wechat/user/toDistributeControll.do?conName=wx.supplier.shop.toSupplierShopPage&fromOpenid=<%=openid%>&sid=<%=supplier.getId()%>&isRemote=1");
+	weixinInit.setShareImg("<%=BaseContext.getServerUrl()%>images/shop/shopOpen.jpg");
 	
 	if(top!=self){
           if(top.location != self.location)

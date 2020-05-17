@@ -140,6 +140,12 @@ function pay(){
 	var coupon_record_id = '';
 	var sid = '<%=supplier.getId() %>';
 	
+	if(cost_money < 0.01){
+		alert('金额需要大于0.01元');
+		return false;
+	}
+	
+	
 	$.ajax({
 		url : "wechat/createUnifiedOrderByShop.do",
 		data : { cost_money : cost_money.toFixed(2),

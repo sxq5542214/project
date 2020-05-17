@@ -46,7 +46,7 @@
 	</select>
 	<insert id="insertSupplier" parameterType="supplier" useGeneratedKeys="true" keyProperty="id">
 		insert into ll_supplier(customer_id,parent_customer_id,level,parent_name,name,openid,status,type,issale,address,balance,points,deposit_money,create_time,contacts_name,contacts_phone,remark,modify_time,discount,pay_where,personal_pay_img,charge_rate)
-		values(#{customer_id},#{parent_customer_id},#{level},#{parent_name},#{name},#{openid},#{status},#{type},#{issale},#{address},#{balance},#{points},#{deposit_money},#{create_time},#{contacts_name},#{contacts_phone},#{remark},#{modify_time},#{discount},#{pay_where},#{personal_pay_img}，#{charge_rate})
+		values(#{customer_id},#{parent_customer_id},#{level},#{parent_name},#{name},#{openid},#{status},#{type},#{issale},#{address},#{balance},#{points},#{deposit_money},#{create_time},#{contacts_name},#{contacts_phone},#{remark},#{modify_time},#{discount},#{pay_where},#{personal_pay_img},#{charge_rate})
 	</insert>
 	<update id="updateSupplier" parameterType="supplier">
 		update ll_supplier 
