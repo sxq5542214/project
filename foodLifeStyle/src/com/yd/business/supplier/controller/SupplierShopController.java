@@ -138,7 +138,7 @@ public class SupplierShopController extends BaseController {
 	 * @return
 	 * @throws IOException 
 	 */
-	@RequestMapping("/wx/supplier/shop/toSupplierShopPage.html")
+	@RequestMapping("/supplier/shop/toSupplierShopPage.html")
 	public ModelAndView toSupplierShopPage(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		String sid = request.getParameter("sid");
 		String isEff = request.getParameter("isEff");

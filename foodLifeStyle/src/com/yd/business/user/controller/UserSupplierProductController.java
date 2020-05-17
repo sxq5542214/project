@@ -168,7 +168,7 @@ public class UserSupplierProductController extends BaseController {
 			if(listMyVisit.size() == 1) {
 				// 用户只访问过一个，则直接进入商户页
 				
-				return new ModelAndView("/wx/supplier/shop/toSupplierShopPage.html?sid="+ listMyVisit.get(0).getId() +"&fromOpenid="+openid);
+				return new ModelAndView("/supplier/shop/toSupplierShopPage.html?sid="+ listMyVisit.get(0).getId() +"&fromOpenid="+openid);
 				
 			}else {
 

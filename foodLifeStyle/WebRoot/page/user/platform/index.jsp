@@ -65,8 +65,8 @@ String openid = request.getParameter("openid");
             			if(StringUtil.isNotNull(supplier.getSupplier_img())){ img = supplier.getSupplier_img(); }
             		 %>
                 	<li>
-                    	<a href="wx/supplier/shop/toSupplierShopPage.html?sid=<%=supplier.getId() %>&fromOpenid=<%=openid %>" style="width: 160px;" class="tImg" ><img src="<%=img %>" style="width: 100%;height: 100%;"/></a>
-                        <a href="wx/supplier/shop/toSupplierShopPage.html?sid=<%=supplier.getId() %>&fromOpenid=<%=openid %>" style="width: 50%;margin-left: 5px;" class="tLnk" >
+                    	<a href="supplier/shop/toSupplierShopPage.html?sid=<%=supplier.getId() %>&fromOpenid=<%=openid %>" style="width: 160px;" class="tImg" ><img src="<%=img %>" style="width: 100%;height: 100%;"/></a>
+                        <a href="supplier/shop/toSupplierShopPage.html?sid=<%=supplier.getId() %>&fromOpenid=<%=openid %>" style="width: 50%;margin-left: 5px;" class="tLnk" >
                             <div class="tNm"><%=supplier.getName() %></div>
                         	<div class="tTit"><%=StringUtil.convertNull(supplier.getSupplier_title()) %></div>
                             <div class="tPrc">平均消费 &nbsp;&nbsp;&nbsp;&nbsp; &yen;<b><%=NumberUtil.convertNull(supplier.getAvg_price())/100d %></b> </div>
