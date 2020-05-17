@@ -49,6 +49,8 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	private String invoice_info;
 	private Integer type;
 	
+	private String product_name_str;
+	
 	private List<? extends ShopOrderProductBean> productList;
 	public List<? extends ShopOrderProductBean> getProductList() {
 		return productList;
@@ -70,6 +72,12 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	}
 	public Integer getType() {
 		return type;
+	}
+	public String getProduct_name_str() {
+		return product_name_str;
+	}
+	public void setProduct_name_str(String product_name_str) {
+		this.product_name_str = product_name_str;
 	}
 	public void setType(Integer type) {
 		this.type = type;

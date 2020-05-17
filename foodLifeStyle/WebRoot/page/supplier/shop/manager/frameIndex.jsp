@@ -75,6 +75,8 @@ String openid = request.getParameter("openid");
               <ul class="dropdown-menu">
              <!--    <li role="separator" class="divider"></li>
                 <li class="dropdown-header">订单管理</li> -->
+                <li><a onclick="changeIframe('order/shop/toShopOrderListPage.html?openid=<%=openid %>&sid=<%=sid%>',this)">
+                	订单列表（每日详情）</a></li>
                 <li><a onclick="changeIframe('order/shop/toShopOrderEffListPage.html?openid=<%=openid %>&sid=<%=sid%>',this)">
                 	预约订单列表（每日详情）</a></li>
               </ul>

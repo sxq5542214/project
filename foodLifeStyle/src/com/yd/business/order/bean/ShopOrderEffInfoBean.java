@@ -18,7 +18,6 @@ import com.yd.util.AutoInvokeGetSetMethod;
 public class ShopOrderEffInfoBean extends ShopOrderInfoBean {
 	private Integer old_order_id;
 	private String eff_date;
-	private String product_name_str;
 //	private List<ShopOrderEffProductBean> effProductList;
 	
 	public ShopOrderEffInfoBean(){
@@ -48,12 +47,6 @@ public class ShopOrderEffInfoBean extends ShopOrderInfoBean {
 	}
 	public void setOld_order_id(Integer old_order_id) {
 		this.old_order_id = old_order_id;
-	}
-	public String getProduct_name_str() {
-		return product_name_str;
-	}
-	public void setProduct_name_str(String product_name_str) {
-		this.product_name_str = product_name_str;
 	}
 
 //	public List<ShopOrderEffProductBean> getEffProductList() {

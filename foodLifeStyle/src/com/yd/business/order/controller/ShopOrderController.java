@@ -43,6 +43,7 @@ import com.yd.util.StringUtil;
 @Controller
 public class ShopOrderController extends BaseController {
 	public static final String PAGE_SUPPLIER_ORDER_EFFORDERLIST = "/page/supplier/order/effOrderList.jsp";
+	public static final String PAGE_SUPPLIER_ORDER_ORDERLIST = "/page/supplier/order/orderList.jsp";
 
 	@Resource
 	private IShopOrderService shopOrderService;
@@ -332,6 +333,41 @@ public class ShopOrderController extends BaseController {
 			map.put("listOrder", listOrder);
 			
 			return new ModelAndView(PAGE_SUPPLIER_ORDER_EFFORDERLIST ,map );
+		} catch (Exception e) {
+			log.error(e, e);
+			writeJson(response, TIPS_STRING_ERROR);
+		}
+		return null;
+	}
+
+	@RequestMapping("**/order/shop/toShopOrderListPage.html")
+	public ModelAndView toShopOrderListPage(HttpServletRequest request,HttpServletResponse response){
+		try {
+			//查询所有待发货的订单
+			String queryDate = request.getParameter("queryDate");
+			String sid = request.getParameter("sid");
+			String openid = getCurrentOpenid();
+			
+			SupplierBean supplier = supplierService.findSupplier(Integer.parseInt(sid), openid);
+			if(supplier == null) {
+				writeJson(response, TIPS_STRING_DENIED); 
+				return null;
+			}
+			if(StringUtil.isNull(queryDate)) {
+				queryDate = DateUtil.getNowOnlyDateStr();
+			}
+			ShopOrderInfoBean bean = new ShopOrderInfoBean();
+			bean.setSupplier_id(Integer.parseInt(sid));
+			bean.setCreate_time(queryDate);
+//			bean.setStatus(ShopOrderEffInfoBean.STATUS_ORDERING);
+			bean.setNotInStatus( ShopOrderEffInfoBean.STATUS_WAIT +""  );
+			bean.setOrderby(" order by status desc, i.id desc ");
+			List<ShopOrderInfoBean> listOrder = shopOrderService.queryShopOrderAndProductList(bean);
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("listOrder", listOrder);
+			
+			return new ModelAndView(PAGE_SUPPLIER_ORDER_ORDERLIST ,map );
 		} catch (Exception e) {
 			log.error(e, e);
 			writeJson(response, TIPS_STRING_ERROR);
