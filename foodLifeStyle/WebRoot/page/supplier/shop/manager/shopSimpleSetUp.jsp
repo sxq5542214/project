@@ -47,6 +47,12 @@ SupplierBean supplier = (SupplierBean) request.getAttribute("supplier");
       <form id="addForm" class="form-signup" action="supplier/shop/simpleSetUp.html" method="post" enctype="multipart/form-data" onsubmit="return checkRequire()">
         <input type="hidden" name="id" value="<%=supplier.getId()%>">
      	
+     	
+     	账户余额：
+        <input type="text" class="form-control" readonly="readonly" disabled="disabled" value="<%=supplier.getBalance() / 100d %>">
+        
+     	
+     	
      	店铺展示图（建议为门头图片，横屏）：
         <input id="supplier_img" name="supplier_img" type="file" class="file" data-browse-on-zone-click="true">
         

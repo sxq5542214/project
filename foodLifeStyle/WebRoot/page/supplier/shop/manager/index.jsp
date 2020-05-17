@@ -302,7 +302,7 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
                 		str += '新增客户【' + result.dataList[i].daycustomer + '】个，';
                 		str += '累计客户【' + result.dataList[i].customercount + '】个，';
                 		str += '新增订单【' + result.dataList[i].dayordercount + '】个，';
-                		str += '营收【' + (result.dataList[i].daymoney / 100).toFixed(2) + '】元<br>';
+                		str += '订单总金额【' + (result.dataList[i].daymoney / 100).toFixed(2) + '】元<br>';
                 	}
                 	
                 	str += '以下是最近5笔订单信息：';
