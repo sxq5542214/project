@@ -292,8 +292,8 @@ public class SupplierShopController extends BaseController {
 			String personal_pay_img = null;
 			
 			//压缩并写入图片到磁盘
-			int width = 160;
-			int height = 90;
+			int width = 160 * 3;
+			int height = 90 * 3;
 			String tempDir = ImageBean.THUMB_IMG_DIR + supplier.getId() + "/";
 			String targetDir = request.getServletContext().getRealPath("/")+ "/" + tempDir;
 			
