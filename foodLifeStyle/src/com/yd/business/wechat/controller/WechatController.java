@@ -52,6 +52,7 @@ import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.HttpUtil;
 import com.yd.util.JsonUtil;
 import com.yd.util.MD5Util;
+import com.yd.util.NumberUtil;
 import com.yd.util.StringUtil;
 import com.yd.util.WebUtil;
 
@@ -320,6 +321,7 @@ public class WechatController extends BaseController {
 	public ModelAndView createUnifiedOrderByShop(HttpServletRequest request,HttpServletResponse response){
 		
 		String coupon_record_id = request.getParameter("coupon_record_id");			//优惠卷id
+		String balance_card_id = request.getParameter("balance_card_id");			//折扣卡/储值卡id
 		String openid = request.getParameter("openid");								//openid 	123
 		String cost_money = request.getParameter("cost_money");								//用户需要支付的价格		14.20
 		String points = request.getParameter("points");							//该产品可以抵用的积分		100
@@ -332,6 +334,8 @@ public class WechatController extends BaseController {
 		
 		Map<String,String> attachMap = new HashMap<String, String>();
 		attachMap.put("coupon_record_id", coupon_record_id);
+		attachMap.put("balance_card_id", balance_card_id);
+		attachMap.put("cost_balance", cost_balance.toString());
 		attachMap.put("sid", sid);
 		attachMap.put("type", type);
 		String attachStr = JsonUtil.convertObjectToJsonString(attachMap);
@@ -567,43 +571,15 @@ public class WechatController extends BaseController {
 		if(typeStr != null) {
 			Integer type = Integer.parseInt(typeStr);
 			Integer sid = Integer.parseInt(attach.get("sid"));
+			Integer coupon_id = NumberUtil.parseInt(attach.get("coupon_record_id"));
+			Integer card_record_id = NumberUtil.parseInt(attach.get("balance_card_id"));
 			String remark = attach.get("remark");
-			switch (type) {
-			case SupplierBalanceLogBean.TYPE_USER_PAYDIRECT:
-				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
-				
-				break;
-			case SupplierBalanceLogBean.TYPE_USER_RECHARGE:
-//				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
-				
-				break;
-			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE:
-
-				//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
-				userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
-				//通过订单号在订购表中更改状态为更新支付成功状态
-				shopOrderService.updateShopOrderPaySuccess(cash_fee,orderCode );
-				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
-				
-				break;
-			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE:
-
-				//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
-				userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, result.getOut_trade_no());
-				//通过订单号在订购表中更改状态为更新支付成功状态
-				shopOrderService.updateShopOrderPaySuccess(cash_fee,orderCode );
-				//修改订单状态为完成
-				shopOrderService.updateShopOrderStatus(orderCode, ShopOrderInfoBean.STATUS_FINISH);
-				supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
-				
-				break;
-			}
 			
+			
+			shopOrderService.notifyShopOrder(sid, orderCode, result.getOut_trade_no(), cash_fee, coupon_id, card_record_id, type, remark);
 			
 			
 		}
-		
-		
 		
 		
 		

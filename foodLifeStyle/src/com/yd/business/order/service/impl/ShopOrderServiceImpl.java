@@ -32,10 +32,12 @@ import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponConfigBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierStoreBalanceCardRecordBean;
 import com.yd.business.supplier.bean.SupplierUserBean;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.ISupplierStoreService;
 import com.yd.business.supplier.service.ISupplierUserService;
 import com.yd.business.supplier.service.impl.SupplierServiceImpl;
 import com.yd.business.supplier.service.impl.SupplierUserServiceImpl;
@@ -84,6 +86,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	private ISupplierService supplierService;
 	@Resource
 	private ISupplierUserService supplierUserService;
+	@Resource
+	private ISupplierStoreService supplierStoreService;
 	
 
 	@Override
@@ -345,6 +349,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		order.setCost_money(0);
 		order.setCost_balance(0);
 		order.setCoupon_total_price(0);
+		order.setStore_card_total_price(0);
 		order.setType(type);
 		((ShopOrderEffInfoBean)order).setEff_date(effDate);
 		
@@ -754,6 +759,94 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		shopOrderDao.createShopOrderRemind(bean);
 		
 		return bean;
+	}
+	
+	
+
+	@Override
+	public String notifyShopOrderByBalance(Integer sid,String orderCode,String openid, int balance,Integer coupon_id,Integer card_record_id , Integer type,String remark) {
+		String result = "您的储值卡余额无法支付当前订单，请重新选择";
+		SupplierUserBean spUser = supplierUserService.findSupplierUser(openid, sid);
+		//如果优惠卷规记录id不等于空
+		if(coupon_id != null ){
+			SupplierCouponRecordBean couponRecordBean = new SupplierCouponRecordBean();
+			couponRecordBean.setUserid(spUser.getUser_id());
+			couponRecordBean.setStatus(SupplierCouponRecordBean.STATUS_CANUSE);
+			couponRecordBean.setId(coupon_id);
+			couponRecordBean  = supplierCouponService.findCouponRecord(couponRecordBean);
+			//根据优惠卷信息 更新订单数据，主要是价格侧的变动
+			this.updateShopOrderByCoupon(orderCode, couponRecordBean);
+			if(couponRecordBean == null){
+				log.error(" notifyShopOrder couponRecord is null ,userid:"+ spUser.getUser_id() +" recordid:" + coupon_id);
+			}
+		}
+		
+		// 使用了折扣卡/储值卡 
+		if(card_record_id != null) {
+			SupplierStoreBalanceCardRecordBean cardRecord = supplierStoreService.findStoreBalanceCardRecordById(card_record_id);
+			
+			ShopOrderInfoBean order = this.findShopOrderInfoByCode(orderCode);
+			int money = order.getCost_money();
+			int discountMoney = money - (money * cardRecord.getDiscount()) / 1000;
+			balance = money * cardRecord.getDiscount() / 1000;
+			if(money <= cardRecord.getBalance() && balance <= cardRecord.getBalance() ) {
+				order.setCost_balance(balance);
+				order.setCost_money(0);
+				order.setStore_card_total_price(discountMoney);
+				//修改订单余额
+				updateShopOrderInfo(order);
+			}else {
+				return result;
+			}
+			result = notifyShopOrder(sid, orderCode, openid, 0, coupon_id, card_record_id, type, remark);
+			if("success".equalsIgnoreCase(result)) {
+				String remarkStr  = "订单消费";
+				supplierStoreService.updateStoreCardRecordBalance(openid, card_record_id, -balance, sid,orderCode,remarkStr);
+			}
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public String notifyShopOrder(Integer sid,String orderCode,String openid, int cash_fee,Integer coupon_id,Integer card_record_id , Integer type,String remark) {
+		
+		switch (type) {
+		case SupplierBalanceLogBean.TYPE_USER_PAYDIRECT:
+			supplierService.updateSupplierBalance(sid, cash_fee, orderCode, openid ,type,remark);
+			
+			break;
+		case SupplierBalanceLogBean.TYPE_USER_RECHARGE:
+//			supplierService.updateSupplierBalance(sid, cash_fee, orderCode, result.getOpenid(),type,remark);
+			
+			break;
+		case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE:
+
+			//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
+			userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, orderCode);
+			//通过订单号在订购表中更改状态为更新支付成功状态
+			this.updateShopOrderPaySuccess(cash_fee,orderCode );
+			supplierService.updateSupplierBalance(sid, cash_fee, orderCode, openid,type,remark);
+			
+			break;
+		case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE:
+
+			//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
+			userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, orderCode );
+			//通过订单号在订购表中更改状态为更新支付成功状态
+			this.updateShopOrderPaySuccess(cash_fee,orderCode );
+			//修改订单状态为完成
+			this.updateShopOrderStatus(orderCode, ShopOrderInfoBean.STATUS_FINISH);
+			supplierService.updateSupplierBalance(sid, cash_fee, orderCode, openid,type,remark);
+			
+			break;
+		}
+		
+		
+		
+		
+		return "success";
+		
 	}
 	
 }

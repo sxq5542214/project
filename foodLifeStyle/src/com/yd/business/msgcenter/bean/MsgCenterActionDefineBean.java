@@ -184,6 +184,14 @@ public class MsgCenterActionDefineBean extends BaseBean {
 	 */
 	public static final String ACTION_TYPE_SUPPLIER_PACKAGE_UPDATE_RECORD = "supplier_package_update_record";
 	/**
+	 * 	商户给用户分配折扣卡
+	 */
+	public static final String ACTION_TYPE_SUPPLIER_STORE_CARD_ASSIGN = "supplier_store_card_assign";
+	/**
+	 * 	商户修改用户分配折扣卡内容
+	 */
+	public static final String ACTION_TYPE_SUPPLIER_STORE_CARD_UPDATE_RECORD = "supplier_store_card_update_record";
+	/**
 	 * 	商户了新增用户
 	 */
 	public static final String ACTION_TYPE_SUPPLIER_USER_ADD = "supplier_user_add";

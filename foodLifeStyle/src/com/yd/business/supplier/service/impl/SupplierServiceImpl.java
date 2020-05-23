@@ -194,36 +194,39 @@ public class SupplierServiceImpl extends BaseService implements
 	 */
 	@Override
 	public Integer updateSupplierBalance(Integer sid,Integer cash_fee,String orderCode,String openid,Integer type,String remark) {
-		
-		SupplierBean supplier = findSupplierById(sid);
-		SupplierUserBean su = supplierUserService.findSupplierUser(openid, sid);
-		int rate = supplier.getCharge_rate();	//单位：千分之
-		int subCharge = cash_fee * rate / 1000;
-		int addBalance = cash_fee - subCharge;
-		
-		supplierDao.addSupplierBalance(sid,addBalance);
-		
-		//创建修改日志
-		SupplierBalanceLogBean bean = new SupplierBalanceLogBean();
-		bean.setSupplier_id(sid);
-		bean.setAdd_balance(addBalance);
-		bean.setCharge_rate(supplier.getCharge_rate());
-		bean.setCreate_time(DateUtil.getNowDateStr());
-		bean.setOpenid(openid);
-		bean.setOrder_code(orderCode);
-		bean.setRemark(remark);
-		bean.setService_fee(subCharge);
-		bean.setTotal_balance(supplier.getBalance() + addBalance);
-		bean.setType(type);
-		
-		supplierDao.createSupplierBalanceLog(bean );
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("nick_name", su.getNick_name());
-		map.put("addBalance", addBalance / 100d );
-		map.put("totalBalance",  (supplier.getBalance() + addBalance ) / 100d );
-		map.put("remark",  remark );
-		
-		msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_PAY_DIRECT, null, map);
+		int addBalance = 0;
+		if(cash_fee != 0) {
+			SupplierBean supplier = findSupplierById(sid);
+			SupplierUserBean su = supplierUserService.findSupplierUser(openid, sid);
+			int rate = supplier.getCharge_rate();	//单位：千分之
+			int subCharge = cash_fee * rate / 1000;
+			addBalance = cash_fee - subCharge;
+			
+			supplierDao.addSupplierBalance(sid,addBalance);
+			
+			//创建修改日志
+			SupplierBalanceLogBean bean = new SupplierBalanceLogBean();
+			bean.setSupplier_id(sid);
+			bean.setAdd_balance(addBalance);
+			bean.setCharge_rate(supplier.getCharge_rate());
+			bean.setCreate_time(DateUtil.getNowDateStr());
+			bean.setOpenid(openid);
+			bean.setOrder_code(orderCode);
+			bean.setRemark(remark);
+			bean.setService_fee(subCharge);
+			bean.setTotal_balance(supplier.getBalance() + addBalance);
+			bean.setType(type);
+			
+			supplierDao.createSupplierBalanceLog(bean );
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("nick_name", su.getNick_name());
+			map.put("addBalance", addBalance / 100d );
+			map.put("totalBalance",  (supplier.getBalance() + addBalance ) / 100d );
+			map.put("remark",  remark );
+			
+			msgCenterActionService.saveAndHandleUserAction(supplier.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_WECHAT_USER_PAY_DIRECT, null, map);
+
+		}
 		
 		return addBalance;
 	}

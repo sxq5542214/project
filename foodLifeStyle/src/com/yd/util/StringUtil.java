@@ -17,8 +17,7 @@ import java.util.Map;
 public class StringUtil
 {
 	public static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	public static String convertNull(String str)
-	{
+	public static String convertNull(String str){
 		if(str == null || "".equals(str.trim()))
 		{
 			return "";
@@ -26,6 +25,12 @@ public class StringUtil
 		{
 			return str;
 		}
+	}
+	public static String convertNull(String str,String optStr){
+		if(isNull(str)) {
+			return optStr;
+		}
+		return convertNull(str);
 	}
 
 	public static String convertNull(Integer str)

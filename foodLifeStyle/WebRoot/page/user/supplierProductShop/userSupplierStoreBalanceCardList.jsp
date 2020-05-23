@@ -1,3 +1,5 @@
+<%@page import="com.yd.business.supplier.bean.SupplierStoreBalanceCardRecordBean"%>
+<%@page import="com.yd.business.supplier.bean.SupplierStoreBalanceCardBean"%>
 <%@page import="com.yd.util.JsonUtil"%>
 <%@page import="com.yd.business.supplier.bean.SupplierPackageProductRecordBean"%>
 <%@page import="com.yd.util.NumberUtil"%>
@@ -9,9 +11,8 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
-	List<SupplierPackageProductRecordBean> list = (List<SupplierPackageProductRecordBean>) request.getAttribute("list");
+	List<SupplierStoreBalanceCardRecordBean> list = (List<SupplierStoreBalanceCardRecordBean>) request.getAttribute("list");
 	Object openid = request.getAttribute("openid");
-	String jsoStr = JsonUtil.convertObjectToJsonString(list);
 %>
 <!doctype html>
 <html>
@@ -22,7 +23,7 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0" />
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>我的套餐详情</title>
+<title>我的折扣卡/储值卡详情</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/index.css">
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js" type="text/javascript" ></script>
@@ -30,9 +31,9 @@
 </head>
 
 <body>
-		<div style="position: absolute;" onclick="javascript:history.go(-1);">
+	<!-- 	<div style="position: absolute;" onclick="javascript:history.go(-1);">
 			<img style="width: 0.6rem; margin-top: 8px; margin-left: 8px;" src="page/shop/order/images/c_back_btn.png">
-		</div>
+		</div> -->
 	<div id="_contain">
 
 		<div >
@@ -63,17 +64,18 @@
 				<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;">暂无数据</span> 
 			<%}else{ %>
 			<%
-				for (SupplierPackageProductRecordBean bean : list) {
+				for (SupplierStoreBalanceCardRecordBean bean : list) {
 			%>
-			<div class="fb" style="padding:5px;height:auto; width: 98%;padding-top: 0px;">
+			<div class="fb" style="padding:5px;height:auto; width: 98%;padding-top: 0px;" >
 				<div class="fb-lt" style="width: 100%;">
 					<!-- <img src="images/scenics/scenic_3.png"> -->
-
-					<p class="price">
-						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;">商品名称：<big  style="color: black;"><%=bean.getSupplier_product_name()%></big></span>
-						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;">剩余次数：<big style="color: black;"><%=bean.getNum() %></big></span>
 					
-						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;">截至日期：<big style="color: black;"><%=bean.getDff_time() %></big></span> 
+					<p class="price">
+						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">店铺名称：<big  style="color: black;"><%=bean.getSupplier_name() %></big></span>
+						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">折扣卡名：<big  style="color: black;"><%=bean.getName()%></big></span>
+						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">折扣额度：<big style="color: black;"><%=NumberUtil.divideHave100(bean.getDiscount()) %>折</big></span>
+						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">剩余金额：<big style="color: black;"><%=NumberUtil.divideHave100(bean.getBalance()) %>元</big>(点击可查看消费记录)</span>
+						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">失效日期：<big style="color: black;"><%=bean.getDff_time() %></big></span> 
 					</p>
 				</div>
 			</div>
@@ -109,16 +111,6 @@
 </body>
 <script type="text/javascript">
 
-var listData = $.parseJSON( '<%=jsoStr%>' );
-var packageList = new Array();
-var packName = '';
-for(var i = 0 ; i < listData.length ; i++){
-	var data = listData[i];
-	if(packName != data.supplier_package_name){
-		packageList.push(data.supplier_package_name);
-		packName = data.supplier_package_name;
-	}
-}
 
 
 	// JavaScript Document

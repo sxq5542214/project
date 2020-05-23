@@ -34,6 +34,7 @@ import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
+import com.yd.util.NumberUtil;
 import com.yd.util.StringUtil;
 
 /**
@@ -375,5 +376,38 @@ public class ShopOrderController extends BaseController {
 		return null;
 	}
 	
+	
+	
+
+	@RequestMapping("**/order/shop/notifyShopOrderByBalance.html")
+	public ModelAndView notifyShopOrderByBalance(HttpServletRequest request,HttpServletResponse response){
+		try {
+
+			String coupon_record_id = request.getParameter("coupon_record_id");			//优惠卷id
+			String balance_card_id = request.getParameter("balance_card_id");			//折扣卡/储值卡id
+			String openid = request.getParameter("openid");								//openid 	123
+			String cost_money = request.getParameter("cost_money");								//用户需要支付的价格		14.20
+			String points = request.getParameter("points");							//该产品可以抵用的积分		100
+			String balanceStr = request.getParameter("cost_balance");					//可以使用的余额			100
+			Integer cost_balance = StringUtil.isNull(balanceStr) ? 0:Integer.parseInt(balanceStr);	//给eff_numStr字段          String类型转换成Integer类型
+			String phone = request.getParameter("phone");											//充值的电话号码			18755171111
+			String orderCode = request.getParameter("order_code");				//定单号
+			int sid = Integer.parseInt(request.getParameter("sid"));		// 商户号
+			Integer type = Integer.parseInt(request.getParameter("type"));		// 支付分类	
+			String remark = request.getParameter("remark");	
+			
+			Integer coupon_id = NumberUtil.parseInt(coupon_record_id);
+			Integer card_record_id = NumberUtil.parseInt(balance_card_id);
+			
+			String result = shopOrderService.notifyShopOrderByBalance(sid, orderCode, openid, cost_balance, coupon_id, card_record_id, type, remark);
+			
+			writeJson(response, result);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			writeJson(response, TIPS_STRING_ERROR);
+		}
+		return null;
+	}
 	
 }

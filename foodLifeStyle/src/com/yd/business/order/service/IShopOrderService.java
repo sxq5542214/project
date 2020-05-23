@@ -78,6 +78,12 @@ public interface IShopOrderService {
 
 	List<ShopOrderEffInfoBean> queryShopOrderEffAndProductList(ShopOrderEffInfoBean bean);
 
+	String notifyShopOrder(Integer sid, String orderCode, String openid, int cash_fee, Integer coupon_id,
+			Integer card_record_id, Integer type, String remark);
+
+	String notifyShopOrderByBalance(Integer sid, String orderCode, String openid, int balance, Integer coupon_id,
+			Integer card_record_id, Integer type, String remark);
+
 
 
 

@@ -30,22 +30,32 @@ public class TokenFilter extends BaseFilter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
 		request.setCharacterEncoding("utf-8");
-		
-		if( req.getRequestURI().indexOf("/admin/") >0 ){
+		String uri = req.getRequestURI();
+		if( uri.indexOf("/admin/") >0 ){
 			Object user = req.getSession().getAttribute(CustomerServiceImpl._CURRENT_USER);
 			if(user == null){
 				String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+req.getContextPath()+"/";
 				resp.sendRedirect(basePath+"wxLogin.htm");
 			}
-		}else if( req.getRequestURI().indexOf("/app/") >0 ){
+		}else if( uri.indexOf("/app/") >0 ){
 			Object user = req.getSession().getAttribute(CustomerServiceImpl._CURRENT_USER);
 			if(user == null){
 				resp.sendRedirect(BaseContext.getServerUrl()+"page/wechat/login.jsp");
 			}
-		}else if( req.getRequestURI().indexOf("/wx/") >0 ){
+		}else if( uri.indexOf("/wx/") >0 ){
 			Object openid = req.getSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
 			if(openid == null){
 				resp.sendRedirect(BaseContext.getServerUrl()+"wechat/user/toDistributeControll.do?conName=wechat.user.toReopenTips");
+			}
+		}
+		if( uri.indexOf("/supplier/shop/") >0 
+				|| uri.indexOf("/supplierProduct/") >0 
+				|| uri.indexOf("/supplier/package/") >0 
+				|| uri.indexOf("/supplier/store/") >0  ){
+			Object supplier = req.getSession().getAttribute(WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER);
+			//非商户商城界面
+			if(supplier == null && uri.indexOf("toSupplierShopPage") < 0){
+				resp.sendRedirect(BaseContext.getServerUrl()+"wechat/user/toDistributeControll.do?conName=wx.supplier.shop.toMySupplierShopManagerFramePage");
 			}
 		}
 		

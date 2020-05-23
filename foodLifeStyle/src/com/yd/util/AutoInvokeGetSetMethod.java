@@ -179,10 +179,12 @@ public class AutoInvokeGetSetMethod
 						if(realType == String.class){
 //	System.out.println("autoGetSet key:"+key);
 							if(inType == Integer.class || inType == int.class){
-								realValue = Integer.valueOf((String)value);
+								BigDecimal bd = new BigDecimal((String)value);
+								realValue = bd.intValue();
 							}
 							if(inType == Long.class || inType == long.class){
-								realValue = Long.valueOf((String)value);
+								BigDecimal bd = new BigDecimal((String)value);
+								realValue = bd.longValue();
 							}
 							if(inType == String.class){
 								realValue = (String)value;

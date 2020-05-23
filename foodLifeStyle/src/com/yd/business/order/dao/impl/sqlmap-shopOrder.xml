@@ -17,24 +17,24 @@
 	
 	<insert id="createShopOrderInfo" parameterType="shopOrderInfo" useGeneratedKeys="true" keyProperty="id" >
 		insert into ll_shop_order_info(supplier_id,user_id,nick_name,order_code,order_name,order_img,create_time,
-		modify_time,cost_price,cost_points,cost_money,cost_balance,coupon_total_price,status,remark,
+		modify_time,cost_price,cost_points,cost_money,cost_balance,coupon_total_price,store_card_total_price,status,remark,
 		event_type,lucky_money,share_time,share_type,is_sended,express_price,type,
 		contact_name,contact_phone,contact_address,express_mode,express_date,
 		express_time,express_order_code,invoice_type,invoice_info) values(#{supplier_id},#{user_id},
 		#{nick_name},#{order_code},#{order_name},#{order_img},#{create_time},#{modify_time},#{cost_price},
-		#{cost_points},#{cost_money},#{cost_balance},#{coupon_total_price},#{status},#{remark},#{event_type},
+		#{cost_points},#{cost_money},#{cost_balance},#{coupon_total_price},#{store_card_total_price},#{status},#{remark},#{event_type},
 		#{lucky_money},#{share_time},#{share_type},#{is_sended},#{express_price},#{type},
 		#{contact_name},#{contact_phone},#{contact_address},#{express_mode},
 		#{express_date},#{express_time},#{express_order_code},#{invoice_type},#{invoice_info})
 	</insert>
 	<insert id="createShopOrderEffInfo" parameterType="shopOrderEffInfo" useGeneratedKeys="true" keyProperty="id" >
 		insert into ll_shop_order_eff_info(supplier_id,user_id,nick_name,order_code,order_name,order_img,create_time,
-		modify_time,cost_price,cost_points,cost_money,cost_balance,coupon_total_price,status,remark,
+		modify_time,cost_price,cost_points,cost_money,cost_balance,coupon_total_price,store_card_total_price,status,remark,
 		event_type,lucky_money,share_time,share_type,is_sended,express_price,type,
 		contact_name,contact_phone,contact_address,express_mode,express_date,
 		express_time,express_order_code,invoice_type,invoice_info,eff_date,old_order_id) values(#{supplier_id},#{user_id},
 		#{nick_name},#{order_code},#{order_name},#{order_img},#{create_time},#{modify_time},#{cost_price},
-		#{cost_points},#{cost_money},#{cost_balance},#{coupon_total_price},#{status},#{remark},#{event_type},
+		#{cost_points},#{cost_money},#{cost_balance},#{coupon_total_price},#{store_card_total_price},#{status},#{remark},#{event_type},
 		#{lucky_money},#{share_time},#{share_type},#{is_sended},#{express_price},#{type},
 		#{contact_name},#{contact_phone},#{contact_address},#{express_mode},
 		#{express_date},#{express_time},#{express_order_code},#{invoice_type},#{invoice_info},#{eff_date},#{old_order_id})
@@ -111,6 +111,8 @@
 			<if test=" express_order_code != null"> express_order_code = #{express_order_code} ,</if>
 			<if test=" invoice_type != null"> invoice_type = #{invoice_type} ,</if>
 			<if test=" invoice_info != null"> invoice_info = #{invoice_info} ,</if>
+			<if test=" store_card_total_price != null"> store_card_total_price = #{store_card_total_price} ,</if>
+			
 		</set>
 		<where>
 			<if test=" id != null"> and id = #{id} </if>
@@ -152,6 +154,8 @@
 			<if test=" invoice_type != null"> invoice_type = #{invoice_type} ,</if>
 			<if test=" invoice_info != null"> invoice_info = #{invoice_info} ,</if>
 			<if test=" eff_date != null"> eff_date = #{eff_date} ,</if>
+			<if test=" store_card_total_price != null"> store_card_total_price = #{store_card_total_price} ,</if>
+			
 		</set>
 		<where>
 			<if test=" id != null"> and id = #{id} </if>

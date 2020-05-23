@@ -96,13 +96,13 @@ Integer id = pack.getId();
         
                 
         <label for="product_price" class="sr-only" >销售价</label>
-        <input type="number" id="product_price" name="product_price" class="form-control" placeholder="请输入产品套餐销售价格（单位分）" required="required" value="<%=StringUtil.convertNull(pack.getProduct_price()) %>">
+        <input type="number" id="product_price" name="product_price" step="0.01" class="form-control" placeholder="请输入产品套餐销售价格（单位元）" required="required" value="<%=NumberUtil.divideHave100(pack.getProduct_price()) %>">
         
         <label for="product_real_price" class="sr-only" >市场价</label>
-        <input type="number" id="product_real_price" name="product_real_price" class="form-control" placeholder="请输入产品套餐市场价/划线价（单位分）" required="required" value="<%=StringUtil.convertNull(pack.getProduct_real_price()) %>">
+        <input type="number" id="product_real_price" name="product_real_price" step="0.01" class="form-control" placeholder="请输入产品套餐市场价/划线价（单位元）" required="required" value="<%=NumberUtil.divideHave100(pack.getProduct_real_price()) %>">
         
         <label for="prime_cost_price" class="sr-only" >成本价</label>
-        <input type="number" id="prime_cost_price" name="prime_cost_price" class="form-control" placeholder="请输入产品套餐成本价（单位分）" required="required" value="<%=StringUtil.convertNull(pack.getPrime_cost_price()) %>">
+        <input type="number" id="prime_cost_price" name="prime_cost_price" step="0.01" class="form-control" placeholder="请输入产品套餐成本价（单位元）" required="required" value="<%=NumberUtil.divideHave100(pack.getPrime_cost_price()) %>">
         
         
         <label for="remark" class="sr-only" >套餐备注</label>

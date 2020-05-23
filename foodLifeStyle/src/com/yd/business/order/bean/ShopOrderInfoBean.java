@@ -29,6 +29,7 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	private Integer cost_money;
 	private Integer cost_balance;
 	private Integer coupon_total_price;
+	private Integer store_card_total_price;
 	private Integer status;
 	private String remark;
 	private Integer event_type;
@@ -261,5 +262,11 @@ public class ShopOrderInfoBean extends OrderProductLogBean {
 	}
 	public void setSupplier_id(Integer supplier_id) {
 		this.supplier_id = supplier_id;
+	}
+	public Integer getStore_card_total_price() {
+		return store_card_total_price;
+	}
+	public void setStore_card_total_price(Integer store_card_total_price) {
+		this.store_card_total_price = store_card_total_price;
 	}
 }

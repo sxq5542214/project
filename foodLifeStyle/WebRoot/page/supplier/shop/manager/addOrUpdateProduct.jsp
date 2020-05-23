@@ -1,3 +1,4 @@
+<%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.supplier.bean.SupplierProductBean"%>
 <%@page import="com.yd.util.JsonUtil"%>
 <%@page import="org.json.JSONObject"%>
@@ -66,14 +67,14 @@ if(bean == null){
         <label for="product_title" class="sr-only" >商品描述</label>
         <input type="text" id="product_title" name="product_title" value="<%=StringUtil.convertNull(bean.getProduct_title())%>" class="form-control" placeholder="请输入商品描述,建议20字以内" required="required" maxlength="30" value="">
         
-        <label for="product_price" class="sr-only" >商品销售价格（分为单位）</label>
-        <input type="number" id="product_price" name="product_price" value="<%=StringUtil.convertNull(bean.getProduct_price())%>" class="form-control" placeholder="请输入商品销售价格（分为单位）" required="required" maxlength="8" value="">
+        <label for="product_price" class="sr-only" >商品销售价格（元为单位）</label>
+        <input type="number" id="product_price" name="product_price" step="0.01"  value="<%=NumberUtil.divideHave100(bean.getProduct_price())%>" class="form-control" placeholder="请输入商品销售价格（元为单位）" required="required" maxlength="8" value="">
         
-        <label for="product_real_price" class="sr-only" >商品市场/划线价格（分）</label>
-        <input type="number" id="product_real_price" name="product_real_price" value="<%=StringUtil.convertNull(bean.getProduct_real_price())%>" class="form-control" placeholder="请输入商品市场/划线价格（分为单位）" required="required"  maxlength="8" value="">
+        <label for="product_real_price" class="sr-only" >商品市场/划线价格（元）</label>
+        <input type="number" id="product_real_price" step="0.01"  name="product_real_price" value="<%=NumberUtil.divideHave100(bean.getProduct_real_price())%>" class="form-control" placeholder="请输入商品市场/划线价格（元为单位）" required="required"  maxlength="8" value="">
         
-        <label for="prime_cost_price" class="sr-only" >商品成本价格（分）</label>
-        <input type="number" id="prime_cost_price" name="prime_cost_price" value="<%=StringUtil.convertNull(bean.getPrime_cost_price())%>" class="form-control" placeholder="请输入成本价格（分为单位）" maxlength="20" value="">
+        <label for="prime_cost_price" class="sr-only" >商品成本价格（元）</label>
+        <input type="number" id="prime_cost_price" step="0.01"  name="prime_cost_price" value="<%=NumberUtil.divideHave100(bean.getPrime_cost_price())%>" class="form-control" placeholder="请输入成本价格（元为单位）" maxlength="20" value="">
         
         <div style="margin-bottom: 15px;">
 	     	<select id="seq" name="seq" class="selectpicker form-control show-tick"  data-live-search="true" title="">

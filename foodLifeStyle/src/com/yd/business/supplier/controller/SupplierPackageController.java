@@ -181,12 +181,17 @@ public class SupplierPackageController extends BaseController {
 			String id = request.getParameter("id");
 			String[] numList = request.getParameterValues("num");
 			String[] productList = request.getParameterValues("products");
+			String product_price = request.getParameter("product_price");
+			String product_real_price = request.getParameter("product_real_price");
+			String prime_cost_price = request.getParameter("prime_cost_price");
 			
 			SupplierPackageBean pack = new SupplierPackageBean();
 			
 			AutoInvokeGetSetMethod.autoInvoke(getRequestParamsMap(request), pack);
 			pack.setSupplier_id(supplier.getId());
-			
+			pack.setProduct_price(NumberUtil.multiply100(product_price));
+			pack.setProduct_real_price(NumberUtil.multiply100(product_real_price));
+			pack.setPrime_cost_price(NumberUtil.multiply100(prime_cost_price));
 			if(StringUtil.isNotNull(id)) {
 				supplierPackageService.updatePackageAndProducts(pack, productList, numList);
 			}else {

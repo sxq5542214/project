@@ -112,6 +112,7 @@ public class SupplierShopController extends BaseController {
 				supplier = list.get(0);
 				//设置session
 				WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER, supplier);
+//				CookieUtil.addCookie(response, WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER, ""+supplier.getId());
 				modelView = "/page/supplier/shop/manager/frameIndex.jsp?openid="+openid+"&sid="+supplier.getId();
 				break;
 			default:
@@ -132,7 +133,7 @@ public class SupplierShopController extends BaseController {
 	}
 
 	/**
-	 * 跳转至商户商城界面
+	 * 	跳转至商户商城界面
 	 * @param request
 	 * @param response
 	 * @return

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,6 +72,30 @@ public class NumberUtil {
 		}
 		return num;
 	}
+	
+	public static String divideNoNull(Integer num,int divide) {
+		if(num == null) {
+			return "";
+		}
+		BigDecimal divisor = new BigDecimal(divide);
+		return new BigDecimal(num).divide(divisor).setScale(2, RoundingMode.HALF_UP).toString();
+	}
+	
+	public static String divideHave100(Integer num) {
+		return divideNoNull(num, 100);
+	}
+	
+	public static int multiply100(String value){
+		
+		if(StringUtil.isNull(value)) {
+			return 0;
+		}
+		
+		BigDecimal hundred = new BigDecimal(100);
+		int price = new BigDecimal(value).multiply(hundred).intValue();
+		return price;
+	}
+	
 	
 	/**
 	 * <p>�?单格�?:yyyy-MM-dd
@@ -751,6 +776,13 @@ public class NumberUtil {
 			}
 		}
 		return total;
+	}
+	
+	public static Integer parseInt(String value) {
+		if(StringUtil.isNotNull(value)) {
+			return Integer.parseInt(value);
+		}
+		return null;
 	}
 	
 }

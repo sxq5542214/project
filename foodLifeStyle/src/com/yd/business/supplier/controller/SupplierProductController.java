@@ -170,15 +170,12 @@ public class SupplierProductController extends BaseController {
 			bean.setSeq(Integer.parseInt(seq));
 			bean.setProduct_name(product_name);
 			bean.setProduct_title(product_title);
-			bean.setProduct_price(Integer.parseInt(product_price));
+			bean.setProduct_price(NumberUtil.multiply100(product_price));
 			if(StringUtil.isNotNull(product_real_price)) {
-				bean.setProduct_real_price(Integer.parseInt(product_real_price));
+				bean.setProduct_real_price(NumberUtil.multiply100(product_real_price));
 			}
-			if(StringUtil.isNotNull(prime_cost_price)) {
-				bean.setPrime_cost_price(Integer.parseInt(prime_cost_price));
-			}else {
-				bean.setPrime_cost_price(0);
-			}
+			bean.setPrime_cost_price(NumberUtil.multiply100(prime_cost_price));
+			
 			bean.setProduct_category_id(category.getId());
 			bean.setProduct_category_name(category.getName());
 			bean.setSupplier_id(supplier.getId());

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.protocol.HTTP;
+import org.aspectj.weaver.BetaException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,13 +94,14 @@ public class SupplierUserController extends BaseController {
 		
 		try {
 //			String openid = getCurrentOpenid();
-			String sid = request.getParameter("sid");
+
+			Integer sid = getCurrentSupplier().getId();
 			String level = request.getParameter("level");
 			String phone = request.getParameter("phone");
 			
 			
 			SupplierUserBean bean = new SupplierUserBean();
-			bean.setSupplier_id(Integer.parseInt(sid));
+			bean.setSupplier_id(sid);
 			if(StringUtil.isNotNull(level)) {
 				bean.setLevel(Integer.parseInt(level));
 			}

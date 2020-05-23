@@ -38,11 +38,13 @@ import com.yd.business.supplier.bean.SupplierBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
 import com.yd.business.supplier.bean.SupplierPackageProductRecordBean;
 import com.yd.business.supplier.bean.SupplierProductBean;
+import com.yd.business.supplier.bean.SupplierStoreBalanceCardRecordBean;
 import com.yd.business.supplier.bean.SupplierUserBean;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierPackageService;
 import com.yd.business.supplier.service.ISupplierProductService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.ISupplierStoreService;
 import com.yd.business.supplier.service.ISupplierTopicService;
 import com.yd.business.supplier.service.ISupplierUserService;
 import com.yd.business.user.bean.UserWechatBean;
@@ -58,7 +60,7 @@ import com.yd.util.DateUtil;
 import com.yd.util.NumberUtil;
 import com.yd.util.StringUtil;
 @Controller
-public class UserSupplierProductController extends BaseController {
+public class UserSupplierController extends BaseController {
 	public static final String PAGE_USERSUPPLIERPRODUCT = "/page/user/supplierProductShop/index.jsp";
 	public static final String PAGE_USERSUPPLIERCATEGORY = "/page/user/supplierProductShop/category.jsp";
 	public static final String PAGE_USER_SHOP_ORDER = "/page/shop/order/orderInfo.jsp";
@@ -68,7 +70,9 @@ public class UserSupplierProductController extends BaseController {
 	public static final String PAGE_SUPPLIER_SHOP_ORDER_EFF = "/page/supplier/shop/orderEffInfo.jsp";
 	public static final String PAGE_SUPPLIER_SHOP_PAY_PRICE_PLATFORM = "/page/supplier/shop/payPricePlatForm.jsp";
 	public static final String PAGE_SUPPLIER_SHOP_PAY_PRICE_PERSONAL = "/page/supplier/shop/payPricePersonal.jsp";
-
+	public static final String PAGE_USER_SUPPLIERSHOP_STOREBALANCECARDLIST = "/page/user/supplierProductShop/userSupplierStoreBalanceCardList.jsp";
+	
+	
 	@Resource
 	private ISupplierProductService supplierProductService;
 	@Autowired
@@ -117,7 +121,8 @@ public class UserSupplierProductController extends BaseController {
 	private IAdvertisingService advertisingService;
 	@Resource
 	private ISupplierPackageService supplierPackageService;
-	
+	@Resource
+	private ISupplierStoreService supplierStoreService;
 
 	
 	@Deprecated
@@ -193,6 +198,7 @@ public class UserSupplierProductController extends BaseController {
 	/**
 	 *  打开商城分类界面
 	 */
+	@Deprecated
 	@RequestMapping("**/user/supplier/toSupplierProductCategoryPage.do")
 	public ModelAndView toSupplierProductCategoryPage(String sid,String openid){
 		try{
@@ -305,7 +311,7 @@ public class UserSupplierProductController extends BaseController {
 			}else if(StringUtil.isNotNull(productInfos)){ // 根据传参过来的数据创建订单
 				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,productInfos,time,type);
 			}else{//没有定单号、没有传参数据,则根据cookie里的数据创建订单
-				String data = CookieUtil.getValueByCookie(request, "productInfo");
+				String data = CookieUtil.getValueByCookie(request, UserCartController.COOKIE_KEY_PRODUCTINFO);
 				order = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,time,type);
 			}
 			
@@ -315,6 +321,10 @@ public class UserSupplierProductController extends BaseController {
 			{	//如果没有，则找目前可用的优惠卷
 				couponList = supplierCouponService.queryUserCanUseCouponByOrderCode(order.getUser_id(), order.getOrder_code());
 			}
+			
+			// 找折扣卡/储值卡 
+			List<SupplierStoreBalanceCardRecordBean> cardList = supplierStoreService.queryUserCanuseStoreBalanceCardRecord( openid, order.getSupplier_id());
+			
 			SupplierUserBean user = supplierUserService.findSupplierUser(order.getUser_id(), supplier.getId());
 			int expressBottomPrice = configAttributeService.getIntValueByCode(AttributeConstant.CODE_SHOP_ORDER_NEED_EXPRESS_BOTTOM_PRICE);
 
@@ -322,6 +332,7 @@ public class UserSupplierProductController extends BaseController {
 			model.put("order", order);
 			model.put("user", user);
 			model.put("couponList", couponList);
+			model.put("cardList", cardList);
 			model.put("expressBottomPrice", expressBottomPrice);
 			model.put("supplier", supplier);
 			
@@ -370,7 +381,7 @@ public class UserSupplierProductController extends BaseController {
 				ShopOrderInfoBean newOrder = shopOrderService.createOrderLogByUserCartList(supplier_id,openid,productInfos,time,eff_date,type);
 				order = new ShopOrderEffInfoBean(newOrder);
 			}else{//没有定单号、没有传参数据,则根据cookie里的数据创建订单
-				String data = CookieUtil.getValueByCookie(request, "productInfo");
+				String data = CookieUtil.getValueByCookie(request, UserCartController.COOKIE_KEY_PRODUCTINFO);
 				ShopOrderInfoBean newOrder =  shopOrderService.createOrderLogByUserCartList(supplier_id,openid,data,time,eff_date,type);
 				order = new ShopOrderEffInfoBean(newOrder);
 			}
@@ -399,7 +410,7 @@ public class UserSupplierProductController extends BaseController {
 		}
 		return null;
 	}
-	
+
 
 	/**
 	 * 用户的商户产品套餐详情界面
@@ -429,6 +440,48 @@ public class UserSupplierProductController extends BaseController {
 		}
 		return null;
 	}
+	
+	
+
+
+	/**
+	 * 用户的商户储值卡/折扣卡详情界面
+	 * @return
+	 */
+	@RequestMapping("/user/supplier/toSupplierStoreBalanceCardListPage.html")
+	public ModelAndView toSupplierStoreBalanceCardListPage(HttpServletRequest request,HttpServletResponse response){
+		try {
+			
+			String openid = request.getParameter("openid");
+			String sid = request.getParameter("sid");
+			String id = request.getParameter("id");
+			Integer record_id = null; 
+			if(StringUtil.isNull(openid)) {
+				openid = getCurrentOpenid();
+			}
+			if(StringUtil.isNotNull(id)) {
+				record_id = Integer.parseInt(id);
+			}
+			
+			
+			SupplierStoreBalanceCardRecordBean bean = new SupplierStoreBalanceCardRecordBean();
+			bean.setOpenid(openid);
+			bean.setSupplier_id(Integer.parseInt(sid));
+			bean.setId(record_id);
+			bean.setOrderby("order by id desc");
+			List<SupplierStoreBalanceCardRecordBean> list = supplierStoreService.queryStoreBalanceCardRecord(bean);
+			
+			Map<String, Object> model = new HashMap<String, Object>();
+			model.put("list", list);
+			
+			return new ModelAndView(PAGE_USER_SUPPLIERSHOP_STOREBALANCECARDLIST,model );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
+	
 	
 	
 	

@@ -1,3 +1,4 @@
+<%@page import="com.yd.business.supplier.bean.SupplierStoreBalanceCardRecordBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierUserBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierBalanceLogBean"%>
 <%@page import="com.yd.business.supplier.bean.SupplierBean"%>
@@ -23,6 +24,7 @@
 	int expressBottomPrice = (int) request.getAttribute("expressBottomPrice");
 	SupplierUserBean user = (SupplierUserBean) request.getAttribute("user");
 	List<SupplierCouponRecordBean> couponList = (List<SupplierCouponRecordBean>) request.getAttribute("couponList");
+	List<SupplierStoreBalanceCardRecordBean> cardList = (List<SupplierStoreBalanceCardRecordBean>) request.getAttribute("cardList");
 	List<? extends ShopOrderProductBean> productList = order.getProductList();
 	Integer checkCouponId = 0; 
 	
@@ -112,6 +114,8 @@
 
 
 					</div></li>
+					
+					
 				<li>
 					<div class="order-box">
 						<ul class="book-list">
@@ -138,8 +142,29 @@
 							<%} %>
 						</ul>
 					</div></li>
-
 				
+				<%if(cardList.size() > 0){ %>
+				<li id="balanceCardInfo">
+					<div class="order-box">
+						<div class="order-width">
+						
+							<p class="border-bottom usr-name">
+								当前订单可用折扣卡/储值卡：
+							</p>
+						
+							<%for(SupplierStoreBalanceCardRecordBean card : cardList){ 
+							 %>
+							<p class="border-bottom usr-name"  onclick="chooseCardRadio(this)">
+								<input type="radio" name="cardId" value="<%=card.getId() %>" title="<%=card.getBalance() %>" > <%=card.getName() %> （余额：<%=NumberUtil.divideHave100(card.getBalance())  %> 元，折扣：<%=NumberUtil.divideHave100(card.getDiscount()) %>折）
+								<input type="hidden" id="cardDiscount<%=card.getId() %>" value="<%=card.getDiscount() %>">
+							</p>
+							
+							<%} %>
+							
+						</div>
+					</div>
+				</li>
+					<%} %>
 				<%if(couponList.size()>0){ %>
 				<li>
 					<div class="order-box">
@@ -180,8 +205,12 @@
 							<p class="border-bottom">
 								优惠券:<span class="fr red">￥ -<span id="coupon_price"><%=order.getCoupon_total_price() / 100d %></span>&nbsp;元</span>
 							</p>
+							<p class="border-bottom">
+								卡余额支付:<span class="fr red">￥ -<span id="cost_balance"><%=order.getCost_balance() / 100d %></span>&nbsp;元</span>
+							</p>
+							
 							<p>
-								支付金额:<span class="fr red">￥ <span id="cost_money"><%=(order.getCost_money()) / 100d %></span>&nbsp;元</span>
+								支付现金:<span class="fr red">￥ <span id="cost_money"><%=(order.getCost_money()) / 100d %></span>&nbsp;元</span>
 							</p>
 						</div>
 					</div></li>
@@ -218,14 +247,16 @@
 	<!-- 通用尾 div -->
 	<div style="display:none;"></div>
 	<input type="hidden" id="coupon_record_id" value="">
+	<input type="hidden" id="balance_card_id" value="">
 	<input type="hidden" id="order_code" value="<%=order.getOrder_code() %>" >
 	<input type="hidden" id="openid" value="<%=user.getOpenid()%>">
-	<input type="hidden" id="cost_balance" value="0">
 
 <script type="text/javascript">
 	var coupon = eval('<%=JsonUtil.convertObjectToJsonString(couponList) %>');
 	var currentCoupon = findCouponById(<%=checkCouponId %>);
+	var currentCard = 0;
 	var orderStatus = <%=order.getStatus()%>;
+	var discount_total_money = 0;
 	function chooseRadio(dom){
 		dom.children[0].checked = true;
 		
@@ -242,7 +273,40 @@
 			currentCoupon = coupon;
 		}
 	}
-	
+	function chooseCardRadio(dom){
+		dom.children[0].checked = true;
+		var cost_money = Number($("#cost_money").html());
+		var cost_price = Number($("#cost_price").html());
+		
+		var cardId = dom.children[0].value ;
+		var balance = Number(dom.children[0].title).toFixed(2) ;
+		var discount =  Number($("#cardDiscount"+cardId).val()); //千
+
+		$("#balance_card_id").val(cardId);
+		//比对余额是否和上一次选的一致
+		if(currentCard != balance){
+			//还原之前扣减的余额
+			cost_money += currentCard;
+			
+			discount_total_money = Number(cost_money - (discount * cost_money)/1000).toFixed(2) ;
+			var cost_money = cost_money - discount_total_money;
+
+			if(balance >= cost_money){
+				$("#cost_money").html("0.0");
+				$("#cost_balance").html(cost_money);
+				//修改支付按钮的指向，余额够，不用请求微信支付
+				$("#payButton").attr('onClick', 'payByBalance()');
+				
+			}else{
+				$("#cost_money").html(Number(cost_money - balance).toFixed(2));
+				$("#cost_balance").html(balance);
+				
+				//修改支付按钮的指向，余额不够，请求微信支付
+				$("#payButton").attr('onClick', 'pay()');
+			}
+			currentCard = balance;
+		}
+	}
 	function findCouponById(couponid){
 		for(var i = 0; i < coupon.length; i++){
 			var record = coupon[i];
@@ -312,16 +376,17 @@
 function pay(){
 
 	$("#payButton").html('加载中...');
-	$("#payButton").on('click', '' );
+//	$("#payButton").on('click', '' );
 
 	var order_code = $("#order_code").val();
 	var sid = $("#sid").val();
 	var cost_money = $("#cost_money").html();
-	var cost_balance = $("#cost_balance").val();
+	var cost_balance = $("#cost_balance").html();
 	var openid = $("#openid").val();
 	var phone = '';
 	var points = $("#points").html();
 	var coupon_record_id = $("#coupon_record_id").val();
+	var balance_card_id = $("#balance_card_id").val();
 	
 	$.ajax({
 		url : "wechat/createUnifiedOrderByShop.do",
@@ -332,6 +397,7 @@ function pay(){
 				 phone : phone ,
 				 points : points,
 				 coupon_record_id : coupon_record_id,
+				 balance_card_id : balance_card_id,
 				 sid : sid ,
 				 type : <%=SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE%>
 		},
@@ -376,6 +442,52 @@ function pay(){
 			           }
 			       }
 			   ); 
+			}
+		}
+	});
+	
+}
+
+	
+function payByBalance(){
+
+	$("#payButton").html('加载中...');
+//	$("#payButton").on('click', '' );
+
+	var order_code = $("#order_code").val();
+	var sid = $("#sid").val();
+	var cost_money = $("#cost_money").html();
+	var cost_balance = $("#cost_balance").html();
+	var openid = $("#openid").val();
+	var phone = '';
+	var points = $("#points").html();
+	var coupon_record_id = $("#coupon_record_id").val();
+	var balance_card_id = $("#balance_card_id").val();
+	
+	$.ajax({
+		url : "order/shop/notifyShopOrderByBalance.html",
+		data : { cost_money : (cost_money - cost_balance).toFixed(2),
+				 cost_balance : (cost_balance * 100).toFixed(0),
+				 openid : openid,
+				 order_code : order_code,
+				 phone : phone ,
+				 points : points,
+				 coupon_record_id : coupon_record_id,
+				 balance_card_id : balance_card_id,
+				 sid : sid ,
+				 type : <%=SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE%>
+		},
+		success : function(result) {
+			if(result == 'success'){
+			    delCookie('productInfo'); 
+			    $("#payButton").hide();
+				alert('支付成功');
+				location.href = "page/supplier/shop/paySuccess.jsp";	
+			}else{
+	//			result = eval('('+result+')');
+				alert('支付失败！' + result);
+				$("#payButton").html('立即支付');
+				
 			}
 		}
 	});

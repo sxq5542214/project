@@ -60,7 +60,7 @@ import com.yd.business.user.bean.UserSenceLog;
 import com.yd.business.user.bean.UserSignBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.controller.UserController;
-import com.yd.business.user.controller.UserSupplierProductController;
+import com.yd.business.user.controller.UserSupplierController;
 import com.yd.business.user.service.IUserSignService;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.BaseMessage;
@@ -110,7 +110,7 @@ public class WechatUserController extends BaseController {
 	@Resource
 	private IWechatCommentReplyService wechatCommentReplyService;
 	@Resource
-	private UserSupplierProductController userSupplierProductController;
+	private UserSupplierController userSupplierProductController;
 	@Resource
 	private SupplierCouponController supplierCouponController;
 	
@@ -314,7 +314,10 @@ public class WechatUserController extends BaseController {
 			}
 			param.put("openid", openid);
 System.out.println("============================================toDistributeControll: "+ conName +"  " + openid);
+
+			//添加openid 至Session  和 cookie
 			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,openid);
+			CookieUtil.addCookie(response, WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
 			return new ModelAndView("/"+conName.replaceAll("\\.", "/")+".html?openid="+ StringUtil.convertNull(openid),param);
 			
 		}catch (Exception e) {

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="supplierStore">
+	
+	<insert id="createStoreBalanceCard" parameterType="supplierStoreBalanceCard"  useGeneratedKeys="true" keyProperty="id">
+		insert into ll_supplier_store_balance_card (name,supplier_id,discount,init_balance,
+		status,create_time,remark,useful_lift,card_price)
+		values(#{name},#{supplier_id},#{discount},#{init_balance},#{status},#{create_time},
+		#{remark},#{useful_lift},#{card_price})
+	</insert>
+	
+	<insert id="createStoreBalanceCardRecord" parameterType="supplierStoreBalanceCardRecord" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_supplier_store_balance_card_record (supplier_id,card_id,openid,
+		user_id,balance,init_balance,status,create_time,eff_time,dff_time)
+		values(#{supplier_id},#{card_id},#{openid},#{user_id},#{balance},#{init_balance},
+		#{status},#{create_time},#{eff_time},#{dff_time})
+	</insert>
+	
+	<insert id="createStoreBalanceCardCostlog" parameterType="supplierStoreBalanceCardCostlog" useGeneratedKeys="true" keyProperty="id">
+		insert into ll_supplier_store_balance_card_costlog (supplier_id,supplier_name,card_id,
+		card_name,user_id,openid,cost,surplus,order_code,create_time,remark)
+		values(#{supplier_id},#{supplier_name},#{card_id},#{card_name},#{user_id},#{openid},
+		#{cost},#{surplus},#{order_code},#{create_time},#{remark})
+	</insert>
+	
+	<update id="updateStoreBalanceCard" parameterType="supplierStoreBalanceCard">
+		update ll_supplier_store_balance_card 
+		<set>
+			<if test="name != null"> name = #{name} ,</if>
+			<if test="discount != null"> discount = #{discount} ,</if>
+			<if test="init_balance != null"> init_balance = #{init_balance} ,</if>
+			<if test="status != null"> status = #{status} ,</if>
+			<if test="remark != null"> remark = #{remark} ,</if>
+			<if test="useful_lift != null"> useful_lift = #{useful_lift} ,</if>
+			<if test="except_supplier_product_ids != null"> except_supplier_product_ids = #{except_supplier_product_ids} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="updateStoreBalanceCardRecord" parameterType="supplierStoreBalanceCardRecord">
+		update ll_supplier_store_balance_card_record
+		<set>
+<!-- 			<if test="balance != null"> balance = #{balance} ,</if>
+ -->			<if test="eff_time != null"> eff_time = #{eff_time} ,</if>
+			<if test="dff_time != null"> dff_time = #{dff_time} ,</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="updateStoreCardRecordBalance" >
+		update ll_supplier_store_balance_card_record
+		set balance = balance + #{addBalance}
+		where id = #{id}
+	</update>
+	
+	<select id="queryStoreBalanceCard" parameterType="supplierStoreBalanceCard" resultType="supplierStoreBalanceCard">
+		select * from ll_supplier_store_balance_card
+		<where>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="name != null"> and name = #{name} </if>
+			<if test="supplier_id != null"> and supplier_id = #{supplier_id} </if>
+			<if test="discount != null"> and discount = #{discount} </if>
+			<if test="init_balance != null"> and init_balance = #{init_balance} </if>
+			<if test="status != null"> and status = #{status} </if>
+			<if test="useful_lift != null"> and useful_lift = #{useful_lift} </if>
+		</where>
+		<if test="orderby != null">${orderby}</if>
+	</select>
+	
+	<select id="queryStoreBalanceCardRecord" parameterType="supplierStoreBalanceCardRecord" resultType="supplierStoreBalanceCardRecord">
+		select r.*,c.name ,c.discount ,s.name supplier_name  from ll_supplier_store_balance_card_record r ,ll_supplier_store_balance_card c , ll_supplier s
+		where r.card_id = c.id  and c.supplier_id = s.id
+			<if test="id != null"> and r.id = #{id} </if>
+			<if test="supplier_id != null"> and r.supplier_id = #{supplier_id} </if>
+			<if test="card_id != null"> and r.card_id = #{card_id} </if>
+			<if test="openid != null"> and r.openid = #{openid} </if>
+			<if test="user_id != null"> and r.user_id = #{user_id} </if>
+			<if test="status != null"> and r.status = #{status} </if>
+			<if test="balance != null"> and r.balance >= #{balance} </if>
+			<if test="dff_time != null"> and r.dff_time >= #{dff_time} </if>
+		
+		<if test="orderby != null">${orderby}</if>
+	</select>
+	
+	<select id="queryStoreBalanceCardCostlog" parameterType="supplierStoreBalanceCardCostlog" resultType="supplierStoreBalanceCardCostlog">
+		select * from ll_supplier_store_balance_card_costlog
+		<where>
+			<if test="id != null"> and id = #{id} </if>
+			<if test="supplier_id != null"> and supplier_id = #{supplier_id} </if>
+			<if test="card_id != null"> and card_id = #{card_id} </if>
+			<if test="openid != null"> and openid = #{openid} </if>
+			<if test="user_id != null"> and user_id = #{user_id} </if>
+			<if test="order_code != null"> and order_code = #{status} </if>
+		</where>
+		<if test="orderby != null">${orderby}</if>
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,6 +32,7 @@ import com.yd.basic.framework.context.WebContext;
 import com.yd.business.customer.bean.CustomerBean;
 import com.yd.business.customer.service.impl.CustomerServiceImpl;
 import com.yd.business.supplier.bean.SupplierBean;
+import com.yd.util.CookieUtil;
 import com.yd.util.DateUtil;
 import com.yd.util.JsonUtil;
 import com.yd.util.StringUtil;
@@ -335,11 +337,22 @@ public abstract class BaseController extends MultiActionController {
 	}
 	
 	protected String getCurrentOpenid() {
-
-		return (String) WebContext.getHttpSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+		String openid = (String) WebContext.getHttpSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+		if(StringUtil.isNull(openid)) {
+			openid = CookieUtil.getValueByCookie(WebContext.getHttpServletRequest(), WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+		}
+		return openid;
 	}
 	protected SupplierBean getCurrentSupplier() {
-		return (SupplierBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER);
+		SupplierBean supplier = (SupplierBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER);
+		if(supplier == null) {
+			String sid = CookieUtil.getValueByCookie(WebContext.getHttpServletRequest(), WebContext.SESSION_ATTRIBUTE_CURRENT_SUPPLIER);
+			if(StringUtil.isNotNull(sid)) {
+				supplier = new SupplierBean();
+				supplier.setId(Integer.parseInt(sid));
+			}
+		}
+		return supplier;
 	}
 	
 }
