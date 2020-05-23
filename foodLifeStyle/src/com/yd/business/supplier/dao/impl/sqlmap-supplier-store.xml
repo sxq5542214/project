@@ -18,9 +18,9 @@
 	</insert>
 	
 	<insert id="createStoreBalanceCardCostlog" parameterType="supplierStoreBalanceCardCostlog" useGeneratedKeys="true" keyProperty="id">
-		insert into ll_supplier_store_balance_card_costlog (supplier_id,supplier_name,card_id,
+		insert into ll_supplier_store_balance_card_costlog (supplier_id,supplier_name,record_id,
 		card_name,user_id,openid,cost,surplus,order_code,create_time,remark)
-		values(#{supplier_id},#{supplier_name},#{card_id},#{card_name},#{user_id},#{openid},
+		values(#{supplier_id},#{supplier_name},#{record_id},#{card_name},#{user_id},#{openid},
 		#{cost},#{surplus},#{order_code},#{create_time},#{remark})
 	</insert>
 	
@@ -88,7 +88,7 @@
 		<where>
 			<if test="id != null"> and id = #{id} </if>
 			<if test="supplier_id != null"> and supplier_id = #{supplier_id} </if>
-			<if test="card_id != null"> and card_id = #{card_id} </if>
+			<if test="record_id != null"> and record_id = #{record_id} </if>
 			<if test="openid != null"> and openid = #{openid} </if>
 			<if test="user_id != null"> and user_id = #{user_id} </if>
 			<if test="order_code != null"> and order_code = #{status} </if>

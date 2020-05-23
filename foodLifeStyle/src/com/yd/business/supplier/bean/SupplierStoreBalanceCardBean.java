@@ -32,6 +32,7 @@ public class SupplierStoreBalanceCardBean extends BaseBean {
 	
 	private String supplier_name;
 	private String addBalance;
+	private String balanceStr;
 	public Integer getId() {
 		return id;
 	}
@@ -97,6 +98,12 @@ public class SupplierStoreBalanceCardBean extends BaseBean {
 	}
 	public void setCard_price(Integer card_price) {
 		this.card_price = card_price;
+	}
+	public String getBalanceStr() {
+		return balanceStr;
+	}
+	public void setBalanceStr(String balanceStr) {
+		this.balanceStr = balanceStr;
 	}
 	public String getExcept_supplier_product_ids() {
 		return except_supplier_product_ids;

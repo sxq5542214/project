@@ -16,7 +16,7 @@ public class SupplierStoreBalanceCardCostlogBean extends BaseBean {
 	private Integer id;
 	private Integer supplier_id;
 	private String supplier_name;
-	private Integer card_id;
+	private Integer record_id;
 	private String card_name;
 	private Integer user_id;
 	private String openid;
@@ -51,11 +51,11 @@ public class SupplierStoreBalanceCardCostlogBean extends BaseBean {
 	public void setSupplier_name(String supplier_name) {
 		this.supplier_name = supplier_name;
 	}
-	public Integer getCard_id() {
-		return card_id;
+	public Integer getRecord_id() {
+		return record_id;
 	}
-	public void setCard_id(Integer card_id) {
-		this.card_id = card_id;
+	public void setRecord_id(Integer record_id) {
+		this.record_id = record_id;
 	}
 	public String getCard_name() {
 		return card_name;

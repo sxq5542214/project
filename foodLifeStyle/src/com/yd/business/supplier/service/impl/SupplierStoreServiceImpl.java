@@ -166,13 +166,15 @@ public class SupplierStoreServiceImpl extends BaseService implements
 		}
 		SupplierStoreBalanceCardBean card = findStoreBalanceCardById(record.getCard_id());
 		card.setAddBalance(NumberUtil.divideHave100(addBalance));
-		record.setCreate_time(card.getName());
+		record.setName(card.getName());
 		record.setRemark( NumberUtil.divideHave100(card.getDiscount()) );
+		record.setBalanceStr(NumberUtil.divideHave100(record.getBalance()));
+		record.setRemark(remark);
 		msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_STORE_CARD_UPDATE_RECORD, null, record);
 		
 		
 		SupplierStoreBalanceCardCostlogBean costlog = new SupplierStoreBalanceCardCostlogBean();
-		costlog.setCard_id(card.getId());
+		costlog.setRecord_id(record.getId());
 		costlog.setCard_name(card.getName());
 		costlog.setSupplier_id(record.getSupplier_id());
 		costlog.setUser_id(record.getUser_id());
@@ -191,7 +193,7 @@ public class SupplierStoreServiceImpl extends BaseService implements
 	@Override
 	public int createStoreBalanceCardRecord(Integer userId, Integer cardId, Integer supplier_id) {
 		SupplierUserBean user = supplierUserService.findSupplierUser(userId, supplier_id);
-//		SupplierBean supplier = supplierService.findSupplierById(supplier_id);
+		SupplierBean supplier = supplierService.findSupplierById(supplier_id);
 		SupplierStoreBalanceCardBean card = findStoreBalanceCardById(cardId, supplier_id);
 		
 		SupplierStoreBalanceCardRecordBean record = new SupplierStoreBalanceCardRecordBean();
@@ -207,6 +209,7 @@ public class SupplierStoreServiceImpl extends BaseService implements
 		record.setDff_time(dff_time);
 		
 		record.setSupplier_id(supplier_id);
+		record.setSupplier_name(supplier.getName());
 		record.setCard_id(card.getId());
 		record.setOpenid(user.getOpenid());
 		record.setUser_id(user.getUser_id());
@@ -217,8 +220,10 @@ public class SupplierStoreServiceImpl extends BaseService implements
 		
 		createStoreBalanceCardRecord(record);
 		record.setAddBalance(NumberUtil.divideHave100(record.getBalance()));
-		
-		msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_STORE_CARD_ASSIGN, null, card);
+		record.setBalanceStr(record.getAddBalance());
+		record.setName(card.getName());
+		record.setRemark("新增储值卡/折扣卡");
+		msgCenterActionService.saveAndHandleUserAction(user.getOpenid(), MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_STORE_CARD_ASSIGN, null, record);
 		
 		return record.getId();
 	}
