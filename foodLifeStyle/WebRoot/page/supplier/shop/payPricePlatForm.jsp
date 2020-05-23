@@ -180,7 +180,7 @@ function pay(){
 			           	alert('支付成功！');
 			           
 			           	$("#payButton").hide();
-			         	location.href = "page/supplier/shop/paySuccess.jsp";			           	
+			         	location.href = "page/shop/order/paySuccess.jsp";			           	
 			           }else{
 								$("#payBTN").val('立即支付');
 								$("#payBTN").show();

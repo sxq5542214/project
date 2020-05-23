@@ -482,7 +482,7 @@ function payByBalance(){
 			    delCookie('productInfo'); 
 			    $("#payButton").hide();
 				alert('支付成功');
-				location.href = "page/supplier/shop/paySuccess.jsp";	
+				location.href = "page/shop/order/paySuccess.jsp";	
 			}else{
 	//			result = eval('('+result+')');
 				alert('支付失败！' + result);

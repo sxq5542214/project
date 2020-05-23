@@ -184,6 +184,9 @@ public class WechatServiceImpl extends BaseService implements IWechatService {
 					if(user == null){
 						createWechatUser(eventBean.getFromUserName(), parentId,senceType,senceId,eventBean.getToUserName());
 						
+					}else if(user.getStatus() == UserWechatBean.STATUS_UNSUBSCRIBE) {
+						user.setStatus(UserWechatBean.STATUS_SUBSCRIBE);
+						userWechatService.updateUserWechat(user);
 					}
 					// 子类有重写此方法
 					handleSenceCode(senceValue,eventBean.getFromUserName(),parentId);
