@@ -544,7 +544,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			}
 			//保存并处理用户购买成功的动作
 			int type = NumberUtil.convertNull(order.getType());
-			
+			order.setMoney(NumberUtil.divideHave100(order.getCost_price()));
 			//不同的订单类型，需要推送不同的消息
 			switch (type) {
 			case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE:
