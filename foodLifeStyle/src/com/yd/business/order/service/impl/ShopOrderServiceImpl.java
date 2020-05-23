@@ -800,7 +800,7 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			}
 			result = notifyShopOrder(sid, orderCode, openid, 0, coupon_id, card_record_id, type, remark);
 			if("success".equalsIgnoreCase(result)) {
-				String remarkStr  = "订单消费";
+				String remarkStr  = "订单支付";
 				supplierStoreService.updateStoreCardRecordBalance(openid, card_record_id, -balance, sid,orderCode,remarkStr);
 			}
 		}

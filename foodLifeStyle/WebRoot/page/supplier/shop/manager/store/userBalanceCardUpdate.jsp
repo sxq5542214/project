@@ -55,7 +55,7 @@ SupplierStoreBalanceCardBean card = (SupplierStoreBalanceCardBean)request.getAtt
       					<div class="panel-heading"> 卡名：【<%=card.getName() %>】  <span style="float: right;">折扣：<%=NumberUtil.divideHave100(card.getDiscount()) %>折</span> </div>
 						  <div class="panel-body">
 								<input type="hidden" value="<%=record.getId() %>" id="id" name="id" >
-								<input type="hidden" value="<%=spUser.getOpenid() %>" name="openid" >
+								<input type="hidden" value="<%=spUser.getOpenid() %>" id="openid" name="openid" >
       						   <!-- 【】 <span style="float: right;"></span>  -->
 						   <div class="input-group" style="width: 100%;">  
 						   		<div class="input-group" style="width: 90%;">
@@ -118,7 +118,6 @@ function submitUpdate(){
 	var addBalance = -$("#addBalance").val();
 	var balance = $("#balance").val();
 	var dff_time = $("#dff_time").val();
-	
 	$.ajax({
        type : "POST",
        //请求地址

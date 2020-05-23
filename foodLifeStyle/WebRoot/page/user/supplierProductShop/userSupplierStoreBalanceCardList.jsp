@@ -74,7 +74,7 @@
 						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">店铺名称：<big  style="color: black;"><%=bean.getSupplier_name() %></big></span>
 						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">折扣卡名：<big  style="color: black;"><%=bean.getName()%></big></span>
 						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">折扣额度：<big style="color: black;"><%=NumberUtil.divideHave100(bean.getDiscount()) %>折</big></span>
-						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">剩余金额：<big style="color: black;"><%=NumberUtil.divideHave100(bean.getBalance()) %>元</big>(点击可查看消费记录)</span>
+						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">剩余金额：<big style="color: black;"><%=NumberUtil.divideHave100(bean.getBalance()) %>元</big></span>
 						<span class="discount" style="font-size: 0.4rem;margin: 0;width: 100%;text-align: left;margin-left: 5px;">失效日期：<big style="color: black;"><%=bean.getDff_time() %></big></span> 
 					</p>
 				</div>

@@ -165,9 +165,8 @@ public class SupplierStoreServiceImpl extends BaseService implements
 			record.setBalance(record.getBalance() + addBalance);
 		}
 		SupplierStoreBalanceCardBean card = findStoreBalanceCardById(record.getCard_id());
-		card.setAddBalance(NumberUtil.divideHave100(addBalance));
+		record.setAddBalance(NumberUtil.divideHave100(addBalance));
 		record.setName(card.getName());
-		record.setRemark( NumberUtil.divideHave100(card.getDiscount()) );
 		record.setBalanceStr(NumberUtil.divideHave100(record.getBalance()));
 		record.setRemark(remark);
 		msgCenterActionService.saveAndHandleUserAction(openid, MsgCenterActionDefineBean.ACTION_TYPE_SUPPLIER_STORE_CARD_UPDATE_RECORD, null, record);
