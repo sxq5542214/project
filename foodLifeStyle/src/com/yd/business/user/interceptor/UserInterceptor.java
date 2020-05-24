@@ -21,6 +21,7 @@ import com.yd.business.msgcenter.service.IMsgCenterActionService;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
+import com.yd.business.wechat.bean.WechatWebAuthBean;
 import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
 import com.yd.util.HttpUtil;
@@ -80,7 +81,8 @@ public class UserInterceptor extends BaseInterceptor {
 			String serverName = request.getServerName();
 			WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByServer(serverName);
 			
-			openid = wechatService.getOpenId(code,originalInfo.getOriginalid());
+			WechatWebAuthBean auth = wechatService.getOpenIdByWebAuthCode(code,originalInfo.getOriginalid());
+			openid = auth.getOpenid();
 		}
 
 		System.out.println("UserInterceptor.preControllerHandle openid:"+openid);
@@ -114,6 +116,7 @@ public class UserInterceptor extends BaseInterceptor {
 	 */
 	private void addOpenidToCookie(HttpServletResponse response,String openid){
 		if(StringUtil.isNotNull(openid)){
+			openid = openid.split(",")[0];
 			Cookie cookie = new Cookie(WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
 			cookie.setPath("/");
 			response.addCookie(cookie);

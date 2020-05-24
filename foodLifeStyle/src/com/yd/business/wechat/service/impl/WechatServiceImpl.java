@@ -1053,6 +1053,7 @@ log.debug("userTicketResponse:"+response);
 		return url;
 	}
 	
+	@Deprecated
 	@Override
 	public String getOpenId(String code,String originalid) {
 
@@ -1077,6 +1078,7 @@ log.debug("userTicketResponse:"+response);
 				}else{
 					openId = jso.getString("openid");
 					long time = System.currentTimeMillis();
+					
 					wechatCodeMap.put(code, openId);
 					codeTimeMap.put(time, code);
 				}
@@ -1100,6 +1102,7 @@ log.debug("userTicketResponse:"+response);
 			return null;
 		}
 		WechatWebAuthBean code_auth = (WechatWebAuthBean) wechatAuthMap.get(code);
+log.info("wechatAuthMapGet:" + code +"    ,"+ code_auth == null);
 		WechatWebAuthBean bean = new WechatWebAuthBean();
 
 		if(code_auth == null){
@@ -1107,7 +1110,7 @@ log.debug("userTicketResponse:"+response);
 			try {
 				String result = HttpUtil.get(url);
 				JSONObject jso = new JSONObject(result);
-				
+
 				int errcode = jso.optInt("errcode",-9999);
 				if(errcode == 40163){ // 返回code been used，代表已用过,从session中找
 					WechatWebAuthBean oldBean = (WechatWebAuthBean) wechatAuthMap.get(code);
@@ -1121,6 +1124,7 @@ log.debug("userTicketResponse:"+response);
 					bean.setScope(jso.optString("scope"));
 					
 					wechatAuthMap.put(code, bean);
+log.info("wechatAuthMap:"+ wechatAuthMap);
 					codeTimeMap.put(System.currentTimeMillis(), code);
 				}
 				
@@ -1780,18 +1784,21 @@ log.debug("userTicketResponse:"+response);
 		return action;
 	}
 	public static void main(String[] args) {
-		String senceValue = WechatUtil.getScenceStrValue(4, 1, 2);
-		String json = "{\"expire_seconds\": 2592000, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_str\":\""+senceValue+"\"}}}";
-
-		String qrCodeUrl = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" +
-				"qn_c1W8APzQP6wzIN8eqYFAcw-vddMXtykjxf93rt08V7CI1VtV1OKuROwMDH7Zozc-4sudqtbfyjrAX0af2UBZsSAntuahXe0diSNftYRYXPYfAJAQIR" ;
-		try {
-			String response = HttpUtil.post(qrCodeUrl ,json);
-			System.out.println(response);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+//		String senceValue = WechatUtil.getScenceStrValue(4, 1, 2);
+//		String json = "{\"expire_seconds\": 2592000, \"action_name\": \"QR_SCENE\", \"action_info\": {\"scene\": {\"scene_str\":\""+senceValue+"\"}}}";
+//
+//		String qrCodeUrl = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" +
+//				"qn_c1W8APzQP6wzIN8eqYFAcw-vddMXtykjxf93rt08V7CI1VtV1OKuROwMDH7Zozc-4sudqtbfyjrAX0af2UBZsSAntuahXe0diSNftYRYXPYfAJAQIR" ;
+//		try {
+//			String response = HttpUtil.post(qrCodeUrl ,json);
+//			System.out.println(response);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}	
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("abc", new SupplierBean());
 		
+		System.out.println(map);
 	}
 
 	/**

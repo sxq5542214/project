@@ -307,6 +307,7 @@ public class WechatUserController extends BaseController {
 					wechatUserService.createWechatUserByWebAuth(auth.getOpenid(), parentId,  WechatConstant.TICKET_SENCE_CODE_WXMENU, null, originalid , auth.getAccess_token());
 					openid = auth.getOpenid();
 				}else{ // 没有accessstoken 则重新访问
+Thread.sleep(100);
 					String enCodeUrl = URLEncoder.encode(original.getServer_url() +"wechat/user/toDistributeControll.do?"+ paramStr , "utf-8");
 					response.sendRedirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+original.getAppid()+"&redirect_uri="+ enCodeUrl + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 					return null;
