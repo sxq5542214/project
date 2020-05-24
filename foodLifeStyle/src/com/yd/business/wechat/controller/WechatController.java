@@ -365,16 +365,18 @@ public class WechatController extends BaseController {
 				log.error(" createUnifiedOrderByShop couponRecord is null ,userid:"+ user.getId() +" recordid:" + coupon_record_id);
 			}
 		}
-		//如果优惠卷规记录id不等于空
-		if(!StringUtil.isNull(balance_card_id) ){
-			SupplierStoreBalanceCardRecordBean record = supplierStoreService.findStoreBalanceCardRecordById(Integer.parseInt(balance_card_id));
-			
-			//根据折扣卡信息 更新订单数据，主要是价格侧的变动
-			shopOrderService.updateShopOrderByUsedBalanceCard(order_code, Integer.parseInt(balance_card_id), rmb);
-			if(record == null){
-				log.error(" createUnifiedOrderByShop BalanceCardRecord is null ,userid:"+ user.getId() +" recordid:" + balance_card_id);
-			}
-		}
+		
+		// 已经不在这里修改了，在用户支付后的回调通知后修改
+//		//如果折扣卡记录id不等于空
+//		if(!StringUtil.isNull(balance_card_id) ){
+//			SupplierStoreBalanceCardRecordBean record = supplierStoreService.findStoreBalanceCardRecordById(Integer.parseInt(balance_card_id));
+//			
+//			//根据折扣卡信息 更新订单数据，主要是价格侧的变动
+//			shopOrderService.updateShopOrderByUsedBalanceCard(order_code, Integer.parseInt(balance_card_id), rmb);
+//			if(record == null){
+//				log.error(" createUnifiedOrderByShop BalanceCardRecord is null ,userid:"+ user.getId() +" recordid:" + balance_card_id);
+//			}
+//		}
 		//根据用户表中originalid 在ll_wechat_original_info表中信息 ,主要用于查询来自哪个公众号
 		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 		int payCount = 1;

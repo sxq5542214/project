@@ -832,6 +832,10 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 				order.setStore_card_total_price(discountMoney);
 				//修改订单余额
 				updateShopOrderInfo(order);
+				
+				String remarkStr  = "订单支付";
+				supplierStoreService.updateStoreCardRecordBalance(cardRecord.getOpenid(), cardRecord.getId(), -balance, cardRecord.getSupplier_id(),orderCode,remarkStr);
+
 			}
 			
 		}
@@ -855,7 +859,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			
 			//更新订单的金额
 			if(card_record_id != null) {
-				shopOrderService.updateShopOrderByUsedBalanceCard(orderCode, card_record_id, cash_fee);
+				ShopOrderInfoBean order = shopOrderService.updateShopOrderByUsedBalanceCard(orderCode, card_record_id, cash_fee);
+				if(order == null) break;
 			}
 			//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
 			userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, orderCode);
@@ -867,7 +872,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 		case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE:
 			//更新订单的金额
 			if(card_record_id != null) {
-				shopOrderService.updateShopOrderByUsedBalanceCard(orderCode, card_record_id, cash_fee);
+				ShopOrderInfoBean order = this.updateShopOrderByUsedBalanceCard(orderCode, card_record_id, cash_fee);
+				if(order == null) break;
 			}
 			
 			//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
