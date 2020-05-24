@@ -1,3 +1,4 @@
+<%@page import="com.yd.util.NumberUtil"%>
 <%@page import="com.yd.business.order.bean.ShopOrderInfoBean"%>
 <%@page import="com.yd.util.DateUtil"%>
 <%@page import="com.yd.business.order.bean.ShopOrderProductBean"%>
@@ -70,7 +71,13 @@ List<ShopOrderInfoBean> listOrder = (List<ShopOrderInfoBean>)request.getAttribut
       					<div class="panel-heading">【<%=StringUtil.convertNull(order.getCreate_time()).substring(5, 16) %>】【<%=name %>】 【<%=order.getDictValueByField("status") %>】  
       					</div>
 						  <div class="panel-body">
-						    <%=order.getProduct_name_str() %>
+						    订单包含：<%=order.getProduct_name_str() %><br>
+						    订单原价：<%=NumberUtil.divideHave100(order.getCost_price()) %>元（
+						    现金支付：<%=NumberUtil.divideHave100(order.getCost_money()) %>元，
+						    卡余额支付：<%=NumberUtil.divideHave100(order.getCost_balance()) %>元，
+						    优惠券抵扣：<%=NumberUtil.divideHave100(order.getCoupon_total_price()) %>元，
+						    折扣卡抵扣：<%=NumberUtil.divideHave100(order.getStore_card_total_price()) %>元）
+						 
 						<!--   <a href=""  role="button" class="btn btn-success pull-right btn-xs"  >确定</a> -->
 						  </div>
       				</div>
