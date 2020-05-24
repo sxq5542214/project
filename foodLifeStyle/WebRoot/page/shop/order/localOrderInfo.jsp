@@ -291,7 +291,6 @@
 
 			discount_total_money = Number(cost_money - (discount * cost_money)/1000).toFixed(2) ;
 			var cost_money = cost_money - discount_total_money;
-alert(balance +"," + cost_money);
  
 			if(balance >= cost_money){
 				$("#cost_money").html("0.0");

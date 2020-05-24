@@ -38,8 +38,10 @@ import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.supplier.bean.SupplierBalanceLogBean;
 import com.yd.business.supplier.bean.SupplierCouponRecordBean;
+import com.yd.business.supplier.bean.SupplierStoreBalanceCardRecordBean;
 import com.yd.business.supplier.service.ISupplierCouponService;
 import com.yd.business.supplier.service.ISupplierService;
+import com.yd.business.supplier.service.ISupplierStoreService;
 import com.yd.business.user.bean.UserConsumeInfoBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.service.IUserConsumeInfoService;
@@ -87,6 +89,8 @@ public class WechatController extends BaseController {
 	private IShopOrderService shopOrderService;
 	@Resource
 	private IWechatOriginalInfoService wechatOriginalInfoService;
+	@Resource
+	private ISupplierStoreService supplierStoreService;
 	
 //	@Deprecated
 //	@RequestMapping("/wechat/handle.do")
@@ -331,6 +335,7 @@ public class WechatController extends BaseController {
 		String order_code = request.getParameter("order_code");				//定单号
 		String sid = request.getParameter("sid");		// 商户号
 		String type = request.getParameter("type");		// 支付分类
+		int rmb = (int) (Double.parseDouble(cost_money)  * 100);
 		
 		Map<String,String> attachMap = new HashMap<String, String>();
 		attachMap.put("coupon_record_id", coupon_record_id);
@@ -360,7 +365,16 @@ public class WechatController extends BaseController {
 				log.error(" createUnifiedOrderByShop couponRecord is null ,userid:"+ user.getId() +" recordid:" + coupon_record_id);
 			}
 		}
-		
+		//如果优惠卷规记录id不等于空
+		if(!StringUtil.isNull(balance_card_id) ){
+			SupplierStoreBalanceCardRecordBean record = supplierStoreService.findStoreBalanceCardRecordById(Integer.parseInt(balance_card_id));
+			
+			//根据折扣卡信息 更新订单数据，主要是价格侧的变动
+			shopOrderService.updateShopOrderByUsedBalanceCard(order_code, Integer.parseInt(balance_card_id), rmb);
+			if(record == null){
+				log.error(" createUnifiedOrderByShop BalanceCardRecord is null ,userid:"+ user.getId() +" recordid:" + balance_card_id);
+			}
+		}
 		//根据用户表中originalid 在ll_wechat_original_info表中信息 ,主要用于查询来自哪个公众号
 		WechatOriginalInfoBean originalInfo = wechatOriginalInfoService.findWechatOriginalInfoByOriginalid(user.getOriginalid());
 		int payCount = 1;
@@ -383,7 +397,6 @@ public class WechatController extends BaseController {
 //		String out_no = userConsumeInfoService.createOutTradeNo(IUserConsumeInfoService.OUTTRADE_TYPE_WXPAY, user.getId());
 		String out_trade_no = "out_trade_no="+ order_code + "-"+payCount;
 		//需要支付的总金额,以分为单位
-		int rmb = (int) (Double.parseDouble(cost_money)  * 100);
 		String total_fee = "total_fee="+ rmb;
 		//客户IP
 		String spbill_create_ip = request.getRemoteAddr();

@@ -88,7 +88,8 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	private ISupplierUserService supplierUserService;
 	@Resource
 	private ISupplierStoreService supplierStoreService;
-	
+	@Resource
+	private IShopOrderService shopOrderService;
 
 	@Override
 	public void createShopOrderInfo(ShopOrderInfoBean bean){
@@ -809,6 +810,36 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 	}
 	
 	@Override
+	public ShopOrderInfoBean updateShopOrderByUsedBalanceCard(String orderCode,Integer cardRecordId,Integer cash_fee) {
+		ShopOrderInfoBean order = null;
+		if(cardRecordId != null) {
+			SupplierStoreBalanceCardRecordBean cardRecord = supplierStoreService.findStoreBalanceCardRecordById(cardRecordId);
+			
+			order = this.findShopOrderInfoByCode(orderCode);
+			int money = order.getCost_money();
+			int discountMoney = money - (money * cardRecord.getDiscount()) / 1000;
+			int balance = money * cardRecord.getDiscount() / 1000;
+			
+			//余额不足折扣后的支付金额
+			if(cardRecord.getBalance() < balance) {
+				balance = cardRecord.getBalance();
+			}
+			int totalPrice = order.getCost_price();
+			
+			if(totalPrice  == (discountMoney + cash_fee + balance ) ) {
+				order.setCost_balance(balance);
+				order.setCost_money(cash_fee);
+				order.setStore_card_total_price(discountMoney);
+				//修改订单余额
+				updateShopOrderInfo(order);
+			}
+			
+		}
+		return order;
+	}
+	
+	
+	@Override
 	public String notifyShopOrder(Integer sid,String orderCode,String openid, int cash_fee,Integer coupon_id,Integer card_record_id , Integer type,String remark) {
 		
 		switch (type) {
@@ -821,7 +852,11 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			
 			break;
 		case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_ONLINE:
-
+			
+			//更新订单的金额
+			if(card_record_id != null) {
+				shopOrderService.updateShopOrderByUsedBalanceCard(orderCode, card_record_id, cash_fee);
+			}
 			//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
 			userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, orderCode);
 			//通过订单号在订购表中更改状态为更新支付成功状态
@@ -830,7 +865,11 @@ public class ShopOrderServiceImpl extends BaseService implements IShopOrderServi
 			
 			break;
 		case SupplierBalanceLogBean.TYPE_USER_SHOPORDER_OFFLINE:
-
+			//更新订单的金额
+			if(card_record_id != null) {
+				shopOrderService.updateShopOrderByUsedBalanceCard(orderCode, card_record_id, cash_fee);
+			}
+			
 			//更新充值记录表和订购表(通过订单号更新ll_user_consume_info表中的状态)
 			userConsumeInfoService.updateUserConsumeInfoStatus(UserConsumeInfoBean.STATUS_SUCCESS, orderCode );
 			//通过订单号在订购表中更改状态为更新支付成功状态

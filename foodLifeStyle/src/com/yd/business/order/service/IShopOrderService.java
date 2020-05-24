@@ -84,6 +84,8 @@ public interface IShopOrderService {
 	String notifyShopOrderByBalance(Integer sid, String orderCode, String openid, int balance, Integer coupon_id,
 			Integer card_record_id, Integer type, String remark);
 
+	ShopOrderInfoBean updateShopOrderByUsedBalanceCard(String orderCode, Integer cardRecordId, Integer cash_fee);
+
 
 
 
