@@ -267,7 +267,7 @@ SupplierBean supplier = (SupplierBean)request.getAttribute("supplier");
                 		var da = result.dataList[i];
                 		var remark = da.remark;
                 		if(typeof(remark) == "undefined") remark = '无备注';
-                		str += '<li class="list-group-item">【'+ da.nick_name +'】提交了共计【'+ 
+                		str += '<li class="list-group-item">【'+ da.nick_name +'】提交了原价【'+ 
                 		da.cost_price  +'元】的订单。订单包括【 '+ da.order_name+'】 订单状态：【'+ da.statusStr +'】</li>';
                 	}
                 	shopOrderEffLatelyData.html(str);
