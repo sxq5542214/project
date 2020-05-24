@@ -73,7 +73,9 @@ public class SupplierStoreController extends BaseController{
 	public static final String PAGE_SUPPLIER_SHOP_MANAGER_STORE_ADDORUPDATEBALANCECARD = "/page/supplier/shop/manager/store/addOrUpdateBalanceCard.jsp";
 	public static final String PAGE_SUPPLIER_SHOP_MANAGER_STORE_BALANCECARDLIST = "/page/supplier/shop/manager/store/storeBalanceCardList.jsp";
 	public static final String PAGE_SUPPLIER_SHOP_MANAGER_STORE_ASSIGNUSER = "/page/supplier/shop/manager/store/storeBalanceCardAssignUser.jsp";
+	public static final String PAGE_SUPPLIER_SHOP_MANAGER_STORE_USERASSIGNCARD = "/page/supplier/shop/manager/store/userAssignBalanceCard.jsp";
 	public static final String PAGE_SUPPLIER_SHOP_MANAGER_STORE_USERBALANCECARDUPDATE = "/page/supplier/shop/manager/store/userBalanceCardUpdate.jsp";
+	public static final String PAGE_SUPPLIER_SHOP_MANAGER_STORE_USERBALANCECARDLIST = "/page/supplier/shop/manager/store/userBalanceCardList.jsp";
 	
 	@Resource
 	private IUserWechatService userWechatService;
@@ -202,6 +204,41 @@ public class SupplierStoreController extends BaseController{
 		return null;
 	}
 	
+
+	/**
+	 * 	跳转至折扣卡分配界面
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("supplier/store/toAssignBalanceCardToUserPage.html")
+	public ModelAndView toAssignBalanceCardToUserPage(HttpServletRequest request,HttpServletResponse response) {
+		
+		try {
+			SupplierBean supplier = getCurrentSupplier();
+			String openid = request.getParameter("openid");
+			
+			SupplierUserBean spUser=  supplierUserService.findSupplierUser(openid, supplier.getId());
+			
+			SupplierStoreBalanceCardBean bean = new SupplierStoreBalanceCardRecordBean();
+			bean.setSupplier_id(supplier.getId());
+			bean.setStatus(SupplierStoreBalanceCardBean.STATUS_UP);
+			List<SupplierStoreBalanceCardBean> cardList = supplierStoreService.queryStoreBalanceCard(bean );
+			
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("spUser", spUser);
+			map.put("cardList", cardList);
+			
+			return new ModelAndView(PAGE_SUPPLIER_SHOP_MANAGER_STORE_USERASSIGNCARD ,map );
+			
+		} catch (Exception e) {
+			log.error(e,e);
+			writeJson(response, e.toString());
+		}
+		
+		return null;
+	}
 	
 	
 	
@@ -288,6 +325,50 @@ public class SupplierStoreController extends BaseController{
 		
 		return null;
 	}
+	
+	
+	/**
+	 * 	跳转至产品套餐管理界面
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("supplier/store/toUserBalanceCardListPage.html")
+	public ModelAndView toUserBalanceCardListPage(HttpServletRequest request,HttpServletResponse response) {
+		
+		try {
+			SupplierBean supplier = getCurrentSupplier();
+			String openid = request.getParameter("openid");
+			
+			SupplierUserBean spUser = supplierUserService.findSupplierUser(openid, supplier.getId());
+			
+			SupplierStoreBalanceCardRecordBean record = null;
+			SupplierStoreBalanceCardRecordBean bean = new SupplierStoreBalanceCardRecordBean();
+			bean.setSupplier_id(supplier.getId());
+			bean.setOpenid(openid);
+			List<SupplierStoreBalanceCardRecordBean> recordList = supplierStoreService.queryStoreBalanceCardRecord(bean);
+			
+			//如果只有一条记录，则直接进入对应的余额卡管理界面
+			if(recordList.size() == 1) {
+				record = recordList.get(0);
+				return new ModelAndView("redirect:/supplier/store/toUserBalanceCardManagerPage.html?openid="+openid+"&record_id="+record.getId());
+			}
+
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("recordList", recordList);
+			map.put("spUser", spUser);
+			
+			return new ModelAndView(PAGE_SUPPLIER_SHOP_MANAGER_STORE_USERBALANCECARDLIST  ,map );
+			
+		} catch (Exception e) {
+			log.error(e,e);
+			writeJson(response, e.toString());
+		}
+		
+		return null;
+	}
+	
 	
 	/**
 	 * 	跳转至产品套餐管理界面
