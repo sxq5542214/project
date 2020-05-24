@@ -1102,7 +1102,7 @@ log.debug("userTicketResponse:"+response);
 			return null;
 		}
 		WechatWebAuthBean code_auth = (WechatWebAuthBean) wechatAuthMap.get(code);
-log.info("wechatAuthMapGet:" + code +"    ,"+ code_auth == null);
+log.info("wechatAuthMapGet:" + code +"    ,"+  (code_auth == null));
 		WechatWebAuthBean bean = new WechatWebAuthBean();
 
 		if(code_auth == null){

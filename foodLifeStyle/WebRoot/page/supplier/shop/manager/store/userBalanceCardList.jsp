@@ -71,7 +71,7 @@ SupplierUserBean spUser  = (SupplierUserBean)request.getAttribute("spUser");
 						  <div class="panel-body">
 						    折扣额度：<%=NumberUtil.divideHave100(record.getDiscount()) %>折，剩余金额：<%=NumberUtil.divideHave100(record.getBalance()) %>元<br>
 						    到期时间：<%=record.getDff_time() %>
-						   <a href="supplier/store/toUserBalanceCardManagerPage.html?openid=<%=record.getOpenid() %>record_id=<%=record.getId() %>" style="margin-right: 5px;"  role="button" class="btn btn-info pull-right btn-xs"  >修改余额</a>&nbsp;&nbsp;
+						   <a href="supplier/store/toUserBalanceCardManagerPage.html?openid=<%=record.getOpenid() %>&record_id=<%=record.getId() %>" style="margin-right: 5px;"  role="button" class="btn btn-info pull-right btn-xs"  >修改余额</a>&nbsp;&nbsp;
 						  </div>
       				</div>
       				
