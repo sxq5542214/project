@@ -576,7 +576,7 @@ public class WechatController extends BaseController {
 			String remark = attach.get("remark");
 			
 			
-			shopOrderService.notifyShopOrder(sid, orderCode, result.getOut_trade_no(), cash_fee, coupon_id, card_record_id, type, remark);
+			shopOrderService.notifyShopOrder(sid, orderCode, result.getOpenid(), cash_fee, coupon_id, card_record_id, type, remark);
 			
 			
 		}

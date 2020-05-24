@@ -388,7 +388,7 @@ public class ShopOrderController extends BaseController {
 			String openid = request.getParameter("openid");								//openid 	123
 			String cost_money = request.getParameter("cost_money");								//用户需要支付的价格		14.20
 			String points = request.getParameter("points");							//该产品可以抵用的积分		100
-			String balanceStr = request.getParameter("cost_balance");					//可以使用的余额			100
+			String balanceStr = request.getParameter("cost_balance");					//可以使用的余额			100	分为单位
 			Integer cost_balance = StringUtil.isNull(balanceStr) ? 0:Integer.parseInt(balanceStr);	//给eff_numStr字段          String类型转换成Integer类型
 			String phone = request.getParameter("phone");											//充值的电话号码			18755171111
 			String orderCode = request.getParameter("order_code");				//定单号

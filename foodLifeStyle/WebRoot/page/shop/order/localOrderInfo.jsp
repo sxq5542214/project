@@ -277,23 +277,25 @@
 		dom.children[0].checked = true;
 		var cost_money = Number($("#cost_money").html());
 		var cost_price = Number($("#cost_price").html());
-		
+		var cost_balance = Number($("#cost_balance").html());
 		var cardId = dom.children[0].value ;
-		var balance = Number(dom.children[0].title).toFixed(2) ;
+		var balance = (Number(dom.children[0].title) /100 ).toFixed(2) ;
 		var discount =  Number($("#cardDiscount"+cardId).val()); //千
 
 		$("#balance_card_id").val(cardId);
 		//比对余额是否和上一次选的一致
-		if(currentCard != balance){
+		if(currentCard != cardId){	
 			//还原之前扣减的余额
-			cost_money += currentCard;
-			
+			cost_money += Number(discount_total_money) + cost_balance;
+
+
 			discount_total_money = Number(cost_money - (discount * cost_money)/1000).toFixed(2) ;
 			var cost_money = cost_money - discount_total_money;
-
+alert(balance +"," + cost_money);
+ 
 			if(balance >= cost_money){
 				$("#cost_money").html("0.0");
-				$("#cost_balance").html(cost_money);
+				$("#cost_balance").html(cost_money.toFixed(2));
 				//修改支付按钮的指向，余额够，不用请求微信支付
 				$("#payButton").attr('onClick', 'payByBalance()');
 				
@@ -304,7 +306,7 @@
 				//修改支付按钮的指向，余额不够，请求微信支付
 				$("#payButton").attr('onClick', 'pay()');
 			}
-			currentCard = balance;
+			currentCard = cardId;
 		}
 	}
 	function findCouponById(couponid){
@@ -390,7 +392,7 @@ function pay(){
 	
 	$.ajax({
 		url : "wechat/createUnifiedOrderByShop.do",
-		data : { cost_money : (cost_money - cost_balance).toFixed(2),
+		data : { cost_money : cost_money,
 				 cost_balance : (cost_balance * 100).toFixed(0),
 				 openid : openid,
 				 order_code : order_code,
@@ -425,8 +427,7 @@ function pay(){
 			           
 			           	$("#payButton").hide();
 //			           	location.href = "order/userOrderProduct.do?out_trade_code="+result.outTradeNo;
-			         	location.href = "page/supplier/shop/paySuccess.jsp";			           	
-			           }else{
+						location.href = "page/shop/order/paySuccess.jsp";				           }else{
 			           	$.ajax({
 							url : "wechat/deleteUnifiedOrderByShop.do",
 							data : { outTradeNo : result.outTradeNo,
@@ -466,7 +467,7 @@ function payByBalance(){
 	
 	$.ajax({
 		url : "order/shop/notifyShopOrderByBalance.html",
-		data : { cost_money : (cost_money - cost_balance).toFixed(2),
+		data : { cost_money : cost_money,
 				 cost_balance : (cost_balance * 100).toFixed(0),
 				 openid : openid,
 				 order_code : order_code,
