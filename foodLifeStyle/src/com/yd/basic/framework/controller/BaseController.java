@@ -338,9 +338,9 @@ public abstract class BaseController extends MultiActionController {
 	
 	protected String getCurrentOpenid() {
 		String openid = (String) WebContext.getHttpSession().getAttribute(WebContext.SESSION_ATTRIBUTE_USER_OPENID);
-		if(StringUtil.isNull(openid)) {
-			openid = CookieUtil.getValueByCookie(WebContext.getHttpServletRequest(), WebContext.SESSION_ATTRIBUTE_USER_OPENID);
-		}
+//		if(StringUtil.isNull(openid)) {
+//			openid = CookieUtil.getValueByCookie(WebContext.getHttpServletRequest(), WebContext.SESSION_ATTRIBUTE_USER_OPENID);
+//		}
 		return openid;
 	}
 	protected SupplierBean getCurrentSupplier() {

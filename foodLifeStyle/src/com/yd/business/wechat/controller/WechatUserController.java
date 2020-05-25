@@ -316,9 +316,9 @@ Thread.sleep(100);
 			param.put("openid", openid);
 System.out.println("============================================toDistributeControll: "+ conName +"  " + openid);
 
-			//添加openid 至Session  和 cookie
+			//添加openid 至Session 
 			WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_USER_OPENID,openid);
-			CookieUtil.addCookie(response, WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
+//			CookieUtil.addCookie(response, WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
 			return new ModelAndView("/"+conName.replaceAll("\\.", "/")+".html?openid="+ StringUtil.convertNull(openid),param);
 			
 		}catch (Exception e) {

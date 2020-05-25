@@ -101,10 +101,10 @@ public class UserInterceptor extends BaseInterceptor {
 			//保存并处理用户动作
 			msgCenterActionService.saveAndHandleUserAction(openid, request.getServletPath(), action_value, requestMap);
 			
-			//如果cookie中没有openid 就加到cookie中去
-			if(StringUtil.isNull(cookieOpenid)){
-				addOpenidToCookie(response, openid);
-			}
+			//如果cookie中没有openid 就加到cookie中去			//有问题，openid中有 - 字符，会报错，屏蔽了，不在cookie中存openid
+//			if(StringUtil.isNull(cookieOpenid)){
+//				addOpenidToCookie(response, openid);
+//			}
 		}
 		return true;
 	}
@@ -116,7 +116,9 @@ public class UserInterceptor extends BaseInterceptor {
 	 */
 	private void addOpenidToCookie(HttpServletResponse response,String openid){
 		if(StringUtil.isNotNull(openid)){
-			openid = openid.split(",")[0];
+log.info("[addOpenidToCookie:"+ openid +"]");
+			openid = openid.split(",")[0].trim();
+log.info("[addOpenidToCookie:"+ openid +"]");
 			Cookie cookie = new Cookie(WebContext.SESSION_ATTRIBUTE_USER_OPENID, openid);
 			cookie.setPath("/");
 			response.addCookie(cookie);
