@@ -27,7 +27,7 @@
 <title>商品分类</title>
 <link rel="stylesheet" type="text/css"
 	href="css/user/supplierProductShop/category.css">
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js" type="text/javascript" ></script>
+ 	<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" type="text/javascript" ></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
 	<script type="text/javascript" src="<%=request.getScheme()  %>://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 	<script type="text/javascript" src="js/wechat/weixinInit.js"></script>

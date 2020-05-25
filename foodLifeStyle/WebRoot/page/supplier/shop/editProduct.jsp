@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <title>我的商铺</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   	<link rel="stylesheet" href="css/bootstrap/fileinput/fileinput.min.css">
-  	<script type="text/javascript" src="js/jquery.js"></script>
+ 	<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" type="text/javascript" ></script>
   	<script type="text/javascript" src="js/bootstrap/fileinput/fileinput.min.js"></script>
   	<script type="text/javascript" src="js/bootstrap/fileinput/i18n/zh.js"></script>
   </head>

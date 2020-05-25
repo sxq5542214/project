@@ -33,7 +33,7 @@
 <title><%=supplier.getName() %></title>
 <link rel="stylesheet" type="text/css"
 	href="css/user/supplierProductShop/category.css">
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js" type="text/javascript" ></script>
+ 	<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" type="text/javascript" ></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
 	<script type="text/javascript" src="js/user/supplierProductShop/shoppingCart.js"></script>
 	<script src="js/common/cookieUtil.js"></script>
@@ -112,7 +112,7 @@
 				<div>
 					<div style="line-height: 30px;height: 30px;background: #F4F4F4;padding: 4px 15px;">
 						<span style="font-size: 0.5rem;">购物车</span>
-						<span style="float: right;font-size: 0.5rem;">清空购物车</span>
+						<span style="float: right;font-size: 0.5rem;"><!-- 清空购物车 --></span>
 					</div>
 					<div style="max-height: 300px;overflow: auto;">
 						<div id="cartInfoTemplate_div" style="display: none;align-items:center;padding: 14px 0px;font-size: 16px;color: #333;border-bottom: 1px solid #E4E4E4;margin: 0 15px;">
@@ -153,11 +153,11 @@
 					</div>
 				</div>
 				<div id="gotoBTN"
-					style="height: 50px;padding: 0 30px; font-size: 1.2rem;font-weight:bold; line-height:50px; color:#333; position: relative;background-image: linear-gradient(-135deg, #FFBD27 0%, #FFD161 100%);"
+					style="height: 50px;padding: 0 20px; font-size: 1.2rem;font-weight:bold; line-height:50px; color:#333; position: relative;background-image: linear-gradient(-135deg, #FFBD27 0%, #FFD161 100%);"
 					onclick="gotoPayPrice();">
 					不选，直接付款</div>
 				<div id="gotoOrder"
-					style="display:none;height: 50px;padding: 0 30px; font-size: 1.2rem;font-weight:bold; line-height:50px; color:#333; position: relative;background-image: linear-gradient(-135deg, #FFBD27 0%, #FFD161 100%);"
+					style="display:none;height: 50px;padding: 0 20px; font-size: 1.2rem;font-weight:bold; line-height:50px; color:#333; position: relative;background-image: linear-gradient(-135deg, #FFBD27 0%, #FFD161 100%);"
 					onclick="gotoOrder();">
 					选好了</div>
 			</div>
@@ -420,7 +420,7 @@
 					var item = findItem(spid);
 					var price = item.price;
 					var name = item.name;
-					var numPrice = Number(price * num);
+					var numPrice = Number(price * num).toFixed(2);
 		 			updateTotalPrice(numPrice);
 		 			
 		 			createCartInfo(spid,name,num,numPrice);
@@ -436,7 +436,7 @@
   			node = document.getElementById("cartInfoTemplate_div").cloneNode(true);
   			node.id = 'cartInfo_'+spid;
 	  		node.children[0].children[0].children[0].innerHTML = name;
-	  		node.children[0].children[1].children[0].innerHTML = price;
+	  		node.children[0].children[1].children[0].innerHTML = Number(price).toFixed(2);
 	//  		node.children[1].children[0].children[0].onclick = addToCartBySpid(spid,-1);
 	  		node.children[1].children[0].children[1].innerHTML = num;
 	  		node.children[1].children[0].children[0].onclick = function(){
@@ -451,7 +451,7 @@
   		}else{
 	  		var n = node.children[1].children[0].children[1].innerHTML;
   			node.children[1].children[0].children[1].innerHTML = Number(n) + num;
-		  	node.children[0].children[1].children[0].innerHTML = (Number(n) + num) * item.price ;
+		  	node.children[0].children[1].children[0].innerHTML = ((Number(n) + num) * item.price ).toFixed(2) ;
   		}
   		
   	}
@@ -464,7 +464,7 @@
 			
 		}else{
 			node.children[1].children[0].children[1].innerHTML = Number(n) + num;
-			node.children[0].children[1].children[0].innerHTML = (Number(n) + num) * item.price ;
+			node.children[0].children[1].children[0].innerHTML = ((Number(n) + num) * item.price).toFixed(2) ;
 			
 			addToCartBySpid(spid, num );
 			

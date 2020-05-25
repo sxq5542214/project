@@ -47,7 +47,7 @@
 <link rel="stylesheet" type="text/css" href="page/shop/order/css/order2014.src.css"
 	charset="gbk">
 
-<script type="text/javascript" src="js/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" type="text/javascript" ></script>
 <!-- <script type="text/javascript" src="js/spin.min.js"></script>
  -->
  <script type="text/javascript" src="js/common/cookieUtil.js"></script>
