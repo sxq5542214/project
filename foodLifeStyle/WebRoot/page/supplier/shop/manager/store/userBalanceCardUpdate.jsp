@@ -16,7 +16,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 SupplierUserBean spUser = (SupplierUserBean)request.getAttribute("spUser");
 
 SupplierStoreBalanceCardRecordBean record = (SupplierStoreBalanceCardRecordBean)request.getAttribute("record");
-SupplierStoreBalanceCardBean card = (SupplierStoreBalanceCardBean)request.getAttribute("card");
+List<SupplierStoreBalanceCardBean> cardList = (List<SupplierStoreBalanceCardBean>)request.getAttribute("cardList");
 
 %>
 
@@ -52,7 +52,7 @@ SupplierStoreBalanceCardBean card = (SupplierStoreBalanceCardBean)request.getAtt
       <div class="">
       
       				<div class="panel panel-primary ">
-      					<div class="panel-heading"> 卡名：【<%=card.getName() %>】  <span style="float: right;">折扣：<%=NumberUtil.divideHave100(card.getDiscount()) %>折</span> </div>
+      					<div class="panel-heading"> 卡名：【<%=record.getName() %>】  <span style="float: right;">折扣：<%=NumberUtil.divideHave100(record.getDiscount()) %>折</span> </div>
 						  <div class="panel-body">
 								<input type="hidden" value="<%=record.getId() %>" id="id" name="id" >
 								<input type="hidden" value="<%=spUser.getOpenid() %>" id="openid" name="openid" >
@@ -62,6 +62,12 @@ SupplierStoreBalanceCardBean card = (SupplierStoreBalanceCardBean)request.getAtt
 						   		<span class="input-group-addon" style="width: 40%;border: 0;background: white;">用户昵称：</span>
 							  
 							    <input type="text" disabled="disabled" style="text-align: center;" class="form-control" aria-label="请输入数字" value="<%=spUser.getNick_name() %>" >
+						   </div>
+						   <div class="input-group" style="width: 100%;">  
+						   		<div class="input-group" style="width: 90%;">
+						   		<span class="input-group-addon" style="width: 40%;border: 0;background: white;">手机号码：</span>
+							  
+							    <input type="text" id="phone" name="phone" style="text-align: center;" class="form-control" aria-label="请输入用户手机号码" value="<%=StringUtil.convertNull(spUser.getPhone()) %>" >
 						   </div>
 						   <div class="input-group" style="width: 100%;margin-top: 5px;">  
 						   		<div class="input-group" style="width: 90%;">
@@ -73,7 +79,7 @@ SupplierStoreBalanceCardBean card = (SupplierStoreBalanceCardBean)request.getAtt
 						   		<div class="input-group" style="width: 90%;">
 						   		<span class="input-group-addon" style="width: 40%;border: 0;background: white;">扣减余额：</span>
 							  
-							    <input type="number" step="0.01" id="addBalance" name="addBalance" style="text-align: center;" class="form-control" aria-label="请输入数字" value="0" >
+							    <input type="number" step="0.01" id="addBalance" name="addBalance" style="text-align: center;" class="form-control" aria-label="请输入消费金额，负数为充值" value="" >
 						   </div>
 						   
 						   <div class="input-group" style="width: 100%;margin-top: 5px;">  
@@ -82,6 +88,22 @@ SupplierStoreBalanceCardBean card = (SupplierStoreBalanceCardBean)request.getAtt
 							  
 							    <input type="datetime" id="dff_time" name="dff_time" style="text-align: center;" class="form-control" value="<%=record.getDff_time() %>" >
 						   </div>
+						   
+						   <div class="input-group" style="width: 100%;margin-top: 5px;">  
+						   		<div class="input-group" style="width: 90%;">
+						   		<span class="input-group-addon" style="width: 40%;border: 0;background: white;">所属卡名：</span>
+							  	
+							  	<select id="card_id" name="card_id" class="form-control show-tick" style="text-align: center;">
+							  		<%String selected ;
+							  		for(SupplierStoreBalanceCardBean card : cardList){
+							  			selected = card.getId().intValue() == record.getCard_id() ? "selected=\"selected\"":"" ;
+							  		%>
+							  			<option value="<%=card.getId()%>" <%=selected %>><%=card.getName() %></option>
+							  		<%} %>
+							  	</select>
+						   </div>
+						   
+						   
 							<a style="margin-top: 10px;" onclick="submitUpdate()" role="button" class="btn btn-primary pull-right"  >提交修改</a>
 							</div>
       					  </div>
@@ -118,12 +140,16 @@ function submitUpdate(){
 	var addBalance = -$("#addBalance").val();
 	var balance = $("#balance").val();
 	var dff_time = $("#dff_time").val();
+	var phone = $("#phone").val();
+	var card_id = $("#card_id").val();
+
 	$.ajax({
        type : "POST",
        //请求地址
        url : "supplier/store/ajax/updateUserStoreCardRecordBalance.html",
        //数据，json字符串
-       data : { id : id , openid : openid , addBalance:addBalance, dff_time:dff_time},
+       data : { id : id , openid : openid , addBalance:addBalance, dff_time:dff_time ,
+        phone:phone ,card_id:card_id },
        //请求成功
        success : function(resultstr) {
        		if(resultstr == 'success'){

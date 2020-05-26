@@ -44,6 +44,7 @@
 <!-- 			<if test="balance != null"> balance = #{balance} ,</if>
  -->			<if test="eff_time != null"> eff_time = #{eff_time} ,</if>
 			<if test="dff_time != null"> dff_time = #{dff_time} ,</if>
+			<if test="card_id != null"> card_id = #{card_id} ,</if>
 		</set>
 		where id = #{id}
 	</update>

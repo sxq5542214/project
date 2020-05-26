@@ -283,7 +283,7 @@ public class SupplierStoreController extends BaseController{
 	}
 	
 	/**
-	 * 	跳转至产品套餐管理界面
+	 * 	跳转至用户折扣卡管理界面
 	 * @param request
 	 * @param response
 	 * @return
@@ -303,18 +303,23 @@ public class SupplierStoreController extends BaseController{
 			bean.setSupplier_id(supplier.getId());
 			bean.setOpenid(openid);
 			bean.setId(Integer.parseInt(record_id));
-			List<SupplierStoreBalanceCardRecordBean> cardList = supplierStoreService.queryStoreBalanceCardRecord(bean);
+			List<SupplierStoreBalanceCardRecordBean> recordList = supplierStoreService.queryStoreBalanceCardRecord(bean);
 			
-			if(cardList.size() > 0) {
-				record = cardList.get(0);
+			if(recordList.size() > 0) {
+				record = recordList.get(0);
 			}
-			SupplierStoreBalanceCardBean card = supplierStoreService.findStoreBalanceCardById(record.getCard_id(), supplier.getId());
-
+//			SupplierStoreBalanceCardBean card = supplierStoreService.findStoreBalanceCardById(record.getCard_id(), supplier.getId());
+			
+			// 查询所有的折扣卡/储值卡
+			SupplierStoreBalanceCardBean card = new SupplierStoreBalanceCardRecordBean();
+			card.setSupplier_id(supplier.getId());
+			card.setStatus(SupplierStoreBalanceCardBean.STATUS_UP);
+			List<SupplierStoreBalanceCardBean> cardList = supplierStoreService.queryStoreBalanceCard(card);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("record", record);
 			map.put("spUser", spUser);
-			map.put("card", card);
+			map.put("cardList", cardList);
 			
 			return new ModelAndView(PAGE_SUPPLIER_SHOP_MANAGER_STORE_USERBALANCECARDUPDATE  ,map );
 			
@@ -385,16 +390,30 @@ public class SupplierStoreController extends BaseController{
 			String record_id = request.getParameter("id");
 			String dff_time = request.getParameter("dff_time");
 			String addBalance = request.getParameter("addBalance");
+			String phone = request.getParameter("phone");
+			String card_id = request.getParameter("card_id");
 			
 			
 			int add = NumberUtil.multiply100(addBalance);
-			String remark = "店主为您修改余额";
-			supplierStoreService.updateStoreCardRecordBalance(openid, Integer.parseInt(record_id), add, supplier.getId(),null,remark);
 			
 			SupplierStoreBalanceCardRecordBean record = supplierStoreService.findStoreBalanceCardRecordById(Integer.parseInt(record_id));
-			record.setDff_time(dff_time);
-			supplierStoreService.updateStoreBalanceCardRecord(record);
-			
+			if(record.getOpenid().equals(openid)) {
+				//修改过期时间和对应cardid
+				record.setDff_time(dff_time);
+				record.setCard_id(Integer.parseInt(card_id));
+				supplierStoreService.updateStoreBalanceCardRecord(record);
+				
+				//修改用户手机号
+				if(StringUtil.isNotNull(phone)) {
+					SupplierUserBean spUser = supplierUserService.findSupplierUser(openid, supplier.getId());
+					spUser.setPhone(phone);
+					supplierUserService.updateSupplierUser(spUser);
+				}
+				
+				// 修改余额
+				String remark = "店主为您修改余额";
+				supplierStoreService.updateStoreCardRecordBalance(openid, Integer.parseInt(record_id), add, supplier.getId(),null,remark);
+			}
 			writeJson(response, "success");
 			
 		} catch (Exception e) {
