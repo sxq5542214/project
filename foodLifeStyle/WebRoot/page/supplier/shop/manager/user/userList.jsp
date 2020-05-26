@@ -45,7 +45,7 @@ List<SupplierUserBean> userList = (List<SupplierUserBean>)request.getAttribute("
 		<div class="container row">
 			<input type="hidden" name="sid" value="<%=sid%>">
 	        <input type="number" id="phone" name="phone" value="<%=StringUtil.convertNull(phone) %>" class="form-control " placeholder="请输入手机号" >
-			<select id="level" name="level" class="form-control show-tick" title="请选择会员等级"   >
+<!-- 			<select id="level" name="level" class="form-control show-tick" title="请选择会员等级"   >
 		      	 <option value="">全部会员</option>
 		      	 <option value="0">普通会员</option>
 		      	 <option value="1">一级会员</option>
@@ -53,7 +53,7 @@ List<SupplierUserBean> userList = (List<SupplierUserBean>)request.getAttribute("
 		      	 <option value="3">三级会员</option>
 		      	 <option value="4">四级会员</option>
 		      	 <option value="5">五级会员</option>
-			</select>	
+			</select>	 -->
         </div>
         <button  class="btn btn-lg btn-primary btn-block" style="margin-top: 0px;" type="submit">确定查询</button>
       </form> 
