@@ -93,7 +93,7 @@ List<SupplierStoreBalanceCardBean> cardList = (List<SupplierStoreBalanceCardBean
 						   		<div class="input-group" style="width: 90%;">
 						   		<span class="input-group-addon" style="width: 40%;border: 0;background: white;">所属卡名：</span>
 							  	
-							  	<select id="card_id" name="card_id" class="form-control show-tick" style="text-align: center;">
+							  	<select id="card_id" name="card_id" class="form-control show-tick" style="text-align-last: center;">
 							  		<%String selected ;
 							  		for(SupplierStoreBalanceCardBean card : cardList){
 							  			selected = card.getId().intValue() == record.getCard_id() ? "selected=\"selected\"":"" ;
