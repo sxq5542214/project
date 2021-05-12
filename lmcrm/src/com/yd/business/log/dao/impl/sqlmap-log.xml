@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="systemLog">
+	<select id="queryLogList" resultType="log" parameterType="map">
+		select * from ll_system_log
+		<where>
+			<if test="userid!=null">
+				and userid = #{userid}
+			</if>
+			<if test="type!=null">
+				and type = #{type}
+			</if>
+			<if test="supplier_id!=null">
+				and supplier_id = #{supplier_id}
+			</if>
+		</where>
+	</select>
+	<insert id="insertLog" parameterType="log">
+		insert into ll_system_log(userid,type,date,action,content,function,supplier_id)
+		values(#{userid},#{type},#{date},#{action},#{content},#{function},#{supplier_id})
+	</insert>
+	
+	
+</mapper>

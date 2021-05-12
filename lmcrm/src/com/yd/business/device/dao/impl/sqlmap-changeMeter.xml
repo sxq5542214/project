@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="changeMeter">
+	<select id="queryChangeMeterList" resultType="changeMeter" parameterType="changeMeter">
+		select * from changeMeter 
+		<where>
+			
+			<if test="cm_id != null"> and cm_id = #{cm_id}</if>
+		</where>
+	</select>
+	
+	<insert id="insertChangeMeter" parameterType="changeMeter" useGeneratedKeys="true" keyProperty="cm_id">
+		
+		insert into changeMeter(
+      cm_userid
+      ,cm_oldmetercode
+      ,cm_newmetercode
+      ,cm_happendate
+      ,cm_type
+      ,cm_status
+      ,cm_operatorid
+      ,cm_remark
+      ,cm_oldmeterno
+      ,cm_newmeterno  ) values(
+      #{cm_userid}
+      ,#{cm_oldmetercode}
+      ,#{cm_newmetercode}
+      ,#{cm_happendate}
+      ,#{cm_type}
+      ,#{cm_status}
+      ,#{cm_operatorid}
+      ,#{cm_remark}
+      ,#{cm_oldmeterno}
+      ,#{cm_newmeterno}    )
+   	</insert>
+	
+	<delete id="deleteChangeMeter" parameterType="long">
+		delete from  changeMeter
+		where cm_id = #{cm_id}
+	</delete>
+	
+	
+ 	<update id="updateChangeMeter" parameterType="changeMeter">
+		update changeMeter 
+		<set>
+			<if test="cm_userid != null">cm_userid = #{cm_userid},</if>
+			<if test="cm_oldmetercode != null">cm_oldmetercode = #{cm_oldmetercode},</if>
+			<if test="cm_newmetercode != null">cm_newmetercode = #{cm_newmetercode},</if>
+			<if test="cm_happendate != null">cm_happendate = #{cm_happendate},</if>
+			<if test="cm_type != null">cm_type = #{cm_type},</if>
+			<if test="cm_status != null">cm_status = #{cm_status},</if>
+			<if test="cm_operatorid != null">cm_operatorid = #{cm_operatorid},</if>
+			<if test="cm_remark != null">cm_remark = #{cm_remark},</if>
+			<if test="cm_oldmeterno != null">cm_oldmeterno = #{cm_oldmeterno},</if>
+			<if test="cm_newmeterno != null">cm_newmeterno = #{cm_newmeterno},</if>
+		</set>
+		<where>
+			cm_id = #{cm_id}
+		</where>
+		
+	</update>
+	
+</mapper>
+
+

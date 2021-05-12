@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="building">
+	<select id="queryBuildingList" resultType="buildingExt" parameterType="building">
+		select *, b_name as 'text' ,'javascript:updateUserData(3,' + convert(varchar ,b_id) +');'  as 'href' from building 
+		<where>
+			
+			<if test="b_id != null"> and b_id = #{b_id}</if>
+			<if test="b_areaid != null"> and b_areaid = #{b_areaid}</if>
+		</where>
+	</select>
+	
+	<insert id="insertBuilding" parameterType="building" useGeneratedKeys="true" keyProperty="c_id">
+		
+		insert into building(
+      b_areaid
+      ,b_name
+      ,b_createdate
+      ,b_updatedate ) values(
+      #{b_areaid}
+      ,#{b_name}
+      ,#{b_createdate}
+      ,#{b_updatedate} )
+   	</insert>
+	
+	<delete id="deleteBuilding" parameterType="long">
+		delete from  building
+		where b_id = #{b_id}
+	</delete>
+	
+	
+ 	<update id="updateBuilding" parameterType="building">
+		update building 
+		<set>
+			<if test="b_areaid != null">b_areaid = #{b_areaid},</if>
+			<if test="b_name != null">b_name = #{b_name},</if>
+			<if test="b_updatedate != null">b_updatedate = #{b_updatedate},</if>
+		</set>
+		<where>
+			b_id = #{b_id}
+		</where>
+		
+	</update>
+	
+</mapper>
+
+
