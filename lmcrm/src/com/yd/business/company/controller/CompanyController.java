@@ -19,6 +19,7 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.area.bean.AreaBean;
 import com.yd.business.area.service.IAreaService;
 import com.yd.business.company.bean.CompanyBean;
+import com.yd.business.company.bean.CompanyExtBean;
 import com.yd.business.company.service.ICompanyService;
 import com.yd.business.operator.bean.OperatorBean;
 
@@ -33,7 +34,7 @@ public class CompanyController extends BaseController {
 	
 
 	/**
-	 *  界面查询取悦列表
+	 *  界面查询营业所列表
 	 * @param request
 	 * @param response
 	 * @return
@@ -43,7 +44,7 @@ public class CompanyController extends BaseController {
 		
 		try {
 
-			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(BaseContext.CURRENT_USER);
+			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			
 			CompanyBean bean = companyService.findCompanyById(op.getO_companyid());
 			
@@ -54,5 +55,31 @@ public class CompanyController extends BaseController {
 		return null;
 	}
 	
+	/**
+	 *  界面查询营业所列表
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/company/ajaxQueryCompanyList.do")
+	public ModelAndView ajaxQueryCompanyList(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+
+			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			Long company_id = null;
+			if(op.getO_kind() != OperatorBean.KIND_SUPPERUSER) {
+				company_id = op.getO_companyid();
+			}
+			CompanyBean bean = new CompanyBean();
+			bean.setC_id(company_id);
+			List<CompanyBean> list = companyService.queryCompanyList(bean );
+			
+			writeJson(response, list );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
 	
 }

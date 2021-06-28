@@ -1,4 +1,4 @@
-package com.yd.business.user.controller;
+package com.yd.business.operator.controller;
 
 import java.util.List;
 
@@ -17,20 +17,24 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.business.operator.bean.OperatorExtBean;
+import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.other.service.IAddressService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
+import com.yd.business.price.bean.PriceBean;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.service.IWechatPayService;
 import com.yd.business.wechat.service.IWechatService;
+import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.StringUtil;
 @Controller
-public class UserController extends BaseController {
+public class OperatorController extends BaseController {
 
 	@Autowired
-	private IUserInfoService userInfoService;
+	private IOperatorService operatorService;
 	@Resource
 	private IConfigAttributeService configAttributeService;
 	@Resource
@@ -43,54 +47,27 @@ public class UserController extends BaseController {
 	private IConfigCruxService configCruxService;
 	
 	public static final String PAGE_ORDERPRODUCTLOG = "/page/user/orderProductLog.jsp";
+
 	/**
-	 * 检查手机号
+	 *  界面查询员工列表
 	 * @param request
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("**/user/checkPhone.do")
-	public ModelAndView checkPhone(HttpServletRequest request,HttpServletResponse response){
-		
-		try {
-			
-			String phone = request.getParameter("phone");
-			AreaDataBean ad = areaDataService.getAreaDataByPhone(phone);
-			writeJson(response, ad);
-		} catch (Exception e) {
-			log.error(e, e);
-		}
-		return null;
-	}
-	
-	/**
-	 *  界面查询用户列表
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping("**/admin/user/ajaxQueryUserByCompany.do")
-	public ModelAndView ajaxQueryUserByCompany(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/operator/ajaxQueryOperatorList.do")
+	public ModelAndView ajaxQueryOperatorList(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
 
-			String u_phone = request.getParameter("u_phone");
-			String u_name = request.getParameter("u_name");
-			String u_paperwork = request.getParameter("u_paperwork");
-			String u_buildingid = request.getParameter("u_buildingid");
-			String u_areaid = request.getParameter("u_areaid");
+			String id = request.getParameter("company_id");
+			Long company_id = id == null ? null : Long.parseLong(id) ;
 			
-			UserInfoBean bean = new UserInfoBean();
-			bean.setU_phone(u_phone);
-			bean.setU_name(u_name);
-			bean.setU_paperwork(u_paperwork);
-			if(StringUtil.isNotNull(u_buildingid)) {
-				bean.setU_buildingid(Long.parseLong(u_buildingid));
-			}else if(StringUtil.isNotNull(u_areaid)) {
-				bean.setAreaid(Long.parseLong(u_areaid));
+			OperatorBean operator = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			if(operator.getO_kind() != OperatorBean.KIND_SUPPERUSER) {
+				company_id = operator.getO_companyid();
 			}
-			List<UserInfoBean> list = userInfoService.queryUserInfo(bean);
 			
+			List<OperatorExtBean> list = operatorService.queryOperatorList(company_id);
 			
 			writeJson(response, list );
 		} catch (Exception e) {
@@ -101,30 +78,29 @@ public class UserController extends BaseController {
 	
 
 	/**
-	 *  界面查询未开户用户列表
+	 *  界面查询员工列表
 	 * @param request
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("**/admin/user/ajaxQueryUnOpenAccountUser.do")
-	public ModelAndView ajaxQueryUnOpenAccountUser(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/operator/ajaxAddOrUpdateOperator.do")
+	public ModelAndView ajaxAddOrUpdateOperator(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
 
-			OperatorBean operator = getCurrentLoginOperator();
-			UserInfoBean bean = new UserInfoBean();
-			bean.setU_status(UserInfoBean.STATUS_UNOPEN);
-			bean.setU_operatorid(operator.getO_id());
-			List<UserInfoBean> list = userInfoService.queryUserInfo(bean);
+			OperatorBean bean = new OperatorBean();
+			
+			AutoInvokeGetSetMethod.autoInvoke(request.getParameterMap(), bean);
+			
+			int result = operatorService.addOrUpdateOperator(bean);
 			
 			
-			writeJson(response, list );
+			writeJson(response, result );
 		} catch (Exception e) {
 			log.error(e, e);
 		}
 		return null;
 	}
-	
 	
 	
 	

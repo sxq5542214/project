@@ -322,4 +322,24 @@ public class SystemManagerController extends BaseController {
 		}
 		return null;
 	}
+	
+	
+
+	/**
+	 * 提交客户与权限的关系，并作新增删除修改操作
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/system/queryLastChildMenu.do")
+	public ModelAndView queryLastChildMenu(HttpServletRequest request,HttpServletResponse response){
+		try {
+			List<SystemMenuBean> menuList = systemManagerService.queryLastChildMenu(null);
+			writeJson(response, menuList);
+		} catch (Exception e) {
+			log.error(e, e);
+			writeJson(response, "queryLastChildMenu失败");
+		}
+		return null;
+	}
 }

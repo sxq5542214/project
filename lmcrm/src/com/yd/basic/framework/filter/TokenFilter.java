@@ -33,12 +33,12 @@ public class TokenFilter extends BaseFilter {
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+req.getContextPath()+"/";
 
 		if( uri.indexOf("/admin/") >0 ){
-			Object user = req.getSession().getAttribute(BaseContext.CURRENT_USER);
+			Object user = req.getSession().getAttribute(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			if(user == null){
 				resp.sendRedirect(basePath+"page/login.jsp");
 			}
 		}else if( uri.indexOf("/frame/") >0 ){
-			Object user = req.getSession().getAttribute(BaseContext.CURRENT_USER);
+			Object user = req.getSession().getAttribute(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			if(user == null){
 				resp.sendRedirect(basePath+"page/login.jsp");
 			}

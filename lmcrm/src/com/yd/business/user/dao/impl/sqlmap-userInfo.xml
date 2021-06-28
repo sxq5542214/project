@@ -13,6 +13,7 @@
 			<if test="u_name != ''  and u_name != null"> and u_name like '%' + #{u_name} + '%'</if>
 			<if test="u_paperwork != '' and u_paperwork != null"> and u_paperwork like '%' + #{u_paperwork} + '%'</if>
 			<if test="u_buildingid != null"> and u_buildingid = #{u_buildingid} </if>
+			<if test="u_operatorid != null"> and u_operatorid = #{u_operatorid} </if>
 			<if test="areaid != null"> and u_buildingid in ( select b_id from Building where b_areaid = #{areaid} ) </if>
 		</where>
 		<if test="orderby != null"> ${orderby}</if>

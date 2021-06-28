@@ -43,7 +43,7 @@ public class AreaController extends BaseController {
 		
 		try {
 
-			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(BaseContext.CURRENT_USER);
+			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			
 			CompanyExtBean tree = areaService.queryAreaAndBuildingTree(op.getO_companyid());
 			List<CompanyExtBean> list = new ArrayList<CompanyExtBean>(1);

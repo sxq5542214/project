@@ -21,7 +21,7 @@ import com.yd.business.company.service.ICompanyService;
 public class CompanyServiceImpl extends BaseService implements ICompanyService {
 	@Autowired
 	private ICompanyDao companyDao;
-	
+
 	@Override
 	public CompanyBean findCompanyById(Long id) {
 		
@@ -31,5 +31,16 @@ public class CompanyServiceImpl extends BaseService implements ICompanyService {
 		
 		return list.size()>0 ? list.get(0):null;
 	}
+	
+
+	@Override
+	public List<CompanyBean> queryCompanyList(CompanyBean bean) {
+		
+		List<CompanyBean> list = companyDao.listCompany(bean );
+		
+		return list;
+	}
+	
+	
 	
 }

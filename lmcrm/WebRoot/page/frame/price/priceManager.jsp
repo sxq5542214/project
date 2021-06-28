@@ -269,7 +269,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		      
 		      <div class="col-md-2  align-self-center">屯积量</div>
 		      <div class="col-md-4 ml-auto">
-					<input type="number" name="update_p_limitamount" class="form-control" placeholder="单位：吨">
+					<input type="number" name="update_p_limitamount" class="form-control" placeholder="单位：吨" value="9999">
 				</div>
 		      
 		    </div>

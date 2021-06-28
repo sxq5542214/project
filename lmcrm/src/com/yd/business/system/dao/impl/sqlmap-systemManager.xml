@@ -103,7 +103,7 @@
 			<if test="id != null"> and id = #{id} </if>
 			<if test="parentid != null"> and parentid = #{parentid} </if>
 			<if test="status != null"> and status = #{status}</if>
-		</where>  order by id ;
+		</where>  order by id 
 	</select>
 	<insert id="createSystemMenu" parameterType="systemMenu" useGeneratedKeys="true" keyProperty="id">
 		insert into ll_system_menu(name,code,parentid,description,icon_path,path,type,create_time,status,seq)
@@ -196,7 +196,7 @@
 	</update>
 	
 	<select id="queryLastChildMenu" parameterType="systemMenu" resultType="systemMenu">
-		select * from ll_system_menu lastmenu 
+		select * ,(select name from ll_system_menu where id = lastmenu.parentid ) parent_name from ll_system_menu lastmenu 
 		<where>
 			NOT EXISTS(select 1 from ll_system_menu menu where menu.parentid = lastmenu.id) 
 			<if test="status != null"> and lastmenu.status = #{status} </if>

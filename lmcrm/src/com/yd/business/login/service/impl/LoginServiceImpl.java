@@ -147,7 +147,7 @@ public class LoginServiceImpl extends BaseService implements ILoginService{
 			OperatorBean bean = operatorService.findOperatorByNameAndPass(username, password);
 			if(bean != null) {
 				// 登录用户写入session缓存
-				WebContext.setObejctToSession(BaseContext.CURRENT_USER, bean);
+				WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR, bean);
 			}
 			
 			return bean;

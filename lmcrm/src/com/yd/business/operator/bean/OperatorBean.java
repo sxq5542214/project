@@ -11,6 +11,17 @@ import org.apache.ibatis.type.Alias;
 @Alias("operator")
 public class OperatorBean implements java.io.Serializable {
 
+	public static final int KIND_SUPPERUSER = 0; // 超级管理员
+	public static final int KIND_MANAGER = 2; // 主管
+	public static final int KIND_USER = 3; // 员工
+	
+	public static final int STATUS_ENABLE = 1; //启用状态
+	public static final int STATUS_DISABLE = 0; //停用状态
+
+	public static final int OPENAUDIT_YES = 1; // 可审核状态
+	public static final int OPENAUDIT_NO = 0; // 不可审核
+	
+	
 	// Fields
 
 	/**
@@ -21,17 +32,18 @@ public class OperatorBean implements java.io.Serializable {
 	private Long o_companyid;
 	private String o_name;
 	private String o_password;
+	private String o_password2;
 	private Integer o_kind;
-	private String o_rank1;
-	private String o_rank2;
-	private String o_rank3;
-	private String o_rank4;
-	private String o_rank5;
-	private String o_rank6;
-	private String o_rank7;
-	private String o_rank8;
-	private String o_rank9;
-	private String o_rank99;
+	private String o_rank1; //档案管理权限
+	private String o_rank2;	//审核管理权限
+	private String o_rank3; //入库管理权限
+	private String o_rank4; //出库管理权限
+	private String o_rank5; //材料调配权限
+	private String o_rank6; //营业管理权限
+	private String o_rank7; //抄表管理权限
+	private String o_rank8; //查询管理权限
+	private String o_rank9; //维护管理权限
+	private String o_rank99; //系统管理权限
 	private Integer o_status;
 	private Date o_createdate;
 	private Date o_updatedate;
@@ -122,6 +134,14 @@ public class OperatorBean implements java.io.Serializable {
 
 	public String getO_rank2() {
 		return this.o_rank2;
+	}
+
+	public String getO_password2() {
+		return o_password2;
+	}
+
+	public void setO_password2(String o_password2) {
+		this.o_password2 = o_password2;
 	}
 
 	public void setO_rank2(String o_rank2) {

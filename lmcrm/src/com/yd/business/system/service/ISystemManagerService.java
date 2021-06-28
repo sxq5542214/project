@@ -98,7 +98,7 @@ public interface ISystemManagerService {
 	List<SystemRoleBean> changeSystemRoleStatus(String ids,String status);
 	
 	/**
-	 * 查询子菜单节点（没有子菜单的节点）
+	 * 查询子菜单节点（没有父菜单的节点）
 	 * @param 
 	 * @return
 	 */

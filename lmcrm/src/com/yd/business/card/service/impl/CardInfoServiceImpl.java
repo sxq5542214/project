@@ -70,7 +70,7 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 		long priceid = user.getU_priceid();
 		PriceBean price = priceService.findPriceById(priceid);
 		DeviceKindBean deviceKind = deviceKindService.findDeviceKindById(deviceKindId);
-		OperatorBean operator = (OperatorBean)WebContext.getObjectBySession(BaseContext.CURRENT_USER);
+		OperatorBean operator = (OperatorBean)WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 
 		CardInfoBean bean = new CardInfoBean();
 		try {

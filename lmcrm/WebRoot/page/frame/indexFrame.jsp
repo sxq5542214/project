@@ -45,7 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           档案管理
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">员工管理</a>
+          <a class="dropdown-item" onclick="changeIframe('page/frame/operator/operatorManager.jsp',this)">员工管理</a>
           <a class="dropdown-item" onclick="changeIframe('page/frame/price/priceManager.jsp',this)">价格管理</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" onclick="changeIframe('page/frame/user/userManager.jsp',this)">用户管理</a>

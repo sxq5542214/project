@@ -91,9 +91,14 @@ function login(){
 	   		if(result != ''){
 	   			alert(result);
 	   		}else{
-	   			window.location.href = '<%=basePath%>page/frame/a.jsp';
+	   			window.location.href = '<%=basePath%>page/frame/indexFrame.jsp';
 	   		}
-	}});
+		},
+		error:function(jqXHR, textStatus, errorThrown){
+			alert("登录请求失败请检查后端服务！" );
+		}
+		
+	});
 }
 
 

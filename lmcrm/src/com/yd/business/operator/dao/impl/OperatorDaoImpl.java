@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.business.operator.bean.OperatorExtBean;
 import com.yd.business.operator.dao.IOperatorDao;
 
 /**
@@ -22,7 +23,7 @@ public class OperatorDaoImpl extends BaseDao implements IOperatorDao {
     
 
     @Override
-    public List<OperatorBean> queryOperatorList(OperatorBean bean){
+    public List<OperatorExtBean> queryOperatorList(OperatorBean bean){
     	return sqlSessionTemplate.selectList(NAMESPACE + "queryOperatorList", bean);
     }
     

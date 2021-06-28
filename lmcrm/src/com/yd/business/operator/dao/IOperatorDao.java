@@ -6,6 +6,7 @@ package com.yd.business.operator.dao;
 import java.util.List;
 
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.business.operator.bean.OperatorExtBean;
 
 /**
  * @author ice
@@ -13,7 +14,7 @@ import com.yd.business.operator.bean.OperatorBean;
  */
 public interface IOperatorDao {
 
-	List<OperatorBean> queryOperatorList(OperatorBean bean);
+	List<OperatorExtBean> queryOperatorList(OperatorBean bean);
 
 	int insertOperator(OperatorBean bean);
 

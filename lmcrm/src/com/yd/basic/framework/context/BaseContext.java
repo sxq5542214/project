@@ -39,8 +39,8 @@ public class BaseContext {
 	private static Logger log = Logger.getLogger(BaseContext.class);
 	private static Properties pops;
 
-	public static String POPS_SERVER_NAME = "server_name";
-	public static final String CURRENT_USER = "current_user";
+//	public static String POPS_SERVER_NAME = "server_name";
+//	public static final String CURRENT_USER = "current_user";
 
 	public static void initContext(ServletContext servletContext) {
 		context = WebApplicationContextUtils.getWebApplicationContext(servletContext);

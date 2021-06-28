@@ -16,6 +16,10 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 	 * 未开户
 	 */
 	public static final int STATUS_UNOPEN = 6; 
+//	/**
+//	 * 待审核
+//	 */
+//	public static final int STATUS_WAIT_AUDIT = 6; 
 	/**
 	 * 正常，已开户
 	 */

@@ -18,6 +18,7 @@ public class SystemMenuBean extends SystemBean {
 	private String icon_path;
 	private String path;
 	private Integer type;
+	private String rank_hex;
 	private String status_value;
 	private List<SystemMenuBean> children_menu;
 	/**
@@ -30,8 +31,22 @@ public class SystemMenuBean extends SystemBean {
 	 */
 	private Integer seq;
 	
+	private String parent_name;
+	
+	public String getParent_name() {
+		return parent_name;
+	}
+	public void setParent_name(String parent_name) {
+		this.parent_name = parent_name;
+	}
 	public Integer getParentid() {
 		return parentid;
+	}
+	public String getRank_hex() {
+		return rank_hex;
+	}
+	public void setRank_hex(String rank_hex) {
+		this.rank_hex = rank_hex;
 	}
 	public void setParentid(Integer parentid) {
 		this.parentid = parentid;

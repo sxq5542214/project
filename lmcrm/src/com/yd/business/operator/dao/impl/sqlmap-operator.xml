@@ -3,14 +3,15 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="operator">
-	<select id="queryOperatorList" resultType="operator" parameterType="operator">
-		select * from operator 
+	<select id="queryOperatorList" resultType="operatorExt" parameterType="operator">
+		select o.*, c.c_name company_name from operator o, company c
 		<where>
-			
+			o.o_companyid = c.c_id
 			<if test="o_id != null"> and o_id = #{o_id}</if>
 			<if test="o_companyid != null"> and o_companyid = #{o_companyid}</if>
 			<if test="o_name != null"> and o_name = #{o_name}</if>
 			<if test="o_password != null"> and o_password = #{o_password}</if>
+			<if test="o_password2 != null"> and o_password2 = #{o_password2}</if>
 		</where>
 	</select>
 	
@@ -35,7 +36,8 @@
       ,o_createdate
       ,o_updatedate
       ,o_openaudit
-      ,o_limitmoney ) values(
+      ,o_limitmoney
+      ,o_password2 ) values(
       #{o_companyid}
       ,#{o_name}
       ,#{o_password}
@@ -54,7 +56,8 @@
       ,#{o_createdate}
       ,#{o_updatedate}
       ,#{o_openaudit}
-      ,#{o_limitmoney}      )
+      ,#{o_limitmoney} 
+      ,#{o_password2}      )
    	</insert>
 	
 	<delete id="deleteOperator" parameterType="long">
@@ -68,7 +71,7 @@
 		<set>
 			<if test="o_companyid != null">o_companyid = #{o_companyid},</if>
 			<if test="o_name != null">o_name = #{o_name},</if>
-			<if test="o_password != null">o_password = #{o_password},</if>
+			<if test="o_password2 != null">o_password2 = #{o_password2},</if>
 			<if test="o_kind != null">o_kind = #{o_kind},</if>
 			<if test="o_rank1 != null">o_rank1 = #{o_rank1},</if>
 			<if test="o_rank2 != null">o_rank2 = #{o_rank2},</if>
@@ -84,6 +87,7 @@
 			<if test="o_updatedate != null">o_updatedate = #{o_updatedate},</if>
 			<if test="o_openaudit != null">o_openaudit = #{o_openaudit},</if>
 			<if test="o_limitmoney != null">o_limitmoney = #{o_limitmoney},</if>
+			<if test="o_limitmoney != null">o_password2 = #{o_password2},</if>
 	
 		</set>
 		<where>

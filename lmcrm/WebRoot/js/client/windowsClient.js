@@ -20,7 +20,7 @@ function alertResultTips(iret){
     switch (iret)
     {
         case 0:
-            resultStr = "操作成功";
+            resultStr = "写卡操作成功";
             break;
         case 1:
             resultStr = "搜索写卡器失败";

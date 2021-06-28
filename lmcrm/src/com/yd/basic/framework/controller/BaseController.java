@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.yd.basic.framework.context.WebContext;
+import com.yd.business.operator.bean.OperatorBean;
 import com.yd.util.CookieUtil;
 import com.yd.util.DateUtil;
 import com.yd.util.JsonUtil;
@@ -327,10 +328,15 @@ public abstract class BaseController extends MultiActionController {
 		}
 	}
 	
-//	protected CustomerBean getCurrentLoginUser() {
-//
-//		return (CustomerBean) WebContext.getHttpSession().getAttribute(_CURRENT_USER);
-//	}
+	/**
+	 * 获取当前操作员工
+	 * @return
+	 */
+	protected OperatorBean getCurrentLoginOperator() {
+
+		return (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+
+	}
 	
 	
 }
