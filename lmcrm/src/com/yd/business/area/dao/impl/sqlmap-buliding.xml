@@ -4,9 +4,10 @@
 
 <mapper namespace="building">
 	<select id="queryBuildingList" resultType="buildingExt" parameterType="building">
-		select *, b_name as 'text' ,'javascript:updateUserData(3,' + convert(varchar ,b_id) +');'  as 'href' from building 
+		select b.*, a.A_Name + b.B_Name full_name , b_name as 'text' ,'javascript:updateUserData(3,' + convert(varchar ,b_id)+ ',"' + b_name +'");'  as 'href' 
+		from Building b , Area a 
 		<where>
-			
+			b.B_AreaId = a.A_Id 
 			<if test="b_id != null"> and b_id = #{b_id}</if>
 			<if test="b_areaid != null"> and b_areaid = #{b_areaid}</if>
 		</where>

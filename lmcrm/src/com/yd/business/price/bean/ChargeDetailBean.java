@@ -85,6 +85,13 @@ public class ChargeDetailBean extends BaseBean implements Serializable {
 	private BigDecimal cd_basemoneyton2;
 	private BigDecimal cd_basemoneyton3;
 
+	
+	
+	private Long user_no;
+	private String user_name;
+	private String user_phone;
+	private String price_name;
+	private String operator_name;
 	// Constructors
 
 	/** default constructor */
@@ -138,6 +145,46 @@ public class ChargeDetailBean extends BaseBean implements Serializable {
 
 	public Long getCd_id() {
 		return this.cd_id;
+	}
+
+	public String getOperator_name() {
+		return operator_name;
+	}
+
+	public void setOperator_name(String operator_name) {
+		this.operator_name = operator_name;
+	}
+
+	public Long getUser_no() {
+		return user_no;
+	}
+
+	public void setUser_no(Long user_no) {
+		this.user_no = user_no;
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+
+	public String getUser_phone() {
+		return user_phone;
+	}
+
+	public void setUser_phone(String user_phone) {
+		this.user_phone = user_phone;
+	}
+
+	public String getPrice_name() {
+		return price_name;
+	}
+
+	public void setPrice_name(String price_name) {
+		this.price_name = price_name;
 	}
 
 	public void setCd_id(Long cd_id) {

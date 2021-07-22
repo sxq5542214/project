@@ -4,16 +4,18 @@
 
 <mapper namespace="userInfo">
 	<select id="queryUserInfoList" resultType="userInfo" parameterType="userInfo">
-		select *, (select P_Name from Price where P_Id =U_PriceId ) as priceName  from userInfo 
+		select *, (select P_Name from Price where P_Id =U_PriceId ) as priceName ,
+		(select dk_name from deviceinfo di, devicekind dk where dk.dk_id = di.di_dkid and di.di_userid = u_id ) deviceKindName from userInfo 
 		<where>
 			
 			<if test="u_id != null"> and u_id = #{u_id}</if>
 			<if test="u_phone != '' and u_phone != null"> and u_phone like '%' + #{u_phone} + '%'</if>
 			<if test="u_status != '' and u_status != null"> and u_status = #{u_status} </if>
+			<if test="u_no != '' and u_no != null"> and u_no = #{u_no} </if>
 			<if test="u_name != ''  and u_name != null"> and u_name like '%' + #{u_name} + '%'</if>
 			<if test="u_paperwork != '' and u_paperwork != null"> and u_paperwork like '%' + #{u_paperwork} + '%'</if>
 			<if test="u_buildingid != null"> and u_buildingid = #{u_buildingid} </if>
-			<if test="u_operatorid != null"> and u_operatorid = #{u_operatorid} </if>
+			<if test="u_operatorid != null"> and u_operatorid in ( select o1.o_id from operator o1 ,operator o2 where o2.O_Id=  #{u_operatorid} and o1.O_CompanyId = o2.O_CompanyId  ) </if>
 			<if test="areaid != null"> and u_buildingid in ( select b_id from Building where b_areaid = #{areaid} ) </if>
 		</where>
 		<if test="orderby != null"> ${orderby}</if>
@@ -44,8 +46,8 @@
            #{u_buildingid}
            ,#{u_priceid}
            ,#{u_group}
-           ,#{u_no}
-           ,#{u_cardno}
+           ,(SELECT max(U_No)+1 FROM userinfo)
+           ,(SELECT max(U_No)+1 FROM userinfo)
            ,#{u_address}
            ,#{u_name}
            ,#{u_phone}

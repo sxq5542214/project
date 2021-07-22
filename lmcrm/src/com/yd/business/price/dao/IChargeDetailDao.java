@@ -13,4 +13,6 @@ public interface IChargeDetailDao {
 
 	int updateChargeDetail(ChargeDetailBean bean);
 
+	List<ChargeDetailBean> queryChargeListByUserId(Long u_id);
+
 }

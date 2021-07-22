@@ -12,4 +12,8 @@ public interface IUserInfoService {
 
 	void updateUserStatusToNormal(Long userid);
 
+	UserInfoBean findUserByNo(Long no);
+
+	int addOrUpdateUser(UserInfoBean bean);
+
 }

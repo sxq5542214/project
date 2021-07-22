@@ -25,7 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
 
 <body >
-<div class="row" >
+<div class="row" style="margin-left: 0; margin-right: 0;" >
 <nav class="navbar navbar-expand-lg navbar-light bg-light col-md-2" id="navMenu" >
 <!--   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -49,8 +49,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <a class="dropdown-item" onclick="changeIframe('page/frame/price/priceManager.jsp',this)">价格管理</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" onclick="changeIframe('page/frame/user/userManager.jsp',this)">用户管理</a>
-          <a class="dropdown-item" href="#">批量建户</a>
-          <a class="dropdown-item" href="#">位置变更</a>
+<!--           <a class="dropdown-item" href="#">批量建户</a>
+ -->          <a class="dropdown-item" onclick="changeIframe('page/frame/address/addressManager.jsp',this)">地址管理</a>
+          <a class="dropdown-item" onclick="changeIframe('page/frame/user/modifyAddress.jsp',this)">位置变更</a>
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -59,7 +60,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" onclick="changeIframe('page/frame/user/userOpenAccount.jsp',this)">用户开户</a>
-          <a class="dropdown-item" href="#">用户充值</a>
+          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户充值</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">扣费结算</a>
           <a class="dropdown-item" href="#">用户退费</a>
@@ -88,7 +89,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           	查询管理
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">台账查询</a>
+          <a class="dropdown-item" onclick="changeIframe('admin/report/toSimpleReportPage.do',this)">报表查询</a>
           <a class="dropdown-item" href="#">收费统计</a>
           <a class="dropdown-item" href="#">疑户查询</a>
           <div class="dropdown-divider"></div>
@@ -112,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	          	 系统管理 
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item" href="#">修改密码</a>
+	          <a class="dropdown-item"  onclick="changeIframe('page/frame/system/modifyPassword.jsp',this)">修改密码</a>
 	          <a class="dropdown-item" href="#">退出系统</a>
 	        </div>
 	      </li>
@@ -135,6 +136,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </div>
 </body>
 
+</html>
 
 <script type="text/javascript" src="js/client/windowsClient.js"></script>
   <script type="text/javascript">
@@ -161,4 +163,3 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	
 
   </script>
-</html>

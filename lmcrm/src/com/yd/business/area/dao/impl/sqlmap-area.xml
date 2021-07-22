@@ -4,7 +4,7 @@
 
 <mapper namespace="area">
 	<select id="queryAreaList" resultType="areaExt" parameterType="area">
-		select *, a_name as 'text', 'javascript:updateUserData(2,' + convert(varchar ,a_id) +');'  as 'href'  from area 
+		select *, a_name as 'text', 'javascript:updateUserData(2,' + convert(varchar ,a_id) +',"'+ a_name +'");'  as 'href'  from area 
 		<where>
 			
 			<if test="a_id != null"> and a_id = #{a_id}</if>

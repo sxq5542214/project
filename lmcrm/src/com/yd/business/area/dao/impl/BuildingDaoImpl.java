@@ -25,21 +25,21 @@ public class BuildingDaoImpl extends BaseDao implements IBuildingDao {
 	}
 
 	@Override
-	public void insertBuilding(BuildingBean bean) {
+	public int insertBuilding(BuildingBean bean) {
 		// TODO Auto-generated method stub
-		sqlSessionTemplate.insert(NAMESPACE+"insertBuilding", bean);
+		return sqlSessionTemplate.insert(NAMESPACE+"insertBuilding", bean);
 	}
 
 	@Override
-	public void updateBuilding(BuildingBean bean) {
+	public int updateBuilding(BuildingBean bean) {
 		// TODO Auto-generated method stub
-		sqlSessionTemplate.update(NAMESPACE+"updateBuilding", bean);
+		return sqlSessionTemplate.update(NAMESPACE+"updateBuilding", bean);
 	}
 
 	@Override
-	public void deleteBuilding(long id) {
+	public int deleteBuilding(long id) {
 		// TODO Auto-generated method stub
-		sqlSessionTemplate.delete(NAMESPACE+"deleteBuilding", id);
+		return sqlSessionTemplate.delete(NAMESPACE+"deleteBuilding", id);
 	}
 	
 	

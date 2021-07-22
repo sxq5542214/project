@@ -2,17 +2,34 @@
  * 
  */
 function callWindowsClientMethod(action,jsonstr,callback){
+
+//	alert( window.external.jsCallClient  );
+	if( typeof(window.external.jsCallClient ) == "undefined"){
+		alert( "未运行在客户端环境中，无法读写卡！" );
+		return ;
+	}
 	
 	var str  = 'javascript访问C#代码';
 	var status = window.external.jsCallClient(action,jsonstr);
+	
 	if(typeof callback == "function") {
-		if(status == 0){
-			callback(1); 
+		
+		
+		// 类型为字符串并且长度大于2时，说明是返回的具体内容
+		if( status.length > 2 ){
+			callback(status); 
 		}else{
-			callback(-1); 
+			status = Number(status);
+			if(status == 0){
+				callback(1); 
+			}else{
+				callback(-1); 
+			}
 		}
 	}
-	alertResultTips(status);
+	if(typeof status == "number"){
+		alertResultTips(status);
+	}
 }
 
 function alertResultTips(iret){

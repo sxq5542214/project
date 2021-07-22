@@ -9,10 +9,10 @@ public interface IBuildingDao {
 
 	List<BuildingExtBean> listBuilding(BuildingBean bean);
 
-	void insertBuilding(BuildingBean bean);
+	int insertBuilding(BuildingBean bean);
 
-	void updateBuilding(BuildingBean bean);
+	int updateBuilding(BuildingBean bean);
 
-	void deleteBuilding(long id);
+	int deleteBuilding(long id);
 
 }

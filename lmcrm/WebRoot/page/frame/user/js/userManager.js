@@ -25,6 +25,7 @@ var userManager =  new Vue({
         checkedRows: [],// 选中的行标，用于删除行
         userList: [],// 表格数据
         priceList : [] ,
+        buildingId : '',
         newRow:{}// 新增的行数据，用于新增行
     },
 	created: function(){
@@ -44,12 +45,12 @@ var userManager =  new Vue({
 			form.u_address.value = this.userList[index].u_address ;
 			form.u_paperwork.value = this.userList[index].u_paperwork ;
 			form.u_peoplesize.value = this.userList[index].u_peoplesize ;
-			form.u_group.value = this.userList[index].u_group ;
 			form.u_remark.value = this.userList[index].u_remark ;
 			form.u_materialfee.value = this.userList[index].u_materialfee ;
 			form.u_constructioncost.value = this.userList[index].u_constructioncost ;
 			form.u_prepayment.value = this.userList[index].u_prepayment ;
-	    	
+//			form.u_group.value = this.userList[index].u_group +1;
+	    	$("#selectGroup").val(this.userList[index].u_group +1);
 			$("#radio"+index).prop('checked',true);
 	    }
     }
@@ -57,28 +58,24 @@ var userManager =  new Vue({
 
 function addOrUpdateUser(){
 	var form = document.updateForm;
-	$.ajax({url:"admin/price/ajaxAddOrUpdatePriceByCompany.do",
+	$.ajax({url:"admin/user/ajaxAddOrUpdateUser.do",
 		type : "POST",
 		data:{
-			p_id: form.update_p_id.value,
-			p_name: form.update_p_name.value,
-			p_ladder : form.update_p_ladder.value,
-			p_settlemonth: form.update_p_settlemonth.value,
-			p_settleday: form.update_p_settleday.value,
-			p_base1: form.update_p_base1.value,
-			p_other1: form.update_p_other1.value,
-			p_other2: form.update_p_other2.value,
-			p_lowprice: form.update_p_lowprice.value,
-			p_lowamount: form.update_p_lowamount.value,
-			p_enabled: form.update_p_enabled.value,
-			p_ton1: form.update_p_ton1.value,
-			p_base2: form.update_p_base2.value,
-			p_ton2: form.update_p_ton2.value,
-			p_base3: form.update_p_base3.value,
-			p_limitamount: form.update_p_limitamount.value,
-			p_storedamount: form.update_p_storedamount.value,
-			p_weakprompt: form.update_p_weakprompt.value,
-			p_overflat: form.update_p_overflat.value
+			u_id: form.u_id.value,
+			u_name: form.u_name.value,
+			u_phone : form.u_phone.value,
+			u_balance: form.u_balance.value,
+			u_status: form.u_status.value,
+			u_priceid: form.u_priceid.value,
+			u_address: form.u_address.value,
+			u_paperwork: form.u_paperwork.value,
+			u_peoplesize: form.u_peoplesize.value,
+			u_group: form.u_group.value,
+			u_remark: form.u_remark.value,
+			u_materialfee: form.u_materialfee.value,
+			u_constructioncost: form.u_constructioncost.value,
+			u_prepayment: form.u_prepayment.value,
+			u_buildingid : userManager.buildingId
 		},
 		success:function(result){
 		    if(result > 0){
@@ -91,8 +88,30 @@ function addOrUpdateUser(){
 }
 function addUser(){
 	 document.updateForm.u_id.value = '';
+	 document.updateForm.u_name.value = '';
+	 document.updateForm.u_paperwork.value = '';
+	 document.updateForm.u_balance.value = '0';
+	 document.updateForm.u_peoplesize.value = '0';
+	 document.updateForm.u_phone.value = '';
+	 if(userManager.buildingId == ''){
+		 alert('请先选择下方最末级地址！');
+	 }else{
+		 
+			$.ajax({url:"admin/area/ajaxQueryBuildingById.do?id="+userManager.buildingId,
+				success:function(result){
+					 var json = eval('(' + result + ')');
+					 document.updateForm.u_address.value = json.full_name;
+					 $('#exampleModalCenter').modal('show');
+				}});
+	 }
+	 
 }
 function updateUser(){
+	if(document.updateForm.u_id.value == ''){
+		alert("请先选择要修改的用户！");
+	}else{
+		 $('#exampleModalCenter').modal('show');
+	}
 	
 }
 
@@ -117,15 +136,22 @@ function queryUserData(){
 		    userManager.userList = list;
 		}});
 }
-function updateUserData(level,id){
+function updateUserData(level,id,name){
+	
 	if(level == 3){
+		userManager.buildingId = id;
 		$("#u_buildingid").val(id);
 		$("#u_areaid").val('');
 		queryUserData();
 	}else if(level == 2){
+		userManager.buildingId = '';
 		$("#u_areaid").val(id);
 		$("#u_buildingid").val('');
 		queryUserData();
+	}else{
+		userManager.buildingId = '';
+		$("#u_buildingid").val('');
+		$("#u_areaid").val('');
 	}
 }
 

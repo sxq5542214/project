@@ -25,6 +25,7 @@ import com.yd.business.user.service.IUserInfoService;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.service.IWechatPayService;
 import com.yd.business.wechat.service.IWechatService;
+import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.StringUtil;
 @Controller
 public class UserController extends BaseController {
@@ -74,13 +75,16 @@ public class UserController extends BaseController {
 		
 		try {
 
+			OperatorBean operator = getCurrentLoginOperator();
 			String u_phone = request.getParameter("u_phone");
 			String u_name = request.getParameter("u_name");
 			String u_paperwork = request.getParameter("u_paperwork");
 			String u_buildingid = request.getParameter("u_buildingid");
 			String u_areaid = request.getParameter("u_areaid");
+			String u_no = request.getParameter("u_no");
 			
 			UserInfoBean bean = new UserInfoBean();
+			bean.setU_operatorid(operator.getO_id());
 			bean.setU_phone(u_phone);
 			bean.setU_name(u_name);
 			bean.setU_paperwork(u_paperwork);
@@ -88,6 +92,8 @@ public class UserController extends BaseController {
 				bean.setU_buildingid(Long.parseLong(u_buildingid));
 			}else if(StringUtil.isNotNull(u_areaid)) {
 				bean.setAreaid(Long.parseLong(u_areaid));
+			}else if(StringUtil.isNotNull(u_no)) {
+				bean.setU_no(Long.parseLong(u_no));
 			}
 			List<UserInfoBean> list = userInfoService.queryUserInfo(bean);
 			
@@ -100,6 +106,50 @@ public class UserController extends BaseController {
 	}
 	
 
+	/**
+	 *  界面查询用户列表
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/user/ajaxAddOrUpdateUser.do")
+	public ModelAndView ajaxAddOrUpdateUser(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+
+			OperatorBean operator = getCurrentLoginOperator();
+//			String u_phone = request.getParameter("u_phone");
+//			String u_name = request.getParameter("u_name");
+//			String u_paperwork = request.getParameter("u_paperwork");
+			String u_buildingid = request.getParameter("u_buildingid");
+//			String u_areaid = request.getParameter("u_areaid");
+//			String u_no = request.getParameter("u_no");
+			UserInfoBean bean = new UserInfoBean();
+			
+			AutoInvokeGetSetMethod.autoInvoke(request.getParameterMap(), bean);
+			
+			
+			bean.setU_operatorid(operator.getO_id());
+//			bean.setU_phone(u_phone);
+//			bean.setU_name(u_name);
+//			bean.setU_paperwork(u_paperwork);
+//			if(StringUtil.isNotNull(u_buildingid)) {
+//				bean.setU_buildingid(Long.parseLong(u_buildingid));
+//			}else if(StringUtil.isNotNull(u_areaid)) {
+//				bean.setAreaid(Long.parseLong(u_areaid));
+//			}else if(StringUtil.isNotNull(u_no)) {
+//				bean.setU_no(Long.parseLong(u_no));
+//			}
+			int num = userInfoService.addOrUpdateUser(bean);
+			
+			
+			writeJson(response, num );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
 	/**
 	 *  界面查询未开户用户列表
 	 * @param request
@@ -115,6 +165,45 @@ public class UserController extends BaseController {
 			UserInfoBean bean = new UserInfoBean();
 			bean.setU_status(UserInfoBean.STATUS_UNOPEN);
 			bean.setU_operatorid(operator.getO_id());
+			List<UserInfoBean> list = userInfoService.queryUserInfo(bean);
+			
+			
+			writeJson(response, list );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
+
+	/**
+	 *  界面查询未用户信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/user/ajaxQueryAccountUser.do")
+	public ModelAndView ajaxQueryAccountUser(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+
+			OperatorBean operator = getCurrentLoginOperator();
+			String u_phone = request.getParameter("u_phone");
+			String u_name = request.getParameter("u_name");
+			String u_paperwork = request.getParameter("u_paperwork");
+			String u_buildingid = request.getParameter("u_buildingid");
+			String u_areaid = request.getParameter("u_areaid");
+			
+			UserInfoBean bean = new UserInfoBean();
+			bean.setU_operatorid(operator.getO_id());
+			bean.setU_phone(u_phone);
+			bean.setU_name(u_name);
+			bean.setU_paperwork(u_paperwork);
+			if(StringUtil.isNotNull(u_buildingid)) {
+				bean.setU_buildingid(Long.parseLong(u_buildingid));
+			}else if(StringUtil.isNotNull(u_areaid)) {
+				bean.setAreaid(Long.parseLong(u_areaid));
+			}
 			List<UserInfoBean> list = userInfoService.queryUserInfo(bean);
 			
 			

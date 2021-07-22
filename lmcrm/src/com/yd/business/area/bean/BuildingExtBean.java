@@ -19,7 +19,7 @@ public class BuildingExtBean extends BuildingBean {
 	
 	private String text;
 	private String href;
-
+	private String full_name;
 	
 	public String getHref() {
 		return href;
@@ -35,6 +35,14 @@ public class BuildingExtBean extends BuildingBean {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public String getFull_name() {
+		return full_name;
+	}
+
+	public void setFull_name(String full_name) {
+		this.full_name = full_name;
 	}
 	
 }

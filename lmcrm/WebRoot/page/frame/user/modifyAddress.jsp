@@ -72,22 +72,22 @@
 				<input type="text" class="form-control" id="u_paperwork"
 					name="u_paperwork" placeholder="请输入用户证件号码"> <input
 					type="hidden" class="form-control" id="u_buildingid"
-					name="u_buildingid"> <input type="hidden"
-					class="form-control" id="u_areaid" name="u_areaid">
+					name="u_buildingid">
+				<input type="hidden"
+					class="form-control" id="u_no" name="u_no">
 			</div>
 		</div>
 
 		<div class="form-group align-items-center">
 			<div class="row">
 				<div class="col-10">
-					<button type="button" class="btn btn-success" onclick="addUser();">新增用户</button>
-					<button type="button" class="btn btn-info"  onclick="updateUser();">修改用户</button>
+					<button type="button" class="btn btn-success" onclick="readCardAndQueryUser();">读卡查询用户</button>
 					<!-- 		      	<button type="button" class="btn btn-secondary">删除价格</button>
  -->
 				</div>
 				<div class="col-2">
 					<button type="button" class="btn btn-primary"
-						onclick="queryUserData();">查询用户</button>
+						onclick="queryUserData(-1);">查询用户</button>
 				</div>
 			</div>
 
@@ -96,36 +96,18 @@
 
 
 
-	<div class="container" style="overflow:scroll;" >
+	<div class="container"  >
 
 		<div class="row">
-			<div class="col-3">
-				<div id="tree"></div>
-			</div>
 
-			<div class="col-9">
-				<table class="table table-striped table-hover table-sm"
-					style="min-width:1800px;">
+			<div class="col-8" >
+				<table class="table table-striped table-hover table-sm" >
 					<thead>
 						<tr>
-							<th scope="col">用户编号</th>
+							<th scope="col">编号</th>
 							<th scope="col">用户名称</th>
 							<th scope="col">联系方式</th>
-							<th scope="col">账户余额</th>
-							<th scope="col">用户状态</th>
-							<th scope="col">价格类型</th>
-							<th scope="col">表具类型</th>
 							<th scope="col">用户地址</th>
-							<th scope="col">证件号码</th>
-							<th scope="col">人口数</th>
-							<th scope="col">用户卡号</th>
-							<th scope="col">材料费</th>
-							<th scope="col">施工费</th>
-							<th scope="col">所属组</th>
-							<th scope="col">备注信息</th>
-							<th scope="col">创建时间</th>
-							<th scope="col">更新时间</th>
-
 						</tr>
 					</thead>
 					<tbody>
@@ -138,22 +120,11 @@
 							<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
 							<td>{{user.u_name}}</td>
 							<td>{{user.u_phone}}</td>
-							<td>{{user.u_balance }}</td>
-							<td>{{getDescByBeanAttrValue("user","u_status",user.u_status)
-								}}</td>
-							<td>{{user.priceName }}</td>
-							<td>{{user.deviceKindName }}</td>
-							<td>{{user.u_address }}</td>
-							<td>{{user.u_paperwork }}</td>
-							<td>{{user.u_peoplesize }}</td>
-							<td>{{user.u_cardno }}</td>
-							<td>{{user.u_materialfee }}</td>
-							<td>{{user.u_constructioncost }}</td>
-							<td>{{user.u_group +1 }}</td>
-							<td>{{user.u_remark }}</td>
-							<td>{{user.u_createdate }}</td>
-							<td>{{user.u_updatedate }}</td>
-
+							<td>
+								<input type="text" name="u_address" :id="'u_address'+user.u_id" :value="user.u_address" disabled="disabled">
+								<input type="hidden" name="u_buildingid" :id="'u_buildingid'+user.u_id" :value="user.u_buildingid" >
+								<button type="button" class="btn btn-primary" :id="'button'+user.u_id" :onclick="'modifyAddress('+ user.u_id + ')'">修改地址</button>
+							</td>
 						</tr>
 
 						<tr data-toggle="collapse" href="#collapseExample"
@@ -172,6 +143,10 @@
 						ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes
 						anderson cred nesciunt sapiente ea proident.</div>
 				</div>
+			</div>
+			
+			<div class="col-4" style="position: absolute;right: 0;">
+				<div id="tree"></div>
 			</div>
 		</div>
 	</div>
@@ -316,7 +291,7 @@
 
 <script type="text/javascript" src="js/client/windowsClient.js"></script>
 <script src="js/common/dictionaryData.js" type="text/javascript"></script>
-<script src="page/frame/user/js/userManager.js" type="text/javascript"></script>
+<script src="page/frame/user/js/modifyAddress.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 

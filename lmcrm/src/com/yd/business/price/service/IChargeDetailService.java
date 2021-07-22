@@ -1,5 +1,8 @@
 package com.yd.business.price.service;
 
+import java.util.Date;
+import java.util.List;
+
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.price.bean.ChargeDetailBean;
 import com.yd.business.price.bean.PriceBean;
@@ -24,5 +27,13 @@ public interface IChargeDetailService {
 	int updateChargeDetailToSuccess(String cdid);
 
 	ChargeDetailBean findChargeDetailById(Long id);
+
+	ChargeDetailBean findLastChargeDetailByUser(Long userNo) throws Exception;
+
+	int updateChargeDetail(ChargeDetailBean bean);
+
+	int updateChargeDetailBrushFlagToSuccess(Long cd_id, Date brushDate);
+
+	List<ChargeDetailBean> queryChargeListByUserId(Long u_id);
 
 }

@@ -27,6 +27,21 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	private IUserInfoService userInfoService;
 
 
+	@Override
+	public ChargeDetailBean findLastChargeDetailByUser(Long userNo) throws Exception {
+		
+		UserInfoBean user = userInfoService.findUserByNo(userNo);
+		ChargeDetailBean bean = new ChargeDetailBean();
+		bean.setCd_userid(user.getU_id());
+		bean.setOrderby("order by cd_no desc ");
+		List<ChargeDetailBean> list = chargeDetailDao.queryChargeDetailList(bean);
+
+		if(list.size() > 0 ) {
+			bean = list.get(0);
+			return bean;
+		}
+		return null;
+	}
 	/**
 	 * 
 	 * @param user		用户信息
@@ -47,13 +62,21 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		Long no = 1l ;
 		if(list.size() > 0 ) {
 			ChargeDetailBean lastCharge = list.get(0);
-			no = lastCharge.getCd_no() + 1l ;
+			
+			// 如果之前写卡失败，则修改金额，直接返回之前的写卡数据
+			if(lastCharge.getCd_charge() != ChargeDetailBean.CHARGE_SUCCESS) {
+				lastCharge.setCd_chargeamount(new BigDecimal(money).divide(price.getP_price1(),2,BigDecimal.ROUND_HALF_UP));
+				lastCharge.setCd_chargemoney(new BigDecimal(money));
+				lastCharge.setCd_basemoney(lastCharge.getCd_chargemoney());
+				updateChargeDetail(lastCharge);
+				return lastCharge ;
+			}
 			
 			if(lastCharge.getCd_brushflag() == ChargeDetailBean.BRUSHFLAG_NO) {
 				throw new Exception("当前用户上次充值未刷卡至水表，请刷卡至水表后再试！");
 			}
+			no = lastCharge.getCd_no() + 1l ;
 		}
-		
 		bean.setCd_savingno(no.intValue());
 		bean.setCd_no(no);
 		bean.setCd_brushflag(ChargeDetailBean.BRUSHFLAG_NO);
@@ -85,7 +108,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		bean.setCd_basemoneyton2(BigDecimal.ZERO);
 		bean.setCd_basemoneyton3(BigDecimal.ZERO);
 		
-		bean.setCd_happendate(new Date());
+		bean.setCd_happendate(new Date(0));
 		bean.setCd_startdate(new Date());
 		bean.setCd_enddate(new Date());
 		chargeDetailDao.insertChargeDetail(bean);
@@ -118,6 +141,26 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		return num;
 	}
 	
+	@Override
+	public int updateChargeDetail(ChargeDetailBean bean) {
+		return chargeDetailDao.updateChargeDetail(bean);
+		
+	}
+
+	@Override
+	public int updateChargeDetailBrushFlagToSuccess(Long cd_id,Date brushDate) {
+		ChargeDetailBean bean  = new ChargeDetailBean();
+		bean.setCd_id(cd_id);
+		bean.setCd_brushflag(ChargeDetailBean.BRUSHFLAG_YES);
+		bean.setCd_happendate(brushDate);
+		
+		int num = chargeDetailDao.updateChargeDetail(bean);
+		
+		 
+		return num;
+	}
+	
+	
 	
 	@Override
 	public ChargeDetailBean findChargeDetailById(Long id) {
@@ -126,5 +169,13 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		List<ChargeDetailBean> list = chargeDetailDao.queryChargeDetailList(bean);
 		return list.size() > 0 ? list.get(0):null;
 	}
+	@Override
+	public List<ChargeDetailBean> queryChargeListByUserId(Long u_id) {
+		
+		return  chargeDetailDao.queryChargeListByUserId(u_id);
+		
+	}
+	
+	
 	
 }

@@ -16,6 +16,7 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.card.bean.CardInfoBean;
 import com.yd.business.card.service.ICardInfoService;
 import com.yd.business.user.bean.UserInfoBean;
+import com.yd.business.user.service.IUserInfoService;
 
 @Controller
 public class CardInfoController extends BaseController {
@@ -23,9 +24,12 @@ public class CardInfoController extends BaseController {
 	@Autowired
 	private ICardInfoService cardInfoService;
 
+	@Autowired
+	private IUserInfoService userInfoService;
+	
 
 	/**
-	 *  界面查询未开户用户列表
+	 *  界面进行用户开户操作
 	 * @param request
 	 * @param response
 	 * @return
@@ -51,6 +55,32 @@ public class CardInfoController extends BaseController {
 	}
 	
 	
-	
+
+	/**
+	 *  界面进行用户开户操作
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/card/ajaxChargeMoneyCard.do")
+	public ModelAndView ajaxChargeMoneyCard(HttpServletRequest request,HttpServletResponse response){
+		CardInfoBean bean  = new CardInfoBean();
+		try {
+			String u_no = request.getParameter("u_no");
+			String chargeMoney = request.getParameter("chargeMoney");
+			BigDecimal money = new BigDecimal(chargeMoney);
+			
+			
+			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
+			bean  = cardInfoService.generateCardInfoByChargeMoney( user.getU_id(), null , money.intValue() );
+					
+		} catch (Exception e) {
+			log.error(e, e);
+			bean.setQueryStatus(BaseBean.QUERYSTATUS_ERROR);
+			bean.setQueryResult(e.getMessage());
+		}
+		writeJson(response, bean );
+		return null;
+	}
 	
 }

@@ -3,6 +3,7 @@
  */
 package com.yd.business.area.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,11 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 	public int addOrUpdateArea(AreaBean bean) {
 		int result = 0 ;
 		if(bean.getA_id() == null) {
+			bean.setA_createdate(new Date());
+			bean.setA_updatedate(bean.getA_createdate());
 			result = areaDao.insertArea(bean);
 		}else {
+			bean.setA_updatedate(new Date());
 			result = areaDao.updateArea(bean);
 		}
 		return result;
@@ -57,7 +61,7 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 		CompanyBean companyBean = companyService.findCompanyById(companyId);
 		CompanyExtBean companyExtBean = new CompanyExtBean();
 		AutoInvokeGetSetMethod.autoInvoke(companyBean, companyExtBean);
-		companyExtBean.setHref("javascript:updateUserData(1," + companyBean.getC_id() +");");
+		companyExtBean.setHref("javascript:updateUserData(1," + companyBean.getC_id() +",'"+ companyBean.getC_name() +"',this);");
 		companyExtBean.setText(companyBean.getC_name());
 		
 		List<AreaExtBean> areaList = queryAreaList(companyId);

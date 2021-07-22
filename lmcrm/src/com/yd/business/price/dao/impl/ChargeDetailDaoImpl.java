@@ -33,5 +33,10 @@ public class ChargeDetailDaoImpl extends BaseDao implements IChargeDetailDao {
 	public int updateChargeDetail(ChargeDetailBean bean) {
 		return sqlSessionTemplate.update(NAMESPACE + "updateChargeDetail", bean);
 	}
+
+	@Override
+	public List<ChargeDetailBean> queryChargeListByUserId(Long u_id) {
+		return sqlSessionTemplate.selectList(NAMESPACE +"queryChargeListByUserId", u_id);
+	}
 	
 }

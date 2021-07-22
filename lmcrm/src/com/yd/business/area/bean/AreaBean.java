@@ -11,8 +11,12 @@ import org.apache.ibatis.type.Alias;
 @Alias("area")
 public class AreaBean implements java.io.Serializable {
 
+	
 	// Fields
-
+	public static final int LEVEL_COMPANY = 1 ;
+	public static final int LEVEL_AREA = 2 ;
+	public static final int LEVEL_BUILDING = 3 ;
+			
 	/**
 	 * 
 	 */

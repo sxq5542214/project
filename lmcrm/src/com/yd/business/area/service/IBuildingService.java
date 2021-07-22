@@ -9,4 +9,8 @@ public interface IBuildingService {
 
 	List<BuildingExtBean> queryBuildingByArea(Long areaId);
 
+	BuildingExtBean findBuildingById(Long buildingId);
+
+	int addOrUpdateBuilding(BuildingBean bean);
+
 }

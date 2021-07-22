@@ -8,4 +8,6 @@ public interface ICardInfoService {
 
 	CardInfoBean generateCardInfoByOpenAccount(long userId, long deviceKindId, int chargePrice);
 
+	CardInfoBean generateCardInfoByChargeMoney(long userId, Long deviceKindId, int chargePrice);
+
 }

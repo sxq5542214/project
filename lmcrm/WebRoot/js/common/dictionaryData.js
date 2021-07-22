@@ -1,7 +1,8 @@
 var dictionaryCache = new Object();
 $.ajax({url:"dictionary/ajaxQueryAllDictionaryByCache.do",
-	success:function(result){
-    var list = eval('(' + result + ')');
+	success:function(res){
+
+    var list = eval("(" + res + ")");
     dictionaryCache.json = list;
     
 //    alert(dictionaryCache.getDescByBeanAttrValue("price","p_ladder",0));

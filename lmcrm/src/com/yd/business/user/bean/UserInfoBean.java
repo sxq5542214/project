@@ -56,10 +56,12 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 	private Date u_createdate;
 	private Date u_updatedate;
 	private Integer u_prepayment;
+	
 
 	//extends field
 	private Long areaid;
 	private String priceName;
+	private String deviceKindName;
 	
 	// Constructors
 
@@ -132,6 +134,14 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 
 	public void setPriceName(String priceName) {
 		this.priceName = priceName;
+	}
+
+	public String getDeviceKindName() {
+		return deviceKindName;
+	}
+
+	public void setDeviceKindName(String deviceKindName) {
+		this.deviceKindName = deviceKindName;
 	}
 
 	public void setAreaid(Long areaid) {

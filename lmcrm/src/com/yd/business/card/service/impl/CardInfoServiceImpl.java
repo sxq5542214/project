@@ -56,6 +56,21 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 		return generateCardInfo("openAccount", userId, deviceKindId,chargePrice);
 	}
 	
+
+	@Override
+	public CardInfoBean generateCardInfoByChargeMoney(long userId,Long deviceKindId , int chargePrice) {
+		// 查询用户的设备类型
+		if(deviceKindId == null) {
+			DeviceInfoBean device = deviceInfoService.findDeviceInfoByUserAndKind(userId, null);
+			if(device == null) {
+				throw new RuntimeException("error!  userid:" + userId +"  not find device .....");
+			}
+			deviceKindId = device.getDi_dkid();
+		}
+		
+		return generateCardInfo("chargeMoney", userId, deviceKindId,chargePrice);
+	}
+	
 	/**
 	 * 
 	 * @param cardKind
@@ -140,6 +155,15 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 	
 				chargeDetail = chargeDetailService.createChargeDetail(user, price, ChargeDetailBean.KIND_OPEN_ACCOUNT, ChargeDetailBean.ORDER_MONEY, operator, chargePrice);
 				break;
+			case "chargeMoney":
+
+				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
+				chargeDetail = chargeDetailService.createChargeDetail(user, price, ChargeDetailBean.KIND_CHARGE, ChargeDetailBean.ORDER_MONEY, operator, chargePrice);
+
+				up.setIsavingno(chargeDetail.getCd_savingno());
+				
+				break;
+				
 			default:
 				break;
 			}

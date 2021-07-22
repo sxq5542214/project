@@ -14,6 +14,18 @@
 		<if test="orderby != null"> ${orderby} </if>
 		
 	</select>
+	
+	<select id="queryChargeListByUserId" parameterType="long" resultType="chargeDetail" useCache="false"  >
+		select c.*,u.U_No user_no,u.U_Name user_name,u.U_Phone user_phone,p.P_Name price_name , o.o_name operator_name 
+		from chargeDetail c ,UserInfo u , Price p ,operator o
+		<where>
+			 c.CD_UserId = u.U_Id and p.P_Id = c.CD_PriceId and o.o_id = cd_operatorid and 
+			 cd_userid = #{value}
+		</where>
+		order by cd_id desc
+	</select>
+	
+	
 	<cache eviction="LRU" size="4096" ></cache>
 	
 	<insert id="insertChargeDetail" parameterType="chargeDetail" useGeneratedKeys="true" keyProperty="cd_id">
