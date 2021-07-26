@@ -55,6 +55,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	 * @return			充值记录
 	 * @throws Exception	上次有未刷卡至水表的数据
 	 */
+	@Override
 	public ChargeDetailBean createChargeDetail(UserInfoBean user,PriceBean price,int kind,int order,OperatorBean operator,int money ,boolean isBrushCard ) throws Exception {
 
 		ChargeDetailBean bean = new ChargeDetailBean();
