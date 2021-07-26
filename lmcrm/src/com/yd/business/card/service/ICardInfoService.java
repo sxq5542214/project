@@ -10,4 +10,8 @@ public interface ICardInfoService {
 
 	CardInfoBean generateCardInfoByChargeMoney(long userId, Long deviceKindId, int chargePrice);
 
+	CardInfoBean generateCardInfoByUpdateLastChargeMoney(long userId, Long deviceKindId, int chargePrice);
+
+	CardInfoBean generateCardInfoByRepairCard(long userId, Long deviceKindId, int chargePrice, boolean isBrushCard);
+
 }

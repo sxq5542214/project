@@ -83,4 +83,63 @@ public class CardInfoController extends BaseController {
 		return null;
 	}
 	
+	
+
+	/**
+	 *  界面进行用户修改充值记录操作
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/card/ajaxUpdateLastChargeMoneyCard.do")
+	public ModelAndView ajaxUpdateLastChargeMoneyCard(HttpServletRequest request,HttpServletResponse response){
+		CardInfoBean bean  = new CardInfoBean();
+		try {
+			String u_no = request.getParameter("u_no");
+			String updateChargeMoney = request.getParameter("updateChargeMoney");
+			BigDecimal money = new BigDecimal(updateChargeMoney);
+			
+			
+			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
+			bean  = cardInfoService.generateCardInfoByUpdateLastChargeMoney(user.getU_id(), null , money.intValue() );
+					
+		} catch (Exception e) {
+			log.error(e, e);
+			bean.setQueryStatus(BaseBean.QUERYSTATUS_ERROR);
+			bean.setQueryResult(e.getMessage());
+		}
+		writeJson(response, bean );
+		return null;
+	}
+	
+	/**
+	 *  界面进行用户补卡操作
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/card/ajaxRepairCard.do")
+	public ModelAndView ajaxRepairCard(HttpServletRequest request,HttpServletResponse response){
+		CardInfoBean bean  = new CardInfoBean();
+		try {
+			String u_no = request.getParameter("u_no");
+			String brushFlag = request.getParameter("brushFlag");
+			String repairCardMoney = request.getParameter("repairCardMoney");
+			BigDecimal money = new BigDecimal(repairCardMoney);
+			
+			
+			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
+			boolean flag = "1".equals(brushFlag) ? true:false;
+			bean  = cardInfoService.generateCardInfoByRepairCard(user.getU_id(), null , money.intValue() ,flag);
+					
+		} catch (Exception e) {
+			log.error(e, e);
+			bean.setQueryStatus(BaseBean.QUERYSTATUS_ERROR);
+			bean.setQueryResult(e.getMessage());
+		}
+		writeJson(response, bean );
+		return null;
+	}
+	
+	
 }

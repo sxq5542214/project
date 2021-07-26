@@ -131,6 +131,30 @@ function readCardAndUpdateCharge(){
 	} );
 }
 
+// 用户补卡
+function readCardAndRepairCard(){
+
+	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+	callWindowsClientMethod('readCard','{}' , function(result){
+		if(result < 1){
+			alert("操作卡失败，无法获取数据");
+			return ;
+		}
+//		alert(result);
+		var json = eval('(' + result + ')');
+		var iCardKind = json.iCardKind;
+		if(iCardKind != 0){
+			alert("该卡不是新卡，不能进行补卡！");
+			return ;
+		}else{
+
+
+			$('#repairCardModalCenter').modal('show');
+			
+		}
+	} );
+}
+
 function writeCardByCharge(){
 	
 	var u_no = $("#u_no").val();
@@ -205,6 +229,45 @@ function writeCardByUpdateCharge(){
 	
 	});
 }
+
+function writeCardByRepairCard(){
+
+	var u_no = $("#u_no").val();
+	if(u_no == ''){
+		alert("请先查询并选择用户！");
+		return ;
+	}
+	
+	$.ajax({url:"admin/card/ajaxRepairCard.do",
+		type : "POST",async:false, 
+		data :{ u_no :  u_no , brushFlag :  $("#brushFlag").val() , 
+			repairCardMoney : $("#repairCardMoney").val() },
+		success:function(result){
+			var bean = eval('(' + result + ')');
+		    var cdid = bean.chargeDetailId ;
+			if(bean.queryStatus == -1){
+				alert(bean.queryResult);
+			}else{
+				//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+				callWindowsClientMethod('chargeMoney',result , function(status){
+					if(status == 1){
+						// 写卡成功,更新写卡状态
+						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeInfo.do",
+							type : "POST",async:false, 
+							data :{ cdid : cdid  },
+							success:function(result){}
+						});
+						
+						alert("充值写卡成功！");
+						$('#repairCardModalCenter').modal('hide');
+					}
+				} );
+			}
+		}
+	
+	});
+}
+
 
 function queryUserData(){
 

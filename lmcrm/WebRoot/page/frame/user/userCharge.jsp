@@ -92,7 +92,8 @@
 			<!-- 			<button type="button" class="btn btn-success" onclick="readCard();">读  卡</button> -->
 						<button type="button" class="btn btn-info" onclick="readCardAndQueryUser();">读卡并充值</button>
 						<button type="button" class="btn btn-info" onclick="readCardAndUpdateCharge();">充值修改</button>
-						<button type="button" class="btn btn-info" onclick="readCardAndQueryUser();">用户退费</button>
+<!-- 						<button type="button" class="btn btn-info" onclick="readCardAn();">用户退费</button>
+ -->						<button type="button" class="btn btn-info" onclick="readCardAndRepairCard();">用户补卡</button>
 <!-- 							      	<button type="button" class="btn btn-secondary">删除价格</button>
  -->
 					</div>
@@ -303,6 +304,74 @@
 								data-dismiss="modal">关 闭</button>
 							<button type="button" class="btn btn-primary"
 								onclick="writeCardByUpdateCharge()">确 定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+<!-- 用户补卡弹框 -->
+		<form name="repairCardForm" action="#">
+			<!-- Modal -->
+			<div class="modal fade" id="repairCardModalCenter" tabindex="-1"
+				role="dialog" aria-labelledby="repairCardModalCenterTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered  modal-lg"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="repairCardModalCenterTitle">用户补卡</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body" id="repairCardModalBodyDiv">
+							<div class="container-fluid">
+
+<!-- 
+								<div class="row">
+									<div class="col-md-4 align-self-center">当前余额</div>
+									<div class="col-md-8 ml-auto">
+										<input type="number" name="balance" class="form-control"
+											placeholder="元为单位" readonly="readonly" >
+										
+									</div>
+								</div> -->
+								<div class="row">
+									<div class="col-md-4 align-self-center">
+										是否已刷卡（选已刷卡）
+									</div>
+									<div class="col-md-8 ml-auto">
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										  <input type="radio" id="brushFlag0" name="brushFlag" class="form-check-input" checked>
+										  <label class="form-check-label" for="brushFlag0" value="0" >未刷卡</label>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										  <input type="radio" id="brushFlag1" name="brushFlag" class="form-check-input">
+										  <label class="form-check-label" for="brushFlag1" value="1">已刷卡</label>
+									
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4 align-self-center">
+										本次充值金额 <span style="color: red;">*</span>
+									</div>
+									<div class="col-md-8 ml-auto">
+										<input type="number" id="repairCardMoney" name="repairCardMoney" class="form-control"
+											placeholder="元为单位" required="required">
+										
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">关 闭</button>
+							<button type="button" class="btn btn-primary"
+								onclick="writeCardByRepairCard()">确 定</button>
 						</div>
 					</div>
 				</div>

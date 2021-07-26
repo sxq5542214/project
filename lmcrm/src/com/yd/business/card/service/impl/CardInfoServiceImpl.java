@@ -71,15 +71,39 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 		return generateCardInfo("chargeMoney", userId, deviceKindId,chargePrice);
 	}
 	
-	/**
-	 * 
-	 * @param cardKind
-	 * @param userId
-	 * @param deviceKindId
-	 * @param chargePrice  充值金额，元为单位
-	 * @return
-	 */
-	public CardInfoBean generateCardInfo(String action,long userId ,long deviceKindId,int chargePrice)	{
+
+	@Override
+	public CardInfoBean generateCardInfoByUpdateLastChargeMoney(long userId,Long deviceKindId , int chargePrice) {
+		// 查询用户的设备类型
+		if(deviceKindId == null) {
+			DeviceInfoBean device = deviceInfoService.findDeviceInfoByUserAndKind(userId, null);
+			if(device == null) {
+				throw new RuntimeException("error!  userid:" + userId +"  not find device .....");
+			}
+			deviceKindId = device.getDi_dkid();
+		}
+		
+		return generateCardInfo("updateLastChargeMoney", userId, deviceKindId,chargePrice);
+	}
+	
+
+	@Override
+	public CardInfoBean generateCardInfoByRepairCard(long userId,Long deviceKindId , int chargePrice , boolean isBrushCard) {
+		// 查询用户的设备类型
+		if(deviceKindId == null) {
+			DeviceInfoBean device = deviceInfoService.findDeviceInfoByUserAndKind(userId, null);
+			if(device == null) {
+				throw new RuntimeException("error!  userid:" + userId +"  not find device .....");
+			}
+			deviceKindId = device.getDi_dkid();
+		}
+		
+		return generateCardInfo("RepairCard", userId, deviceKindId,chargePrice,isBrushCard);
+	}
+	
+	
+	
+	public CardInfoBean generateCardInfo(String action,long userId ,long deviceKindId,int chargePrice , Boolean isBrushFlag)	{
 
 		UserInfoBean user = userInfoService.findUserById(userId);
 		long priceid = user.getU_priceid();
@@ -163,6 +187,26 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 				up.setIsavingno(chargeDetail.getCd_savingno());
 				
 				break;
+			case "updateLastChargeMoney":
+
+				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
+				chargeDetail = chargeDetailService.findLastChargeDetailByUser(user.getU_no());
+				
+				chargeDetail.setCd_chargeamount(new BigDecimal(chargePrice).divide(price.getP_price1(),2,BigDecimal.ROUND_HALF_UP));
+				chargeDetail.setCd_chargemoney(new BigDecimal(chargePrice));
+				chargeDetail.setCd_basemoney(chargeDetail.getCd_chargemoney());
+				chargeDetail.setCd_kindid(ChargeDetailBean.KIND_CHARGE_UPDATE);
+				chargeDetailService.updateChargeDetail(chargeDetail);
+
+			case "repairCard":
+
+				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
+//				chargeDetail = chargeDetailService.findLastChargeDetailByUser(user.getU_no());
+				
+				chargeDetail = chargeDetailService.createChargeDetail(user, price, ChargeDetailBean.KIND_CHANGE_CARD, ChargeDetailBean.ORDER_MONEY, operator, chargePrice , isBrushFlag);
+
+				up.setIsavingno(chargeDetail.getCd_savingno());
+				
 				
 			default:
 				break;
@@ -176,6 +220,17 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 		}
 		
 		return bean;
+	}
+	/**
+	 * 
+	 * @param cardKind
+	 * @param userId
+	 * @param deviceKindId
+	 * @param chargePrice  充值金额，元为单位
+	 * @return
+	 */
+	public CardInfoBean generateCardInfo(String action,long userId ,long deviceKindId,int chargePrice)	{
+		return generateCardInfo(action, userId, deviceKindId, chargePrice, false);
 	}
 	
 	

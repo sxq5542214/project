@@ -42,6 +42,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		}
 		return null;
 	}
+
 	/**
 	 * 
 	 * @param user		用户信息
@@ -50,16 +51,18 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	 * @param order		付款方式   0是现金 1是微信  2是支付宝
 	 * @param operator	操作人
 	 * @param money		充值金额，元为单位
+	 * @param isBrushCard		是否刷卡到表
 	 * @return			充值记录
 	 * @throws Exception	上次有未刷卡至水表的数据
 	 */
-	@Override
-	public ChargeDetailBean createChargeDetail(UserInfoBean user,PriceBean price,int kind,int order,OperatorBean operator,int money) throws Exception {
+	public ChargeDetailBean createChargeDetail(UserInfoBean user,PriceBean price,int kind,int order,OperatorBean operator,int money ,boolean isBrushCard ) throws Exception {
+
 		ChargeDetailBean bean = new ChargeDetailBean();
 		bean.setCd_userid(user.getU_id());
 		bean.setOrderby("order by cd_no desc ");
 		List<ChargeDetailBean> list = chargeDetailDao.queryChargeDetailList(bean);
 		Long no = 1l ;
+		Long saving_no = 1l ;
 		if(list.size() > 0 ) {
 			ChargeDetailBean lastCharge = list.get(0);
 			
@@ -76,9 +79,14 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 				throw new Exception("当前用户上次充值未刷卡至水表，请刷卡至水表后再试！");
 			}
 			no = lastCharge.getCd_no() + 1l ;
+			saving_no = lastCharge.getCd_savingno() + 1l;
 		}
-		bean.setCd_savingno(no.intValue());
+		bean.setCd_savingno(saving_no.intValue());
 		bean.setCd_no(no);
+		if( kind == ChargeDetailBean.KIND_CHANGE_CARD && !isBrushCard) { //补卡并且之前未刷卡
+			bean.setCd_savingno(saving_no.intValue() - 1);
+		}
+		
 		bean.setCd_brushflag(ChargeDetailBean.BRUSHFLAG_NO);
 		bean.setCd_charge(ChargeDetailBean.CHARGE_FAILD_WRITE);
 		bean.setCd_chargeamount(new BigDecimal(money).divide(price.getP_price1(),2,BigDecimal.ROUND_HALF_UP));
@@ -114,6 +122,22 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		chargeDetailDao.insertChargeDetail(bean);
 		
 		return bean;
+	}	
+	/**
+	 * 
+	 * @param user		用户信息
+	 * @param price		用户的价格信息
+	 * @param kind		充值类型，0是开户，1是充值，2是充值修改等
+	 * @param order		付款方式   0是现金 1是微信  2是支付宝
+	 * @param operator	操作人
+	 * @param money		充值金额，元为单位
+	 * @return			充值记录
+	 * @throws Exception	上次有未刷卡至水表的数据
+	 */
+	@Override
+	public ChargeDetailBean createChargeDetail(UserInfoBean user,PriceBean price,int kind,int order,OperatorBean operator,int money ) throws Exception {
+		return createChargeDetail(user, price, kind, order, operator, money,false);
+
 	}
 	
 	@Override

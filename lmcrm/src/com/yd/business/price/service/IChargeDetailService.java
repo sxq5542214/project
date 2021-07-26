@@ -24,6 +24,9 @@ public interface IChargeDetailService {
 	ChargeDetailBean createChargeDetail(UserInfoBean user, PriceBean price, int kind, int order, OperatorBean operator,
 			int money) throws Exception;
 
+	ChargeDetailBean createChargeDetail(UserInfoBean user, PriceBean price, int kind, int order, OperatorBean operator,
+			int money, boolean isBrushCard) throws Exception;
+	
 	int updateChargeDetailToSuccess(String cdid);
 
 	ChargeDetailBean findChargeDetailById(Long id);
@@ -35,5 +38,6 @@ public interface IChargeDetailService {
 	int updateChargeDetailBrushFlagToSuccess(Long cd_id, Date brushDate);
 
 	List<ChargeDetailBean> queryChargeListByUserId(Long u_id);
+
 
 }
