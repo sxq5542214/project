@@ -20,6 +20,9 @@ var userManager =  new Vue({
 //			form.u_phone.value = this.userList[index].u_phone ;
 //			form.u_id.value = this.userList[index].u_id ;
 	    	
+	    	
+	    	var no = this.userList[index].user_no ;
+	    	$("#u_no").val(no);
 			$("#radio"+index).prop('checked',true);
 	    }
     }
@@ -131,9 +134,16 @@ function readCardAndUpdateCharge(){
 	} );
 }
 
-// 用户补卡
+//用户补卡
 function readCardAndRepairCard(){
 
+	var u_no = $("#u_no").val();
+	if(u_no == ''){
+		alert("请先查询并选择用户！");
+		return ;
+	}
+	
+	
 	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
 	callWindowsClientMethod('readCard','{}' , function(result){
 		if(result < 1){
@@ -154,6 +164,45 @@ function readCardAndRepairCard(){
 		}
 	} );
 }
+
+
+//用户补卡
+function readCardAndChangeMeter(){
+
+	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+	callWindowsClientMethod('readCard','{}' , function(result){
+		if(result < 1){
+			alert("操作卡失败，无法获取数据");
+			return ;
+		}
+//		alert(result);
+		var json = eval('(' + result + ')');
+		var user_no = json.stru_userparm.iUserNo;
+		var iSavingNo = json.stru_userparm.iSavingNo;
+		var iUserFlag = json.stru_userparm.stru_retparm.iUserFlag;
+		var iSetFlag = json.stru_userparm.stru_retparm.iSetFlag;
+		var iFlag = json.stru_userparm.stru_retparm.iFlag;
+		var iYear = json.stru_userparm.stru_retparm.iYear;
+		var iMonth = json.stru_userparm.stru_retparm.iMonth;
+		var iDay = json.stru_userparm.stru_retparm.iDay;
+		var iMonth = iMonth <10 ? "0"+iMonth : iMonth;
+		var iDay = iDay <10 ? "0"+iDay : iDay;
+		
+//		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
+		
+		
+		$("#u_no").val(user_no);
+		$("#u_phone").val('');
+		$("#u_name").val('');
+		$("#u_paperwork").val('');
+		queryUserData();
+
+		$('#changeMeterModalCenter').modal('show');
+			
+	} );
+}
+
+
 
 function writeCardByCharge(){
 	
@@ -214,7 +263,7 @@ function writeCardByUpdateCharge(){
 				callWindowsClientMethod('chargeMoney',result , function(status){
 					if(status == 1){
 						// 写卡成功,更新写卡状态
-						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeInfo.do",
+						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailStatusToSuccess.do",
 							type : "POST",async:false, 
 							data :{ cdid : cdid  },
 							success:function(result){}
@@ -240,7 +289,7 @@ function writeCardByRepairCard(){
 	
 	$.ajax({url:"admin/card/ajaxRepairCard.do",
 		type : "POST",async:false, 
-		data :{ u_no :  u_no , brushFlag :  $("#brushFlag").val() , 
+		data :{ u_no :  u_no , brushFlag :  $('input[name="brushFlag"]:checked').val() , 
 			repairCardMoney : $("#repairCardMoney").val() },
 		success:function(result){
 			var bean = eval('(' + result + ')');
@@ -252,7 +301,7 @@ function writeCardByRepairCard(){
 				callWindowsClientMethod('chargeMoney',result , function(status){
 					if(status == 1){
 						// 写卡成功,更新写卡状态
-						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeInfo.do",
+						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailStatusToSuccess.do",
 							type : "POST",async:false, 
 							data :{ cdid : cdid  },
 							success:function(result){}
@@ -268,6 +317,48 @@ function writeCardByRepairCard(){
 	});
 }
 
+
+function writeCardByChangeMeter(){
+
+	var u_no = $("#u_no").val();
+	if(u_no == ''){
+		alert("请先查询并选择用户！");
+		return ;
+	}
+	
+	$.ajax({url:"admin/card/ajaxChangeMeterCard.do",
+		type : "POST",async:false, 
+		data :{ u_no :  u_no , 
+				changeMeterMoney :  $('#changeMeterMoney').val() ,
+				cm_oldmetercode : $("#cm_oldmetercode").val() ,
+				cm_type : $("#cm_type").val() ,
+				cm_remark : $("#cm_remark").val() 
+		},
+		success:function(result){
+			var bean = eval('(' + result + ')');
+		    var cdid = bean.chargeDetailId ;
+			if(bean.queryStatus == -1){
+				alert(bean.queryResult);
+			}else{
+				//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+				callWindowsClientMethod('chargeMoney',result , function(status){
+					if(status == 1){
+						// 写卡成功,更新写卡状态
+						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailStatusToSuccess.do",
+							type : "POST",async:false, 
+							data :{ cdid : cdid  },
+							success:function(result){}
+						});
+						
+						alert("充值写卡成功！");
+						$('#changeMeterModalCenter').modal('hide');
+					}
+				} );
+			}
+		}
+	
+	});
+}
 
 function queryUserData(){
 

@@ -24,21 +24,21 @@ public class ChangeMeterDaoImpl extends BaseDao implements IChangeMeterDao {
 	}
 
 	@Override
-	public void insertChangeMeter(ChangeMeterBean bean) {
+	public int insertChangeMeter(ChangeMeterBean bean) {
 		// TODO Auto-generated method stub
-		sqlSessionTemplate.insert(NAMESPACE+"insertChangeMeter", bean);
+		return sqlSessionTemplate.insert(NAMESPACE+"insertChangeMeter", bean);
 	}
 
 	@Override
-	public void updateChangeMeter(ChangeMeterBean bean) {
+	public int updateChangeMeter(ChangeMeterBean bean) {
 		// TODO Auto-generated method stub
-		sqlSessionTemplate.update(NAMESPACE+"updateChangeMeter", bean);
+		return sqlSessionTemplate.update(NAMESPACE+"updateChangeMeter", bean);
 	}
 
 	@Override
-	public void deleteChangeMeter(long id) {
+	public int deleteChangeMeter(long id) {
 		// TODO Auto-generated method stub
-		sqlSessionTemplate.delete(NAMESPACE+"deleteChangeMeter", id);
+		return sqlSessionTemplate.delete(NAMESPACE+"deleteChangeMeter", id);
 	}
 	
 	

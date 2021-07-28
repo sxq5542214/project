@@ -14,4 +14,6 @@ public interface ICardInfoService {
 
 	CardInfoBean generateCardInfoByRepairCard(long userId, Long deviceKindId, int chargePrice, boolean isBrushCard);
 
+	CardInfoBean generateCardInfoByChangeMeter(long userId, Long deviceKindId, int chargePrice);
+
 }

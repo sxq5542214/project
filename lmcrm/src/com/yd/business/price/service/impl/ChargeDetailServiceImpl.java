@@ -60,15 +60,15 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 
 		ChargeDetailBean bean = new ChargeDetailBean();
 		bean.setCd_userid(user.getU_id());
-		bean.setOrderby("order by cd_no desc ");
+		bean.setOrderby("order by cd_id desc ");
 		List<ChargeDetailBean> list = chargeDetailDao.queryChargeDetailList(bean);
 		Long no = 1l ;
 		Long saving_no = 1l ;
 		if(list.size() > 0 ) {
 			ChargeDetailBean lastCharge = list.get(0);
 			
-			// 如果之前写卡失败，则修改金额，直接返回之前的写卡数据
-			if(lastCharge.getCd_charge() != ChargeDetailBean.CHARGE_SUCCESS) {
+			// 如果之前写卡失败，则修改金额，直接返回之前的写卡数据.   补卡/换表维护 可能之前未刷卡，所以判断剔除补卡情况
+			if(lastCharge.getCd_charge() != ChargeDetailBean.CHARGE_SUCCESS && kind != ChargeDetailBean.KIND_CHANGE_CARD && kind != ChargeDetailBean.KIND_CHANGE_DEVICE ) {
 				lastCharge.setCd_chargeamount(new BigDecimal(money).divide(price.getP_price1(),2,BigDecimal.ROUND_HALF_UP));
 				lastCharge.setCd_chargemoney(new BigDecimal(money));
 				lastCharge.setCd_basemoney(lastCharge.getCd_chargemoney());
@@ -76,7 +76,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 				return lastCharge ;
 			}
 			
-			if(lastCharge.getCd_brushflag() == ChargeDetailBean.BRUSHFLAG_NO) {
+			if(lastCharge.getCd_brushflag() == ChargeDetailBean.BRUSHFLAG_NO && kind != ChargeDetailBean.KIND_CHANGE_CARD && kind != ChargeDetailBean.KIND_CHANGE_DEVICE ) {
 				throw new Exception("当前用户上次充值未刷卡至水表，请刷卡至水表后再试！");
 			}
 			no = lastCharge.getCd_no() + 1l ;
@@ -86,6 +86,9 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		bean.setCd_no(no);
 		if( kind == ChargeDetailBean.KIND_CHANGE_CARD && !isBrushCard) { //补卡并且之前未刷卡
 			bean.setCd_savingno(saving_no.intValue() - 1);
+		}
+		if( kind == ChargeDetailBean.KIND_CHANGE_DEVICE) {  //换表维护，充值次数需要修改为从1开始
+			bean.setCd_savingno(1);
 		}
 		
 		bean.setCd_brushflag(ChargeDetailBean.BRUSHFLAG_NO);
@@ -101,8 +104,8 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		
 		bean.setCd_basemoney(bean.getCd_chargemoney());
 		bean.setCd_paidmoney(BigDecimal.ZERO);
-		bean.setCd_othermoney1(BigDecimal.ZERO);
-		bean.setCd_othermoney2(BigDecimal.ZERO);
+		bean.setCd_othermoney1(price.getP_other1().multiply(bean.getCd_chargeamount()));
+		bean.setCd_othermoney2(price.getP_other2().multiply(bean.getCd_chargeamount()));
 		bean.setCd_lastbalance(BigDecimal.ZERO);
 		bean.setCd_balance(BigDecimal.ZERO);
 		bean.setCd_startamount(BigDecimal.ZERO);

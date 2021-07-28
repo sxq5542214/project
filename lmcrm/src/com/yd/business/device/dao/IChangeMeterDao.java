@@ -9,9 +9,9 @@ public interface IChangeMeterDao {
 
 	List<ChangeMeterBean> listChangeMeter(ChangeMeterBean bean);
 
-	void insertChangeMeter(ChangeMeterBean bean);
+	int insertChangeMeter(ChangeMeterBean bean);
 
-	void updateChangeMeter(ChangeMeterBean bean);
+	int updateChangeMeter(ChangeMeterBean bean);
 
-	void deleteChangeMeter(long id);
+	int deleteChangeMeter(long id);
 }

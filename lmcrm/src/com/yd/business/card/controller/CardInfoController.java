@@ -15,6 +15,8 @@ import com.yd.basic.framework.bean.BaseBean;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.card.bean.CardInfoBean;
 import com.yd.business.card.service.ICardInfoService;
+import com.yd.business.device.service.IChangeMeterService;
+import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 
@@ -26,6 +28,8 @@ public class CardInfoController extends BaseController {
 
 	@Autowired
 	private IUserInfoService userInfoService;
+	@Autowired
+	private IChangeMeterService changeMeterService;
 	
 
 	/**
@@ -111,7 +115,7 @@ public class CardInfoController extends BaseController {
 		writeJson(response, bean );
 		return null;
 	}
-	
+
 	/**
 	 *  界面进行用户补卡操作
 	 * @param request
@@ -140,6 +144,41 @@ public class CardInfoController extends BaseController {
 		writeJson(response, bean );
 		return null;
 	}
+
+	/**
+	 *  界面进行换表维护操作
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/card/ajaxChangeMeterCard.do")
+	public ModelAndView ajaxChangeMeterCard(HttpServletRequest request,HttpServletResponse response){
+		CardInfoBean bean  = new CardInfoBean();
+		try {
+			String u_no = request.getParameter("u_no");
+			String changeMeterMoney = request.getParameter("changeMeterMoney");
+			String cm_oldmetercode = request.getParameter("cm_oldmetercode");
+			String cm_type = request.getParameter("cm_type");
+			String cm_remark = request.getParameter("cm_remark");
+			BigDecimal money = new BigDecimal(changeMeterMoney);
+			
+			OperatorBean op = getCurrentLoginOperator();
+			// 写入换表维护表
+			changeMeterService.createChangeMeter(Long.parseLong(u_no), new BigDecimal(cm_oldmetercode), Integer.parseInt(cm_type), op.getO_id(), cm_remark);
+			
+			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
+			bean  = cardInfoService.generateCardInfoByChangeMeter(user.getU_id(), null , money.intValue()  );
+					
+		} catch (Exception e) {
+			log.error(e, e);
+			bean.setQueryStatus(BaseBean.QUERYSTATUS_ERROR);
+			bean.setQueryResult(e.getMessage());
+		}
+		writeJson(response, bean );
+		return null;
+	}
+	
+	
 	
 	
 }

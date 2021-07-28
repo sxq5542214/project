@@ -12,7 +12,15 @@ import org.apache.ibatis.type.Alias;
 public class ChangeMeterBean implements java.io.Serializable {
 
 	// Fields
-
+	public static final int TYPE_CHANGE_MODULES = 0;  // 更换模块
+	public static final int TYPE_CHANGE_DEVICE = 1;	  //  更换整表
+	public static final int TYPE_CHANGE_BATTERY = 2;	// 更换电池
+	public static final int TYPE_CHANGE_OTHER = 3;	// 其他
+	public static final int TYPE_CHANGE_DEVICEKIND = 4;	// 更换表具类型
+	
+	
+	
+	
 	/**
 	 * 
 	 */

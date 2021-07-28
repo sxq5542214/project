@@ -18,6 +18,7 @@ import com.yd.business.card.bean.CardInfoBean.UserParm;
 import com.yd.business.card.service.ICardInfoService;
 import com.yd.business.device.bean.DeviceInfoBean;
 import com.yd.business.device.bean.DeviceKindBean;
+import com.yd.business.device.service.IChangeMeterService;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.device.service.IDeviceKindService;
 import com.yd.business.operator.bean.OperatorBean;
@@ -44,6 +45,8 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 	private IPriceService priceService;
 	@Autowired
 	private IChargeDetailService chargeDetailService;
+	@Autowired
+	private IChangeMeterService changeMeterService;
 	
 
 	@Override
@@ -85,7 +88,7 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 		
 		return generateCardInfo("updateLastChargeMoney", userId, deviceKindId,chargePrice);
 	}
-	
+
 
 	@Override
 	public CardInfoBean generateCardInfoByRepairCard(long userId,Long deviceKindId , int chargePrice , boolean isBrushCard) {
@@ -98,7 +101,24 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 			deviceKindId = device.getDi_dkid();
 		}
 		
-		return generateCardInfo("RepairCard", userId, deviceKindId,chargePrice,isBrushCard);
+		return generateCardInfo("repairCard", userId, deviceKindId,chargePrice,isBrushCard);
+	}
+	
+
+
+	@Override
+	public CardInfoBean generateCardInfoByChangeMeter(long userId,Long deviceKindId , int chargePrice ) {
+		
+		// 查询用户的设备类型
+		if(deviceKindId == null) {
+			DeviceInfoBean device = deviceInfoService.findDeviceInfoByUserAndKind(userId, null);
+			if(device == null) {
+				throw new RuntimeException("error!  userid:" + userId +"  not find device .....");
+			}
+			deviceKindId = device.getDi_dkid();
+		}
+		
+		return generateCardInfo("changeMeter", userId, deviceKindId,chargePrice);
 	}
 	
 	
@@ -197,7 +217,7 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 				chargeDetail.setCd_basemoney(chargeDetail.getCd_chargemoney());
 				chargeDetail.setCd_kindid(ChargeDetailBean.KIND_CHARGE_UPDATE);
 				chargeDetailService.updateChargeDetail(chargeDetail);
-
+				break;
 			case "repairCard":
 
 				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
@@ -206,7 +226,17 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 				chargeDetail = chargeDetailService.createChargeDetail(user, price, ChargeDetailBean.KIND_CHANGE_CARD, ChargeDetailBean.ORDER_MONEY, operator, chargePrice , isBrushFlag);
 
 				up.setIsavingno(chargeDetail.getCd_savingno());
+				break;
 				
+			case "changeMeter":
+
+				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
+//				chargeDetail = chargeDetailService.findLastChargeDetailByUser(user.getU_no());
+				
+				chargeDetail = chargeDetailService.createChargeDetail(user, price, ChargeDetailBean.KIND_CHANGE_DEVICE, ChargeDetailBean.ORDER_MONEY, operator, chargePrice , isBrushFlag);
+
+				up.setIsavingno(chargeDetail.getCd_savingno());
+				break;
 				
 			default:
 				break;

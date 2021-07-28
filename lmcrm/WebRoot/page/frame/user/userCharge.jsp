@@ -94,8 +94,8 @@
 						<button type="button" class="btn btn-info" onclick="readCardAndUpdateCharge();">充值修改</button>
 <!-- 						<button type="button" class="btn btn-info" onclick="readCardAn();">用户退费</button>
  -->						<button type="button" class="btn btn-info" onclick="readCardAndRepairCard();">用户补卡</button>
-<!-- 							      	<button type="button" class="btn btn-secondary">删除价格</button>
- -->
+ 						<button type="button" class="btn btn-secondary" onclick="readCardAndChangeMeter();">换表维护</button>
+ 
 					</div>
 					<div class="col-2">
 						<button type="button" class="btn btn-primary"
@@ -115,6 +115,7 @@
 				<thead>
 					<tr>
 						<th scope="col">用户编号</th>
+						<th scope="col">总序号</th>
 						<th scope="col">充值序号</th>
 						<th scope="col">用户名称</th>
 						<th scope="col">联系方式</th>
@@ -143,6 +144,7 @@
 							:value="index" v-model="checkedRows">{{user.user_no }}</th>
 						<!-- <td>{{user.u_no}}</td> -->
 						<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
+						<td>{{user.cd_no }}</td>
 						<td>{{user.cd_savingno }}</td>
 						<td>{{user.user_name}}</td>
 						<td>{{user.user_phone}}</td>
@@ -345,12 +347,12 @@
 									</div>
 									<div class="col-md-8 ml-auto">
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										  <input type="radio" id="brushFlag0" name="brushFlag" class="form-check-input" checked>
-										  <label class="form-check-label" for="brushFlag0" value="0" >未刷卡</label>
+										  <input type="radio" id="brushFlag0" name="brushFlag" class="form-check-input" checked value="0" >
+										  <label class="form-check-label" for="brushFlag0" >未刷卡</label>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										  <input type="radio" id="brushFlag1" name="brushFlag" class="form-check-input">
-										  <label class="form-check-label" for="brushFlag1" value="1">已刷卡</label>
+										  <input type="radio" id="brushFlag1" name="brushFlag" class="form-check-input" value="1">
+										  <label class="form-check-label" for="brushFlag1" >已刷卡</label>
 									
 									</div>
 								</div>
@@ -378,6 +380,79 @@
 			</div>
 		</form>
 		
+		
+<!-- 换表维护弹框 -->
+		<form name="changeMeterForm" action="#">
+			<!-- Modal -->
+			<div class="modal fade" id="changeMeterModalCenter" tabindex="-1"
+				role="dialog" aria-labelledby="changeMeterModalCenterTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered  modal-lg"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="changeMeterModalCenterTitle">用户补卡</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body" id="changeMeterModalBodyDiv">
+							<div class="container-fluid">
+
+
+								<div class="row">
+									<div class="col-md-4 align-self-center">表上剩余金额<span style="color: red;">*</span></div>
+									<div class="col-md-8 ml-auto">
+										<input type="number" id="changeMeterMoney" name="changeMeterMoney" class="form-control"
+											placeholder="元为单位" value="0" >
+										
+									</div>
+								</div> 
+								<div class="row">
+									<div class="col-md-4 align-self-center">旧表止码<span style="color: red;">*</span></div>
+									<div class="col-md-8 ml-auto">
+										<input type="number" id="cm_oldmetercode" name="cm_oldmetercode" class="form-control"
+											placeholder="元为单位" value="0" >
+										
+									</div>
+								</div> 
+								<div class="row">
+									<div class="col-md-4 align-self-center">
+										换表类型
+									</div>
+									<div class="col-md-8 ml-auto">
+										<select id="cm_type" name="cm_type" class="form-control">
+											<option value="0">更换模块</option>
+											<option value="1">更换整表</option>
+											<option value="2">更换电池</option>
+											<option value="3">其他</option>
+											<option value="4">更换表具类型</option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4 align-self-center">
+										换表备注 
+									</div>
+									<div class="col-md-8 ml-auto">
+										<input type="text" id="cm_remark" name="cm_remark" class="form-control"
+											placeholder="请输入换表备注" required="required">
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">关 闭</button>
+							<button type="button" class="btn btn-primary"
+								onclick="writeCardByChangeMeter()">确 定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 		
 	</div>
 </body>
