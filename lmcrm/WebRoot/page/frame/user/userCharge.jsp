@@ -90,11 +90,11 @@
 				<div class="row">
 					<div class="col-10">
 			<!-- 			<button type="button" class="btn btn-success" onclick="readCard();">读  卡</button> -->
-						<button type="button" class="btn btn-info" onclick="readCardAndQueryUser();">读卡并充值</button>
-						<button type="button" class="btn btn-info" onclick="readCardAndUpdateCharge();">充值修改</button>
+						<button type="button" class="btn btn-primary" onclick="readCardAndQueryUser();">读卡并充值</button>
+						<button type="button" class="btn btn-secondary" onclick="readCardAndUpdateCharge();">充值修改</button>
 <!-- 						<button type="button" class="btn btn-info" onclick="readCardAn();">用户退费</button>
- -->						<button type="button" class="btn btn-info" onclick="readCardAndRepairCard();">用户补卡</button>
- 						<button type="button" class="btn btn-secondary" onclick="readCardAndChangeMeter();">换表维护</button>
+ -->						<button type="button" class="btn btn-success" onclick="readCardAndRepairCard();">用户补卡</button>
+ 						<button type="button" class="btn btn-info" onclick="readCardAndChangeMeter();">换表维护</button>
  
 					</div>
 					<div class="col-2">
@@ -422,7 +422,7 @@
 										换表类型
 									</div>
 									<div class="col-md-8 ml-auto">
-										<select id="cm_type" name="cm_type" class="form-control">
+										<select id="cm_type" name="cm_type" class="form-control" onchange="changeCMType(this)">
 											<option value="0">更换模块</option>
 											<option value="1">更换整表</option>
 											<option value="2">更换电池</option>
@@ -441,6 +441,37 @@
 									</div>
 								</div>
 
+								<div class="row"  style="display: none;" id="div_cm_newmetercode">
+									<div class="col-md-4 align-self-center">
+										新表编号 
+									</div>
+									<div class="col-md-8 ml-auto">
+										<input type="number" id="cm_newmetercode" name="cm_newmetercode" class="form-control"
+											placeholder="请输入新表编号" value="0">
+									</div>
+								</div>
+
+								<div class="row" style="display: none;" id="div_cm_newmeterno">
+									<div class="col-md-4 align-self-center">
+										新表起码 
+									</div>
+									<div class="col-md-8 ml-auto">
+										<input type="number" id="cm_newmeterno" name="cm_newmeterno" class="form-control"
+											placeholder="请输入新表起码"  value="0">
+									</div>
+								</div>
+								
+								<div class="row" style="display: none;" id="div_device_kind">
+									<div class="col-md-4 align-self-center">
+										新表具类型
+									</div>
+									<div class="col-md-8 ml-auto">
+										<select id="device_kind" name="device_kind" class="form-control" >
+											<option v-for="dk in deviceKindList" :key="" :value="dk.dk_id">{{dk.dk_name}}</option>
+										</select>
+									</div>
+								</div>
+								
 							</div>
 						</div>
 						<div class="modal-footer">

@@ -198,7 +198,17 @@ function readCardAndChangeMeter(){
 		queryUserData();
 
 		$('#changeMeterModalCenter').modal('show');
-			
+		
+		
+		// 获取 设备列表
+		$.ajax({url:"admin/device/ajaxQueryEnableDeviceKind.do",
+			type : "POST",
+			success:function(result){
+			    var list = eval('(' + result + ')');
+			    userManager.deviceKindList = list;
+		}});
+		
+		
 	} );
 }
 
@@ -332,7 +342,10 @@ function writeCardByChangeMeter(){
 				changeMeterMoney :  $('#changeMeterMoney').val() ,
 				cm_oldmetercode : $("#cm_oldmetercode").val() ,
 				cm_type : $("#cm_type").val() ,
-				cm_remark : $("#cm_remark").val() 
+				cm_remark : $("#cm_remark").val() ,
+				cm_newmetercode : $("#cm_newmetercode").val() ,
+				cm_newmeterno : $("#cm_newmeterno").val() ,
+				device_kind : $("#device_kind").val() 
 		},
 		success:function(result){
 			var bean = eval('(' + result + ')');
@@ -358,6 +371,23 @@ function writeCardByChangeMeter(){
 		}
 	
 	});
+}
+
+function changeCMType(sel){
+	var cm_type = $("#cm_type").val() ;
+	var hide = "hide";
+	if(cm_type == 4){
+		$("#div_cm_newmetercode").show();
+		$("#div_cm_newmeterno").show();
+		$("#div_device_kind").show();
+		
+	}else{
+		$("#div_cm_newmetercode").hide();
+		$("#div_cm_newmeterno").hide();
+		$("#div_device_kind").hide();
+	}
+	
+	
 }
 
 function queryUserData(){

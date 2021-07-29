@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.device.bean.ChangeMeterBean;
+import com.yd.business.device.bean.DeviceInfoBean;
 import com.yd.business.device.dao.IChangeMeterDao;
 import com.yd.business.device.service.IChangeMeterService;
+import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 
@@ -28,9 +30,16 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 	private IChangeMeterDao changeMeterDao;
 	@Resource
 	private IUserInfoService userInfoService;
+	@Resource
+	private IDeviceInfoService deviceInfoService;
+	
+	public int createChangeMeter(long user_no, BigDecimal cm_oldmetercode, int cm_type, long cm_operatorid, String cm_remark) {
+		return createChangeMeter(user_no, cm_oldmetercode, BigDecimal.ZERO, 0l, cm_type, cm_operatorid, cm_remark, null);
+	}
+
 	
 	@Override
-	public int createChangeMeter(long user_no ,BigDecimal cm_oldmetercode,int cm_type,long cm_operatorid,String cm_remark) {
+	public int createChangeMeter(long user_no ,BigDecimal cm_oldmetercode,BigDecimal cm_newmetercode ,Long cm_newmeterno, int cm_type,long cm_operatorid,String cm_remark,Long deviceKindId) {
 		
 		UserInfoBean user = userInfoService.findUserByNo(user_no);
 
@@ -44,8 +53,15 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 		bean.setCm_happendate(new Date());
 		bean.setCm_status(13);  // 不知意义
 		
-		bean.setCm_newmetercode(BigDecimal.ZERO);
-		bean.setCm_newmeterno(0l);
+		bean.setCm_newmetercode(cm_newmetercode);
+		bean.setCm_newmeterno(cm_newmeterno);
+		
+		if(cm_type == ChangeMeterBean.TYPE_CHANGE_DEVICEKIND) { //更换了表具类型
+			DeviceInfoBean di = deviceInfoService.findFirstDeviceInfoByUser(user.getU_id());
+			di.setDi_dkid(deviceKindId);
+			deviceInfoService.updateDeviceInfo(di);
+		}
+		
 		
 		return changeMeterDao.insertChangeMeter(bean);
 	}

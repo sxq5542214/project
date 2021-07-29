@@ -8,4 +8,6 @@ public interface IDeviceDao {
 	List<DeviceInfoBean> queryDeviceInfo(DeviceInfoBean bean);
 
 	DeviceInfoBean createDeviceInfo(DeviceInfoBean bean);
+
+	int updateDeviceInfo(DeviceInfoBean bean);
 }

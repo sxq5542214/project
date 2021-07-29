@@ -120,9 +120,9 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		bean.setCd_basemoneyton2(BigDecimal.ZERO);
 		bean.setCd_basemoneyton3(BigDecimal.ZERO);
 		
-		bean.setCd_happendate(new Date(0));
+		bean.setCd_happendate(new Date());
 		bean.setCd_startdate(new Date());
-		bean.setCd_enddate(new Date());
+		bean.setCd_enddate(new Date(0));
 		chargeDetailDao.insertChargeDetail(bean);
 		
 		return bean;
@@ -150,7 +150,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		ChargeDetailBean bean  = new ChargeDetailBean();
 		bean.setCd_id(id);
 		bean.setCd_charge(ChargeDetailBean.CHARGE_SUCCESS);
-		bean.setCd_enddate(new Date());
+		bean.setCd_startdate(new Date());
 		
 		int num = chargeDetailDao.updateChargeDetail(bean);
 		
@@ -180,7 +180,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		ChargeDetailBean bean  = new ChargeDetailBean();
 		bean.setCd_id(cd_id);
 		bean.setCd_brushflag(ChargeDetailBean.BRUSHFLAG_YES);
-		bean.setCd_happendate(brushDate);
+		bean.setCd_enddate(brushDate);
 		
 		int num = chargeDetailDao.updateChargeDetail(bean);
 		

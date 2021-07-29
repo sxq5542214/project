@@ -31,5 +31,9 @@ public class DeviceDaoImpl extends BaseDao implements IDeviceDao {
 		return bean;
 	}
 	
+	@Override
+	public int updateDeviceInfo(DeviceInfoBean bean) {
+		return sqlSessionTemplate.update(NAMESPACE +"updateDeviceInfo", bean);
+	}
 
 }

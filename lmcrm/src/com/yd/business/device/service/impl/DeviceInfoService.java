@@ -94,5 +94,20 @@ public class DeviceInfoService extends BaseService implements IDeviceInfoService
 		return list.size() >0 ? list.get(0):null;
 	}
 	
+
+	@Override
+	public DeviceInfoBean findFirstDeviceInfoByUser(Long userid) {
+		DeviceInfoBean bean = new DeviceInfoBean();
+		bean.setDi_userid(userid);
+		
+		List<DeviceInfoBean> list = deviceDao.queryDeviceInfo(bean);
+		return list.size() >0 ? list.get(0):null;
+	}
+	
+	@Override
+	public int updateDeviceInfo(DeviceInfoBean bean) {
+		bean.setDi_updatedate(new Date());
+		return deviceDao.updateDeviceInfo(bean);
+	}
 	
 }

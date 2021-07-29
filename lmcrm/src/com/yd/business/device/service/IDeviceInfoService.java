@@ -15,4 +15,8 @@ public interface IDeviceInfoService {
 
 	DeviceInfoBean createDeviceInfo(UserInfoBean user, DeviceKindBean deviceKind, PriceBean price, int chargePrice);
 
+	DeviceInfoBean findFirstDeviceInfoByUser(Long userid);
+
+	int updateDeviceInfo(DeviceInfoBean bean);
+
 }

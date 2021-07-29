@@ -19,6 +19,7 @@ import com.yd.business.device.service.IChangeMeterService;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.util.StringUtil;
 
 @Controller
 public class CardInfoController extends BaseController {
@@ -160,11 +161,15 @@ public class CardInfoController extends BaseController {
 			String cm_oldmetercode = request.getParameter("cm_oldmetercode");
 			String cm_type = request.getParameter("cm_type");
 			String cm_remark = request.getParameter("cm_remark");
+			String cm_newmetercode = request.getParameter("cm_newmetercode");
+			String cm_newmeterno = request.getParameter("cm_newmeterno");
+			Long device_kind = StringUtil.isNotNull(request.getParameter("device_kind"))? Long.parseLong(request.getParameter("device_kind")):-1  ;
+			
 			BigDecimal money = new BigDecimal(changeMeterMoney);
 			
 			OperatorBean op = getCurrentLoginOperator();
 			// 写入换表维护表
-			changeMeterService.createChangeMeter(Long.parseLong(u_no), new BigDecimal(cm_oldmetercode), Integer.parseInt(cm_type), op.getO_id(), cm_remark);
+			changeMeterService.createChangeMeter(Long.parseLong(u_no), new BigDecimal(cm_oldmetercode),new BigDecimal(cm_newmetercode),Long.parseLong(cm_newmeterno), Integer.parseInt(cm_type), op.getO_id(), cm_remark,device_kind);
 			
 			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
 			bean  = cardInfoService.generateCardInfoByChangeMeter(user.getU_id(), null , money.intValue()  );
