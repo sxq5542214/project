@@ -75,7 +75,7 @@
                             <td>
                                 <div class="btn-group">
                                 
-                                	<a class="btn btn-success"  href="admin/report/toSingleReportPage.do?id=<%=ab.getCode() %>">查看数据</a>
+                                	<a class="btn btn-success"  href="admin/report/toSingleReportPage.do?code=<%=ab.getCode() %>">查看数据</a>
                                   <%-- <button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle">
                                     操作 
                                     <span class="caret"></span>
