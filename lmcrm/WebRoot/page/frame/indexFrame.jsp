@@ -21,113 +21,121 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <title>龙马水厂收费系统</title>
     <style type="text/css">
     	.navbar{align-items:baseline;}
+    	.container{max-width: 1440px;}
     </style>
   </head>
 
 <body >
 <div class="row" style="margin-left: 0; margin-right: 0;" >
-<nav class="navbar navbar-expand-lg navbar-light bg-light col-md-2" id="navMenu" >
-<!--   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
-    <ul class="nav flex-column" style="color:black;">
-    
-      <li class="nav-item active">
-	  	<a class="navbar-brand" >&nbsp;&nbsp;龙马水厂</a>
-	  </li>
-      <li class="nav-item active">
-        <a class="nav-link" onclick="changeIframe('page/frame/dashboard/indexDashboard.jsp',this)" >首页 <span class="sr-only">(current)</span></a>
-        
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          档案管理
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" onclick="changeIframe('page/frame/operator/operatorManager.jsp',this)">员工管理</a>
-          <a class="dropdown-item" onclick="changeIframe('page/frame/price/priceManager.jsp',this)">价格管理</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userManager.jsp',this)">用户管理</a>
-<!--           <a class="dropdown-item" href="#">批量建户</a>
- -->          <a class="dropdown-item" onclick="changeIframe('page/frame/address/addressManager.jsp',this)">地址管理</a>
-          <a class="dropdown-item" onclick="changeIframe('page/frame/user/modifyAddress.jsp',this)">位置变更</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          	营业管理 
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userOpenAccount.jsp',this)">用户开户</a>
-          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户充值</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">充值修改</a>
-          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户补卡</a>
-          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表充值</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          	抄表管理 
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">生成计划</a>
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">手工录入</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">远程抄表</a>
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">批量抄表</a>
-        </div>
-      </li>
-      
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          	查询管理
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" onclick="changeIframe('admin/report/toSimpleReportPage.do',this)">报表查询</a>
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">收费统计</a>
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">疑户查询</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">日志查询</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          	维护管理 
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">换表维护</a>
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">换表查询</a>
-          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">表具管理</a>
-        </div>
-      </li>
-      
-        
-	      <li class="nav-item dropdown">
-	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	          	 系统管理 
-	        </a>
-	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item"  onclick="changeIframe('page/frame/system/modifyPassword.jsp',this)">修改密码</a>
-	          <a class="dropdown-item" href="#">退出系统</a>
-	        </div>
-	      </li>
-        
-      
-    <!--   <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li> -->
-    </ul>
-<!--     <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
-<!--   </div> -->
-</nav>
-
-	<div style="background-color: grey;" class="embed-responsive col-md-9 " id="iframeDiv" >  
-		        <iframe src="page/frame/dashboard/indexDashboard.jsp" id="iframPage" class="embed-responsive-item" width="100%" scrolling="yes" ></iframe>  
+	<div style="width: 15%;flex:12%;"  >
+		<nav class="navbar navbar-expand-lg navbar-light bg-light " id="navMenu" >
+		<!--   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+		
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
+		    <ul class="nav flex-column" style="color:black;">
+		    
+		      <li class="nav-item active">
+			  	<a class="navbar-brand" >&nbsp;&nbsp;龙马水厂</a>
+			  </li>
+		      <li class="nav-item active">
+		        <a class="nav-link" onclick="changeIframe('page/frame/dashboard/indexDashboard.jsp',this)" >首页 <span class="sr-only">(current)</span></a>
+		        
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          档案管理
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/operator/operatorManager.jsp',this)">员工管理</a>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/price/priceManager.jsp',this)">价格管理</a>
+		          <div class="dropdown-divider"></div>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userManager.jsp',this)">用户管理</a>
+		<!--           <a class="dropdown-item" href="#">批量建户</a>
+		 -->          <a class="dropdown-item" onclick="changeIframe('page/frame/address/addressManager.jsp',this)">地址管理</a>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/modifyAddress.jsp',this)">位置变更</a>
+		        </div>
+		      </li>
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          	营业管理 
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userOpenAccount.jsp',this)">用户开户</a>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户充值</a>
+		          <div class="dropdown-divider"></div>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">充值修改</a>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户补卡</a>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表充值</a>
+		        </div>
+		      </li>
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          	抄表管理 
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">生成计划</a>
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">手工录入</a>
+		          <div class="dropdown-divider"></div>
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">远程抄表</a>
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">批量抄表</a>
+		        </div>
+		      </li>
+		      
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          	查询管理
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" onclick="changeIframe('admin/report/toSimpleReportPage.do',this)">报表查询</a>
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">收费统计</a>
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">疑户查询</a>
+		          <div class="dropdown-divider"></div>
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">日志查询</a>
+		        </div>
+		      </li>
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          	维护管理 
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">换表维护</a>
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">换表查询</a>
+		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">表具管理</a>
+		        </div>
+		      </li>
+		      
+		        
+			      <li class="nav-item dropdown">
+			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			          	 系统管理 
+			        </a>
+			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			          <a class="dropdown-item"  onclick="changeIframe('page/frame/system/modifyPassword.jsp',this)">修改密码</a>
+			          <a class="dropdown-item" href="#">退出系统</a>
+			        </div>
+			      </li>
+		        
+		      
+		    <!--   <li class="nav-item">
+		        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+		      </li> -->
+		    </ul>
+		<!--     <form class="form-inline my-2 my-lg-0">
+		      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		    </form> -->
+		<!--   </div> -->
+		</nav>
+	
+	
+	</div>
+	
+	<div style="width: 75%;flex:87%;" >
+		<div style="background-color: grey;" class="embed-responsive  " id="iframeDiv" >  
+			        <iframe src="page/frame/dashboard/indexDashboard.jsp" id="iframPage" class="embed-responsive-item" width="100%" scrolling="yes" ></iframe>  
+		</div>
 	</div>
 </div>
 </body>
