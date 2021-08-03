@@ -102,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">换表维护</a>
 		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">换表查询</a>
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">表具管理</a>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/device/deviceManager.jsp',this)">表具管理</a>
 		        </div>
 		      </li>
 		      

@@ -18,6 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
  	<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" type="text/javascript" ></script>
   	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <title>龙马水厂收费系统</title>
     <style type="text/css">
     .col-xs-8{padding: 1px;}
@@ -27,29 +28,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  
 <body>
 
-<div class="container">
+<div class="container" id="deviceManagerDiv" style="width: 99%;">
 	<div class="row">
 	  <div class="col-xs-4">
 		<div class="list-group">
 		  <a  class="list-group-item active">
 		   水表价格
 		  </a>
-		  <a class="list-group-item">Dapibus ac facilisis in</a>
-		  <a class="list-group-item">Morbi leo risus</a>
+		  <a v-for="(price,index) in priceList" @click="getPriceData(index)" :for="'radio'+index"  class="list-group-item">
+		  		<input type="radio" :id="'price'+index"  name="price">
+		  		{{price.p_name}}</a>
+		  
 		</div>
 	  </div>
 	  <div class="col-xs-8">
 		  <a  class="list-group-item active">
-		    参数信息
+		   <strong> 【{{priceName}}】</strong>  参数信息
 		  </a>
 		<div class="table-responsive">
 		  <table class="table table-condensed table-striped">
 		   <thead>
-		   	<tr><th>1</th><th>2</th><th>1</th><th>2</th></tr>
+		   	<tr><th>一阶单价</th><th>一阶吨限</th><th>二阶单价</th><th>二阶吨限</th><th>三阶单价</th></tr>
 		   </thead>
 		   <tbody>
-		   	<tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
-		   	<tr><td>2</td><td>1</td><td>1</td><td>1</td></tr>
+		   	<tr><td>{{priceBase1}}</td><td>{{priceTon1}}</td><td>{{priceBase2}}</td><td>{{priceTon2}}</td><td>{{priceBase3}}</td></tr>
+		   	<tr><th>保底金额</th><th>保底量</th><th>囤积量</th><th>排污费</th><th>其他费</th></tr>
+		   	<tr><td>{{p_lowprice}}</td><td>{{p_lowamount}}</td><td>{{p_limitamount}}</td><td>{{p_other1}}</td><td>{{p_other2}}</td></tr>
 		   </tbody>
 		  </table>
 		</div>
@@ -61,17 +65,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <a  class="list-group-item active">
 		   水表类型
 		  </a>
-		  <a  class="list-group-item">Dapibus ac facilisis in</a>
-		  <a  class="list-group-item">Morbi leo risus</a>
-		  <a  class="list-group-item">Porta ac consectetur ac</a>
-		  <a  class="list-group-item">Vestibulum at eros</a>
+		  <a  v-for="(dk,index) in deviceKindList" @click="getDeviceKindData(index)" :for="'radio'+index"  class="list-group-item">
+		  	 <input type="radio" :id="'deviceKind'+index" name="deviceKind">
+		  	 {{dk.dk_name}}</a>
+		  
 		  <a  class="list-group-item">
 		  <div class="row">
 		  	<div class="col-xs-6">
-		  		<button onclick="callWindowsClientReadCardMethod();" type="button" class="btn btn-primary" >读卡</button>
+		  		<button onclick="readCard();" type="button" class="btn btn-primary btn-lg" >读       卡</button>
 			</div>
 		   <div class="col-xs-6">
-		   		<button onclick="callWindowsClientWriteSpaceCard();" type="button" class="btn btn-primary">写卡</button>
+		   		<button onclick="callWindowsClientWriteSpaceCard();" type="button" class="btn btn-danger btn-lg">写      卡</button>
 			</div>
 		  </div>
 		  </a>
@@ -119,7 +123,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  </div>
 	</div>
 </div>
-调试数据：  <textarea  rows="5" cols="120" id="textArea"></textarea>
+
+
+
+读卡调试数据：  <textarea  rows="5" cols="120" id="debugTextArea"></textarea>
 </body>
+
+<script src="js/common/dictionaryData.js" type="text/javascript"></script>
 <script type="text/javascript" src="js/client/windowsClient.js"></script>
+<script type="text/javascript" src="page/frame/device/js/deviceManager.js"></script>
 </html>
