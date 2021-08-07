@@ -129,7 +129,11 @@ function writeCard(){
 		alert("请先选择 价格类型/水表类型/卡类型 ！");
 		return;
 	}
-
+	
+	if(! confirm('确定写卡吗？ 操作不可撤销！')){
+		return ;
+	}
+	
 	var price = deviceManager.priceList[priceIndex];
 	var dk = deviceManager.deviceKindList[deviceKindIndex];
 	// 获取 imeterkind 参数
