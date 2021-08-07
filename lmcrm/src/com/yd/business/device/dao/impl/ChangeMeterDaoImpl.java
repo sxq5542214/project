@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
 import com.yd.business.device.bean.ChangeMeterBean;
+import com.yd.business.device.bean.ChangeMeterExtBean;
 import com.yd.business.device.dao.IChangeMeterDao;
 /**
  * 操作日志
@@ -18,7 +19,7 @@ public class ChangeMeterDaoImpl extends BaseDao implements IChangeMeterDao {
 	private final static String NAMESPACE = "changeMeter.";
 
 	@Override
-	public List<ChangeMeterBean> listChangeMeter(ChangeMeterBean bean) {
+	public List<ChangeMeterExtBean> listChangeMeter(ChangeMeterExtBean bean) {
 		// TODO Auto-generated method stub
 		return sqlSessionTemplate.selectList(NAMESPACE+"queryChangeMeterList", bean);
 	}

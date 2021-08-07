@@ -330,7 +330,7 @@
 								</div> -->
 								<div class="row">
 									<div class="col-md-4 align-self-center">
-										是否已刷卡（选已刷卡）
+										是否已刷卡（选已刷卡会导致上次未刷的金额丢失）
 									</div>
 									<div class="col-md-8 ml-auto">
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

@@ -67,7 +67,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		          <div class="dropdown-divider"></div>
 		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">充值修改</a>
 		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户补卡</a>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表充值</a>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
 		        </div>
 		      </li>
 		      <li class="nav-item dropdown">
@@ -100,8 +100,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		          	维护管理 
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">换表维护</a>
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">换表查询</a>
+		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
+		          <a class="dropdown-item"  onclick="changeIframe('page/frame/user/userChangeDeviceQuery.jsp',this)">换表查询</a>
 		          <a class="dropdown-item" onclick="changeIframe('page/frame/device/deviceManager.jsp',this)">表具管理</a>
 		        </div>
 		      </li>

@@ -5,11 +5,13 @@ import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
+import com.yd.basic.framework.bean.BaseBean;
+
 /**
  * ChangeMeterBean entity. @author MyEclipse Persistence Tools
  */
 @Alias("changeMeter")
-public class ChangeMeterBean implements java.io.Serializable {
+public class ChangeMeterBean extends BaseBean implements java.io.Serializable {
 
 	// Fields
 	public static final int TYPE_CHANGE_MODULES = 0;  // 更换模块

@@ -14,11 +14,20 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.bean.BaseBean;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.card.bean.CardInfoBean;
+import com.yd.business.card.bean.CardInfoBean.OtherParm;
+import com.yd.business.card.bean.CardInfoBean.PriceParm;
+import com.yd.business.card.bean.CardInfoBean.SysParam;
+import com.yd.business.card.bean.CardInfoBean.UserParm;
 import com.yd.business.card.service.ICardInfoService;
+import com.yd.business.device.bean.DeviceKindBean;
 import com.yd.business.device.service.IChangeMeterService;
+import com.yd.business.device.service.IDeviceKindService;
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.business.price.bean.PriceBean;
+import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
 
 @Controller
@@ -31,6 +40,10 @@ public class CardInfoController extends BaseController {
 	private IUserInfoService userInfoService;
 	@Autowired
 	private IChangeMeterService changeMeterService;
+	@Autowired
+	private IPriceService priceService;
+	@Autowired
+	private IDeviceKindService deviceKindService;
 	
 
 	/**
@@ -183,6 +196,66 @@ public class CardInfoController extends BaseController {
 		return null;
 	}
 	
+
+	/**
+	 *  表具管理界面查询写卡时的 Imeterkind 参数
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/card/ajaxQueryWriteCardParam.do")
+	public ModelAndView ajaxQueryWriteCardParam(HttpServletRequest request,HttpServletResponse response){
+
+		CardInfoBean bean  = new CardInfoBean();
+		try {
+
+			String dk_id = request.getParameter("dk_id");
+			String price_id = request.getParameter("price_id");
+			String cardType = request.getParameter("cardType");
+			
+			PriceBean price = priceService.findPriceById(Long.parseLong(price_id));
+			DeviceKindBean dk = deviceKindService.findDeviceKindById(Long.parseLong(dk_id));
+			
+			int imeterkind  = cardInfoService.convertImeterkind(price, dk);
+			bean.setImeterkind(imeterkind);
+			bean.setIsupper(0);
+			bean.setIsyscode(dk.getDk_no());
+			bean.setIcardkind(Integer.parseInt(cardType));
+			
+			
+			PriceParm pp = cardInfoService.convertPriceParam(bean, price, dk);
+			bean.setStru_priceparm(pp);
+			
+			SysParam sp = cardInfoService.convertSysParam(bean, price);
+			bean.setStru_sysparm(sp);
+			
+			OtherParm op = cardInfoService.convertOtherParam(bean, price , bean.getIcardkind());
+			bean.setStru_otherparm(op);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			bean.setQueryStatus(BaseBean.QUERYSTATUS_ERROR);
+			bean.setQueryResult(e.getMessage());
+		}
+		writeJson(response, bean );
+		return null;
+	}
+	
+	public static void main(String[] args) {
+		CardInfoBean bean  = new CardInfoBean();
+		String dateStr = DateUtil.getNowDateStr();
+System.out.println(dateStr);
+
+		OtherParm op = bean.new OtherParm();
+		op.setIyear(Integer.parseInt(dateStr.substring(2, 4)));
+		op.setImonth(Integer.parseInt(dateStr.substring(5, 7)));
+		op.setIday(Integer.parseInt(dateStr.substring(8, 10)));
+		op.setIhour(Integer.parseInt(dateStr.substring(11, 13)));
+		op.setImin(Integer.parseInt(dateStr.substring(14, 16)));
+		op.setIsec(Integer.parseInt(dateStr.substring(17, 19)));
+		
+		System.out.println(op);
+	}
 	
 	
 	

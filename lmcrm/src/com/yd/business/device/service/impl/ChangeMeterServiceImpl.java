@@ -5,6 +5,7 @@ package com.yd.business.device.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.device.bean.ChangeMeterBean;
+import com.yd.business.device.bean.ChangeMeterExtBean;
 import com.yd.business.device.bean.DeviceInfoBean;
 import com.yd.business.device.dao.IChangeMeterDao;
 import com.yd.business.device.service.IChangeMeterService;
@@ -65,5 +67,13 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 		
 		return changeMeterDao.insertChangeMeter(bean);
 	}
+	
+	@Override
+	public List<ChangeMeterExtBean> queryChangeMeterByExt(ChangeMeterExtBean bean){
+		
+		return changeMeterDao.listChangeMeter(bean);
+		
+	}
+	
 	
 }

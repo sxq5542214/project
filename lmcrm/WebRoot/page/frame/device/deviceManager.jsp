@@ -75,7 +75,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  		<button onclick="readCard();" type="button" class="btn btn-primary btn-lg" >读       卡</button>
 			</div>
 		   <div class="col-xs-6">
-		   		<button onclick="callWindowsClientWriteSpaceCard();" type="button" class="btn btn-danger btn-lg">写      卡</button>
+		   		<button onclick="writeCard();" type="button" class="btn btn-danger btn-lg">写      卡</button>
 			</div>
 		  </div>
 		  </a>
@@ -93,9 +93,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <a onclick="this.firstChild.checked=true;"   class="list-group-item"><input type="radio" name="cardType" value="3"> 清空卡</a>
 		  <a onclick="this.firstChild.checked=true;"   class="list-group-item"><input type="radio" name="cardType" value="4"> 检查卡</a>
 		  <a onclick="this.firstChild.checked=true;"   class="list-group-item"><input type="radio" name="cardType" value="6"> 阀门卡</a>
-		  <a onclick="this.firstChild.checked=true;"   class="list-group-item"><input type="radio" name="cardType" value="7"> 校时卡</a>
+		  <a onclick="this.firstChild.checked=true;"   class="list-group-item"><input type="radio" name="cardType" value="7"> 校时卡</a><!-- 
 		  <a onclick="this.firstChild.checked=true;"   class="list-group-item"><input type="radio" name="cardType" value="13"> 报停/恢复卡</a>
-		  <a onclick="this.firstChild.checked=true;"   class="list-group-item"><input type="radio" name="cardType" value="1"> 清零卡</a>
+		  <a onclick="this.firstChild.checked=true;"   class="list-group-item"><input type="radio" name="cardType" value="1"> 清零卡</a> -->
 			  
 		  </div>
 		  <div class="col-xs-8">
@@ -108,14 +108,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   	<tr><th>数据项</th><th>数据值</th></tr>
 			   </thead>
 			   <tbody>
-			   	<tr><td>1</td><td>1</td></tr>
-			   	<tr><td>2</td><td>1</td></tr>
-			   	<tr><td>1</td><td>1</td></tr>
-			   	<tr><td>2</td><td>1</td></tr>
-			   	<tr><td>1</td><td>1</td></tr>
-			   	<tr><td>2</td><td>1</td></tr>
-			   	<tr><td>1</td><td>1</td></tr>
-			   	<tr><td>2</td><td>1</td></tr>
+			   	<tr><td>卡类型</td><td>{{cardKindName}}</td></tr>
+			   	<tr><td>用户编号</td><td>{{cardUserNo}}</td></tr>
+			   	<tr><td>是否刷卡至水表</td><td>{{cardIsBrush}}</td></tr>
+			   	<tr><td>刷卡至水表时间</td><td>{{cardBrushDate}}</td></tr>
 			   </tbody>
 			  </table>
 			</div>

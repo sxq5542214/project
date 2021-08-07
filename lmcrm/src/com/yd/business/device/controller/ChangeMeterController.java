@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.controller.BaseController;
+import com.yd.business.device.bean.ChangeMeterExtBean;
 import com.yd.business.device.bean.DeviceKindBean;
-import com.yd.business.device.dao.IChangeMeterDao;
 import com.yd.business.device.service.IChangeMeterService;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.device.service.IDeviceKindService;
+import com.yd.util.StringUtil;
 
 @Controller
 public class ChangeMeterController extends BaseController {
@@ -26,6 +27,39 @@ public class ChangeMeterController extends BaseController {
 	@Resource
 	private IChangeMeterService changeMeterService;
 
+
+	@RequestMapping("admin/device/changemeter/ajaxQueryUserChangeMeterList.do")
+	public ModelAndView ajaxQueryUserChangeMeterList(HttpServletRequest request,HttpServletResponse response){
+
+		try {
+			String cm_type = request.getParameter("cm_type");
+			String u_name = request.getParameter("u_name");
+			String u_no = request.getParameter("u_no");
+			String u_phone = request.getParameter("u_phone");
+			
+			ChangeMeterExtBean cme = new ChangeMeterExtBean();
+			if(StringUtil.isNotNull(cm_type)) {
+				cme.setCm_type(Integer.parseInt(cm_type));
+			}
+			if(StringUtil.isNotNull(u_name)) {
+				cme.setUser_name(u_name);
+			}
+			if(StringUtil.isNotNull(u_no)) {
+				cme.setUser_no(Long.parseLong(u_no));
+			}
+			if(StringUtil.isNotNull(u_phone)) {
+				cme.setUser_phone(u_phone);
+			}
+			cme.setOrderby(" order by cm_id desc");
+			List<ChangeMeterExtBean> list =changeMeterService.queryChangeMeterByExt(cme);
+			
+			writeJson(response, list );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
 	
 	
 }

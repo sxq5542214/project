@@ -22,7 +22,7 @@ public class CardInfoBean extends BaseBean {
 	public static final int CARDKIND_STOPSTART = 13; // 暂停恢复卡
 
 	public static final int METERKIND_MON_0x31 = 49; //复费率YM表，按日扣
-	public static final int METERKIND_MON_0x21 = 33; //复费率G表
+	public static final int METERKIND_MON_0x21 = 33; //复费率G表，未满一个月按一个月全额扣
 	public static final int METERKIND_MON_0x41 = 65; //复费率大口径表
 	public static final int METERKIND_YEAR = 81; //年阶梯
 	
@@ -177,6 +177,22 @@ public class CardInfoBean extends BaseBean {
 		private Integer iprice4;
 		private Integer iprice5;
 		private Integer iprice6;
+		
+		private Integer imonth;	//收费月份
+		private Integer iday;	//收费日期
+		
+		public Integer getImonth() {
+			return imonth;
+		}
+		public void setImonth(Integer imonth) {
+			this.imonth = imonth;
+		}
+		public Integer getIday() {
+			return iday;
+		}
+		public void setIday(Integer iday) {
+			this.iday = iday;
+		}
 		public Integer getIton1() {
 			return iton1;
 		}

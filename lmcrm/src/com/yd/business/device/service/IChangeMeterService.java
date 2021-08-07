@@ -1,6 +1,9 @@
 package com.yd.business.device.service;
 
 import java.math.BigDecimal;
+import java.util.List;
+
+import com.yd.business.device.bean.ChangeMeterExtBean;
 
 public interface IChangeMeterService {
 
@@ -8,5 +11,7 @@ public interface IChangeMeterService {
 
 	int createChangeMeter(long user_no, BigDecimal cm_oldmetercode, BigDecimal cm_newmetercode, Long cm_newmeterno,
 			int cm_type, long cm_operatorid, String cm_remark, Long deviceKindId);
+
+	List<ChangeMeterExtBean> queryChangeMeterByExt(ChangeMeterExtBean bean);
 
 }

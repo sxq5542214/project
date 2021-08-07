@@ -3,12 +3,18 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="changeMeter">
-	<select id="queryChangeMeterList" resultType="changeMeter" parameterType="changeMeter">
-		select * from changeMeter 
+	<select id="queryChangeMeterList" resultType="changeMeterExt" parameterType="changeMeterExt">
+		select cm.*,u.u_no user_no,u.u_name user_name, u.u_address user_address ,u.u_phone user_phone, o.o_name operator_name from changeMeter cm ,userInfo u ,operator o
 		<where>
-			
+			cm.cm_userid = u.u_id and cm.cm_operatorid = o.o_id 
 			<if test="cm_id != null"> and cm_id = #{cm_id}</if>
+			<if test="cm_type != null"> and cm_type = #{cm_type}</if>
+			<if test="user_no != null"> and u.u_no = #{user_no}</if>
+			<if test="user_name != '' and user_name != null"> and u.u_name like '%' + #{user_name} + '%'</if>
+			<if test="user_phone != '' and user_phone != null"> and u.u_phone like '%' + #{user_phone} + '%'</if>
+			
 		</where>
+		<if test="orderby != null"> ${orderby}</if>
 	</select>
 	
 	<insert id="insertChangeMeter" parameterType="changeMeter" useGeneratedKeys="true" keyProperty="cm_id">
