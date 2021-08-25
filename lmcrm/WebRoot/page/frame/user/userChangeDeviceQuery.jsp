@@ -52,7 +52,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				placeholder="请输入用户姓名">
 		</div>
 		<div class="col">
-			<input type="text" class="form-control" id="u_no" name="u_no"
+			<input type="text" class="form-control" id="u_cardno" name="u_cardno"
 				placeholder="请输入用户编号">
 		</div>
 		<div class="col">

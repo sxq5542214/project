@@ -75,7 +75,7 @@ public class CardInfoController extends BaseController {
 	
 
 	/**
-	 *  界面进行用户开户操作
+	 *  界面进行用户充值操作
 	 * @param request
 	 * @param response
 	 * @return
@@ -84,12 +84,12 @@ public class CardInfoController extends BaseController {
 	public ModelAndView ajaxChargeMoneyCard(HttpServletRequest request,HttpServletResponse response){
 		CardInfoBean bean  = new CardInfoBean();
 		try {
-			String u_no = request.getParameter("u_no");
+			String u_cardno = request.getParameter("u_cardno");
 			String chargeMoney = request.getParameter("chargeMoney");
 			BigDecimal money = new BigDecimal(chargeMoney);
 			
 			
-			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
+			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
 			bean  = cardInfoService.generateCardInfoByChargeMoney( user.getU_id(), null , money.intValue() );
 					
 		} catch (Exception e) {
@@ -113,12 +113,12 @@ public class CardInfoController extends BaseController {
 	public ModelAndView ajaxUpdateLastChargeMoneyCard(HttpServletRequest request,HttpServletResponse response){
 		CardInfoBean bean  = new CardInfoBean();
 		try {
-			String u_no = request.getParameter("u_no");
+			String u_cardno = request.getParameter("u_cardno");
 			String updateChargeMoney = request.getParameter("updateChargeMoney");
 			BigDecimal money = new BigDecimal(updateChargeMoney);
 			
 			
-			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
+			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
 			bean  = cardInfoService.generateCardInfoByUpdateLastChargeMoney(user.getU_id(), null , money.intValue() );
 					
 		} catch (Exception e) {
@@ -140,13 +140,13 @@ public class CardInfoController extends BaseController {
 	public ModelAndView ajaxRepairCard(HttpServletRequest request,HttpServletResponse response){
 		CardInfoBean bean  = new CardInfoBean();
 		try {
-			String u_no = request.getParameter("u_no");
+			String u_cardno = request.getParameter("u_cardno");
 			String brushFlag = request.getParameter("brushFlag");
 			String repairCardMoney = request.getParameter("repairCardMoney");
 			BigDecimal money = new BigDecimal(repairCardMoney);
 			
 			
-			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
+			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
 			boolean flag = "1".equals(brushFlag) ? true:false;
 			bean  = cardInfoService.generateCardInfoByRepairCard(user.getU_id(), null , money.intValue() ,flag);
 					
@@ -169,7 +169,7 @@ public class CardInfoController extends BaseController {
 	public ModelAndView ajaxChangeMeterCard(HttpServletRequest request,HttpServletResponse response){
 		CardInfoBean bean  = new CardInfoBean();
 		try {
-			String u_no = request.getParameter("u_no");
+			String u_cardno = request.getParameter("u_cardno");
 			String changeMeterMoney = request.getParameter("changeMeterMoney");
 			String cm_oldmetercode = request.getParameter("cm_oldmetercode");
 			String cm_type = request.getParameter("cm_type");
@@ -180,11 +180,12 @@ public class CardInfoController extends BaseController {
 			
 			BigDecimal money = new BigDecimal(changeMeterMoney);
 			
+			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			
 			OperatorBean op = getCurrentLoginOperator();
 			// 写入换表维护表
-			changeMeterService.createChangeMeter(Long.parseLong(u_no), new BigDecimal(cm_oldmetercode),new BigDecimal(cm_newmetercode),Long.parseLong(cm_newmeterno), Integer.parseInt(cm_type), op.getO_id(), cm_remark,device_kind);
+			changeMeterService.createChangeMeter(user.getU_no(), new BigDecimal(cm_oldmetercode),new BigDecimal(cm_newmetercode),Long.parseLong(cm_newmeterno), Integer.parseInt(cm_type), op.getO_id(), cm_remark,device_kind);
 			
-			UserInfoBean user = userInfoService.findUserByNo(Long.parseLong(u_no));
 			bean  = cardInfoService.generateCardInfoByChangeMeter(user.getU_id(), null , money.intValue()  );
 					
 		} catch (Exception e) {

@@ -81,7 +81,7 @@ public class UserController extends BaseController {
 			String u_paperwork = request.getParameter("u_paperwork");
 			String u_buildingid = request.getParameter("u_buildingid");
 			String u_areaid = request.getParameter("u_areaid");
-			String u_no = request.getParameter("u_no");
+			String u_cardno = request.getParameter("u_cardno");
 			
 			UserInfoBean bean = new UserInfoBean();
 			bean.setU_operatorid(operator.getO_id());
@@ -92,8 +92,8 @@ public class UserController extends BaseController {
 				bean.setU_buildingid(Long.parseLong(u_buildingid));
 			}else if(StringUtil.isNotNull(u_areaid)) {
 				bean.setAreaid(Long.parseLong(u_areaid));
-			}else if(StringUtil.isNotNull(u_no)) {
-				bean.setU_no(Long.parseLong(u_no));
+			}else if(StringUtil.isNotNull(u_cardno)) {
+				bean.setU_cardno(Integer.parseInt(u_cardno));
 			}
 			List<UserInfoBean> list = userInfoService.queryUserInfo(bean);
 			

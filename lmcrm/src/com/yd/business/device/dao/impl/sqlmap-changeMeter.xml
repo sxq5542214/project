@@ -9,7 +9,7 @@
 			cm.cm_userid = u.u_id and cm.cm_operatorid = o.o_id 
 			<if test="cm_id != null"> and cm_id = #{cm_id}</if>
 			<if test="cm_type != null"> and cm_type = #{cm_type}</if>
-			<if test="user_no != null"> and u.u_no = #{user_no}</if>
+			<if test="user_cardno != null"> and u.u_cardno = #{user_cardno}</if>
 			<if test="user_name != '' and user_name != null"> and u.u_name like '%' + #{user_name} + '%'</if>
 			<if test="user_phone != '' and user_phone != null"> and u.u_phone like '%' + #{user_phone} + '%'</if>
 			

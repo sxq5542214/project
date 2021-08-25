@@ -21,8 +21,8 @@ var userManager =  new Vue({
 //			form.u_id.value = this.userList[index].u_id ;
 	    	
 	    	
-	    	var no = this.userList[index].user_no ;
-	    	$("#u_no").val(no);
+	    	var no = this.userList[index].user_cardno ;
+	    	$("#u_cardno").val(no);
 			$("#radio"+index).prop('checked',true);
 	    }
     }
@@ -59,7 +59,7 @@ function readCardAndQueryUser(){
 //		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
 		
-		$("#u_no").val(user_no);
+		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
@@ -70,7 +70,7 @@ function readCardAndQueryUser(){
 			// 读卡成功,更新状态
 			$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do",
 				type : "POST",async:false  ,
-				data : {u_no : $("#u_no").val() , useDate : $("#useDate").val() }
+				data : {u_cardno : $("#u_cardno").val() , useDate : $("#useDate").val() }
 			});
 			
 
@@ -108,7 +108,7 @@ function readCardAndUpdateCharge(){
 //		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
 		
-		$("#u_no").val(user_no);
+		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
@@ -137,8 +137,8 @@ function readCardAndUpdateCharge(){
 //用户补卡
 function readCardAndRepairCard(){
 
-	var u_no = $("#u_no").val();
-	if(u_no == ''){
+	var u_cardno = $("#u_cardno").val();
+	if(u_cardno == ''){
 		alert("请先查询并选择用户！");
 		return ;
 	}
@@ -191,7 +191,7 @@ function readCardAndChangeMeter(){
 //		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
 		
-		$("#u_no").val(user_no);
+		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
@@ -216,16 +216,16 @@ function readCardAndChangeMeter(){
 
 function writeCardByCharge(){
 	
-	var u_no = $("#u_no").val();
+	var u_cardno = $("#u_cardno").val();
 	
-	if(u_no == ''){
+	if(u_cardno == ''){
 		
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxChargeMoneyCard.do",
 		type : "POST",async:false, 
-		data :{ u_no :  u_no , chargeMoney : $("#chargeMoney").val() },
+		data :{ u_cardno :  u_cardno , chargeMoney : $("#chargeMoney").val() },
 		success:function(result){
 			var bean = eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
@@ -252,16 +252,16 @@ function writeCardByCharge(){
 // 修改充值记录
 function writeCardByUpdateCharge(){
 	
-	var u_no = $("#u_no").val();
+	var u_cardno = $("#u_cardno").val();
 	
-	if(u_no == ''){
+	if(u_cardno == ''){
 		
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxUpdateLastChargeMoneyCard.do",
 		type : "POST",async:false, 
-		data :{ u_no :  u_no , 
+		data :{ u_cardno :  u_cardno , 
 			updateChargeMoney : $("#updateChargeMoney").val() },
 		success:function(result){
 			var bean = eval('(' + result + ')');
@@ -291,15 +291,19 @@ function writeCardByUpdateCharge(){
 
 function writeCardByRepairCard(){
 
-	var u_no = $("#u_no").val();
-	if(u_no == ''){
+	var u_cardno = $("#u_cardno").val();
+	var money = $("#repairCardMoney").val();
+	if(u_cardno == ''){
 		alert("请先查询并选择用户！");
+		return ;
+	}else if(money == ''){
+		alert("请输入充值金额！");
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxRepairCard.do",
 		type : "POST",async:false, 
-		data :{ u_no :  u_no , brushFlag :  $('input[name="brushFlag"]:checked').val() , 
+		data :{ u_cardno :  u_cardno , brushFlag :  $('input[name="brushFlag"]:checked').val() , 
 			repairCardMoney : $("#repairCardMoney").val() },
 		success:function(result){
 			var bean = eval('(' + result + ')');
@@ -330,15 +334,15 @@ function writeCardByRepairCard(){
 
 function writeCardByChangeMeter(){
 
-	var u_no = $("#u_no").val();
-	if(u_no == ''){
+	var u_cardno = $("#u_cardno").val();
+	if(u_cardno == ''){
 		alert("请先查询并选择用户！");
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxChangeMeterCard.do",
 		type : "POST",async:false, 
-		data :{ u_no :  u_no , 
+		data :{ u_cardno :  u_cardno , 
 				changeMeterMoney :  $('#changeMeterMoney').val() ,
 				cm_oldmetercode : $("#cm_oldmetercode").val() ,
 				cm_type : $("#cm_type").val() ,
@@ -405,9 +409,9 @@ function queryUserData(){
 	var u_paperwork = $("#u_paperwork").val();
 	var u_buildingid = $("#u_buildingid").val();
 	var u_areaid = $("#u_areaid").val();
-	var u_no = $("#u_no").val();
+	var u_cardno = $("#u_cardno").val();
 	
-	if(u_phone == '' && u_name == '' && u_paperwork =='' && u_no ==''){
+	if(u_phone == '' && u_name == '' && u_paperwork =='' && u_cardno ==''){
 		alert('请先填写查询条件');
 		return ;
 	}
@@ -420,7 +424,7 @@ function queryUserData(){
 				u_name :u_name,
 				u_paperwork :u_paperwork,
 				u_buildingid : u_buildingid,
-				u_no : u_no,
+				u_cardno : u_cardno,
 				u_areaid : u_areaid
 			},
 		success:function(result){

@@ -81,7 +81,7 @@ function readCardAndQueryUser(){
 		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
 		
-//		$("#u_no").val(user_no);
+//		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
@@ -115,12 +115,12 @@ function modifyAddress(uid){
 	 
 }
 
-function queryUserData(u_no){
+function queryUserData(u_cardno){
 	var u_phone = $("#u_phone").val();
 	var u_name = $("#u_name").val();
 	var u_paperwork = $("#u_paperwork").val();
 	var u_buildingid = $("#u_buildingid").val();
-	var u_no = u_no == -1 ? '':u_no;
+	var u_cardno = u_cardno == -1 ? '':u_cardno;
 	
 	$.ajax({url:"admin/user/ajaxQueryUserByCompany.do",
 			type : "POST",
@@ -129,7 +129,7 @@ function queryUserData(u_no){
 				u_name :u_name,
 				u_paperwork :u_paperwork,
 				u_buildingid : u_buildingid,
-				u_no : u_no
+				u_cardno : u_cardno
 			},
 		success:function(result){
 		    var list = eval('(' + result + ')');

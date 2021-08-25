@@ -16,4 +16,6 @@ public interface IUserInfoService {
 
 	int addOrUpdateUser(UserInfoBean bean);
 
+	UserInfoBean findUserByCardNo(Integer cardno);
+
 }

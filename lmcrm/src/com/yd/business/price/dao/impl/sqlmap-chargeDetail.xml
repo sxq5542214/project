@@ -16,7 +16,7 @@
 	</select>
 	
 	<select id="queryChargeListByUserId" parameterType="long" resultType="chargeDetail" useCache="false"  >
-		select c.*,u.U_No user_no,u.U_Name user_name,u.U_Phone user_phone,p.P_Name price_name , o.o_name operator_name 
+		select c.*,u.U_No user_no,u.u_cardno user_cardno, u.U_Name user_name,u.U_Phone user_phone,p.P_Name price_name , o.o_name operator_name 
 		from chargeDetail c ,UserInfo u , Price p ,operator o
 		<where>
 			 c.CD_UserId = u.U_Id and p.P_Id = c.CD_PriceId and o.o_id = cd_operatorid and 

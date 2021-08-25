@@ -88,6 +88,7 @@ public class ChargeDetailBean extends BaseBean implements Serializable {
 	
 	
 	private Long user_no;
+	private Integer user_cardno;
 	private String user_name;
 	private String user_phone;
 	private String price_name;
@@ -157,6 +158,15 @@ public class ChargeDetailBean extends BaseBean implements Serializable {
 
 	public Long getUser_no() {
 		return user_no;
+	}
+
+
+	public Integer getUser_cardno() {
+		return user_cardno;
+	}
+
+	public void setUser_cardno(Integer user_cardno) {
+		this.user_cardno = user_cardno;
 	}
 
 	public void setUser_no(Long user_no) {

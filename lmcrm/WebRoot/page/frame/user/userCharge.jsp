@@ -69,8 +69,8 @@
 
 				</div>
 				<div class="col">
-					<input type="text" class="form-control" id="u_no" name="u_no"
-						placeholder="请输入用户编号">
+					<input type="text" class="form-control" id="u_cardno" name="u_cardno"
+						placeholder="请输入用户卡号">
 
 				</div>
 				<div class="col">
@@ -114,7 +114,7 @@
 				style="min-width:1800px;">
 				<thead>
 					<tr>
-						<th scope="col">用户编号</th>
+						<th scope="col">用户卡号</th>
 						<th scope="col">总序号</th>
 						<th scope="col">充值序号</th>
 						<th scope="col">用户名称</th>
@@ -141,7 +141,7 @@
 					<tr v-for="(user,index) in userList" @click="getData(index)"
 						:for="'radio'+index">
 						<th><input type="radio" :id="'radio'+index" name="u_id"
-							:value="index" v-model="checkedRows">{{user.user_no }}</th>
+							:value="index" v-model="checkedRows">{{user.user_cardno }}</th>
 						<!-- <td>{{user.u_no}}</td> -->
 						<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
 						<td>{{user.cd_no }}</td>
@@ -330,7 +330,7 @@
 								</div> -->
 								<div class="row">
 									<div class="col-md-4 align-self-center">
-										是否已刷卡（选已刷卡会导致上次未刷的金额丢失）
+										是否已刷卡
 									</div>
 									<div class="col-md-8 ml-auto">
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

@@ -11,6 +11,7 @@
 			<if test="u_id != null"> and u_id = #{u_id}</if>
 			<if test="u_phone != '' and u_phone != null"> and u_phone like '%' + #{u_phone} + '%'</if>
 			<if test="u_status != '' and u_status != null"> and u_status = #{u_status} </if>
+			<if test="u_cardno != '' and u_cardno != null"> and u_cardno = #{u_cardno} </if>
 			<if test="u_no != '' and u_no != null"> and u_no = #{u_no} </if>
 			<if test="u_name != ''  and u_name != null"> and u_name like '%' + #{u_name} + '%'</if>
 			<if test="u_paperwork != '' and u_paperwork != null"> and u_paperwork like '%' + #{u_paperwork} + '%'</if>

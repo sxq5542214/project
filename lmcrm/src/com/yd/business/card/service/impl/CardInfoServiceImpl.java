@@ -104,6 +104,8 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 			deviceKindId = device.getDi_dkid();
 		}
 		
+		
+		isBrushCard = false;// 如果为是充值次数会加1，但如果实际未刷卡，这里加1就会导致刷卡提示次数对不上。 统一都设置为未刷卡
 		return generateCardInfo("repairCard", userId, deviceKindId,chargePrice,isBrushCard);
 	}
 	

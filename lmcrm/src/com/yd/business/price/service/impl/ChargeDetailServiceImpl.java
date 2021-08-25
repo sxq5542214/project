@@ -57,7 +57,11 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	 */
 	@Override
 	public ChargeDetailBean createChargeDetail(UserInfoBean user,PriceBean price,int kind,int order,OperatorBean operator,int money ,boolean isBrushCard ) throws Exception {
-
+		
+		if(user.getU_id() == null) {
+			throw new Exception("创建充值记录时，未查询到用户信息，请检查！ ");
+		}
+		
 		ChargeDetailBean bean = new ChargeDetailBean();
 		bean.setCd_userid(user.getU_id());
 		bean.setOrderby("order by cd_id desc ");
@@ -77,7 +81,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 			}
 			
 			if(lastCharge.getCd_brushflag() == ChargeDetailBean.BRUSHFLAG_NO && kind != ChargeDetailBean.KIND_CHANGE_CARD && kind != ChargeDetailBean.KIND_CHANGE_DEVICE ) {
-				throw new Exception("当前用户上次充值未刷卡至水表，请刷卡至水表后再试！");
+				throw new Exception("当前用户上次充值未刷卡至水表，请刷卡至水表后再试！ cardNo:"+ user.getU_cardno() );
 			}
 			no = lastCharge.getCd_no() + 1l ;
 			saving_no = lastCharge.getCd_savingno() + 1l;

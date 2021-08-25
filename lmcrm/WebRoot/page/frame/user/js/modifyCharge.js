@@ -61,7 +61,7 @@ function readCardAndQueryUser(){
 		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
 		
-		$("#u_no").val(user_no);
+		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
@@ -72,7 +72,7 @@ function readCardAndQueryUser(){
 			// 读卡成功,更新状态
 			$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do",
 				type : "POST",async:false  ,
-				data : {u_no : $("#u_no").val() , useDate : $("#useDate").val() }
+				data : {u_cardno : $("#u_cardno").val() , useDate : $("#useDate").val() }
 			});
 			
 
@@ -80,23 +80,23 @@ function readCardAndQueryUser(){
 			
 		}else{
 			alert("上次充值未刷卡至表中，请先刷卡至表中后再操作！");
-//			$("#u_no").val('');
+//			$("#u_cardno").val('');
 		}
 	} );
 }
 
 function writeCard(){
 	
-	var u_no = $("#u_no").val();
+	var u_cardno = $("#u_cardno").val();
 	
-	if(u_no == ''){
+	if(u_cardno == ''){
 		
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxChargeMoneyCard.do",
 		type : "POST",async:false, 
-		data :{ u_no :  u_no , chargeMoney : $("#chargeMoney").val() },
+		data :{ u_cardno :  u_cardno , chargeMoney : $("#chargeMoney").val() },
 		success:function(result){
 			var bean = eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
@@ -136,9 +136,9 @@ function queryUserData(){
 	var u_paperwork = $("#u_paperwork").val();
 	var u_buildingid = $("#u_buildingid").val();
 	var u_areaid = $("#u_areaid").val();
-	var u_no = $("#u_no").val();
+	var u_cardno = $("#u_cardno").val();
 	
-	if(u_phone == '' && u_name == '' && u_paperwork =='' && u_no ==''){
+	if(u_phone == '' && u_name == '' && u_paperwork =='' && u_cardno ==''){
 		alert('请先填写查询条件');
 		return ;
 	}
@@ -151,7 +151,7 @@ function queryUserData(){
 				u_name :u_name,
 				u_paperwork :u_paperwork,
 				u_buildingid : u_buildingid,
-				u_no : u_no,
+				u_cardno : u_cardno,
 				u_areaid : u_areaid
 			},
 		success:function(result){

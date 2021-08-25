@@ -57,9 +57,12 @@ public class ChargeDetailController extends BaseController {
 	@RequestMapping("**/admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do")
 	public ModelAndView ajaxUpdateChargeDetailBrushFlagToSuccess(HttpServletRequest request,HttpServletResponse response) {
 		try {
-			String no = request.getParameter("u_no");
+			String u_cardno = request.getParameter("u_cardno");
 			String useDate = request.getParameter("useDate");
-			ChargeDetailBean last = chargeDetailService.findLastChargeDetailByUser(Long.parseLong(no));
+			
+			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			
+			ChargeDetailBean last = chargeDetailService.findLastChargeDetailByUser(user.getU_no());
 			if(last.getCd_brushflag().intValue() == ChargeDetailBean.BRUSHFLAG_NO) {
 				Date brushDate = DateUtil.parseDateOnlyDate(useDate);
 				chargeDetailService.updateChargeDetailBrushFlagToSuccess(last.getCd_id(),brushDate);
@@ -91,7 +94,7 @@ public class ChargeDetailController extends BaseController {
 			String u_paperwork = request.getParameter("u_paperwork");
 			String u_buildingid = request.getParameter("u_buildingid");
 			String u_areaid = request.getParameter("u_areaid");
-			String u_no = request.getParameter("u_no");
+			String u_cardno = request.getParameter("u_cardno");
 			
 			UserInfoBean bean = new UserInfoBean();
 			bean.setU_operatorid(operator.getO_id());
@@ -102,8 +105,8 @@ public class ChargeDetailController extends BaseController {
 				bean.setU_buildingid(Long.parseLong(u_buildingid));
 			}else if(StringUtil.isNotNull(u_areaid)) {
 				bean.setAreaid(Long.parseLong(u_areaid));
-			}else if(StringUtil.isNotNull(u_no)) {
-				bean.setU_no(Long.parseLong(u_no));
+			}else if(StringUtil.isNotNull(u_cardno)) {
+				bean.setU_cardno(Integer.parseInt(u_cardno));
 			}
 			List<ChargeDetailBean> list = new ArrayList<ChargeDetailBean>();
 			List<UserInfoBean> userList = userInfoService.queryUserInfo(bean);

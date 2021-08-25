@@ -50,6 +50,14 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 		return list.size()>0 ? list.get(0):null;
 		
 	}
+	@Override
+	public UserInfoBean findUserByCardNo(Integer cardno){
+		UserInfoBean bean = new UserInfoBean();
+		bean.setU_cardno(cardno);
+		List<UserInfoBean> list = userInfoDao.queryUserInfoList(bean);
+		return list.size()>0 ? list.get(0):null;
+		
+	}
 	
 	@Override
 	public void updateUserStatusToNormal(Long userid) {

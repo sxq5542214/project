@@ -74,7 +74,7 @@
 					type="hidden" class="form-control" id="u_buildingid"
 					name="u_buildingid">
 				<input type="hidden"
-					class="form-control" id="u_no" name="u_no">
+					class="form-control" id="u_cardno" name="u_cardno">
 			</div>
 		</div>
 
@@ -115,7 +115,7 @@
 						<tr v-for="(user,index) in userList" @click="getData(index)"
 							:for="'radio'+index">
 							<th><input type="radio" :id="'radio'+index" name="u_id"
-								:value="index" v-model="checkedRows">{{user.u_no }}</th>
+								:value="index" v-model="checkedRows">{{user.u_cardno }}</th>
 							<!-- <td>{{user.u_no}}</td> -->
 							<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
 							<td>{{user.u_name}}</td>

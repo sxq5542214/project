@@ -47,7 +47,7 @@ function readCardAndQueryChangeDevice(){
 //		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
 		
-		$("#u_no").val(user_no);
+		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		queryChangeDeviceData();
@@ -57,7 +57,7 @@ function readCardAndQueryChangeDevice(){
 			// 读卡成功,更新状态
 			$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do",
 				type : "POST",async:false  ,
-				data : {u_no : $("#u_no").val() , useDate : useDate }
+				data : {u_cardno : $("#u_cardno").val() , useDate : useDate }
 			});
 			
 		}else{
@@ -70,7 +70,7 @@ function readCardAndQueryChangeDevice(){
 function queryChangeDeviceData(){
 	var cm_type = $("#cm_type").val();
 	var u_name = $("#u_name").val();
-	var u_no = $("#u_no").val();
+	var u_cardno = $("#u_cardno").val();
 	var u_phone = $("#u_phone").val();
 
 	$.ajax({url:"admin/device/changemeter/ajaxQueryUserChangeMeterList.do",
@@ -78,7 +78,7 @@ function queryChangeDeviceData(){
 			data:{
 				cm_type: cm_type,
 				u_name :u_name,
-				u_no :u_no,
+				u_cardno :u_cardno,
 				u_phone :u_phone
 			},
 		success:function(result){

@@ -69,7 +69,7 @@
 
 				</div>
 				<div class="col">
-					<input type="text" class="form-control" id="u_no" name="u_no"
+					<input type="text" class="form-control" id="u_cardno" name="u_cardno"
 						placeholder="请输入用户编号">
 
 				</div>
@@ -140,7 +140,7 @@
 						:for="'radio'+index">
 						<th><input type="radio" :id="'radio'+index" name="u_id"
 							:value="index" v-model="checkedRows">{{user.user_no }}</th>
-						<!-- <td>{{user.u_no}}</td> -->
+						<!-- <td>{{user.u_cardno}}</td> -->
 						<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
 						<td>{{user.cd_savingno }}</td>
 						<td>{{user.cd_chargemoney }}</td>

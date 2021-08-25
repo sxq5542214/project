@@ -16,6 +16,7 @@ public class ChangeMeterExtBean extends ChangeMeterBean {
 	 */
 	private static final long serialVersionUID = 7458528671441710025L;
 	private Long user_no;
+	private Integer user_cardno;
 	private String user_name;
 	private String user_phone;
 	private String user_address;
@@ -37,6 +38,12 @@ public class ChangeMeterExtBean extends ChangeMeterBean {
 	}
 	public void setUser_phone(String user_phone) {
 		this.user_phone = user_phone;
+	}
+	public Integer getUser_cardno() {
+		return user_cardno;
+	}
+	public void setUser_cardno(Integer user_cardno) {
+		this.user_cardno = user_cardno;
 	}
 	public String getUser_address() {
 		return user_address;

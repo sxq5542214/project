@@ -34,7 +34,7 @@ public class ChangeMeterController extends BaseController {
 		try {
 			String cm_type = request.getParameter("cm_type");
 			String u_name = request.getParameter("u_name");
-			String u_no = request.getParameter("u_no");
+			String u_cardno = request.getParameter("u_cardno");
 			String u_phone = request.getParameter("u_phone");
 			
 			ChangeMeterExtBean cme = new ChangeMeterExtBean();
@@ -44,8 +44,8 @@ public class ChangeMeterController extends BaseController {
 			if(StringUtil.isNotNull(u_name)) {
 				cme.setUser_name(u_name);
 			}
-			if(StringUtil.isNotNull(u_no)) {
-				cme.setUser_no(Long.parseLong(u_no));
+			if(StringUtil.isNotNull(u_cardno)) {
+				cme.setUser_cardno(Integer.parseInt(u_cardno));
 			}
 			if(StringUtil.isNotNull(u_phone)) {
 				cme.setUser_phone(u_phone);
