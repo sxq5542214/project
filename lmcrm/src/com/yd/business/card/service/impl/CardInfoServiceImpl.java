@@ -359,7 +359,9 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 				
 				up.setIsavingno(1);
 				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
-	
+				if(imeterkind == CardInfoBean.METERKIND_MON_0x31) { //技术文档中要求如果是49类型的表，price6传0x88
+					bean.getStru_priceparm().setIprice6(0x88);
+				}
 				chargeDetail = chargeDetailService.createChargeDetail(user, price, ChargeDetailBean.KIND_OPEN_ACCOUNT, ChargeDetailBean.ORDER_MONEY, operator, chargePrice);
 				break;
 			case "chargeMoney":
