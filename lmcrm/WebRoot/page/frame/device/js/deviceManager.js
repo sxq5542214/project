@@ -24,7 +24,7 @@ var deviceManager =  new Vue({
 				p_enabled :1
 			},
 			success:function(result){
-		    var list = eval('(' + result + ')');
+		    var list = result ; //eval('(' + result + ')');
 		    deviceManager.priceList = list;
 		}});
 		
@@ -33,7 +33,7 @@ var deviceManager =  new Vue({
 			type : "POST",
 			data:{ },
 			success:function(result){
-		    var list = eval('(' + result + ')');
+		    var list = result ; // eval('(' + result + ')');
 		    deviceManager.deviceKindList = list;
 		}});
 		
@@ -142,7 +142,7 @@ function writeCard(){
 		data:{ price_id : price.p_id , dk_id : dk.dk_id ,cardType :cardType},
 		success:function(res){
 
-			var bean = eval('(' + res + ')');
+			var bean = res ; // eval('(' + res + ')');
 			if(bean.queryStatus == -1){
 				alert(bean.queryResult);
 				return;

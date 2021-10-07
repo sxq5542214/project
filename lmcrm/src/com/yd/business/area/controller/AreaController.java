@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.context.BaseContext;
 import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.controller.BaseController;
+import com.yd.business.area.bean.AddressBean;
 import com.yd.business.area.bean.AreaBean;
 import com.yd.business.area.bean.AreaExtBean;
 import com.yd.business.area.bean.BuildingBean;
@@ -48,7 +49,7 @@ public class AreaController extends BaseController {
 	public ModelAndView ajaxQueryAreaTreeByOperator(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
-
+			
 			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			
 			CompanyExtBean tree = areaService.queryAreaAndBuildingTree(op.getO_companyid());
@@ -61,7 +62,7 @@ public class AreaController extends BaseController {
 		}
 		return null;
 	}
-
+	
 	/**
 	 *  界面查询取悦列表
 	 * @param request
@@ -72,7 +73,7 @@ public class AreaController extends BaseController {
 	public ModelAndView ajaxQueryBuildingById(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
-
+			
 			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			String id = request.getParameter("id");
 			BuildingExtBean build = buildingService.findBuildingById(Long.parseLong(id));
@@ -85,6 +86,32 @@ public class AreaController extends BaseController {
 	}
 	
 
+	/**
+	 *  界面查询取悦列表
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/area/ajaxQueryAddressByParent.do")
+	public ModelAndView ajaxQueryAddressByParent(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+
+			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			
+			AddressBean bean = new AddressBean();
+			bean.setCompany_id(op.getO_companyid().intValue());
+			List<AddressBean> list = areaService.queryAddressList(bean );
+						
+			writeJson(response, list );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+	
+	
+	
 
 	/**
 	 *  界面查询取悦列表
@@ -107,8 +134,8 @@ public class AreaController extends BaseController {
 		return null;
 	}
 	
-
-
+	
+	
 	/**
 	 *  界面查询取悦列表
 	 * @param request
@@ -127,27 +154,36 @@ public class AreaController extends BaseController {
 			String full_name  = request.getParameter("full_name");
 			String addressId  = request.getParameter("addressId");
 			int result = 0 ; 
+			
+			AddressBean bean = new AddressBean();
+			bean.setName(a_name);
+			bean.setParent_id(Integer.parseInt(parent_id));
+//			bean.setFull_name(a_name);
+			bean.setLevel(a_level);
+			bean.setCompany_id(op.getO_companyid().intValue());
+			result = areaService.addOrUpdateAddress(bean );
+			
 			//根据不同级别，插入不同数据
-			switch (a_level) {
-			case AreaBean.LEVEL_COMPANY:
-				
-				break;
-			case AreaBean.LEVEL_AREA:
-				AreaBean area = new AreaBean();
-				area.setA_companyid(Long.parseLong(parent_id));
-				area.setA_name(a_name);
-				result = areaService.addOrUpdateArea(area);
-				break;
-			case AreaBean.LEVEL_BUILDING:
-				BuildingBean build = new BuildingBean();
-				build.setB_areaid(Long.parseLong(parent_id));
-				build.setB_name(a_name);
-				result = buildingService.addOrUpdateBuilding(build);
-				break;
-
-			default:
-				break;
-			}
+//			switch (a_level) {
+//			case AreaBean.LEVEL_COMPANY:
+//				
+//				break;
+//			case AreaBean.LEVEL_AREA:
+//				AreaBean area = new AreaBean();
+//				area.setA_companyid(Long.parseLong(parent_id));
+//				area.setA_name(a_name);
+//				result = areaService.addOrUpdateArea(area);
+//				break;
+//			case AreaBean.LEVEL_BUILDING:
+//				BuildingBean build = new BuildingBean();
+//				build.setB_areaid(Long.parseLong(parent_id));
+//				build.setB_name(a_name);
+//				result = buildingService.addOrUpdateBuilding(build);
+//				break;
+//
+//			default:
+//				break;
+//			}
 			
 			
 			writeJson(response, result );
@@ -172,29 +208,36 @@ public class AreaController extends BaseController {
 			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			String a_name  = request.getParameter("a_name");
 			int a_level  = Integer.parseInt(request.getParameter("a_level"));
-			long a_id  = Long.parseLong(request.getParameter("a_id"));
+			Integer a_id  = Integer.parseInt(request.getParameter("a_id"));
 			int result = 0 ; 
+			 
+			AddressBean bean = new AddressBean();
+			bean.setName(a_name);
+			bean.setId(a_id);
+			bean.setCompany_id(op.getO_companyid().intValue());
+			result = areaService.addOrUpdateAddress(bean);
+			
 			//根据不同级别，插入不同数据
-			switch (a_level) {
-			case AreaBean.LEVEL_COMPANY:
-				
-				break;
-			case AreaBean.LEVEL_AREA:
-				AreaBean area = new AreaBean();
-				area.setA_name(a_name);
-				area.setA_id(a_id);
-				result = areaService.addOrUpdateArea(area);
-				break;
-			case AreaBean.LEVEL_BUILDING:
-				BuildingBean build = new BuildingBean();
-				build.setB_name(a_name);
-				build.setB_id(a_id);
-				result = buildingService.addOrUpdateBuilding(build);
-				break;
-
-			default:
-				break;
-			}
+//			switch (a_level) {
+//			case AreaBean.LEVEL_COMPANY:
+//				
+//				break;
+//			case AreaBean.LEVEL_AREA:
+//				AreaBean area = new AreaBean();
+//				area.setA_name(a_name);
+//				area.setA_id(a_id);
+//				result = areaService.addOrUpdateArea(area);
+//				break;
+//			case AreaBean.LEVEL_BUILDING:
+//				BuildingBean build = new BuildingBean();
+//				build.setB_name(a_name);
+//				build.setB_id(a_id);
+//				result = buildingService.addOrUpdateBuilding(build);
+//				break;
+//
+//			default:
+//				break;
+//			}
 			
 			
 			writeJson(response, result );

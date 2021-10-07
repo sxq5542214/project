@@ -5,141 +5,183 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <!-- 必须的 meta 标签 -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <base href="<%=basePath%>">
-    
-    <!-- Bootstrap 的 CSS 文件 -->
+    <head>
+    	<base href="<%=basePath%>">
+        <meta charset="utf-8" />
+        <title>价格管理</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
+        <!-- App css -->
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
+    </head>
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <title>龙马水厂收费系统</title>
-    <style type="text/css">
-    .col-xs-8{padding: 1px;}
-    .col-xs-4{padding: 1px;}
-    .container{padding: 1px; margin-right: 1px; margin-left : 1px;max-width:1940px; }
-    </style>
-  </head>
- 
-<body> 
+    <body>
 
-<div class="container">
+        <!-- Begin page -->
+        <div class="wrapper" id="priceManagerDiv">
 
-	 <div class="form-group align-items-center">
-	 
-	 </div>
-	 <div class="row form-group align-items-center">
-	    <div class="col">
-	      <select name="p_enabled" id="p_enabled" class="form-control">
-			  <option value=""  selected>请选择启用状态</option>
-			  <option value="<%=PriceBean.ENABLED_TRUE%>">启用</option>
-			  <option value="<%=PriceBean.ENABLED_FALSE%>">禁用</option>
-			</select>
-	    </div>
-	    <div class="col">
-	    	<input type="text" class="form-control" id="p_name" name="p_name" placeholder="请输入价格名称">
-	    </div>
-	    <div class="col">
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
 
-	      <select name="p_ladder" id="p_ladder" class="form-control">
-			  <option value="" selected>请选择价格模式</option>
-			  <option value="<%=PriceBean.LADDER_MONTH%>">月</option>
-			  <option value="<%=PriceBean.LADDER_YEAR%>">年</option>
-			</select>
-	    </div>
- 	 </div>
- 	 
-	 <div class="form-group align-items-center">
-	 	<div class="row">
-			 <div class="col-10">
-			    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter" onclick="addPrice();" >新增价格</button>
-		      	<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" onclick="updatePrice();">修改价格</button>
-<!-- 		      	<button type="button" class="btn btn-secondary">删除价格</button>
- -->		    </div>
-			 <div class="col-2">
-		      	<button type="button" class="btn btn-primary" onclick="queryPriceData();">查询价格</button>
-		    </div>
-	    </div>
-	    
-	 </div>
-</div>
+            <div class="content-page" style="margin-left: 0px;">
+                <div class="content" >
 
-<div class="container" style="overflow:scroll;" id="priceManagerDiv">
-	<table class="table table-striped table-hover table-sm" style="min-width:1800px;">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">价格名称</th>
-      <th scope="col">阶梯模式</th>
-      <th scope="col">结算时间</th>
-      <th scope="col">基本单价</th>
-      <th scope="col">排污费</th>
-      <th scope="col">其他费用</th>
-      <th scope="col">合计价格</th>
-      <th scope="col">保底金额</th>
-      <th scope="col">保底量</th>
-      <th scope="col">状态</th>
-      <th scope="col">创建时间</th>
-      <th scope="col">更新时间</th>
-      <th scope="col">一阶吨限</th>
-      <th scope="col">二阶单价</th>
-      <th scope="col">二阶吨限</th>
-      <th scope="col">二阶合计</th>
-      <th scope="col">三阶单价</th>
-      <th scope="col">三阶合计</th>
-      <th scope="col">囤积量</th>
-      <th scope="col">预存量</th>
-      <th scope="col">报警量</th>
-      <th scope="col">透支量</th>
-    </tr>
-  </thead>
-  <tbody>
-  
-  <tr v-for="(price,index) in priceList" @click="getData(index)" :for="'radio'+index" >
-      <th> <input type="radio" :id="'radio'+index" name="p_id" :value="index" v-model="checkedRows" >{{price.p_id }}</th>
-      <td>{{price.p_name}}</td>
-      <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td>
-      <td>{{price.p_ladder == 0 ? '每月'+price.p_settleday +'日' : price.p_settlemonth +'月'+ price.p_settleday +'日' }}</td>
-      <td>{{price.p_base1   }}</td>
-      <td>{{price.p_other1   }}</td>
-      <td>{{price.p_other2   }}</td>
-      <td>{{price.p_price1 }}</td>
-      <td>{{price.p_lowprice }}</td>
-      <td>{{price.p_lowamount }}</td>
-      <td>{{getDescByBeanAttrValue("price","p_enabled",price.p_enabled) }}</td>
-      <td>{{price.p_createdate }}</td>
-      <td>{{price.p_updatedate }}</td>
-      <td>{{price.p_ton1 }}</td>
-      <td>{{price.p_base2 }}</td>
-      <td>{{price.p_ton2 }}</td>
-      <td>{{price.p_price2 }}</td>
-      <td>{{price.p_base3 }}</td>
-      <td>{{price.p_price3 }}</td>
-      <td>{{price.p_limitamount }}</td>
-      <td>{{price.p_storedamount }}</td>
-      <td>{{price.p_weakprompt }}</td>
-      <td>{{price.p_overflat }}</td>
-  </tr>
-  
-  </tbody>
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                        
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                       <!--  <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                                            <li class="breadcrumb-item active">Basic Tables</li>
+                                        </ol> -->
+                                    </div>
+                                    <h4 class="page-title">价格管理</h4>
+                                </div>
+                            </div>
+                        </div>     
+                        <!-- end page title --> 
 
-</table>
-</div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                	<div class="card-header">
+                                		<div class="row">
+	                                        <div class="col">
+										      <select name="p_enabled" id="p_enabled" class="form-control">
+												  <option value=""  selected>请选择启用状态</option>
+												  <option value="<%=PriceBean.ENABLED_TRUE%>">启用</option>
+												  <option value="<%=PriceBean.ENABLED_FALSE%>">禁用</option>
+												</select>
+										    </div>
+										    <div class="col">
+										    	<input type="text" class="form-control" id="p_name" name="p_name" placeholder="请输入价格名称">
+										    </div>
+										    <div class="col">
+									
+										      <select name="p_ladder" id="p_ladder" class="form-control">
+												  <option value="" selected>请选择价格模式</option>
+												  <option value="<%=PriceBean.LADDER_MONTH%>">月</option>
+												  <option value="<%=PriceBean.LADDER_YEAR%>">年</option>
+												</select>
+										    </div>
+										</div>
+										<div class="row" style="margin-top: 10px;">
+											<div class="col-10">
+											    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter" onclick="addPrice();" >新增价格</button>
+										      	<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" onclick="updatePrice();">修改价格</button>
+								<!-- 		      	<button type="button" class="btn btn-secondary">删除价格</button>
+								 -->		    </div>
+											 <div class="col-2">
+										      	<button type="button" class="btn btn-primary" onclick="queryPriceData();">查询价格</button>
+										    </div>
+										</div>
+	                                        <!-- <h4 class="header-title">Striped rows</h4>
+	                                        <p class="text-muted font-14 mb-4">
+	                                            Use <code>.table-striped</code> to add zebra-striping to any table row
+	                                            within the <code>&lt;tbody&gt;</code>.
+	                                        </p> -->
+                                	</div>
+                                    <div class="card-body">
+                                    	
+                                        <div class="table-responsive" >
+                                            <table class="table  mb-0 table-hover table-centered text-nowrap"  >
+                                                <thead>
+                                                    <tr>
+												      <th scope="col" style="width: 20px;">#</th>
+												      <th scope="col" style="width: 20px;">价格名称</th>
+												      <th scope="col" style="width: 20px;">阶梯模式</th>
+												      <th scope="col" style="width: 20px;">结算时间</th>
+												      <th scope="col" style="width: 20px;">基本单价</th>
+												      <th scope="col">排污费</th>
+												      <th scope="col">其他费用</th>
+												      <th scope="col">合计价格</th>
+												      <th scope="col">保底金额</th>
+												      <th scope="col">保底量</th>
+												      <th scope="col">状态</th>
+												      <th scope="col">创建时间</th>
+												      <th scope="col">更新时间</th>
+												      <th scope="col">一阶吨限</th>
+												      <th scope="col">二阶单价</th>
+												      <th scope="col">二阶吨限</th>
+												      <th scope="col">二阶合计</th>
+												      <th scope="col">三阶单价</th>
+												      <th scope="col">三阶合计</th>
+												      <th scope="col">囤积量</th>
+												      <th scope="col">预存量</th>
+												      <th scope="col">报警量</th>
+												      <th scope="col">透支量</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody >
+												  <tr v-for="(price,index) in priceList" @click="getData(index)" :for="'radio'+index" >
+												      <th scope="row"> <input type="radio" :id="'radio'+index" name="p_id" :value="index" v-model="checkedRows" >{{price.p_id }}</th>
+												      <td>{{price.p_name}}</td>
+												      <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td>
+												      <td>{{price.p_ladder == 0 ? '每月'+price.p_settleday +'日' : price.p_settlemonth +'月'+ price.p_settleday +'日' }}</td>
+												      <td>{{price.p_base1   }}</td>
+												      <td>{{price.p_other1   }}</td>
+												      <td>{{price.p_other2   }}</td>
+												      <td>{{price.p_price1 }}</td>
+												      <td>{{price.p_lowprice }}</td>
+												      <td>{{price.p_lowamount }}</td>
+												      <td>{{getDescByBeanAttrValue("price","p_enabled",price.p_enabled) }}</td>
+												      <td>{{price.p_createdate }}</td>
+												      <td>{{price.p_updatedate }}</td>
+												      <td>{{price.p_ton1 }}</td>
+												      <td>{{price.p_base2 }}</td>
+												      <td>{{price.p_ton2 }}</td>
+												      <td>{{price.p_price2 }}</td>
+												      <td>{{price.p_base3 }}</td>
+												      <td>{{price.p_price3 }}</td>
+												      <td>{{price.p_limitamount }}</td>
+												      <td>{{price.p_storedamount }}</td>
+												      <td>{{price.p_weakprompt }}</td>
+												      <td>{{price.p_overflat }}</td>
+												  </tr>
+												  
+                                                </tbody>
+                                            </table>
+                                        </div> <!-- end table-responsive-->
 
+                                    </div> <!-- end card body-->
+                                </div> <!-- end card -->
+                            </div><!-- end col-->
 
+                        
+                        </div>
+                        <!-- end row-->
+
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
 
 <form name="updateForm" action="#" >
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+  <div class="modal-dialog modal-dialog-centered  modal-full-width modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">新增/修改价格</h5>
@@ -297,14 +339,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </div>
 </div>
 </form>
-</body>
-
-<script type="text/javascript" src="js/client/windowsClient.js"></script>
-<script src="js/common/dictionaryData.js" type="text/javascript"></script>
-<script src="page/frame/price/js/priceManager.js" type="text/javascript"></script>
-
-<script type="text/javascript">
 
 
-</script>
+
+        </div>
+        <!-- END wrapper -->
+
+
+<!-- App js -->
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+
+ 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+
+		<script src="page/frame/price/js/priceManager.js" type="text/javascript"></script> 
+ 
+    </body>
 </html>

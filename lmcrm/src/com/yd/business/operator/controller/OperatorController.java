@@ -60,6 +60,8 @@ public class OperatorController extends BaseController {
 		try {
 
 			String id = request.getParameter("company_id");
+			String o_status = request.getParameter("o_status");
+			String o_name = request.getParameter("o_name");
 			Long company_id = id == null ? null : Long.parseLong(id) ;
 			
 			OperatorBean operator = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
@@ -67,8 +69,13 @@ public class OperatorController extends BaseController {
 				company_id = operator.getO_companyid();
 			}
 			
-			List<OperatorExtBean> list = operatorService.queryOperatorList(company_id);
+			OperatorBean condition = new OperatorBean();
+			condition.setO_companyid(company_id);
+			condition.setO_name(o_name);
+			condition.setO_status(StringUtil.isNull(o_status)?null:Integer.parseInt(o_status));
 			
+			List<OperatorExtBean> list = operatorService.queryOperatorList(condition);
+		
 			writeJson(response, list );
 		} catch (Exception e) {
 			log.error(e, e);

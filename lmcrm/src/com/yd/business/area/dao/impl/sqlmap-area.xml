@@ -12,7 +12,7 @@
 		</where>
 	</select>
 	
-	<insert id="insertArea" parameterType="area" useGeneratedKeys="true" keyProperty="c_id">
+	<insert id="insertArea" parameterType="area" useGeneratedKeys="true" keyProperty="a_id">
 		
 		insert into area(
       a_companyid
@@ -43,6 +43,50 @@
 		</where>
 		
 	</update>
+	
+	
+	<insert id="insertAddress" parameterType="address" useGeneratedKeys="true" keyProperty="id">
+		
+		insert into ll_address(
+	      name,full_name,level,parent_id,create_time,update_time,company_id,comment,status,code  ) values(
+	      #{name},#{full_name},#{level},#{parent_id},#{create_time},#{update_time},#{company_id},#{comment},#{status},#{code})
+   	</insert>
+	
+	<delete id="deleteAddress" parameterType="address">
+		delete from  ll_address 
+		where id = #{id}  and company_id = #{company_id}
+	</delete>
+	
+	
+ 	<update id="updateAddress" parameterType="address">
+		update ll_address 
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="full_name != null">full_name = #{full_name},</if>
+			<if test="level != null">level = #{level},</if>
+			<if test="parent_id != null">parent_id = #{parent_id},</if>
+			<if test="update_time != null">update_time = #{update_time},</if>
+			<if test="comment != null">comment = #{comment},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="code != null">code = #{code},</if>
+		</set>
+		<where>
+			id = #{id} and company_id = #{company_id}
+		</where>
+		
+	</update>
+	
+	<select id="queryAddressList" resultType="address" parameterType="address" >
+		select *,a.name text, isnull(cast(a.parent_id as varchar ),'#' )  parent from ll_address a 
+
+		<where>
+			<if test="id != null"> and id = #{id}</if>
+			<if test="name != null"> and name like '%'+ #{name}+ '%'</if>
+			<if test="full_name != null"> and full_name like '%'+ #{full_name}+ '%'</if>
+			<if test="company_id != null"> and company_id = #{company_id}</if>
+			<if test="parent_id != null"> and parent_id = #{parent_id}</if>
+		</where>
+	</select> 
 	
 </mapper>
 

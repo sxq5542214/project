@@ -42,10 +42,10 @@ public class OperatorServiceImpl extends BaseService implements IOperatorService
 	}
 	
 	@Override
-	public List<OperatorExtBean> queryOperatorList(Long company_id){
+	public List<OperatorExtBean> queryOperatorList(OperatorBean bean){
 
-		OperatorBean bean = new OperatorBean();
-		bean.setO_companyid(company_id);
+//		OperatorBean bean = new OperatorBean(); 
+//		bean.setO_companyid(company_id);
 		List<OperatorExtBean> list = operatorDao.queryOperatorList(bean);
 		return list;
 	}
@@ -70,6 +70,7 @@ public class OperatorServiceImpl extends BaseService implements IOperatorService
 			
 			bean.setO_createdate(new Date());
 			bean.setO_updatedate(bean.getO_createdate());
+			bean.setO_password("313331303634"); //对应默认密码：123321
 			i = operatorDao.insertOperator(bean);
 			
 		}else {

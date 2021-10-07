@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.yd.basic.framework.persistence.BaseDao;
+import com.yd.business.area.bean.AddressBean;
 import com.yd.business.area.bean.AreaBean;
 import com.yd.business.area.bean.AreaExtBean;
 import com.yd.business.area.dao.IAreaDao;
@@ -42,7 +43,25 @@ public class AreaDaoImpl extends BaseDao implements IAreaDao {
 		return sqlSessionTemplate.delete(NAMESPACE+"deleteArea", id);
 	}
 	
-	
-	
+	@Override
+	public List<AddressBean> queryAddressList(AddressBean bean){
+		return sqlSessionTemplate.selectList(NAMESPACE + "queryAddressList", bean);
+	}
+
+	@Override
+	public int insertAddress(AddressBean bean) {
+		return sqlSessionTemplate.insert(NAMESPACE+"insertAddress", bean);
+	}
+	@Override
+	public int updateAddress(AddressBean bean) {
+		return sqlSessionTemplate.insert(NAMESPACE+"updateAddress", bean);
+	}
+	@Override
+	public AddressBean findAddressById(int id) {
+		AddressBean bean = new AddressBean();
+		bean.setId(id);
+		List<AddressBean> list = queryAddressList(bean );
+		return list.size() == 0 ? null : list.get(0);
+	}
 	
 }

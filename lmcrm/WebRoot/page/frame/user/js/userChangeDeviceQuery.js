@@ -82,7 +82,11 @@ function queryChangeDeviceData(){
 				u_phone :u_phone
 			},
 		success:function(result){
-		    var list = eval('(' + result + ')');
+			if(result.length == 0){
+			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+			}
+			
+		    var list = result ; // eval('(' + result + ')');
 		    changeDevice.changeMeterList = list;
 	}});
 }

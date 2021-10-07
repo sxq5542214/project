@@ -80,7 +80,7 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 			bean.setU_updatedate(bean.getU_createdate());
 			bean.setU_startdate(bean.getU_createdate());
 			bean.setU_group(bean.getU_group() -1); // 界面上是从1开始，数据库是从0开始
-			
+			bean.setU_buildingid(22l); // 字段已弃用，写入固定值避免插入失败
 			//设置用户编码
 			
 			

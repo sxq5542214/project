@@ -1,19 +1,3 @@
-var datas = [
-        {
-            code: "A2017-001",
-            name: "3800充电器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "andy"
-        },
-        {
-            code: "A2017-002",
-            name: "Lenovo Type-c转接器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "zero"
-        }];
-
 var operatorManager =  new Vue({
     el: "#operatorManagerDiv",
     data: {
@@ -36,12 +20,16 @@ var operatorManager =  new Vue({
 	    	var form = document.updateForm;
 			form.o_id.value = this.operatorList[index].o_id ;
 			form.o_name.value = this.operatorList[index].o_name ;
-			form.o_password2.value = this.operatorList[index].o_password2 ;
 			form.o_kind.value = this.operatorList[index].o_kind ;
 			form.o_status.value = this.operatorList[index].o_status ;
-			form.o_companyid.value = this.operatorList[index].o_companyid ;
+//			form.o_companyid.value = this.operatorList[index].o_companyid ;
 			form.o_openaudit.value = this.operatorList[index].o_openaudit ;
 			form.o_limitmoney.value = this.operatorList[index].o_limitmoney ;
+			$("#updateform_companyid").val(""+this.operatorList[index].o_companyid);
+			
+			var pass = this.operatorList[index].o_password2;
+			if(typeof(pass) == "undefined") pass = '';
+			form.o_password2.value = pass ;
 	    	
 			$("#radio"+index).prop('checked',true);
 	    },
@@ -70,10 +58,12 @@ function addOrUpdateOperator(){
 		success:function(result){
 		    if(result > 0){
 		    	alert('操作成功！请设置权限及区域！');
+		    }else{
+		    	alert('操作失败，请检查数据');
 		    }
 
-		    $('#exampleModalCenter').modal('hide');
 		    queryOperatorData();
+		    $('.close').click();
 		}});
 }
 function addOperator(){
@@ -92,7 +82,7 @@ function queryRole(){
 				data:{
 				},
 			success:function(result){
-			    var list = eval('(' + result + ')');
+			    var list = result ; // eval('(' + result + ')');
 			    operatorManager.menuList = list;
 		}});
 	    $('#roleModalCenter').modal('show');
@@ -108,11 +98,22 @@ function choseAllMenus(){
 function queryArea(){
 	
 }
+//function initDataTable(){
+//	
+//	$("#id_query_data_table").dataTable({
+//    	"paging" : true,
+//    	"ordering" : true,
+//    	"info" : true,
+//    	"retrieve" : true ,
+//    	buttons :  ['copy', 'excel', 'pdf']
+//    });
+//	
+//}
 
 function queryOperatorData(){
 	var o_status = $("#o_status").val();
 	var o_name = $("#o_name").val();
-
+	
 	$.ajax({url:"admin/operator/ajaxQueryOperatorList.do",
 			type : "POST",
 			data:{
@@ -120,8 +121,10 @@ function queryOperatorData(){
 				o_name :o_name
 			},
 		success:function(result){
-	    var list = eval('(' + result + ')');
-	    operatorManager.operatorList = list;
+		    var list = result ; // eval('(' + result + ')');
+		    operatorManager.operatorList = list;
+//		    setTimeout("initDataTable()","100"); 
+	    
 	}});
 	
 
@@ -130,7 +133,7 @@ function queryOperatorData(){
 			data:{
 			},
 		success:function(result){
-	    var list = eval('(' + result + ')');
+	    var list = result ; // eval('(' + result + ')');
 	    operatorManager.companyList = list;
 	}});
 }

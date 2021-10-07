@@ -135,6 +135,7 @@ http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 		<property name="waitForJobsToCompleteOnShutdown" value="true"></property>
 	</bean>
 
+
 	
 	<!-- 线程池 -->
 	<bean id="taskExecutor"

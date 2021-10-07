@@ -1,20 +1,3 @@
-var datas = [
-        {
-            code: "A2017-001",
-            name: "3800充电器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "andy"
-        },
-        {
-            code: "A2017-002",
-            name: "Lenovo Type-c转接器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "zero"
-        }];
-
-
 var userManager =  new Vue({
     el: "#userManagerDiv",
 //	el:"#selectDiv",
@@ -132,7 +115,7 @@ function queryUserData(u_cardno){
 				u_cardno : u_cardno
 			},
 		success:function(result){
-		    var list = eval('(' + result + ')');
+		    var list = result ; // eval('(' + result + ')');
 		    userManager.userList = list;
 		}});
 }
@@ -153,7 +136,7 @@ function updateUserData(level,id,name){
 			type : "POST",
 			data:{		id: id	},
 			success:function(result){
-			    var json = eval('(' + result + ')');
+			    var json = result ; //eval('(' + result + ')');
 			    
 			    for(var i = 0 ; i <userManager.areaList.length;i++ ){
 			    	if(userManager.areaList[i].a_id == json.b_areaid){
@@ -183,7 +166,7 @@ function getTree() {
 		url:"admin/area/ajaxQueryAreaTreeByOperator.do",
 		async:false,
 		success:function(result){
-		    var company = eval('(' + result + ')');
+		    var company = result ; // eval('(' + result + ')');
 		    dataArray = company;
 	}});
 
@@ -191,7 +174,7 @@ function getTree() {
 		type : "POST",
 		data:{			},
 		success:function(result){
-	    var list = eval('(' + result + ')');
+	    var list = result ; // eval('(' + result + ')');
 	    userManager.areaList = list;
 	}});
   return dataArray;

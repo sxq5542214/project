@@ -2,6 +2,7 @@ package com.yd.business.area.service;
 
 import java.util.List;
 
+import com.yd.business.area.bean.AddressBean;
 import com.yd.business.area.bean.AreaBean;
 import com.yd.business.area.bean.AreaExtBean;
 import com.yd.business.company.bean.CompanyExtBean;
@@ -13,5 +14,9 @@ public interface IAreaService {
 	int addOrUpdateArea(AreaBean bean);
 
 	CompanyExtBean queryAreaAndBuildingTree(Long companyId) throws Exception;
+
+	List<AddressBean> queryAddressList(AddressBean bean) throws Exception;
+
+	int addOrUpdateAddress(AddressBean bean);
 
 }

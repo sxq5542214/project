@@ -27,21 +27,23 @@
 <meta name="author" content="Bootstrap Gallery" />
 <link rel="shortcut icon" href="img/favicon.ico">
 
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-        
-		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+<link href="page/frame/report/css/new.css" rel="stylesheet">
+<!-- Important. For Theming change primary-color variable in main.css  -->
+
+	<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 <body style="background-color: #f7f7f7">
 	<!-- Row Start -->
 	<div class="row">
 		<div class="col-lg-12 col-md-12">
-			<div class="card">
-				<div class="card-header">
-					<div class="title">查看报表</div>
+			<div class="widget">
+				<div class="widget-header">
+					<div class="title">自定义报表管理</div>
 				</div>
-				<div class="card-body">
+				<div class="widget-body">
 					<!-- <a class="btn btn-success" href="javascript:window.location.href='admin/supplierTopic/toUpdatePage.do'">
 						<i class="fa fa-plus-circle"></i> 新增自定义报表
 					</a> -->
@@ -73,7 +75,7 @@
                             <td>
                                 <div class="btn-group">
                                 
-                                	<a class="btn btn-info"  href="admin/report/toSingleReportPage.do?code=<%=ab.getCode() %>">查看数据</a>
+                                	<a class="btn btn-success"  href="admin/report/toSingleReportPage.do?code=<%=ab.getCode() %>">查看数据</a>
                                   <%-- <button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle">
                                     操作 
                                     <span class="caret"></span>
@@ -97,6 +99,35 @@
 		</div>
 	</div>
 	<!-- Row End -->
+
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+ 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery.scrollup@2.4.1/dist/jquery.scrollUp.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/datatables.net@1.10.25/js/jquery.dataTables.min.js"></script>
+
+	<!-- Custom JS -->
+	<script type="text/javascript">
+      //ScrollUp
+      $(function () {
+        $.scrollUp({
+          scrollName: 'scrollUp', // Element ID
+          topDistance: '300', // Distance from top before showing element (px)
+          topSpeed: 300, // Speed back to top (ms)
+          animation: 'fade', // Fade, slide, none
+          animationInSpeed: 400, // Animation in speed (ms)
+          animationOutSpeed: 400, // Animation out speed (ms)
+          scrollText: 'Top', // Text for element
+          activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
+        });
+      });
+      //Data Tables
+      $(document).ready(function () {
+        $('#data-table').dataTable({
+        "bPaginate":true,"iDisplayLength":100,"bFilter":true,
+          "sPaginationType": "full_numbers"
+        });
+      });
+    </script>
 
 </body>
 </html>

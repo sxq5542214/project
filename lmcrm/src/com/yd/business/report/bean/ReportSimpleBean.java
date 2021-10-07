@@ -3,6 +3,8 @@
  */
 package com.yd.business.report.bean;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
 
 import com.yd.basic.framework.bean.BaseBean;
@@ -14,6 +16,10 @@ import com.yd.basic.framework.bean.BaseBean;
 @Alias("reportSimple")
 public class ReportSimpleBean extends BaseBean {
 
+	public static final int STATUS_ENABLE = 1;
+	public static final int STATUS_DISABLE = 0;
+	
+	
 	private Integer id;
 	private String name;
 	private String code;
@@ -23,6 +29,7 @@ public class ReportSimpleBean extends BaseBean {
 	private String column_names;
 	private Integer seq;
 	private String remark;
+	private List<ReportParamsBean> paramsList;
 	
 	public String getRemark() {
 		return remark;
@@ -77,5 +84,11 @@ public class ReportSimpleBean extends BaseBean {
 	}
 	public void setColumn_names(String column_names) {
 		this.column_names = column_names;
+	}
+	public List<ReportParamsBean> getParamsList() {
+		return paramsList;
+	}
+	public void setParamsList(List<ReportParamsBean> paramsList) {
+		this.paramsList = paramsList;
 	}
 }

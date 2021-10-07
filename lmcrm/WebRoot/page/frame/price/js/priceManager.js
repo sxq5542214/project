@@ -1,19 +1,3 @@
-var datas = [
-        {
-            code: "A2017-001",
-            name: "3800充电器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "andy"
-        },
-        {
-            code: "A2017-002",
-            name: "Lenovo Type-c转接器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "zero"
-        }];
-
 var priceManager =  new Vue({
     el: "#priceManagerDiv",
     data: {
@@ -88,7 +72,7 @@ function addOrUpdatePrice(){
 		    }
 		    
 		    queryPriceData();
-		    $('#exampleModalCenter').modal('hide');
+		    $('#exampleModalCenter').hide();
 		}});
 }
 function addPrice(){
@@ -110,7 +94,7 @@ function queryPriceData(){
 			p_ladder :p_ladder
 			},
 		success:function(result){
-	    var list = eval('(' + result + ')');
+	    var list = result ; //eval('(' + result + ')');
 	    priceManager.priceList = list;
 	}});
 }

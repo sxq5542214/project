@@ -34,6 +34,29 @@ function checkChose(){
 }
 function openAccount(){
 
+
+	var canwrite = true;
+	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+	callWindowsClientMethod('readCard','{}' , function(result){
+		if(result < 1){
+			alert("操作卡失败，无法获取数据");
+			return ;
+		}
+//		alert(result);
+		var json = eval('(' + result + ')');
+		var cardkind = json.iCardKind ;
+		var user_no = json.stru_userparm.iUserNo;
+		
+		if(cardkind != 0 || user_no != 0 ){
+			canwrite = false;
+		}
+	} );
+	
+	if(!canwrite){
+		alert('该卡不是新卡，不能用于创建新用户写卡！  请使用新卡操作');
+		return ;
+	}
+	
 	var form = document.updateForm;
 	var dk_id = form.di_dkid.value;
 	var uid = form.u_id.value;
@@ -48,7 +71,7 @@ function openAccount(){
 		data :{ deviceKindId : dk_id ,userId : uid ,chargeMoney:chargeMoney},
 		success:function(result){
 //			alert(result);
-		    var bean = eval('(' + result + ')');
+		    var bean = result ; //eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
 			if(bean.queryStatus == -1){
 				alert(bean.queryResult);
@@ -75,7 +98,11 @@ function queryUserData(){
 	$.ajax({url:"admin/user/ajaxQueryUnOpenAccountUser.do",
 			type : "POST",
 		success:function(result){
-		    var list = eval('(' + result + ')');
+//			alert(result);
+			if(result.length == 0){
+			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+			}
+		    var list = result ;
 		    userManager.userList = list;
 		}});
 	
@@ -83,7 +110,7 @@ function queryUserData(){
 	$.ajax({url:"admin/device/ajaxQueryEnableDeviceKind.do",
 		type : "POST",
 		success:function(result){
-		    var list = eval('(' + result + ')');
+		    var list = result ; // eval('(' + result + ')');
 		    userManager.deviceKindList = list;
 	}});
 	

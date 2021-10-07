@@ -1,19 +1,3 @@
-var datas = [
-        {
-            code: "A2017-001",
-            name: "3800充电器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "andy"
-        },
-        {
-            code: "A2017-002",
-            name: "Lenovo Type-c转接器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "zero"
-        }];
-
 var addressManager =  new Vue({
     el: "#addressManagerDiv",
     data: {
@@ -68,18 +52,19 @@ function addAddress(type){
 		return ;
 	}else{
 		if(type == 2){ // 1为同级地址  2为下级地址
-			if(a_level >= 3) {
-				alert('已经是最末级，无法增加下级地址！');
-				return ;
-			}
+//			if(a_level >= 3) {
+//				alert('已经是最末级，无法增加下级地址！');
+//				return ;
+//			}
 			parent_id = addressId ;
 			a_level = Number(a_level) +1;
 			
 		}
-		if(type == 1 && a_level == 1){
-			alert("顶层不能新增同级地址！");
-			return;
-		}
+		
+//		if(type == 1 && a_level == 1){
+//			alert("顶层不能新增同级地址！");
+//			return;
+//		}
 		
 		$.ajax({url:"admin/area/ajaxAddAddressInfo.do",
 			type : "POST",
@@ -136,42 +121,22 @@ var levelid1= '';
 var levelname2;
 var levelname3;
 var addressId = '';
-function updateUserData(level,id,name){
+function updateUserData(level,id,name,parentid,parent_name){
 	addressId = id;
-	if(level ==1){
-		$("#a_level").val(1);
-		$("#full_name").val('');
-		$("#parent_id").val(id);
-		levelname1 = name;
-		levelid1 = id;
-	}else if (level == 2){
-		$("#parent_id").val(levelid1);
-		$("#a_level").val(2);
-		$("#full_name").val(levelname1);
-		levelname2 = name;
-	}else if (level == 3){
-
-		$("#a_level").val(3);
-		levelname3 = name;
-
-		$.ajax({url:"admin/area/ajaxQueryBuildingById.do",
-			type : "POST",
-			data:{		id: id	},
-			success:function(result){
-			    var json = eval('(' + result + ')');
-			    
-			    for(var i = 0 ; i <addressManager.areaList.length;i++ ){
-			    	if(addressManager.areaList[i].a_id == json.b_areaid){
-						$("#full_name").val(addressManager.areaList[i].a_name);
-						$("#parent_id").val(json.b_areaid);
-			    	}
-			    }
-			}});
+	if(parentid =='#'){
+		parentid = '';
 	}
+	if(level == 1){
+		parent_name = '';
+	}
+		$("#a_level").val(level);
+		$("#full_name").val(parent_name);
+		$("#parent_id").val(parentid);
+
 	$("#a_name").val(name);
 	$("#a_id").val(id);
 	
-	
+
 }
 
 function queryAreaData(){
@@ -185,7 +150,7 @@ function getTree() {
 		url:"admin/area/ajaxQueryAreaTreeByOperator.do",
 		async:false,
 		success:function(result){
-		    var company = eval('(' + result + ')');
+		    var company = result; //eval('(' + result + ')');
 		    dataArray = company;
 	}});
 	
@@ -193,12 +158,78 @@ function getTree() {
 		type : "POST",
 		data:{			},
 		success:function(result){
-	    var list = eval('(' + result + ')');
+	    var list = result ; // eval('(' + result + ')');
 	    addressManager.areaList = list;
 	}});
   return dataArray;
 }
-$('#tree').bstreeview({
-	data: getTree(),
-	openNodeLinkOnNewTab: false
+$('#tree').on('changed.jstree', function (e, data) {
+	// 树形列表点击事件
+    var i, j, r ;
+//    for(i = 0, j = data.selected.length; i < j; i++) {   如果多选，则需要循环
+//      r= data.instance.get_node(data.selected[i]);
+//    }
+    r = data.instance.get_node(data.selected[0]);
+    r = r.original;
+//  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
+    var parent_id = data.instance.get_parent(data.selected[0]) ;
+    var parent_name = data.instance.get_node(parent_id).text;
+    updateUserData(r.level,r.id,r.text,r.parent,parent_name);
+    
+    
+  }).jstree({
+	  //树形列表加载参数
+	'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
+				'themes': {
+		            'name': 'proton',
+		            'responsive': true
+		        }
+			},
+	"contextmenu": {
+	    items: {
+	        "add": {
+	            "label": "新增分组",
+	            "action": function (data) {
+	            	var inst = jQuery.jstree.reference(obj.reference);
+                    var clickedNode = inst.get_node(obj.reference);
+                    var newNode = inst.create_node(obj.reference,clickedNode.val);
+                    var ty = inst.get_type(obj.reference);
+                    inst.set_type(newNode, ty);
+                    var Nodeobj = inst.get_json(newNode);
+                    var str = {
+                        "id" : Nodeobj.id,
+                        "text" : Nodeobj.text,
+                        "icon" : Nodeobj.icon,
+                        "type" : Nodeobj.type,
+                        "parentid" : clickedNode.id,
+                        "tablelist" : null
+                    };
+                    var selectedTab = $('#t_map').tabs('getSelected');
+                    var pageTitle = selectedTab.panel('options').title;
+                    $.post("lwy/createNode.do", {changedata : JSON.stringify(str),pageTitle:pageTitle}, 
+                            function(data) {});
+                    inst.edit(newNode);
+                    inst.open_node(obj.reference);
+	            }
+	        }
+	        ,
+	        "edit": {
+	            "label": "修改分组",
+	            "action": function (data) {
+	            	var inst = jQuery.jstree.reference(obj.reference);
+                    var clickedNode = inst.get_node(obj.reference);
+                    inst.edit(obj.reference,clickedNode.val);
+	            }
+	        },
+	        "del": {
+	            "label": "删除分组",
+	            "action": function (data) {
+	            	var inst = jQuery.jstree.reference(obj.reference);
+                    var clickedNode = inst.get_node(obj.reference);
+                    inst.delete_node(obj.reference);
+	            }
+	        }
+	    }
+	}
+
 });

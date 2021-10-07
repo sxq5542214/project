@@ -4,7 +4,21 @@
 
 <mapper namespace="userInfo">
 	<select id="queryUserInfoList" resultType="userInfo" parameterType="userInfo">
-		select *, (select P_Name from Price where P_Id =U_PriceId ) as priceName ,
+	
+		<if test="addressId != null">
+			 WITH TEMP   --递归
+		     AS (SELECT Id,level,Name,parent_id,comment
+		         FROM   ll_address 
+		         WHERE  Id = #{addressId}   --查询当前地址
+		         UNION ALL
+		         SELECT B.Id,  --查询子集地址
+		                B.level,B.Name,B.parent_id,B.comment
+		         FROM   TEMP A
+		                INNER JOIN ll_address B
+		                        ON B.parent_id = A.Id)
+		</if>
+	
+		select *, (select P_Name from Price where P_Id =U_PriceId ) as priceName , (select name from ll_address a where a.id = addressId ) addressName,
 		(select dk_name from deviceinfo di, devicekind dk where dk.dk_id = di.di_dkid and di.di_userid = u_id ) deviceKindName from userInfo 
 		<where>
 			
@@ -18,6 +32,8 @@
 			<if test="u_buildingid != null"> and u_buildingid = #{u_buildingid} </if>
 			<if test="u_operatorid != null"> and u_operatorid in ( select o1.o_id from operator o1 ,operator o2 where o2.O_Id=  #{u_operatorid} and o1.O_CompanyId = o2.O_CompanyId  ) </if>
 			<if test="areaid != null"> and u_buildingid in ( select b_id from Building where b_areaid = #{areaid} ) </if>
+			<if test="addressId != null">and exists ( select 1 from  TEMP t where   addressId = t.id  )  </if>
+		
 		</where>
 		<if test="orderby != null"> ${orderby}</if>
 	</select>
@@ -43,7 +59,8 @@
            ,U_StartDate
            ,U_CreateDate
            ,U_UpdateDate
-           ,U_Prepayment) values(
+           ,U_Prepayment
+           ,addressId) values(
            #{u_buildingid}
            ,#{u_priceid}
            ,#{u_group}
@@ -64,6 +81,7 @@
            ,#{u_createdate}
            ,#{u_updatedate}
            ,#{u_prepayment}
+           ,#{addressId}
            )
    	</insert>
 	
@@ -96,6 +114,7 @@
 			<if test="u_createdate != null">u_createdate = #{u_createdate},</if>
 			<if test="u_updatedate != null">u_updatedate = #{u_updatedate},</if>
 			<if test="u_prepayment != null">u_prepayment = #{u_prepayment},</if>
+			<if test="addressId != null">addressId = #{addressId},</if>
 		</set>
 		<where>
 			u_id = #{u_id}

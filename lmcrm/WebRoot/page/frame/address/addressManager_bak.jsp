@@ -20,18 +20,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <!-- Bootstrap 的 CSS 文件 -->
 
 
-	<link  rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orangehill/jstree-bootstrap-theme/dist/themes/proton/style.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/themes/default/style.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bstreeview@1.2.0/dist/css/bstreeview.min.css">
 	<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script
-	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
-	<script type="text/javascript" src="js/client/windowsClient.js"></script>
-<script src="js/common/dictionaryData.js" type="text/javascript"></script>
-
+	src="https://cdn.jsdelivr.net/npm/bstreeview@1.2.0/dist/js/bstreeview.min.js"></script>
     <title>龙马水厂收费系统</title>
     <style type="text/css">
     .col-xs-8{padding: 1px;}
@@ -79,25 +75,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	 <div class="row  ">
 	      <div class="col-5 ">
-	      		<div class="card">
-	      			<div class="card-header">地址列表</div>
-	      			<div class="card-body">
-						<div id="tree"></div>
-					</div>
-	      		</div>
+				<div id="tree"></div>
 		  </div>
 	      <div class="col-7 border bg-light" style="position: fixed;right:15px;">
 			    <div class="row">
-			      <div class="col-md-3 align-self-center">地址级别</div>
+			      <div class="col-md-3 align-self-center">地址类型</div>
 			      <div class="col-md-9">
 			      		      <select name="a_level" id="a_level" class="form-control" disabled="disabled">
-<!-- 								  <option value="1">公司</option>
- -->								  <option value="1">乡镇</option>
-								  <option value="2">村组</option>
+								  <option value="1">公司</option>
+								  <option value="2">乡镇</option>
 								  <option value="3">村组</option>
-								  <option value="4">村组</option>
-								  <option value="5">村组</option>
-								  <option value="6">村组</option>
 								</select>
 			      	</div>
 			    </div>
@@ -132,7 +119,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 </body>
 
-
+<script type="text/javascript" src="js/client/windowsClient.js"></script>
+<script src="js/common/dictionaryData.js" type="text/javascript"></script>
 <script src="page/frame/address/js/addressManager.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+
+
+</script>
 </html>

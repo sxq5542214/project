@@ -39,23 +39,25 @@
 <meta name="author" content="Bootstrap Gallery" />
 <link rel="shortcut icon" href="img/favicon.ico">
 
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-        
-		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
+<link href="page/frame/report/css/new.css" rel="stylesheet">
+<!-- Important. For Theming change primary-color variable in main.css  -->
+
+	<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body style="background-color: #f7f7f7">
 	<!-- Row Start -->
 	<div class="row">
 		<div class="col-lg-12 col-md-12">
-			<div class="card">
-				<div class="card-header">
+			<div class="widget">
+				<div class="widget-header">
 					<div class="title"><%=report.getName() %></div>
 				</div>
 				
 				<form action="admin/report/toSingleReportPage.do?code=<%=report.getCode() %>">
 					<input type="hidden" name="code" value="<%=report.getCode()%>">
-					<div class="card-body">
+					<div class="widget-body">
 					<% for(int i = 0 ; i < paramsList.size(); i ++){
 						ReportParamsBean param = paramsList.get(i);
 						if(i% 3 == 0){
@@ -100,16 +102,16 @@
 						</div>
 					<%}}  %>
 							<div class="col-12 text-right">
-								<input type="submit" class="btn btn-info" value="查询">
+								<input type="submit" class="btn btn-success" value="查询">
 							</div>
 					</div>
 				</form>
-				<div class="card-body">
+				<div class="widget-body">
 					<!-- <a class="btn btn-success" href="javascript:window.location.href='admin/supplierTopic/toUpdatePage.do'">
 						<i class="fa fa-plus-circle"></i> 新增自定义报表
 					</a> -->
-					<div id="dt_example" class="table-responsive">
-					<table class="table  mb-0 table-hover table-centered text-nowrap" id="data-table">
+					<div id="dt_example" class="example_alt_pagination">
+					<table class="table table-condensed table-striped table-hover table-bordered pull-left" id="data-table">
                         <thead>
                           <tr>
                           	<% for(String name : column_names){ %>
@@ -167,12 +169,38 @@
 	</div>
 	<!-- Row End -->
 
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+ 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery.scrollup@2.4.1/dist/jquery.scrollUp.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/datatables.net@1.10.25/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="js/common/date.format.js"></script>
 	<!-- Custom JS -->
 	<script type="text/javascript">
 	
+	/*   var date = new Date();
+	  var start_date = date.format("Y-m-d");
+	  var date2 = new Date(date.getTime() + 43200000); // 加一天
+	  var end_date = date2.format("Y-m-d");
+	  $("#start_date").val(start_date);
+	  $("#end_date").val(end_date); */
+	  
+	  
 	  
 	
+      //ScrollUp
+      $(function () {
+        $.scrollUp({
+          scrollName: 'scrollUp', // Element ID
+          topDistance: '300', // Distance from top before showing element (px)
+          topSpeed: 300, // Speed back to top (ms)
+          animation: 'fade', // Fade, slide, none
+          animationInSpeed: 400, // Animation in speed (ms)
+          animationOutSpeed: 400, // Animation out speed (ms)
+          scrollText: 'Top', // Text for element
+          activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
+        });
+      });
+      //Data Tables
     </script>
 
 </body>

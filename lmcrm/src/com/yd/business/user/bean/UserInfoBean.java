@@ -56,73 +56,45 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 	private Date u_createdate;
 	private Date u_updatedate;
 	private Integer u_prepayment;
-	
+	private Integer addressId;
 
 	//extends field
 	private Long areaid;
 	private String priceName;
 	private String deviceKindName;
-	
+	private String addressName;
 	// Constructors
 
 	/** default constructor */
 	public UserInfoBean() {
 	}
 
-	/** minimal constructor */
-	public UserInfoBean(Long u_buildingid, Long u_priceid, Integer u_group, Long u_no, Integer u_cardno,
-			Integer u_peoplesize, BigDecimal u_materialfee, BigDecimal u_constructioncost, BigDecimal u_balance,
-			Integer u_status, Long u_operatorid, Date u_startdate, Date u_createdate, Date u_updatedate,
-			Integer u_prepayment) {
-		this.u_buildingid = u_buildingid;
-		this.u_priceid = u_priceid;
-		this.u_group = u_group;
-		this.u_no = u_no;
-		this.u_cardno = u_cardno;
-		this.u_peoplesize = u_peoplesize;
-		this.u_materialfee = u_materialfee;
-		this.u_constructioncost = u_constructioncost;
-		this.u_balance = u_balance;
-		this.u_status = u_status;
-		this.u_operatorid = u_operatorid;
-		this.u_startdate = u_startdate;
-		this.u_createdate = u_createdate;
-		this.u_updatedate = u_updatedate;
-		this.u_prepayment = u_prepayment;
-	}
-
-	/** full constructor */
-	public UserInfoBean(Long u_buildingid, Long u_priceid, Integer u_group, Long u_no, Integer u_cardno,
-			String u_address, String u_name, String u_phone, String u_paperwork, String u_remark, Integer u_peoplesize,
-			BigDecimal u_materialfee, BigDecimal u_constructioncost, BigDecimal u_balance, Integer u_status,
-			Long u_operatorid, Date u_startdate, Date u_createdate, Date u_updatedate, Integer u_prepayment) {
-		this.u_buildingid = u_buildingid;
-		this.u_priceid = u_priceid;
-		this.u_group = u_group;
-		this.u_no = u_no;
-		this.u_cardno = u_cardno;
-		this.u_address = u_address;
-		this.u_name = u_name;
-		this.u_phone = u_phone;
-		this.u_paperwork = u_paperwork;
-		this.u_remark = u_remark;
-		this.u_peoplesize = u_peoplesize;
-		this.u_materialfee = u_materialfee;
-		this.u_constructioncost = u_constructioncost;
-		this.u_balance = u_balance;
-		this.u_status = u_status;
-		this.u_operatorid = u_operatorid;
-		this.u_startdate = u_startdate;
-		this.u_createdate = u_createdate;
-		this.u_updatedate = u_updatedate;
-		this.u_prepayment = u_prepayment;
-	}
 
 	// Property accessors
 
 	public Long getU_id() {
 		return this.u_id;
 	}
+
+	public Integer getAddressId() {
+		return addressId;
+	}
+
+
+	public void setAddressId(Integer addressId) {
+		this.addressId = addressId;
+	}
+
+
+	public String getAddressName() {
+		return addressName;
+	}
+
+
+	public void setAddressName(String addressName) {
+		this.addressName = addressName;
+	}
+
 
 	public Long getAreaid() {
 		return areaid;

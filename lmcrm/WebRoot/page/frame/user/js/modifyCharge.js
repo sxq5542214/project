@@ -46,7 +46,7 @@ function readCardAndQueryUser(){
 			return ;
 		}
 //		alert(result);
-		var json = eval('(' + result + ')');
+		var json =  eval('(' + result + ')');
 		var user_no = json.stru_userparm.iUserNo;
 		var iSavingNo = json.stru_userparm.iSavingNo;
 		var iUserFlag = json.stru_userparm.stru_retparm.iUserFlag;
@@ -98,7 +98,7 @@ function writeCard(){
 		type : "POST",async:false, 
 		data :{ u_cardno :  u_cardno , chargeMoney : $("#chargeMoney").val() },
 		success:function(result){
-			var bean = eval('(' + result + ')');
+			var bean = result ; // eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
 			if(bean.queryStatus == -1){
 				alert(bean.queryResult);
@@ -155,7 +155,7 @@ function queryUserData(){
 				u_areaid : u_areaid
 			},
 		success:function(result){
-		    var list = eval('(' + result + ')');
+		    var list = result ; // eval('(' + result + ')');
 		    userManager.userList = list;
 		}});
 	

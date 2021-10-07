@@ -3,147 +3,246 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <!-- 必须的 meta 标签 -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <base href="<%=basePath%>">
-    
-    <!-- Bootstrap 的 CSS 文件 -->
+<!DOCTYPE html>
+    <html lang="zh-CN">
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" ></script>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
- 
-    <title>龙马水厂收费系统</title>
-    <style type="text/css">
-    	.navbar{align-items:baseline;}
-    	.container{max-width: 1440px;}
-    </style>
-  </head>
+    <head>
+        <base href="<%=basePath%>">
+        <meta charset="utf-8" />
+        <title>霍邱自来水厂收费平台</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="ice" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
-<body >
-<div class="row" style="margin-left: 0; margin-right: 0;" >
+        <!-- third party css -->
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+        <!-- third party css end -->
 
-	<div style="width: 15%;flex:12%;"  >
-		<nav class="navbar navbar-expand-lg navbar-light bg-light " id="navMenu" >
-		<!--   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		    <span class="navbar-toggler-icon"></span>
-		  </button>
-		
-		  <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
-		    <ul class="nav flex-column" style="color:black;">
-		    
-		      <li class="nav-item active">
-			  	<a class="navbar-brand" >&nbsp;&nbsp;龙马水厂</a>
-			  </li>
-		      <li class="nav-item active">
-		        <a class="nav-link" onclick="changeIframe('page/frame/dashboard/indexDashboard.jsp',this)" >首页 <span class="sr-only">(current)</span></a>
-		        
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		          档案管理
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/operator/operatorManager.jsp',this)">员工管理</a>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/price/priceManager.jsp',this)">价格管理</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userManager.jsp',this)">用户管理</a>
-		<!--           <a class="dropdown-item" href="#">批量建户</a>
-		 -->          <a class="dropdown-item" onclick="changeIframe('page/frame/address/addressManager.jsp',this)">地址管理</a>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/modifyAddress.jsp',this)">位置变更</a>
-		        </div>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		          	营业管理 
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userOpenAccount.jsp',this)">用户开户</a>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户充值</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">充值修改</a>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户补卡</a>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
-		        </div>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		          	抄表管理 
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">生成计划</a>
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">手工录入</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">远程抄表</a>
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">批量抄表</a>
-		        </div>
-		      </li>
-		      
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		          	查询管理
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" onclick="changeIframe('admin/report/toSimpleReportPage.do',this)">报表查询</a>
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">收费统计</a>
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">疑户查询</a>
-		          <div class="dropdown-divider"></div>
-		          <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">日志查询</a>
-		        </div>
-		      </li>
-		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		          	维护管理 
-		        </a>
-		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
-		          <a class="dropdown-item"  onclick="changeIframe('page/frame/user/userChangeDeviceQuery.jsp',this)">换表查询</a>
-		          <a class="dropdown-item" onclick="changeIframe('page/frame/device/deviceManager.jsp',this)">表具管理</a>
-		        </div>
-		      </li>
-		      
-		        
-			      <li class="nav-item dropdown">
-			        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			          	 系统管理 
-			        </a>
-			        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-			          <a class="dropdown-item"  onclick="changeIframe('page/frame/system/modifyPassword.jsp',this)">修改密码</a>
-			          <a class="dropdown-item" href="#">退出系统</a>
-			        </div>
-			      </li>
-		        
-		      
-		    <!--   <li class="nav-item">
-		        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-		      </li> -->
-		    </ul>
-		<!--     <form class="form-inline my-2 my-lg-0">
-		      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-		    </form> -->
-		<!--   </div> -->
-		</nav>
-	
-	
-	</div>
-	
-	<div style="width: 75%;flex:87%;" >
-		<div style="background-color: grey;" class="embed-responsive  " id="iframeDiv" >  
-			        <iframe src="page/frame/dashboard/indexDashboard.jsp" id="iframPage" class="embed-responsive-item" width="100%" scrolling="yes" ></iframe>  
+        <!-- App css -->
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body style="padding-bottom: 0px;">
+
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="left-side-menu">
+
+                <div class="slimscroll-menu" id="left-side-menu-container">
+
+                    <!-- LOGO -->
+                    <a href="index.html" class="logo text-center">
+                        <span class="logo-lg">
+                            <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="16">
+                        </span>
+                        <span class="logo-sm">
+                            <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo_sm.png" alt="" height="16">
+                        </span>
+                    </a>
+
+                    <!--- Sidemenu -->
+                    <ul class="metismenu side-nav">
+
+                        <li class="side-nav-title side-nav-item" style="font-size: 1.2rem;">导航菜单</li>
+
+                        <li class="side-nav-item">
+                            <a onclick="changeIframe('page/frame/dashboard/indexDashboard1.jsp',this)" href="javascript: void(0);" class="side-nav-link">
+                                <i class="dripicons-meter"></i>
+                                <span class="badge badge-success float-right">3</span>
+                                <span> 主页看板 </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" class="side-nav-link">
+                                <i class="dripicons-view-apps"></i>
+                                <span> 档案管理 </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-second-level" aria-expanded="false">
+                                <li>
+                                    <a onclick="changeIframe('page/frame/operator/operatorManager.jsp',this)" href="javascript: void(0);">员工管理</a>
+                                </li>
+                                <li>
+                                    <a onclick="changeIframe('page/frame/price/priceManager.jsp',this)" href="javascript: void(0);">价格管理</a>
+                                </li>
+                                <li>
+                                    <a onclick="changeIframe('page/frame/user/userManager.jsp',this)" href="javascript: void(0);">用户管理</a>
+                                </li>
+                                <li>
+                                    <a  href="javascript: void(0);" onclick="changeIframe('page/frame/address/addressManager.jsp',this)">地址管理</a>
+                                </li><!-- 
+                                <li>
+                                    <a  href="javascript: void(0);" onclick="changeIframe('page/frame/user/modifyAddress.jsp',this)">位置变更</a>
+                                </li> -->
+                            </ul>
+                        </li>
+            
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" class="side-nav-link">
+                                <i class="dripicons-copy"></i>
+                                <span> 营业管理  </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-second-level" aria-expanded="false">
+                                <li>
+                                    <a href="javascript: void(0);"onclick="changeIframe('page/frame/user/userOpenAccount.jsp',this)">用户开户</a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户充值</a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">充值修改</a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户补卡</a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" class="side-nav-link">
+                                <i class="dripicons-browser"></i>
+                                <span> 抄表管理 </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-second-level" aria-expanded="false">
+                                <li>
+                                    <a href="javascript:alert('暂未实现此功能');">生成计划</a>
+                                </li>
+                                <li>
+                                    <a  href="javascript:alert('暂未实现此功能');">手工录入</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">远程抄表</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:alert('暂未实现此功能');">批量抄表</a>
+                                </li>
+                            </ul>
+                        </li>
+
+<!--                         <li class="side-nav-title side-nav-item mt-1">Components</li>
+ -->
+
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" class="side-nav-link">
+                                <i class="dripicons-document"></i>
+                                <span> 查询管理 </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-second-level" aria-expanded="false">
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('admin/report/toSimpleReportPage.do',this)">报表查询</a>
+                                </li>
+                          <!--       <li>
+                                    <a href="javascript:alert('暂未实现此功能');">收费统计</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:alert('暂未实现此功能');">疑户查询</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:alert('暂未实现此功能');">日志查询</a>
+                                </li> -->
+                            </ul>
+                        </li>
+
+
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" class="side-nav-link">
+                                <i class="dripicons-list"></i>
+                                <span> 维护管理 </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-second-level" aria-expanded="false">
+                                <li>
+                                    <a href="javascript: void(0);"onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userChangeDeviceQuery.jsp',this)">换表查询</a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/device/deviceManager.jsp',this)">表具管理</a>
+                                </li>
+                            </ul>
+                        </li>
+
+            
+                        <li class="side-nav-item">
+                            <a href="javascript: void(0);" class="side-nav-link">
+                                <i class="dripicons-briefcase"></i>
+                                <span> 系统管理  </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul class="side-nav-second-level" aria-expanded="false">
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/system/modifyPassword.jsp',this)">修改密码</a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" >退出系统</a>
+                                </li>
+                            </ul>
+                        </li>
+            
+                    </ul>
+
+                    <!-- Help Box -->
+                    <div class="help-box text-white text-center" style="margin-top: 0px;">
+                        <a href="javascript: void(0);" class="float-right close-btn text-white">
+                            <i class="mdi mdi-close"></i>
+                        </a>
+                        <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/help-icon.svg" height="90" alt="Helper Icon Image" />
+                        <h5 class="mt-3">更多功能建议？</h5>
+<!--                         <p class="mb-3">请点击这里。。。</p>
+ -->                       <a href="javascript: alert('建议功能正在建设中');" class="btn btn-outline-light btn-sm">请点这里</a>
+                   </div>
+                    <!-- end Help Box -->
+                    <!-- End Sidebar -->
+
+                    <div class="clearfix"></div>
+
+                </div>
+                <!-- Sidebar -left -->
+
+            </div>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+			        
+						<div style="background-color: grey;" class="embed-responsive  " id="iframeDiv" >  
+							        <iframe src="page/frame/dashboard/indexDashboard1.jsp" id="iframPage" class="embed-responsive-item" width="100%" scrolling="auto" ></iframe>  
+						</div>
+				</div>
+				
+			</div>
 		</div>
-	</div>
-</div>
-</body>
+				
+    
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+    <!-- 
+        <script src="https://cdn.bootcss.com/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/jquery-jvectormap-1.2.2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/jquery-jvectormap-world-mill-en.js"></script>
 
-</html>
-
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/pages/demo.dashboard.js"></script>
+      -->
+        
 <script type="text/javascript" src="js/client/windowsClient.js"></script>
-  <script type="text/javascript">
+        <script type="text/javascript">
+        	
   	function setTitle(title){
   		$("#navTitle").html(title) ;
   	}
@@ -164,6 +263,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  // 	alert( window.screen.height +","+ window.innerHeight +"," + window.screen.availHeight +"," + window.document.body.offsetHeight );
  	$("#iframeDiv").height(frameHeight - 20) ;
   	$("#iframPage").height(frameHeight - 20) ;
+//  	$("#iframPage").width($("#iframPage").width()-100) ;
   	
+        </script>
+    </body>
 
-  </script>
+</html>

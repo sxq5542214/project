@@ -11,8 +11,8 @@ public interface IOperatorService {
 
 	OperatorBean findOperatorByNameAndPass(String username, String password);
 
-	List<OperatorExtBean> queryOperatorList(Long company_id);
-
 	int addOrUpdateOperator(OperatorBean bean);
+
+	List<OperatorExtBean> queryOperatorList(OperatorBean bean);
 
 }

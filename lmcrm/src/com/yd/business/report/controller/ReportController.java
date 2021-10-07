@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.context.BaseContext;
 import com.yd.basic.framework.controller.BaseController;
+import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.report.bean.ReportSimpleBean;
 import com.yd.business.report.service.IReportService;
 import com.yd.util.DateUtil;
@@ -40,8 +41,9 @@ public class ReportController extends BaseController {
 	@RequestMapping("**/admin/report/toSimpleReportPage.do")
 	public ModelAndView toSimpleReportPage(HttpServletRequest request, HttpServletResponse response){
 		try {
-			
-			List<ReportSimpleBean> list = reportService.queryReportSimpleList(null);
+			OperatorBean op = getCurrentLoginOperator();
+			//根据登录用户的报表权限查询报表清单
+			List<ReportSimpleBean> list = reportService.queryReportSimpleListByAdminRole(op.getO_id());
 			
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("list", list);
@@ -60,7 +62,11 @@ public class ReportController extends BaseController {
 			String code = request.getParameter("code");
 			String start_date = request.getParameter("start_date");
 			String end_date = request.getParameter("end_date");
-			Long operatorId = getCurrentLoginOperator().getO_id();
+			String operator_id = request.getParameter("operator_id");
+			
+			if(StringUtil.isNull(operator_id)) {
+				operator_id =getCurrentLoginOperator().getO_id().toString();
+			}
 			if(StringUtil.isNull(start_date)) {
 				start_date = DateUtil.getNowOnlyDateStr();
 			}
@@ -74,11 +80,10 @@ public class ReportController extends BaseController {
 			map.put("code", code);
 			map.put("start_date", start_date);
 			map.put("end_date", end_date);
-			map.put("operatorId", operatorId.toString());
+			map.put("operator_id", operator_id);
 			
 			
 			ReportSimpleBean report = reportService.querySimpleReportAndDataByCode(code, map  );
-			
 
 			Map<String, Object> model = new HashMap<String, Object>();
 			model.put("report", report);

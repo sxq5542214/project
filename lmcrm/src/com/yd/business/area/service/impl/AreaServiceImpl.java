@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.area.bean.AddressBean;
 import com.yd.business.area.bean.AreaBean;
 import com.yd.business.area.bean.AreaExtBean;
 import com.yd.business.area.bean.BuildingExtBean;
@@ -20,6 +21,7 @@ import com.yd.business.company.bean.CompanyBean;
 import com.yd.business.company.bean.CompanyExtBean;
 import com.yd.business.company.service.ICompanyService;
 import com.yd.util.AutoInvokeGetSetMethod;
+import com.yd.util.DateUtil;
 
 /**
  * @author ice
@@ -54,7 +56,7 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public CompanyExtBean queryAreaAndBuildingTree(Long companyId) throws Exception {
 		
@@ -74,6 +76,38 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 		companyExtBean.setNodes(areaList);
 		
 		return companyExtBean;
+	}
+	
+	
+
+	@Override
+	public int addOrUpdateAddress(AddressBean bean) {
+		//修改地址全称
+		if(bean.getParent_id() != null) {
+			AddressBean parent = areaDao.findAddressById(bean.getParent_id());
+			bean.setFull_name(parent.getFull_name() + bean.getName());
+		}
+		
+		
+		int result = 0 ;
+		if(bean.getId() == null) {
+			bean.setCreate_time(DateUtil.getNowDateStr());
+			bean.setUpdate_time(DateUtil.getNowDateStr());
+			result = areaDao.insertAddress(bean);
+		}else {
+			bean.setUpdate_time(DateUtil.getNowDateStr());
+			result = areaDao.updateAddress(bean);
+		}
+		return result;
+	}
+
+	@Override
+	public List<AddressBean> queryAddressList(AddressBean bean) throws Exception {
+		
+				
+		List<AddressBean> list = areaDao.queryAddressList(bean);
+		
+		return list;
 	}
 	
 }

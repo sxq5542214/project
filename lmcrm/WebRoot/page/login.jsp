@@ -4,57 +4,96 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-	<meta charset="utf-8">	
-    <base href="<%=basePath%>">
-    
-    <title>请登录</title>
-    
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
-<!-- 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
- -->  
-<style>
-html,body {height: 100%;}
-body {display: -ms-flexbox;display: -webkit-box;display: flex;-ms-flex-align: center;-ms-flex-pack: center;-webkit-box-align: center;align-items: center;-webkit-box-pack: center;justify-content: center;padding-top: 40px;padding-bottom: 40px;background-color: #f5f5f5;}
-.form-signin {width: 100%;max-width: 330px;padding: 15px;}
-.form-signin .checkbox {font-weight: 400;}
-.form-signin .form-control {position: relative;box-sizing: border-box;height: auto;padding: 10px;font-size: 16px;}
-.form-signin .form-control:focus {z-index: 2;}
-.form-signin input[type="email"] {margin-bottom: -1px;border-bottom-right-radius: 0;border-bottom-left-radius: 0;}
-.form-signin input[type="password"] {margin-bottom: 10px;border-top-left-radius: 0;border-top-right-radius: 0;}
-</style> 
-</head>
-  
-  <body class="text-center">
-<form class="form-signin">
-      <img class="mb-4" src="images/login/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
-      <label for="inputName" class="sr-only">用户名</label>
-      <input type="text" id="inputName" class="form-control" placeholder="请输入用户名" required autofocus>
-      <label for="inputPassword" class="sr-only">密码</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="请输入密码" required>
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me" id="remember"> Remember me
-        </label>
-      </div>
-      <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login();">登录</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2021 龙马水厂</p>
-    </form>
+    <head>
+		<meta charset="utf-8">	
+	    <base href="<%=basePath%>">
+        <title>霍邱水厂营业管理平台-请登录</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body class="authentication-bg">
+
+        <div class="account-pages mt-5 mb-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-5">
+                        <div class="card">
+
+                            <!-- Logo -->
+                            <div class="card-header pt-4 pb-4 text-center bg-primary">
+                                <a href="javascript:void(0);">
+                                    <span><img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="18"></span>
+                                </a>
+                            </div>
+
+                            <div class="card-body p-4">
+                                
+                                <div class="text-center w-75 m-auto">
+                                    <h3 class="text-dark-50 text-center mt-0 font-weight-bold">霍邱自来水营业管理平台</h3>
+                                    <p class="text-muted mb-4" style="margin-top: 20px;">如需访问后端管理平台，请输入您的登录用户名和密码。</p>
+                                </div>
+
+                                <form action="javascript:void(0);">
+
+                                    <div class="form-group">
+                                        <label for="emailaddress">用户名</label>
+                                        <input class="form-control" type="text" id="inputName" name="inputName" required placeholder="Enter your loginName">
+                                    </div>
+
+                                    <div class="form-group">
+<!--                                         <a href="pages-recoverpw.html" class="text-muted float-right"><small>Forgot your password?</small></a>
+ -->                                        <label for="password">密码</label>
+                                        <input class="form-control" type="password" required id="inputPassword" placeholder="Enter your password">
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="remember" checked>
+                                            <label class="custom-control-label" for="checkbox-signin">Remember me</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-0 text-center">
+                                        <button class="btn btn-primary" type="submit" onclick="login();"> 登录平台</button>
+                                    </div>
+
+                                </form>
+                            </div> <!-- end card-body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="row mt-3">
+                            <div class="col-12 text-center">
+<!--                                 <p class="text-muted">Don't have an account? <a href="pages-register.html" class="text-muted ml-1"><b>Sign Up</b></a></p>
+ -->                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container -->
+        </div>
+        <!-- end page -->
+
+        <footer class="footer footer-alt">
+           Copyright   ©   2021   ice 
+        </footer>
+
+        <!-- App js -->
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
 
 <script type="text/javascript" src="js/common/cookieUtil.js"></script>
 <script type="text/javascript">
@@ -81,6 +120,8 @@ function login(){
   		setCookie("remember", true);
   	}
   	
+  	
+  	$.NotificationApp.send("请稍等！","正在登录中，请稍后","bottom-center","rgba(0,0,0,0.2)","info");
 	$.ajax({url:"login/loginByWeb.do",
 			type : "POST",
 			data:{
@@ -113,10 +154,9 @@ if(top!=self){
 function IEVersion() {
     var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串  
     var isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1; //判断是否IE<11浏览器  
-    var isEdge = userAgent.indexOf("Edge") > -1 && !isIE; //判断是否IE的Edge浏览器  
+    var isEdge = userAgent.indexOf("Edg") > -1 && !isIE; //判断是否IE的Edge浏览器  
 //    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1 ;
     var isIE11 = userAgent.indexOf('Trident/7') > -1  ;
-    
      if(isIE11) {
         return 11; //IE11 
      }
@@ -142,9 +182,14 @@ function IEVersion() {
     }
 }
 var ver = IEVersion();
-if(ver < 11){
-	alert('请升级IE浏览器版本至11以上再使用！ ');
+
+if( 'edge' != ver || ver < 11 ){
+	alert('请使用edge浏览器 或 升级IE浏览器版本至11以上再使用！ ');
 }
+
+
+
 </script>
-  </body>
+
+    </body>
 </html>

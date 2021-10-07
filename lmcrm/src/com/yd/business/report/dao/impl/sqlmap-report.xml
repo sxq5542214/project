@@ -9,7 +9,7 @@
 		<where>
 			<if test="id != null"> and id = #{id}</if>
 			<if test="name != null"> and name = #{name}</if>
-			<if test="code != null"> and code = #{code}</if>
+			<if test="code != null"> and code like  '%' + #{code} + '%' </if>
 			<if test="data_sql != null"> and data_sql = #{data_sql}</if>
 			<if test="status != null"> and status = #{status}</if>
 			<if test="seq != null"> and seq = #{seq}</if>
@@ -21,7 +21,17 @@
 		${value}
 	</select>
 	
-	
+	<select id="queryReportParamsList" parameterType="reportParams" resultType="reportParams">
+		select * from ll_report_params where report_id = #{report_id}
+		order by seq 
+	</select>
+		
+	<select id="queryReportSimpleListByAdminRole" parameterType="int" resultType="reportSimple">
+		 select distinct rs.* from ll_report_simple rs , ll_report_role_admin_relation ar,ll_report_role_relation rrr
+			where ar.report_role_id = rrr.report_role_id and rrr.report_id = rs.id and rs.status = 1
+			and ar.admin_id = #{value}
+	</select>
+		
 		
 </mapper>
 

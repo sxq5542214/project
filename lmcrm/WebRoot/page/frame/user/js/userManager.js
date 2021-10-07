@@ -1,23 +1,5 @@
-var datas = [
-        {
-            code: "A2017-001",
-            name: "3800充电器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "andy"
-        },
-        {
-            code: "A2017-002",
-            name: "Lenovo Type-c转接器",
-            states: "正常",
-            date: "2017-01-21",
-            admin: "zero"
-        }];
-
-
 var userManager =  new Vue({
     el: "#userManagerDiv",
-//	el:"#selectDiv",
     data: {
     	getDescByBeanAttrValue : dictionaryCache.getDescByBeanAttrValue,
     	choseIndex : '',
@@ -25,6 +7,7 @@ var userManager =  new Vue({
         checkedRows: [],// 选中的行标，用于删除行
         userList: [],// 表格数据
         priceList : [] ,
+        deviceKindList : [],
         buildingId : '',
         newRow:{}// 新增的行数据，用于新增行
     },
@@ -49,6 +32,10 @@ var userManager =  new Vue({
 			form.u_materialfee.value = this.userList[index].u_materialfee ;
 			form.u_constructioncost.value = this.userList[index].u_constructioncost ;
 			form.u_prepayment.value = this.userList[index].u_prepayment ;
+			form.addressId.value = this.userList[index].addressId ;
+			 $('#addressBTN2').text(this.userList[index].addressName );
+//			$("#di_dkid").val();
+			
 //			form.u_group.value = this.userList[index].u_group +1;
 	    	$("#selectGroup").val(this.userList[index].u_group +1);
 			$("#radio"+index).prop('checked',true);
@@ -58,6 +45,19 @@ var userManager =  new Vue({
 
 function addOrUpdateUser(){
 	var form = document.updateForm;
+
+	if(form.addressId.value == ''){
+		alert('请选择地址');
+		return false;
+	}
+	if(form.u_name.value == ''){
+		alert('请输入用户姓名');
+		return false;
+	}
+	if(form.u_phone.value == ''){
+		alert('请输入用户号码');
+		return false;
+	}
 	$.ajax({url:"admin/user/ajaxAddOrUpdateUser.do",
 		type : "POST",
 		data:{
@@ -75,11 +75,21 @@ function addOrUpdateUser(){
 			u_materialfee: form.u_materialfee.value,
 			u_constructioncost: form.u_constructioncost.value,
 			u_prepayment: form.u_prepayment.value,
-			u_buildingid : userManager.buildingId
+//			u_buildingid : userManager.buildingId , 
+			addressId :  form.addressId.value
 		},
 		success:function(result){
 		    if(result > 0){
-		    	alert('操作成功！');
+//		    	alert(result);
+		    	if(document.updateForm.u_id.value == ''){	//没有ID，是新增场景
+			    	$.NotificationApp.send("请注意","已完成用户新增，正在写卡开户，请稍等！","top-center","rgba(0,0,0,0.2)","info");
+			    	document.updateForm.u_id.value = result ;
+			    	openAccount();
+			    	document.updateForm.u_id.value = ''; //开户后，将用户ID重置
+		    	}else{
+		    		alert('修改用户成功');
+		    	}
+		    	
 		    }
 		    
 		    queryUserData();
@@ -93,26 +103,102 @@ function addUser(){
 	 document.updateForm.u_balance.value = '0';
 	 document.updateForm.u_peoplesize.value = '0';
 	 document.updateForm.u_phone.value = '';
-	 if(userManager.buildingId == ''){
-		 alert('请先选择下方最末级地址！');
-	 }else{
-		 
-			$.ajax({url:"admin/area/ajaxQueryBuildingById.do?id="+userManager.buildingId,
-				success:function(result){
-					 var json = eval('(' + result + ')');
-					 document.updateForm.u_address.value = json.full_name;
-					 $('#exampleModalCenter').modal('show');
-				}});
-	 }
+	 document.updateForm.u_address.value = '';
+	 document.updateForm.addressId.value = '';
+	 document.updateForm.di_dkid.disabled = false ;
+	 document.updateForm.chargeMoney.disabled = false ;
 	 
+	 $('#addressBTN2').text('选择地址');
 }
 function updateUser(){
 	if(document.updateForm.u_id.value == ''){
 		alert("请先选择要修改的用户！");
+		return false;
 	}else{
-		 $('#exampleModalCenter').modal('show');
+		 document.updateForm.di_dkid.disabled = true ;
+		 document.updateForm.chargeMoney.disabled = true ;
+		 
+		 
+//		var addrId = document.updateForm.addressId ;
+		//查询用户地址数据并更新
+		var index = userManager.choseIndex ;
+		document.updateForm.addressId.value = userManager.userList[index].addressId ;
+		$('#addressBTN2').text(userManager.userList[index].addressName );
+		
+		$('#exampleModalCenter').modal('show');
 	}
 	
+}
+function openAccount(){
+
+	var form = document.updateForm;
+	var dk_id = form.di_dkid.value;
+	var uid = form.u_id.value;
+	var chargeMoney = form.chargeMoney.value;
+	if(chargeMoney == '' ){
+		alert('请输入开户充值的金额！');
+		return;
+	}
+	if(uid == ''){
+		alert('请确定需要开户的用户');
+		return ;
+	}
+	if(dk_id == ''){
+		alert('请确定需要开户的表具类型');
+		return ;
+	}
+	
+	
+	var canwrite = true;
+	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+	callWindowsClientMethod('readCard','{}' , function(result){
+		if(result < 1){
+			alert("操作卡失败，无法获取数据");
+			return ;
+		}
+//		alert(result);
+		var json = eval('(' + result + ')');
+		var cardkind = json.iCardKind ;
+		var user_no = json.stru_userparm.iUserNo;
+		
+		if(cardkind != 0 || user_no != 0 ){
+			canwrite = false;
+		}
+	} );
+	
+	
+	if(!canwrite){
+		alert('该卡不是新卡，不能用于创建新用户写卡！  用户已创建，请于【营业管理】【用户开户】菜单中继续开户操作！');
+		return ;
+	}
+	
+	$.ajax({
+		url:"admin/card/ajaxOpenAccountCard.do",
+		type : "POST",
+		async: false,
+		data :{ deviceKindId : dk_id ,userId : uid ,chargeMoney:chargeMoney},
+		success:function(result){
+//			alert(result);
+		    var bean = result ; //eval('(' + result + ')');
+		    var cdid = bean.chargeDetailId ;
+			if(bean.queryStatus == -1){
+				alert(bean.queryResult);
+			}else{
+				//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+				callWindowsClientMethod('openAccount',result , function(status){
+					if(status == 1){
+						// 写卡成功,更新状态
+						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailStatusToSuccess.do",
+							type : "POST",async:false, data :{ cdid : cdid }});
+						
+//						queryUserData();
+//						$('#exampleModalCenter').modal('hide');
+					}
+				} );
+			}
+			
+//		    var list = eval('(' + result + ')');
+		}});
 }
 
 function queryUserData(){
@@ -121,6 +207,13 @@ function queryUserData(){
 	var u_paperwork = $("#u_paperwork").val();
 	var u_buildingid = $("#u_buildingid").val();
 	var u_areaid = $("#u_areaid").val();
+	var addressId = $("#addressId").val();
+	var u_cardno = $("#u_cardno").val();
+	
+	if(u_phone == '' && u_name == '' && addressId == '' && u_paperwork == '' && u_cardno == ''){
+		alert('请输入查询条件');
+		return false;
+	}
 	
 	$.ajax({url:"admin/user/ajaxQueryUserByCompany.do",
 			type : "POST",
@@ -129,98 +222,114 @@ function queryUserData(){
 				u_name :u_name,
 				u_paperwork :u_paperwork,
 				u_buildingid : u_buildingid,
-				u_areaid : u_areaid
+				u_areaid : u_areaid,
+				addressId : addressId,
+				u_cardno : u_cardno
 			},
 		success:function(result){
-		    var list = eval('(' + result + ')');
+			if(result.length == 0){
+			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+			}
+		    var list = result ; // eval('(' + result + ')');
 		    userManager.userList = list;
 		}});
 }
-function updateUserData(level,id,name){
-	
-	if(level == 3){
-		userManager.buildingId = id;
-		$("#u_buildingid").val(id);
-		$("#u_areaid").val('');
-		queryUserData();
-	}else if(level == 2){
-		userManager.buildingId = '';
-		$("#u_areaid").val(id);
-		$("#u_buildingid").val('');
-		queryUserData();
-	}else{
-		userManager.buildingId = '';
-		$("#u_buildingid").val('');
-		$("#u_areaid").val('');
-	}
+
+
+function readCardAndQueryUser(){
+
+	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+	callWindowsClientMethod('readCard','{}' , function(result){
+		if(result < 1){
+			alert("操作卡失败，无法获取数据");
+			return ;
+		}
+//		alert(result);
+		var json = eval('(' + result + ')');
+		var user_no = json.stru_userparm.iUserNo;
+		var iSavingNo = json.stru_userparm.iSavingNo;
+		var iUserFlag = json.stru_userparm.stru_retparm.iUserFlag;
+		var iSetFlag = json.stru_userparm.stru_retparm.iSetFlag;
+		var iFlag = json.stru_userparm.stru_retparm.iFlag;
+		var iYear = json.stru_userparm.stru_retparm.iYear;
+		var iMonth = json.stru_userparm.stru_retparm.iMonth;
+		var iDay = json.stru_userparm.stru_retparm.iDay;
+		var iMonth = iMonth <10 ? "0"+iMonth : iMonth;
+		var iDay = iDay <10 ? "0"+iDay : iDay;
+		
+// alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
+		
+		if(user_no == 0 ){
+			alert('该卡无用户数据，请检查！');
+		}else{
+			
+			$("#u_cardno").val(user_no);
+			$("#u_phone").val('');
+			$("#u_name").val('');
+			$("#u_paperwork").val('');
+			queryUserData();
+			
+		}
+
+	} );
 }
 
-function getTree() {
+function initData(){
+	
 
-	var dataArray = new Array();
-	$.ajax({
-		url:"admin/area/ajaxQueryAreaTreeByOperator.do",
-		async:false,
+	//初始化查询价格列表
+	$.ajax({url:"admin/price/ajaxQueryPriceByCompany.do",
+		type : "POST",
+		data:{
+			p_enabled : 1
+		},
+		async : false,
 		success:function(result){
-		    var company = eval('(' + result + ')');
-		    dataArray = company;
+			
+		    var list =   result ;  //eval('(' + result + ')');
+		    userManager.priceList = list;
+		    
 	}});
+	// alert(userManager.priceList.length);
+
+	//初始化查询表具类型列表
+	$.ajax({url:"admin/device/ajaxQueryEnableDeviceKind.do",
+		type : "POST",
+		success:function(result){
+		    var list = result ; // eval('(' + result + ')');
+		    userManager.deviceKindList = list;
+	}});
+
+
+	//初始化地址列表的弹框数据
+	$('#tree').on('changed.jstree', function (e, data) {
+		// 树形列表点击事件
+	    var i, j, r ;
+//	    for(i = 0, j = data.selected.length; i < j; i++) {   如果多选，则需要循环
+//	      r= data.instance.get_node(data.selected[i]);
+//	    }
+	    r = data.instance.get_node(data.selected[0]);
+	    r = r.original;
+	//  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
+	    var parent_id = data.instance.get_parent(data.selected[0]) ;
+	    var parent_name = data.instance.get_node(parent_id).text;
+	    $('#addressId').val(r.id);
+	    $('#addressId2').val(r.id);
+	    $('#addressBTN').text(r.text);
+	    $('#addressBTN2').text(r.text);
+	    document.updateForm.u_address.value = r.full_name;
+	    
+	  }).jstree({
+		  //树形列表加载参数
+		'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
+					'themes': {
+			            'name': 'proton',
+			            'responsive': true
+			        }
+				}
+	});
 	
-// Some logic to retrieve, or generate tree structure
-//	dataArray = [
-//		  {
-//		    text: "Parent 1",
-//		    href:  "javascript:updateTreeData(1);",
-//		    nodes: [
-//		      {
-//		        text: "Child 1",
-//		        nodes: [
-//		          {
-//		            text: "Grandchild 1"
-//		          },
-//		          {
-//		            text: "Grandchild 2"
-//		          }
-//		        ]
-//		      },
-//		      {
-//		        text: "Child 2"
-//		      }
-//		    ]
-//		  },
-//		  {
-//			href:  "javascript:alert(2);",
-//		    text: "Parent 2"
-//		  },
-//		  {
-//				href:  "javascript:alert(3);",
-//		    text: "Parent 3"
-//		  },
-//		  {
-//				href:  "javascript:alert(4);",
-//		    text: "Parent 4"
-//		  },
-//		  {
-//		    text: "Parent 5"
-//		  }
-//		];
-  return dataArray;
 }
-$('#tree').bstreeview({
-	data: getTree(),
-	openNodeLinkOnNewTab: false
-});
-// queryUserData();
 
 
-$.ajax({url:"admin/price/ajaxQueryPriceByCompany.do",
-	type : "POST",
-	data:{
-		p_enabled : 1,
-	},
-	async : false,
-	success:function(result){
-	    var list = eval('(' + result + ')');
-	    userManager.priceList = list;
-}});
-// alert(userManager.priceList.length);
+initData();

@@ -1,9 +1,7 @@
 /**
  * 
  */
-package com.yd.business.other.bean;
-
-import java.io.Serializable;
+package com.yd.business.area.bean;
 
 import org.apache.ibatis.type.Alias;
 
@@ -13,26 +11,9 @@ import com.yd.basic.framework.bean.BaseBean;
  * @author ice
  *
  */
-// @Alias("address")
-public class AddressBean extends BaseBean implements Serializable {
+@Alias("address")
+public class AddressBean extends BaseBean {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 263321027535622625L;
-	/**
-	 * 省
-	 */
-	public static final int LEVEL_PROVINCE = 1;
-	/**
-	 * 市
-	 */
-	public static final int LEVEL_CITY = 2;
-	/**
-	 * 区、县
-	 */
-	public static final int LEVEL_DISTRICT = 3;
-	
 	private Integer id;
 	private String name;
 	private Integer level;
@@ -41,6 +22,9 @@ public class AddressBean extends BaseBean implements Serializable {
 	private Integer parent_id;
 	private String comment;
 	private Integer status;
+	private Integer company_id;
+	private String create_time;
+	private String update_time;
 	
 	private String parent;
 	private String text;
@@ -105,6 +89,23 @@ public class AddressBean extends BaseBean implements Serializable {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+	public Integer getCompany_id() {
+		return company_id;
+	}
+	public void setCompany_id(Integer company_id) {
+		this.company_id = company_id;
+	}
+	public String getCreate_time() {
+		return create_time;
+	}
+	public void setCreate_time(String create_time) {
+		this.create_time = create_time;
+	}
+	public String getUpdate_time() {
+		return update_time;
+	}
+	public void setUpdate_time(String update_time) {
+		this.update_time = update_time;
+	}
 	
 }

@@ -95,7 +95,7 @@ public abstract class BaseController extends MultiActionController {
 	public void writeJson(HttpServletResponse response,Object obj) {
 		
 		try{
-			setResponseCharSet(response);
+			setResponseJsonCharSet(response);
 			if(obj == null){
 				log.debug("writeJson obj is null!");
 				return;
@@ -126,10 +126,14 @@ public abstract class BaseController extends MultiActionController {
 		}
 //		response.flushBuffer();
 	}
-	
+
 	protected void setResponseCharSet(HttpServletResponse response){
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("Content-type", "text/html;charset=UTF-8");
+	}
+	protected void setResponseJsonCharSet(HttpServletResponse response){
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Content-type", "application/json;charset=UTF-8");
 	}
 	
 	protected Integer getPageSizeByRequest(HttpServletRequest request) {

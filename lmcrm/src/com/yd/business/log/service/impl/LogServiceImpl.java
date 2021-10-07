@@ -8,6 +8,10 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.springframework.stereotype.Component;
 
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.log.bean.LogBean;
@@ -21,6 +25,8 @@ import com.yd.util.NumberUtil;
  * @author Anlins
  *
  */
+@Aspect
+@Component
 @Service("logService")
 public class LogServiceImpl extends BaseService implements ILogService {
 
@@ -84,5 +90,21 @@ public class LogServiceImpl extends BaseService implements ILogService {
 		
 		
 	}
+	
+	@Around("execution(* com.yd.business.*.service.impl.*Service*.*(..))")
+	public Object saveSystemLog(ProceedingJoinPoint jp) throws Throwable{
+		try {
+			
+			System.out.println("    saveSystemLog :[" + jp.getTarget().getClass().getSimpleName()+"."+jp.getSignature().getName() );
+			
+			// 执行方法处理
+			Object result = jp.proceed();
+			return result;
+		}catch (Exception e) {
+			log.error("[" + jp.getTarget().getClass().getSimpleName()+"."+jp.getSignature().getName() + "]=======>" + e);
+			throw new Exception(e);
+		}
+	}
+
 	
 }

@@ -22,4 +22,6 @@ public interface IReportService {
 
 	ReportSimpleBean querySimpleReportAndDataByCode(String code, Map<String, String> params);
 
+	List<ReportSimpleBean> queryReportSimpleListByAdminRole(Long operator_id);
+
 }

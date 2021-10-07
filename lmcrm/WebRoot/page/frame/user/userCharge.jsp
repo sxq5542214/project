@@ -1,241 +1,234 @@
 <%@page import="com.yd.business.price.bean.PriceBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-<!-- 必须的 meta 标签 -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<base href="<%=basePath%>">
+    <head>
+    	<base href="<%=basePath%>">
+        <meta charset="utf-8" />
+        <title>用户充值</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
-<!-- Bootstrap 的 CSS 文件 -->
+        <!-- App css -->
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
+    </head>
 
+    <body>
 
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
-	integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
-	crossorigin="anonymous">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bstreeview@1.2.0/dist/css/bstreeview.min.css">
-<link
-	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-	rel="stylesheet"
-	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-	crossorigin="anonymous">
-<script
-	src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bstreeview@1.2.0/dist/js/bstreeview.min.js"></script>
-<title>龙马水厂收费系统</title>
-<style type="text/css">
-.col-xs-8 {
-	padding: 1px;
-}
+        <!-- Begin page -->
+        <div class="wrapper" id="userManagerDiv">
 
-.col-xs-4 {
-	padding: 1px;
-}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
 
-.container {
-	padding: 1px;
-	margin-right: 1px;
-	margin-left: 1px;
-	max-width: 1940px;
-}
-</style>
-</head>
+            <div class="content-page" style="margin-left: 0px;">
+                <div class="content" >
 
-<body>
-	<div id="userManagerDiv">
-		<div class="container">
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                       <!--  <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                                            <li class="breadcrumb-item active">Basic Tables</li>
+                                        </ol> -->
+                                    </div>
+                                    <h4 class="page-title">用户充值/补卡/换表</h4>
+                                </div>
+                            </div>
+                        </div>     
+                        <!-- end page title --> 
 
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                	<div class="card-header">
+                                	<div class="row">
+			                         	<div class="col">
+											<input type="text" class="form-control" id="u_name" name="u_name"
+												placeholder="请输入用户姓名">
+						
+										</div>
+										<div class="col">
+											<input type="text" class="form-control" id="u_cardno" name="u_cardno"
+												placeholder="请输入用户卡号">
+						
+										</div>
+										<div class="col">
+											<input type="text" class="form-control" id="u_phone" name="u_phone"
+												placeholder="请输入用户手机号">
+										</div>
+										<div class="col">
+											<input type="text" class="form-control" id="u_paperwork"
+												name="u_paperwork" placeholder="请输入用户证件号码"> <input
+												type="hidden" class="form-control" id="u_buildingid"
+												name="u_buildingid"> <input type="hidden"
+												class="form-control" id="u_areaid" name="u_areaid">
+										</div>
+			                         </div>
+										<div class="row" style="margin-top: 10px;">
+											<div class="col-10">
+												<button type="button" class="btn btn-info" onclick="readCardAndQueryUser();">读卡并充值</button>
+												<button type="button" class="btn btn-secondary" onclick="readCardAndUpdateCharge();">充值修改</button>
+												<button type="button" class="btn btn-success" onclick="readCardAndRepairCard();">用户补卡</button>
+						 						<button type="button" class="btn btn-primary" onclick="readCardAndChangeMeter();">换表维护</button>
+ 										    </div>
+											 <div class="col-2">
+												<button type="button" class="btn btn-info" onclick="queryUserData();">查询充值记录</button>
+											</div>
+										</div>
+	                                        <!-- <h4 class="header-title">Striped rows</h4>
+	                                        <p class="text-muted font-14 mb-4">
+	                                            Use <code>.table-striped</code> to add zebra-striping to any table row
+	                                            within the <code>&lt;tbody&gt;</code>.
+	                                        </p> -->
+                                	</div>
+                                    <div class="card-body">
+                                    	
+                                        <div class="table-responsive" >
+                                            <table class="table  mb-0 table-hover table-centered text-nowrap"  >
+                                                <thead>
+                                                    <tr>
+														<th scope="col">用户卡号</th>
+														<th scope="col">总序号</th>
+														<th scope="col">充值序号</th>
+														<th scope="col">用户名称</th>
+														<th scope="col">联系方式</th>
+														<th scope="col">价格类型</th>
+														<th scope="col">充值金额</th>
+														<th scope="col">充值量</th>
+														<th scope="col">操作员工</th>
+														<th scope="col">操作类型</th>
+														<th scope="col">写卡时间</th>
+														<th scope="col">刷表时间</th>
+														<th scope="col">缴费方式</th>
+														<th scope="col">打印状态</th>
+														<th scope="col">充值状态</th>
+														<th scope="col">上次余额</th>
+														<th scope="col">本次余额</th>
+														<th scope="col">基本金额</th>
+														<th scope="col">排污费</th>
+														<th scope="col">其他费</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody >
+													<tr v-for="(user,index) in userList" @click="getData(index)"
+														:for="'radio'+index">
+														<th><input type="radio" :id="'radio'+index" name="u_id"
+															:value="index" v-model="checkedRows">{{user.user_cardno }}</th>
+														<!-- <td>{{user.u_no}}</td> -->
+														<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
+														<td>{{user.cd_no }}</td>
+														<td>{{user.cd_savingno }}</td>
+														<td>{{user.user_name}}</td>
+														<td>{{user.user_phone}}</td>
+														<td>{{user.price_name }}</td>
+													<!-- 	<td>{{getDescByBeanAttrValue("user","u_status",user.u_status)
+															}}</td> -->
+														<td>{{user.cd_chargemoney }}</td>
+														<td>{{user.cd_chargeamount }}</td>
+														<td>{{user.operator_name }}</td>
+														<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_kindid",user.cd_kindid)}}</td>
+														<td>{{user.cd_startdate }}</td>
+														<td>{{user.cd_happendate }}</td>
+														<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_order",user.cd_order)}}</td>
+														<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_printstatus",user.cd_printstatus)}}</td>
+														<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_charge",user.cd_charge)}}</td>
+														<td>{{user.cd_lastbalance }}</td>
+														<td>{{user.cd_balance }}</td>
+														<td>{{user.cd_basemoney }}</td>
+														<td>{{user.cd_othermoney1 }}</td>
+														<td>{{user.cd_othermoney2 }}</td>
+													</tr>
+                                                </tbody>
+                                            </table>
+                                        </div> <!-- end table-responsive-->
 
-			<div class="form-group align-items-center"></div>
-			<div class="row form-group align-items-center">
-				<div class="col">
-					<input type="text" class="form-control" id="u_name" name="u_name"
-						placeholder="请输入用户姓名">
+                                    </div> <!-- end card body-->
+                                </div> <!-- end card -->
+                            </div><!-- end col-->
 
+                        
+                        </div>
+                        <!-- end row-->
+
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+<form name="updateForm" action="#" >
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered  modal-full-width modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">用户充值</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+	  <div class="modal-body" id="modalBodyDiv">
+        <div class="container-fluid">
+		    <div class="row">
+				<div class="col-md-4 align-self-center">
+					上次刷表日期
 				</div>
-				<div class="col">
-					<input type="text" class="form-control" id="u_cardno" name="u_cardno"
-						placeholder="请输入用户卡号">
-
-				</div>
-				<div class="col">
-					<input type="text" class="form-control" id="u_phone" name="u_phone"
-						placeholder="请输入用户手机号">
-				</div>
-				<div class="col">
-					<input type="text" class="form-control" id="u_paperwork"
-						name="u_paperwork" placeholder="请输入用户证件号码"> <input
-						type="hidden" class="form-control" id="u_buildingid"
-						name="u_buildingid"> <input type="hidden"
-						class="form-control" id="u_areaid" name="u_areaid">
+				<div class="col-md-8 ml-auto">
+					<input type="text" id="useDate" name="useDate" class="form-control"
+						placeholder="" required="required" readonly="readonly"  >
+					
 				</div>
 			</div>
-
-			<div class="form-group align-items-center">
-				<div class="row">
-					<div class="col-10">
-			<!-- 			<button type="button" class="btn btn-success" onclick="readCard();">读  卡</button> -->
-						<button type="button" class="btn btn-primary" onclick="readCardAndQueryUser();">读卡并充值</button>
-						<button type="button" class="btn btn-secondary" onclick="readCardAndUpdateCharge();">充值修改</button>
-<!-- 						<button type="button" class="btn btn-info" onclick="readCardAn();">用户退费</button>
- -->						<button type="button" class="btn btn-success" onclick="readCardAndRepairCard();">用户补卡</button>
- 						<button type="button" class="btn btn-info" onclick="readCardAndChangeMeter();">换表维护</button>
- 
-					</div>
-					<div class="col-2">
-						<button type="button" class="btn btn-primary"
-							onclick="queryUserData();">查询充值记录</button>
-					</div>
+			<div class="row">
+				<div class="col-md-4 align-self-center">
+					本次充值金额 <span style="color: red;">*</span>
 				</div>
-
+				<div class="col-md-8 ml-auto">
+					<input type="number" id="chargeMoney" name="chargeMoney" class="form-control"
+						placeholder="元为单位" required="required">
+					
+				</div>
 			</div>
 
 		</div>
-
-
-
-		<div class="container" style="overflow:scroll;">
-			<table class="table table-striped table-hover table-sm"
-				style="min-width:1800px;">
-				<thead>
-					<tr>
-						<th scope="col">用户卡号</th>
-						<th scope="col">总序号</th>
-						<th scope="col">充值序号</th>
-						<th scope="col">用户名称</th>
-						<th scope="col">联系方式</th>
-						<th scope="col">价格类型</th>
-						<th scope="col">充值金额</th>
-						<th scope="col">充值量</th>
-						<th scope="col">操作员工</th>
-						<th scope="col">操作类型</th>
-						<th scope="col">写卡时间</th>
-						<th scope="col">刷表时间</th>
-						<th scope="col">缴费方式</th>
-						<th scope="col">打印状态</th>
-						<th scope="col">充值状态</th>
-						<th scope="col">上次余额</th>
-						<th scope="col">本次余额</th>
-						<th scope="col">基本金额</th>
-						<th scope="col">排污费</th>
-						<th scope="col">其他费</th>
-					</tr>
-				</thead>
-				<tbody>
-
-					<tr v-for="(user,index) in userList" @click="getData(index)"
-						:for="'radio'+index">
-						<th><input type="radio" :id="'radio'+index" name="u_id"
-							:value="index" v-model="checkedRows">{{user.user_cardno }}</th>
-						<!-- <td>{{user.u_no}}</td> -->
-						<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
-						<td>{{user.cd_no }}</td>
-						<td>{{user.cd_savingno }}</td>
-						<td>{{user.user_name}}</td>
-						<td>{{user.user_phone}}</td>
-						<td>{{user.price_name }}</td>
-					<!-- 	<td>{{getDescByBeanAttrValue("user","u_status",user.u_status)
-							}}</td> -->
-						<td>{{user.cd_chargemoney }}</td>
-						<td>{{user.cd_chargeamount }}</td>
-						<td>{{user.operator_name }}</td>
-						<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_kindid",user.cd_kindid)}}</td>
-						<td>{{user.cd_enddate }}</td>
-						<td>{{user.cd_happendate }}</td>
-						<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_order",user.cd_order)}}</td>
-						<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_printstatus",user.cd_printstatus)}}</td>
-						<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_charge",user.cd_charge)}}</td>
-						<td>{{user.cd_lastbalance }}</td>
-						<td>{{user.cd_balance }}</td>
-						<td>{{user.cd_basemoney }}</td>
-						<td>{{user.cd_othermoney1 }}</td>
-						<td>{{user.cd_othermoney2 }}</td>
-
-					</tr>
-
-				</tbody>
-
-			</table>
+	</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary"
+				data-dismiss="modal">关 闭</button>
+			<button type="button" class="btn btn-primary"
+				onclick="writeCardByCharge()">确 定</button>
 		</div>
+    </div>
+  </div>
+</div>
+</form>
 
-<!-- 充值弹框 -->
-		<form name="updateForm" action="#">
-			<!-- Modal -->
-			<div class="modal fade" id="exampleModalCenter" tabindex="-1"
-				role="dialog" aria-labelledby="exampleModalCenterTitle"
-				aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered  modal-lg"
-					role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalCenterTitle">用户充值</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body" id="modalBodyDiv">
-							<div class="container-fluid">
 
-<!-- 
-								<div class="row">
-									<div class="col-md-4 align-self-center">当前余额</div>
-									<div class="col-md-8 ml-auto">
-										<input type="number" name="balance" class="form-control"
-											placeholder="元为单位" readonly="readonly" >
-										
-									</div>
-								</div> -->
-								<div class="row">
-									<div class="col-md-4 align-self-center">
-										上次刷表日期
-									</div>
-									<div class="col-md-8 ml-auto">
-										<input type="text" id="useDate" name="useDate" class="form-control"
-											placeholder="" required="required" readonly="readonly"  >
-										
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-4 align-self-center">
-										本次充值金额 <span style="color: red;">*</span>
-									</div>
-									<div class="col-md-8 ml-auto">
-										<input type="number" id="chargeMoney" name="chargeMoney" class="form-control"
-											placeholder="元为单位" required="required">
-										
-									</div>
-								</div>
 
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">关 闭</button>
-							<button type="button" class="btn btn-primary"
-								onclick="writeCardByCharge()">确 定</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-		
-		
 
 <!-- 充值修改弹框 -->
 		<form name="updateChargeForm" action="#">
@@ -471,16 +464,19 @@
 				</div>
 			</div>
 		</form>
-		
-	</div>
-</body>
-
-<script type="text/javascript" src="js/client/windowsClient.js"></script>
-<script src="js/common/dictionaryData.js" type="text/javascript"></script>
-<script src="page/frame/user/js/userCharge.js"	type="text/javascript"></script>
-
-<script type="text/javascript">
 
 
-</script>
+
+        </div>
+        <!-- END wrapper -->
+
+
+<!-- App js -->
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+
+ 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+		<script type="text/javascript" src="js/client/windowsClient.js"></script>
+		<script src="page/frame/user/js/userCharge.js"	type="text/javascript"></script>
+ 
+    </body>
 </html>

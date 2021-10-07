@@ -10,6 +10,12 @@ function callWindowsClientMethod(action,jsonstr,callback){
 	}
 	
 	var str  = 'javascript访问C#代码';
+
+	if(typeof(jsonstr) != 'string'){
+		jsonstr = JSON.stringify(jsonstr);
+	}
+
+	
 	var status = window.external.jsCallClient(action,jsonstr);
 	
 	if(typeof callback == "function") {

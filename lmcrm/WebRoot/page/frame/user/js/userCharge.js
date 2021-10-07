@@ -204,7 +204,7 @@ function readCardAndChangeMeter(){
 		$.ajax({url:"admin/device/ajaxQueryEnableDeviceKind.do",
 			type : "POST",
 			success:function(result){
-			    var list = eval('(' + result + ')');
+			    var list = result ; // eval('(' + result + ')');
 			    userManager.deviceKindList = list;
 		}});
 		
@@ -227,7 +227,7 @@ function writeCardByCharge(){
 		type : "POST",async:false, 
 		data :{ u_cardno :  u_cardno , chargeMoney : $("#chargeMoney").val() },
 		success:function(result){
-			var bean = eval('(' + result + ')');
+			var bean = result ; // eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
 			if(bean.queryStatus == -1){
 				alert(bean.queryResult);
@@ -264,7 +264,7 @@ function writeCardByUpdateCharge(){
 		data :{ u_cardno :  u_cardno , 
 			updateChargeMoney : $("#updateChargeMoney").val() },
 		success:function(result){
-			var bean = eval('(' + result + ')');
+			var bean = result ; // eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
 			if(bean.queryStatus == -1){
 				alert(bean.queryResult);
@@ -306,7 +306,7 @@ function writeCardByRepairCard(){
 		data :{ u_cardno :  u_cardno , brushFlag :  $('input[name="brushFlag"]:checked').val() , 
 			repairCardMoney : $("#repairCardMoney").val() },
 		success:function(result){
-			var bean = eval('(' + result + ')');
+			var bean = result ; // eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
 			if(bean.queryStatus == -1){
 				alert(bean.queryResult);
@@ -352,7 +352,7 @@ function writeCardByChangeMeter(){
 				device_kind : $("#device_kind").val() 
 		},
 		success:function(result){
-			var bean = eval('(' + result + ')');
+			var bean = result; // eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
 			if(bean.queryStatus == -1){
 				alert(bean.queryResult);
@@ -428,7 +428,10 @@ function queryUserData(){
 				u_areaid : u_areaid
 			},
 		success:function(result){
-		    var list = eval('(' + result + ')');
+			if(result.length == 0){
+			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+			}
+		    var list = result ; // eval('(' + result + ')');
 		    userManager.userList = list;
 		}});
 	

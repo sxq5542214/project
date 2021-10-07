@@ -2,7 +2,7 @@ var dictionaryCache = new Object();
 $.ajax({url:"dictionary/ajaxQueryAllDictionaryByCache.do",
 	success:function(res){
 
-    var list = eval("(" + res + ")");
+    var list =  res;  //eval("(" + res + ")");
     dictionaryCache.json = list;
     
 //    alert(dictionaryCache.getDescByBeanAttrValue("price","p_ladder",0));

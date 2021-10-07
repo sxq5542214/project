@@ -82,12 +82,18 @@ public class UserController extends BaseController {
 			String u_buildingid = request.getParameter("u_buildingid");
 			String u_areaid = request.getParameter("u_areaid");
 			String u_cardno = request.getParameter("u_cardno");
+			String addressid = request.getParameter("addressId");
+			Integer addressId = null;
+			if(StringUtil.isNotNull(addressid)) {
+				addressId = Integer.parseInt(addressid);
+			}
 			
 			UserInfoBean bean = new UserInfoBean();
 			bean.setU_operatorid(operator.getO_id());
 			bean.setU_phone(u_phone);
 			bean.setU_name(u_name);
 			bean.setU_paperwork(u_paperwork);
+			bean.setAddressId(addressId);
 			if(StringUtil.isNotNull(u_buildingid)) {
 				bean.setU_buildingid(Long.parseLong(u_buildingid));
 			}else if(StringUtil.isNotNull(u_areaid)) {
@@ -120,8 +126,8 @@ public class UserController extends BaseController {
 			OperatorBean operator = getCurrentLoginOperator();
 //			String u_phone = request.getParameter("u_phone");
 //			String u_name = request.getParameter("u_name");
-//			String u_paperwork = request.getParameter("u_paperwork");
-			String u_buildingid = request.getParameter("u_buildingid");
+			String u_paperwork = request.getParameter("u_paperwork");
+			String u_remark = request.getParameter("u_remark");
 //			String u_areaid = request.getParameter("u_areaid");
 //			String u_no = request.getParameter("u_no");
 			UserInfoBean bean = new UserInfoBean();
@@ -131,8 +137,8 @@ public class UserController extends BaseController {
 			
 			bean.setU_operatorid(operator.getO_id());
 //			bean.setU_phone(u_phone);
-//			bean.setU_name(u_name);
-//			bean.setU_paperwork(u_paperwork);
+			bean.setU_remark(u_remark);
+			bean.setU_paperwork(u_paperwork);
 //			if(StringUtil.isNotNull(u_buildingid)) {
 //				bean.setU_buildingid(Long.parseLong(u_buildingid));
 //			}else if(StringUtil.isNotNull(u_areaid)) {
@@ -143,7 +149,7 @@ public class UserController extends BaseController {
 			int num = userInfoService.addOrUpdateUser(bean);
 			
 			
-			writeJson(response, num );
+			writeJson(response, bean.getU_id() );
 		} catch (Exception e) {
 			log.error(e, e);
 		}
