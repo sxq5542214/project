@@ -157,6 +157,7 @@ function IEVersion() {
     var isEdge = userAgent.indexOf("Edg") > -1 && !isIE; //判断是否IE的Edge浏览器  
 //    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1 ;
     var isIE11 = userAgent.indexOf('Trident/7') > -1  ;
+    
      if(isIE11) {
         return 11; //IE11 
      }
@@ -183,7 +184,8 @@ function IEVersion() {
 }
 var ver = IEVersion();
 
-if( 'edge' != ver || ver < 11 ){
+if( 'edge' == ver || ver == 11 ){
+}else{
 	alert('请使用edge浏览器 或 升级IE浏览器版本至11以上再使用！ ');
 }
 

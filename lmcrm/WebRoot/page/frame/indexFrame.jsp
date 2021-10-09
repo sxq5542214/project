@@ -11,6 +11,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta charset="utf-8" />
         <title>霍邱自来水厂收费平台</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta http-equiv="content-Type" content="text/html; charset=utf-8" />
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
         <meta content="ice" name="author" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
@@ -20,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <!-- third party css end -->
 
         <!-- App css -->
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons1.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 
     </head>
@@ -91,9 +93,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             </a>
                             <ul class="side-nav-second-level" aria-expanded="false">
                                 <li>
-                                    <a href="javascript: void(0);"onclick="changeIframe('page/frame/user/userOpenAccount.jsp',this)">用户开户</a>
-                                </li>
-                                <li>
                                     <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">用户充值</a>
                                 </li>
                                 <li>
@@ -104,6 +103,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 </li>
                                 <li>
                                     <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userOpenAccount.jsp',this)">补开户</a>
                                 </li>
                             </ul>
                         </li>
@@ -164,7 +166,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             </a>
                             <ul class="side-nav-second-level" aria-expanded="false">
                                 <li>
-                                    <a href="javascript: void(0);"onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
                                 </li>
                                 <li>
                                     <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userChangeDeviceQuery.jsp',this)">换表查询</a>

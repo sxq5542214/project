@@ -21,14 +21,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 	<link  rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orangehill/jstree-bootstrap-theme/dist/themes/proton/style.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/themes/default/style.min.css">
+    
+	<link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+ 	  
+<!-- 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 	<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
+ -->	
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+	
 <script
 	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
+	
 	<script type="text/javascript" src="js/client/windowsClient.js"></script>
 <script src="js/common/dictionaryData.js" type="text/javascript"></script>
 
@@ -121,18 +129,70 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    <div class="row ">
 				 	<div class="col-0" ></div>
 				 	<div class="col-12" style="text-align: center;" >
- 					    <button type="button" class="btn btn-success" onclick="addAddress(1);" >新增为同级地址</button>
- 					    <button type="button" class="btn btn-success" onclick="addAddress(2);" >新增为下级地址</button>
-				      	<button type="button" class="btn btn-info" onclick="updateAddress();">修改当前地址</button>
+				      	<button type="button" class="btn btn-info" onclick="updateAddress();" >修改地址名称</button>
+ 					    <button type="button" class="btn btn-success"  onclick="checkAddChose();" style="margin-left: 80px;">新增下级地址</button>
 <!-- 				      	<button type="button" class="btn btn-secondary" onclick="deleteAddress();">删除地址</button>
  -->			   		</div>
 		    	</div>
+		    	
+		    	
+		    	
+	<!-- 		    <div class="row ">
+				 	<div class="col-0" ></div>
+				 	<div class="col-12" style="text-align: center;" >
+ 					    <button type="button" class="btn btn-success" onclick="addAddress(1);" >新增为同级地址</button>
+			   		</div>
+		    	</div> -->
 		  </div>
+		  
+		  
+		<form name="updateForm" action="#" >
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered  modal-full-width modal-dialog-scrollable" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalCenterTitle">新增下级地址</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <div class="container-fluid">
+				    <div class="row">
+				      <div class="col-md-3 align-self-center">上级地址</div>
+				      <div class="col-md-9 ml-auto">
+							<input type="text" name="parent_name" class="form-control" readonly="readonly">
+						</div>
+				    </div>
+				      
+				    <div class="row">
+				      <div class="col-md-3  align-self-center">当前地址名称</div>
+				      <div class="col-md-9 ml-auto">
+							<input type="text" name="name" class="form-control" placeholder="请输入地址名称">
+						</div>
+				    </div>
+				</div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">关 闭</button>
+		        <button type="button" class="btn btn-primary" onclick="addAddress(2);">保 存</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		</form>
+		  
+		  
+		  
 	 </div>
+
+
+
+<script src="page/frame/address/js/addressManager.js" type="text/javascript"></script>
 
 </body>
 
 
-<script src="page/frame/address/js/addressManager.js" type="text/javascript"></script>
 
 </html>

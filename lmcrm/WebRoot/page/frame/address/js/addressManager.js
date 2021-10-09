@@ -42,13 +42,22 @@ function addOrUpdateAddress(){
 		    $('#exampleModalCenter').modal('hide');
 		}});
 }
+function checkAddChose(){
+	var a_name = document.updateForm.name.value ;
+	if(addressId == '' ){
+		alert('请先选择左侧地址！');
+		return false;
+	}
+	$('#exampleModalCenter').modal('show');
+	
+}
 function addAddress(type){
 	var a_level = $("#a_level").val();
 	var parent_id = $("#parent_id").val();
-	var a_name = $("#a_name").val();
+	var a_name = document.updateForm.name.value ;
 	var full_name = $("#full_name").val();
-	if(addressId == '' || a_name == ''){
-		alert('请输入地址名称 和 选择左侧地址！');
+	if( a_name == ''){
+		alert('请输入地址名称！');
 		return ;
 	}else{
 		if(type == 2){ // 1为同级地址  2为下级地址
@@ -129,9 +138,9 @@ function updateUserData(level,id,name,parentid,parent_name){
 	if(level == 1){
 		parent_name = '';
 	}
-		$("#a_level").val(level);
-		$("#full_name").val(parent_name);
-		$("#parent_id").val(parentid);
+	$("#a_level").val(level);
+	$("#full_name").val(parent_name);
+	$("#parent_id").val(parentid);
 
 	$("#a_name").val(name);
 	$("#a_id").val(id);
@@ -176,6 +185,7 @@ $('#tree').on('changed.jstree', function (e, data) {
     var parent_name = data.instance.get_node(parent_id).text;
     updateUserData(r.level,r.id,r.text,r.parent,parent_name);
     
+    document.updateForm.parent_name.value = r.full_name ;
     
   }).jstree({
 	  //树形列表加载参数
