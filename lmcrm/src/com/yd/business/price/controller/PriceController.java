@@ -63,8 +63,8 @@ public class PriceController extends BaseController {
 		try {
 
 			OperatorBean operator = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
-			if(operator == null) 
-				operator = operatorService.findOperatorById(7l);
+//			if(operator == null) 
+//				operator = operatorService.findOperatorById(7l);
 			
 			String p_enabled = request.getParameter("p_enabled");
 			String p_name = request.getParameter("p_name");

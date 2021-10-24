@@ -17,13 +17,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <!-- App favicon -->
         <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
-        <!-- App css -->
+	<link  rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orangehill/jstree-bootstrap-theme/dist/themes/proton/style.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/themes/default/style.min.css">
+            <!-- App css -->
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
         
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+ 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+		<script	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
-    </head>
+</head>
 
     <body>
 
@@ -91,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						 						<button type="button" class="btn btn-primary" onclick="readCardAndChangeMeter();">换表维护</button>
  										    </div>
 											 <div class="col-2">
-												<button type="button" class="btn btn-info" onclick="queryUserData();">查询充值记录</button>
+												<button type="button" class="btn btn-info" onclick="queryUserData();">查询用户</button>
 											</div>
 										</div>
 	                                        <!-- <h4 class="header-title">Striped rows</h4>
@@ -100,67 +105,101 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                            within the <code>&lt;tbody&gt;</code>.
 	                                        </p> -->
                                 	</div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="padding-top: 0px;">
                                     	
-                                        <div class="table-responsive" >
-                                            <table class="table  mb-0 table-hover table-centered text-nowrap"  >
-                                                <thead>
-                                                    <tr>
-														<th scope="col">用户卡号</th>
-														<th scope="col">总序号</th>
-														<th scope="col">充值序号</th>
-														<th scope="col">用户名称</th>
-														<th scope="col">联系方式</th>
-														<th scope="col">价格类型</th>
-														<th scope="col">充值金额</th>
-														<th scope="col">充值量</th>
-														<th scope="col">操作员工</th>
-														<th scope="col">操作类型</th>
-														<th scope="col">写卡时间</th>
-														<th scope="col">刷表时间</th>
-														<th scope="col">缴费方式</th>
-														<th scope="col">打印状态</th>
-														<th scope="col">充值状态</th>
-														<th scope="col">上次余额</th>
-														<th scope="col">本次余额</th>
-														<th scope="col">基本金额</th>
-														<th scope="col">排污费</th>
-														<th scope="col">其他费</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody >
-													<tr v-for="(user,index) in userList" @click="getData(index)"
-														:for="'radio'+index">
-														<th><input type="radio" :id="'radio'+index" name="u_id"
-															:value="index" v-model="checkedRows">{{user.user_cardno }}</th>
-														<!-- <td>{{user.u_no}}</td> -->
-														<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
-														<td>{{user.cd_no }}</td>
-														<td>{{user.cd_savingno }}</td>
-														<td>{{user.user_name}}</td>
-														<td>{{user.user_phone}}</td>
-														<td>{{user.price_name }}</td>
-													<!-- 	<td>{{getDescByBeanAttrValue("user","u_status",user.u_status)
-															}}</td> -->
-														<td>{{user.cd_chargemoney }}</td>
-														<td>{{user.cd_chargeamount }}</td>
-														<td>{{user.operator_name }}</td>
-														<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_kindid",user.cd_kindid)}}</td>
-														<td>{{user.cd_startdate }}</td>
-														<td>{{user.cd_happendate }}</td>
-														<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_order",user.cd_order)}}</td>
-														<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_printstatus",user.cd_printstatus)}}</td>
-														<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_charge",user.cd_charge)}}</td>
-														<td>{{user.cd_lastbalance }}</td>
-														<td>{{user.cd_balance }}</td>
-														<td>{{user.cd_basemoney }}</td>
-														<td>{{user.cd_othermoney1 }}</td>
-														<td>{{user.cd_othermoney2 }}</td>
-													</tr>
-                                                </tbody>
-                                            </table>
-                                        </div> <!-- end table-responsive-->
-
+									  <div class="row">
+									      <div class="col-4 ">
+									      		<div class="card">
+									      			<div class="card-header">地址列表</div>
+									      			<div class="card-body">
+														<div id="tree"></div>
+													</div>
+									      		</div>
+										  </div>
+										  <div class="col-8">
+										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">用户列表</h4>
+	                                        <div class="table-responsive" style="min-height: 150px;">
+	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+	                                                <thead>
+	                                                    <tr>
+															<th scope="col">用户名称</th>
+															<th scope="col">价格类型</th>
+															<th scope="col">表具厂商</th>
+															<th scope="col">联系方式</th>
+															<th scope="col">用户地址</th>
+	                                                    </tr>
+	                                                </thead>
+	                                                <tbody >
+														<tr v-for="(user,index) in userList" @click="getUserData(index)"
+															:for="'radio'+index">
+															<th><input type="radio" :id="'userRadio'+index" name="u_id"
+																:value="index" v-model="checkedRows">{{user.u_name }}</th>
+															<td>{{user.priceName }}</td>
+															<td>{{user.device_company}}</td>
+															<td>{{user.u_phone}}</td>
+															<td>{{user.u_address}}</td>
+														</tr>
+	                                                </tbody>
+	                                            </table>
+	                                        </div> <!-- end table-responsive-->
+	                                        
+	                                        <h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;"> 用户充值记录</h4>
+	                                         <div class="table-responsive" style="min-height: 150px;">
+	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+	                                                <thead>
+	                                                    <tr>
+															<th scope="col">用户卡号</th>
+															<th scope="col">总序号</th>
+															<th scope="col">充值序号</th>
+															<th scope="col">用户名称</th>
+															<th scope="col">充值金额</th>
+															<th scope="col">充值量</th>
+															<th scope="col">操作员工</th>
+															<th scope="col">操作类型</th>
+															<th scope="col">写卡时间</th>
+															<th scope="col">刷表时间</th>
+															<th scope="col">缴费方式</th>
+															<th scope="col">打印状态</th>
+															<th scope="col">充值状态</th>
+															<th scope="col">上次余额</th>
+															<th scope="col">本次余额</th>
+															<th scope="col">基本金额</th>
+															<th scope="col">排污费</th>
+															<th scope="col">其他费</th>
+	                                                    </tr>
+	                                                </thead>
+	                                                <tbody >
+														<tr v-for="(user,index) in userChargeList" @click="getChargeData(index)"
+															:for="'radio'+index">
+															<th><input type="radio" :id="'chargeRadio'+index" name="charge_id"
+																:value="index" v-model="checkedRows">{{user.user_cardno }}</th>
+															<!-- <td>{{user.u_no}}</td> -->
+															<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
+															<td>{{user.cd_no }}</td>
+															<td>{{user.cd_savingno }}</td>
+															<td>{{user.user_name}}</td>
+														<!-- 	<td>{{getDescByBeanAttrValue("user","u_status",user.u_status)
+																}}</td> -->
+															<td>{{user.cd_chargemoney }}</td>
+															<td>{{user.cd_chargeamount }}</td>
+															<td>{{user.operator_name }}</td>
+															<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_kindid",user.cd_kindid)}}</td>
+															<td>{{user.cd_startdate }}</td>
+															<td>{{user.cd_happendate }}</td>
+															<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_order",user.cd_order)}}</td>
+															<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_printstatus",user.cd_printstatus)}}</td>
+															<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_charge",user.cd_charge)}}</td>
+															<td>{{user.cd_lastbalance }}</td>
+															<td>{{user.cd_balance }}</td>
+															<td>{{user.cd_basemoney }}</td>
+															<td>{{user.cd_othermoney1 }}</td>
+															<td>{{user.cd_othermoney2 }}</td>
+														</tr>
+	                                                </tbody>
+	                                            </table>
+	                                        </div> <!-- end table-responsive-->
+										  </div>
+									   </div>
                                     </div> <!-- end card body-->
                                 </div> <!-- end card -->
                             </div><!-- end col-->
@@ -321,6 +360,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										
 									</div>
 								</div> -->
+								
+								<div class="row">
+									<div class="col-md-4 align-self-center">
+										本次充值金额 <span style="color: red;">*</span>
+									</div>
+									<div class="col-md-8 ml-auto">
+										<input type="number" id="repairCardMoney" name="repairCardMoney" class="form-control"
+											placeholder="元为单位" required="required">
+										
+									</div>
+								</div>
+								
 								<div class="row">
 									<div class="col-md-4 align-self-center">
 										是否已刷卡
@@ -331,19 +382,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										  <label class="form-check-label" for="brushFlag0" >未刷卡</label>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										  <input type="radio" id="brushFlag1" name="brushFlag" class="form-check-input" value="1">
+									<!--   <input type="radio" id="brushFlag1" name="brushFlag" class="form-check-input" value="1">
 										  <label class="form-check-label" for="brushFlag1" >已刷卡</label>
-									
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-4 align-self-center">
-										本次充值金额 <span style="color: red;">*</span>
-									</div>
-									<div class="col-md-8 ml-auto">
-										<input type="number" id="repairCardMoney" name="repairCardMoney" class="form-control"
-											placeholder="元为单位" required="required">
-										
+									 -->
 									</div>
 								</div>
 
@@ -371,7 +412,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="changeMeterModalCenterTitle">用户补卡</h5>
+							<h5 class="modal-title" id="changeMeterModalCenterTitle">用户换表</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -408,6 +449,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											<option value="2">更换电池</option>
 											<option value="3">其他</option>
 											<option value="4">更换表具类型</option>
+										</select>
+									</div>
+								</div>
+								<div class="row"  id="div_device_company">
+									<div class="col-md-4 align-self-center">
+										新水表厂商
+									</div>
+									<div class="col-md-8 ml-auto">
+										<select name="device_company" class="form-control" id="device_company" >
+											<option value="轻松">轻松</option>
+											<option value="鲁正">鲁正</option>
 										</select>
 									</div>
 								</div>
@@ -472,9 +524,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!-- App js -->
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
 
- 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 		<script type="text/javascript" src="js/client/windowsClient.js"></script>
 		<script src="page/frame/user/js/userCharge.js"	type="text/javascript"></script>
  

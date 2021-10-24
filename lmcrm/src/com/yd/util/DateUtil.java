@@ -113,9 +113,12 @@ public class DateUtil {
 		}
 		return hour;
 	}
-	
+
 	public static String getNowDateStr(){
 		return formatDate(new Date());
+	}
+	public static String getNowOlnyDateStr(){
+		return formatDateOnlyDate(new Date());
 	}
 	public static String getNowDateStrSSS(){
 		return formatDateSSS(new Date());
@@ -127,7 +130,12 @@ public class DateUtil {
 	public static String getNowOnlyDateStr(){
 		return formatDateOnlyDate(new Date());
 	}
-	
+
+	public static String getTomorrowDateStr(){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, 1);
+		return formatDateOnlyDate(cal.getTime());
+	}
 	/**
 	 * yyyyMMddHHmmssSSS
 	 * @param date

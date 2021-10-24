@@ -45,7 +45,7 @@
 					<!-- <a class="btn btn-success" href="javascript:window.location.href='admin/supplierTopic/toUpdatePage.do'">
 						<i class="fa fa-plus-circle"></i> 新增自定义报表
 					</a> -->
-					<div id="dt_example" class="example_alt_pagination">
+					<div id="dt_example" class="example_alt_pagination" style="min-height: 150px;">
 					<table class="table table-condensed table-striped table-hover table-bordered pull-left" id="data-table">
                         <thead>
                           <tr>
@@ -62,6 +62,10 @@
                         </thead>
                         <tbody>
                         <% for(ReportSimpleBean ab : list){
+                        	String url = "admin/report/toSingleReportPage.do?code="+ ab.getCode() ;
+                        	if(StringUtil.isNotNull(ab.getAccess_url())){
+                        		url = ab.getAccess_url();
+                        	}
 							 %>
                           <tr class="gradeX warning">
                             <td>
@@ -72,8 +76,8 @@
                             </td>
                             <td>
                                 <div class="btn-group">
-                                
-                                	<a class="btn btn-info"  href="admin/report/toSingleReportPage.do?code=<%=ab.getCode() %>">查看数据</a>
+                                	
+                                	<a class="btn btn-info"  href="<%=url %>">查看数据</a>
                                   <%-- <button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle">
                                     操作 
                                     <span class="caret"></span>

@@ -19,4 +19,6 @@ public interface IAreaService {
 
 	int addOrUpdateAddress(AddressBean bean);
 
+	String deleteAddressByIdAndCompany(int id, int companyId);
+
 }

@@ -24,4 +24,6 @@ public interface IReportService {
 
 	List<ReportSimpleBean> queryReportSimpleListByAdminRole(Long operator_id);
 
+	ReportSimpleBean findReportSimpleByCode(String code);
+
 }

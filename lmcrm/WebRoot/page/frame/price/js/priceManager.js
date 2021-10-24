@@ -72,7 +72,7 @@ function addOrUpdatePrice(){
 		    }
 		    
 		    queryPriceData();
-		    $('#exampleModalCenter').hide();
+		    $('.close').click();
 		}});
 }
 function addPrice(){
@@ -80,6 +80,13 @@ function addPrice(){
 }
 function updatePrice(){
 	
+}
+
+function calcLowprice(){
+	var update_p_lowamount =  document.updateForm.update_p_lowamount.value ;
+	var update_p_base1 = document.updateForm.update_p_base1.value ;
+	
+	document.updateForm.update_p_lowprice.value = update_p_lowamount * update_p_base1;
 }
 
 function queryPriceData(){

@@ -32,9 +32,9 @@ public class ReportServiceImpl extends BaseService implements IReportService {
 		
 		if(bean == null) {
 			bean = new ReportSimpleBean();
+			bean.setCode("chart.report");
 		}
 		// 仅查询 chart.report 下的报表
-		bean.setCode("chart.report");
 		bean.setStatus(ReportSimpleBean.STATUS_ENABLE);
 		
 		return reportDao.queryReportSimpleList(bean);
@@ -105,6 +105,17 @@ public class ReportServiceImpl extends BaseService implements IReportService {
 		return null;
 	}
 	
+	@Override
+	public ReportSimpleBean findReportSimpleByCode(String code) {
+		ReportSimpleBean bean = new ReportSimpleBean();
+		bean.setCode(code);
+		List<ReportSimpleBean> list = queryReportSimpleList(bean);
+		
+		if(list.size() > 0){
+			return list.get(0);
+		}
+		return null;
+	}
 	
 	
 

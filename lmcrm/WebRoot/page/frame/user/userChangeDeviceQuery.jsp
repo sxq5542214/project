@@ -102,13 +102,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	</div>
                                     <div class="card-body">
                                     	
-                                        <div class="table-responsive" >
+                                        <div class="table-responsive" style="min-height: 150px;">
                                             <table class="table  mb-0 table-hover table-centered text-nowrap"  >
                                                 <thead>
                                                     <tr>
 												      <th scope="col">#编号</th>
 												      <th scope="col">用户名称</th>
 												      <th scope="col">操作类型</th>
+												      <th scope="col">旧表厂商</th>
+												      <th scope="col">新表厂商</th>
 												      <th scope="col">操作员</th>
 												      <th scope="col">操作时间</th>
 												      <th scope="col">备注</th>
@@ -124,6 +126,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 												      <th> <input type="radio" :id="'radio'+index" name="p_id" :value="index" v-model="checkedRows" >{{cm.cm_id }}</th>
 												      <td>{{cm.user_name   }}</td>
 												      <td>{{getDescByBeanAttrValue("ChangeMeterBean","cm_type",cm.cm_type)}}</td>
+												      <td>{{cm.old_device_company}}</td>
+												      <td>{{cm.new_device_company}}</td>
 												      <td>{{cm.operator_name}}</td>
 												      <td>{{cm.cm_happendate}}</td>
 												      <td>{{cm.cm_remark }}</td>

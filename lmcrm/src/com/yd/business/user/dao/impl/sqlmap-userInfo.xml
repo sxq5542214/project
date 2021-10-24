@@ -19,9 +19,11 @@
 		</if>
 	
 		select *, (select P_Name from Price where P_Id =U_PriceId ) as priceName , (select name from ll_address a where a.id = addressId ) addressName,
-		(select dk_name from deviceinfo di, devicekind dk where dk.dk_id = di.di_dkid and di.di_userid = u_id ) deviceKindName from userInfo 
+		 dk.dk_name  deviceKindName ,device_company  from userInfo 
+		 left join 	deviceinfo di on  di.di_userid = u_id 
+		 left join 	devicekind dk on  dk.dk_id = di.di_dkid
 		<where>
-			
+			isdisplay != -1 
 			<if test="u_id != null"> and u_id = #{u_id}</if>
 			<if test="u_phone != '' and u_phone != null"> and u_phone like '%' + #{u_phone} + '%'</if>
 			<if test="u_status != '' and u_status != null"> and u_status = #{u_status} </if>
@@ -33,7 +35,7 @@
 			<if test="u_operatorid != null"> and u_operatorid in ( select o1.o_id from operator o1 ,operator o2 where o2.O_Id=  #{u_operatorid} and o1.O_CompanyId = o2.O_CompanyId  ) </if>
 			<if test="areaid != null"> and u_buildingid in ( select b_id from Building where b_areaid = #{areaid} ) </if>
 			<if test="addressId != null">and exists ( select 1 from  TEMP t where   addressId = t.id  )  </if>
-		
+			
 		</where>
 		<if test="orderby != null"> ${orderby}</if>
 	</select>
@@ -60,7 +62,7 @@
            ,U_CreateDate
            ,U_UpdateDate
            ,U_Prepayment
-           ,addressId) values(
+           ,addressId , isdisplay) values(
            #{u_buildingid}
            ,#{u_priceid}
            ,#{u_group}
@@ -81,7 +83,7 @@
            ,#{u_createdate}
            ,#{u_updatedate}
            ,#{u_prepayment}
-           ,#{addressId}
+           ,#{addressId} , 1 
            )
    	</insert>
 	
@@ -115,6 +117,8 @@
 			<if test="u_updatedate != null">u_updatedate = #{u_updatedate},</if>
 			<if test="u_prepayment != null">u_prepayment = #{u_prepayment},</if>
 			<if test="addressId != null">addressId = #{addressId},</if>
+			<if test="isdisplay != null">isdisplay = #{isdisplay},</if>
+			
 		</set>
 		<where>
 			u_id = #{u_id}

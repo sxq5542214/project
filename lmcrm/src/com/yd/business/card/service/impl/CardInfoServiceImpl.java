@@ -58,8 +58,8 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 	}
 
 	@Override
-	public CardInfoBean generateCardInfoByOpenAccount(long userId,long deviceKindId , int chargePrice) {
-		return generateCardInfo("openAccount", userId, deviceKindId,chargePrice);
+	public CardInfoBean generateCardInfoByOpenAccount(long userId,long deviceKindId , int chargePrice,String deviceCompany) {
+		return generateCardInfo("openAccount", userId, deviceKindId,chargePrice,false,deviceCompany);
 	}
 	
 
@@ -302,6 +302,10 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 	}
 	
 	public CardInfoBean generateCardInfo(String action,long userId ,long deviceKindId,int chargePrice , Boolean isBrushFlag)	{
+		return generateCardInfo(action, userId, deviceKindId, chargePrice, isBrushFlag, null);
+	}
+	
+	public CardInfoBean generateCardInfo(String action,long userId ,long deviceKindId,int chargePrice , Boolean isBrushFlag,String deviceCompany)	{
 
 		UserInfoBean user = userInfoService.findUserById(userId);
 		long priceid = user.getU_priceid();
@@ -354,7 +358,7 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 				DeviceInfoBean deviceInfo = deviceInfoService.findDeviceInfoByUserAndKind(user.getU_id(), deviceKindId);
 				if(deviceInfo == null) {
 					// 充值的入参按角为单位，需要换算为元
-					deviceInfo = deviceInfoService.createDeviceInfo(user,deviceKind,price,chargePrice);
+					deviceInfo = deviceInfoService.createDeviceInfo(user,deviceKind,price,chargePrice,deviceCompany);
 				}
 				
 				up.setIsavingno(1);

@@ -129,8 +129,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    <div class="row ">
 				 	<div class="col-0" ></div>
 				 	<div class="col-12" style="text-align: center;" >
-				      	<button type="button" class="btn btn-info" onclick="updateAddress();" >修改地址名称</button>
- 					    <button type="button" class="btn btn-success"  onclick="checkAddChose();" style="margin-left: 80px;">新增下级地址</button>
+ 					    <button type="button" class="btn btn-success"  onclick="checkAddChose();">新增下级地址</button>
+				      	<button type="button" class="btn btn-info" onclick="updateAddress();"  style="margin-left: 30px;">修改地址名称</button>
+				      	<button type="button" class="btn btn-secondary" onclick="deleteAddress();"  style="margin-left: 30px;">删除当前地址</button>
 <!-- 				      	<button type="button" class="btn btn-secondary" onclick="deleteAddress();">删除地址</button>
  -->			   		</div>
 		    	</div>

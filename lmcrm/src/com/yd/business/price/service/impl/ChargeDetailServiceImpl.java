@@ -107,7 +107,12 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		bean.setCd_printstatus(ChargeDetailBean.PRINT_STATUS_NO);
 		
 		bean.setCd_basemoney(bean.getCd_chargemoney());
-		bean.setCd_paidmoney(BigDecimal.ZERO);
+		// 用户补卡、 换表的情况，实际不支付金额，所以付款金额设置为0
+		if(kind == ChargeDetailBean.KIND_CHANGE_CARD || kind == ChargeDetailBean.KIND_CHANGE_DEVICE) {
+			bean.setCd_paidmoney(BigDecimal.ZERO);
+		}else {
+			bean.setCd_paidmoney(bean.getCd_chargemoney());
+		}
 		bean.setCd_othermoney1(price.getP_other1().multiply(bean.getCd_chargeamount()));
 		bean.setCd_othermoney2(price.getP_other2().multiply(bean.getCd_chargeamount()));
 		bean.setCd_lastbalance(BigDecimal.ZERO);

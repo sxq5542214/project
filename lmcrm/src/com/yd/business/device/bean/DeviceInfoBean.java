@@ -50,6 +50,7 @@ public class DeviceInfoBean implements java.io.Serializable {
 	private Date di_updatedate;
 	private BigDecimal di_signalintensity;
 	private BigDecimal di_batteryvoltage;
+	private String device_company;
 
 	// Constructors
 
@@ -105,6 +106,14 @@ public class DeviceInfoBean implements java.io.Serializable {
 
 	public Long getDi_id() {
 		return this.di_id;
+	}
+
+	public String getDevice_company() {
+		return device_company;
+	}
+
+	public void setDevice_company(String device_company) {
+		this.device_company = device_company;
 	}
 
 	public void setDi_id(Long di_id) {

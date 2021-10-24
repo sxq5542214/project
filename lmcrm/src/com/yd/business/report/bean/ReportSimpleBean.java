@@ -29,8 +29,16 @@ public class ReportSimpleBean extends BaseBean {
 	private String column_names;
 	private Integer seq;
 	private String remark;
+	private String access_url;
 	private List<ReportParamsBean> paramsList;
 	
+	
+	public String getAccess_url() {
+		return access_url;
+	}
+	public void setAccess_url(String access_url) {
+		this.access_url = access_url;
+	}
 	public String getRemark() {
 		return remark;
 	}

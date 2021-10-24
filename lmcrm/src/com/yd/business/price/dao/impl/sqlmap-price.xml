@@ -12,6 +12,7 @@
 			<if test="p_ladder != null"> and p_ladder = #{p_ladder} </if>
 			<if test="p_name != null"> and p_name like '%' + #{p_name} + '%' </if>
 		</where>
+		order by seq 
 	</select>
 	<cache eviction="LRU" size="4096" flushInterval="600"></cache>
 	

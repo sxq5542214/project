@@ -16,9 +16,8 @@ var userManager =  new Vue({
 	    getData: function(index){
 	    	this.choseIndex = index;
 	    	var form = document.updateForm;
-			form.u_name.value = this.userList[index].u_name ;
-			form.u_phone.value = this.userList[index].u_phone ;
 			form.u_id.value = this.userList[index].u_id ;
+			form.u_name.value = this.userList[index].u_name ;
 	    	
 			$("#radio"+index).prop('checked',true);
 	    }
@@ -61,14 +60,24 @@ function openAccount(){
 	var dk_id = form.di_dkid.value;
 	var uid = form.u_id.value;
 	var chargeMoney = form.chargeMoney.value;
+	var device_company = form.device_company.value;
+
+	if(dk_id == ''){
+		alert('请选择表具类型！');
+		return;
+	}
 	if(chargeMoney == ''){
 		alert('请输入开户充值的金额！');
+		return;
+	}
+	if(device_company == ''){
+		alert('请选择水表厂商！');
 		return;
 	}
 	$.ajax({
 		url:"admin/card/ajaxOpenAccountCard.do",
 		type : "POST",
-		data :{ deviceKindId : dk_id ,userId : uid ,chargeMoney:chargeMoney},
+		data :{ deviceKindId : dk_id ,userId : uid ,chargeMoney:chargeMoney,device_company:device_company},
 		success:function(result){
 //			alert(result);
 		    var bean = result ; //eval('(' + result + ')');

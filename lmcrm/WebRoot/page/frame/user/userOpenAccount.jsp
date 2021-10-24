@@ -77,7 +77,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	</div>
                                     <div class="card-body">
                                     	
-                                        <div class="table-responsive" >
+                                        <div class="table-responsive" style="min-height: 150px;">
                                             <table class="table  mb-0 table-hover table-centered text-nowrap"  >
                                                 <thead>
                                                     <tr>
@@ -162,9 +162,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <div class="container-fluid">
 		    
 				<div class="row">
-					<div class="col-md-2 align-self-center">表具类型</div>
+					<div class="col-md-2 align-self-center">表具类型  <span style="color: red;">*</span> </div>
 					<div class="col-md-4 ml-auto" >
 						<select name="di_dkid" class="form-control"  >
+							<option value="">请选择</option>
 							<option v-for="device in deviceKindList" :key="" :value="device.dk_id">{{device.dk_name}}</option>
 						</select>
 					</div>
@@ -175,17 +176,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</div>
 				</div>
 				
+				
+										
+				
 				<div class="row">
-					<div class="col-md-2 align-self-center">用户名称</div>
+					<div class="col-md-2 align-self-center">水表厂商  <span style="color: red;">*</span> </div>
 					<div class="col-md-4 ml-auto">
-						<input type="text" name="u_name" class="form-control" readonly="readonly"
-							placeholder="请输入用户名称">
+						<select name="device_company" class="form-control" id="device_company" >
+							<option value="">请选择</option>
+							<option value="轻松">轻松</option>
+							<option value="鲁正">鲁正</option>
+						</select>
 					</div>
 
-					<div class="col-md-2 align-self-center">联系方式</div>
+					<div class="col-md-2 align-self-center">用户姓名</div>
 					<div class="col-md-4 ml-auto" >
-						<input type="text" name="u_phone" class="form-control" readonly="readonly"
-							placeholder="请输入用户名称">
+						<input type="text" name="u_name" class="form-control" readonly="readonly" >
 					</div>
 
 				</div>

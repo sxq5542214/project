@@ -11,8 +11,6 @@ public interface ICardInfoService {
 
 	CardInfoBean generateCardInfoByNew(long userId, long deviceKindId);
 
-	CardInfoBean generateCardInfoByOpenAccount(long userId, long deviceKindId, int chargePrice);
-
 	CardInfoBean generateCardInfoByChargeMoney(long userId, Long deviceKindId, int chargePrice);
 
 	CardInfoBean generateCardInfoByUpdateLastChargeMoney(long userId, Long deviceKindId, int chargePrice);
@@ -28,5 +26,7 @@ public interface ICardInfoService {
 	SysParam convertSysParam(CardInfoBean card, PriceBean price);
 
 	OtherParm convertOtherParam(CardInfoBean card, PriceBean price, int cardKind);
+
+	CardInfoBean generateCardInfoByOpenAccount(long userId, long deviceKindId, int chargePrice, String deviceCompany);
 
 }

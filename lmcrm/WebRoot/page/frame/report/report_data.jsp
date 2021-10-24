@@ -108,7 +108,7 @@
 					<!-- <a class="btn btn-success" href="javascript:window.location.href='admin/supplierTopic/toUpdatePage.do'">
 						<i class="fa fa-plus-circle"></i> 新增自定义报表
 					</a> -->
-					<div id="dt_example" class="table-responsive">
+					<div id="dt_example" class="table-responsive" style="min-height: 150px;">
 					<table class="table  mb-0 table-hover table-centered text-nowrap" id="data-table">
                         <thead>
                           <tr>

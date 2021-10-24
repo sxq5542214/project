@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <head>
         <base href="<%=basePath%>">
         <meta charset="utf-8" />
-        <title>霍邱自来水厂收费平台</title>
+        <title>霍邱县农饮智慧云平台</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<meta http-equiv="content-Type" content="text/html; charset=utf-8" />
     	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -24,7 +24,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <!-- App css -->
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons1.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-
+<style type="text/css">
+.side-nav .side-nav-link{font-size: 1.2rem;}
+</style>
     </head>
 
     <body style="padding-bottom: 0px;">
@@ -38,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="slimscroll-menu" id="left-side-menu-container">
 
                     <!-- LOGO -->
-                    <a href="index.html" class="logo text-center">
+                    <a href="javascript: void(0);" class="logo text-center">
                         <span class="logo-lg">
                             <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="16">
                         </span>
@@ -56,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <a onclick="changeIframe('page/frame/dashboard/indexDashboard1.jsp',this)" href="javascript: void(0);" class="side-nav-link">
                                 <i class="dripicons-meter"></i>
                                 <span class="badge badge-success float-right">3</span>
-                                <span> 主页看板 </span>
+                                <span> 首页 </span>
                             </a>
                         </li>
 
@@ -67,12 +69,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 <span class="menu-arrow"></span>
                             </a>
                             <ul class="side-nav-second-level" aria-expanded="false">
-                                <li>
-                                    <a onclick="changeIframe('page/frame/operator/operatorManager.jsp',this)" href="javascript: void(0);">员工管理</a>
-                                </li>
-                                <li>
-                                    <a onclick="changeIframe('page/frame/price/priceManager.jsp',this)" href="javascript: void(0);">价格管理</a>
-                                </li>
                                 <li>
                                     <a onclick="changeIframe('page/frame/user/userManager.jsp',this)" href="javascript: void(0);">用户管理</a>
                                 </li>
@@ -143,15 +139,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             </a>
                             <ul class="side-nav-second-level" aria-expanded="false">
                                 <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userChangeDeviceQuery.jsp',this)">换表查询</a>
+                                </li>
+                                <li>
                                     <a href="javascript: void(0);" onclick="changeIframe('admin/report/toSimpleReportPage.do',this)">报表查询</a>
                                 </li>
-                          <!--       <li>
-                                    <a href="javascript:alert('暂未实现此功能');">收费统计</a>
+                                <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/report/access_billChart.jsp',this)">台账查询</a>
                                 </li>
                                 <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/report/access_chargeCountChart.jsp',this)">收费统计</a>
+                                </li>
+                      <!--             <li>
                                     <a href="javascript:alert('暂未实现此功能');">疑户查询</a>
                                 </li>
-                                <li>
+                              <li>
                                     <a href="javascript:alert('暂未实现此功能');">日志查询</a>
                                 </li> -->
                             </ul>
@@ -169,9 +171,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
                                 </li>
                                 <li>
-                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userChangeDeviceQuery.jsp',this)">换表查询</a>
-                                </li>
-                                <li>
                                     <a href="javascript: void(0);" onclick="changeIframe('page/frame/device/deviceManager.jsp',this)">表具管理</a>
                                 </li>
                             </ul>
@@ -186,10 +185,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             </a>
                             <ul class="side-nav-second-level" aria-expanded="false">
                                 <li>
+                                    <a onclick="changeIframe('page/frame/operator/operatorManager.jsp',this)" href="javascript: void(0);">员工管理</a>
+                                </li>
+                                <li>
+                                    <a onclick="changeIframe('page/frame/price/priceManager.jsp',this)" href="javascript: void(0);">价格管理</a>
+                                </li>
+                                <li>
                                     <a href="javascript: void(0);" onclick="changeIframe('page/frame/system/modifyPassword.jsp',this)">修改密码</a>
                                 </li>
                                 <li>
-                                    <a href="javascript: void(0);" >退出系统</a>
+                                    <a href="javascript: logout();" >退出系统</a>
                                 </li>
                             </ul>
                         </li>
@@ -197,15 +202,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </ul>
 
                     <!-- Help Box -->
-                    <div class="help-box text-white text-center" style="margin-top: 0px;">
+ <!--                   <div class="help-box text-white text-center" style="margin-top: 0px;">
                         <a href="javascript: void(0);" class="float-right close-btn text-white">
                             <i class="mdi mdi-close"></i>
                         </a>
                         <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/help-icon.svg" height="90" alt="Helper Icon Image" />
                         <h5 class="mt-3">更多功能建议？</h5>
-<!--                         <p class="mb-3">请点击这里。。。</p>
- -->                       <a href="javascript: alert('建议功能正在建设中');" class="btn btn-outline-light btn-sm">请点这里</a>
-                   </div>
+                        <p class="mb-3">请点击这里。。。</p>
+                       <a href="javascript: alert('建议功能正在建设中');" class="btn btn-outline-light btn-sm">请点这里</a>
+                   </div> -->
                     <!-- end Help Box -->
                     <!-- End Sidebar -->
 
@@ -244,7 +249,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
 <script type="text/javascript" src="js/client/windowsClient.js"></script>
         <script type="text/javascript">
-        	
+    function logout(){
+    	if(confirm("确定退出系统？")){
+    		$.ajax({url:"login/unloginByWeb.do"});
+    		window.location.href = '<%=basePath%>';
+    	}
+    }
   	function setTitle(title){
   		$("#navTitle").html(title) ;
   	}

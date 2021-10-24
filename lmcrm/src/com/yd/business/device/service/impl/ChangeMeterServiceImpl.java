@@ -36,12 +36,12 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 	private IDeviceInfoService deviceInfoService;
 	
 	public int createChangeMeter(long user_no, BigDecimal cm_oldmetercode, int cm_type, long cm_operatorid, String cm_remark) {
-		return createChangeMeter(user_no, cm_oldmetercode, BigDecimal.ZERO, 0l, cm_type, cm_operatorid, cm_remark, null);
+		return createChangeMeter(user_no, cm_oldmetercode, BigDecimal.ZERO, 0l, cm_type, cm_operatorid, cm_remark, null,"","");
 	}
 
 	
 	@Override
-	public int createChangeMeter(long user_no ,BigDecimal cm_oldmetercode,BigDecimal cm_newmetercode ,Long cm_newmeterno, int cm_type,long cm_operatorid,String cm_remark,Long deviceKindId) {
+	public int createChangeMeter(long user_no ,BigDecimal cm_oldmetercode,BigDecimal cm_newmetercode ,Long cm_newmeterno, int cm_type,long cm_operatorid,String cm_remark,Long deviceKindId ,String old_device_company ,String new_device_company) {
 		
 		UserInfoBean user = userInfoService.findUserByNo(user_no);
 
@@ -57,13 +57,15 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 		
 		bean.setCm_newmetercode(cm_newmetercode);
 		bean.setCm_newmeterno(cm_newmeterno);
-		
+		bean.setOld_device_company(old_device_company);
+		bean.setNew_device_company(new_device_company);
+
+		DeviceInfoBean di = deviceInfoService.findFirstDeviceInfoByUser(user.getU_id());
 		if(cm_type == ChangeMeterBean.TYPE_CHANGE_DEVICEKIND) { //更换了表具类型
-			DeviceInfoBean di = deviceInfoService.findFirstDeviceInfoByUser(user.getU_id());
 			di.setDi_dkid(deviceKindId);
-			deviceInfoService.updateDeviceInfo(di);
 		}
-		
+		di.setDevice_company(new_device_company);
+		deviceInfoService.updateDeviceInfo(di);
 		
 		return changeMeterDao.insertChangeMeter(bean);
 	}

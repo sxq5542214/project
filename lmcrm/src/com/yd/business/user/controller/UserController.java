@@ -155,6 +155,33 @@ public class UserController extends BaseController {
 		}
 		return null;
 	}
+
+	/**
+	 *  界面删除用户
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/user/ajaxDeleteUser.do")
+	public ModelAndView ajaxDeleteUser(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+
+			OperatorBean operator = getCurrentLoginOperator();
+			String u_id = request.getParameter("u_id");
+			UserInfoBean bean = new UserInfoBean();
+			
+			bean.setU_id(Long.parseLong(u_id));
+			bean.setIsdisplay(UserInfoBean.ISDISPLAY_NO);
+			int num = userInfoService.addOrUpdateUser(bean);
+			
+			
+			writeJson(response, bean.getU_id() );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
 	
 	/**
 	 *  界面查询未开户用户列表

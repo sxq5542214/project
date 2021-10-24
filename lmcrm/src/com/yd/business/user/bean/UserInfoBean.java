@@ -28,6 +28,15 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 	 * 报停
 	 */
 	public static final int STATUS_STOP = 8;
+	/**
+	 * 是否展示-是
+	 */
+	public static final int ISDISPLAY_YES = 1;
+	/**
+	 * 是否展示-否
+	 */
+	public static final int ISDISPLAY_NO = -1;
+	
 	
 	/**
 	 * 
@@ -57,12 +66,14 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 	private Date u_updatedate;
 	private Integer u_prepayment;
 	private Integer addressId;
+	private Integer isdisplay;
 
 	//extends field
 	private Long areaid;
 	private String priceName;
 	private String deviceKindName;
 	private String addressName;
+	private String device_company;
 	// Constructors
 
 	/** default constructor */
@@ -75,6 +86,26 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 	public Long getU_id() {
 		return this.u_id;
 	}
+
+	public String getDevice_company() {
+		return device_company;
+	}
+
+
+	public void setDevice_company(String device_company) {
+		this.device_company = device_company;
+	}
+
+
+	public Integer getIsdisplay() {
+		return isdisplay;
+	}
+
+
+	public void setIsdisplay(Integer isdisplay) {
+		this.isdisplay = isdisplay;
+	}
+
 
 	public Integer getAddressId() {
 		return addressId;

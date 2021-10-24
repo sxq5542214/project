@@ -33,6 +33,8 @@ var userManager =  new Vue({
 			form.u_constructioncost.value = this.userList[index].u_constructioncost ;
 			form.u_prepayment.value = this.userList[index].u_prepayment ;
 			form.addressId.value = this.userList[index].addressId ;
+			form.device_company.value = this.userList[index].device_company ;
+			
 			 $('#addressBTN2').text(this.userList[index].addressName );
 //			$("#di_dkid").val();
 			
@@ -45,7 +47,11 @@ var userManager =  new Vue({
 
 function addOrUpdateUser(){
 	var form = document.updateForm;
-
+	var chargeMoney = form.chargeMoney.value;
+	if(chargeMoney == '' ){
+		alert('请输入开户充值的金额！');
+		return;
+	}
 	if(form.addressId.value == ''){
 		alert('请选择地址');
 		return false;
@@ -56,6 +62,14 @@ function addOrUpdateUser(){
 	}
 	if(form.u_phone.value == ''){
 		alert('请输入用户号码');
+		return false;
+	}
+	if(form.di_dkid.value == ''){
+		alert('请选择表具类型');
+		return false;
+	}
+	if(form.device_company.value == ''){
+		alert('请选择水表厂商');
 		return false;
 	}
 	$.ajax({url:"admin/user/ajaxAddOrUpdateUser.do",
@@ -96,6 +110,33 @@ function addOrUpdateUser(){
 		    $('#exampleModalCenter').modal('hide');
 		}});
 }
+
+function deleteUser(){
+	var uid = document.updateForm.u_id.value;
+	if( uid == ''){
+		alert("请先选择要删除的用户！");
+		return false;
+	}else{
+		
+		if(confirm("确定删除该用户？")){
+			$.ajax({url:"admin/user/ajaxDeleteUser.do",
+				type : "POST", async: false,
+				data:{
+					u_id: uid
+				},
+				success:function(result){
+				    if(result > 0){
+				    	alert('删除用户成功');
+				    	queryUserData();
+				    }else{
+				    	alert('删除失败！');
+				    }
+				}});
+		}
+	}
+	
+	
+}
 function addUser(){
 	 document.updateForm.u_id.value = '';
 	 document.updateForm.u_name.value = '';
@@ -135,6 +176,7 @@ function openAccount(){
 	var dk_id = form.di_dkid.value;
 	var uid = form.u_id.value;
 	var chargeMoney = form.chargeMoney.value;
+	var device_company = form.device_company.value;
 	if(chargeMoney == '' ){
 		alert('请输入开户充值的金额！');
 		return;
@@ -176,7 +218,7 @@ function openAccount(){
 		url:"admin/card/ajaxOpenAccountCard.do",
 		type : "POST",
 		async: false,
-		data :{ deviceKindId : dk_id ,userId : uid ,chargeMoney:chargeMoney},
+		data :{ deviceKindId : dk_id ,userId : uid ,chargeMoney:chargeMoney , device_company : device_company},
 		success:function(result){
 //			alert(result);
 		    var bean = result ; //eval('(' + result + ')');
@@ -232,6 +274,8 @@ function queryUserData(){
 			}
 		    var list = result ; // eval('(' + result + ')');
 		    userManager.userList = list;
+		    $('#queryUserModalCenter').modal('hide');
+		    
 		}});
 }
 
@@ -268,6 +312,7 @@ function readCardAndQueryUser(){
 			$("#u_name").val('');
 			$("#u_paperwork").val('');
 			queryUserData();
+		    $('#queryUserModalCenter').modal('hide');
 			
 		}
 

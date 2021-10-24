@@ -135,7 +135,31 @@ public class AreaController extends BaseController {
 	}
 	
 	
-	
+
+	/**
+	 *  界面删除地址信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/area/ajaxDeleteAddressInfo.do")
+	public ModelAndView ajaxDeleteAddressInfo(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+
+			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			String addressId  = request.getParameter("addressId");
+			
+			
+			String result = areaService.deleteAddressByIdAndCompany(Integer.parseInt(addressId) , op.getO_companyid().intValue() );
+			
+			
+			writeString(response, result );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
 	/**
 	 *  界面查询取悦列表
 	 * @param request

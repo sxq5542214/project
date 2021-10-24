@@ -9,40 +9,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <head>
 		<meta charset="utf-8">	
 	    <base href="<%=basePath%>">
-        <title>霍邱水厂营业管理平台-请登录</title>
+        <title>霍邱县农饮智慧云平台-请登录</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-        <meta content="Coderthemes" name="author" />
+    	<meta http-equiv="content-Type" content="text/html; charset=utf-8" />
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
         <!-- App favicon -->
         <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
         <!-- App css -->
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-
+<style type="text/css">
+.custom-control-input:checked~.custom-control-label::before {
+    color: #39afd1;
+    border-color: #39afd1;
+    background-color: #39afd1;
+}
+.bg-primary {
+    background-color: #39afd1!important;
+}
+</style>
     </head>
 
-    <body class="authentication-bg">
+    <body class="authentication-bg" style="background: url('images/login/login_background.jpg');background-size: cover;background-position: center;">
 
-        <div class="account-pages mt-5 mb-5">
+        <div class="account-pages mt-5 mb-5" >
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-5">
-                        <div class="card">
+                        <div class="card" style="margin-top: 25%;">
 
                             <!-- Logo -->
-                            <div class="card-header pt-4 pb-4 text-center bg-primary">
-                                <a href="javascript:void(0);">
+                       		<div class="card-header text-center bg-primary">
+               <!--                       <a href="javascript:void(0);">
                                     <span><img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="18"></span>
-                                </a>
-                            </div>
-
-                            <div class="card-body p-4">
-                                
+                                </a>-->
                                 <div class="text-center w-75 m-auto">
-                                    <h3 class="text-dark-50 text-center mt-0 font-weight-bold">霍邱自来水营业管理平台</h3>
-                                    <p class="text-muted mb-4" style="margin-top: 20px;">如需访问后端管理平台，请输入您的登录用户名和密码。</p>
+                                    <h3 class=" text-center font-weight-bold" style="color: white;">霍邱县农饮智慧云平台</h3>
                                 </div>
+                            </div> 
+
+                            <div class="card-body p-4 ">
+                                
+                                
 
                                 <form action="javascript:void(0);">
 
@@ -57,15 +66,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                         <input class="form-control" type="password" required id="inputPassword" placeholder="Enter your password">
                                     </div>
 
-                                    <div class="form-group mb-3">
+                                    <div class="form-group ">
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="remember" checked>
-                                            <label class="custom-control-label" for="checkbox-signin">Remember me</label>
+                                            <label class="custom-control-label" for="checkbox-signin">记住密码</label>
                                         </div>
                                     </div>
 
                                     <div class="form-group mb-0 text-center">
-                                        <button class="btn btn-primary" type="submit" onclick="login();"> 登录平台</button>
+                                        <button class="btn btn-info" type="submit" onclick="login();"> 登录平台</button>
                                     </div>
 
                                 </form>
@@ -88,8 +97,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
         <!-- end page -->
 
-        <footer class="footer footer-alt">
-           Copyright   ©   2021   ice 
+        <footer class="footer footer-alt" style="color: white;">
+           Copyright   ©   2021   霍邱县龙马自来水有限公司 
         </footer>
 
         <!-- App js -->
@@ -157,7 +166,7 @@ function IEVersion() {
     var isEdge = userAgent.indexOf("Edg") > -1 && !isIE; //判断是否IE的Edge浏览器  
 //    var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1 ;
     var isIE11 = userAgent.indexOf('Trident/7') > -1  ;
-    
+//alert(userAgent);    
      if(isIE11) {
         return 11; //IE11 
      }

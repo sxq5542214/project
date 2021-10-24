@@ -34,10 +34,11 @@ public class DeviceInfoService extends BaseService implements IDeviceInfoService
 	}
 	
 	@Override
-	public DeviceInfoBean createDeviceInfo(UserInfoBean user,DeviceKindBean deviceKind, PriceBean price, int chargePrice) {
+	public DeviceInfoBean createDeviceInfo(UserInfoBean user,DeviceKindBean deviceKind, PriceBean price, int chargePrice , String deviceCompany) {
 		DeviceInfoBean bean = new DeviceInfoBean();
 		bean.setDi_userid(user.getU_id());
 		bean.setDi_dkid(deviceKind.getDk_id());
+		bean.setDevice_company(deviceCompany);
 		
 		BigDecimal amount = new BigDecimal(chargePrice).divide(price.getP_price1() ,2, BigDecimal.ROUND_HALF_UP);
 		

@@ -4,7 +4,9 @@
 package com.yd.business.report.controller;
 
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -111,13 +113,29 @@ public class ReportController extends BaseController {
 	public ModelAndView ajaxCommonChartDataByCode(HttpServletRequest request,HttpServletResponse response) {
 		
 		try {
-			Long operatorId = getCurrentLoginOperator().getO_id();
-//			String sid = request.getParameter("sid");
+			OperatorBean op = getCurrentLoginOperator();
+			Long operatorId = op.getO_id();
 			String code = request.getParameter("code");
 			if(StringUtil.isNotNull(code)) {
 				Map<String,String> params = new HashMap<String, String>();
-//				params.put("sid", sid);
-				params.put("operatorId", operatorId.toString());
+				
+				Enumeration<String> names = request.getParameterNames();
+				while(names.hasMoreElements()) {
+					String name = names.nextElement();
+					params.put(name, request.getParameter(name));
+				}
+
+				if(op.getO_kind() == OperatorBean.KIND_SUPPERUSER) {
+					params.put("company_id", "-1");
+				}
+				if(op.getO_kind() == OperatorBean.KIND_USER) {
+					params.put("operator_id", operatorId.toString());
+					params.put("company_id", op.getO_companyid().toString());
+				}
+				if(op.getO_kind() == OperatorBean.KIND_MANAGER) {
+					params.put("company_id", op.getO_companyid().toString());
+				}
+				
 				ReportSimpleBean bean = reportService.querySimpleReportAndDataByCode(code, params);
 				writeJson(response, bean);
 			}
@@ -130,4 +148,34 @@ public class ReportController extends BaseController {
 		return null;
 	}
 	
+
+	/**
+	 * 通用查询报表数据 , code入参必须提供,有界面提供
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("admin/report/ajaxQueryReportSimpleByCode.html")
+	public ModelAndView ajaxQueryReportSimpleByCode(HttpServletRequest request,HttpServletResponse response) {
+		
+		try {
+			Long operatorId = getCurrentLoginOperator().getO_id();
+//			String sid = request.getParameter("sid");
+			String code = request.getParameter("code");
+			if(StringUtil.isNotNull(code)) {
+				Map<String,String> params = new HashMap<String, String>();
+//				params.put("sid", sid);
+				params.put("operatorId", operatorId.toString());
+				ReportSimpleBean bean = reportService.findReportSimpleByCode(code);
+				bean.setData_sql(null);
+				writeJson(response, bean);
+			}
+
+		} catch (Exception e) {
+			log.error(e,e);
+			writeJson(response, "error");
+		}
+		
+		return null;
+	}
 }

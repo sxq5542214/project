@@ -65,7 +65,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="col-xl-12">
                                 <div class="card">
                                 	<div class="card-header">
-                                		<div class="row">
+                                		<%-- <div class="row">
 	                                        <div class="col">
 										      <select name="o_status" id="o_status" class="form-control  " data-toggle="select">
 												  <option value=""  selected>请选择启用状态</option>
@@ -76,18 +76,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										    <div class="col">
 										    	<input type="text" class="form-control" id="o_name" name="o_name" placeholder="请输入员工名称">
 										    </div>
-										</div>
+										</div> --%>
 										<div class="row" style="margin-top: 10px;">
 											<div class="col-10">
 											    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter" onclick="addOperator();" >新增员工</button>
 										      	<button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalCenter" onclick="updateOperator();">修改员工</button>
 										      	<button type="button" class="btn btn-secondary" >修改密码</button>
 										      	<button type="button" class="btn btn-warning"  onclick="return queryRole();"  >设置权限</button>
-										      	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#areaModalCenter" onclick="queryArea();"  >设置区域</button>
-									    	 </div>
-											 <div class="col-2">
+<!-- 										      	<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#areaModalCenter" onclick="queryArea();"  >设置区域</button>
+ -->									    	 </div>
+											<!--  <div class="col-2">
 										      	<button type="button" class="btn btn-primary" onclick="queryOperatorData();">查询员工</button>
-										    </div>
+										    </div> -->
 										</div>
 	                                        <!-- <h4 class="header-title">Striped rows</h4>
 	                                        <p class="text-muted font-14 mb-4">
@@ -97,7 +97,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	</div>
                                     <div class="card-body">
                                     	
-                                        <div class="table-responsive-sm">
+                                        <div class="table-responsive-sm" style="min-height: 150px;">
                                             <table class="table table-centered mb-0 table-hover " id="id_query_data_table" >
                                                 <thead>
                                                     <tr>
@@ -110,8 +110,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 												    <!--   <th scope="col">创建时间</th> -->
 												      <th scope="col">修改时间</th>
 												      <th scope="col">归属公司</th>
-												      <th scope="col">操作</th>
-                                                    </tr>
+<!-- 												      <th scope="col">操作</th>
+ -->                                                    </tr>
                                                 </thead>
                                                 <tbody >
 												  <tr v-for="(operator,index) in operatorList" @click="getData(index)" :for="'radio'+index" >
@@ -124,8 +124,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 												      <td>{{operator.o_createdate }}</td>
  -->												      <td>{{operator.o_updatedate }}</td>
 												      <td>{{operator.company_name}}</td>
-												      <td class="table-action"><a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a></td>
-												  </tr>
+<!-- 												      <td class="table-action"><a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a></td>
+ -->												  </tr>
                                                 </tbody>
                                             </table>
                                            <!--  <div class="row">

@@ -48,7 +48,7 @@
       ,di_createdate
       ,di_updatedate
       ,di_signalintensity
-      ,di_batteryvoltage ) values(
+      ,di_batteryvoltage ,device_company ) values(
       #{di_userid}
       ,#{di_dkid}
       ,#{di_totalamount}
@@ -80,7 +80,7 @@
       ,#{di_createdate}
       ,#{di_updatedate}
       ,#{di_signalintensity}
-      ,#{di_batteryvoltage}   )
+      ,#{di_batteryvoltage} ,#{device_company}  )
    	</insert>
 	
 	<delete id="deleteDeviceInfo" parameterType="long">
@@ -124,6 +124,8 @@
 			<if test="di_updatedate != null">di_updatedate = #{di_updatedate},</if>
 			<if test="di_signalintensity != null">di_signalintensity = #{di_signalintensity},</if>
 			<if test="di_batteryvoltage != null">di_batteryvoltage = #{di_batteryvoltage},</if>
+			<if test="device_company != null">device_company = #{device_company},</if>
+			
 		</set>
 		<where>
 			di_id = #{di_id}

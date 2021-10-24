@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.login.service.ILoginService;
 import com.yd.business.operator.bean.OperatorBean;
@@ -56,6 +57,14 @@ public class LoginController extends BaseController {
 		if(bean == null) {
 			writeJson(response, "登录失败，请检查用户名或密码");
 		}
+		
+	}
+	
+	@RequestMapping("**/login/unloginByWeb.do")
+	public void unloginByWeb(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		WebContext.setObejctToSession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR, null);
 		
 	}
 	

@@ -6,6 +6,7 @@ var userManager =  new Vue({
         checkAll: false,// 是否全选
         checkedRows: [],// 选中的行标，用于删除行
         userList: [],// 表格数据
+        userChargeList : [],
         priceList : [] ,
         deviceKindList : [],
         newRow:{}// 新增的行数据，用于新增行
@@ -13,7 +14,7 @@ var userManager =  new Vue({
 	created: function(){
 	},
     methods:{
-	    getData: function(index){
+	    getChargeData: function(index){
 	    	this.choseIndex = index;
 	    	var form = document.updateForm;
 //			form.u_name.value = this.userList[index].u_name ;
@@ -21,9 +22,21 @@ var userManager =  new Vue({
 //			form.u_id.value = this.userList[index].u_id ;
 	    	
 	    	
-	    	var no = this.userList[index].user_cardno ;
-	    	$("#u_cardno").val(no);
-			$("#radio"+index).prop('checked',true);
+//	    	var no = this.userChargeList[index].user_cardno ;
+//	    	$("#u_cardno").val(no);
+			$("#chargeRadio"+index).prop('checked',true);
+	    },
+	    getUserData: function(index){
+	    	this.choseIndex = index;
+//	    	var form = document.updateForm;
+	    	
+	    	
+	    	var u_id = this.userList[index].u_id ;
+	    	var cardno = this.userList[index].u_cardno ;
+	    	
+	    	$("#u_cardno").val(cardno);
+			queryUserChargeData();
+			$("#userRadio"+index).prop('checked',true);
 	    }
     }
 })
@@ -57,13 +70,17 @@ function readCardAndQueryUser(){
 		var iDay = iDay <10 ? "0"+iDay : iDay;
 		
 //		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
-		
+
+		if(user_no == 0 ){
+			alert("该卡没有用户数据，请重新查询！");
+			return ;
+		}
 		
 		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
-		queryUserData();
+		queryUserData('');
 
 		if(iFlag == 1){
 			$("#useDate").val("20"+iYear+"-"+ iMonth + "-" + iDay);
@@ -107,12 +124,17 @@ function readCardAndUpdateCharge(){
 		
 //		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
+
+		if(user_no == 0 ){
+			alert("该卡没有用户数据，请重新查询！");
+			return ;
+		}
 		
 		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
-		queryUserData();
+		queryUserData('');
 
 		if(iFlag == 1){
 			alert("上次充值已刷卡至表中，无法进行修改！");
@@ -166,7 +188,7 @@ function readCardAndRepairCard(){
 }
 
 
-//用户补卡
+//用户换表
 function readCardAndChangeMeter(){
 
 	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
@@ -190,12 +212,15 @@ function readCardAndChangeMeter(){
 		
 //		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
-		
+		if(user_no == 0 ){
+			alert("该卡没有用户数据，请重新查询！");
+			return ;
+		}
 		$("#u_cardno").val(user_no);
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
-		queryUserData();
+		queryUserData('');
 
 		$('#changeMeterModalCenter').modal('show');
 		
@@ -241,6 +266,8 @@ function writeCardByCharge(){
 						
 						alert("充值写卡成功！");
 						$('#exampleModalCenter').modal('hide');
+						
+						queryUserChargeData();
 					}
 				} );
 			}
@@ -281,6 +308,7 @@ function writeCardByUpdateCharge(){
 						
 						alert("充值写卡成功！");
 						$('#updateChargeModalCenter').modal('hide');
+						queryUserChargeData();
 					}
 				} );
 			}
@@ -323,6 +351,8 @@ function writeCardByRepairCard(){
 						
 						alert("充值写卡成功！");
 						$('#repairCardModalCenter').modal('hide');
+						
+						queryUserChargeData();
 					}
 				} );
 			}
@@ -335,7 +365,7 @@ function writeCardByRepairCard(){
 function writeCardByChangeMeter(){
 
 	var u_cardno = $("#u_cardno").val();
-	if(u_cardno == ''){
+	if(u_cardno == '' || u_cardno == '0' || u_cardno == 0 ){
 		alert("请先查询并选择用户！");
 		return ;
 	}
@@ -349,7 +379,8 @@ function writeCardByChangeMeter(){
 				cm_remark : $("#cm_remark").val() ,
 				cm_newmetercode : $("#cm_newmetercode").val() ,
 				cm_newmeterno : $("#cm_newmeterno").val() ,
-				device_kind : $("#device_kind").val() 
+				device_kind : $("#device_kind").val() ,
+				device_company : $("#device_company").val()
 		},
 		success:function(result){
 			var bean = result; // eval('(' + result + ')');
@@ -369,6 +400,8 @@ function writeCardByChangeMeter(){
 						
 						alert("充值写卡成功！");
 						$('#changeMeterModalCenter').modal('hide');
+						
+						queryUserChargeData();
 					}
 				} );
 			}
@@ -394,7 +427,34 @@ function changeCMType(sel){
 	
 }
 
-function queryUserData(){
+function queryUserData(addressId){
+	var u_phone = $("#u_phone").val();
+	var u_name = $("#u_name").val();
+	var u_paperwork = $("#u_paperwork").val();
+	var u_cardno = $("#u_cardno").val();
+	$.ajax({url:"admin/user/ajaxQueryUserByCompany.do",
+		data:{
+			addressId : addressId,
+			u_phone: u_phone,
+			u_name :u_name,
+			u_paperwork :u_paperwork,
+			u_cardno : u_cardno
+		},
+	success:function(result){
+		if(result.length == 0){
+		  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+		}else if(result.length == 1){
+//			alert(result[0].u_cardno);
+	    	$("#u_cardno").val(result[0].u_cardno);
+			queryUserChargeData();
+		}
+	    var list = result ; 
+	    userManager.userList = list;
+	    
+	}});
+}
+
+function queryUserChargeData(){
 
 //	$.ajax({url:"admin/user/ajaxQueryAccountUser.do",
 //			type : "POST",
@@ -432,21 +492,45 @@ function queryUserData(){
 			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
 			}
 		    var list = result ; // eval('(' + result + ')');
-		    userManager.userList = list;
+		    userManager.userChargeList = list;
 		}});
 	
 }
 
-// queryUserData();
+
+$('#tree').on('changed.jstree', function (e, data) {
+	// 树形列表点击事件
+    var i, j, r ;
+//    for(i = 0, j = data.selected.length; i < j; i++) {   如果多选，则需要循环
+//      r= data.instance.get_node(data.selected[i]);
+//    }
+    r = data.instance.get_node(data.selected[0]);
+    r = r.original;
+//  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
+    var addressId = r.id ;
+    queryUserData(addressId); //查询用户
+    
+	$.ajax({url:"admin/user/ajaxQueryUserByCompany.do",
+			data:{
+				addressId : addressId
+			},
+		success:function(result){
+			if(result.length == 0){
+			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+			}
+		    var list = result ; 
+		    userManager.userList = list;
+		}});
+    
+  }).jstree({
+	  //树形列表加载参数
+	'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
+				'themes': {
+		            'name': 'proton',
+		            'responsive': true
+		        }
+			}
+});
 
 
-//$.ajax({url:"admin/price/ajaxQueryPriceByCompany.do",
-//	type : "POST",
-//	data:{
-//		p_enabled : 1,
-//	},
-//	async : false,
-//	success:function(result){
-//	    var list = eval('(' + result + ')');
-//	    userManager.priceList = list;
-//}});
+

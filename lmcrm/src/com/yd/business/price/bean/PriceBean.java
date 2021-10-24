@@ -46,7 +46,7 @@ public class PriceBean implements java.io.Serializable {
 	private Integer p_settlemonth;	// 结算月份
 	private Integer p_settleday;	// 结算日
 	private Integer p_ladder;  // 结算模式
-
+	private Integer seq ; //排序  越小越先
 	// Constructors
 
 	/** default constructor */
@@ -90,6 +90,14 @@ public class PriceBean implements java.io.Serializable {
 
 	public Long getP_id() {
 		return this.p_id;
+	}
+
+	public Integer getSeq() {
+		return seq;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
 
 	public void setP_id(Long p_id) {

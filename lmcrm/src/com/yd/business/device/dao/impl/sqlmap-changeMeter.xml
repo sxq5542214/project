@@ -29,7 +29,7 @@
       ,cm_operatorid
       ,cm_remark
       ,cm_oldmeterno
-      ,cm_newmeterno  ) values(
+      ,cm_newmeterno ,old_device_company ,new_device_company ) values(
       #{cm_userid}
       ,#{cm_oldmetercode}
       ,#{cm_newmetercode}
@@ -39,7 +39,7 @@
       ,#{cm_operatorid}
       ,#{cm_remark}
       ,#{cm_oldmeterno}
-      ,#{cm_newmeterno}    )
+      ,#{cm_newmeterno}  ,#{old_device_company} ,#{new_device_company}  )
    	</insert>
 	
 	<delete id="deleteChangeMeter" parameterType="long">
@@ -61,6 +61,10 @@
 			<if test="cm_remark != null">cm_remark = #{cm_remark},</if>
 			<if test="cm_oldmeterno != null">cm_oldmeterno = #{cm_oldmeterno},</if>
 			<if test="cm_newmeterno != null">cm_newmeterno = #{cm_newmeterno},</if>
+			<if test="old_device_company != null">old_device_company = #{old_device_company},</if>
+			<if test="new_device_company != null">new_device_company = #{new_device_company},</if>
+			
+			
 		</set>
 		<where>
 			cm_id = #{cm_id}

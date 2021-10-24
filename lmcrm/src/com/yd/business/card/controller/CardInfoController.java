@@ -19,8 +19,10 @@ import com.yd.business.card.bean.CardInfoBean.PriceParm;
 import com.yd.business.card.bean.CardInfoBean.SysParam;
 import com.yd.business.card.bean.CardInfoBean.UserParm;
 import com.yd.business.card.service.ICardInfoService;
+import com.yd.business.device.bean.DeviceInfoBean;
 import com.yd.business.device.bean.DeviceKindBean;
 import com.yd.business.device.service.IChangeMeterService;
+import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.device.service.IDeviceKindService;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.price.bean.PriceBean;
@@ -44,6 +46,8 @@ public class CardInfoController extends BaseController {
 	private IPriceService priceService;
 	@Autowired
 	private IDeviceKindService deviceKindService;
+	@Autowired
+	private IDeviceInfoService deviceInfoService;
 	
 
 	/**
@@ -59,9 +63,11 @@ public class CardInfoController extends BaseController {
 			String dkid = request.getParameter("deviceKindId");
 			String uid = request.getParameter("userId");
 			String chargeMoney = request.getParameter("chargeMoney");
+			String device_company = request.getParameter("device_company");
+			
 			BigDecimal money = new BigDecimal(chargeMoney);
 			
-			bean  = cardInfoService.generateCardInfoByOpenAccount(Long.parseLong(uid), Long.parseLong(dkid), money.intValue() );
+			bean  = cardInfoService.generateCardInfoByOpenAccount(Long.parseLong(uid), Long.parseLong(dkid), money.intValue() ,device_company);
 			
 		} catch (Exception e) {
 			log.error(e, e);
@@ -176,15 +182,21 @@ public class CardInfoController extends BaseController {
 			String cm_remark = request.getParameter("cm_remark");
 			String cm_newmetercode = request.getParameter("cm_newmetercode");
 			String cm_newmeterno = request.getParameter("cm_newmeterno");
+			String device_company = request.getParameter("device_company");
 			Long device_kind = StringUtil.isNotNull(request.getParameter("device_kind"))? Long.parseLong(request.getParameter("device_kind")):-1  ;
 			
 			BigDecimal money = new BigDecimal(changeMeterMoney);
 			
 			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
-			
+			DeviceInfoBean deviceInfo = deviceInfoService.findFirstDeviceInfoByUser(user.getU_id());
+
 			OperatorBean op = getCurrentLoginOperator();
 			// 写入换表维护表
-			changeMeterService.createChangeMeter(user.getU_no(), new BigDecimal(cm_oldmetercode),new BigDecimal(cm_newmetercode),Long.parseLong(cm_newmeterno), Integer.parseInt(cm_type), op.getO_id(), cm_remark,device_kind);
+			changeMeterService.createChangeMeter(user.getU_no(), new BigDecimal(cm_oldmetercode),new BigDecimal(cm_newmetercode),Long.parseLong(cm_newmeterno), Integer.parseInt(cm_type), op.getO_id(), cm_remark,device_kind,deviceInfo.getDevice_company(),device_company);
+			
+			//修改用户的表厂商
+			user.setDevice_company(device_company);
+			userInfoService.addOrUpdateUser(user);
 			
 			bean  = cardInfoService.generateCardInfoByChangeMeter(user.getU_id(), null , money.intValue()  );
 					

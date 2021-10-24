@@ -13,10 +13,11 @@ public interface IDeviceInfoService {
 
 	DeviceInfoBean findDeviceInfoByUserAndKind(Long userid, Long dkid);
 
-	DeviceInfoBean createDeviceInfo(UserInfoBean user, DeviceKindBean deviceKind, PriceBean price, int chargePrice);
-
 	DeviceInfoBean findFirstDeviceInfoByUser(Long userid);
 
 	int updateDeviceInfo(DeviceInfoBean bean);
+
+	DeviceInfoBean createDeviceInfo(UserInfoBean user, DeviceKindBean deviceKind, PriceBean price, int chargePrice,
+			String deviceCompany);
 
 }

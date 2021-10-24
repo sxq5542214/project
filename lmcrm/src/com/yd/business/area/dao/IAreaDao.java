@@ -25,4 +25,6 @@ public interface IAreaDao {
 
 	AddressBean findAddressById(int id);
 
+	int deleteAddress(int id, int companyId);
+
 }

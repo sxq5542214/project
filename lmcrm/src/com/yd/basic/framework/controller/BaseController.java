@@ -85,6 +85,23 @@ public abstract class BaseController extends MultiActionController {
 			log.error(e, e);
 		}
 	}
+
+	/**
+	 * 写入文本
+	 * @param response
+	 * @param str
+	 * @throws IOException
+	 */
+	public void writeString(HttpServletResponse response,String str) {
+		
+		try{
+			setResponseCharSet(response);
+			response.getWriter().append(str);
+			response.flushBuffer();
+		}catch (Exception e) {
+			log.error(e, e);
+		}
+	}
 	
 	/**
 	 * 写入JSON

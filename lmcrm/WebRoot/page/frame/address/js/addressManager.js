@@ -51,6 +51,29 @@ function checkAddChose(){
 	$('#exampleModalCenter').modal('show');
 	
 }
+function deleteAddress(){
+
+	var a_name = document.updateForm.name.value ;
+	var parent_id = $("#parent_id").val();
+	if(addressId == '' ){
+		alert('请先选择左侧地址！');
+		return false;
+	}
+	if(parent_id == '' ){
+		alert('顶层地址不允许删除！');
+		return false;
+	}
+	if(confirm("确定删除当前地址？")){
+		$.ajax({url:"admin/area/ajaxDeleteAddressInfo.do",
+			data:{
+					addressId : addressId
+			},
+			success:function(result){
+			   alert(result);
+			}});
+	}
+	
+}
 function addAddress(type){
 	var a_level = $("#a_level").val();
 	var parent_id = $("#parent_id").val();

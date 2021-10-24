@@ -64,4 +64,13 @@ public class AreaDaoImpl extends BaseDao implements IAreaDao {
 		return list.size() == 0 ? null : list.get(0);
 	}
 	
+	@Override
+	public int deleteAddress(int id , int companyId) {
+		AddressBean bean = new AddressBean();
+		bean.setId(id);
+		bean.setCompany_id(companyId);
+
+		return sqlSessionTemplate.delete(NAMESPACE+"deleteAddress", bean);
+	}
+	
 }

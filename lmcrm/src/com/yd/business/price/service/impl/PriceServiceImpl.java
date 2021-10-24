@@ -3,6 +3,7 @@
  */
 package com.yd.business.price.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -82,11 +83,21 @@ public class PriceServiceImpl extends BaseService implements IPriceService {
 	public int addOrUpdatePrice(PriceBean bean) {
 		
 		int i = 0 ;
-		
+
+// 简化界面，写死部分数据
+bean.setP_base2(bean.getP_base1());	
+bean.setP_base3(bean.getP_base1());	
+bean.setP_ton1(new BigDecimal(10));
+bean.setP_ton2(bean.getP_ton1().multiply(new BigDecimal(2)));
+// 写死结束
+
 		bean.setP_price1(bean.getP_base1().add(bean.getP_other1()).add(bean.getP_other2()));
 		bean.setP_price2(bean.getP_base2().add(bean.getP_other1()).add(bean.getP_other2()));
 		bean.setP_price3(bean.getP_base3().add(bean.getP_other1()).add(bean.getP_other2()));
 		
+		if(bean.getSeq() == null) {
+			bean.setSeq(9);
+		}
 		bean.setP_updatedate(new Date());
 		if(bean.getP_id() == null) {
 			bean.setP_createdate(new Date());

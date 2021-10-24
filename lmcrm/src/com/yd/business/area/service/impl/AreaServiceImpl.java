@@ -20,6 +20,8 @@ import com.yd.business.area.service.IBuildingService;
 import com.yd.business.company.bean.CompanyBean;
 import com.yd.business.company.bean.CompanyExtBean;
 import com.yd.business.company.service.ICompanyService;
+import com.yd.business.user.bean.UserInfoBean;
+import com.yd.business.user.service.IUserInfoService;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
 
@@ -35,6 +37,8 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 	private IBuildingService buildingService;
 	@Autowired
 	private ICompanyService companyService;
+	@Autowired
+	private IUserInfoService userInfoService;
 	
 	@Override
 	public List<AreaExtBean> queryAreaList(Long companyid){
@@ -108,6 +112,23 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 		List<AddressBean> list = areaDao.queryAddressList(bean);
 		
 		return list;
+	}
+
+	@Override
+	public String deleteAddressByIdAndCompany(int id , int companyId) {
+		
+		UserInfoBean user = new UserInfoBean();
+		user.setAddressId(id);
+
+		List<UserInfoBean> list = userInfoService.queryUserInfo(user );
+		if(list.size() > 0) {
+			return "地址下有用户信息，不允许删除";
+		}else {
+
+			areaDao.deleteAddress(id,companyId);
+			return "操作成功";
+			
+		}
 	}
 	
 }

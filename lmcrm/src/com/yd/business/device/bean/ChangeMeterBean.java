@@ -38,7 +38,8 @@ public class ChangeMeterBean extends BaseBean implements java.io.Serializable {
 	private String cm_remark;
 	private Long cm_oldmeterno;
 	private Long cm_newmeterno;
-
+	private String old_device_company;
+	private String new_device_company ;
 	// Constructors
 
 	/** default constructor */
@@ -79,6 +80,22 @@ public class ChangeMeterBean extends BaseBean implements java.io.Serializable {
 
 	public Long getCm_id() {
 		return this.cm_id;
+	}
+
+	public String getOld_device_company() {
+		return old_device_company;
+	}
+
+	public void setOld_device_company(String old_device_company) {
+		this.old_device_company = old_device_company;
+	}
+
+	public String getNew_device_company() {
+		return new_device_company;
+	}
+
+	public void setNew_device_company(String new_device_company) {
+		this.new_device_company = new_device_company;
 	}
 
 	public void setCm_id(Long cm_id) {
