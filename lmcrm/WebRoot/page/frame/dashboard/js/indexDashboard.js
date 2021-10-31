@@ -83,12 +83,15 @@ var dashboard =  new Vue({
 
     var curDate = new Date();
     var lastdate1 = new Date();
-    var lastdate2 = new Date(curDate.setMonth(curDate.getMonth() -1 ));
-    var lastdate3 = new Date(curDate.setMonth(curDate.getMonth() -1 ));
+    var lastdate2 = new Date(curDate.setMonth(curDate.getMonth() -1 ,1 ));
+    var lastdate3 = new Date(curDate.setMonth(curDate.getMonth() -1 ,1 ));
     // 指定图表的配置项和数据
     var nearThreeMonthPaidMoneyChartOption = {
     	tooltip: {show:true,showContent:true},
     	grid:{top:10,bottom:20},
+    	legend: {
+    	    data: [ lastdate1.getMonth()+1 +'月', lastdate2.getMonth()+1 +'月',lastdate3.getMonth()+1 +'月']
+    	  },
         xAxis: {
             data: ["待加载"]
         },
@@ -184,7 +187,7 @@ function initImportantCard(){
 	// 查询当前操作员信息
 	$.ajax({
         //请求地址
-        url : "admin/operator/ajaxQueryCurrentOperator.do",
+        url : "admin/operator/ajaxQueryCurrentOperator.do", async: false,
         //请求成功
         success : function(result) {
         	dashboard.operator_role = result.o_rank99 ;
@@ -206,7 +209,7 @@ function initImportantCard(){
         //请求地址
         url : "admin/report/ajaxCommonChartDataByCode.html",
         //数据，json字符串
-        data : {  code: 'chart.dashboard.ajaxCompanyCRMData'},
+        data : {  code: 'chart.dashboard.ajaxCompanyCRMData'+ o_kind },
         //请求成功
         success : function(result) {
         	var result = result ;

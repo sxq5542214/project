@@ -332,7 +332,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                                     <i class="mdi mdi-pulse widget-icon"></i>
                                                 </div>
                                                 <h5 class="text-muted font-weight-normal mt-0" title="Growth">已开户总数</h5>
-                                                <h3 class="mt-3 mb-3">{{user_stop_count}}户</h3>
+                                                <h3 class="mt-3 mb-3">{{user_open_count}}户</h3>
                                                 <p class="mb-0 text-muted">
                                                      <span :class="[ user_open_count_ratio >0 ? 'text-danger mr-2':'text-success mr-2' ]"><i :class="[ user_open_count_ratio >0 ? 'mdi mdi-arrow-up-bold':'mdi mdi-arrow-down-bold' ]"></i>  {{user_open_count_ratio}}%</span>
                                                     <span class="text-nowrap">环比上月</span>
@@ -358,44 +358,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     </div> <!-- end col-->
                                 </div> <!-- end row -->
 
-
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="card widget-flat">
-                                            <div class="card-body">
-                                                <div class="float-right">
-                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
-                                                </div>
-                                                <h5 class="text-muted font-weight-normal mt-0" title="Number of Customers">轻松水表数</h5>
-                                                <h3 class="mt-3 mb-3">{{device_qs_count}}个</h3>
-                                                <p class="mb-0 text-muted">
-                                                     <span :class="[ device_qs_count_ratio >0 ? 'text-danger mr-2':'text-success mr-2' ]"><i :class="[ device_qs_count_ratio >0 ? 'mdi mdi-arrow-up-bold':'mdi mdi-arrow-down-bold' ]"></i>  {{device_qs_count_ratio}}% </span>
-                                                    <span class="text-nowrap">环比上月</span>  
-                                                </p>
-                                            </div> <!-- end card-body-->
-                                        </div> <!-- end card-->
-                                    </div> <!-- end col-->
-
-                                    <div class="col-lg-6">
-                                        <div class="card widget-flat">
-                                            <div class="card-body">
-                                                <div class="float-right">
-                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
-                                                </div>
-                                                <h5 class="text-muted font-weight-normal mt-0" title="Number of Orders">鲁正水表数</h5>
-                                                <h3 class="mt-3 mb-3">{{device_lz_count}}个</h3>
-                                                <p class="mb-0 text-muted">
-                                                     <span :class="[ device_lz_count_ratio >0 ? 'text-danger mr-2':'text-success mr-2' ]"><i :class="[ device_lz_count_ratio >0 ? 'mdi mdi-arrow-up-bold':'mdi mdi-arrow-down-bold' ]"></i>  {{device_lz_count_ratio}}%</span>
-                                                    <span class="text-nowrap">环比上月</span>
-                                                </p>
-                                            </div> <!-- end card-body-->
-                                        </div> <!-- end card-->
-                                    </div> <!-- end col-->
-                                </div> <!-- end row -->
-
-
-                            </div> <!-- end col -->
-						</div>
 
                         <div class="row">
                             <div class="col-xl-12">
@@ -426,6 +388,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
                             </div> <!-- end col -->
                         </div>
+                        
+                        
+                        
+
+                         <div class="row">
+                             <div class="col-6">
+                                 <div class="card widget-flat">
+                                     <div class="card-body">
+                                         <div class="float-right">
+                                             <i class="mdi mdi-account-multiple widget-icon"></i>
+                                         </div>
+                                         <h5 class="text-muted font-weight-normal mt-0" title="Number of Customers">轻松水表数</h5>
+                                         <h3 class="mt-3 mb-3">{{device_qs_count}}个</h3>
+                                         <p class="mb-0 text-muted">
+                                              <span :class="[ device_qs_count_ratio >0 ? 'text-danger mr-2':'text-success mr-2' ]"><i :class="[ device_qs_count_ratio >0 ? 'mdi mdi-arrow-up-bold':'mdi mdi-arrow-down-bold' ]"></i>  {{device_qs_count_ratio}}% </span>
+                                             <span class="text-nowrap">环比上月</span>  
+                                         </p>
+                                     </div> <!-- end card-body-->
+                                 </div> <!-- end card-->
+                             </div> <!-- end col-->
+	
+                             <div class="col-6">
+                                 <div class="card widget-flat">
+                                     <div class="card-body">
+                                         <div class="float-right">
+                                             <i class="mdi mdi-cart-plus widget-icon"></i>
+                                         </div>
+                                         <h5 class="text-muted font-weight-normal mt-0" title="Number of Orders">鲁正水表数</h5>
+                                         <h3 class="mt-3 mb-3">{{device_lz_count}}个</h3>
+                                         <p class="mb-0 text-muted">
+                                              <span :class="[ device_lz_count_ratio >0 ? 'text-danger mr-2':'text-success mr-2' ]"><i :class="[ device_lz_count_ratio >0 ? 'mdi mdi-arrow-up-bold':'mdi mdi-arrow-down-bold' ]"></i>  {{device_lz_count_ratio}}%</span>
+                                             <span class="text-nowrap">环比上月</span>
+                                         </p>
+                                     </div> <!-- end card-body-->
+                                 </div> <!-- end card-->
+                             </div> <!-- end col-->
+                         </div> <!-- end row -->
+	
+	
+						
+                        
+                        
+                        
                         <!-- end row -->
                         <div class="row">
                         	 <div class="col-3">
