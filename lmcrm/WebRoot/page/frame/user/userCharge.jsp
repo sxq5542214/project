@@ -82,18 +82,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										</div>
 										<div class="col">
 											<input type="text" class="form-control" id="u_paperwork"
-												name="u_paperwork" placeholder="请输入用户证件号码"> <input
-												type="hidden" class="form-control" id="u_buildingid"
-												name="u_buildingid"> <input type="hidden"
+												name="u_paperwork" placeholder="请输入用户证件号码">
+												 <input type="hidden" class="form-control" id="u_buildingid"
+												name="u_buildingid">
+												 <input type="hidden"
 												class="form-control" id="u_areaid" name="u_areaid">
+												 <input type="hidden"
+												class="form-control" id="u_id" >
+												
 										</div>
 			                         </div>
 										<div class="row" style="margin-top: 10px;">
 											<div class="col-10">
-												<button type="button" class="btn btn-info" onclick="readCardAndQueryUser();">读卡并充值</button>
-												<button type="button" class="btn btn-secondary" onclick="readCardAndUpdateCharge();">充值修改</button>
-												<button type="button" class="btn btn-success" onclick="readCardAndRepairCard();">用户补卡</button>
-						 						<button type="button" class="btn btn-primary" onclick="readCardAndChangeMeter();">换表维护</button>
+												<button type="button" class="btn btn-info" onclick="readCardAndQueryUser();">读卡查询</button>
+												<button type="button" class="btn btn-info" name="button_charge" disabled="disabled" data-toggle="modal" data-target="#exampleModalCenter">用户充值</button>
+												<button type="button" class="btn btn-secondary" name="button_updateCharge" disabled="disabled"  onclick="readCardAndUpdateCharge();">充值修改</button>
+												<button type="button" class="btn btn-success"  name="button_repairCard" disabled="disabled" onclick="readCardAndRepairCard();">用户补卡</button>
+						 						<button type="button" class="btn btn-primary"  name="button_changeMeter" disabled="disabled" onclick="readCardAndChangeMeter();">换表维护</button>
  										    </div>
 											 <div class="col-2">
 												<button type="button" class="btn btn-info" onclick="queryUserData();">查询用户</button>

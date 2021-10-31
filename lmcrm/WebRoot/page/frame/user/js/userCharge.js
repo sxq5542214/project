@@ -33,8 +33,14 @@ var userManager =  new Vue({
 	    	
 	    	var u_id = this.userList[index].u_id ;
 	    	var cardno = this.userList[index].u_cardno ;
-	    	
+
 	    	$("#u_cardno").val(cardno);
+	    	$("#u_id").val(u_id);
+	    	
+	    	//充值等按钮启用
+	    	var btnlist = $("button[name^='button_']");
+	    	btnlist.attr("disabled",false);
+	    	
 			queryUserChargeData();
 			$("#userRadio"+index).prop('checked',true);
 	    }
@@ -80,6 +86,7 @@ function readCardAndQueryUser(){
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
+		$("#u_id").val('');
 		queryUserData('');
 
 		if(iFlag == 1){
@@ -91,7 +98,7 @@ function readCardAndQueryUser(){
 			});
 			
 
-			$('#exampleModalCenter').modal('show');
+//			$('#exampleModalCenter').modal('show');
 			
 		}else{
 			alert("上次充值未刷卡至表中，请先刷卡至表中后再操作！");
@@ -109,7 +116,6 @@ function readCardAndUpdateCharge(){
 			alert("操作卡失败，无法获取数据");
 			return ;
 		}
-//		alert(result);
 		var json = eval('(' + result + ')');
 		var user_no = json.stru_userparm.iUserNo;
 		var iSavingNo = json.stru_userparm.iSavingNo;
@@ -122,7 +128,6 @@ function readCardAndUpdateCharge(){
 		var iMonth = iMonth <10 ? "0"+iMonth : iMonth;
 		var iDay = iDay <10 ? "0"+iDay : iDay;
 		
-//		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 		
 
 		if(user_no == 0 ){
@@ -134,18 +139,13 @@ function readCardAndUpdateCharge(){
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
+		$("#u_id").val('');
 		queryUserData('');
 
 		if(iFlag == 1){
 			alert("上次充值已刷卡至表中，无法进行修改！");
 		}else{
 
-//			$("#useDate").val("20"+iYear+"-"+ iMonth + "-" + iDay);
-//			// 读卡成功,更新状态
-//			$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do",
-//				type : "POST",async:false  ,
-//				data : {u_no : $("#u_no").val() , useDate : $("#useDate").val() }
-//			});
 
 			var iAmount = json.stru_userparm.iAmount;
 
@@ -220,6 +220,7 @@ function readCardAndChangeMeter(){
 		$("#u_phone").val('');
 		$("#u_name").val('');
 		$("#u_paperwork").val('');
+		$("#u_id").val('');
 		queryUserData('');
 
 		$('#changeMeterModalCenter').modal('show');
@@ -240,17 +241,18 @@ function readCardAndChangeMeter(){
 
 
 function writeCardByCharge(){
-	
+
 	var u_cardno = $("#u_cardno").val();
+	var u_id = $("#u_id").val();
 	
-	if(u_cardno == ''){
-		
+	if(u_cardno == '' ||  u_id == ''){
+		alert("请先选择用户再充值");
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxChargeMoneyCard.do",
 		type : "POST",async:false, 
-		data :{ u_cardno :  u_cardno , chargeMoney : $("#chargeMoney").val() },
+		data :{ u_cardno :  u_cardno , u_id:u_id, chargeMoney : $("#chargeMoney").val() },
 		success:function(result){
 			var bean = result ; // eval('(' + result + ')');
 		    var cdid = bean.chargeDetailId ;
@@ -278,17 +280,18 @@ function writeCardByCharge(){
 
 // 修改充值记录
 function writeCardByUpdateCharge(){
-	
+
 	var u_cardno = $("#u_cardno").val();
+	var u_id = $("#u_id").val();
 	
-	if(u_cardno == ''){
-		
+	if(u_cardno == '' ||  u_id == ''){
+		alert("请先选择用户再充值");
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxUpdateLastChargeMoneyCard.do",
 		type : "POST",async:false, 
-		data :{ u_cardno :  u_cardno , 
+		data :{ u_cardno :  u_cardno , u_id : u_id ,
 			updateChargeMoney : $("#updateChargeMoney").val() },
 		success:function(result){
 			var bean = result ; // eval('(' + result + ')');
@@ -319,19 +322,23 @@ function writeCardByUpdateCharge(){
 
 function writeCardByRepairCard(){
 
+
 	var u_cardno = $("#u_cardno").val();
-	var money = $("#repairCardMoney").val();
-	if(u_cardno == ''){
-		alert("请先查询并选择用户！");
+	var u_id = $("#u_id").val();
+	
+	if(u_cardno == '' ||  u_id == ''){
+		alert("请先选择用户再充值");
 		return ;
-	}else if(money == ''){
+	}
+	var money = $("#repairCardMoney").val();
+	if(money == ''){
 		alert("请输入充值金额！");
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxRepairCard.do",
 		type : "POST",async:false, 
-		data :{ u_cardno :  u_cardno , brushFlag :  $('input[name="brushFlag"]:checked').val() , 
+		data :{ u_cardno :  u_cardno ,u_id : u_id, brushFlag :  $('input[name="brushFlag"]:checked').val() , 
 			repairCardMoney : $("#repairCardMoney").val() },
 		success:function(result){
 			var bean = result ; // eval('(' + result + ')');
@@ -365,14 +372,17 @@ function writeCardByRepairCard(){
 function writeCardByChangeMeter(){
 
 	var u_cardno = $("#u_cardno").val();
-	if(u_cardno == '' || u_cardno == '0' || u_cardno == 0 ){
-		alert("请先查询并选择用户！");
+	var u_id = $("#u_id").val();
+	
+	if(u_cardno == '' || u_cardno == '0' || u_cardno == 0 ||  u_id == ''){
+		alert("请先选择用户再充值");
 		return ;
 	}
 	
 	$.ajax({url:"admin/card/ajaxChangeMeterCard.do",
 		type : "POST",async:false, 
-		data :{ u_cardno :  u_cardno , 
+		data :{ u_cardno :  u_cardno ,  
+				u_id : u_id,
 				changeMeterMoney :  $('#changeMeterMoney').val() ,
 				cm_oldmetercode : $("#cm_oldmetercode").val() ,
 				cm_type : $("#cm_type").val() ,
@@ -443,10 +453,17 @@ function queryUserData(addressId){
 	success:function(result){
 		if(result.length == 0){
 		  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+		  	
+	    	//充值等按钮禁用
+	    	var btnlist = $("button[name^='button_']");
+	    	btnlist.attr("disabled",true);
+		  	
 		}else if(result.length == 1){
 //			alert(result[0].u_cardno);
 	    	$("#u_cardno").val(result[0].u_cardno);
 			queryUserChargeData();
+		}else if(result.length >1 && u_cardno != ''){
+			alert('用户卡号不唯一，充值会导致问题，请重新为用户开户！');
 		}
 	    var list = result ; 
 	    userManager.userList = list;
@@ -470,6 +487,7 @@ function queryUserChargeData(){
 	var u_buildingid = $("#u_buildingid").val();
 	var u_areaid = $("#u_areaid").val();
 	var u_cardno = $("#u_cardno").val();
+	var u_id = $("#u_id").val();
 	
 	if(u_phone == '' && u_name == '' && u_paperwork =='' && u_cardno ==''){
 		alert('请先填写查询条件');
@@ -485,7 +503,8 @@ function queryUserChargeData(){
 				u_paperwork :u_paperwork,
 				u_buildingid : u_buildingid,
 				u_cardno : u_cardno,
-				u_areaid : u_areaid
+				u_areaid : u_areaid,
+				u_id : u_id
 			},
 		success:function(result){
 			if(result.length == 0){
@@ -508,19 +527,22 @@ $('#tree').on('changed.jstree', function (e, data) {
     r = r.original;
 //  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
     var addressId = r.id ;
+	$("#u_cardno").val('');
+	$("#u_id").val('');
+    
     queryUserData(addressId); //查询用户
     
-	$.ajax({url:"admin/user/ajaxQueryUserByCompany.do",
-			data:{
-				addressId : addressId
-			},
-		success:function(result){
-			if(result.length == 0){
-			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
-			}
-		    var list = result ; 
-		    userManager.userList = list;
-		}});
+//	$.ajax({url:"admin/user/ajaxQueryUserByCompany.do",
+//			data:{
+//				addressId : addressId
+//			},
+//		success:function(result){
+//			if(result.length == 0){
+//			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+//			}
+//		    var list = result ; 
+//		    userManager.userList = list;
+//		}});
     
   }).jstree({
 	  //树形列表加载参数

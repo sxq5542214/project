@@ -90,12 +90,17 @@ public class CardInfoController extends BaseController {
 	public ModelAndView ajaxChargeMoneyCard(HttpServletRequest request,HttpServletResponse response){
 		CardInfoBean bean  = new CardInfoBean();
 		try {
+			String u_id = request.getParameter("u_id");
 			String u_cardno = request.getParameter("u_cardno");
 			String chargeMoney = request.getParameter("chargeMoney");
 			BigDecimal money = new BigDecimal(chargeMoney);
 			
-			
-			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			UserInfoBean user = null;
+			if(StringUtil.isNotNull(u_id)) {
+				user = userInfoService.findUserById(Long.parseLong(u_id));
+			}else {
+				user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			}
 			bean  = cardInfoService.generateCardInfoByChargeMoney( user.getU_id(), null , money.intValue() );
 					
 		} catch (Exception e) {
@@ -119,12 +124,17 @@ public class CardInfoController extends BaseController {
 	public ModelAndView ajaxUpdateLastChargeMoneyCard(HttpServletRequest request,HttpServletResponse response){
 		CardInfoBean bean  = new CardInfoBean();
 		try {
+			String u_id = request.getParameter("u_id");
 			String u_cardno = request.getParameter("u_cardno");
 			String updateChargeMoney = request.getParameter("updateChargeMoney");
 			BigDecimal money = new BigDecimal(updateChargeMoney);
 			
-			
-			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			UserInfoBean user = null;
+			if(StringUtil.isNotNull(u_id)) {
+				user = userInfoService.findUserById(Long.parseLong(u_id));
+			}else {
+				user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			}
 			bean  = cardInfoService.generateCardInfoByUpdateLastChargeMoney(user.getU_id(), null , money.intValue() );
 					
 		} catch (Exception e) {
@@ -146,13 +156,18 @@ public class CardInfoController extends BaseController {
 	public ModelAndView ajaxRepairCard(HttpServletRequest request,HttpServletResponse response){
 		CardInfoBean bean  = new CardInfoBean();
 		try {
+			String u_id = request.getParameter("u_id");
 			String u_cardno = request.getParameter("u_cardno");
 			String brushFlag = request.getParameter("brushFlag");
 			String repairCardMoney = request.getParameter("repairCardMoney");
 			BigDecimal money = new BigDecimal(repairCardMoney);
 			
-			
-			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			UserInfoBean user = null;
+			if(StringUtil.isNotNull(u_id)) {
+				user = userInfoService.findUserById(Long.parseLong(u_id));
+			}else {
+				user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			}
 			boolean flag = "1".equals(brushFlag) ? true:false;
 			bean  = cardInfoService.generateCardInfoByRepairCard(user.getU_id(), null , money.intValue() ,flag);
 					
@@ -175,6 +190,7 @@ public class CardInfoController extends BaseController {
 	public ModelAndView ajaxChangeMeterCard(HttpServletRequest request,HttpServletResponse response){
 		CardInfoBean bean  = new CardInfoBean();
 		try {
+			String u_id = request.getParameter("u_id");
 			String u_cardno = request.getParameter("u_cardno");
 			String changeMeterMoney = request.getParameter("changeMeterMoney");
 			String cm_oldmetercode = request.getParameter("cm_oldmetercode");
@@ -186,8 +202,12 @@ public class CardInfoController extends BaseController {
 			Long device_kind = StringUtil.isNotNull(request.getParameter("device_kind"))? Long.parseLong(request.getParameter("device_kind")):-1  ;
 			
 			BigDecimal money = new BigDecimal(changeMeterMoney);
-			
-			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			UserInfoBean user = null;
+			if(StringUtil.isNotNull(u_id)) {
+				user = userInfoService.findUserById(Long.parseLong(u_id));
+			}else {
+				user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
+			}
 			DeviceInfoBean deviceInfo = deviceInfoService.findFirstDeviceInfoByUser(user.getU_id());
 
 			OperatorBean op = getCurrentLoginOperator();

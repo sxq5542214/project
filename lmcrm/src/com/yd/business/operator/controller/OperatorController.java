@@ -113,6 +113,38 @@ public class OperatorController extends BaseController {
 		return null;
 	}
 	
+
+	/**
+	 *  界面查询员工列表
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/operator/ajaxQueryCurrentOperator.do")
+	public ModelAndView ajaxQueryCurrentOperator(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+			
+			OperatorBean operator = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			operator.setO_password("");
+			operator.setO_password2("");
+
+			if(operator.getO_kind() == OperatorBean.KIND_SUPPERUSER) {
+				operator.setO_rank99("超级管理员");
+			}
+			if(operator.getO_kind() == OperatorBean.KIND_MANAGER) {
+				operator.setO_rank99("公司主管");
+			}
+			if(operator.getO_kind() == OperatorBean.KIND_USER) {
+				operator.setO_rank99("营业人员");
+			}
+		
+			writeJson(response, operator );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
 	
 	
 }
