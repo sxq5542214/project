@@ -111,6 +111,13 @@ function initParam(){
 
 initParam();
 
+//默认打开根节点
+$("#tree").on("ready.jstree", function (e, data) {
+//	alert(data.instance.get_node(6));
+	var id = e.target.firstChild.firstChild.id ; // 获取根节点
+    data.instance.open_node(id);//打开根节点
+});
+
 $('#tree').on('changed.jstree', function (e, data) {
 	// 树形列表点击事件
     var i, j, r ;
