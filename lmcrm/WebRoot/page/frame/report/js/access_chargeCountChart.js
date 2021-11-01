@@ -35,7 +35,11 @@ function queryBillData(){
 	var address_id = $("#addressId").val();
 	var price_id = $("#price_id").val();
 	var dk_id = $("#dk_id").val();
-	
+
+	if(start_date > end_date){
+		alert('起始时间不能晚于结束时间！');
+		return ;
+	}
 	if(operator_id == '' && price_id == '' && dk_id== '' ){
 		alert('查询条件不可为空，请输入！');
 		return ;

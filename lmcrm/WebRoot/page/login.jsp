@@ -35,9 +35,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
         <div class="account-pages mt-5 mb-5" >
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-5">
-                        <div class="card" style="margin-top: 25%;">
+                <div class="row justify-content-center" style="float: right;width: 400px;">
+                    <div class="col-12">
+                        <div class="card" style="margin-top: 25%;width: 100%;">
 
                             <!-- Logo -->
                        		<div class="card-header text-center bg-primary">

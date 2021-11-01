@@ -25,7 +25,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
         
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
  		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 		<script	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
@@ -68,11 +67,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	<div class="card-header">
                                 	<div class="row">
 			                         	<div class="col">
-											起始时间：<input type="date" id="start_date" name="start_date" class="form-control"  value="<%=DateUtil.getNowOlnyDateStr() %>" data-date-format="yyyy-mm-dd">
-						
+											起始时间：<input type="text" id="start_date" value="<%=DateUtil.getNowOlnyDateStr() %>"  name="start_date" class="form-control date" data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true" >
 										</div>
 										<div class="col">
-											结束时间：<input type="date" id="end_date" name="end_date" class="form-control"  value="<%=DateUtil.getTomorrowDateStr() %>" data-date-format="yyyy-mm-dd">
+											结束时间：<input type="text" id="end_date"  value="<%=DateUtil.getTomorrowDateStr() %>" name="end_date" class="form-control date"  data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true">
 										</div>
 										<div class="col">
 											操作员：
@@ -182,6 +180,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <!-- App js -->
 		<script src="page/frame/report/js/access_chargeCountChart.js"	type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
  
     </body>
 </html>

@@ -27,6 +27,7 @@ var userManager =  new Vue({
 })
 
 
+
 var code = "chart.report.adminBillChart";
 function queryBillData(){
 	var start_date = $("#start_date").val();
@@ -36,6 +37,11 @@ function queryBillData(){
 	var price_id = $("#price_id").val();
 	var dk_id = $("#dk_id").val();
 	var cd_kindid = $("#cd_kindid").val();
+	
+	if(start_date > end_date){
+		alert('起始时间不能晚于结束时间！');
+		return ;
+	}
 	
 	if(operator_id == '' && price_id == '' && dk_id== '' && cd_kindid =='' ){
 		alert('查询条件不可为空，请输入！');
