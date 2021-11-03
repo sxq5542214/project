@@ -2,7 +2,8 @@ var userManager =  new Vue({
     el: "#userManagerDiv",
     data: {
     	getDescByBeanAttrValue : dictionaryCache.getDescByBeanAttrValue,
-    	choseIndex : -1,
+    	choseUserIndex : -1,
+    	choseChargeIndex : -1,
         checkAll: false,// 是否全选
         checkedRows: [],// 选中的行标，用于删除行
         userList: [],// 表格数据
@@ -15,7 +16,7 @@ var userManager =  new Vue({
 	},
     methods:{
 	    getChargeData: function(index){
-	    	this.choseIndex = index;
+	    	this.choseChargeIndex = index;
 	    	var form = document.updateForm;
 //			form.u_name.value = this.userList[index].u_name ;
 //			form.u_phone.value = this.userList[index].u_phone ;
@@ -27,7 +28,7 @@ var userManager =  new Vue({
 			$("#chargeRadio"+index).prop('checked',true);
 	    },
 	    getUserData: function(index){
-	    	this.choseIndex = index;
+	    	this.choseUserIndex = index;
 //	    	var form = document.updateForm;
 	    	
 	    	
@@ -48,7 +49,7 @@ var userManager =  new Vue({
 })
 
 function checkChose(){
-	if(userManager.choseIndex == -1){
+	if(userManager.choseUserIndex == -1){
 		alert('请选择需要开户的用户');
 	}else{
 		$('#exampleModalCenter').modal('show');
@@ -107,9 +108,15 @@ function readCardAndQueryUser(){
 	} );
 }
 
-
+//充值修改
 function readCardAndUpdateCharge(){
-
+	var u_id = $("#u_id").val();
+	var user = userManager.userList[userManager.choseUserIndex] ;
+	if(u_id == ""){
+		alert("请先选择用户！");
+		return ;
+	}
+	
 	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
 	callWindowsClientMethod('readCard','{}' , function(result){
 		if(result < 1){
@@ -134,13 +141,17 @@ function readCardAndUpdateCharge(){
 			alert("该卡没有用户数据，请重新查询！");
 			return ;
 		}
+		if(user.u_cardno != user_no ){
+			alert('该卡不属于当前用户的卡，请确认卡是否属于当前用户！');
+			return ;
+		}
 		
-		$("#u_cardno").val(user_no);
-		$("#u_phone").val('');
-		$("#u_name").val('');
-		$("#u_paperwork").val('');
-		$("#u_id").val('');
-		queryUserData('');
+//		$("#u_cardno").val(user_no);
+//		$("#u_phone").val('');
+//		$("#u_name").val('');
+//		$("#u_paperwork").val('');
+////		$("#u_id").val('');    充值修改时，需要保证读卡的卡号与用户ID一致
+//		queryUserData('');
 
 		if(iFlag == 1){
 			alert("上次充值已刷卡至表中，无法进行修改！");
@@ -159,8 +170,8 @@ function readCardAndUpdateCharge(){
 //用户补卡
 function readCardAndRepairCard(){
 
-	var u_cardno = $("#u_cardno").val();
-	if(u_cardno == ''){
+	var u_id = $("#u_id").val();
+	if(u_id == ''){
 		alert("请先查询并选择用户！");
 		return ;
 	}
@@ -179,8 +190,15 @@ function readCardAndRepairCard(){
 			alert("该卡不是新卡，不能进行补卡！");
 			return ;
 		}else{
-
-
+			var len = userManager.userChargeList.length ;
+			var lastChargeMoney = 0;
+			if(len > 0){
+				lastChargeMoney = userManager.userChargeList[0].cd_chargemoney;
+			}else{
+				alert('请注意，该用户没有充值记录！');
+			}
+			
+			$("#repairCardMoney").val(lastChargeMoney);
 			$('#repairCardModalCenter').modal('show');
 			
 		}
@@ -190,38 +208,38 @@ function readCardAndRepairCard(){
 
 //用户换表
 function readCardAndChangeMeter(){
-
-	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
-	callWindowsClientMethod('readCard','{}' , function(result){
-		if(result < 1){
-			alert("操作卡失败，无法获取数据");
-			return ;
-		}
-//		alert(result);
-		var json = eval('(' + result + ')');
-		var user_no = json.stru_userparm.iUserNo;
-		var iSavingNo = json.stru_userparm.iSavingNo;
-		var iUserFlag = json.stru_userparm.stru_retparm.iUserFlag;
-		var iSetFlag = json.stru_userparm.stru_retparm.iSetFlag;
-		var iFlag = json.stru_userparm.stru_retparm.iFlag;
-		var iYear = json.stru_userparm.stru_retparm.iYear;
-		var iMonth = json.stru_userparm.stru_retparm.iMonth;
-		var iDay = json.stru_userparm.stru_retparm.iDay;
-		var iMonth = iMonth <10 ? "0"+iMonth : iMonth;
-		var iDay = iDay <10 ? "0"+iDay : iDay;
-		
-//		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
-		
-		if(user_no == 0 ){
-			alert("该卡没有用户数据，请重新查询！");
-			return ;
-		}
-		$("#u_cardno").val(user_no);
-		$("#u_phone").val('');
-		$("#u_name").val('');
-		$("#u_paperwork").val('');
-		$("#u_id").val('');
-		queryUserData('');
+//
+//	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败
+//	callWindowsClientMethod('readCard','{}' , function(result){
+//		if(result < 1){
+//			alert("操作卡失败，无法获取数据");
+//			return ;
+//		}
+////		alert(result);
+//		var json = eval('(' + result + ')');
+//		var user_no = json.stru_userparm.iUserNo;
+//		var iSavingNo = json.stru_userparm.iSavingNo;
+//		var iUserFlag = json.stru_userparm.stru_retparm.iUserFlag;
+//		var iSetFlag = json.stru_userparm.stru_retparm.iSetFlag;
+//		var iFlag = json.stru_userparm.stru_retparm.iFlag;
+//		var iYear = json.stru_userparm.stru_retparm.iYear;
+//		var iMonth = json.stru_userparm.stru_retparm.iMonth;
+//		var iDay = json.stru_userparm.stru_retparm.iDay;
+//		var iMonth = iMonth <10 ? "0"+iMonth : iMonth;
+//		var iDay = iDay <10 ? "0"+iDay : iDay;
+//		
+////		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
+//		
+//		if(user_no == 0 ){
+//			alert("该卡没有用户数据，请重新查询！");
+//			return ;
+//		}
+//		$("#u_cardno").val(user_no);
+//		$("#u_phone").val('');
+//		$("#u_name").val('');
+//		$("#u_paperwork").val('');
+//		$("#u_id").val('');
+//		queryUserData('');
 
 		$('#changeMeterModalCenter').modal('show');
 		
@@ -235,7 +253,7 @@ function readCardAndChangeMeter(){
 		}});
 		
 		
-	} );
+//	} );
 }
 
 
@@ -373,9 +391,14 @@ function writeCardByChangeMeter(){
 
 	var u_cardno = $("#u_cardno").val();
 	var u_id = $("#u_id").val();
-	
+	var device_company = $("#device_company").val();
+	alert(u_cardno +"," + u_id);
 	if(u_cardno == '' || u_cardno == '0' || u_cardno == 0 ||  u_id == ''){
 		alert("请先选择用户再充值");
+		return ;
+	}
+	if(device_company == ""){
+		alert('请选择新水表厂商！');
 		return ;
 	}
 	
@@ -408,7 +431,7 @@ function writeCardByChangeMeter(){
 							success:function(result){}
 						});
 						
-						alert("充值写卡成功！");
+						alert("换表维护写卡成功！");
 						$('#changeMeterModalCenter').modal('hide');
 						
 						queryUserChargeData();

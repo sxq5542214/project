@@ -157,6 +157,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 															<th scope="col">总序号</th>
 															<th scope="col">充值序号</th>
 															<th scope="col">用户名称</th>
+															<th scope="col">实付金额</th>
 															<th scope="col">充值金额</th>
 															<th scope="col">充值量</th>
 															<th scope="col">操作员工</th>
@@ -185,6 +186,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 															<td>{{user.user_name}}</td>
 														<!-- 	<td>{{getDescByBeanAttrValue("user","u_status",user.u_status)
 																}}</td> -->
+															<td>{{user.cd_paidmoney }}</td>
 															<td>{{user.cd_chargemoney }}</td>
 															<td>{{user.cd_chargeamount }}</td>
 															<td>{{user.operator_name }}</td>
@@ -368,10 +370,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								
 								<div class="row">
 									<div class="col-md-4 align-self-center">
-										本次充值金额 <span style="color: red;">*</span>
+										补卡金额 <span style="color: red;">*</span>
 									</div>
 									<div class="col-md-8 ml-auto">
-										<input type="number" id="repairCardMoney" name="repairCardMoney" class="form-control"
+										<input type="number" id="repairCardMoney" name="repairCardMoney" class="form-control" readonly="readonly"
 											placeholder="元为单位" required="required">
 										
 									</div>
@@ -459,10 +461,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								</div>
 								<div class="row"  id="div_device_company">
 									<div class="col-md-4 align-self-center">
-										新水表厂商
+										新水表厂商<span style="color: red;">*</span>
 									</div>
 									<div class="col-md-8 ml-auto">
 										<select name="device_company" class="form-control" id="device_company" >
+											<option value="">请选择</option>
 											<option value="轻松">轻松</option>
 											<option value="鲁正">鲁正</option>
 										</select>
