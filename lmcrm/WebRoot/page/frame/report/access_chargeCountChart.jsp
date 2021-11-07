@@ -28,6 +28,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 		<script	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
+	 	<script src="js/common/exportExcel.js" type="text/javascript"></script>
+	 	
 </head>
 
     <body>
@@ -98,11 +100,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										</div>
 			                         </div>
 										<div class="row" style="margin-top: 10px;">
-											<div class="col-10">
+											<div class="col-8">
 											
  										    </div>
-											 <div class="col-2">
-												<button type="button" class="btn btn-info" onclick="queryBillData();">查询用户</button>
+											 <div class="col-4">
+												<button type="button" class="btn btn-info" onclick="queryBillData();">查询数据</button>
+												&nbsp;&nbsp;&nbsp;&nbsp;
+												<button type="button" class="btn btn-info" onclick="exportExcel()">导出数据</button>
+											
 											</div>
 										</div>
 	                                        <!-- <h4 class="header-title">Striped rows</h4>

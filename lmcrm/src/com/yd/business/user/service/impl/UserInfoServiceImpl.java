@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.area.bean.AddressBean;
 import com.yd.business.area.bean.BuildingExtBean;
 import com.yd.business.area.service.IAreaService;
 import com.yd.business.area.service.IBuildingService;
+import com.yd.business.other.service.IAddressService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.dao.IUserInfoDao;
 import com.yd.business.user.service.IUserInfoService;
@@ -27,6 +29,8 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	private IBuildingService buildingService;
 	@Autowired
 	private IUserInfoDao userInfoDao;
+	
+	private IAreaService areaService;
 	
 	@Override
 	public List<UserInfoBean> queryUserInfo(UserInfoBean bean){
@@ -71,9 +75,6 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	@Override
 	public int addOrUpdateUser(UserInfoBean bean) {
 		int num =0;
-//		Long buildingId = bean.getU_buildingid();
-//		BuildingExtBean build = buildingService.findBuildingById(buildingId);
-//		bean.setU_address(build.getB_name());
 		
 		if(bean.getU_id() == null) {
 			bean.setU_createdate(new Date());

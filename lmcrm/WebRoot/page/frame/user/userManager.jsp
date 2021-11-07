@@ -144,7 +144,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													<td>{{user.priceName }}</td>
 													<td>{{user.device_company }}</td>
 													<td>{{user.deviceKindName }}</td>
-													<td>{{user.u_address }}</td>
+													<td>{{user.addressName}}{{user.u_address }}</td>
 													<td>{{user.u_paperwork }}</td>
 													<td>{{user.u_peoplesize }}</td>
 													<td>{{user.u_cardno }}</td>
@@ -180,6 +180,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
 
 
+
+
+		
+
 		<form name="updateForm" action="#">
 			<!-- Modal -->
 			<div class="modal fade" id="exampleModalCenter" tabindex="-1"
@@ -204,27 +208,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 											placeholder="请输入用户名称">
 									</div>
 	
-									<div class="col-md-2  align-self-center">联系号码 <span style="color: red;">*</span> </div>
+									<div class="col-md-2  align-self-center">联系号码</div>
 									<div class="col-md-4 ml-auto">
-										<input type="number" name="u_phone" class="form-control" required="required"
-											placeholder="请输入联系号码">
+										<input type="number" name="u_phone" class="form-control" placeholder="请输入联系号码">
 									</div>
 	
 								</div>
-								<div class="row">
-									<div class="col-md-2 align-self-center">用户余额 <span style="color: red;">*</span> </div>
-									<div class="col-md-4">
-										<input type="number" name="u_balance" class="form-control" value="0">
-									</div>
-									<div class="col-md-2  align-self-center">用户状态 <span style="color: red;">*</span> </div>
-									<div class="col-md-4">
-										<select name="u_status" class="form-control">
-											<option value="6">待开户</option>
-											<option value="7">已开户</option>
-											<option value="8">已报停</option>
-										</select>
-									</div>
-								</div>
+								
 								<div class="row" >
 									<div class="col-md-2 align-self-center">价格类型 <span style="color: red;">*</span> </div>
 									<div class="col-md-4 ml-auto" >
@@ -233,36 +223,112 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										</select>
 									</div>
 	
-									<div class="col-md-2  align-self-center">ID标识</div>
-									<div class="col-md-4 ml-auto">
-										<input type="number" name="u_id" class="form-control"
-											disabled="disabled" placeholder="无需填写">
-									</div>
-									
-								</div>
-	
-								<div class="row">
-									<div class="col-md-2 align-self-center">证件号码 <span style="color: red;">*</span> </div>
+									<div class="col-md-2 align-self-center">证件号码   </div>
 									<div class="col-md-4 ml-auto">
 										<input type="text" name="u_paperwork"
 											class="form-control" placeholder="请输入证件号码">
 									</div>
-	
-									<div class="col-md-2  align-self-center">人口数 <span style="color: red;">*</span> </div>
+								</div>
+								
+								
+								<div class="row">
+								
+									<div class="col-md-2  align-self-center">水表厂商 <span style="color: red;">*</span></div>
 									<div class="col-md-4 ml-auto">
-										<input type="number" name="u_peoplesize"
+										<select name="device_company" class="form-control" id="device_company" >
+											<option value="">请选择</option>
+											<option value="轻松">轻松</option>
+											<option value="鲁正">鲁正</option>
+										</select>
+									</div>
+									
+									
+									<div class="col-md-2 align-self-center">表具类型 <span style="color: red;">*</span> </div>
+									<div class="col-md-4 ml-auto" >
+										<select name="di_dkid" class="form-control" id="di_dkid" >
+											<option value="">请选择</option>
+											<option v-for="device in deviceKindList" :key="" :value="device.dk_id">{{device.dk_name}}</option>
+										</select>
+									</div>
+									
+									
+								</div>
+								
+								
+								<div class="row">
+	
+									<div class="col-md-2  align-self-center">用户地址 <span style="color: red;">*</span> </div>
+									<div class="col-md-4 ml-auto">
+										<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addressModalCenter" name="addressBTN2" id="addressBTN2">选择地址</button>
+										
+										<input type="hidden" name="addressId" id="addressId2">
+									</div>
+									
+									
+									
+									<div class="col-md-2 align-self-center">充值金额  <span style="color: red;">*</span> </div>
+									<div class="col-md-4">
+										<input type="number" name="chargeMoney" class="form-control" placeholder="元为单位" required="required" value="">
+										<input type="hidden" name="u_materialfee" class="form-control" value="0"
+											placeholder="单位：元">
+										<input type="hidden" name="u_constructioncost" class="form-control"
+											placeholder="单位：元" value="0">
+	
+										<input type="hidden" name="u_prepayment" class="form-control"
+											placeholder="单位：元" value="0">
+									</div>
+									
+								</div>
+								
+								<div class="row">
+									<div class="col-md-2  align-self-center">位置说明  </div>
+									<div class="col-md-4 ml-auto">
+										<input type="text" name="u_address" required="required"
+											class="form-control" placeholder="请输入位置说明">
+									</div>
+									
+									<div class="col-md-2 align-self-center">用户余额  </div>
+									<div class="col-md-4">
+										<input type="number" name="u_balance" class="form-control" value="0">
+									</div>
+								</div>
+								
+	
+								<div class="row">
+	
+									
+									<div class="col-md-2  align-self-center">用户状态 <span style="color: red;">*</span> </div>
+									<div class="col-md-4">
+										<select name="u_status" class="form-control">
+											<option value="6">待开户</option>
+											<option value="7">已开户</option>
+											<option value="8">已报停</option>
+										</select>
+									</div>
+									
+									<div class="col-md-2  align-self-center">人口数  </div>
+									<div class="col-md-4 ml-auto">
+										<input type="number" name="u_peoplesize" value="0"
 											class="form-control" placeholder="请输入人口数">
 									</div>
 	
 								</div>
 								<div class="row">
-									<div class="col-md-2 align-self-center">所属组 <span style="color: red;">*</span> </div>
+					<!-- 				<div class="col-md-2 align-self-center">所属组 <span style="color: red;">*</span> </div>
 									<div class="col-md-4 ml-auto">
 										<select name="u_group" id="selectGroup" class="form-control">
 											<option v-for="index in 20" :value="index">{{index}}</option>
 										</select>
-									</div>
+									</div> -->
 	
+									<div class="col-md-2  align-self-center">ID标识</div>
+									<div class="col-md-4 ml-auto">
+										<input type="number" name="u_id" class="form-control"
+											disabled="disabled" placeholder="无需填写">
+											
+										<input type="hidden" name="u_group" value="9">
+									</div>
+									
 									<div class="col-md-2  align-self-center">备注</div>
 									<div class="col-md-4 ml-auto">
 										<input type="number" name="u_remark" class="form-control"
@@ -286,66 +352,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									</div>
 	
 								</div> -->
-								<div class="row">
-	
-									<div class="col-md-2  align-self-center">用户地址 <span style="color: red;">*</span> </div>
-									<div class="col-md-4 ml-auto">
-										<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addressModalCenter" name="addressBTN2" id="addressBTN2">选择地址</button>
-										<input type="hidden" name="addressId" id="addressId2">
-									</div>
-									
-									
-									<div class="col-md-2  align-self-center">位置说明 <span style="color: red;">*</span> </div>
-									<div class="col-md-4 ml-auto">
-										<input type="text" name="u_address" required="required"
-											class="form-control" placeholder="请输入位置说明">
-									</div>
-								</div>
 								
-								<div class="row">
-									<div class="col-md-2 align-self-center">表具类型 <span style="color: red;">*</span> </div>
-									<div class="col-md-4 ml-auto" >
-										<select name="di_dkid" class="form-control" id="di_dkid" >
-											<option value="">请选择</option>
-											<option v-for="device in deviceKindList" :key="" :value="device.dk_id">{{device.dk_name}}</option>
-										</select>
-									</div>
-									<div class="col-md-2 align-self-center">充值金额  <span style="color: red;">*</span> </div>
-									<div class="col-md-4">
-										<input type="number" name="chargeMoney" class="form-control" placeholder="元为单位" required="required" >
-										<input type="hidden" name="u_materialfee" class="form-control" value="0"
-											placeholder="单位：元">
-										<input type="hidden" name="u_constructioncost" class="form-control"
-											placeholder="单位：元" value="0">
-	
-										<input type="hidden" name="u_prepayment" class="form-control"
-											placeholder="单位：元" value="0">
-									</div>
-								</div>
-								<div class="row">
+					<!-- 			<div class="row">
 									
-									<div class="col-md-2  align-self-center">水表厂商 <span style="color: red;">*</span></div>
-									<div class="col-md-4 ml-auto">
-										<select name="device_company" class="form-control" id="device_company" >
-											<option value="">请选择</option>
-											<option value="轻松">轻松</option>
-											<option value="鲁正">鲁正</option>
-										</select>
-									</div>
 									
 									
 									<div class="col-md-2 align-self-center"></div>
 									<div class="col-md-4 ml-auto">
 										
 									</div>
-								</div>
+								</div> -->
 							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">关 闭</button>
 							<button type="button" class="btn btn-primary"
-								onclick="addOrUpdateUser()">保 存</button>
+								onclick="addOrUpdateUser()">确 定</button>
 						</div>
 					</div>
 				</div>
@@ -353,6 +376,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</form>
 	
 	
+
+	<div class="modal fade" id="addressModalCenter" tabindex="-1"
+					role="dialog" aria-labelledby="addressModalCenterTitle"
+					aria-hidden="true"> 
+			<div class="modal-dialog modal-dialog-centered  modal-lg modal-dialog-scrollable"
+				role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalCenterTitle">请选择用户地址</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" >
+						<div class="container-fluid">
+							<div class="row">
+								<div id="modalTree"></div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">关 闭</button>
+						<button type="button" class="btn btn-primary"
+							data-dismiss="modal">确定</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
 <!-- 用户查询弹框 -->
 		<form name="queryUserForm" action="#">
 			<!-- Modal -->
@@ -443,6 +498,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</form>
 	
+	
+		
 	</div>
 	
 	

@@ -106,12 +106,23 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 	}
 
 	@Override
-	public List<AddressBean> queryAddressList(AddressBean bean) throws Exception {
+	public List<AddressBean> queryAddressList(AddressBean bean)  {
 		
 				
 		List<AddressBean> list = areaDao.queryAddressList(bean);
 		
 		return list;
+	}
+	
+	@Override
+	public AddressBean findAddressById(int id)  {
+		AddressBean bean = new AddressBean();
+		bean.setId(id);
+		List<AddressBean> list = queryAddressList(bean);
+		if(list.size()> 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 
 	@Override

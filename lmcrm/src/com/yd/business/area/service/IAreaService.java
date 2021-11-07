@@ -15,10 +15,12 @@ public interface IAreaService {
 
 	CompanyExtBean queryAreaAndBuildingTree(Long companyId) throws Exception;
 
-	List<AddressBean> queryAddressList(AddressBean bean) throws Exception;
+	List<AddressBean> queryAddressList(AddressBean bean) ;
 
 	int addOrUpdateAddress(AddressBean bean);
 
 	String deleteAddressByIdAndCompany(int id, int companyId);
+
+	AddressBean findAddressById(int id) ;
 
 }

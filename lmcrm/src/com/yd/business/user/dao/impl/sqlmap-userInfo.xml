@@ -18,7 +18,7 @@
 		                        ON B.parent_id = A.Id)
 		</if>
 	
-		select *, (select P_Name from Price where P_Id =U_PriceId ) as priceName , (select name from ll_address a where a.id = addressId ) addressName,
+		select *, (select P_Name from Price where P_Id =U_PriceId ) as priceName , (select full_name from ll_address a where a.id = addressId ) addressName,
 		 dk.dk_name  deviceKindName ,device_company  from userInfo 
 		 left join 	deviceinfo di on  di.di_userid = u_id 
 		 left join 	devicekind dk on  dk.dk_id = di.di_dkid

@@ -29,7 +29,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 		<script	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 		<script src="js/common/dictionaryData.js" type="text/javascript"></script>
-	 	
+		<script src="js/common/exportExcel.js" type="text/javascript"></script>
+	<!-- 	<script	src="https://cdn.jsdelivr.net/gh/SheetJS/sheetjs/dist/xlsx.core.min.js"></script>
+ -->	 	
 </head>
 
     <body>
@@ -114,11 +116,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										</div>
 			                         </div>
 										<div class="row" style="margin-top: 10px;">
-											<div class="col-10">
+											<div class="col-8">
 											
  										    </div>
-											 <div class="col-2">
-												<button type="button" class="btn btn-info" onclick="queryBillData();">查询用户</button>
+											 <div class="col-4">
+												<button type="button" class="btn btn-success" onclick="queryBillData();">查询数据</button>
+												&nbsp;&nbsp;&nbsp;&nbsp;
+												<button type="button" class="btn btn-info" onclick="exportExcel()">导出数据</button>
+											
+											
 											</div>
 										</div>
 	                                        <!-- <h4 class="header-title">Striped rows</h4>
@@ -130,7 +136,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <div class="card-body" style="padding-top: 0px;">
                                     	
 									  <div class="row">
-									      <div class="col-3 " style="padding: 0">
+									      <div class="col-2 " style="padding: 0">
 									      		<div class="card">
 									      			<div class="card-header">地址列表</div>
 									      			<div class="card-body">
@@ -138,10 +144,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													</div>
 									      		</div>
 										  </div>
-										  <div class="col-9">
+										  <div class="col-10">
 										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">台账清单</h4>
 	                                        <div class="table-responsive" style="min-height: 150px;">
-	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" id="dataTable" >
 	                                                <thead>
 	                                                    <tr>
 															<th v-for="name in columnNames" scope="col">{{name}}</th>
@@ -193,11 +199,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
         <!-- END wrapper -->
 
-
 <!-- App js -->
 		<script src="page/frame/report/js/access_billChart.js"	type="text/javascript"></script>
 	
         <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
-
     </body>
 </html>

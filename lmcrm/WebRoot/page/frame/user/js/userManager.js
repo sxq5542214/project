@@ -39,7 +39,7 @@ var userManager =  new Vue({
 //			$("#di_dkid").val();
 			
 //			form.u_group.value = this.userList[index].u_group +1;
-	    	$("#selectGroup").val(this.userList[index].u_group +1);
+//	    	$("#selectGroup").val(this.userList[index].u_group +1);
 			$("#radio"+index).prop('checked',true);
 	    }
     }
@@ -48,7 +48,9 @@ var userManager =  new Vue({
 function addOrUpdateUser(){
 	var form = document.updateForm;
 	var chargeMoney = form.chargeMoney.value;
-	if(chargeMoney == '' ){
+	var isUpdate = form.u_id.value == '' ? false : true;
+	
+	if(chargeMoney == '' && !isUpdate){
 		alert('请输入开户充值的金额！');
 		return;
 	}
@@ -60,15 +62,15 @@ function addOrUpdateUser(){
 		alert('请输入用户姓名');
 		return false;
 	}
-	if(form.u_phone.value == ''){
-		alert('请输入用户号码');
-		return false;
-	}
-	if(form.di_dkid.value == ''){
+//	if(form.u_phone.value == ''){
+//		alert('请输入用户号码');
+//		return false;
+//	}
+	if(form.di_dkid.value == '' && !isUpdate){
 		alert('请选择表具类型');
 		return false;
 	}
-	if(form.device_company.value == ''){
+	if(form.device_company.value == '' && !isUpdate){
 		alert('请选择水表厂商');
 		return false;
 	}
@@ -102,11 +104,12 @@ function addOrUpdateUser(){
 			    	document.updateForm.u_id.value = ''; //开户后，将用户ID重置
 		    	}else{
 		    		alert('修改用户成功');
+		    		queryUserData();
 		    	}
 		    	
 		    }
 		    
-		    queryUserData();
+//		    queryUserData();
 		    $('#exampleModalCenter').modal('hide');
 		}});
 }
@@ -138,6 +141,7 @@ function deleteUser(){
 	
 }
 function addUser(){
+	
 	 document.updateForm.u_id.value = '';
 	 document.updateForm.u_name.value = '';
 	 document.updateForm.u_paperwork.value = '';
@@ -391,6 +395,36 @@ function initData(){
 				}
 	});
 	
+	
+	
+//  弹窗选择地址的树	
+	//默认打开根节点
+		$("#modalTree").on("ready.jstree", function (e, data) {
+//			alert(data.instance.get_node(6));
+			var id = e.target.firstChild.firstChild.id ; // 获取根节点
+			data.instance.open_node(id);//打开根节点
+		});
+		//初始化地址列表的弹框数据
+		$('#modalTree').on('changed.jstree', function (e, data) {
+			// 树形列表点击事件
+		    var i, j, r ;
+		    r = data.instance.get_node(data.selected[0]);
+		    r = r.original;
+		//  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
+		    var parent_id = data.instance.get_parent(data.selected[0]) ;
+		    var parent_name = data.instance.get_node(parent_id).text;
+		    $('#addressId2').val(r.id);
+		    $('#addressBTN2').text(r.full_name);
+		    
+		  }).jstree({
+			  //树形列表加载参数
+			'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
+						'themes': {
+				            'name': 'proton',
+				            'responsive': true
+				        }
+					}
+		});
 }
 
 
