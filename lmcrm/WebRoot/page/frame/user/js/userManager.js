@@ -311,9 +311,14 @@ function readCardAndQueryUser(){
 			$("#u_phone").val('');
 			$("#u_name").val('');
 			$("#u_paperwork").val('');
+			var addressId = $("#addressId").val();
+			$("#addressId").val('');
+			
+			
 			queryUserData();
 		    $('#queryUserModalCenter').modal('hide');
-			
+
+			$("#addressId").val(addressId);
 		}
 
 	} );
@@ -366,10 +371,15 @@ function initData(){
 	    var parent_id = data.instance.get_parent(data.selected[0]) ;
 	    var parent_name = data.instance.get_node(parent_id).text;
 	    $('#addressId').val(r.id);
-	    $('#addressId2').val(r.id);
-	    $('#addressBTN').text(r.text);
 	    $('#addressBTN2').text(r.text);
 	    document.updateForm.u_address.value = r.full_name;
+	    
+	    var addressId = r.id ;
+		$("#u_cardno").val('');
+		$("#u_id").val('');
+		$("#addressId").val(addressId);
+	    queryUserData(); //查询用户
+	    
 	    
 	  }).jstree({
 		  //树形列表加载参数

@@ -24,24 +24,6 @@ var addressManager =  new Vue({
     }
 })
 
-function addOrUpdateAddress(){
-	var form = document.updateForm;
-	$.ajax({url:"admin/area/ajaxAddOrUpdateAddressByCompany.do",
-		type : "POST",
-		data:{
-			a_id: form.a_id.value,
-			a_name: form.a_name.value,
-			a_level : form.a_level.value
-		},
-		success:function(result){
-		    if(result > 0){
-		    	alert('操作成功！');
-		    }
-		    
-		    queryAddressData();
-		    $('#exampleModalCenter').modal('hide');
-		}});
-}
 function checkAddChose(){
 	var a_name = document.updateForm.name.value ;
 	if(addressId == '' ){
@@ -53,7 +35,6 @@ function checkAddChose(){
 }
 function deleteAddress(){
 
-	var a_name = document.updateForm.name.value ;
 	var parent_id = $("#parent_id").val();
 	if(addressId == '' ){
 		alert('请先选择左侧地址！');
@@ -70,6 +51,9 @@ function deleteAddress(){
 			},
 			success:function(result){
 			   alert(result);
+
+		    	var curNode = $.jstree.reference('#tree').get_node(addressId);
+			   $.jstree.reference('#tree').delete_node(curNode);
 			}});
 	}
 	
@@ -112,7 +96,17 @@ function addAddress(type){
 			    	alert('操作失败！');
 			    }else{
 			    	alert('操作成功！');
-				    window.location.reload();
+
+					//$.jstree.reference('#tree').create_node(parent_id,a_name);
+					$.jstree.reference('#tree').refresh();
+//					var curNode = $("#tree").jstree('get_node', parent_id+'' );
+//					$.jstree.reference('#tree').select_node(curNode);
+//				alert(curNode);
+//					$.jstree.reference('#tree').open_node(curNode);
+					
+
+					$('#exampleModalCenter').modal('hide');
+				   // window.location.reload();
 			    }
 			}});
 	}
@@ -144,7 +138,12 @@ function updateAddress(){
 		    	alert('操作失败！');
 		    }else{
 		    	alert('操作成功！');
-			    window.location.reload();
+		    	
+		    	var curNode = $.jstree.reference('#tree').get_node(a_id);
+		    	
+		    	$("#tree").jstree('rename_node', curNode , a_name );
+//				$('#exampleModalCenter').modal('hide');
+			    //window.location.reload();
 		    }
 		}});
 }
@@ -195,6 +194,14 @@ function getTree() {
 	}});
   return dataArray;
 }
+
+//默认打开根节点
+$("#tree").on("ready.jstree", function (e, data) {
+//	alert(data.instance.get_node(6));
+	var id = e.target.firstChild.firstChild.id ; // 获取根节点
+data.instance.open_node(id);//打开根节点
+});
+//树形菜单点击事件
 $('#tree').on('changed.jstree', function (e, data) {
 	// 树形列表点击事件
     var i, j, r ;
@@ -216,7 +223,8 @@ $('#tree').on('changed.jstree', function (e, data) {
 				'themes': {
 		            'name': 'proton',
 		            'responsive': true
-		        }
+		        },
+		        'check_callback': true,
 			},
 	"contextmenu": {
 	    items: {

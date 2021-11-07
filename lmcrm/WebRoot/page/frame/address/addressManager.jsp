@@ -184,16 +184,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		</form>
 		  
-		  
-		  
 	 </div>
-
-
 
 <script src="page/frame/address/js/addressManager.js" type="text/javascript"></script>
 
 </body>
-
-
 
 </html>

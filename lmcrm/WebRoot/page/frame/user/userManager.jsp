@@ -94,6 +94,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	</div>
                                     <div class="card-body">
                                     	
+                                    	
+									  <div class="row">
+									      <div class="col-4 ">
+									      		<div class="card">
+									      			<div class="card-header">地址列表</div>
+									      			<div class="card-body">
+														<div id="tree"></div>
+													</div>
+									      		</div>
+										  </div>
+										  <div class="col-8">
                                         <div class="table-responsive" style="min-height: 150px;">
                                             <table class="table  mb-0 table-hover table-centered text-nowrap"  >
                                                 <thead>
@@ -149,7 +160,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                                 </tbody>
                                             </table>
                                         </div> <!-- end table-responsive-->
-
+										</div><!-- end col8 -->
+										</div><!-- end row -->
                                     </div> <!-- end card body-->
                                 </div> <!-- end card -->
                             </div><!-- end col-->
@@ -398,37 +410,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													name="u_paperwork" placeholder="请输入用户证件号码"> 
 									</div>
 									
-									<div class="col-md-2 align-self-center">
-										用户地址 
-									</div>
-									<div class="col-md-4 ml-auto">
-										<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addressModalCenter" id="addressBTN">请选择地址</button>
-									</div>
-								</div>
-								<div class="row">
+									
 									<div class="col-md-2 align-self-center">
 										用户卡号
 									</div>
 									<div class="col-md-4 ml-auto">
 										    	<input type="text" class="form-control" id="u_cardno" name="u_cardno"
 													placeholder="请输入用户卡号">
-									</div>
-									<div class="col-md-2 align-self-center">
-										
+									
+										  <input type="hidden" class="form-control" id="u_buildingid" name="u_buildingid">
+										  <input type="hidden" class="form-control" id="u_areaid" name="u_areaid">
+										  <input type="hidden" class="form-control" id="addressId" name="addressId">
+						<!-- 			<div class="col-md-2 align-self-center">
+										用户地址 
 									</div>
 									<div class="col-md-4 ml-auto">
-										    	
-									</div>
-										  <input
-												type="hidden" class="form-control" id="u_buildingid"
-												name="u_buildingid">
-										  <input type="hidden"
-												class="form-control" id="u_areaid" name="u_areaid">
-										  <input type="hidden"
-												class="form-control" id="addressId" name="addressId">
-									
+										<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addressModalCenter" id="addressBTN">请选择地址</button>
+									</div> -->
 								</div>
-								
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -444,36 +443,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</form>
 	
-		<div class="modal fade" id="addressModalCenter" tabindex="1"
-					role="dialog" aria-labelledby="addressModalCenterTitle"
-					aria-hidden="true"> 
-			<div class="modal-dialog modal-dialog-centered  modal-lg modal-dialog-scrollable"
-				role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalCenterTitle">请选择用户地址</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body" >
-						<div class="container-fluid">
-							<div class="row">
-								<div id="tree"></div>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">关 闭</button>
-						<button type="button" class="btn btn-primary"
-							data-dismiss="modal">确定</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
 	</div>
 	
 	
