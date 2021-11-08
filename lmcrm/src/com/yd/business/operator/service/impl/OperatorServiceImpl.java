@@ -55,18 +55,18 @@ public class OperatorServiceImpl extends BaseService implements IOperatorService
 	public int addOrUpdateOperator(OperatorBean bean) {
 		
 		int i = 0 ;
-		bean.setO_rank1("FFFF");
-		bean.setO_rank2("FFFF");
-		bean.setO_rank3("FFFF");
-		bean.setO_rank4("FFFF");
-		bean.setO_rank5("FFFF");
-		bean.setO_rank6("FFFF");
-		bean.setO_rank7("FFFF");
-		bean.setO_rank8("FFFF");
-		bean.setO_rank9("FFFF");
-		bean.setO_rank99("FFFF");
 		
 		if(bean.getO_id() == null) {
+			bean.setO_rank1("FFFF");
+			bean.setO_rank2("FFFF");
+			bean.setO_rank3("FFFF");
+			bean.setO_rank4("FFFF");
+			bean.setO_rank5("FFFF");
+			bean.setO_rank6("FFFF");
+			bean.setO_rank7("FFFF");
+			bean.setO_rank8("FFFF");
+			bean.setO_rank9("FFFF");
+			bean.setO_rank99("FFFF");
 			
 			bean.setO_createdate(new Date());
 			bean.setO_updatedate(bean.getO_createdate());

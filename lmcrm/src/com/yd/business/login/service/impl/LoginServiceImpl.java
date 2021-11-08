@@ -152,6 +152,33 @@ public class LoginServiceImpl extends BaseService implements ILoginService{
 			
 			return bean;
 		}
-		
+	
+		/**
+		 * 
+		 * @param oldPassword
+		 * @param newPassword
+		 * @param operatorid
+		 * @return
+		 */
+		@Override
+		public String modifyPassword(String oldPassword , String newPassword,long operatorid) {
+			String result ="修改失败，请联系管理员";
+			
+			OperatorBean op = operatorService.findOperatorById(operatorid);
+			System.out.println(op.getO_password2() +"," + oldPassword+","+newPassword);
+			if(!op.getO_password2().equals(oldPassword) ) {
+				result = "您输入的原密码不正确，请修改！";
+			}else {
+				op.setO_password2(newPassword);
+				int i = operatorService.addOrUpdateOperator(op);
+				
+				if(i == 1) {
+					result = "修改成功！后续请使用新密码登录！";
+				}
+			}
+			
+			
+			return result;
+		}
 		
 }

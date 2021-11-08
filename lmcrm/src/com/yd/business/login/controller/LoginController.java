@@ -68,6 +68,20 @@ public class LoginController extends BaseController {
 		
 	}
 	
+
+	@RequestMapping("**/admin/login/ajaxModifyPasswordByWeb.do")
+	public void ajaxModifyPasswordByWeb(HttpServletRequest request, HttpServletResponse response){
+		
+		String newPassword = request.getParameter("newPassword");
+		String oldPassword = request.getParameter("oldPassword");
+		OperatorBean op = getCurrentLoginOperator();
+		
+		String result = loginService.modifyPassword(oldPassword, newPassword, op.getO_id());
+		writeString(response, result);
+		
+		
+	}
+	
 	
 	
 }

@@ -41,18 +41,19 @@ body {display: -ms-flexbox;display: -webkit-box;display: flex;-ms-flex-align: ce
   
   <body class="text-center">
 <form class="form-signin">
-      <img class="mb-4" src="images/login/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
-      <label for="inputName" class="sr-only">用户名</label>
-      <input type="text" id="inputName" class="form-control" placeholder="请输入用户名" required autofocus>
-      <label for="inputPassword" class="sr-only">密码</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="请输入密码" required>
+   <!--    <img class="mb-4" src="images/login/bootstrap-solid.svg" alt="" width="72" height="72"> -->
+      <h1 class="h3 mb-3 font-weight-normal">请修改密码</h1>
+      <label for="inputName" style="float: left;">用户名</label>
+      <input type="text" id="inputName" class="form-control" placeholder="请输入用户名" required disabled="disabled">
+      <label for="oldPassword" style="float: left;">原密码</label>
+      <input type="password" id="oldPassword" class="form-control" placeholder="请输入原密码" required autofocus>
+      <label for="newPassword" style="float: left;">新密码</label>
+      <input type="password" id="newPassword" class="form-control" placeholder="请输入新密码" required>
       <div class="checkbox mb-3">
         <label>
-          <input type="checkbox" value="remember-me" id="remember"> Remember me
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login();">登录</button>
+      <button class="btn btn-lg btn-primary btn-block" type="button" onclick="modifyPassword();">确认修改</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2021 龙马水厂</p>
     </form>
 
@@ -60,54 +61,37 @@ body {display: -ms-flexbox;display: -webkit-box;display: flex;-ms-flex-align: ce
 <script type="text/javascript">
 var username = getCookie("username");
 var password = getCookie("password");
-var remember = getCookie("remember");
 if(username != null && username != ''){
 	$("#inputName").val(username);
 }
 if(password != null && password != ''){
-	$("#inputPassword").val(password);
-}
-if(remember != null && remember != ''){
-	$("#remember").prop('checked',remember);
+	$("#oldPassword").val(password);
 }
 
-function login(){
+
+function modifyPassword(){
 	
-	var username = $("#inputName").val();
-	var password = $("#inputPassword").val();
-  	if($("#remember").prop('checked')){
-  		setCookie("username", username);
-  		setCookie("password", password);
-  		setCookie("remember", true);
-  	}
+	var oldPassword = $("#oldPassword").val();
+	var newPassword = $("#newPassword").val();
   	
-	$.ajax({url:"login/loginByWeb.do",
+	$.ajax({url:"admin/login/ajaxModifyPasswordByWeb.do",
 			type : "POST",
 			data:{
-				username: username,
-				password :password
+				oldPassword : oldPassword,
+				newPassword : newPassword
 			},
 		success:function(result){
-	   		if(result != ''){
-	   			alert(result);
-	   		}else{
-	   			window.location.href = '<%=basePath%>page/frame/indexFrame.jsp';
-	   		}
+//  			setCookie("password", newpassword);
+			alert(result);
+	   		
 		},
 		error:function(jqXHR, textStatus, errorThrown){
-			alert("登录请求失败请检查后端服务！" );
+			alert("修改密码失败请检查后端服务！" );
 		}
 		
 	});
 }
 
-
-if(top!=self){
-	alert('您的登录状态已过期，请重新登录！');
-   if(top.location != self.location){
-        top.location = self.location;
-   }
-}
 
 </script>
   </body>

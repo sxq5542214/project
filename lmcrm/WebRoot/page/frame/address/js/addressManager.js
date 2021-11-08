@@ -98,6 +98,7 @@ function addAddress(type){
 			    	alert('操作成功！');
 
 					//$.jstree.reference('#tree').create_node(parent_id,a_name);
+			    	
 					$.jstree.reference('#tree').refresh();
 //					var curNode = $("#tree").jstree('get_node', parent_id+'' );
 //					$.jstree.reference('#tree').select_node(curNode);
@@ -195,6 +196,7 @@ function getTree() {
   return dataArray;
 }
 
+var queryIndex = 1;
 //默认打开根节点
 $("#tree").on("ready.jstree", function (e, data) {
 //	alert(data.instance.get_node(6));
@@ -210,6 +212,9 @@ $('#tree').on('changed.jstree', function (e, data) {
 //    }
     r = data.instance.get_node(data.selected[0]);
     r = r.original;
+    if(r ==null){
+    	return ;
+    }
 //  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
     var parent_id = data.instance.get_parent(data.selected[0]) ;
     var parent_name = data.instance.get_node(parent_id).text;
@@ -219,7 +224,12 @@ $('#tree').on('changed.jstree', function (e, data) {
     
   }).jstree({
 	  //树形列表加载参数
-	'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
+	'core' : { 	'data': { 	
+							'url': 'admin/area/ajaxQueryAddressByParent.do' ,
+							'data' : function (node) {  
+								return { 'index' : queryIndex++ };
+								}
+						},
 				'themes': {
 		            'name': 'proton',
 		            'responsive': true

@@ -22,4 +22,6 @@ public interface ILoginService {
 
 	OperatorBean login(String username, String password);
 
+	String modifyPassword(String oldPassword, String newPassword, long operatorid);
+
 }
