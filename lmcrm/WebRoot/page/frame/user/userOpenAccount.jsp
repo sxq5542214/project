@@ -113,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 														<td>{{getDescByBeanAttrValue("user","u_status",user.u_status)}}</td>
 														<td>{{user.priceName }}</td>
 														<td>{{user.u_deviceinfo }}</td>
-														<td>{{user.u_address }}</td>
+														<td>{{user.addressName }}{{user.u_address }}</td>
 														<td>{{user.u_paperwork }}</td>
 														<td>{{user.u_peoplesize }}</td>
 														<td>{{user.u_cardno }}</td>
@@ -150,7 +150,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <form name="updateForm" action="#" >
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered  modal-full-width modal-dialog-scrollable" role="document">
+  <div class="modal-dialog modal-dialog-centered  modal-lg modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">用户开户</h5>

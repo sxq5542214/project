@@ -142,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 															<td>{{user.priceName }}</td>
 															<td>{{user.device_company}}</td>
 															<td>{{user.u_phone}}</td>
-															<td>{{user.u_address}}</td>
+															<td>{{user.addressName}}{{user.u_address}}</td>
 														</tr>
 	                                                </tbody>
 	                                            </table>
@@ -229,7 +229,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <form name="updateForm" action="#" >
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered  modal-full-width modal-dialog-scrollable" role="document">
+  <div class="modal-dialog modal-dialog-centered   modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">用户充值</h5>
@@ -282,7 +282,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="modal fade" id="updateChargeModalCenter" tabindex="-1"
 				role="dialog" aria-labelledby="updateChargeModalCenterTitle"
 				aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered  modal-lg"
+				<div class="modal-dialog modal-dialog-centered "
 					role="document">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -345,7 +345,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="modal fade" id="repairCardModalCenter" tabindex="-1"
 				role="dialog" aria-labelledby="repairCardModalCenterTitle"
 				aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered  modal-lg"
+				<div class="modal-dialog modal-dialog-centered "
 					role="document">
 					<div class="modal-content">
 						<div class="modal-header">
