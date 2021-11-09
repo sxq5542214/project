@@ -94,6 +94,7 @@ public class UserController extends BaseController {
 			bean.setU_name(u_name);
 			bean.setU_paperwork(u_paperwork);
 			bean.setAddressId(addressId);
+			bean.setIsdisplay(UserInfoBean.ISDISPLAY_YES);
 			if(StringUtil.isNotNull(u_buildingid)) {
 				bean.setU_buildingid(Long.parseLong(u_buildingid));
 			}else if(StringUtil.isNotNull(u_areaid)) {
@@ -232,6 +233,7 @@ public class UserController extends BaseController {
 			bean.setU_phone(u_phone);
 			bean.setU_name(u_name);
 			bean.setU_paperwork(u_paperwork);
+			bean.setIsdisplay(UserInfoBean.ISDISPLAY_YES);
 			if(StringUtil.isNotNull(u_buildingid)) {
 				bean.setU_buildingid(Long.parseLong(u_buildingid));
 			}else if(StringUtil.isNotNull(u_areaid)) {
