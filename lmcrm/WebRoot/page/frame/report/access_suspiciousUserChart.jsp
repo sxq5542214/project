@@ -68,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 <div class="card">
                                 	<div class="card-header">
                                 	<div class="row">
-			                         	<div class="col">
+			                         	<%-- <div class="col">
 											起始时间：<input type="text" id="start_date" value="<%=DateUtil.getNowOlnyDateStr() %>"  name="start_date" class="form-control date" data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true" >
 										</div>
 										<div class="col">
@@ -98,18 +98,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 												type="hidden" class="form-control" id="addressId"
 												name="addressId">
 										</div>
-			                         </div>
-										<div class="row" style="margin-top: 10px;">
+			                         </div> --%>
 											<div class="col-8">
-											
+												
  										    </div>
 											 <div class="col-4">
-												<button type="button" class="btn btn-info" onclick="queryBillData();">查询数据</button>
+												<button type="button" class="btn btn-success" onclick="queryBillData();">查询数据</button>
 												&nbsp;&nbsp;&nbsp;&nbsp;
 												<button type="button" class="btn btn-info" onclick="exportExcel()">导出数据</button>
 											
 											</div>
-										</div>
 	                                        <!-- <h4 class="header-title">Striped rows</h4>
 	                                        <p class="text-muted font-14 mb-4">
 	                                            Use <code>.table-striped</code> to add zebra-striping to any table row
@@ -119,15 +117,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <div class="card-body" style="padding-top: 0px;">
                                     	
 									  <div class="row">
-									      <div class="col-3 " style="padding: 0">
+									   <!--    <div class="col-3 " style="padding: 0">
 									      		<div class="card">
 									      			<div class="card-header">地址列表</div>
 									      			<div class="card-body">
 														<div id="tree"></div>
 													</div>
 									      		</div>
-										  </div>
-										  <div class="col-9">
+										  </div> -->
+										  <div class="col-12">
 										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">疑户清单</h4>
 	                                        <div class="table-responsive" style="min-height: 150px;">
 	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
@@ -184,8 +182,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!-- App js -->
-		<script src="page/frame/report/js/access_suspiciousUserChart.js"	type="text/javascript"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
- 
+		<script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+ <script src="page/frame/report/js/access_suspiciousUserChart.js"	type="text/javascript"></script>
+        
     </body>
 </html>
