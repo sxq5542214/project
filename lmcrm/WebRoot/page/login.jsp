@@ -21,62 +21,78 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 .custom-control-input:checked~.custom-control-label::before {
-    color: #39afd1;
-    border-color: #39afd1;
-    background-color: #39afd1;
+    color: #0147FF;
+    border-color: #0147FF;
+    background-color: #0147FF;
 }
 .bg-primary {
-    background-color: #39afd1!important;
+    background-color: #0147FF!important;
 }
 </style>
     </head>
 
-    <body class="authentication-bg" style="background: url('images/login/login_background.jpg');background-size: cover;background-position: center;">
-
+    <body class="authentication-bg" style="font-family: 宋体 ;background: url('images/login/login_background2.png');background-size: cover;background-position: center;">
+		<div style="position: fixed;">
+			<img alt="" src="images/login/logo.png" style="width: 75%;margin-left: 25px;">
+		</div>
         <div class="account-pages mt-5 mb-5" >
             <div class="container">
                 <div class="row justify-content-center" style="float: right;width: 400px;">
                     <div class="col-12">
-                        <div class="card" style="margin-top: 25%;width: 100%;">
+                        <div class="card" style="margin-top: 45%;width: 100%;">
 
                             <!-- Logo -->
-                       		<div class="card-header text-center bg-primary">
-               <!--                       <a href="javascript:void(0);">
+           <!--             		<div class="card-header text-center bg-primary">
+                                     <a href="javascript:void(0);">
                                     <span><img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="18"></span>
-                                </a>-->
+                                </a>
                                 <div class="text-center w-75 m-auto">
                                     <h3 class=" text-center font-weight-bold" style="color: white;">霍邱县农饮智慧云平台</h3>
                                 </div>
-                            </div> 
+                            </div>  -->
 
-                            <div class="card-body p-4 ">
+                            <div class="card-body p-4 " style="padding-bottom: 1rem!important;padding-top:  1rem!important;">
                                 
                                 
-
+								<span style="color: #2E76FF;font-size: 1.2rem;"><strong> 欢迎登陆霍邱县智慧农饮云平台</strong></span>
+                                <div style="width: 100%;border: 1px;height: 1.5px;background-color: #2E76FF;margin: 0 auto;"></div>
+                                
                                 <form action="javascript:void(0);">
 
-                                    <div class="form-group">
-                                        <label for="emailaddress">用户名</label>
-                                        <input class="form-control" type="text" id="inputName" name="inputName" required placeholder="Enter your loginName">
+                                    <div class="form-group row" style="margin-top: 15px;">
+                                       <!--  <label for="emailaddress">用户名</label> -->
+                                       <div class="col-1" style="padding-right: 0px;">
+                                        	<i class="form-control mdi mdi-18px mdi-zodiac-taurus mdi-rotate-180" style="background-color:transparent;border:0;"></i>
+                                        </div>
+                                        <div class="col-11">
+                                        	<input class="form-control"  type="text" id="inputName" name="inputName" required placeholder="请输入用户名" style="background-color:transparent;border:0;padding-bottom: 0;">
+                                        </div>
+                                        <div style="width: 90%;border: 1px;height: 1px;background-color: #e3eaef;margin: 0 auto;"></div>
                                     </div>
 
-                                    <div class="form-group">
-<!--                                         <a href="pages-recoverpw.html" class="text-muted float-right"><small>Forgot your password?</small></a>
- -->                                        <label for="password">密码</label>
-                                        <input class="form-control" type="password" required id="inputPassword" placeholder="Enter your password">
+ 									<div class="form-group row" style="margin-top: 10px;">
+                                       <!--  <label for="emailaddress">密码</label> -->
+                                       <div class="col-1" style="padding-right: 0px;">
+                                        	<i class="form-control mdi mdi-18px mdi-windows glyphicon glyphicon-lock" style="background-color:transparent;border:0;"></i>
+                                        </div>
+                                        <div class="col-11">
+                                        	<input class="form-control"  type="password" id="inputPassword" required placeholder="请输入密码" style="background-color:transparent;border:0;padding-bottom: 0;">
+                                        </div>
+                                        <div style="width: 90%;border: 1px;height: 1px;background-color: #e3eaef;margin: 0 auto;"></div>
                                     </div>
 
-                                    <div class="form-group ">
+
+
+                                    <div class="form-group mb-0 text-center">
+                                        <button class="btn btn-rounded" style="background :#0147FF;width: 90%;color: white;margin-top: 20px;" type="submit" onclick="login();"> 登录平台</button>
+                                    </div>
+
+                                    <div class="form-group " style="margin-top: 20px;">
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="remember" checked>
                                             <label class="custom-control-label" for="checkbox-signin">记住密码</label>
                                         </div>
                                     </div>
-
-                                    <div class="form-group mb-0 text-center">
-                                        <button class="btn btn-info" type="submit" onclick="login();"> 登录平台</button>
-                                    </div>
-
                                 </form>
                             </div> <!-- end card-body -->
                         </div>
@@ -97,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
         <!-- end page -->
 
-        <footer class="footer footer-alt" style="color: white;">
+        <footer class="footer footer-alt" style="color: white;font-size: 1.1rem;">
            Copyright   ©   2021   霍邱县龙马自来水有限公司 
         </footer>
 
