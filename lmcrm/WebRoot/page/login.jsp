@@ -84,7 +84,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
                                     <div class="form-group mb-0 text-center">
-                                        <button class="btn btn-rounded" style="background :#0147FF;width: 90%;color: white;margin-top: 20px;" type="submit" onclick="login();"> 登录平台</button>
+                                        <button class="btn btn-rounded" style="height:50px;background :#0147FF;width: 90%;color: white;margin-top: 20px;" type="submit" onclick="login();"> 登录平台</button>
                                     </div>
 
                                     <div class="form-group " style="margin-top: 20px;">
