@@ -414,7 +414,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="modal fade" id="queryUserModalCenter" tabindex="-1"
 				role="dialog" aria-labelledby="queryUserModalCenterTitle"
 				aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered  modal-full-width modal-dialog-scrollable"
+				<div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
 					role="document">
 					<div class="modal-content">
 						<div class="modal-header" style="border-bottom: 0;">
@@ -456,7 +456,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										
 									</div>
 								</div> 
-								<div class="row">
+								<div class="row" style="margin-top: 10px;">
 									<div class="col-md-2 align-self-center">
 										证件号码
 									</div>
@@ -484,14 +484,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									</div> -->
 								</div>
 							</div>
-						</div>
-						<div class="modal-footer">
+						</div> 
+						<div  style="margin-top: 20px;" class="modal-footer">
 <!-- 							<button type="button" class="btn btn-success" style="margin-left: 0;">读卡查询</button>
  -->							
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">关 闭</button>
 							<button type="button" class="btn btn-primary"
-								onclick="queryUserData()">确 定</button>
+								onclick="queryUserData()">确 定3</button>
 						</div>
 					</div>
 				</div>

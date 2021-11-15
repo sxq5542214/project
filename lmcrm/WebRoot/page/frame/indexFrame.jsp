@@ -101,6 +101,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">换表维护</a>
                                 </li>
                                 <li>
+                                    <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userCharge.jsp',this)">补打票据</a>                                </li>
+                                <li>
                                     <a href="javascript: void(0);" onclick="changeIframe('page/frame/user/userOpenAccount.jsp',this)">补开户</a>
                                 </li>
                             </ul>

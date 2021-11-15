@@ -179,7 +179,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <form name="updateForm" action="#" >
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered  modal-full-width modal-dialog-scrollable" role="document">
+  <div class="modal-dialog modal-dialog-centered   modal-lg modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">新增/修改员工</h5>
@@ -261,7 +261,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <form name="updateRoleForm" action="#" >
 <!-- Modal -->
 <div class="modal fade" id="roleModalCenter" tabindex="-1" role="dialog" aria-labelledby="roleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered  modal-full-width" role="document">
+  <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="roleModalCenterTitle">修改权限</h5>

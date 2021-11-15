@@ -25,6 +25,11 @@ var userManager =  new Vue({
 	    	
 //	    	var no = this.userChargeList[index].user_cardno ;
 //	    	$("#u_cardno").val(no);
+	    	
+	    	// 点击某条记录再启用菜单
+	    	var btnlist = $("button[name='button_makeReceipt']");
+	    	btnlist.attr("disabled",false);
+	    	
 			$("#chargeRadio"+index).prop('checked',true);
 	    },
 	    getUserData: function(index){
@@ -41,6 +46,8 @@ var userManager =  new Vue({
 	    	//充值等按钮启用
 	    	var btnlist = $("button[name^='button_']");
 	    	btnlist.attr("disabled",false);
+	    	// 补打票据仍让禁用
+	    	$("button[name='button_makeReceipt']").attr("disabled",true);
 	    	
 			queryUserChargeData();
 			$("#userRadio"+index).prop('checked',true);

@@ -99,6 +99,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 												<button type="button" class="btn btn-secondary" name="button_updateCharge" disabled="disabled"  onclick="readCardAndUpdateCharge();">充值修改</button>
 												<button type="button" class="btn btn-success"  name="button_repairCard" disabled="disabled" onclick="readCardAndRepairCard();">用户补卡</button>
 						 						<button type="button" class="btn btn-primary"  name="button_changeMeter" disabled="disabled" onclick="readCardAndChangeMeter();">换表维护</button>
+						 						<button type="button" class="btn btn-dark"  name="button_makeReceipt" disabled="disabled" onclick="alert('暂未实现');">补打票据</button>
  										    </div>
 											 <div class="col-2">
 												<button type="button" class="btn btn-info" onclick="queryUserData();">查询用户</button>
@@ -415,7 +416,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="modal fade" id="changeMeterModalCenter" tabindex="-1"
 				role="dialog" aria-labelledby="changeMeterModalCenterTitle"
 				aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered  modal-lg"
+				<div class="modal-dialog modal-dialog-centered "
 					role="document">
 					<div class="modal-content">
 						<div class="modal-header">
