@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <title>用户管理</title>
   </head>
  
-<body> 
+<body style="padding-bottom: 0px;"> 
 
         <!-- Begin page -->
 	<div class="wrapper" id="userManagerDiv">
@@ -100,7 +100,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									      		<div class="card">
 									      			<div class="card-header">地址列表</div>
 									      			<div class="card-body">
-														<div id="tree"></div>
+														<div id="tree" style=""></div>
 													</div>
 									      		</div>
 										  </div>
@@ -189,7 +189,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="modal fade" id="exampleModalCenter" tabindex="-1"
 				role="dialog" aria-labelledby="exampleModalCenterTitle"
 				aria-hidden="true"> 
-				<div class="modal-dialog modal-dialog-centered  modal-full-width modal-dialog-scrollable"
+				<div class="modal-dialog modal-dialog-centered  modal-lg modal-dialog-scrollable"
 					role="document">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -219,6 +219,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									<div class="col-md-2 align-self-center">价格类型 <span style="color: red;">*</span> </div>
 									<div class="col-md-4 ml-auto" >
 										<select name="u_priceid"   class="form-control" >
+											<option value="">请选择</option>
 											<option v-for="price in priceList" :key="" :value="price.p_id">{{price.p_name}}</option>
 										</select>
 									</div>

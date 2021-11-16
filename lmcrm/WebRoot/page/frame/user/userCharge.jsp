@@ -124,7 +124,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										  </div>
 										  <div class="col-8">
 										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">用户列表</h4>
-	                                        <div class="table-responsive" style="min-height: 150px;">
+	                                        <div class="table-responsive" style="min-height: 100px;">
 	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
 	                                                <thead>
 	                                                    <tr>

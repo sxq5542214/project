@@ -62,10 +62,10 @@ function addOrUpdateUser(){
 		alert('请输入用户姓名');
 		return false;
 	}
-//	if(form.u_phone.value == ''){
-//		alert('请输入用户号码');
-//		return false;
-//	}
+	if(form.u_priceid.value == ''){
+		alert('请选择价格类型');
+		return false;
+	}
 	if(form.di_dkid.value == '' && !isUpdate){
 		alert('请选择表具类型');
 		return false;
@@ -362,6 +362,7 @@ function initData(){
 		var id = e.target.firstChild.firstChild.id ; // 获取根节点
 		data.instance.open_node(id);//打开根节点
 	});
+	
 	//初始化地址列表的弹框数据
 	$('#tree').on('changed.jstree', function (e, data) {
 		// 树形列表点击事件
@@ -396,13 +397,18 @@ function initData(){
 	});
 	
 	
-	
+	var addrName ;
 //  弹窗选择地址的树	
 	//默认打开根节点
 		$("#modalTree").on("ready.jstree", function (e, data) {
 //			alert(data.instance.get_node(6));
 			var id = e.target.firstChild.firstChild.id ; // 获取根节点
 			data.instance.open_node(id);//打开根节点
+		});
+		//双击事件
+		$("#modalTree").on("dblclick.jstree", function (e) {
+			
+			$("#addressModalCenter").modal('hide');
 		});
 		//初始化地址列表的弹框数据
 		$('#modalTree').on('changed.jstree', function (e, data) {
@@ -415,7 +421,7 @@ function initData(){
 		    var parent_name = data.instance.get_node(parent_id).text;
 		    $('#addressId2').val(r.id);
 		    $('#addressBTN2').text(r.full_name);
-		    
+		    addrName = r.full_name ;
 		  }).jstree({
 			  //树形列表加载参数
 			'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
