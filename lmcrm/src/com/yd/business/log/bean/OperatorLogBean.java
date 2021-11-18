@@ -20,6 +20,7 @@ public class OperatorLogBean implements java.io.Serializable {
 	private Long ol_operatorid;
 	private String ol_remark;
 	private Date ol_happendate;
+	private String params;
 
 	// Constructors
 
@@ -38,6 +39,14 @@ public class OperatorLogBean implements java.io.Serializable {
 
 	public Long getOl_id() {
 		return this.ol_id;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
 	}
 
 	public void setOl_id(Long ol_id) {

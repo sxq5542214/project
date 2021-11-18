@@ -19,11 +19,19 @@
 	<insert id="insertOperatorLog" parameterType="operatorLog">
 		insert into operatorlog(ol_operatorid
       ,ol_remark
-      ,ol_happendate)
+      ,ol_happendate
+      ,params)
 		values(#{ol_operatorid}
       ,#{ol_remark}
-      ,#{ol_happendate})
+      ,#{ol_happendate}
+      ,#{params})
 	</insert>
 	
+	<select id="findLogTemplateByMethod" parameterType="map" resultType="logTemplate" useCache="true">
+		select * from ll_system_log_template where status = 1
+			<if test="hierarchy != null "> and hierarchy = #{hierarchy}</if>
+			<if test="method != null "> and method = #{method}</if>
+	</select>
 	
+	<cache eviction="LRU" size="4096" flushInterval="600000"></cache>
 </mapper>
