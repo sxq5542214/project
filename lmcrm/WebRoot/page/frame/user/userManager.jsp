@@ -96,7 +96,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     	
                                     	
 									  <div class="row">
-									      <div class="col-4 ">
+									      <div class="col-3 ">
 									      		<div class="card">
 									      			<div class="card-header">地址列表</div>
 									      			<div class="card-body">
@@ -104,7 +104,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													</div>
 									      		</div>
 										  </div>
-										  <div class="col-8">
+										  <div class="col-9">
                                         <div class="table-responsive" style="min-height: 150px;">
                                             <table class="table  mb-0 table-hover table-centered text-nowrap"  >
                                                 <thead>
@@ -115,18 +115,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 														<th scope="col">账户余额</th>
 														<th scope="col">用户状态</th>
 														<th scope="col">价格类型</th>
-														<th scope="col">表具厂商</th>
+														<th scope="col">水表厂商</th>
 														<th scope="col">表具类型</th>
 														<th scope="col">用户地址</th>
 														<th scope="col">证件号码</th>
-														<th scope="col">人口数</th>
+								<!-- 						<th scope="col">人口数</th> -->
 														<th scope="col">用户卡号</th>
 								<!-- 						<th scope="col">材料费</th>
 														<th scope="col">施工费</th> -->
-														<th scope="col">所属组</th>
-														<th scope="col">备注信息</th>
+								<!-- 						<th scope="col">所属组</th> -->
 														<th scope="col">创建时间</th>
 														<th scope="col">更新时间</th>
+														<th scope="col">备注信息</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody >
@@ -146,15 +146,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													<td>{{user.deviceKindName }}</td>
 													<td>{{user.addressName}}{{user.u_address }}</td>
 													<td>{{user.u_paperwork }}</td>
-													<td>{{user.u_peoplesize }}</td>
+										<!-- 			<td>{{user.u_peoplesize }}</td> -->
 													<td>{{user.u_cardno }}</td>
 													<!-- <td>{{user.u_materialfee }}</td>
 													<td>{{user.u_constructioncost }}</td> -->
-													<td>{{user.u_group +1 }}</td>
-													<td>{{user.u_remark }}</td>
+										<!-- 			<td>{{user.u_group +1 }}</td> -->
 													<td>{{user.u_createdate }}</td>
 													<td>{{user.u_updatedate }}</td>
-						
+													<td>{{user.u_remark }}</td>
 												</tr>
 												  
                                                 </tbody>

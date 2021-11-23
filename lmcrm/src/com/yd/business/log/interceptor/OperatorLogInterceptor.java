@@ -52,7 +52,7 @@ public class OperatorLogInterceptor extends BaseInterceptor {
 	@Override
 	protected void postControllerHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) {
-		System.out.println(getClass().getName() + "  postControllerHandle..."+ request.getRequestURI());
+//		System.out.println(getClass().getName() + "  postControllerHandle..."+ request.getRequestURI());
 		
 		try {
 			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);

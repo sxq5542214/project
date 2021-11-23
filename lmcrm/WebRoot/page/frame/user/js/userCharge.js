@@ -10,6 +10,7 @@ var userManager =  new Vue({
         userChargeList : [],
         priceList : [] ,
         deviceKindList : [],
+        userCard : {iCardKind:'未读卡',iSysCode:'未读卡',iUserNo:'未读卡',iSavingNo:'未读卡',iAmount:'未读卡',iTon1:'未读卡',iTon2:'未读卡',iPrice1:'未读卡',iPrice2:'未读卡',iPrice3:'未读卡',iFlag:'未读卡'},
         newRow:{}// 新增的行数据，用于新增行
     },
 	created: function(){
@@ -85,6 +86,21 @@ function readCardAndQueryUser(){
 		
 //		alert(user_no+"," + iSavingNo +"," + iUserFlag +"," + iSetFlag +"," + iFlag );
 
+		//加载卡中数据到界面上
+		userManager.userCard.iCardKind = json.iCardKind == 1 ? '用户卡':'非用户卡';
+		userManager.userCard.iSysCode = json.iSysCode;
+		userManager.userCard.iUserNo = user_no ;
+		userManager.userCard.iFlag = iFlag == 1 ? '已刷卡':'未刷卡';
+		userManager.userCard.iAmount = (json.stru_userparm.iAmount / 10).toFixed(2);
+		userManager.userCard.iSavingNo = iSavingNo ;
+		userManager.userCard.iTon1 = json.stru_priceparm.iTon1;
+		userManager.userCard.iTon2 = json.stru_priceparm.iTon2;
+		userManager.userCard.iPrice1 = (json.stru_priceparm.iPrice1 / 100).toFixed(2);
+		userManager.userCard.iPrice2 = (json.stru_priceparm.iPrice2 / 100).toFixed(2);
+		userManager.userCard.iPrice3 = (json.stru_priceparm.iPrice3 / 100).toFixed(2);
+
+
+		
 		if(user_no == 0 ){
 			alert("该卡没有用户数据，请重新查询！");
 			return ;

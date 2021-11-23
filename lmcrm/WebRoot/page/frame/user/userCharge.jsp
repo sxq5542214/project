@@ -123,6 +123,43 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									      		</div>
 										  </div>
 										  <div class="col-8">
+										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">用户卡上数据</h4>
+	                                        <div class="table-responsive" style="min-height: 100px;">
+	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+	                                                <thead>
+	                                                    <tr>
+															<th scope="col">卡类型</th>
+															<th scope="col">维护码</th>
+															<th scope="col">卡号</th>
+															<th scope="col">刷卡标志</th>
+															<th scope="col">充值次数</th>
+															<th scope="col">充值金额</th>
+															<th scope="col">一阶价格</th>
+															<th scope="col">二阶价格</th>
+															<th scope="col">三阶价格</th>
+															<th scope="col">二阶起始量</th>
+															<th scope="col">三阶起始量</th>
+	                                                    </tr>
+	                                                </thead>
+	                                                <tbody >
+														<tr >
+															<td>{{userCard.iCardKind }}</td>
+															<td>{{userCard.iSysCode }}</td>
+															<td>{{userCard.iUserNo}}</td>
+															<td>{{userCard.iFlag}}</td>
+															<td>{{userCard.iSavingNo}}</td>
+															<td>{{userCard.iAmount}}</td>
+															<td>{{userCard.iPrice1}}</td>
+															<td>{{userCard.iPrice2}}</td>
+															<td>{{userCard.iPrice3}}</td>
+															<td>{{userCard.iTon1}}</td>
+															<td>{{userCard.iTon2}}</td>
+														</tr>
+	                                                </tbody>
+	                                            </table>
+	                                        </div> <!-- end table-responsive-->
+	                                        
+	                                        
 										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">用户列表</h4>
 	                                        <div class="table-responsive" style="min-height: 100px;">
 	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >

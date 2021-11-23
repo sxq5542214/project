@@ -3,7 +3,6 @@
  */
 package com.yd.business.log.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public class OperatorLogServiceImpl extends BaseService implements IOperatorLogS
 		if(StringUtil.isNotNull(uri)) {
 			String[] paths = uri.split("/");
 			String method = paths[paths.length-1].split("\\.")[0] ;
-System.out.println("method : ======= " + method );
+//System.out.println("method : ======= " + method );
 			
 			
 			

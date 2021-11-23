@@ -214,7 +214,7 @@ function openAccount(){
 	
 	
 	if(!canwrite){
-		alert('该卡不是新卡，不能用于创建新用户写卡！  用户已创建，请于【营业管理】【用户开户】菜单中继续开户操作！');
+		alert('该卡不是新卡，不能用于创建新用户写卡！  用户已创建，请于【营业管理】【补开户】菜单中继续开户操作！');
 		return ;
 	}
 	
@@ -236,9 +236,11 @@ function openAccount(){
 						// 写卡成功,更新状态
 						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailStatusToSuccess.do",
 							type : "POST",async:false, data :{ cdid : cdid }});
-						
+						alert('该用户已开户成功，请刷表！');
 //						queryUserData();
 //						$('#exampleModalCenter').modal('hide');
+					}else{
+						alert('用户未开户成功，请在【营业管理】【补开户】菜单中继续开户操作！');
 					}
 				} );
 			}
