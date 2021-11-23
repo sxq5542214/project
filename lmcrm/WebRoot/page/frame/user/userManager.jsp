@@ -33,7 +33,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 	<script type="text/javascript" src="js/client/windowsClient.js"></script>
 <script src="js/common/dictionaryData.js" type="text/javascript"></script>
-
+<style type="text/css">
+.fix-div{
+	margin: 0 auto;position: fixed;width: 80%;
+	top: 0;
+	left: 0;
+	right: 0;
+	z- index : 99999;
+}
+</style>
     <title>用户管理</title>
   </head>
  
@@ -96,8 +104,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     	
                                     	
 									  <div class="row">
-									      <div class="col-3 ">
-									      		<div class="card">
+									      <div class="col-3" style="padding: 0px;">
+									      		<div class="card"  id="treeDiv">
 									      			<div class="card-header">地址列表</div>
 									      			<div class="card-body">
 														<div id="tree" style=""></div>
@@ -105,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									      		</div>
 										  </div>
 										  <div class="col-9">
-                                        <div class="table-responsive" style="min-height: 150px;">
+                                        <div class="table-responsive" style="min-height: 150px;" id="tableDiv">
                                             <table class="table  mb-0 table-hover table-centered text-nowrap"  >
                                                 <thead>
                                                     <tr>
@@ -501,11 +509,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 		
 	</div>
-	
+
 	
 <script src="page/frame/user/js/userManager.js" type="text/javascript"></script>
 </body>
-
 
 
 </html>

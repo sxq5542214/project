@@ -433,6 +433,28 @@ function initData(){
 				        }
 					}
 		});
+		
+		
+		
+		//  监听滚动条，固定地址树
+		//获取要定位元素距离浏览器顶部的距离
+		var navH = $("#treeDiv").offset().top;
+		//滚动条事件
+		$(window).scroll(function(){
+			
+			//获取滚动条的滑动距离
+			var scroH = $(this).scrollTop();
+			var height = $("#tableDiv").height() ;
+//			var minHeight = $("#tableDiv").css("minHeight") ;
+//			alert(height);
+			//滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定
+			if(scroH >= navH && height > 150){
+				$("#treeDiv").css({"position":"fixed","top":0 , "bottom" : 0 , "overflow-x": "scroll" });
+			}else if(scroH < navH){
+				$("#treeDiv").css({"position":"static"});
+			}
+		});
+
 }
 
 
