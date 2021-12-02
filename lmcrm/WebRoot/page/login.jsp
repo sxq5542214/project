@@ -157,7 +157,7 @@ function login(){
 	   		if(result != ''){
 	   			alert(result);
 	   		}else{
-	   			window.location.href = '<%=basePath%>page/frame/indexFrame.jsp';
+	   			window.location.href = '<%=basePath%>admin/login/toIndexFramePage.do';
 	   		}
 		},
 		error:function(jqXHR, textStatus, errorThrown){

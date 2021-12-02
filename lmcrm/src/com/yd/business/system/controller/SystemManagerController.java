@@ -19,6 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.dictionary.bean.DictionaryBean;
 import com.yd.business.dictionary.service.IDictionaryService;
+import com.yd.business.operator.bean.OperatorBean;
+import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.system.bean.SystemBean;
 import com.yd.business.system.bean.SystemMenuBean;
 import com.yd.business.system.bean.SystemRoleAdminRelationBean;
@@ -37,6 +39,8 @@ public class SystemManagerController extends BaseController {
 	private ISystemManagerService systemManagerService;
 	@Resource
 	private IDictionaryService dictionaryService;
+	@Resource
+	private IOperatorService operatorService;
 	
 	public static final String PAGE_SYSTEM_MENU_SHOW = "/page/pc/systemMenu/iframe_sysrem_menu_mgr.jsp";
 	public static final String PAGE_SYSTEM_ROLE_SHOW = "/page/pc/systemRole/iframe_sysrem_role_mgr.jsp";
@@ -45,12 +49,14 @@ public class SystemManagerController extends BaseController {
 	 * 异步获取菜单数据，用于树形结构展示
 	 * 
 	 */
-	@RequestMapping("**/admin/system/getSystemMenuToShow.do")
-	public ModelAndView getSystemMenuToShow(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/system/querySystemMenuToShow.do")
+	public ModelAndView querySystemMenuToShow(HttpServletRequest request,HttpServletResponse response){
 		try {
-			SystemMenuBean bean = new SystemMenuBean();
-			systemManagerService.querySystemMenuForMgr(bean);
-			writeJson(response, bean);
+			OperatorBean op = getCurrentLoginOperator();
+			
+			List<SystemMenuBean> list = systemManagerService.querySystemMenuByOperator(op.getO_id());
+			
+			writeJson(response, list);
 		} catch (Exception e) {
 			log.error(e, e);
 			writeJson(response, "失败");
@@ -58,29 +64,38 @@ public class SystemManagerController extends BaseController {
 		return null;
 	}
 	
-	/**
-	 * 初始化菜单管理页面，带入相关字典值
-	 */
-	@RequestMapping("**/admin/system/initSystemMenuForMgr.do")
-	public ModelAndView initSystemMenuForMgr(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/system/queryRoleByOperator.do")
+	public ModelAndView queryRoleByOperator(HttpServletRequest request,HttpServletResponse response){
 		try {
-			Map<String,Object> map = new HashMap<String,Object>();
-			SystemMenuBean bean = new SystemMenuBean();
-			//初始化字典值
-			Map<String, List<DictionaryBean>>  dicMap = dictionaryService.getTableAttributuByDictionaryCache(bean.getClass().getSimpleName());
-			SystemRoleBean roleBean = new SystemRoleBean();
-			List<SystemRoleBean> roleList = systemManagerService.querySystemRoleBeanByBean(roleBean);
-			bean.setStatus(SystemMenuBean.STATUS_ENABLE);
-			List<SystemMenuBean> menuList = systemManagerService.findLevel1MenuList(bean);
-			map.put("dicMap", dicMap);
-			map.put("roleList", roleList);
-			map.put("menuList", menuList);
-			return new ModelAndView(PAGE_SYSTEM_MENU_SHOW,map);
+			List<SystemRoleBean> list = null;
+			String opidstr = request.getParameter("opid");
+			OperatorBean target ;
+			OperatorBean cur = getCurrentLoginOperator();
+			if(StringUtil.isNotNull(opidstr)) {// 有目标用户 查目标用户的
+				target = operatorService.findOperatorById(Long.parseLong(opidstr));
+			
+				
+				if(cur.getO_kind() == OperatorBean.KIND_SUPPERUSER) {
+					list = systemManagerService.querySystemRoleByOperator(target.getO_id());
+				}else {
+					// 判断同一公司才能查询
+					if(cur.getO_companyid().longValue() == target.getO_companyid().longValue()) {
+						list = systemManagerService.querySystemRoleByOperator(target.getO_id());
+					}
+				}
+			
+			}else { //  没有目标用户查当前登录用户的
+				list = systemManagerService.querySystemRoleByOperator(cur.getO_id());
+			}
+			
+			writeJson(response, list);
 		} catch (Exception e) {
 			log.error(e, e);
-			return null;
+			writeJson(response, "失败");
 		}
+		return null;
 	}
+	
 	
 	/**
 	 * 提交菜单数据(新增或者修改)
@@ -88,11 +103,11 @@ public class SystemManagerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("**/admin/system/commitSystemMenu.do")
-	public ModelAndView commitSystemMenu(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/system/createSystemMenu.do")
+	public ModelAndView createSystemMenu(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String jsonData = request.getParameter("jsonData");
-			SystemMenuBean bean = systemManagerService.commitSystemMenuInfo(jsonData);
+			SystemMenuBean bean = systemManagerService.createSystemMenuInfo(jsonData);
 			writeJson(response, bean);
 		} catch (Exception e) {
 			log.error(e, e);
@@ -125,15 +140,15 @@ public class SystemManagerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("**/admin/system/commitSystemMenuAndRole.do")
-	public ModelAndView commitSystemMenuAndRole(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/system/createSystemMenuAndRole.do")
+	public ModelAndView createSystemMenuAndRole(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String action = request.getParameter("action");
 			Object menu_id = request.getParameter("menu_id");
 			Object role_ids = request.getParameter("role_ids");
 			Object rela_id = request.getParameter("rela_id");
 			String status = request.getParameter("status");
-			List<SystemRoleMenuRelationBean> relaList = systemManagerService.commitSystemMenuAndRoleRelation(menu_id,role_ids,rela_id,action,status);
+			List<SystemRoleMenuRelationBean> relaList = systemManagerService.createSystemMenuAndRoleRelation(menu_id,role_ids,rela_id,action,status);
 			writeJson(response, relaList);
 		} catch (Exception e) {
 			log.error(e, e);
@@ -203,11 +218,11 @@ public class SystemManagerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("**/admin/system/commitSystemRoleForAjax.do")
-	public ModelAndView commitSystemRoleForAjax(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/system/createSystemRoleForAjax.do")
+	public ModelAndView createSystemRoleForAjax(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String jsonData = request.getParameter("jsonData");
-			SystemRoleBean bean = systemManagerService.commitSystemRoleInfo(jsonData);
+			SystemRoleBean bean = systemManagerService.createSystemRoleInfo(jsonData);
 			writeJson(response, bean);
 		} catch (Exception e) {
 			log.error(e, e);
@@ -243,13 +258,13 @@ public class SystemManagerController extends BaseController {
 	/**
 	 * 系统权限的关联管理（对于菜单和客户的权限关联）
 	 */
-	@RequestMapping("**/admin/system/commitRoleRelation.do")
-	public ModelAndView commitRoleRelation(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/system/createRoleRelation.do")
+	public ModelAndView createRoleRelation(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String itemIds = request.getParameter("itemIds");
 			String roleId = request.getParameter("roleId");
 			String type = request.getParameter("type");
-			List<Object> list = systemManagerService.commitRoleRelation(type, itemIds, roleId, null, SystemBean.ACTION_TYPE_ADD, null);
+			List<Object> list = systemManagerService.createRoleRelation(type, itemIds, roleId, null, SystemBean.ACTION_TYPE_ADD, null);
 			writeJson(response, list);
 		} catch (Exception e) {
 			log.error(e, e);
@@ -306,15 +321,15 @@ public class SystemManagerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("**/admin/system/commitSystemAdminAndRole.do")
-	public ModelAndView commitSystemAdminAndRole(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/admin/system/createSystemAdminAndRole.do")
+	public ModelAndView createSystemAdminAndRole(HttpServletRequest request,HttpServletResponse response){
 		try {
 			String action = request.getParameter("action");
 			Object admin_id = request.getParameter("admin_id");
 			Object role_ids = request.getParameter("role_ids");
 			Object rela_id = request.getParameter("rela_id");
 			String status = request.getParameter("status");
-			List<SystemRoleAdminRelationBean> relaList = systemManagerService.commitSystemAdminAndRoleRelation(admin_id,role_ids,rela_id,action,status);
+			List<SystemRoleAdminRelationBean> relaList = systemManagerService.createSystemAdminAndRoleRelation(admin_id,role_ids,rela_id,action,status);
 			writeJson(response, relaList);
 		} catch (Exception e) {
 			log.error(e, e);

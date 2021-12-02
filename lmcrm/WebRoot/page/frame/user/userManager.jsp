@@ -33,15 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 	<script type="text/javascript" src="js/client/windowsClient.js"></script>
 <script src="js/common/dictionaryData.js" type="text/javascript"></script>
-<style type="text/css">
-.fix-div{
-	margin: 0 auto;position: fixed;width: 80%;
-	top: 0;
-	left: 0;
-	right: 0;
-	z- index : 99999;
-}
-</style>
+
     <title>用户管理</title>
   </head>
  

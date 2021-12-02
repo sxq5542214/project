@@ -78,16 +78,6 @@ public class SystemManagerDaoImpl extends BaseDao implements ISystemManagerDao {
 	}
 	
 	@Override
-	public List<SystemMenuBean> querySystemMenuByCustomer(int customer_id,Integer admin_id){
-		
-		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("customer_id", customer_id);
-		param.put("admin_id", admin_id);
-		param.put("status", SystemBean.STATUS_ENABLE);
-		return sqlSessionTemplate.selectList(NAMESPACE + "querySystemMenuByAdmin", param);
-	}
-
-	@Override
 	public List<SystemMenuBean> querySystemMenuByBean(SystemMenuBean bean) {
 		return sqlSessionTemplate.selectList(NAMESPACE + "querySystemMenuByBean", bean);
 	}
@@ -168,4 +158,20 @@ public class SystemManagerDaoImpl extends BaseDao implements ISystemManagerDao {
 	public void deleteSystemRole(SystemRoleBean bean) {
 		sqlSessionTemplate.delete(NAMESPACE + "deleteSystemRole", bean);
 	}
+
+	@Override
+	public List<SystemMenuBean> querySystemMenuListByOperatorId(long operatorid){
+		return sqlSessionTemplate.selectList(NAMESPACE + "querySystemMenuListByOperatorId", operatorid);
+		
+	}
+
+	@Override
+	public List<SystemRoleBean> querySystemRoleListByOperatorId(long operatorid){
+		return sqlSessionTemplate.selectList(NAMESPACE + "querySystemRoleListByOperatorId", operatorid);
+		
+	}
+	
+	
+	
+	
 }

@@ -23,6 +23,7 @@ import com.yd.business.other.service.IAddressService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.price.bean.PriceBean;
+import com.yd.business.system.service.ISystemManagerService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.business.user.service.IUserWechatService;
@@ -45,6 +46,8 @@ public class OperatorController extends BaseController {
 	private ThreadPoolTaskExecutor taskExecutor;
 	@Resource
 	private IConfigCruxService configCruxService;
+	@Resource
+	private ISystemManagerService systemManagerService;
 	
 	public static final String PAGE_ORDERPRODUCTLOG = "/page/user/orderProductLog.jsp";
 
@@ -112,7 +115,7 @@ public class OperatorController extends BaseController {
 		}
 		return null;
 	}
-	
+
 
 	/**
 	 *  界面查询员工列表
@@ -140,6 +143,34 @@ public class OperatorController extends BaseController {
 			}
 		
 			writeJson(response, operator );
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
+
+
+	/**
+	 *  界面查询员工列表
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/admin/operator/ajaxUdateOperatorRole.do")
+	public ModelAndView ajaxUdateOperatorRole(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+			
+			OperatorBean operator = getCurrentLoginOperator();
+			int result = 0 ; 
+			String opid = request.getParameter("opid");
+			String[] roleids = request.getParameterValues("roleids[]");
+			if(StringUtil.isNotNull(opid)) {
+				result = operatorService.updateOperatorRole(Long.parseLong(opid), roleids , operator);
+				
+			}
+		
+			writeString(response, String.valueOf(result) );
 		} catch (Exception e) {
 			log.error(e, e);
 		}

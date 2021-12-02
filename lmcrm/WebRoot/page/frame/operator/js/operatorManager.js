@@ -3,11 +3,13 @@ var operatorManager =  new Vue({
     data: {
     	getDescByBeanAttrValue : dictionaryCache.getDescByBeanAttrValue,
     	choseIndex : -1,
+    	choseRoleIndex : -1,
         checkAll: false,// 是否全选
         checkedRows: [],// 选中的行标，用于删除行
         operatorList: [],// 表格数据
         companyList: [],// 表格数据
-        menuList :[],
+        roleList :[],
+        operatorRoleList :[],
         areaList :[],
         newRow:{}// 新增的行数据，用于新增行
     },
@@ -34,9 +36,8 @@ var operatorManager =  new Vue({
 			$("#radio"+index).prop('checked',true);
 	    },
 	    checkRole: function(index){
-	    	$("#selectAllMenu").prop("checked", false);
-	    	
-	    	$("#menu"+index).prop("checked", !$("#menu"+index).prop("checked"));
+	    	$("#selectAllRole").prop("checked", false);
+	    	$("#role"+index).prop("checked", !$("#role"+index).prop("checked"));
 	    }
     }
 })
@@ -77,25 +78,70 @@ function queryRole(){
 		alert("请先选则员工！");
 		return false;
 	}else{
-		$.ajax({url:"admin/system/queryLastChildMenu.do",
-				type : "POST",
-				data:{
-				},
+
+		// 查自己
+		$.ajax({url:"admin/system/queryRoleByOperator.do", async: false,
 			success:function(result){
-			    var list = result ; // eval('(' + result + ')');
-			    operatorManager.menuList = list;
+			    var list = result ; 
+			    operatorManager.roleList = list;
 		}});
+		
+		//查员工
+		var opid = operatorManager.operatorList[operatorManager.choseIndex].o_id;
+		$.ajax({url:"admin/system/queryRoleByOperator.do",
+			data:{opid :  opid },
+			success:function(result){
+			    var list = result ; 
+			    operatorManager.operatorRoleList = list;
+			    
+			    for(var i = 0 ; i < operatorManager.roleList.length;i++){
+			    	var role = operatorManager.roleList[i];
+			    	
+			    	for(var x = 0 ; x < list.length ; x++){
+			    		var opRole = list[x];
+			    		//员工的角色 在 角色列表中则默认选中
+			    		if(opRole.id == role.id){
+			    			$("#role"+i).prop("checked", true);
+			    		}
+			    	}
+			    }
+			    
+		}});
+		
 	    $('#roleModalCenter').modal('show');
 
 	}
 }
 
-function choseAllMenus(){
-	$("#selectAllMenu").prop("checked", true);
-	 $(":checkbox[name='menu_ids']").prop("checked", true);
+function choseAllRoles(){
+	$("#selectAllRole").prop("checked", true);
+	 $(":checkbox[name='role_ids']").prop("checked", true);
 }
 
-function queryArea(){
+function updateOperatorRole(){
+	//查员工
+	var opid = operatorManager.operatorList[operatorManager.choseIndex].o_id;
+	var roleids = [];//定义一个空数组
+
+	$("input[name='role_ids']:checked").each(function(i){//把所有被选中的复选框的值存入数组
+		roleids[i] =$(this).val();
+	});
+	if(roleids.length == 0 ){
+		alert('请选择角色权限！');
+		return ;
+	}
+	// 查自己
+	$.ajax({url:"admin/operator/ajaxUdateOperatorRole.do", 
+		data:{ "opid" : opid , "roleids": roleids },
+		success:function(result){
+			if(result > 0){
+			    alert('修改角色权限成功！');
+			    $('#roleModalCenter').modal('hide');
+			    
+			}else{
+			    alert('修改角色权限失败！');
+			}
+	}});
 	
 }
 //function initDataTable(){

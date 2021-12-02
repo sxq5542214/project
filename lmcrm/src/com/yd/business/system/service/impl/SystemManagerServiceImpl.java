@@ -79,91 +79,62 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 		systemManagerDao.deleteSystemRoleMenuRelation(bean);
 	}
 	
-	/**
-	 * 通过客户查询菜单
-	 */
-	@Override
-	public Map<String,List<SystemMenuBean>> queryMenuByCustomer(int customer_id){
-		
-		Map<String, List<SystemMenuBean>> map = new HashMap<String, List<SystemMenuBean>>();
-		List<SystemMenuBean> allMenu = systemManagerDao.querySystemMenuByCustomer(customer_id, null);
-		List<SystemMenuBean> firstMenu = new ArrayList<SystemMenuBean>();
-		for(SystemMenuBean menu : allMenu){
-			
-			//没有父节点的一级菜单
-			if(menu.getParentid() == null){
-				firstMenu.add(menu);
-			}else{
-				// 有父节点的二级菜单
-				String idStr = "id" + menu.getParentid();
-				List<SystemMenuBean> subMenu = map.get(idStr);
-				if(subMenu == null){
-					subMenu = new ArrayList<SystemMenuBean>();
-					map.put(idStr, subMenu);
-				}
-				subMenu.add(menu);
-			}
-		}
-		map.put("firstMenu", firstMenu);
-		
-		return map;
-	}
+
+//	@Override
+//	public SystemMenuBean querySystemMenuForMgr(SystemMenuBean bean) {
+//		//用于存储菜单信息的Map（非一级菜单）
+//		Map<Integer,List<SystemMenuBean>> beanMap = new HashMap<Integer,List<SystemMenuBean>>();
+//		//用于存储菜单信息的Map（所有）
+//		Map<Integer,SystemMenuBean> allBeanMap = new HashMap<Integer,SystemMenuBean>();
+//		//获得所有菜单信息
+//		List<SystemMenuBean> beanList = systemManagerDao.querySystemMenuByBean(bean);
+//		List<SystemRoleMenuRelationBean> roleList = systemManagerDao.querySystemRoleMenuRelation(null);
+//		//获取第一级菜单，parentid为空的默认第一级
+//		List<SystemMenuBean> firstLevelMenuList = new ArrayList<SystemMenuBean>();
+//		for (SystemMenuBean systemMenuBean : beanList) {
+//			allBeanMap.put(systemMenuBean.getId(), systemMenuBean);
+//			if(StringUtil.isNull(systemMenuBean.getParentid())){
+//				firstLevelMenuList.add(systemMenuBean);
+//			}else{
+//				if(StringUtil.isNull(beanMap.get(systemMenuBean.getParentid()))){
+//					List<SystemMenuBean> mapList = new ArrayList<SystemMenuBean>();
+//					mapList.add(systemMenuBean);
+//					beanMap.put(systemMenuBean.getParentid(), mapList);
+//				}else{
+//					beanMap.get(systemMenuBean.getParentid()).add(systemMenuBean);
+//				}
+//			}
+//		}
+//		//遍历一级菜单列表，将子菜单插入，同时将菜单的权限带出
+//		for (SystemMenuBean systemMenuBean : beanList) {
+//			List<SystemMenuBean> childrenMenu = beanMap.get(systemMenuBean.getId());
+//			if(StringUtil.isNull(systemMenuBean.getChildren_menu())){
+//				systemMenuBean.setChildren_menu(childrenMenu);
+//			}else{
+//				systemMenuBean.getChildren_menu().addAll(childrenMenu);
+//			}
+//		}
+//		//遍历权限集合将菜单的权限关联
+//		for (SystemRoleMenuRelationBean systemRoleMenuRelationBean : roleList) {
+//			SystemMenuBean menu = allBeanMap.get(systemRoleMenuRelationBean.getMenu_id());
+//			if(!StringUtil.isNull(menu)){
+//				if(StringUtil.isNull(menu.getMenu_roles())){
+//					List<SystemRoleMenuRelationBean> menu_role = new ArrayList<SystemRoleMenuRelationBean>();
+//					menu_role.add(systemRoleMenuRelationBean);
+//					menu.setMenu_roles(menu_role);
+//				}else{
+//					menu.getMenu_roles().add(systemRoleMenuRelationBean);
+//				}
+//			}
+//		}
+//		bean.setName("菜单");
+//		bean.setId(0);
+//		bean.setChildren_menu(firstLevelMenuList);
+//		return bean;
+//	}
 
 	@Override
-	public SystemMenuBean querySystemMenuForMgr(SystemMenuBean bean) {
-		//用于存储菜单信息的Map（非一级菜单）
-		Map<Integer,List<SystemMenuBean>> beanMap = new HashMap<Integer,List<SystemMenuBean>>();
-		//用于存储菜单信息的Map（所有）
-		Map<Integer,SystemMenuBean> allBeanMap = new HashMap<Integer,SystemMenuBean>();
-		//获得所有菜单信息
-		List<SystemMenuBean> beanList = systemManagerDao.querySystemMenuByBean(bean);
-		List<SystemRoleMenuRelationBean> roleList = systemManagerDao.querySystemRoleMenuRelation(null);
-		//获取第一级菜单，parentid为空的默认第一级
-		List<SystemMenuBean> firstLevelMenuList = new ArrayList<SystemMenuBean>();
-		for (SystemMenuBean systemMenuBean : beanList) {
-			allBeanMap.put(systemMenuBean.getId(), systemMenuBean);
-			if(StringUtil.isNull(systemMenuBean.getParentid())){
-				firstLevelMenuList.add(systemMenuBean);
-			}else{
-				if(StringUtil.isNull(beanMap.get(systemMenuBean.getParentid()))){
-					List<SystemMenuBean> mapList = new ArrayList<SystemMenuBean>();
-					mapList.add(systemMenuBean);
-					beanMap.put(systemMenuBean.getParentid(), mapList);
-				}else{
-					beanMap.get(systemMenuBean.getParentid()).add(systemMenuBean);
-				}
-			}
-		}
-		//遍历一级菜单列表，将子菜单插入，同时将菜单的权限带出
-		for (SystemMenuBean systemMenuBean : beanList) {
-			List<SystemMenuBean> childrenMenu = beanMap.get(systemMenuBean.getId());
-			if(StringUtil.isNull(systemMenuBean.getChildren_menu())){
-				systemMenuBean.setChildren_menu(childrenMenu);
-			}else{
-				systemMenuBean.getChildren_menu().addAll(childrenMenu);
-			}
-		}
-		//遍历权限集合将菜单的权限关联
-		for (SystemRoleMenuRelationBean systemRoleMenuRelationBean : roleList) {
-			SystemMenuBean menu = allBeanMap.get(systemRoleMenuRelationBean.getMenu_id());
-			if(!StringUtil.isNull(menu)){
-				if(StringUtil.isNull(menu.getMenu_roles())){
-					List<SystemRoleMenuRelationBean> menu_role = new ArrayList<SystemRoleMenuRelationBean>();
-					menu_role.add(systemRoleMenuRelationBean);
-					menu.setMenu_roles(menu_role);
-				}else{
-					menu.getMenu_roles().add(systemRoleMenuRelationBean);
-				}
-			}
-		}
-		bean.setName("菜单");
-		bean.setId(0);
-		bean.setChildren_menu(firstLevelMenuList);
-		return bean;
-	}
-
-	@Override
-	public SystemMenuBean commitSystemMenuInfo(String jsonDataStr) {
+	public SystemMenuBean createSystemMenuInfo(String jsonDataStr) {
 		SystemMenuBean systemMenuBean = new SystemMenuBean();
 		//将json串转换为json对象
 		JSONObject jsonData = new JSONObject(jsonDataStr);
@@ -192,7 +163,7 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 	}
 
 	@Override
-	public List<SystemRoleMenuRelationBean> commitSystemMenuAndRoleRelation(Object menu_ids, Object role_ids,Object rela_ids, String action, String status) {
+	public List<SystemRoleMenuRelationBean> createSystemMenuAndRoleRelation(Object menu_ids, Object role_ids,Object rela_ids, String action, String status) {
 		List<SystemRoleMenuRelationBean> relaList = new ArrayList<SystemRoleMenuRelationBean>();
 		if(!StringUtil.isNull(action)){
 			//新增关联关系
@@ -223,7 +194,7 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 	}
 	
 	@Override
-	public List<SystemRoleAdminRelationBean> commitSystemAdminAndRoleRelation(Object menu_ids, Object role_ids,Object rela_ids, String action, String status) {
+	public List<SystemRoleAdminRelationBean> createSystemAdminAndRoleRelation(Object menu_ids, Object role_ids,Object rela_ids, String action, String status) {
 		List<SystemRoleAdminRelationBean> relaList = new ArrayList<SystemRoleAdminRelationBean>();
 		if(!StringUtil.isNull(action)){
 			//新增关联关系
@@ -458,7 +429,7 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 //	}
 	
 	@Override
-	public SystemRoleBean commitSystemRoleInfo(String jsonDataStr) {
+	public SystemRoleBean createSystemRoleInfo(String jsonDataStr) {
 		SystemRoleBean systemRoleBean = new SystemRoleBean();
 		//将json串转换为json对象
 		JSONObject jsonData = new JSONObject(jsonDataStr);
@@ -500,13 +471,12 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 		return beanList;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> commitRoleRelation(String type, String itemIds,String roleIds, Object rela_ids, String action, String status) {		
+	public <T> List<T> createRoleRelation(String type, String itemIds,String roleIds, Object rela_ids, String action, String status) {		
 		if(SystemBean.BEAN_TYPE_MENU.equals(type)){
-			return (List<T>) this.commitSystemMenuAndRoleRelation(itemIds, roleIds, rela_ids, action, status);
+			return (List<T>) this.createSystemMenuAndRoleRelation(itemIds, roleIds, rela_ids, action, status);
 		}else if(SystemBean.BEAN_TYPE_ADMIN.equals(type)){
-			return (List<T>) this.commitSystemAdminAndRoleRelation(itemIds, roleIds, rela_ids, action, status);
+			return (List<T>) this.createSystemAdminAndRoleRelation(itemIds, roleIds, rela_ids, action, status);
 		}
 		return null;
 	}
@@ -549,16 +519,18 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 			}
 		}
 	}
-
+	
 	@Override
-	public List<SystemMenuBean> findLevel1MenuList(SystemMenuBean bean) {
-		List<SystemMenuBean> level1MenuList = new ArrayList<SystemMenuBean>();
-		List<SystemMenuBean> menuList = systemManagerDao.querySystemMenuByBean(bean);
-		for (SystemMenuBean systemMenuBean : menuList) {
-			if(StringUtil.isNull(systemMenuBean.getParentid())){
-				level1MenuList.add(systemMenuBean);
-			}
-		}
-		return level1MenuList;
+	public List<SystemMenuBean> querySystemMenuByOperator(long operatorid){
+		
+		return systemManagerDao.querySystemMenuListByOperatorId(operatorid);
 	}
+	
+	@Override
+	public List<SystemRoleBean> querySystemRoleByOperator(long operatorid){
+		
+		return systemManagerDao.querySystemRoleListByOperatorId(operatorid);
+	}
+	
+	
 }

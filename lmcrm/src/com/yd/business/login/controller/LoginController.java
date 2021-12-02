@@ -1,6 +1,9 @@
 package com.yd.business.login.controller;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -11,17 +14,21 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.login.service.ILoginService;
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.business.system.bean.SystemMenuBean;
+import com.yd.business.system.service.ISystemManagerService;
 
 @Controller
 public class LoginController extends BaseController {
 	@Autowired
 	private ILoginService loginService;
-	
+	@Autowired
+	private ISystemManagerService systemManagerService;
 
 	/**
 	 * 生成验证码图片，以及把验证码生成的随机文字放到session中
@@ -82,6 +89,18 @@ public class LoginController extends BaseController {
 		
 	}
 	
-	
+
+	@RequestMapping("**/admin/login/toIndexFramePage.do")
+	public ModelAndView toIndexFramePage(HttpServletRequest request, HttpServletResponse response){
+		
+		OperatorBean op = getCurrentLoginOperator();
+		
+		List<SystemMenuBean> menuList = systemManagerService.querySystemMenuByOperator(op.getO_id());
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("menuList", menuList);
+		return new ModelAndView("/page/frame/indexFrame.jsp", model);
+		
+	}
 	
 }

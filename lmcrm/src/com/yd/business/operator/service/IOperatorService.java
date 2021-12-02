@@ -15,4 +15,6 @@ public interface IOperatorService {
 
 	List<OperatorExtBean> queryOperatorList(OperatorBean bean);
 
+	int updateOperatorRole(Long opid, String[] roleids, OperatorBean loginOperator);
+
 }

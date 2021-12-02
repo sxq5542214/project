@@ -40,8 +40,6 @@ public interface ISystemManagerDao {
 	
 	void updateSystemRoleAdminRelation(SystemRoleAdminRelationBean bean);
 
-	List<SystemMenuBean> querySystemMenuByCustomer(int customer_id, Integer admin_id);
-	
 	List<SystemMenuBean> querySystemMenuByBean(SystemMenuBean bean);
 
 	/**
@@ -90,5 +88,9 @@ public interface ISystemManagerDao {
 	 * @param bean
 	 */
 	void deleteSystemRole(SystemRoleBean bean);
+
+	List<SystemMenuBean> querySystemMenuListByOperatorId(long operatorid);
+
+	List<SystemRoleBean> querySystemRoleListByOperatorId(long operatorid);
 
 }

@@ -56,10 +56,9 @@
 	</select>
 	
 	<insert id="createSystemRoleAdminRelation" parameterType="systemRoleAdminRelation">
-		insert into ll_system_role_admin_relation (role_id,role_name,customer_id,customer_name,
-		admin_id,admin_name,status ) 
-		values (#{role_id},#{role_name},#{customer_id},#{customer_name},
-		#{admin_id},#{admin_name},#{status})
+		insert into ll_system_role_admin_relation (role_id,role_name,
+		admin_id,admin_name,status,create_time ) 
+		values (#{role_id},#{role_name},#{admin_id},#{admin_name},#{status},#{create_time})
 	</insert>
 	
 	<delete id="deleteSystemRoleAdminRelation" parameterType="systemRoleAdminRelation">
@@ -67,7 +66,6 @@
 		<where>
 			<if test="id != null "> and id = #{id} </if>
 			<if test="role_id != null "> and role_id = #{role_id} </if>
-			<if test="customer_id != null "> and customer_id = #{customer_id} </if>
 			<if test="admin_id != null "> and admin_id = #{admin_id} </if>
 			<if test="status != null "> and status = #{status} </if>
 		</where>
@@ -213,6 +211,20 @@
 	<delete id="deleteSystemRole" parameterType="systemRole">
 		delete from ll_system_role where id = #{id}
 	</delete>
+	
+	<select id="querySystemMenuListByOperatorId" parameterType="long" resultType="systemMenu" useCache="false" >
+		select distinct m.* from ll_system_menu m , ll_system_role_admin_relation ar , ll_system_role_menu_relation mr
+		  where m.id = mr.menu_id and mr.role_id = ar.role_id and m.status = 1 and ar.status = 1 and mr.status = 1
+		  and ar.admin_id = #{value}
+		  order by m.seq asc 
+	</select>
+	
+	<select id="querySystemRoleListByOperatorId" parameterType="long" resultType="systemRole" useCache="false">
+		select distinct r.* from ll_system_role r , ll_system_role_admin_relation ar 
+		  where r.id = ar.role_id and  r.status = 1 and ar.status = 1 
+		  and ar.admin_id = #{value}
+		  order by r.id asc 
+	</select>
 </mapper>
 
 

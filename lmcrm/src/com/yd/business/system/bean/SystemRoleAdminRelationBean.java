@@ -20,8 +20,8 @@ public class SystemRoleAdminRelationBean extends SystemBean {
 	
 	private Integer role_id;
 	private String role_name;
-	private Integer customer_id;
-	private String customer_name;
+	private Integer company_id;
+	private String company_name;
 	private Integer admin_id;
 	private String admin_name;
 	private String status_value;
@@ -36,18 +36,6 @@ public class SystemRoleAdminRelationBean extends SystemBean {
 	}
 	public void setRole_name(String role_name) {
 		this.role_name = role_name;
-	}
-	public Integer getCustomer_id() {
-		return customer_id;
-	}
-	public void setCustomer_id(Integer customer_id) {
-		this.customer_id = customer_id;
-	}
-	public String getCustomer_name() {
-		return customer_name;
-	}
-	public void setCustomer_name(String customer_name) {
-		this.customer_name = customer_name;
 	}
 	public Integer getAdmin_id() {
 		return admin_id;
@@ -66,6 +54,18 @@ public class SystemRoleAdminRelationBean extends SystemBean {
 	}
 	public void setStatus_value(String status_value) {
 		this.status_value = status_value;
+	}
+	public Integer getCompany_id() {
+		return company_id;
+	}
+	public void setCompany_id(Integer company_id) {
+		this.company_id = company_id;
+	}
+	public String getCompany_name() {
+		return company_name;
+	}
+	public void setCompany_name(String company_name) {
+		this.company_name = company_name;
 	}
 	
 }

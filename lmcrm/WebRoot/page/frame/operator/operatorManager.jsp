@@ -274,19 +274,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   	<table class="table table-striped table-hover table-sm" >
 			  <thead>
 			    <tr>
-			      <th scope="col" onclick="choseAllMenus()"><input type="checkbox" id="selectAllMenu" >全选</th>
-			      <th scope="col">一级菜单</th>
-			      <th scope="col">二级菜单</th>
-			      <th scope="col">菜单状态</th>
+			      <th scope="col" onclick="choseAllRoles()"><input type="checkbox" id="selectAllRole" >全选</th>
+			      <th scope="col">角色名称</th>
+			      <th scope="col">角色权限说明</th>
+			 <!--      <th scope="col">角色状态</th> -->
 			    </tr>
 			  </thead>
 			  <tbody>
 			  
-			  <tr v-for="(menu,index) in menuList"  :for="'menu'+index"  @click="checkRole(index)">
-			      <th> <input type="checkbox" :id="'menu'+index" name="menu_ids" :value="menu.id" v-model="checkedRows" > </th>
-			      <td>{{menu.parent_name   }}</td>
-			      <td>{{menu.name   }}</td>
-			      <td>{{getDescByBeanAttrValue("SystemMenuBean","status",menu.status)}}</td>
+			  <tr v-for="(role,index) in roleList"  :for="'role'+index"  @click="checkRole(index)">
+			      <th> <input type="checkbox" :id="'role'+index" name="role_ids" :value="role.id"  > </th>
+			      <td>{{role.name   }}</td>
+			      <td>{{role.description   }}</td>
+			     <!--  <td>{{getDescByBeanAttrValue("SystemMenuBean","status",role.status)}}</td> -->
 			      
 			  </tr>
 			  
@@ -299,7 +299,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">关 闭</button>
-        <button type="button" class="btn btn-primary" onclick="addOrUpdateOperator()">保 存</button>
+        <button type="button" class="btn btn-primary" onclick="updateOperatorRole()">保 存</button>
       </div>
     </div>
   </div>

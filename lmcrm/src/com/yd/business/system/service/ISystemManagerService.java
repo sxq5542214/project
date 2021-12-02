@@ -33,21 +33,19 @@ public interface ISystemManagerService {
 
 	void deleteSystemRoleMenuRelation(SystemRoleMenuRelationBean bean);
 
-	Map<String, List<SystemMenuBean>> queryMenuByCustomer(int customer_id);
-	
 	/**
 	 * 查询系统的菜单信息用于后台管理
 	 * @param bean
 	 * @return
 	 */
-	SystemMenuBean querySystemMenuForMgr(SystemMenuBean bean);
+//	SystemMenuBean querySystemMenuForMgr(SystemMenuBean bean);
 	
 	/**
 	 * 处理提交菜单信息
 	 * @param jsonData
 	 * @return
 	 */
-	SystemMenuBean commitSystemMenuInfo(String jsonData);
+	SystemMenuBean createSystemMenuInfo(String jsonData);
 	
 	/**
 	 * 删除菜单信息
@@ -71,7 +69,7 @@ public interface ISystemManagerService {
 	 * @param rela_id   关联id
 	 * @return
 	 */
-	List<SystemRoleMenuRelationBean> commitSystemMenuAndRoleRelation(Object menu_ids, Object role_ids,Object rela_ids, String action, String status);
+	List<SystemRoleMenuRelationBean> createSystemMenuAndRoleRelation(Object menu_ids, Object role_ids,Object rela_ids, String action, String status);
 	/**
 	 * 用户权限的关联修改
 	 * @param admin_ids  用户id集合
@@ -80,7 +78,7 @@ public interface ISystemManagerService {
 	 * @param rela_id   关联id
 	 * @return
 	 */
-	List<SystemRoleAdminRelationBean> commitSystemAdminAndRoleRelation(Object admin_ids, Object role_ids,Object rela_ids, String action, String status);
+	List<SystemRoleAdminRelationBean> createSystemAdminAndRoleRelation(Object admin_ids, Object role_ids,Object rela_ids, String action, String status);
 
 	
 	/**
@@ -88,7 +86,7 @@ public interface ISystemManagerService {
 	 * @param jsonData
 	 * @return
 	 */
-	SystemRoleBean commitSystemRoleInfo(String jsonData);
+	SystemRoleBean createSystemRoleInfo(String jsonData);
 	
 	/**
 	 * 修改权限状态
@@ -111,7 +109,7 @@ public interface ISystemManagerService {
 	 * @param roleIds
 	 * @return
 	 */
-	<T> List<T> commitRoleRelation(String type,String itemIds,String roleIds,Object rela_ids,String action,String status);
+	<T> List<T> createRoleRelation(String type,String itemIds,String roleIds,Object rela_ids,String action,String status);
 
 	/**
 	 * 没有关联的菜单集合
@@ -125,11 +123,9 @@ public interface ISystemManagerService {
 	 * @param list
 	 */
 	void deleteRoleByIds(List<String> list);
+
+	List<SystemMenuBean> querySystemMenuByOperator(long operatorid);
+
+	List<SystemRoleBean> querySystemRoleByOperator(long operatorid);
 	
-	/**
-	 * 得到一级菜单
-	 * @param bean
-	 * @return
-	 */
-	List<SystemMenuBean> findLevel1MenuList(SystemMenuBean bean);
 }
