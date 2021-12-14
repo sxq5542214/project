@@ -6,6 +6,7 @@ import java.util.List;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.price.bean.ChargeDetailBean;
 import com.yd.business.price.bean.PriceBean;
+import com.yd.business.price.bean.PrintBean;
 import com.yd.business.user.bean.UserInfoBean;
 
 public interface IChargeDetailService {
@@ -39,5 +40,6 @@ public interface IChargeDetailService {
 
 	List<ChargeDetailBean> queryChargeListByUserId(Long u_id);
 
+	PrintBean generatePrintBean(long cdid);
 
 }

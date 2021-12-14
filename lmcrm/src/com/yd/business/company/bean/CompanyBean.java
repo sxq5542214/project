@@ -24,6 +24,7 @@ public class CompanyBean implements java.io.Serializable {
 	private String c_mchid;
 	private String c_key;
 	private String c_commkey;
+	private String print_grf_path;
 
 	// Constructors
 
@@ -55,6 +56,14 @@ public class CompanyBean implements java.io.Serializable {
 
 	public Long getC_id() {
 		return this.c_id;
+	}
+
+	public String getPrint_grf_path() {
+		return print_grf_path;
+	}
+
+	public void setPrint_grf_path(String print_grf_path) {
+		this.print_grf_path = print_grf_path;
 	}
 
 	public void setC_id(Long c_id) {

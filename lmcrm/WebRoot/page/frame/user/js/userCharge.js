@@ -466,6 +466,57 @@ function writeCardByChangeMeter(){
 	});
 }
 
+function printBill(){
+
+	var u_id = $("#u_id").val();
+	var user = userManager.userList[userManager.choseUserIndex] ;
+	if(u_id == ""){
+		alert("请先选择用户！");
+		return ;
+	}
+
+	var charge = userManager.userChargeList[userManager.choseChargeIndex] ;
+	if(userManager.choseChargeIndex == -1 ){
+		alert("请先选择要打印的充值记录！");
+		return ;
+	}
+	
+//	alert(charge.cd_id);
+	
+	
+	$.ajax({url:"admin/company/ajaxQueryCompanyPrintFileName.do",
+		data:{		},
+	success:function(companyNo){
+
+		webapp_start(companyNo, charge.cd_id , 'preview');
+	}});
+	
+}
+
+//应用URL协议启动WEB报表客户端程序，根据参数 option 调用对应的功能   type:print/pdf/xls/preview/rtf/csv/txt/img/grd
+function webapp_start(report, data, type) {
+    var args = {
+        type: type
+    };
+
+    if (data) {
+        args.report = "assets/print/grf/" + report + ".grf";
+        args.data = "admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data;
+
+        webapp_ws_ajax_run(args);
+    }
+    else {
+    	alert('打印没有数据！');
+    	return;
+        args.report = "grf/" + report + ".grf";
+        args.data = "data/SQLParam.jsp";
+        args.baseurl = window.rootURL;
+        args.selfsql = true;
+
+        webapp_ws_run(args);
+    }
+}
+
 function changeCMType(sel){
 	var cm_type = $("#cm_type").val() ;
 	var hide = "hide";

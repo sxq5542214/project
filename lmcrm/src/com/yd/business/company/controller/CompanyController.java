@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.context.BaseContext;
@@ -21,7 +23,9 @@ import com.yd.business.area.service.IAreaService;
 import com.yd.business.company.bean.CompanyBean;
 import com.yd.business.company.bean.CompanyExtBean;
 import com.yd.business.company.service.ICompanyService;
+import com.yd.business.image.bean.UploadLogBean;
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.util.StringUtil;
 
 /**
  * @author ice
@@ -82,4 +86,49 @@ public class CompanyController extends BaseController {
 		return null;
 	}
 	
+	@RequestMapping("**/admin/company/ajaxUploadPrintGRF.do")
+	public ModelAndView ajaxUploadPrintGRF(HttpServletRequest request,HttpServletResponse response) {
+
+		try {
+
+			String remote_ip = getRemoteHost(request);
+			MultipartHttpServletRequest mtr = (MultipartHttpServletRequest)request;
+			
+			
+			OperatorBean op = getCurrentLoginOperator();
+			String result = companyService.saveCompanyPrintGRF(mtr, remote_ip, op );
+			
+
+			writeJson(response, result);
+			
+			
+		} catch (Exception e) {
+			log.error(e, e);
+
+			writeJson(response, e.getMessage());			
+		}
+		return null;
+	}
+	
+
+	@RequestMapping("**/admin/company/ajaxQueryCompanyPrintFileName.do")
+	public ModelAndView ajaxQueryCompanyPrintFileName(HttpServletRequest request,HttpServletResponse response) {
+
+		try {
+			
+			OperatorBean op = getCurrentLoginOperator();
+			CompanyBean comp = companyService.findCompanyById(op.getO_companyid());
+			
+			writeString(response, String.valueOf(comp.getC_no()));
+			
+		} catch (Exception e) {
+			log.error(e, e);
+
+			writeJson(response, e.getMessage());			
+		}
+		return null;
+	}
+	
+		
+		
 }

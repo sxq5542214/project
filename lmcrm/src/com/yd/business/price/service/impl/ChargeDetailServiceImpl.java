@@ -1,6 +1,7 @@
 package com.yd.business.price.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -11,13 +12,17 @@ import org.springframework.stereotype.Service;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.card.bean.CardInfoBean;
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.price.bean.ChargeDetailBean;
 import com.yd.business.price.bean.PriceBean;
+import com.yd.business.price.bean.PrintBean;
 import com.yd.business.price.dao.IChargeDetailDao;
 import com.yd.business.price.service.IChargeDetailService;
+import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.util.DateUtil;
+import com.yd.util.NumberUtil;
 
 @Service("chargeDetailService")
 public class ChargeDetailServiceImpl extends BaseService implements IChargeDetailService {
@@ -25,6 +30,11 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	private IChargeDetailDao chargeDetailDao;
 	@Resource
 	private IUserInfoService userInfoService;
+	@Resource
+	private IPriceService priceService;
+	@Resource
+	private IOperatorService operatorService;
+	
 
 
 	@Override
@@ -213,6 +223,54 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		
 	}
 	
-	
+	@Override
+	public PrintBean generatePrintBean(long cdid) {
+		PrintBean bean = new PrintBean();
+		
+		ChargeDetailBean cd = findChargeDetailById(cdid);
+		UserInfoBean user = userInfoService.findUserById(cd.getCd_userid());
+		PriceBean price = priceService.findPriceById(user.getU_priceid());
+		OperatorBean operator = operatorService.findOperatorById(cd.getCd_operatorid());
+		// 用户信息、价格
+		bean.setTxtUserNo1(user.getU_no().toString());
+		bean.setTxtUserName1(user.getU_name());
+		bean.setTxtUserAddress1(user.getAddressName());
+		bean.setTxtPriceKind1(price.getP_name());
+		bean.setTxtPrice11(price.getP_price1().setScale(2, RoundingMode.HALF_UP).toString());
+		
+		//抄表
+		bean.setTxtReadingDate1("/");
+		bean.setTxtStartAmount1("/");
+		bean.setTxtEndAmount1("/");
+		bean.setTxtOperator12("/");
+		
+		//结算时间、水量、金额
+		bean.setTxtStartDate("/");
+		bean.setTxtEndDate("/");
+		bean.setTxtChargeAmount11(cd.getCd_chargeamount().setScale(2, RoundingMode.HALF_UP).toString());
+		bean.setTxtChargeMoney11(cd.getCd_chargemoney().setScale(2, RoundingMode.HALF_UP).toString());
+		
+		//实收金额
+		bean.setTxtPaidMoney(cd.getCd_paidmoney().setScale(2, RoundingMode.HALF_UP).toString());
+		//用户余额
+		bean.setTxtBalance(user.getU_balance().setScale(2, RoundingMode.HALF_UP).toString());
+		bean.setTxtOperator11(operator.getO_name());
+		
+		//收费日期
+		bean.setTxtChargeDate1(DateUtil.formatDateOnlyDate(cd.getCd_startdate() ));
+		//累计购水量
+		bean.setTxtTotalCharge1("/");
+		//大写金额
+		String bigMoney = NumberUtil.number2CNMontrayUnit(cd.getCd_paidmoney());
+		bean.setTxtBigMoney1(bigMoney);
+		
+		//支付方式
+		bean.setTxtChargeOrder1("现金");
+		//排污费等
+		bean.setTxtOtherMoney11("/");
+		bean.setTxtOtherMoney12("/");
+		
+		return bean;
+	}
 	
 }

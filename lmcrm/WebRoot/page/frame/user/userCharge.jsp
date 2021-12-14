@@ -25,6 +25,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
         <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/grid++/js/grwebapp.js"></script>
  		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 		<script	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
@@ -99,7 +100,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 												<button type="button" class="btn btn-secondary" name="button_updateCharge" disabled="disabled"  onclick="readCardAndUpdateCharge();">充值修改</button>
 												<button type="button" class="btn btn-success"  name="button_repairCard" disabled="disabled" onclick="readCardAndRepairCard();">用户补卡</button>
 						 						<button type="button" class="btn btn-primary"  name="button_changeMeter" disabled="disabled" onclick="readCardAndChangeMeter();">换表维护</button>
-						 						<button type="button" class="btn btn-dark"  name="button_makeReceipt" disabled="disabled" onclick="alert('暂未实现');">补打票据</button>
+						 						<button type="button" class="btn btn-dark"  name="button_makeReceipt" disabled="disabled" onclick="printBill();">补打票据</button>
  										    </div>
 											 <div class="col-2">
 												<button type="button" class="btn btn-info" onclick="queryUserData();">查询用户</button>

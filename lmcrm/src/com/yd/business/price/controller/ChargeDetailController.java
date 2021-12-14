@@ -7,11 +7,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.impl.conn.Wire;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.price.bean.ChargeDetailBean;
+import com.yd.business.price.bean.PrintBean;
 import com.yd.business.price.service.IChargeDetailService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
@@ -123,5 +128,33 @@ public class ChargeDetailController extends BaseController {
 		}
 		return null;
 	}
+	
+	/**
+	 * 	查询打印数据
+	 */
+	@RequestMapping("**/admin/chargeDetail/ajaxQueryChargeDetailByPrint.do")
+	public ModelAndView ajaxQueryChargeDetailByPrint(HttpServletRequest request,HttpServletResponse response) {
+		try {
+			String cdid = request.getParameter("cdid");
+			
+			System.out.println(cdid);
+			
+			PrintBean print = chargeDetailService.generatePrintBean(Long.parseLong(cdid));
+			
+			Map<String,PrintBean[]> map = new HashMap<String, PrintBean[]>();
+			map.put("Master", new PrintBean[] {print});
+
+			JSONObject jso = new JSONObject(map);
+//			String str = "{\"Master\": [{\"txtUserNo1\": 123,\"txtUserName1\": \"3333\" ,\"txtPriceKind1\":111,\"txtPrice11\":222,\"txtUserAddress1\":\"XX地址\",\"txtReadingDate1\":\"2021\" ,\"txtStartDate\":\"11\",\"txtEndDate\":\"11\",\"txtStartAmount1\":\"11\",\"txtChargeAmount11\":\"11\",\"txtChargeMoney11\":\"11\",\"txtEndAmount1\":\"11\",\"txtPaidMoney\":\"11\",\"txtBalance\":\"11\",\"txtOperator12\":\"11\",\"txtOperator11\":\"11\",\"txtChargeDate1\":\"11\",\"txtTotalCharge1\":\"11\",\"txtBigMoney1\":\"11\",\"txtOtherMoney11\":\"11\",\"txtOtherMoney12\":\"11\",\"txtChargeOrder1\":\"11\"} ]}";
+			
+			System.out.println(jso.toString() );
+			writeJson(response, map);
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+		
+	}
+	
 	
 }

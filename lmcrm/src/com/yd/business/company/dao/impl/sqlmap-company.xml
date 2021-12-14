@@ -45,6 +45,7 @@
 			<if test="c_mchid != null">c_mchid = #{c_mchid},</if>
 			<if test="c_key != null">c_key = #{c_key},</if>
 			<if test="c_commkey != null">c_commkey = #{c_commkey},</if>
+			<if test="print_grf_path != null">print_grf_path = #{print_grf_path},</if>
 		</set>
 		<where>
 			c_id = #{c_id}

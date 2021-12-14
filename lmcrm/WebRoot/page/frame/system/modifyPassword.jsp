@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta charset="utf-8">	
     <base href="<%=basePath%>">
     
-    <title>请登录</title>
+    <title>请修改密码</title>
     
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">

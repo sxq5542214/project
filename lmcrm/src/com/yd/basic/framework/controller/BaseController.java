@@ -79,6 +79,7 @@ public abstract class BaseController extends MultiActionController {
 		
 		try{
 			setResponseCharSet(response);
+
 			response.getWriter().append(json);
 			response.flushBuffer();
 		}catch (Exception e) {
