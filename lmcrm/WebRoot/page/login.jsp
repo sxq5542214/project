@@ -54,7 +54,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="card-body p-4 " style="padding-bottom: 1rem!important;padding-top:  1rem!important;">
                                 
                                 
-								<span style="color: #2E76FF;font-size: 1.2rem;"><strong> 欢迎登陆霍邱县农饮智慧云平台</strong></span>
+								<span style="color: #2E76FF;font-size: 1.2rem;"><strong> 欢迎登录霍邱县农饮智慧云平台</strong></span>
                                 <div style="width: 100%;border: 1px;height: 1.5px;background-color: #2E76FF;margin: 0 auto;"></div>
                                 
                                 <form action="javascript:void(0);">

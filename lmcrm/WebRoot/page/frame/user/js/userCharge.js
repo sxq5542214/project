@@ -307,7 +307,10 @@ function writeCardByCharge(){
 						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailStatusToSuccess.do",
 							type : "POST",async:false, data :{ cdid : cdid }});
 						
-						alert("充值写卡成功！");
+						if(confirm('充值写卡成功！ 是否打印票据？')){
+							printBill(cdid);
+						}
+						
 						$('#exampleModalCenter').modal('hide');
 						
 						queryUserChargeData();
@@ -466,7 +469,7 @@ function writeCardByChangeMeter(){
 	});
 }
 
-function printBill(){
+function printBill(cd_id){
 
 	var u_id = $("#u_id").val();
 	var user = userManager.userList[userManager.choseUserIndex] ;
@@ -475,10 +478,14 @@ function printBill(){
 		return ;
 	}
 
-	var charge = userManager.userChargeList[userManager.choseChargeIndex] ;
-	if(userManager.choseChargeIndex == -1 ){
-		alert("请先选择要打印的充值记录！");
-		return ;
+	if(cd_id == null || typeof(cd_id) == 'undefined'){
+
+		if(userManager.choseChargeIndex == -1 ){
+			alert("请先选择要打印的充值记录！");
+			return ;
+		}
+		var charge = userManager.userChargeList[userManager.choseChargeIndex] ;
+		cd_id = charge.cd_id
 	}
 	
 //	alert(charge.cd_id);
@@ -487,8 +494,7 @@ function printBill(){
 	$.ajax({url:"admin/company/ajaxQueryCompanyPrintFileName.do",
 		data:{		},
 	success:function(companyNo){
-
-		webapp_start(companyNo, charge.cd_id , 'preview');
+		webapp_start(companyNo, cd_id , 'preview');
 	}});
 	
 }
@@ -508,12 +514,12 @@ function webapp_start(report, data, type) {
     else {
     	alert('打印没有数据！');
     	return;
-        args.report = "grf/" + report + ".grf";
-        args.data = "data/SQLParam.jsp";
-        args.baseurl = window.rootURL;
-        args.selfsql = true;
-
-        webapp_ws_run(args);
+//        args.report = "grf/" + report + ".grf";
+//        args.data = "data/SQLParam.jsp";
+//        args.baseurl = window.rootURL;
+//        args.selfsql = true;
+//
+//        webapp_ws_run(args);
     }
 }
 

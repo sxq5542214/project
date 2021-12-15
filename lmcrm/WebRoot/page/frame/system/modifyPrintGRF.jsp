@@ -45,7 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@4.5.3/js/plugins/sortable.min.js" type="text/javascript"></script>
  <!-- popper.min.js below is needed if you use bootstrap 4.x. You can also use the bootstrap js 
    3.3.x versions without popper.min.js. -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.0/dist/umd/popper.min.js"></script>
  
 <!-- bootstrap.bundle.min.js below is needed if you wish to zoom and preview file content in a detail modal
     dialog. bootstrap 5.x or 4.x is supported. You can also use the bootstrap js 3.3.x versions. -->
@@ -70,7 +70,7 @@ html,body {height: 100%;}
                 <div class="card-body">
                     <h4 class="header-title m-t-0">修改票据打印设置</h4>
                     <p class="text-muted font-13 m-b-30">
-                        请点击下方空白区或将要上传的打印设置文件拖入下方后，点击上传按钮
+                        请点击下方空白区或将要上传的打印设置文件拖入下方后，点击上传按钮 &nbsp;&nbsp;&nbsp;&nbsp;<a href="assets/print/grf/example_print.zip" download="打印设置样例.zip"  class="btn btn-primary">下载模板</a>
                     </p>
 
                     <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
@@ -78,7 +78,7 @@ html,body {height: 100%;}
                         <div class="fallback">
                             <input id="printGRF" name="printGRF" type="file" class="file" data-browse-on-zone-click="true">
                         </div>
-
+					
                     </form>
 
                 </div>
