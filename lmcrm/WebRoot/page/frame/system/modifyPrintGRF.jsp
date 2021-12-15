@@ -70,7 +70,7 @@ html,body {height: 100%;}
                 <div class="card-body">
                     <h4 class="header-title m-t-0">修改票据打印设置</h4>
                     <p class="text-muted font-13 m-b-30">
-                        请点击下方空白区或将要上传的打印设置文件拖入下方后，点击上传按钮 &nbsp;&nbsp;&nbsp;&nbsp;<a href="assets/print/grf/example_print.zip" download="打印设置样例.zip"  class="btn btn-primary">下载模板</a>
+                        请点击下方空白区或将要上传的打印设置文件拖入下方后，点击上传按钮 &nbsp;&nbsp;&nbsp;&nbsp; <a href="assets/print/grf/example_print.zip" download="打印设置样例.zip"  class="btn btn-primary">下载模板</a>
                     </p>
 
                     <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone" data-previews-container="#file-previews"
