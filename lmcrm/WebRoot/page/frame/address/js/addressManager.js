@@ -51,9 +51,11 @@ function deleteAddress(){
 			},
 			success:function(result){
 			   alert(result);
-
-		    	var curNode = $.jstree.reference('#tree').get_node(addressId);
-			   $.jstree.reference('#tree').delete_node(curNode);
+			   //操作成功则删除界面上的元素
+			   if(result.indexOf('成功') > 0){
+			    	var curNode = $.jstree.reference('#tree').get_node(addressId);
+				   $.jstree.reference('#tree').delete_node(curNode);
+			   }
 			}});
 	}
 	

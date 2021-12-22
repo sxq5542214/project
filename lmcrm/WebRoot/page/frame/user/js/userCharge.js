@@ -17,26 +17,20 @@ var userManager =  new Vue({
 	},
     methods:{
 	    getChargeData: function(index){
+	    	$("#chargeRadio"+index).prop("checked",true);
 	    	this.choseChargeIndex = index;
 	    	var form = document.updateForm;
 //			form.u_name.value = this.userList[index].u_name ;
-//			form.u_phone.value = this.userList[index].u_phone ;
-//			form.u_id.value = this.userList[index].u_id ;
-	    	
-	    	
-//	    	var no = this.userChargeList[index].user_cardno ;
-//	    	$("#u_cardno").val(no);
 	    	
 	    	// 点击某条记录再启用菜单
 	    	var btnlist = $("button[name='button_makeReceipt']");
 	    	btnlist.attr("disabled",false);
 	    	
-			$("#chargeRadio"+index).prop('checked',true);
 	    },
 	    getUserData: function(index){
+	    	$("#userRadio"+index).prop("checked",true);
 	    	this.choseUserIndex = index;
 //	    	var form = document.updateForm;
-	    	
 	    	
 	    	var u_id = this.userList[index].u_id ;
 	    	var cardno = this.userList[index].u_cardno ;
@@ -47,11 +41,10 @@ var userManager =  new Vue({
 	    	//充值等按钮启用
 	    	var btnlist = $("button[name^='button_']");
 	    	btnlist.attr("disabled",false);
-	    	// 补打票据仍让禁用
+	    	// 补打票据仍然禁用
 	    	$("button[name='button_makeReceipt']").attr("disabled",true);
 	    	
 			queryUserChargeData();
-			$("#userRadio"+index).prop('checked',true);
 	    }
     }
 })
@@ -103,6 +96,7 @@ function readCardAndQueryUser(){
 		
 		if(user_no == 0 ){
 			alert("该卡没有用户数据，请重新查询！");
+			clearUserData();
 			return ;
 		}
 		
@@ -522,7 +516,14 @@ function webapp_start(report, data, type) {
 //        webapp_ws_run(args);
     }
 }
+// 清除用户数据
+function clearUserData(){
 
+	userManager.userList = [];
+	userManager.userChargeList = [];
+	userManager.choseUserIndex = -1;
+	userManager.choseChargeIndex = -1;
+}
 function changeCMType(sel){
 	var cm_type = $("#cm_type").val() ;
 	var hide = "hide";
@@ -554,8 +555,15 @@ function queryUserData(addressId){
 			u_cardno : u_cardno
 		},
 	success:function(result){
+
+	    var list = result ; 
+	    userManager.userList = list;
+	    
 		if(result.length == 0){
-		  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+		  	$.NotificationApp.send("请注意","已完成用户查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+		  	
+		  	//清除充值记录的展示及选中
+		  	clearUserData();
 		  	
 	    	//充值等按钮禁用
 	    	var btnlist = $("button[name^='button_']");
@@ -564,13 +572,20 @@ function queryUserData(addressId){
 		}else if(result.length == 1){
 //			alert(result[0].u_cardno);
 	    	$("#u_cardno").val(result[0].u_cardno);
-			queryUserChargeData();
+			
 		}else if(result.length >1 && u_cardno != ''){
-			alert('用户卡号不唯一，充值会导致问题，请重新为用户开户！');
+			alert('用户卡号不唯一，充值会导致问题，建议重新为用户开户！');
+			
 		}
-	    var list = result ; 
-	    userManager.userList = list;
-	    
+			
+		if(result.length > 0){
+			setTimeout(function() { // 直接调用选中不行，界面上的列表未加载，找不到对应的id dom对象
+				// 如果就默认调用第一条的点击事件
+				userManager.getUserData(0);
+				queryUserChargeData();
+	    	}, 100);
+		}
+		
 	}});
 }
 
@@ -611,10 +626,17 @@ function queryUserChargeData(){
 			},
 		success:function(result){
 			if(result.length == 0){
-			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+			  	$.NotificationApp.send("请注意","已完成充值记录查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
 			}
 		    var list = result ; // eval('(' + result + ')');
 		    userManager.userChargeList = list;
+		    
+		    if(list.length > 0 ){ //默认调用第一条数据的点击事件
+		    	setTimeout(function() {
+			    	userManager.getChargeData(0);
+		    	}, 500);
+		    }
+		    
 		}});
 	
 }
