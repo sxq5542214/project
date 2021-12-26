@@ -24,6 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
         
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
 	
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/themes/default/style.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
@@ -106,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										  </div>
 										  <div class="col-9">
                                         <div class="table-responsive" style="min-height: 150px;" id="tableDiv">
-                                            <table class="table  mb-0 table-hover table-centered text-nowrap"  >
+                                            <table class="table  mb-0 table-hover table-centered text-nowrap dt-responsive" id="userDataTable" >
                                                 <thead>
                                                     <tr>
 														<th scope="col">用户编号</th>
@@ -130,12 +131,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                                     </tr>
                                                 </thead>
                                                 <tbody >
-												  <tr v-for="(user,index) in userList" @click="getData(index)"
+												 <!--  <tr v-for="(user,index) in userList" @click="getData(index)"
 													:for="'radio'+index">
 													<th><input type="radio" :id="'radio'+index" name="u_id"
 														:value="index" v-model="checkedRows">{{user.u_no }}</th>
-													<!-- <td>{{user.u_no}}</td> -->
-													<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->
 													<td>{{user.u_name}}</td>
 													<td>{{user.u_phone}}</td>
 													<td>{{user.u_balance }}</td>
@@ -146,15 +145,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													<td>{{user.deviceKindName }}</td>
 													<td>{{user.addressName}}{{user.u_address }}</td>
 													<td>{{user.u_paperwork }}</td>
-										<!-- 			<td>{{user.u_peoplesize }}</td> -->
 													<td>{{user.u_cardno }}</td>
-													<!-- <td>{{user.u_materialfee }}</td>
-													<td>{{user.u_constructioncost }}</td> -->
-										<!-- 			<td>{{user.u_group +1 }}</td> -->
 													<td>{{user.u_createdate }}</td>
 													<td>{{user.u_updatedate }}</td>
 													<td>{{user.u_remark }}</td>
-												</tr>
+												</tr> -->
 												  
                                                 </tbody>
                                             </table>
@@ -491,7 +486,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">关 闭</button>
 							<button type="button" class="btn btn-primary"
-								onclick="queryUserData()">确 定3</button>
+								onclick="queryUserData()">确 定</button>
 						</div>
 					</div>
 				</div>
@@ -503,6 +498,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 
 	
+<script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/datatables.net@1.11.3/js/jquery.dataTables.min.js"></script>
+        
 <script src="page/frame/user/js/userManager.js" type="text/javascript"></script>
 </body>
 

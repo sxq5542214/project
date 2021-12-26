@@ -124,68 +124,103 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									      		</div>
 										  </div>
 										  <div class="col-8">
-										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">用户卡上数据</h4>
-	                                        <div class="table-responsive" style="min-height: 100px;">
-	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
-	                                                <thead>
-	                                                    <tr>
-															<th scope="col">卡类型</th>
-															<th scope="col">卡号</th>
-															<th scope="col">刷卡标志</th>
-															<th scope="col">充值次数</th>
-															<th scope="col">充值金额</th>
-															<th scope="col">维护码</th>
-											<!-- 				<th scope="col">一阶价格</th>
-															<th scope="col">二阶价格</th>
-															<th scope="col">三阶价格</th>
-															<th scope="col">二阶起始量</th>
-															<th scope="col">三阶起始量</th> -->
-	                                                    </tr>
-	                                                </thead>
-	                                                <tbody >
-														<tr >
-															<td>{{userCard.iCardKind }}</td>
-															<td>{{userCard.iUserNo}}</td>
-															<td>{{userCard.iFlag}}</td>
-															<td>{{userCard.iSavingNo}}</td>
-															<td>{{userCard.iAmount}}</td>
-															<td>{{userCard.iSysCode }}</td>
-												<!-- 			<td>{{userCard.iPrice1}}</td>
-															<td>{{userCard.iPrice2}}</td>
-															<td>{{userCard.iPrice3}}</td>
-															<td>{{userCard.iTon1}}</td>
-															<td>{{userCard.iTon2}}</td> -->
-														</tr>
-	                                                </tbody>
-	                                            </table>
-	                                        </div> <!-- end table-responsive-->
 	                                        
 	                                        
-										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">用户列表</h4>
-	                                        <div class="table-responsive" style="min-height: 100px;">
-	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
-	                                                <thead>
-	                                                    <tr>
-															<th scope="col">用户名称</th>
-															<th scope="col">价格类型</th>
-															<th scope="col">表具厂商</th>
-															<th scope="col">联系方式</th>
-															<th scope="col">用户地址</th>
-	                                                    </tr>
-	                                                </thead>
-	                                                <tbody >
-														<tr v-for="(user,index) in userList" @click="getUserData(index)"
-															:for="'radio'+index">
-															<th><input type="radio" :id="'userRadio'+index" name="u_id"
-																:value="index" v-model="checkedRows">{{user.u_name }}</th>
-															<td>{{user.priceName }}</td>
-															<td>{{user.device_company}}</td>
-															<td>{{user.u_phone}}</td>
-															<td>{{user.addressName}}{{user.u_address}}</td>
-														</tr>
-	                                                </tbody>
-	                                            </table>
-	                                        </div> <!-- end table-responsive-->
+	                                    <ul class="nav nav-tabs nav-bordered  mb-3" style="margin-top: 1.5rem;">
+                                            <li class="nav-item">
+                                                <a href="#home1" data-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
+                                                    <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
+                                                    <span class="d-none d-lg-block" style="font-size: 1.0rem;">用户列表</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#profile1" data-toggle="tab" aria-expanded="false" class="nav-link rounded-0 ">
+                                                    <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
+                                                    <span class="d-none d-lg-block"  style="font-size: 1.0rem;">用户卡上数据</span>
+                                                </a>
+                                            </li>
+                                         <!--    <li class="nav-item">
+                                                <a href="#settings1" data-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
+                                                    <i class="mdi mdi-settings-outline d-lg-none d-block mr-1"></i>
+                                                    <span class="d-none d-lg-block">Settings</span>
+                                                </a>
+                                            </li> -->
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div class="tab-pane active"  id="home1">
+                                                
+		                                        <div class="table-responsive" style="min-height: 100px;">
+		                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+		                                                <thead>
+		                                                    <tr>
+																<th scope="col">用户名称</th>
+																<th scope="col">价格类型</th>
+																<th scope="col">表具厂商</th>
+																<th scope="col">联系方式</th>
+																<th scope="col">用户地址</th>
+		                                                    </tr>
+		                                                </thead>
+		                                                <tbody >
+															<tr v-for="(user,index) in userList" @click="getUserData(index)"
+																:for="'radio'+index">
+																<th><input type="radio" :id="'userRadio'+index" name="u_id"
+																	:value="index" v-model="checkedRows">{{user.u_name }}</th>
+																<td>{{user.priceName }}</td>
+																<td>{{user.device_company}}</td>
+																<td>{{user.u_phone}}</td>
+																<td>{{user.addressName}}{{user.u_address}}</td>
+															</tr>
+		                                                </tbody>
+		                                            </table>
+		                                        </div> <!-- end table-responsive-->
+											</div>
+                                            <div class="tab-pane show " id="profile1">
+                                                <div class="table-responsive" style="min-height: 100px;">
+		                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+		                                                <thead>
+		                                                    <tr>
+																<th scope="col">卡类型</th>
+																<th scope="col">卡号</th>
+																<th scope="col">刷卡标志</th>
+																<th scope="col">充值次数</th>
+																<th scope="col">充值金额</th>
+																<th scope="col">维护码</th>
+												<!-- 				<th scope="col">一阶价格</th>
+																<th scope="col">二阶价格</th>
+																<th scope="col">三阶价格</th>
+																<th scope="col">二阶起始量</th>
+																<th scope="col">三阶起始量</th> -->
+		                                                    </tr>
+		                                                </thead>
+		                                                <tbody >
+															<tr >
+																<td>{{userCard.iCardKind }}</td>
+																<td>{{userCard.iUserNo}}</td>
+																<td>{{userCard.iFlag}}</td>
+																<td>{{userCard.iSavingNo}}</td>
+																<td>{{userCard.iAmount}}</td>
+																<td>{{userCard.iSysCode }}</td>
+													<!-- 			<td>{{userCard.iPrice1}}</td>
+																<td>{{userCard.iPrice2}}</td>
+																<td>{{userCard.iPrice3}}</td>
+																<td>{{userCard.iTon1}}</td>
+																<td>{{userCard.iTon2}}</td> -->
+															</tr>
+		                                                </tbody>
+		                                            </table>
+		                                        </div> <!-- end table-responsive-->
+		                                        
+                                            </div>
+                                 <!--            <div class="tab-pane" id="settings1">
+                                                <p>Food truck quinoa dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                <p class="mb-0">Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                            </div> -->
+                                        </div>
+	                                        
+	                                        
+	                                        
+	                                        
 	                                        
 	                                        <h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;"> 用户充值记录</h4>
 	                                         <div class="table-responsive" style="min-height: 150px;">

@@ -1,3 +1,4 @@
+var dataTables;
 var userManager =  new Vue({
     el: "#userManagerDiv",
     data: {
@@ -282,6 +283,11 @@ function queryUserData(){
 		    userManager.userList = list;
 		    $('#queryUserModalCenter').modal('hide');
 		    
+		    
+		    
+		    dataTables.fnClearTable();   //将数据清除  
+       　    		dataTables.fnAddData(list,true); 
+		    
 		}});
 }
 
@@ -440,21 +446,43 @@ function initData(){
 		//获取要定位元素距离浏览器顶部的距离
 		var navH = $("#treeDiv").offset().top;
 		//滚动条事件
-		$(window).scroll(function(){
-			
-			//获取滚动条的滑动距离
-			var scroH = $(this).scrollTop();
-			var height = $("#tableDiv").height() ;
-//			var minHeight = $("#tableDiv").css("minHeight") ;
-//			alert(height);
-			//滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定
-			if(scroH >= navH && height > 150){
-				$("#treeDiv").css({"position":"fixed","top":0 , "bottom" : 0 , "overflow-x": "scroll" });
-			}else if(scroH < navH){
-				$("#treeDiv").css({"position":"static"});
-			}
-		});
+//		$(window).scroll(function(){
+//			
+//			//获取滚动条的滑动距离
+//			var scroH = $(this).scrollTop();
+//			var height = $("#tableDiv").height() ;
+//			//滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定
+//			if(scroH >= navH && height > 150){
+//				$("#treeDiv").css({"position":"fixed","top":0 , "bottom" : 0 , "overflow-x": "scroll" });
+//			}else if(scroH < navH){
+//				$("#treeDiv").css({"position":"static"});
+//			}
+//		});
 
+		
+		dataTables = $('#userDataTable').dataTable({"columns": [
+		    { "data": "u_no" },
+		    { "data": "u_name" },
+		    { "data": "u_phone" },
+		    { "data": "u_balance" },
+		    { "data":  function(row, type, set, meta){
+		    			if(type =='set') return;
+		    			return dictionaryCache.getDescByBeanAttrValue("user","u_status",row.u_status);} },
+		    { "data": "priceName" },
+		    { "data": "device_company" },
+		    { "data": "deviceKindName" },
+		    { "data": "addressName" },
+		    { "data": "u_paperwork" },
+		    { "data": "u_cardno" },
+		    { "data": "u_createdate" },
+		    { "data": "u_updatedate" },
+		    { "data": "u_remark" }
+		  ],
+		  	"columnDefs" : [{
+		  		"defaultContent": " ",
+		  		"targets": "_all"
+		  	}
+  		]});
 }
 
 
