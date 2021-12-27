@@ -20,6 +20,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <!-- App css -->
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+        
         
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
 	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
@@ -103,7 +105,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <div class="card-body">
                                     	
                                         <div class="table-responsive" style="min-height: 150px;">
-                                            <table class="table  mb-0 table-hover table-centered text-nowrap"  >
+                                            <table class="table  mb-0 table-hover table-centered text-nowrap" id="dataTable"  >
                                                 <thead>
                                                     <tr>
 												      <th scope="col">#编号</th>
@@ -122,7 +124,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                                     </tr>
                                                 </thead>
                                                 <tbody >
-												  <tr v-for="(cm,index) in changeMeterList" @click="getData(index)" :for="'radio'+index" >
+												<!--   <tr v-for="(cm,index) in changeMeterList" @click="getData(index)" :for="'radio'+index" >
 												      <th> <input type="radio" :id="'radio'+index" name="p_id" :value="index" v-model="checkedRows" >{{cm.cm_id }}</th>
 												      <td>{{cm.user_name   }}</td>
 												      <td>{{getDescByBeanAttrValue("ChangeMeterBean","cm_type",cm.cm_type)}}</td>
@@ -136,7 +138,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 												      <td>{{cm.cm_newmeterno }}</td>
 												      <td>{{cm.cm_newmetercode }}</td>
 												      <td>{{cm.user_address}}</td>
-												  </tr>
+												  </tr> -->
                                                 </tbody>
                                             </table>
                                         </div> <!-- end table-responsive-->
@@ -168,6 +170,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
 
  		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+ 		<script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/datatables.net@1.11.3/js/jquery.dataTables.min.js"></script>
+ 		
 		<script type="text/javascript" src="js/client/windowsClient.js"></script>
 		<script src="page/frame/user/js/userChangeDeviceQuery.js" type="text/javascript"></script>
  

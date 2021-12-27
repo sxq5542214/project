@@ -22,6 +22,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <!-- App css -->
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+        
         
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
         <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
@@ -129,13 +131,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                    <ul class="nav nav-tabs nav-bordered  mb-3" style="margin-top: 1.5rem;">
                                             <li class="nav-item">
                                                 <a href="#home1" data-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                                    <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
+                                                    <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
                                                     <span class="d-none d-lg-block" style="font-size: 1.0rem;">用户列表</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
                                                 <a href="#profile1" data-toggle="tab" aria-expanded="false" class="nav-link rounded-0 ">
-                                                    <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
+                                                    
+                                                    <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
                                                     <span class="d-none d-lg-block"  style="font-size: 1.0rem;">用户卡上数据</span>
                                                 </a>
                                             </li>
@@ -151,7 +154,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                             <div class="tab-pane active"  id="home1">
                                                 
 		                                        <div class="table-responsive" style="min-height: 100px;">
-		                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+		                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" id="userDataTable" >
 		                                                <thead>
 		                                                    <tr>
 																<th scope="col">用户名称</th>
@@ -162,7 +165,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                                                    </tr>
 		                                                </thead>
 		                                                <tbody >
-															<tr v-for="(user,index) in userList" @click="getUserData(index)"
+											<!-- 				<tr v-for="(user,index) in userList" @click="getUserData(index)"
 																:for="'radio'+index">
 																<th><input type="radio" :id="'userRadio'+index" name="u_id"
 																	:value="index" v-model="checkedRows">{{user.u_name }}</th>
@@ -170,7 +173,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 																<td>{{user.device_company}}</td>
 																<td>{{user.u_phone}}</td>
 																<td>{{user.addressName}}{{user.u_address}}</td>
-															</tr>
+															</tr> -->
 		                                                </tbody>
 		                                            </table>
 		                                        </div> <!-- end table-responsive-->
@@ -224,7 +227,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                        
 	                                        <h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;"> 用户充值记录</h4>
 	                                         <div class="table-responsive" style="min-height: 150px;">
-	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" id="chargeDataTable"  >
 	                                                <thead>
 	                                                    <tr>
 															<th scope="col">用户卡号</th>
@@ -606,7 +609,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!-- App js -->
-
+		<script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/datatables.net@1.11.3/js/jquery.dataTables.min.js"></script>
+		
 		<script type="text/javascript" src="js/client/windowsClient.js"></script>
 		<script src="page/frame/user/js/userCharge.js"	type="text/javascript"></script>
  

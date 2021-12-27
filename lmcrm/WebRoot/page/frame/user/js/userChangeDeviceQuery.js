@@ -1,4 +1,4 @@
-
+var dataTables ;
 var changeDevice =  new Vue({
     el: "#changeDeviceDiv",
     data: {
@@ -88,5 +88,53 @@ function queryChangeDeviceData(){
 			
 		    var list = result ; // eval('(' + result + ')');
 		    changeDevice.changeMeterList = list;
+		    
+
+		    dataTables.fnClearTable();   //将数据清除  
+       　    		dataTables.fnAddData(list,true); 
 	}});
 }
+function initData(){
+	
+
+	dataTables = $('#dataTable').dataTable({"columns": [
+	    { "data": "cm_id" },
+	    { "data": "user_name" },
+	    { "data":  function(row, type, set, meta){
+	    			if(type =='set') return;
+	    			return dictionaryCache.getDescByBeanAttrValue("ChangeMeterBean","cm_type",row.cm_type)} },
+	    { "data": "old_device_company" },
+	    { "data": "new_device_company" },
+	    { "data": "operator_name" },
+	    { "data": "cm_happendate" },
+	    { "data": "cm_remark" },
+	    { "data": "cm_oldmeterno" },
+	    { "data": "cm_oldmetercode" },
+	    { "data": "cm_newmeterno" },
+	    { "data": "cm_newmetercode" },
+	    { "data": "user_address" }
+	  ],
+	  	"columnDefs" : [{
+	  		"defaultContent": " ",
+	  		"targets": "_all"
+	  	}], "order" : [] ,
+		"oLanguage": {
+	  		"sLengthMenu": "每页显示 _MENU_ 条记录",
+	  		"sZeroRecords": "对不起，没有匹配的数据",
+	  		"sInfo": "第 _START_ - _END_ 条 / 共 _TOTAL_ 条数据",
+	  		"sInfoEmpty": "没有匹配的数据",
+	  		"sInfoFiltered": "(数据表中共 _MAX_ 条记录)",
+	  		"sProcessing": "正在加载中...",
+	  		"sSearch": "表内搜索：",
+	  		"oPaginate": {
+	  		"sFirst": "第一页",
+	  		"sPrevious": " 上一页 ",
+	  		"sNext": " 下一页 ",
+	  		"sLast": " 最后一页 "
+	  		}
+  		}
+	
+	});
+}
+
+initData();

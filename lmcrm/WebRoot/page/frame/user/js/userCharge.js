@@ -1,3 +1,4 @@
+var userDataTables , chargeDataTables;
 var userManager =  new Vue({
     el: "#userManagerDiv",
     data: {
@@ -559,6 +560,10 @@ function queryUserData(addressId){
 	    var list = result ; 
 	    userManager.userList = list;
 	    
+
+	    userDataTables.fnClearTable();   //将数据清除  
+   　    		userDataTables.fnAddData(list,true); 
+	    
 		if(result.length == 0){
 		  	$.NotificationApp.send("请注意","已完成用户查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
 		  	
@@ -641,48 +646,95 @@ function queryUserChargeData(){
 	
 }
 
-//默认打开根节点
-$("#tree").on("ready.jstree", function (e, data) {
-//	alert(data.instance.get_node(6));
-	var id = e.target.firstChild.firstChild.id ; // 获取根节点
-data.instance.open_node(id);//打开根节点
-});
-$('#tree').on('changed.jstree', function (e, data) {
-	// 树形列表点击事件
-    var i, j, r ;
-//    for(i = 0, j = data.selected.length; i < j; i++) {   如果多选，则需要循环
-//      r= data.instance.get_node(data.selected[i]);
-//    }
-    r = data.instance.get_node(data.selected[0]);
-    r = r.original;
-//  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
-    var addressId = r.id ;
-	$("#u_cardno").val('');
-	$("#u_id").val('');
-    
-    queryUserData(addressId); //查询用户
-    
-//	$.ajax({url:"admin/user/ajaxQueryUserByCompany.do",
-//			data:{
-//				addressId : addressId
-//			},
-//		success:function(result){
-//			if(result.length == 0){
-//			  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
-//			}
-//		    var list = result ; 
-//		    userManager.userList = list;
-//		}});
-    
-  }).jstree({
-	  //树形列表加载参数
-	'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
-				'themes': {
-		            'name': 'proton',
-		            'responsive': true
-		        }
-			}
-});
+
+
+function initData(){
+	
+	
+	userDataTables = $('#userDataTable').dataTable({"columns": [
+	    { "data": "u_name" ,render : function(data,type,row,meta){
+	//    	alert(data+","+type+","+full+","+meta+",");
+	    	return '<input type="radio" id="userRadio'+meta.row +'" name="u_id" value="'+ meta.row +'" title="'+ meta.row +'">'+ data +'</th>' ;} },
+	    { "data": "priceName" },
+	    { "data": "device_company" },
+	    { "data": "u_phone" }, 
+	    { "data":  function(row, type, set, meta){
+			if(type =='set') return;
+			return row.addressName + row.u_address} }
+	  ],
+	  	"columnDefs" : [{
+	  		"defaultContent": " ",
+	  		"targets": "_all"
+	  	}], "order" : [] ,
+		"oLanguage": {
+	  		"sLengthMenu": "每页显示 _MENU_ 条记录",
+	  		"sZeroRecords": "对不起，没有匹配的数据",
+	  		"sInfo": "第 _START_ - _END_ 条 / 共 _TOTAL_ 条数据",
+	  		"sInfoEmpty": "没有匹配的数据",
+	  		"sInfoFiltered": "(数据表中共 _MAX_ 条记录)",
+	  		"sProcessing": "正在加载中...",
+	  		"sSearch": "表内搜索：",
+	  		"oPaginate": {
+	  		"sFirst": "第一页",
+	  		"sPrevious": " 上一页 ",
+	  		"sNext": " 下一页 ",
+	  		"sLast": " 最后一页 "
+	  		}
+  		}
+	});
+
+	$('#userDataTable').on("click","tr",function(e){
+		userManager.getUserData(e.target.parentNode.childNodes[0].childNodes[0].title);
+	});
+	
+	
+	
+	
+	
+	//默认打开根节点
+	$("#tree").on("ready.jstree", function (e, data) {
+//		alert(data.instance.get_node(6));
+		var id = e.target.firstChild.firstChild.id ; // 获取根节点
+	data.instance.open_node(id);//打开根节点
+	});
+	$('#tree').on('changed.jstree', function (e, data) {
+		// 树形列表点击事件
+	    var i, j, r ;
+//	    for(i = 0, j = data.selected.length; i < j; i++) {   如果多选，则需要循环
+//	      r= data.instance.get_node(data.selected[i]);
+//	    }
+	    r = data.instance.get_node(data.selected[0]);
+	    r = r.original;
+	//  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
+	    var addressId = r.id ;
+		$("#u_cardno").val('');
+		$("#u_id").val('');
+	    
+	    queryUserData(addressId); //查询用户
+	    
+//		$.ajax({url:"admin/user/ajaxQueryUserByCompany.do",
+//				data:{
+//					addressId : addressId
+//				},
+//			success:function(result){
+//				if(result.length == 0){
+//				  	$.NotificationApp.send("请注意","已完成查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
+//				}
+//			    var list = result ; 
+//			    userManager.userList = list;
+//			}});
+	    
+	  }).jstree({
+		  //树形列表加载参数
+		'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
+					'themes': {
+			            'name': 'proton',
+			            'responsive': true
+			        }
+				}
+	});
+}
 
 
 
+initData();

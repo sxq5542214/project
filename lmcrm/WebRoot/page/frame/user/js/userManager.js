@@ -461,7 +461,9 @@ function initData(){
 
 		
 		dataTables = $('#userDataTable').dataTable({"columns": [
-		    { "data": "u_no" },
+		    { "data": "u_no" , render : function(data,type,row,meta){
+		    	return '<input type="radio" id="radio'+meta.row+'" name="u_id" value="'+ meta.row +'" v-model="checkedRows" title="'+ meta.row +'">'+row.u_no;
+		    }},
 		    { "data": "u_name" },
 		    { "data": "u_phone" },
 		    { "data": "u_balance" },
@@ -481,7 +483,7 @@ function initData(){
 		  	"columnDefs" : [{
 		  		"defaultContent": " ",
 		  		"targets": "_all"
-		  	}],
+		  	}], "order" : [] ,
 			"oLanguage": {
 		  		"sLengthMenu": "每页显示 _MENU_ 条记录",
 		  		"sZeroRecords": "对不起，没有匹配的数据",
@@ -497,7 +499,9 @@ function initData(){
 		  		"sLast": " 最后一页 "
 		  		}
 	  		}
-		
+		});
+		$('#userDataTable').on("click","tr",function(e){
+			userManager.getData(e.target.parentNode.childNodes[0].childNodes[0].title);
 		});
 }
 
