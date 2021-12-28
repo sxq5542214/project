@@ -507,10 +507,11 @@ function webapp_start(report, data, type) {
 //        webapp_ws_ajax_run(args);
     	
     	// 调用Gird++ Web插件直接打印
-    	CreateReport("Report");
-    	SyncReportLoad(Report, urlAddRandomNo("../../../assets/print/grf/" + report + ".grf")); //载入报表模板
-    	SyncReportLoadData(Report, "../../../admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data);  //载入报表数据
+    	SyncReportLoad(Report, urlAddRandomNo("assets/print/grf/" + report + ".grf")); //载入报表模板
+    	SyncReportLoadData(Report, "admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data);  //载入报表数据
         Report.Print(true);
+        
+//        AjaxReportPrint(Report,urlAddRandomNo("../../assets/print/grf/" + report + ".grf"), "../../admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data,true);
         
 //        // 调用Gird++ Web插件展示打印预览
 //        InsertPrintViewer({
@@ -662,6 +663,9 @@ function queryUserChargeData(){
 
 
 function initData(){
+	//初始化打印报表组建
+	CreateReport("Report");
+	
 	
 	
 	userDataTables = $('#userDataTable').dataTable({"columns": [
