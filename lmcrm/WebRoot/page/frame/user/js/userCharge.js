@@ -501,10 +501,23 @@ function webapp_start(report, data, type) {
     };
 
     if (data) {
-        args.report = "assets/print/grf/" + report + ".grf";
-        args.data = "admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data;
-
-        webapp_ws_ajax_run(args);
+//    	   调用grid++客户端打印 ， 但是有水印
+//        args.report = "assets/print/grf/" + report + ".grf";
+//        args.data = "admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data;
+//        webapp_ws_ajax_run(args);
+    	
+    	// 调用Gird++ Web插件直接打印
+    	CreateReport("Report");
+    	SyncReportLoad(Report, urlAddRandomNo("../../../assets/print/grf/" + report + ".grf")); //载入报表模板
+    	SyncReportLoadData(Report, "../../../admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data);  //载入报表数据
+        Report.Print(true);
+        
+//        // 调用Gird++ Web插件展示打印预览
+//        InsertPrintViewer({
+//            report: urlAddRandomNo("../../../assets/print/grf/" + report + ".grf"),
+//            data: "../../../admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data
+//        });
+        
     }
     else {
     	alert('打印没有数据！');
