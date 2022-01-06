@@ -59,7 +59,7 @@ public class CompanyServiceImpl extends BaseService implements ICompanyService {
 			String path = request.getRealPath("/");
 			String dir = "assets/print/grf/";
 			CompanyBean company = findCompanyById(op.getO_companyid());
-			String filePath = dir + company.getC_no()+".grf";
+			String filePath = dir + company.getC_no()+"_"+ System.currentTimeMillis() +".grf";
 			MultipartFile postFile = request.getFile("printGRF");
 			if(StringUtil.isNull(postFile)){
 				jso.put("error", "上传文件为空，请检查上传数据！");

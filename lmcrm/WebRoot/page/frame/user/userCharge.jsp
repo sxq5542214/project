@@ -28,8 +28,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
         <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
  <!--        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/grid++/js/grwebapp.js"></script>
-  -->       <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/grid++/js/CreateControl.js"></script>
- 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+  --> 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 		<script	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
 </head>

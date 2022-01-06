@@ -119,7 +119,7 @@ public class CompanyController extends BaseController {
 			OperatorBean op = getCurrentLoginOperator();
 			CompanyBean comp = companyService.findCompanyById(op.getO_companyid());
 			
-			writeString(response, String.valueOf(comp.getC_no()));
+			writeString(response, comp.getPrint_grf_path());
 			
 		} catch (Exception e) {
 			log.error(e, e);

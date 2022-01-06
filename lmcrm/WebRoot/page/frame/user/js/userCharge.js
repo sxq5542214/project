@@ -487,37 +487,43 @@ function printBill(cd_id){
 	
 	
 	$.ajax({url:"admin/company/ajaxQueryCompanyPrintFileName.do",
-		data:{		},
-	success:function(companyNo){
-		webapp_start(companyNo, cd_id , 'preview');
+		data:{	cd_id : cd_id	},
+	success:function(printFileName){
+		webapp_start(printFileName, cd_id , 'preview');
 	}});
 	
 }
 
 //应用URL协议启动WEB报表客户端程序，根据参数 option 调用对应的功能   type:print/pdf/xls/preview/rtf/csv/txt/img/grd
-function webapp_start(report, data, type) {
+function webapp_start(printFileName, cd_id, type) {
     var args = {
         type: type
     };
 
-    if (data) {
+    if (cd_id) {
 //    	   调用grid++客户端打印 ， 但是有水印
 //        args.report = "assets/print/grf/" + report + ".grf";
 //        args.data = "admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data;
 //        webapp_ws_ajax_run(args);
     	
-    	// 调用Gird++ Web插件直接打印
-    	SyncReportLoad(Report, urlAddRandomNo("assets/print/grf/" + report + ".grf")); //载入报表模板
-    	SyncReportLoadData(Report, "admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data);  //载入报表数据
-        Report.Print(true);
+    	//获取上下文路径
+    	var webroot=document.location.href;
+    	var scheme = webroot.substring(0,webroot.indexOf('//')+2);
+    	var domain = webroot.substring(webroot.indexOf('//')+2,webroot.length);
+    	var serverNameStr = domain.substring(domain.indexOf('/')+1,domain.length);
+    	var domain = domain.substring(0,domain.indexOf('/')+1);
+    	var serverName =serverNameStr.substring(0,serverNameStr.indexOf('/')+1);
+    	var path = scheme + domain + serverName
+//    	  alert(path);
+    	
+    	// 调用Gird++ c/s插件直接打印  
+    	var printBill = {"printBill":{ 
+    						dataUrl : path +"admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + cd_id ,
+    						grfFileDownloadPath : path  + printFileName ,
+    							}};
+    	callWindowsClientMethod('printBill',printBill , null);
         
-//        AjaxReportPrint(Report,urlAddRandomNo("../../assets/print/grf/" + report + ".grf"), "../../admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data,true);
-        
-//        // 调用Gird++ Web插件展示打印预览
-//        InsertPrintViewer({
-//            report: urlAddRandomNo("../../../assets/print/grf/" + report + ".grf"),
-//            data: "../../../admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data
-//        });
+    	
         
     }
     else {
@@ -663,10 +669,6 @@ function queryUserChargeData(){
 
 
 function initData(){
-	//初始化打印报表组建
-	CreateReport("Report");
-	
-	
 	
 	userDataTables = $('#userDataTable').dataTable({"columns": [
 	    { "data": "u_name" ,render : function(data,type,row,meta){
