@@ -258,8 +258,8 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		
 		//收费日期
 		bean.setTxtChargeDate1(DateUtil.formatDateOnlyDate(cd.getCd_startdate() ));
-		//累计购水量
-		bean.setTxtTotalCharge1("/");
+		//累计购水量    打印纸上对应的是合计 小写
+		bean.setTxtTotalCharge1(cd.getCd_paidmoney().setScale(2, RoundingMode.HALF_UP).toString());
 		//大写金额
 		String bigMoney = NumberUtil.number2CNMontrayUnit(cd.getCd_paidmoney());
 		bean.setTxtBigMoney1(bigMoney);
