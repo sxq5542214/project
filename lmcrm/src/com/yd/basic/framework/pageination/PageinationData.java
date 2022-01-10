@@ -11,6 +11,11 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public class PageinationData
 {
+	public static final int RESULTCODE_SUCCESS = 1;
+	public static final int RESULTCODE_FAILD = -1;
+	
+	private int resultCode ;
+	private String resultDesc ;
 	//当前页
 	private int nowpage =1;
 	//页面显示最大数,默认50
@@ -56,6 +61,22 @@ public class PageinationData
 	public int getTotalpage()
 	{
 		return totalpage;
+	}
+
+	public int getResultCode() {
+		return resultCode;
+	}
+
+	public void setResultCode(int resultCode) {
+		this.resultCode = resultCode;
+	}
+
+	public String getResultDesc() {
+		return resultDesc;
+	}
+
+	public void setResultDesc(String resultDesc) {
+		this.resultDesc = resultDesc;
 	}
 
 	public void setTotalpage(int totalpage)

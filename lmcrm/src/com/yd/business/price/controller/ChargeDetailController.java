@@ -64,10 +64,28 @@ public class ChargeDetailController extends BaseController {
 		try {
 			String u_cardno = request.getParameter("u_cardno");
 			String useDate = request.getParameter("useDate");
+			String u_id = request.getParameter("u_id");
+			UserInfoBean user = null;
+
+			UserInfoBean bean = new UserInfoBean();
+			if(StringUtil.isNotNull(u_id)) {
+				user = userInfoService.findUserById(Long.parseLong(u_id));
+			}else {
+				bean.setU_cardno(Integer.parseInt(u_cardno));
+				
+				List<UserInfoBean> userList = userInfoService.queryUserInfo(bean);
+				if(userList.size() != 1 ) {
+					bean.setDataList(userList);
+					bean.setResultCode(UserInfoBean.RESULTCODE_FAILD);
+					bean.setResultDesc("用户卡号"+ u_cardno +"有重复！");
+					writeJson(response, bean);
+					return null;
+				}else {
+					user = userList.get(0);
+				}
 			
-			UserInfoBean user = userInfoService.findUserByCardNo(Integer.parseInt(u_cardno));
-			
-			ChargeDetailBean last = chargeDetailService.findLastChargeDetailByUser(user.getU_no());
+			}
+			ChargeDetailBean last = chargeDetailService.findLastChargeDetailByUserId(user.getU_id());
 			if(last.getCd_brushflag().intValue() == ChargeDetailBean.BRUSHFLAG_NO) {
 				Date brushDate = DateUtil.parseDateOnlyDate(useDate);
 				chargeDetailService.updateChargeDetailBrushFlagToSuccess(last.getCd_id(),brushDate);
@@ -96,6 +114,7 @@ public class ChargeDetailController extends BaseController {
 			OperatorBean operator = getCurrentLoginOperator();
 			String u_phone = request.getParameter("u_phone");
 			String u_name = request.getParameter("u_name");
+			String u_id = request.getParameter("u_id");
 			String u_paperwork = request.getParameter("u_paperwork");
 			String u_buildingid = request.getParameter("u_buildingid");
 			String u_areaid = request.getParameter("u_areaid");
@@ -108,10 +127,15 @@ public class ChargeDetailController extends BaseController {
 			bean.setU_paperwork(u_paperwork);
 			if(StringUtil.isNotNull(u_buildingid)) {
 				bean.setU_buildingid(Long.parseLong(u_buildingid));
-			}else if(StringUtil.isNotNull(u_areaid)) {
+			}
+			if(StringUtil.isNotNull(u_areaid)) {
 				bean.setAreaid(Long.parseLong(u_areaid));
-			}else if(StringUtil.isNotNull(u_cardno)) {
+			}
+			if(StringUtil.isNotNull(u_cardno)) {
 				bean.setU_cardno(Integer.parseInt(u_cardno));
+			}
+			if(StringUtil.isNotNull(u_id)) {
+				bean.setU_id(Long.parseLong(u_id));
 			}
 			List<ChargeDetailBean> list = new ArrayList<ChargeDetailBean>();
 			List<UserInfoBean> userList = userInfoService.queryUserInfo(bean);

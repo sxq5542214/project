@@ -379,7 +379,7 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 			case "updateLastChargeMoney":
 
 				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
-				chargeDetail = chargeDetailService.findLastChargeDetailByUser(user.getU_no());
+				chargeDetail = chargeDetailService.findLastChargeDetailByUserId(user.getU_id());
 				
 				chargeDetail.setCd_chargeamount(new BigDecimal(chargePrice).divide(price.getP_price1(),2,BigDecimal.ROUND_HALF_UP));
 				chargeDetail.setCd_chargemoney(new BigDecimal(chargePrice));

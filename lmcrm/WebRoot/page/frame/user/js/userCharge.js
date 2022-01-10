@@ -11,6 +11,7 @@ var userManager =  new Vue({
         userChargeList : [],
         priceList : [] ,
         deviceKindList : [],
+        repeatCardUserList : [],
         userCard : {iCardKind:'未读卡',iSysCode:'未读卡',iUserNo:'未读卡',iSavingNo:'未读卡',iAmount:'未读卡',iTon1:'未读卡',iTon2:'未读卡',iPrice1:'未读卡',iPrice2:'未读卡',iPrice3:'未读卡',iFlag:'未读卡'},
         newRow:{}// 新增的行数据，用于新增行
     },
@@ -113,7 +114,17 @@ function readCardAndQueryUser(){
 			// 读卡成功,更新状态
 			$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do",
 				type : "POST",async:false  ,
-				data : {u_cardno : $("#u_cardno").val() , useDate : $("#useDate").val() }
+				data : {u_cardno : $("#u_cardno").val() , useDate : $("#useDate").val() },
+				success : function(data){
+					// 失败的情况
+					if( data.resultCode == -1 ){
+						alert(data.resultDesc);
+						$("#repeat_u_id").val('');
+						
+						userManager.repeatCardUserList = data.dataList;
+						$('#repeatCardNoModalCenter').modal('show');
+					}
+				}
 			});
 			
 
@@ -124,6 +135,31 @@ function readCardAndQueryUser(){
 //			$("#u_no").val('');
 		}
 	} );
+}
+
+
+
+
+function updateChargeDetailBrushFlagByRepeatCard(){
+	var form = document.repeatCardNoForm;
+	var u_id = $("#repeat_u_id").val();
+	// 读卡成功,更新状态
+	$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do",
+		type : "POST",async:false  ,
+		data : { u_id : u_id , useDate : $("#useDate").val() },
+		success : function(data){
+			// 失败的情况
+			if( data.resultCode == -1 ){
+				alert(data.resultDesc);
+			}else{
+				$('#repeatCardNoModalCenter').modal('hide');
+			}
+		}
+	});
+}
+function clickRepeatRow(u_id,row){
+	$("#repeat_u_id").val(u_id);
+ 	$("#repeatCardRow"+u_id).prop("checked",true);
 }
 
 //充值修改
@@ -520,6 +556,7 @@ function webapp_start(printFileName, cd_id, type) {
     	var printBill = {"printBill":{ 
     						dataUrl : path +"admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + cd_id ,
     						grfFileDownloadPath : path  + printFileName ,
+    						type: type
     							}};
     	callWindowsClientMethod('printBill',printBill , null);
         
@@ -583,7 +620,8 @@ function queryUserData(addressId){
 
 	    userDataTables.fnClearTable();   //将数据清除  
    　    		userDataTables.fnAddData(list,true); 
-	    
+   　    		userManager.userChargeList = [];
+   　    		
 		if(result.length == 0){
 		  	$.NotificationApp.send("请注意","已完成用户查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
 		  	
@@ -597,19 +635,21 @@ function queryUserData(addressId){
 		}else if(result.length == 1){
 //			alert(result[0].u_cardno);
 	    	$("#u_cardno").val(result[0].u_cardno);
-			
+	    	userManager.getUserData(0);
+	    	queryUserChargeData();
 		}else if(result.length >1 && u_cardno != ''){
-			alert('用户卡号不唯一，充值会导致问题，建议重新为用户开户！');
+			alert('用户卡号有重复，请确认用户姓名再充值！');
 			
 		}
 			
-		if(result.length > 0){
-			setTimeout(function() { // 直接调用选中不行，界面上的列表未加载，找不到对应的id dom对象
-				// 如果就默认调用第一条的点击事件
-				userManager.getUserData(0);
-				queryUserChargeData();
-	    	}, 100);
-		}
+//		查询用户后自动加载充值记录
+//		if(result.length > 0){
+//			setTimeout(function() { // 直接调用选中不行，界面上的列表未加载，找不到对应的id dom对象
+//				// 如果就默认调用第一条的点击事件
+//				userManager.getUserData(0);
+//				queryUserChargeData();
+//	    	}, 100);
+//		}
 		
 	}});
 }
@@ -757,3 +797,5 @@ function initData(){
 
 
 initData();
+
+

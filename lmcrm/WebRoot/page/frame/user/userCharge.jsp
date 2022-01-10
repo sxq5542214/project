@@ -602,6 +602,64 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</div>
 		</form>
 
+<!-- 读卡卡号重复选择用户弹框 -->
+		<form name="repeatCardNoForm" action="#">
+			<!-- Modal -->
+			<div class="modal fade" id="repeatCardNoModalCenter" tabindex="-1"
+				role="dialog" aria-labelledby="repeatCardNoModalCenterTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered modal-lg"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="repeatCardNoModalCenterTitle">卡号重复，请选择用户</h5>
+					<!-- 		<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button> -->
+						</div>
+						<div class="modal-body" id="repeatCardNoModalBodyDiv">
+							<div class="container-fluid">
+
+								
+								 <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" id="chargeDataTable"  >
+                                     <thead>
+                                                   <tr>
+													<th scope="col">用户卡号</th>
+													<th scope="col">用户名称</th>
+													<th scope="col">价格类型</th>
+													<th scope="col">水表厂商</th>
+													<th scope="col">联系方式</th>
+													<th scope="col">用户地址</th>
+                                                   </tr>
+                                               </thead>
+                                               <tbody >
+													<tr v-for="(user,index) in repeatCardUserList" @click="clickRepeatRow(user.u_id,this)"
+																	>
+													<th><input type="radio" :id="'repeatCardRow' + user.u_id" name="repeatCardRow">{{user.u_cardno }}</th>
+													<td>{{user.u_name }}</td>
+													<td>{{user.priceName }}</td>
+													<td>{{user.device_company}}</td>
+													<td>{{user.u_phone}}</td>
+													<td>{{user.addressName}}{{user.u_address}}
+														<input type="hidden" name="repeat_u_id" id="repeat_u_id" >
+													</td>
+												</tr>
+                                               </tbody>
+                                  </table>
+
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary"
+								onclick="updateChargeDetailBrushFlagByRepeatCard()">确 定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
 
 
         </div>

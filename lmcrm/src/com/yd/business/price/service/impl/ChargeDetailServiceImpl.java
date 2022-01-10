@@ -35,12 +35,12 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	@Resource
 	private IOperatorService operatorService;
 	
-
+	
 
 	@Override
-	public ChargeDetailBean findLastChargeDetailByUser(Long userNo) throws Exception {
+	public ChargeDetailBean findLastChargeDetailByUserId(Long userid) throws Exception {
 		
-		UserInfoBean user = userInfoService.findUserByNo(userNo);
+		UserInfoBean user = userInfoService.findUserById(userid);
 		ChargeDetailBean bean = new ChargeDetailBean();
 		bean.setCd_userid(user.getU_id());
 		bean.setOrderby("order by cd_no desc ");

@@ -32,8 +32,6 @@ public interface IChargeDetailService {
 
 	ChargeDetailBean findChargeDetailById(Long id);
 
-	ChargeDetailBean findLastChargeDetailByUser(Long userNo) throws Exception;
-
 	int updateChargeDetail(ChargeDetailBean bean);
 
 	int updateChargeDetailBrushFlagToSuccess(Long cd_id, Date brushDate);
@@ -41,5 +39,7 @@ public interface IChargeDetailService {
 	List<ChargeDetailBean> queryChargeListByUserId(Long u_id);
 
 	PrintBean generatePrintBean(long cdid);
+
+	ChargeDetailBean findLastChargeDetailByUserId(Long userid) throws Exception;
 
 }
