@@ -18,6 +18,7 @@ import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.interceptor.BaseInterceptor;
 import com.yd.business.log.service.IOperatorLogService;
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.util.DateUtil;
 
 /**
  * @author ice
@@ -55,7 +56,7 @@ public class OperatorLogInterceptor extends BaseInterceptor {
 		
 		try {
 			OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
-			System.out.println(getClass().getName() + "  postControllerHandle... "+op.getO_name()+"  "+ request.getRequestURI());
+			System.out.println(DateUtil.getNowDateStr() + getClass().getName() + "  postControllerHandle... "+op.getO_name()+"  "+ request.getRequestURI());
 
 			operatorLogService.createOperatoryLog( op  , request);
 		}catch (Exception e) {

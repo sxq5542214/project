@@ -207,6 +207,18 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		return num;
 	}
 	
+
+	@Override
+	public int updateChargeDetailPrintStatus(Long cd_id,int printStatus) {
+		ChargeDetailBean bean  = new ChargeDetailBean();
+		bean.setCd_id(cd_id);
+		bean.setCd_printstatus(printStatus);
+		
+		int num = chargeDetailDao.updateChargeDetail(bean);
+		
+		 
+		return num;
+	}
 	
 	
 	@Override

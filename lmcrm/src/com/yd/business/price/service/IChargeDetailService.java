@@ -42,4 +42,6 @@ public interface IChargeDetailService {
 
 	ChargeDetailBean findLastChargeDetailByUserId(Long userid) throws Exception;
 
+	int updateChargeDetailPrintStatus(Long cd_id, int printStatus);
+
 }

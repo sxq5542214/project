@@ -462,7 +462,7 @@ function initData(){
 		
 		dataTables = $('#userDataTable').dataTable({"columns": [
 		    { "data": "u_no" , render : function(data,type,row,meta){
-		    	return '<input type="radio" id="radio'+meta.row+'" name="u_id" value="'+ meta.row +'" v-model="checkedRows" title="'+ meta.row +'">'+row.u_no;
+		    	return '<input type="radio" id="radio'+meta.row+'" name="u_id" value="'+ meta.row +'" v-model="checkedRows" >'+row.u_no;
 		    }},
 		    { "data": "u_name" },
 		    { "data": "u_phone" },
@@ -501,7 +501,7 @@ function initData(){
 	  		}
 		});
 		$('#userDataTable').on("click","tr",function(e){
-			userManager.getData(e.target.parentNode.childNodes[0].childNodes[0].title);
+			userManager.getData(e.target.parentNode.childNodes[0].childNodes[0].value);
 		});
 }
 

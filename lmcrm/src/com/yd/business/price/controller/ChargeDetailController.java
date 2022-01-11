@@ -171,6 +171,9 @@ public class ChargeDetailController extends BaseController {
 			JSONObject jso = new JSONObject(map);
 //			String str = "{\"Master\": [{\"txtUserNo1\": 123,\"txtUserName1\": \"3333\" ,\"txtPriceKind1\":111,\"txtPrice11\":222,\"txtUserAddress1\":\"XX地址\",\"txtReadingDate1\":\"2021\" ,\"txtStartDate\":\"11\",\"txtEndDate\":\"11\",\"txtStartAmount1\":\"11\",\"txtChargeAmount11\":\"11\",\"txtChargeMoney11\":\"11\",\"txtEndAmount1\":\"11\",\"txtPaidMoney\":\"11\",\"txtBalance\":\"11\",\"txtOperator12\":\"11\",\"txtOperator11\":\"11\",\"txtChargeDate1\":\"11\",\"txtTotalCharge1\":\"11\",\"txtBigMoney1\":\"11\",\"txtOtherMoney11\":\"11\",\"txtOtherMoney12\":\"11\",\"txtChargeOrder1\":\"11\"} ]}";
 			
+			// 查询后，设置打印状态为已打印
+			chargeDetailService.updateChargeDetailPrintStatus(Long.parseLong(cdid), ChargeDetailBean.PRINT_STATUS_YES);
+			
 			System.out.println(jso.toString() );
 			writeJson(response, map);
 		} catch (Exception e) {

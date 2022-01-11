@@ -560,7 +560,9 @@ function webapp_start(printFileName, cd_id, type) {
     							}};
     	callWindowsClientMethod('printBill',printBill , null);
         
-    	
+//    	$.ajax({url:"chargeDetail/ajaxUpdateChargeDetailPrintSuccess.do",
+//    		data:{	cd_id : cd_id	}
+//    		});
         
     }
     else {
@@ -620,7 +622,7 @@ function queryUserData(addressId){
 
 	    userDataTables.fnClearTable();   //将数据清除  
    　    		userDataTables.fnAddData(list,true); 
-   　    		userManager.userChargeList = [];
+   　    		userManager.userChargeList = [];  //用户列表查询时，清除充值记录列表
    　    		
 		if(result.length == 0){
 		  	$.NotificationApp.send("请注意","已完成用户查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
@@ -713,7 +715,7 @@ function initData(){
 	userDataTables = $('#userDataTable').dataTable({"columns": [
 	    { "data": "u_name" ,render : function(data,type,row,meta){
 	//    	alert(data+","+type+","+full+","+meta+",");
-	    	return '<input type="radio" id="userRadio'+meta.row +'" name="u_id" value="'+ meta.row +'" title="'+ meta.row +'">'+ data +'</th>' ;} },
+	    	return '<input type="radio" id="userRadio'+meta.row +'" name="u_id" value="'+ meta.row +'" >'+ data +'</th>' ;} },
 	    { "data": "priceName" },
 	    { "data": "device_company" },
 	    { "data": "u_phone" }, 
@@ -743,7 +745,7 @@ function initData(){
 	});
 
 	$('#userDataTable').on("click","tr",function(e){
-		userManager.getUserData(e.target.parentNode.childNodes[0].childNodes[0].title);
+		userManager.getUserData(e.target.parentNode.childNodes[0].childNodes[0].value);
 	});
 	
 	
