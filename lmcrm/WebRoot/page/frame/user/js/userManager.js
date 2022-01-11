@@ -286,7 +286,9 @@ function queryUserData(){
 		    
 		    
 		    dataTables.fnClearTable();   //将数据清除  
-       　    		dataTables.fnAddData(list,true); 
+		    if(list.length >0){
+   　    				dataTables.fnAddData(list,true); 
+		    }
 		    
 		}});
 }

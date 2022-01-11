@@ -621,7 +621,9 @@ function queryUserData(addressId){
 	    
 
 	    userDataTables.fnClearTable();   //将数据清除  
-   　    		userDataTables.fnAddData(list,true); 
+	    if(list.length >0){
+    		userDataTables.fnAddData(list,true); 
+	    }
    　    		userManager.userChargeList = [];  //用户列表查询时，清除充值记录列表
    　    		
 		if(result.length == 0){
