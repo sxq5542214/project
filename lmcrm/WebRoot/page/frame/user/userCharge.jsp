@@ -117,7 +117,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <div class="card-body" style="padding-top: 0px;">
                                     	
 									  <div class="row">
-									      <div class="col-4 ">
+									      <div class="col-2 ">
 									      		<div class="card">
 									      			<div class="card-header">地址列表</div>
 									      			<div class="card-body">
@@ -125,7 +125,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													</div>
 									      		</div>
 										  </div>
-										  <div class="col-8">
+										  <div class="col-10">
 	                                        
 	                                        
 	                                    <ul class="nav nav-tabs nav-bordered  mb-3" style="margin-top: 1.5rem;">
@@ -153,10 +153,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                         <div class="tab-content">
                                             <div class="tab-pane active"  id="home1">
                                                 
-		                                        <div class="table-responsive" style="min-height: 100px;">
+		                                        <div class="table-responsive" style="min-height: 100px;padding: 1px;">
 		                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" id="userDataTable" >
 		                                                <thead>
 		                                                    <tr>
+																<th scope="col" style="width: 5%;">序号</th>
 																<th scope="col">用户名称</th>
 																<th scope="col">价格类型</th>
 																<th scope="col">表具厂商</th>

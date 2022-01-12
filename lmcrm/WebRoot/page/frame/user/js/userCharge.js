@@ -715,9 +715,9 @@ function queryUserChargeData(){
 function initData(){
 	
 	userDataTables = $('#userDataTable').dataTable({"columns": [
-	    { "data": "u_name" ,render : function(data,type,row,meta){
-	//    	alert(data+","+type+","+full+","+meta+",");
-	    	return '<input type="radio" id="userRadio'+meta.row +'" name="u_id" value="'+ meta.row +'" >'+ data +'</th>' ;} },
+		{ "data": "u_id" ,render : function(data,type,row,meta){
+	    	return '<input type="radio" id="userRadio'+meta.row +'" name="u_id" value="'+ meta.row +'" onclick="userManager.getUserData('+ meta.row+')" >'+ ( Number(meta.row) + 1) +'</th>' ;} },
+	    { "data": "u_name" },
 	    { "data": "priceName" },
 	    { "data": "device_company" },
 	    { "data": "u_phone" }, 
@@ -738,12 +738,16 @@ function initData(){
 	  		"sProcessing": "正在加载中...",
 	  		"sSearch": "表内搜索：",
 	  		"oPaginate": {
-	  		"sFirst": "第一页",
-	  		"sPrevious": " 上一页 ",
-	  		"sNext": " 下一页 ",
-	  		"sLast": " 最后一页 "
-	  		}
-  		}
+		  		"sFirst": "第一页",
+		  		"sPrevious": " 上一页 ",
+		  		"sNext": " 下一页 ",
+		  		"sLast": " 最后一页 "
+		  		},
+  		},
+  		"ordering": false, //排序功能
+  		"searching": false,//本地搜索
+  		"lengthChange": false,//是否允许用户自定义显示数量
+        "bFilter": false //列筛序功能
 	});
 
 	$('#userDataTable').on("click","tr",function(e){

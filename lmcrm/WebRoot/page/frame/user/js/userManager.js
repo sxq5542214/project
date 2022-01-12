@@ -464,7 +464,7 @@ function initData(){
 		
 		dataTables = $('#userDataTable').dataTable({"columns": [
 		    { "data": "u_no" , render : function(data,type,row,meta){
-		    	return '<input type="radio" id="radio'+meta.row+'" name="u_id" value="'+ meta.row +'" v-model="checkedRows" >'+row.u_no;
+		    	return '<input type="radio" id="radio'+meta.row+'" name="u_id" value="'+ meta.row +'"  onclick="userManager.getData('+ meta.row+')"  >'+row.u_no;
 		    }},
 		    { "data": "u_name" },
 		    { "data": "u_phone" },
