@@ -110,6 +110,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                             <table class="table  mb-0 table-hover table-centered text-nowrap dt-responsive" id="userDataTable" >
                                                 <thead>
                                                     <tr>
+														<th scope="col">序号</th>
 														<th scope="col">用户编号</th>
 														<th scope="col">用户名称</th>
 														<th scope="col">联系方式</th>

@@ -716,7 +716,7 @@ function initData(){
 	
 	userDataTables = $('#userDataTable').dataTable({"columns": [
 		{ "data": "u_id" ,render : function(data,type,row,meta){
-	    	return '<input type="radio" id="userRadio'+meta.row +'" name="u_id" value="'+ meta.row +'" onclick="userManager.getUserData('+ meta.row+')" >'+ ( Number(meta.row) + 1) +'</th>' ;} },
+	    	return '<input type="radio" id="userRadio'+meta.row +'" name="u_id" value="'+ meta.row +'" onclick="userManager.getUserData('+ meta.row+')" >'+ ( Number(meta.row) + 1)  ;} },
 	    { "data": "u_name" },
 	    { "data": "priceName" },
 	    { "data": "device_company" },

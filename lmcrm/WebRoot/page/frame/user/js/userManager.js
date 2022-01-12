@@ -464,8 +464,9 @@ function initData(){
 		
 		dataTables = $('#userDataTable').dataTable({"columns": [
 		    { "data": "u_no" , render : function(data,type,row,meta){
-		    	return '<input type="radio" id="radio'+meta.row+'" name="u_id" value="'+ meta.row +'"  onclick="userManager.getData('+ meta.row+')"  >'+row.u_no;
+		    	return '<input type="radio" id="radio'+meta.row+'" name="u_id" value="'+ meta.row +'"  onclick="userManager.getData('+ meta.row+')"  >'+ ( Number(meta.row) + 1) ;
 		    }},
+		    { "data": "u_no" },
 		    { "data": "u_name" },
 		    { "data": "u_phone" },
 		    { "data": "u_balance" },
@@ -495,12 +496,13 @@ function initData(){
 		  		"sProcessing": "正在加载中...",
 		  		"sSearch": "表内搜索：",
 		  		"oPaginate": {
-		  		"sFirst": "第一页",
-		  		"sPrevious": " 上一页 ",
-		  		"sNext": " 下一页 ",
-		  		"sLast": " 最后一页 "
-		  		}
-	  		}
+			  		"sFirst": "第一页",
+			  		"sPrevious": " 上一页 ",
+			  		"sNext": " 下一页 ",
+			  		"sLast": " 最后一页 "
+			  		}
+	  		},
+	  		"ordering": false, //排序功能
 		});
 		$('#userDataTable').on("click","tr",function(e){
 			
