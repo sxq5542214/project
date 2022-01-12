@@ -503,7 +503,15 @@ function initData(){
 	  		}
 		});
 		$('#userDataTable').on("click","tr",function(e){
-			userManager.getData(e.target.parentNode.childNodes[0].childNodes[0].value);
+			
+
+			if(e.target.toString().indexOf("Input") > 0){
+				//点击的是 单选按钮 ， 放在input的 onclick中了
+//				userManager.getData(e.target.value);
+
+			}else{
+				userManager.getData(e.target.parentNode.childNodes[0].childNodes[0].value);
+			}
 		});
 }
 

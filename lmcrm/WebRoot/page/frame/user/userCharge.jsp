@@ -117,7 +117,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <div class="card-body" style="padding-top: 0px;">
                                     	
 									  <div class="row">
-									      <div class="col-2 ">
+									      <div class="col-3 ">
 									      		<div class="card">
 									      			<div class="card-header">地址列表</div>
 									      			<div class="card-body">
@@ -125,7 +125,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 													</div>
 									      		</div>
 										  </div>
-										  <div class="col-10">
+										  <div class="col-9">
 	                                        
 	                                        
 	                                    <ul class="nav nav-tabs nav-bordered  mb-3" style="margin-top: 1.5rem;">

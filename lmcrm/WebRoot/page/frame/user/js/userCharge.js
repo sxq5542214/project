@@ -751,7 +751,13 @@ function initData(){
 	});
 
 	$('#userDataTable').on("click","tr",function(e){
-		userManager.getUserData(e.target.parentNode.childNodes[0].childNodes[0].value);
+		if(e.target.toString().indexOf("Input") > 0){
+			//点击的是 单选按钮 ， 放在input的 onclick中了
+//			userManager.getUserData(e.target.value);
+
+		}else{
+			userManager.getUserData(e.target.parentNode.childNodes[0].childNodes[0].value);
+		}
 	});
 	
 	
