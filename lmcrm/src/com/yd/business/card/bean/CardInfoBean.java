@@ -3,12 +3,15 @@
  */
 package com.yd.business.card.bean;
 
+import org.apache.ibatis.type.Alias;
+
 import com.yd.basic.framework.bean.BaseBean;
 
 /**
  * @author ice
  *
  */
+@Alias("cardInfo")
 public class CardInfoBean extends BaseBean {
 	
 	public static final int CARDKIND_NEW = 0 ; // 新卡

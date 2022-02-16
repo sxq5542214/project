@@ -265,6 +265,12 @@ public class CardInfoController extends BaseController {
 			OtherParm op = cardInfoService.convertOtherParam(bean, price , bean.getIcardkind());
 			bean.setStru_otherparm(op);
 			
+			UserParm up = bean.new UserParm(); //空值
+			bean.setStru_userparm(up);
+			
+			//保存写卡记录
+			cardInfoService.saveCardInfoParams("表具管理写卡", bean);
+			
 		} catch (Exception e) {
 			log.error(e, e);
 			bean.setQueryStatus(BaseBean.QUERYSTATUS_ERROR);

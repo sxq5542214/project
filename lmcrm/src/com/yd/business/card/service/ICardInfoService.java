@@ -29,4 +29,6 @@ public interface ICardInfoService {
 
 	CardInfoBean generateCardInfoByOpenAccount(long userId, long deviceKindId, int chargePrice, String deviceCompany);
 
+	int saveCardInfoParams(String action, CardInfoBean bean);
+
 }

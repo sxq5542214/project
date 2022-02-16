@@ -17,6 +17,7 @@ import com.yd.business.card.bean.CardInfoBean.OtherParm;
 import com.yd.business.card.bean.CardInfoBean.PriceParm;
 import com.yd.business.card.bean.CardInfoBean.SysParam;
 import com.yd.business.card.bean.CardInfoBean.UserParm;
+import com.yd.business.card.dao.ICardInfoDao;
 import com.yd.business.card.service.ICardInfoService;
 import com.yd.business.device.bean.DeviceInfoBean;
 import com.yd.business.device.bean.DeviceKindBean;
@@ -31,6 +32,7 @@ import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.util.DateUtil;
+import com.yd.util.JsonUtil;
 
 /**
  * @author ice
@@ -50,6 +52,8 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 	private IChargeDetailService chargeDetailService;
 	@Autowired
 	private IChangeMeterService changeMeterService;
+	@Autowired
+	private ICardInfoDao cardInfoDao;
 	
 
 	@Override
@@ -412,6 +416,9 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 			}
 		
 			bean.setChargeDetailId(chargeDetail.getCd_id());
+			
+			//保存写卡记录
+			saveCardInfoParams(action, bean);
 		}catch (Exception e) {
 			log.error(e, e);
 			bean.setQueryStatus(BaseBean.QUERYSTATUS_ERROR);
@@ -440,5 +447,25 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 		return null;
 	}
 	
+	/**
+	 * 保存写卡的参数 日志
+	 * @param bean
+	 * @return
+	 */
+	@Override
+	public int saveCardInfoParams(String action ,CardInfoBean bean) {
+
+		OperatorBean op = (OperatorBean) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+		bean.setResult_code( op.getO_id().intValue() );
+		
+		String jsonString = JsonUtil.convertObjectToJsonString(bean);
+		bean.setResult_desc(jsonString);
+		
+		bean.setQueryResult(DateUtil.getNowDateStr());
+		
+		bean.setOrderby(action);
+		
+		return cardInfoDao.insertWriteCardLogs(bean);
+	}
 	
 }
