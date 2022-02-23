@@ -89,10 +89,10 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 				updateChargeDetail(lastCharge);
 				return lastCharge ;
 			}
-			
-			if(lastCharge.getCd_brushflag() == ChargeDetailBean.BRUSHFLAG_NO && kind != ChargeDetailBean.KIND_CHANGE_CARD && kind != ChargeDetailBean.KIND_CHANGE_DEVICE ) {
-				throw new Exception("当前用户上次充值未刷卡至水表，请刷卡至水表后再试！ cardNo:"+ user.getU_cardno() );
-			}
+//			老系统中未做该判断，仅判断卡中的刷表字段。  因此注释。 by 2022.2.23
+//			if(lastCharge.getCd_brushflag() == ChargeDetailBean.BRUSHFLAG_NO && kind != ChargeDetailBean.KIND_CHANGE_CARD && kind != ChargeDetailBean.KIND_CHANGE_DEVICE ) {
+//				throw new Exception("当前用户上次充值未刷卡至水表，请刷卡至水表后再试！ cardNo:"+ user.getU_cardno() );
+//			}
 			no = lastCharge.getCd_no() + 1l ;
 			saving_no = lastCharge.getCd_savingno() + 1l;
 		}
