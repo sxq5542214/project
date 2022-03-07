@@ -188,6 +188,7 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 			pp.setIprice1(price.getP_price1().multiply(new BigDecimal(100)).intValue()); //分为单位
 			pp.setIprice2(price.getP_price2().multiply(new BigDecimal(100)).intValue()); //分为单位
 			pp.setIprice3(price.getP_price3().multiply(new BigDecimal(100)).intValue()); //分为单位
+			pp.setIprice5(9); //9代表每月最低消费 ton1额度      0代表每月赠送 ton1额度
 			break;
 		case CardInfoBean.METERKIND_MON_0x41:
 
@@ -201,7 +202,8 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 			pp.setIprice3(price.getP_price3().multiply(new BigDecimal(100)).intValue()); //分为单位
 			break;
 		case CardInfoBean.METERKIND_YEAR:
-			
+
+			pp.setIprice5(13); //年水表13代表每月最低消费 ton1额度      0代表每月赠送 ton1额度
 			break;
 
 		default:
@@ -369,6 +371,8 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
 				if(imeterkind == CardInfoBean.METERKIND_MON_0x31) { //技术文档中要求如果是49类型的表，price6传0x88
 					bean.getStru_priceparm().setIprice6(0x88);
+					bean.getStru_priceparm().setIprice5(9); // 0x31的月消费卡   9代表最低消费iton1额度   0代表赠送iton1额度
+
 				}
 				chargeDetail = chargeDetailService.createChargeDetail(user, price, ChargeDetailBean.KIND_OPEN_ACCOUNT, ChargeDetailBean.ORDER_MONEY, operator, chargePrice);
 				break;

@@ -11,6 +11,7 @@ var userManager =  new Vue({
         userChargeList : [],
         priceList : [] ,
         deviceKindList : [],
+        readCardUserNo : -1,
         repeatCardUserList : [],
         userCard : {iCardKind:'未读卡',iSysCode:'未读卡',iUserNo:'未读卡',iSavingNo:'未读卡',iAmount:'未读卡',iTon1:'未读卡',iTon2:'未读卡',iPrice1:'未读卡',iPrice2:'未读卡',iPrice3:'未读卡',iFlag:'未读卡'},
         newRow:{}// 新增的行数据，用于新增行
@@ -110,6 +111,7 @@ function readCardAndQueryUser(){
 		queryUserData('');
 
 		if(iFlag == 1){
+			userManager.readCardUserNo = user_no ;
 			$("#useDate").val("20"+iYear+"-"+ iMonth + "-" + iDay);
 			// 读卡成功,更新状态
 			$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do",
@@ -321,6 +323,10 @@ function writeCardByCharge(){
 		alert("请先选择用户再充值");
 		return ;
 	}
+	if(userManager.readCardUserNo != u_cardno ){
+		alert('您可能未刷卡至表中，请先读卡查询再做操作！');
+		return ;
+	}
 	
 	$.ajax({url:"admin/card/ajaxChargeMoneyCard.do",
 		type : "POST",async:false, 
@@ -363,7 +369,7 @@ function writeCardByUpdateCharge(){
 		alert("请先选择用户再充值");
 		return ;
 	}
-	
+
 	$.ajax({url:"admin/card/ajaxUpdateLastChargeMoneyCard.do",
 		type : "POST",async:false, 
 		data :{ u_cardno :  u_cardno , u_id : u_id ,
