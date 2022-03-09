@@ -1,4 +1,4 @@
-document.write('<script	src="https://cdn.jsdelivr.net/gh/SheetJS/sheetjs/dist/xlsx.core.min.js"></script>');
+document.write('<script	src="https://cdn.jsdelivr.net/gh/SheetJS/sheetjs@0.17.5/dist/xlsx.core.min.js"></script>');
 function exportExcel(tableIndex){ 
 	if(tableIndex == null){
 		tableIndex = 0;
