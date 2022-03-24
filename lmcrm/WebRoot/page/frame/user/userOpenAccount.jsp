@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                             <li class="breadcrumb-item active">Basic Tables</li>
                                         </ol> -->
                                     </div>
-                                    <h4 class="page-title">用户开户</h4>
+                                    <h4 class="page-title">水表开户</h4>
                                 </div>
                             </div>
                         </div>     
@@ -63,7 +63,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	<div class="card-header">
 										<div class="row" style="margin-top: 10px;">
 											<div class="col-10">
-												<button type="button" class="btn btn-info"  onclick="return checkChose();">用户开户</button>
+												<button type="button" class="btn btn-info"  onclick="return checkChose();">水表开户</button>
 										    </div>
 											 <div class="col-2">
 <!-- 										      	<button type="button" class="btn btn-primary" onclick="queryPriceData();">查询价格</button>

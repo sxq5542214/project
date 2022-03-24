@@ -455,7 +455,7 @@ function writeCardByChangeMeter(){
 	var u_cardno = $("#u_cardno").val();
 	var u_id = $("#u_id").val();
 	var device_company = $("#device_company").val();
-	alert(u_cardno +"," + u_id);
+//	alert(u_cardno +"," + u_id);
 	if(u_cardno == '' || u_cardno == '0' || u_cardno == 0 ||  u_id == ''){
 		alert("请先选择用户再充值");
 		return ;

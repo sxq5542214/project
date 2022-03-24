@@ -408,6 +408,10 @@ public class CardInfoServiceImpl extends BaseService implements ICardInfoService
 			case "changeMeter":
 
 				bean.setIcardkind(CardInfoBean.CARDKIND_USER); // 卡类型
+				if(imeterkind == CardInfoBean.METERKIND_MON_0x31) { //技术文档中要求如果是49类型的表，price6传0x88
+					bean.getStru_priceparm().setIprice6(0x88);
+					bean.getStru_priceparm().setIprice5(9); // 0x31的月消费卡   9代表最低消费iton1额度   0代表赠送iton1额度
+				}
 //				chargeDetail = chargeDetailService.findLastChargeDetailByUser(user.getU_no());
 				
 				chargeDetail = chargeDetailService.createChargeDetail(user, price, ChargeDetailBean.KIND_CHANGE_DEVICE, ChargeDetailBean.ORDER_MONEY, operator, chargePrice , isBrushFlag);
