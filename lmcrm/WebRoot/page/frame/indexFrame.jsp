@@ -1,9 +1,10 @@
+<%@page import="com.yd.business.operator.bean.OperatorBean"%>
 <%@page import="com.yd.business.system.bean.SystemMenuBean"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-
+OperatorBean op = (OperatorBean)request.getAttribute("operator");
 List<SystemMenuBean> menuList = (List<SystemMenuBean> )request.getAttribute("menuList");
 if(menuList == null) menuList = Collections.EMPTY_LIST;
 
@@ -62,13 +63,13 @@ if(menuList == null) menuList = Collections.EMPTY_LIST;
                     <!--- Sidemenu -->
                     <ul class="metismenu side-nav">
 
-                        <li class="side-nav-title side-nav-item" style="font-size: 1.2rem;">导航菜单</li>
+						<li class="side-nav-title side-nav-item" style="font-size: 1.2rem;">导航菜单  </li>
 
                         <li class="side-nav-item">
                             <a onclick="changeIframe('page/frame/dashboard/indexDashboard1.jsp',this)" href="javascript: void(0);" class="side-nav-link">
                                 <i class="dripicons-meter"></i>
-                                <span class="badge badge-success float-right">3</span>
-                                <span> 首页 </span>
+                                <!-- <span class="badge badge-success float-right">3</span> -->
+                                <span> 首页 <label style="color:springgreen;float: right;">【<%=op.getO_name() %>】 </label>  </span>
                             </a>
                         </li>
 
@@ -140,8 +141,11 @@ if(menuList == null) menuList = Collections.EMPTY_LIST;
 	<script >
 		  	function logout(){
 		    	if(confirm("确定退出系统？")){
-		    		$.ajax({url:"login/unloginByWeb.do"});
-		    		window.location.href = '<%=basePath%>';
+		    		$.ajax({url:"login/unloginByWeb.do",
+		    		success:function(res){
+		    			window.location.href = '<%=basePath%>';
+					}});
+					window.location.href = '<%=basePath%>';
 		    	}
 		    }
 		  	function setTitle(title){

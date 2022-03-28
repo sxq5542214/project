@@ -255,7 +255,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                                <tbody >
 														<tr v-for="(user,index) in userChargeList" @click="getChargeData(index)"
 															:for="'radio'+index">
-															<th><input type="radio" :id="'chargeRadio'+index" name="charge_id"
+															<th><input v-show="index != userChargeList.length-1" type="radio" :id="'chargeRadio'+index" name="charge_id"
 																:value="index" v-model="checkedRows">{{user.user_cardno }}</th>
 															<!-- <td>{{user.u_no}}</td> -->
 															<!--   <td>{{getDescByBeanAttrValue("price","p_ladder",price.p_ladder)}}</td> -->

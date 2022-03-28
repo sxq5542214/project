@@ -20,6 +20,10 @@ var userManager =  new Vue({
 	},
     methods:{
 	    getChargeData: function(index){
+	    	//如果选中的是最后一个，即“合计” 则不选中
+	    	if(index == this.userChargeList.length -1 ){  
+	    		return;
+	    	}
 	    	$("#chargeRadio"+index).prop("checked",true);
 	    	this.choseChargeIndex = index;
 	    	var form = document.updateForm;
@@ -704,7 +708,25 @@ function queryUserChargeData(){
 			  	$.NotificationApp.send("请注意","已完成充值记录查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
 			}
 		    var list = result ; // eval('(' + result + ')');
+		    
+		    //计算合计
+		    var sumObj = new Object();
+		    sumObj.user_cardno = '合计';
+		    sumObj.cd_paidmoney = 0;
+		    sumObj.cd_chargemoney = 0;
+		    sumObj.cd_chargeamount = 0;
+		    sumObj.cd_othermoney1 = 0;
+		    sumObj.cd_othermoney2 = 0;
+		    for(var i = 0 ; i < list.length ; i ++){
+		    	sumObj.cd_paidmoney = (Number(sumObj.cd_paidmoney) + Number(list[i].cd_paidmoney)).toFixed(2);
+		    	sumObj.cd_chargemoney = (Number(sumObj.cd_chargemoney) +  Number(list[i].cd_chargemoney)).toFixed(2);
+		    	sumObj.cd_chargeamount = (Number(sumObj.cd_chargeamount) +  Number(list[i].cd_chargeamount)).toFixed(2);
+		    	sumObj.cd_othermoney1 = (Number(sumObj.cd_othermoney1) +  Number(list[i].cd_othermoney1)).toFixed(2);
+		    	sumObj.cd_othermoney2 = (Number(sumObj.cd_othermoney2) +  Number(list[i].cd_othermoney2)).toFixed(2);
+		    }
+		    list.push(sumObj);
 		    userManager.userChargeList = list;
+		    
 		    
 		    if(list.length > 0 ){ //默认调用第一条数据的点击事件
 		    	setTimeout(function() {

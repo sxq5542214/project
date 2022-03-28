@@ -99,6 +99,7 @@ public class LoginController extends BaseController {
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("menuList", menuList);
+		model.put("operator", op);
 		return new ModelAndView("/page/frame/indexFrame.jsp", model);
 		
 	}

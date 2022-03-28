@@ -490,7 +490,7 @@ function initData(){
 			"oLanguage": {
 		  		"sLengthMenu": "每页显示 _MENU_ 条记录",
 		  		"sZeroRecords": "对不起，没有匹配的数据",
-		  		"sInfo": "第 _START_ - _END_ 条 / 共 _TOTAL_ 条数据",
+		  		"sInfo": "第 _START_ - _END_ 户 / 共 _TOTAL_ 户数据",
 		  		"sInfoEmpty": "没有匹配的数据",
 		  		"sInfoFiltered": "(数据表中共 _MAX_ 条记录)",
 		  		"sProcessing": "正在加载中...",
