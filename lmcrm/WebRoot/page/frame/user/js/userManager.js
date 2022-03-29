@@ -153,6 +153,12 @@ function addUser(){
 	 document.updateForm.addressId.value = '';
 	 document.updateForm.di_dkid.disabled = false ;
 	 document.updateForm.chargeMoney.disabled = false ;
+
+	 document.updateForm.di_dkid.value = '';
+	 document.updateForm.device_company.value = '';
+	 document.updateForm.u_priceid.value = '';
+	 document.updateForm.u_status.value = '6';
+	 
 	 
 	 $('#addressBTN2').text('选择地址');
 }
@@ -237,7 +243,11 @@ function openAccount(){
 						// 写卡成功,更新状态
 						$.ajax({url:"admin/chargeDetail/ajaxUpdateChargeDetailStatusToSuccess.do",
 							type : "POST",async:false, data :{ cdid : cdid }});
-						alert('该用户已开户成功，请刷表！');
+//						alert('该用户已开户成功，请刷表！');
+						if(confirm('该用户已开户写卡成功！ 是否打印票据？')){
+							printBill(cdid);
+						}
+						
 //						queryUserData();
 //						$('#exampleModalCenter').modal('hide');
 					}else{
@@ -294,6 +304,66 @@ function queryUserData(){
 }
 
 
+function printBill(cd_id){
+
+	if(cd_id == null || typeof(cd_id) == 'undefined'){
+		alert("未获取到要打印的充值记录！");
+		
+	}
+	
+	$.ajax({url:"admin/company/ajaxQueryCompanyPrintFileName.do",
+		data:{	cd_id : cd_id	},
+	success:function(printFileName){
+		webapp_start(printFileName, cd_id , 'preview');
+	}});
+	
+}
+//应用URL协议启动WEB报表客户端程序，根据参数 option 调用对应的功能   type:print/pdf/xls/preview/rtf/csv/txt/img/grd
+function webapp_start(printFileName, cd_id, type) {
+  var args = {
+      type: type
+  };
+
+  if (cd_id) {
+//  	   调用grid++客户端打印 ， 但是有水印
+//      args.report = "assets/print/grf/" + report + ".grf";
+//      args.data = "admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + data;
+//      webapp_ws_ajax_run(args);
+  	
+  	//获取上下文路径
+  	var webroot=document.location.href;
+  	var scheme = webroot.substring(0,webroot.indexOf('//')+2);
+  	var domain = webroot.substring(webroot.indexOf('//')+2,webroot.length);
+  	var serverNameStr = domain.substring(domain.indexOf('/')+1,domain.length);
+  	var domain = domain.substring(0,domain.indexOf('/')+1);
+  	var serverName =serverNameStr.substring(0,serverNameStr.indexOf('/')+1);
+  	var path = scheme + domain + serverName
+//  	  alert(path);
+  	
+  	// 调用Gird++ c/s插件直接打印  
+  	var printBill = {"printBill":{ 
+  						dataUrl : path +"admin/chargeDetail/ajaxQueryChargeDetailByPrint.do?cdid=" + cd_id ,
+  						grfFileDownloadPath : path  + printFileName ,
+  						type: type
+  							}};
+  	callWindowsClientMethod('printBill',printBill , null);
+      
+//  	$.ajax({url:"chargeDetail/ajaxUpdateChargeDetailPrintSuccess.do",
+//  		data:{	cd_id : cd_id	}
+//  		});
+      
+  }
+  else {
+  	alert('打印没有数据！');
+  	return;
+//      args.report = "grf/" + report + ".grf";
+//      args.data = "data/SQLParam.jsp";
+//      args.baseurl = window.rootURL;
+//      args.selfsql = true;
+//
+//      webapp_ws_run(args);
+  }
+}
 function readCardAndQueryUser(){
 
 	//调用C#客户端，并提供回调方法，回调入参为调用状态 1成功 -1失败

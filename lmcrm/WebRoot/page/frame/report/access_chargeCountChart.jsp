@@ -11,7 +11,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <head>
     	<base href="<%=basePath%>">
         <meta charset="utf-8" />
-        <title>台账查询</title>
+        <title>收费统计</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -23,7 +23,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <!-- App css -->
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-        
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+
 		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
  		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
 		<script	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
@@ -69,7 +70,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	<div class="card-header">
                                 	<div class="row">
 			                         	<div class="col">
-											起始时间：<input type="text" id="start_date" value="<%=DateUtil.getNowOlnyDateStr() %>"  name="start_date" class="form-control date" data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true" >
+											起始时间：<input type="text" id="start_date" value="<%=DateUtil.getNowOlnyDateStr().substring(0, 8)+"01" %>"  name="start_date" class="form-control date" data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true" >
 										</div>
 										<div class="col">
 											结束时间：<input type="text" id="end_date"  value="<%=DateUtil.getTomorrowDateStr() %>" name="end_date" class="form-control date"  data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true">
@@ -130,20 +131,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										  <div class="col-9">
 										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">台账清单</h4>
 	                                        <div class="table-responsive" style="min-height: 150px;">
-	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered"  >
+	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" style="display: none" id="dataTable0" >
 	                                                <thead>
 	                                                    <tr>
 															<th v-for="name in columnNames" scope="col">{{name}}</th>
-													<!-- 		<th scope="col">地址</th>
-															<th scope="col">水表类型</th>
-															<th scope="col">价格名称</th>
-															<th scope="col">支付金额</th>
-															<th scope="col">充值金额</th>
-															<th scope="col">充值量</th>
-															<th scope="col">基本价格</th>
-															<th scope="col">操作类型</th>
-															<th scope="col">操作员</th>
-															<th scope="col">操作时间</th> -->
 	                                                    </tr>
 	                                                </thead>
 	                                                <tbody >
@@ -151,6 +142,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 														
 															<td v-for="code in columnCodes" scope="col">{{user[code] }} </td>
 														</tr>
+	                                                </tbody>
+	                                            </table>
+	                                            
+	                                             <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" id="dataTable" >
+	                                                <thead>
+	                                                </thead>
+	                                                <tbody >
 	                                                </tbody>
 	                                            </table>
 	                                        </div> <!-- end table-responsive-->
@@ -184,6 +182,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!-- App js -->
+		<script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/datatables.net@1.11.3/js/jquery.dataTables.min.js"></script>
+
 		<script src="page/frame/report/js/access_chargeCountChart.js"	type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
  

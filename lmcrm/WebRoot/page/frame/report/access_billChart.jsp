@@ -22,7 +22,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	 	
 	 	<link  rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orangehill/jstree-bootstrap-theme/dist/themes/proton/style.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/themes/default/style.min.css">
-      
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
@@ -71,7 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	<div class="card-header">
                                 	<div class="row">
 			                         	<div class="col">
-											起始时间：<input type="text" id="start_date" value="<%=DateUtil.getNowOlnyDateStr() %>"  name="start_date" class="form-control date" data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true" >
+											起始时间：<input type="text" id="start_date" value="<%=DateUtil.getNowOlnyDateStr().substring(0, 8)+"01" %>"  name="start_date" class="form-control date" data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true" >
 										</div>
 										<div class="col">
 											结束时间：<input type="text" id="end_date"  value="<%=DateUtil.getTomorrowDateStr() %>" name="end_date" class="form-control date"  data-date-format="yyyy-mm-dd" data-provide="datepicker" data-date-autoclose="true">
@@ -147,10 +148,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										  <div class="col-9">
 										  	<h4 class="header-title" style="padding-top: 1.5rem;font-size: 1.1rem;">台账清单</h4>
 	                                        <div class="table-responsive" style="min-height: 150px;">
+		                        <!-- 导出用的Table --><table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" style="display: none" id="dataTable0" >
+		                                                <thead>
+		                                                    <tr>
+																<th v-for="name in columnNames" scope="col">{{name}}</th> 
+														
+														
+														<!-- 		<th scope="col">地址</th>
+																<th scope="col">水表类型</th>
+																<th scope="col">价格名称</th>
+																<th scope="col">支付金额</th>
+																<th scope="col">充值金额</th>
+																<th scope="col">充值量</th>
+																<th scope="col">基本价格</th>
+																<th scope="col">操作类型</th>
+																<th scope="col">操作员</th>
+																<th scope="col">操作时间</th> -->
+		                                                    </tr>
+		                                                </thead>
+		                                                <tbody >
+															<tr v-for="(user,index) in dataList" @click="getUserData(index)">
+															
+																<td v-for="code in columnCodes" scope="col">{{user[code] }} </td>
+															</tr>
+		                                                </tbody>
+		                                            </table>
+	                                        
+	                                        
+	                                        
 	                                            <table class="table  mb-0 table-hover table-centered text-nowrap table-bordered" id="dataTable" >
 	                                                <thead>
 	                                                    <tr>
-															<th v-for="name in columnNames" scope="col">{{name}}</th>
+															<!-- <th v-for="name in columnNames" scope="col">{{name}}</th> -->
+													
+													
 													<!-- 		<th scope="col">地址</th>
 															<th scope="col">水表类型</th>
 															<th scope="col">价格名称</th>
@@ -164,10 +195,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                                                    </tr>
 	                                                </thead>
 	                                                <tbody >
-														<tr v-for="(user,index) in dataList" @click="getUserData(index)">
+													<!-- 	<tr v-for="(user,index) in dataList" @click="getUserData(index)">
 														
 															<td v-for="code in columnCodes" scope="col">{{user[code] }} </td>
-														</tr>
+														</tr> -->
 	                                                </tbody>
 	                                            </table>
 	                                        </div> <!-- end table-responsive-->
@@ -200,7 +231,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <!-- END wrapper -->
 
 <!-- App js -->
-		<script src="page/frame/report/js/access_billChart.js"	type="text/javascript"></script>
+		<script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/datatables.net@1.11.3/js/jquery.dataTables.min.js"></script>
+        <script src="page/frame/report/js/access_billChart.js"	type="text/javascript"></script>
 	
         <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
     </body>
