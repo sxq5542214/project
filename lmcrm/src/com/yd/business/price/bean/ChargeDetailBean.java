@@ -69,11 +69,11 @@ public class ChargeDetailBean extends BaseBean implements Serializable {
 	private Integer cd_order;
 	private Integer cd_charge;
 	private Long cd_operatorid;
-	private Date cd_happendate;
+	private Date cd_happendate;	//操作时间
 	private BigDecimal cd_startamount;
 	private BigDecimal cd_endamount;
-	private Date cd_startdate;
-	private Date cd_enddate;
+	private Date cd_startdate; // 写卡时间
+	private Date cd_enddate;	// 刷表时间
 	private Long cd_readerid;
 	private Integer cd_printstatus;
 	private String cd_tradecustomer;

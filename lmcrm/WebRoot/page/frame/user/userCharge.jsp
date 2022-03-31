@@ -98,7 +98,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										<div class="row" style="margin-top: 10px;">
 											<div class="col-10">
 												<button type="button" class="btn btn-info" onclick="readCardAndQueryUser();">读卡查询</button>
-												<button type="button" class="btn btn-info" name="button_charge" disabled="disabled" data-toggle="modal" data-target="#exampleModalCenter">用户充值</button>
+												<button type="button" class="btn btn-info" name="button_charge" disabled="disabled" data-toggle="modal" data-target="#exampleModalCenter" onclick="resetChargeMoney();">用户充值</button>
 												<button type="button" class="btn btn-secondary" name="button_updateCharge" disabled="disabled"  onclick="readCardAndUpdateCharge();">充值修改</button>
 												<button type="button" class="btn btn-success"  name="button_repairCard" disabled="disabled" onclick="readCardAndRepairCard();">用户补卡</button>
 						 						<button type="button" class="btn btn-primary"  name="button_changeMeter" disabled="disabled" onclick="readCardAndChangeMeter();">换表维护</button>
@@ -241,7 +241,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 															<th scope="col">操作员工</th>
 															<th scope="col">操作类型</th>
 															<th scope="col">写卡时间</th>
-															<th scope="col">刷表时间</th>
+															<th scope="col">刷表日期</th>
 															<th scope="col">缴费方式</th>
 															<th scope="col">打印状态</th>
 															<th scope="col">充值状态</th>
@@ -270,7 +270,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 															<td>{{user.operator_name }}</td>
 															<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_kindid",user.cd_kindid)}}</td>
 															<td>{{user.cd_startdate }}</td>
-															<td>{{user.cd_happendate }}</td>
+															<td>{{user.cd_enddate }}</td>
 															<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_order",user.cd_order)}}</td>
 															<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_printstatus",user.cd_printstatus)}}</td>
 															<td>{{getDescByBeanAttrValue("ChargeDetailBean","cd_charge",user.cd_charge)}}</td>

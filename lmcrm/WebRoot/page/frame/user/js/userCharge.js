@@ -260,7 +260,7 @@ function readCardAndRepairCard(){
 			
 			$("#repairCardMoney").val(lastChargeMoney);
 			$('#repairCardModalCenter').modal('show');
-			
+
 		}
 	} );
 }
@@ -353,7 +353,7 @@ function writeCardByCharge(){
 						}
 						
 						$('#exampleModalCenter').modal('hide');
-						
+						userManager.readCardUserNo = -1 ; // 写卡成功后重置用户信息，避免再次写卡
 						queryUserChargeData();
 					}
 				} );
@@ -508,6 +508,10 @@ function writeCardByChangeMeter(){
 		}
 	
 	});
+}
+
+function resetChargeMoney(){
+	$("#chargeMoney").val('');
 }
 
 function printBill(cd_id){

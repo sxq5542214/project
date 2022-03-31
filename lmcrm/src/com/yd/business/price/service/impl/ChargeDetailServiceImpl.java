@@ -141,7 +141,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		
 		bean.setCd_happendate(new Date());
 		bean.setCd_startdate(new Date());
-		bean.setCd_enddate(new Date(0));
+		bean.setCd_enddate(new Date());
 		chargeDetailDao.insertChargeDetail(bean);
 		
 		return bean;
