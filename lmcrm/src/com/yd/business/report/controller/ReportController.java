@@ -160,11 +160,9 @@ public class ReportController extends BaseController {
 		
 		try {
 			Long operatorId = getCurrentLoginOperator().getO_id();
-//			String sid = request.getParameter("sid");
 			String code = request.getParameter("code");
 			if(StringUtil.isNotNull(code)) {
 				Map<String,String> params = new HashMap<String, String>();
-//				params.put("sid", sid);
 				params.put("operatorId", operatorId.toString());
 				ReportSimpleBean bean = reportService.findReportSimpleByCode(code);
 				bean.setData_sql(null);

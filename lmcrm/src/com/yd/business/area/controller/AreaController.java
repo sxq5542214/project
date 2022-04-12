@@ -87,7 +87,7 @@ public class AreaController extends BaseController {
 	
 
 	/**
-	 *  界面查询取悦列表
+	 *  界面查询地址信息
 	 * @param request
 	 * @param response
 	 * @return

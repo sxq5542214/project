@@ -50,7 +50,7 @@ public class LoginController extends BaseController {
 	
 
 	/**
-	 * 生成验证码图片，以及把验证码生成的随机文字放到session中
+	 * 界面登录
 	 */
 	@RequestMapping("**/login/loginByWeb.do")
 	public void loginByWeb(HttpServletRequest request, HttpServletResponse response)

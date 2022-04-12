@@ -15,12 +15,6 @@
 			<attribute name="owner.project.facets" value="maven.deps"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="com.genuitec.runtime.library/com.genuitec.jstl_1.2.1">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="WEB-INF/lib"/>
-			<attribute name="owner.project.facets" value="jst.web.jstl"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="E:/Program Files/apache/tomcat9/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="E:/Program Files/apache/tomcat9/lib/annotations-api.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
