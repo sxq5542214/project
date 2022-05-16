@@ -20,43 +20,43 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	
-  <!--   <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+  <!--   <link href="/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 	 -->
 	 
 	 
 	<!-- bootstrap 5.x or 4.x is supported. You can also use the bootstrap css 3.3.x versions -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="/staticFiles/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
  
  
 <!-- the fileinput plugin styling CSS file -->
-<link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@4.5.3/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<link href="/staticFiles/bootstrap-fileinput@4.5.3/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
  
  
 <!-- the jQuery Library -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script src="/staticFiles/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
  
 <!-- piexif.min.js is needed for auto orienting image files OR when restoring exif data in resized images and when you
     wish to resize images before upload. This must be loaded before fileinput.min.js -->
-<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@4.5.3/js/plugins/piexif.min.js" type="text/javascript"></script>
+<script src="/staticFiles/bootstrap-fileinput@4.5.3/js/plugins/piexif.min.js" type="text/javascript"></script>
  
 <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. 
     This must be loaded before fileinput.min.js -->
-<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@4.5.3/js/plugins/sortable.min.js" type="text/javascript"></script>
+<script src="/staticFiles/bootstrap-fileinput@4.5.3/js/plugins/sortable.min.js" type="text/javascript"></script>
  <!-- popper.min.js below is needed if you use bootstrap 4.x. You can also use the bootstrap js 
    3.3.x versions without popper.min.js. -->
- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.0/dist/umd/popper.min.js"></script>
+ <script src="/staticFiles/popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
  
 <!-- bootstrap.bundle.min.js below is needed if you wish to zoom and preview file content in a detail modal
     dialog. bootstrap 5.x or 4.x is supported. You can also use the bootstrap js 3.3.x versions. -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="/staticFiles/bootstrap@4.6.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
  
 <!-- the main fileinput plugin script JS file -->
-<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@4.5.3/js/fileinput.min.js"></script>
+<script src="/staticFiles/bootstrap-fileinput@4.5.3/js/fileinput.min.js"></script>
  
  
 <!-- optionally if you need translation for your language then include the locale file as mentioned below (replace LANG.js with your language locale) -->
-<script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@4.5.3/js/locales/zh.js"></script>
+<script src="/staticFiles/bootstrap-fileinput@4.5.3/js/locales/zh.js"></script>
 	
 <style>
 html,body {height: 100%;}
@@ -90,9 +90,9 @@ html,body {height: 100%;}
     </div>
     <!-- end row -->
   
-<!-- <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/dropzone.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/ui/component.fileupload.js"></script>
+<!-- <script src="/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+	<script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/dropzone.min.js"></script>
+	<script src="/staticFiles/bootstrap4/hyper/assets/js/ui/component.fileupload.js"></script>
 	 -->
 	 <script type="text/javascript">
 	 $("#printGRF").fileinput({

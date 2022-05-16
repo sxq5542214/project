@@ -39,9 +39,9 @@
 <meta name="author" content="Bootstrap Gallery" />
 <link rel="shortcut icon" href="img/favicon.ico">
 
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
         
-		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+		<script src="/staticFiles/jquery@3.5.1/dist/jquery.min.js" ></script>
 
 </head>
 <body style="background-color: #f7f7f7">

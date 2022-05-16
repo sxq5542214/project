@@ -15,17 +15,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
+        <link rel="shortcut icon" href="/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/vendor/dataTables.bootstrap4.css" rel="stylesheet" type="text/css" />
-<!--         <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/vendor/responsive.bootstrap4.css" rel="stylesheet" type="text/css" />
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/vendor/buttons.bootstrap4.css" rel="stylesheet" type="text/css" />
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/vendor/select.bootstrap4.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/vendor/dataTables.bootstrap4.css" rel="stylesheet" type="text/css" />
+<!--         <link href="/staticFiles/bootstrap4/hyper/assets/css/vendor/responsive.bootstrap4.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/vendor/buttons.bootstrap4.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/vendor/select.bootstrap4.css" rel="stylesheet" type="text/css" />
  -->        <!-- App css -->
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
         
-		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+		<script src="/staticFiles/jquery@3.5.1/dist/jquery.min.js" ></script>
 	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
     </head>
 
@@ -314,21 +314,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!-- App js -->
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
 
-<!--         <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.bootstrap4.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.responsive.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/responsive.bootstrap4.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.buttons.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/buttons.bootstrap4.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/buttons.html5.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/buttons.flash.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/buttons.print.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.keyTable.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.select.min.js"></script>
+<!--         <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/jquery.dataTables.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.bootstrap4.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.responsive.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/responsive.bootstrap4.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.buttons.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/buttons.bootstrap4.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/buttons.html5.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/buttons.flash.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/buttons.print.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.keyTable.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/vendor/dataTables.select.min.js"></script>
          -->
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+        <script src="/staticFiles/vue/dist/vue.min.js"></script>
 		<script src="page/frame/operator/js/operatorManager.js" type="text/javascript"></script>
  
  

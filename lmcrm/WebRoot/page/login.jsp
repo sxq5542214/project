@@ -14,11 +14,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<meta http-equiv="content-Type" content="text/html; charset=utf-8" />
     	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
         <!-- App favicon -->
-        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
+        <link rel="shortcut icon" href="/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
         <!-- App css -->
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 .custom-control-input:checked~.custom-control-label::before {
     color: #0147FF;
@@ -44,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <!-- Logo -->
            <!--             		<div class="card-header text-center bg-primary">
                                      <a href="javascript:void(0);">
-                                    <span><img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="18"></span>
+                                    <span><img src="/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="18"></span>
                                 </a>
                                 <div class="text-center w-75 m-auto">
                                     <h3 class=" text-center font-weight-bold" style="color: white;">霍邱县农饮智慧云平台</h3>
@@ -118,7 +118,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </footer>
 
         <!-- App js -->
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
 
 <script type="text/javascript" src="js/common/cookieUtil.js"></script>
 <script type="text/javascript">

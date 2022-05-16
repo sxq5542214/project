@@ -21,15 +21,15 @@ if(menuList == null) menuList = Collections.EMPTY_LIST;
     	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
         <meta content="ice" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
+        <link rel="shortcut icon" href="/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
         <!-- third party css -->
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
         <!-- third party css end -->
 
         <!-- App css -->
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons1.min.css" rel="stylesheet" type="text/css" />
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/icons1.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 	
 	
 	
@@ -53,10 +53,10 @@ if(menuList == null) menuList = Collections.EMPTY_LIST;
                     <!-- LOGO -->
                     <a href="javascript: void(0);" class="logo text-center">
                         <span class="logo-lg">
-                            <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="16">
+                            <img src="/staticFiles/bootstrap4/hyper/assets/images/logo.png" alt="" height="16">
                         </span>
                         <span class="logo-sm">
-                            <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/logo_sm.png" alt="" height="16">
+                            <img src="/staticFiles/bootstrap4/hyper/assets/images/logo_sm.png" alt="" height="16">
                         </span>
                     </a>
 
@@ -105,7 +105,7 @@ if(menuList == null) menuList = Collections.EMPTY_LIST;
                         <a href="javascript: void(0);" class="float-right close-btn text-white">
                             <i class="mdi mdi-close"></i>
                         </a>
-                        <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/help-icon.svg" height="90" alt="Helper Icon Image" />
+                        <img src="/staticFiles/bootstrap4/hyper/assets/images/help-icon.svg" height="90" alt="Helper Icon Image" />
                         <h5 class="mt-3">更多功能建议？</h5>
                         <p class="mb-3">请点击这里。。。</p>
                        <a href="javascript: alert('建议功能正在建设中');" class="btn btn-outline-light btn-sm">请点这里</a>
@@ -136,7 +136,7 @@ if(menuList == null) menuList = Collections.EMPTY_LIST;
 			</div>
 		</div>
 				
-	  <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+	  <script src="/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
 
 	<script >
 		  	function logout(){

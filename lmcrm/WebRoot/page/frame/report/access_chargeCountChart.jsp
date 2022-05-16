@@ -16,18 +16,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
+        <link rel="shortcut icon" href="/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
-	<link  rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orangehill/jstree-bootstrap-theme/dist/themes/proton/style.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/themes/default/style.min.css">
+	<link  rel="stylesheet" href="/staticFiles/jstree-bootstrap-theme/dist/themes/proton/style.min.css">
+	<link rel="stylesheet" href="/staticFiles/jstree@3.3.12/dist/themes/default/style.min.css">
             <!-- App css -->
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
 
-		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
- 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
-		<script	src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
+		<script src="/staticFiles/jquery@3.5.1/dist/jquery.min.js" ></script>
+ 		<script src="/staticFiles/vue/dist/vue.min.js"></script>
+		<script	src="/staticFiles/jstree@3.3.12/dist/jstree.min.js"></script>
 	 	<script src="js/common/dictionaryData.js" type="text/javascript"></script>
 	 	<script src="js/common/exportExcel.js" type="text/javascript"></script>
 	 	
@@ -182,10 +182,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
 <!-- App js -->
-		<script type="text/javascript"  src="https://cdn.jsdelivr.net/npm/datatables.net@1.11.3/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript"  src="/staticFiles/dataTables@1.10.21/js/jquery.dataTables.min.js"></script>
 
 		<script src="page/frame/report/js/access_chargeCountChart.js"	type="text/javascript"></script>
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
  
     </body>
 </html>

@@ -27,12 +27,12 @@
 <meta name="author" content="Bootstrap Gallery" />
 <link rel="shortcut icon" href="img/favicon.ico">
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+	<link rel="stylesheet" href="/staticFiles/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
 <link href="page/frame/report/css/new.css" rel="stylesheet">
 <!-- Important. For Theming change primary-color variable in main.css  -->
 
-	<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/staticFiles/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 <body style="background-color: #f7f7f7">
@@ -100,10 +100,10 @@
 	</div>
 	<!-- Row End -->
 
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
- 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
-	<script src="https://cdn.jsdelivr.net/npm/jquery.scrollup@2.4.1/dist/jquery.scrollUp.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/datatables.net@1.10.25/js/jquery.dataTables.min.js"></script>
+	<script src="/staticFiles/jquery@3.5.1/dist/jquery.min.js" ></script>
+ 	<script src="/staticFiles/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" ></script>
+	<script src="/staticFiles/jquery.scrollup@2.4.1/dist/jquery.scrollUp.min.js"></script>
+	<script src="/staticFiles/dataTables@1.10.21/js/jquery.dataTables.min.js"></script>
 
 	<!-- Custom JS -->
 	<script type="text/javascript">

@@ -16,18 +16,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
+        <link rel="shortcut icon" href="/staticFiles/bootstrap4/hyper/assets/images/favicon.ico">
 
         <!-- third party css -->
         <!-- third party css end -->
 
         <!-- App css -->
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <link href="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="/staticFiles/bootstrap4/hyper/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 
-		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    	<script src="https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.min.js" type="text/javascript"></script>
+		<script src="/staticFiles/jquery@3.5.1/dist/jquery.min.js" ></script>
+		<script src="/staticFiles/vue/dist/vue.js"></script>
+    	<script src="/staticFiles/echarts@4.7.0/dist/echarts.min.js" type="text/javascript"></script>
 
     </head>
 
@@ -49,17 +49,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
                             <li class="dropdown notification-list topbar-dropdown">
                                 <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                    <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/flags/china.jpg" alt="user-image" class="mr-1" height="12"> <span class="align-middle">中文</span> <i class="mdi mdi-chevron-down"></i>
+                                    <img src="/staticFiles/bootstrap4/hyper/assets/images/flags/china.jpg" alt="user-image" class="mr-1" height="12"> <span class="align-middle">中文</span> <i class="mdi mdi-chevron-down"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu">
 
                                     <!-- item-->
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                        <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/flags/china.jpg" alt="user-image" class="mr-1" height="12"> <span class="align-middle">中文</span>
+                                        <img src="/staticFiles/bootstrap4/hyper/assets/images/flags/china.jpg" alt="user-image" class="mr-1" height="12"> <span class="align-middle">中文</span>
                                     </a>
 
                                     <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                        <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/flags/us.jpg" alt="user-image" class="mr-1" height="12"> <span class="align-middle">English</span>
+                                        <img src="/staticFiles/bootstrap4/hyper/assets/images/flags/us.jpg" alt="user-image" class="mr-1" height="12"> <span class="align-middle">English</span>
                                     </a>
 
                                 </div>
@@ -107,7 +107,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                         item
                                         <a href="javascript:void(0);" class="dropdown-item notify-item">
                                             <div class="notify-icon">
-                                                <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt="" /> </div>
+                                                <img src="/staticFiles/bootstrap4/hyper/assets/images/users/avatar-2.jpg" class="img-fluid rounded-circle" alt="" /> </div>
                                             <p class="notify-details">Cristina Pride</p>
                                             <p class="text-muted mb-0 user-msg">
                                                 <small>Hi, How are you? What about our next meeting</small>
@@ -127,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                         item
                                         <a href="javascript:void(0);" class="dropdown-item notify-item">
                                             <div class="notify-icon">
-                                                <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt="" /> </div>
+                                                <img src="/staticFiles/bootstrap4/hyper/assets/images/users/avatar-4.jpg" class="img-fluid rounded-circle" alt="" /> </div>
                                             <p class="notify-details">Karen Robinson</p>
                                             <p class="text-muted mb-0 user-msg">
                                                 <small>Wow ! this admin looks good and awesome design</small>
@@ -158,7 +158,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                                     aria-expanded="false">
                                     <span class="account-user-avatar"> 
-                                        <img src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+                                        <img src="/staticFiles/bootstrap4/hyper/assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
                                     </span>
                                     <span>
                                         <span class="account-user-name">{{operator_name}}</span>
@@ -533,7 +533,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
         <!-- bundle -->
-        <script src="https://cdn.jsdelivr.net/gh/sxq5542214/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
+        <script src="/staticFiles/bootstrap4/hyper/assets/js/app.min.js"></script>
 		<script src="page/frame/dashboard/js/indexDashboard.js" type="text/javascript"></script>
 		
 

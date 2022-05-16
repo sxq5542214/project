@@ -638,8 +638,8 @@ function queryUserData(addressId){
 	    if(list.length >0){
     		userDataTables.fnAddData(list,true); 
 	    }
-   　    		userManager.userChargeList = [];  //用户列表查询时，清除充值记录列表
-   　    		
+       		userManager.userChargeList = [];  //用户列表查询时，清除充值记录列表
+       		
 		if(result.length == 0){
 		  	$.NotificationApp.send("请注意","已完成用户查询，但没有数据！","top-center","rgba(0,0,0,0.2)","error");
 		  	

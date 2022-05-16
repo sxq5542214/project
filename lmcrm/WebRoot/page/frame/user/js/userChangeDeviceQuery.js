@@ -90,8 +90,8 @@ function queryChangeDeviceData(){
 		    changeDevice.changeMeterList = list;
 		    
 
-		    dataTables.fnClearTable();   //将数据清除  
-       　    		dataTables.fnAddData(list,true); 
+			dataTables.fnClearTable();   //将数据清除  
+			dataTables.fnAddData(list,true); 
 	}});
 }
 function initData(){
