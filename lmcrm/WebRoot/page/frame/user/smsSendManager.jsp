@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="js/client/windowsClient.js"></script>
 <script src="js/common/dictionaryData.js" type="text/javascript"></script>
 
-    <title>短信发送管理</title>
+    <title>短信发送模块</title>
   </head>
  
 <body style="padding-bottom: 0px;"> 
@@ -58,7 +58,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <div class="col-12">
                                 <div class="page-title-box">
                                     <div class="page-title-right">
-                                       <!--  <ol class="breadcrumb m-0">
+                                <!--      <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
                                             <li class="breadcrumb-item active">Basic Tables</li>
@@ -76,11 +76,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 	<div class="card-header">
 										<div class="row" style="margin-top: 10px;">
 											<div class="col-10">
-											  <!--   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter"  onclick="addUser();">新增用户</button>
-										      	<button type="button" class="btn btn-danger" onclick="updateUser();">修改用户</button>
-										      	<button type="button" class="btn btn-secondary" onclick="deleteUser();">删除用户</button>
+											     <button type="button" class="btn btn-success"  onclick="showSendSMS();">发送短信</button>
+<!-- 										      	<button type="button" class="btn btn-danger" onclick="reSendSMS();">重新发送失败短信</button>
+ -->									<!-- 	      	<button type="button" class="btn btn-secondary" onclick="deleteUser();">删除用户</button>
 										      	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#queryUserModalCenter" >查询用户</button>
-											 -->
+								 -->			
 								<!-- 		      	<button type="button" class="btn btn-secondary">删除价格</button>
 								 -->		    </div>
 									<!-- 		 <div class="col-2">
@@ -110,15 +110,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                             <table class="table  mb-0 table-hover table-centered text-nowrap dt-responsive" id="userDataTable" >
                                                 <thead>
                                                     <tr>
-														<th scope="col">序号</th>
-														<th scope="col">模版名称</th>
-														<th scope="col">发送内容</th>
-														<th scope="col">发送时间</th>
-														<th scope="col">发送人</th>
-														<th scope="col">总数</th>
-														<th scope="col">成功数</th>
-														<th scope="col">失败数</th>
 														<th scope="col">操作</th>
+														<th scope="col">模版名称</th>
+														<th scope="col">发送人</th>
+														<th scope="col">失败数</th>
+														<th scope="col">成功数</th>
+														<th scope="col">总数</th>
+														<th scope="col">发送时间</th>
+														<th scope="col">发送内容</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody >
@@ -178,7 +177,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="exampleModalCenterTitle">新增/修改用户</h5>
+							<h5 class="modal-title" id="exampleModalCenterTitle">发送短信</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -187,174 +186,72 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="modal-body" id="modalBodyDiv">
 							<div class="container-fluid">
 								<div class="row">
-									<div class="col-md-2 align-self-center">用户名称 <span style="color: red;">*</span> </div>
+									<div class="col-md-2 align-self-center">发送原由 <span style="color: red;">*</span> </div>
 									<div class="col-md-4 ml-auto">
-										<input type="text" name="u_name" class="form-control" required="required"
-											placeholder="请输入用户名称">
+										
+										<input type="text" id="sms_name" name="sms_name" class="form-control" required="required" >
 									</div>
-	
-									<div class="col-md-2  align-self-center">联系号码</div>
+									
+									<div class="col-md-2 align-self-center"> </div>
 									<div class="col-md-4 ml-auto">
-										<input type="number" name="u_phone" class="form-control" placeholder="请输入联系号码">
+										
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-2 align-self-center">短信模板 <span style="color: red;">*</span> </div>
+									<div class="col-md-10 ml-auto">
+										
+										<input type="text" name="sms_template" class="form-control" required="required" readonly="readonly"
+											:value="sms_template">
+											
+											
+										  <input type="hidden" class="form-control" id="addressIds" name="addressIds">
+										  <input type="hidden" class="form-control" id="sms_templateId" name="sms_templateId" :value="sms_templateId">
+									</div>
+								</div>
+								<div class="row" v-for="num in paramNum">
+									<div class="col-md-2 align-self-center">参数{{num}} <span style="color: red;">*</span> </div>
+									<div class="col-md-10 ml-auto" >
+										
+										<input type="text" name="params" :id="'params'+num" class="form-control" required="required" >
 									</div>
 	
 								</div>
 								
 								<div class="row" >
-									<div class="col-md-2 align-self-center">价格类型 <span style="color: red;">*</span> </div>
-									<div class="col-md-4 ml-auto" >
-										<select name="u_priceid"   class="form-control" >
-											<option value="">请选择</option>
-											<option v-for="price in priceList" :key="" :value="price.p_id">{{price.p_name}}</option>
-										</select>
-									</div>
-	
-									<div class="col-md-2 align-self-center">证件号码   </div>
-									<div class="col-md-4 ml-auto">
-										<input type="text" name="u_paperwork"
-											class="form-control" placeholder="请输入证件号码">
-									</div>
-								</div>
-								
-								
-								<div class="row">
-								
-									<div class="col-md-2  align-self-center">水表厂商 <span style="color: red;">*</span></div>
-									<div class="col-md-4 ml-auto">
-										<select name="device_company" class="form-control" id="device_company" >
-											<option value="">请选择</option>
-											<option value="轻松">轻松</option>
-											<option value="鲁正">鲁正</option>
-										</select>
-									</div>
-									
-									
-									<div class="col-md-2 align-self-center">表具类型 <span style="color: red;">*</span> </div>
-									<div class="col-md-4 ml-auto" >
-										<select name="di_dkid" class="form-control" id="di_dkid" >
-											<option value="">请选择</option>
-											<option v-for="device in deviceKindList" :key="" :value="device.dk_id">{{device.dk_name}}</option>
-										</select>
-									</div>
-									
-									
-								</div>
-								
-								
-								<div class="row">
-	
-									<div class="col-md-2  align-self-center">用户地址 <span style="color: red;">*</span> </div>
-									<div class="col-md-4 ml-auto">
-										<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addressModalCenter" name="addressBTN2" id="addressBTN2">选择地址</button>
+									<div class="col-md-2 align-self-center">实际内容 <span style="color: red;">*</span> </div>
+									<div class="col-md-10 ml-auto" >
 										
-										<input type="hidden" name="addressId" id="addressId2">
-									</div>
-									
-									
-									
-									<div class="col-md-2 align-self-center">充值金额  <span style="color: red;">*</span> </div>
-									<div class="col-md-4">
-										<input type="number" name="chargeMoney" class="form-control" placeholder="元为单位" required="required" value="">
-										<input type="hidden" name="u_materialfee" class="form-control" value="0"
-											placeholder="单位：元">
-										<input type="hidden" name="u_constructioncost" class="form-control"
-											placeholder="单位：元" value="0">
-	
-										<input type="hidden" name="u_prepayment" class="form-control"
-											placeholder="单位：元" value="0">
+										<textarea id="send_content" name="send_content" class="form-control" readonly="readonly">{{send_content}}</textarea>
 									</div>
 									
 								</div>
-								
-								<div class="row">
-									<div class="col-md-2  align-self-center">位置说明  </div>
-									<div class="col-md-4 ml-auto">
-										<input type="text" name="u_address" required="required"
-											class="form-control" placeholder="请输入位置说明">
-									</div>
-									
-									<div class="col-md-2 align-self-center">用户余额  </div>
-									<div class="col-md-4">
-										<input type="number" name="u_balance" class="form-control" value="0">
+								<div class="row" >
+									<div class="col-md-2 align-self-center"> </div>
+									<div class="col-md-10 ml-auto" >
+										 当前<span style="color: red;">{{sms_content_count}}</span>字
+										 <button type="button" class="btn btn-primary"  onclick="checkContentCount();">应用参数并校验字数</button>
+										 <span style="color: red;">  *超过64字会拆分成多条短信下发</span>
 									</div>
 								</div>
 								
-	
-								<div class="row">
-	
-									
-									<div class="col-md-2  align-self-center">用户状态 <span style="color: red;">*</span> </div>
-									<div class="col-md-4">
-										<select name="u_status" class="form-control">
-											<option value="6">待开户</option>
-											<option value="7">已开户</option>
-											<option value="8">已报停</option>
-										</select>
-									</div>
-									
-									<div class="col-md-2  align-self-center">人口数  </div>
-									<div class="col-md-4 ml-auto">
-										<input type="number" name="u_peoplesize" value="0"
-											class="form-control" placeholder="请输入人口数">
-									</div>
-	
-								</div>
-								<div class="row">
-					<!-- 				<div class="col-md-2 align-self-center">所属组 <span style="color: red;">*</span> </div>
-									<div class="col-md-4 ml-auto">
-										<select name="u_group" id="selectGroup" class="form-control">
-											<option v-for="index in 20" :value="index">{{index}}</option>
-										</select>
-									</div> -->
-	
-									<div class="col-md-2  align-self-center">ID标识</div>
-									<div class="col-md-4 ml-auto">
-										<input type="number" name="u_id" class="form-control"
-											disabled="disabled" placeholder="无需填写">
-											
-										<input type="hidden" name="u_group" value="9">
-									</div>
-									
-									<div class="col-md-2  align-self-center">备注</div>
-									<div class="col-md-4 ml-auto">
-										<input type="number" name="u_remark" class="form-control"
-											placeholder="请输入备注">
-									</div>
-	
-								</div>
-						<!-- 		<div class="row">
 								
-									<div class="col-md-2  align-self-center">材料费(元)</div>
-									<div class="col-md-4 ml-auto">
-										<input type="hidden" name="u_materialfee" class="form-control" value="0"
-											placeholder="单位：元">
-									</div>
-									
-									<div class="col-md-2 align-self-center">施工费(元)</div>
-									<div class="col-md-4 ml-auto">
-										<input type="hidden" name="u_constructioncost" class="form-control"
-											placeholder="单位：元" value="0">
-	
-									</div>
-	
-								</div> -->
-								
-					<!-- 			<div class="row">
-									
-									
-									
-									<div class="col-md-2 align-self-center"></div>
-									<div class="col-md-4 ml-auto">
+								<div class="row" >
+									<div class="col-md-2 align-self-center">涉及地址  </div>
+									<div class="col-md-10 ml-auto" >
 										
+										<textarea id="addressNames" name="addressNames" class="form-control" readonly="readonly"></textarea>
 									</div>
-								</div> -->
+									
+								</div>
+								
 							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">关 闭</button>
 							<button type="button" class="btn btn-primary"
-								onclick="addOrUpdateUser()">确 定</button>
+								onclick="sendSMS()">确 定</button>
 						</div>
 					</div>
 				</div>
@@ -362,130 +259,58 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</form>
 	
 	
+		
 
-	<div class="modal fade" id="addressModalCenter" tabindex="-1"
-					role="dialog" aria-labelledby="addressModalCenterTitle"
-					aria-hidden="true"> 
-			<div class="modal-dialog modal-dialog-centered  modal-lg modal-dialog-scrollable"
-				role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalCenterTitle">请选择用户地址</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body" >
-						<div class="container-fluid">
-							<div class="row">
-								<div id="modalTree"></div>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">关 闭</button>
-						<button type="button" class="btn btn-primary"
-							data-dismiss="modal">确定</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		
-<!-- 用户查询弹框 -->
-		<form name="queryUserForm" action="#">
+		<form name="phoneInfoForm" action="#">
 			<!-- Modal -->
-			<div class="modal fade" id="queryUserModalCenter" tabindex="-1"
-				role="dialog" aria-labelledby="queryUserModalCenterTitle"
-				aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"
+			<div class="modal fade" id="phoneInfoModalCenter" tabindex="-1"
+				role="dialog" aria-labelledby="phoneInfoModalCenterTitle"
+				aria-hidden="true"> 
+				<div class="modal-dialog modal-dialog-centered  modal-lg modal-dialog-scrollable"
 					role="document">
 					<div class="modal-content">
-						<div class="modal-header" style="border-bottom: 0;">
-						
-							 <ul class="nav nav-tabs mb-3" style="width: 100%;">
-                                <li class="nav-item">
-                                    <a href="#home" data-toggle="tab" aria-expanded="false" class="nav-link active">
-                                        <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
-                                        <span class="d-none d-lg-block">条件查询</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="javascript:void(0);" onclick="readCardAndQueryUser();"  class="nav-link btn btn-info">
-                                        <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
-                                        <span class="d-none d-lg-block" style="color: white;">读卡查询</span>
-                                    </a>
-                                </li>
-                            </ul>
-							<!-- <h5 class="modal-title" id="queryUserModalCenterTitle">查询用户</h5> -->
+						<div class="modal-header">
+							<h5 class="modal-title" id="phoneInfoModalCenterTitle">号码明细</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 						</div>
-						<div class="modal-body" id="changeMeterModalBodyDiv">
+						<div class="modal-body" id="phoneInfoModalBodyDiv">
 							<div class="container-fluid">
-
-
-								<div class="row">
-									<div class="col-md-2 align-self-center">用户姓名</div>
-									<div class="col-md-4 ml-auto">
-										 <input type="text" class="form-control" id="u_name" name="u_name"
-												placeholder="请输入用户姓名">
-									</div>
-									<div class="col-md-2 align-self-center">手机号</div>
-									<div class="col-md-4 ml-auto">
-										 <input type="text" class="form-control" id="u_phone" name="u_phone"
-													placeholder="请输入用户手机号">
-										
-									</div>
-								</div> 
-								<div class="row" style="margin-top: 10px;">
-									<div class="col-md-2 align-self-center">
-										证件号码
-									</div>
-									<div class="col-md-4 ml-auto">
-										<input type="text" class="form-control" id="u_paperwork"
-													name="u_paperwork" placeholder="请输入用户证件号码"> 
-									</div>
-									
-									
-									<div class="col-md-2 align-self-center">
-										用户卡号
-									</div>
-									<div class="col-md-4 ml-auto">
-										    	<input type="text" class="form-control" id="u_cardno" name="u_cardno"
-													placeholder="请输入用户卡号">
-									
-										  <input type="hidden" class="form-control" id="u_buildingid" name="u_buildingid">
-										  <input type="hidden" class="form-control" id="u_areaid" name="u_areaid">
-										  <input type="hidden" class="form-control" id="addressId" name="addressId">
-						<!-- 			<div class="col-md-2 align-self-center">
-										用户地址 
-									</div>
-									<div class="col-md-4 ml-auto">
-										<button type="button" class="btn btn-info" data-toggle="modal" data-target="#addressModalCenter" id="addressBTN">请选择地址</button>
-									</div> -->
-								</div>
+								<table class="table  mb-0 table-hover table-centered text-nowrap dt-responsive" id="userDataTable" >
+                                                <thead>
+                                                    <tr>
+														<th scope="col">序号</th>
+														<th scope="col">号码</th>
+														<th scope="col">计费条数</th>
+														<th scope="col">失败类型</th>
+														<th scope="col">失败原因</th>
+														<th scope="col">请求编号</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody >
+												  <tr v-for="(user,index) in phoneInfoList" >
+													<td>{{index+1}}</td>
+													<td>{{user.phone}}</td>
+													<td>{{user.fee }}</td>
+													<td>{{user.code}}</td>
+													<td>{{user.message }}</td>
+													<td>{{user.request_id }}</td>
+												</tr>
+												  
+                                                </tbody>
+                                            </table>
 							</div>
-						</div> 
-						<div  style="margin-top: 20px;" class="modal-footer">
-<!-- 							<button type="button" class="btn btn-success" style="margin-left: 0;">读卡查询</button>
- -->							
+						</div>
+						<div class="modal-footer">
 							<button type="button" class="btn btn-secondary"
 								data-dismiss="modal">关 闭</button>
-							<button type="button" class="btn btn-primary"
-								onclick="queryUserData()">确 定</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
-	
-	
-		
 	</div>
 
 	

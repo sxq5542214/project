@@ -333,10 +333,10 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 	 */
 	private String handlerUserShareFromOrderProduct(UserWechatBean user,String share_from,int share_type){
 		
-		int shareAddPoints = configAttributeService.getIntValueByCode(AttributeConstant.CODE_USER_SHARE_ADD_POINTS);
-		
-		user.setPoints(user.getPoints() + shareAddPoints);
-		update(user);
+//		int shareAddPoints = configAttributeService.getIntValueByCode(AttributeConstant.CODE_USER_SHARE_ADD_POINTS);
+//		
+//		user.setPoints(user.getPoints() + shareAddPoints);
+//		update(user);
 		
 //		userCommissionPointsService.createUserPointLog(user.getId(), shareAddPoints, "分享订购页面获得积分");
 		

@@ -73,6 +73,15 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	}
 	
 	@Override
+	public List<UserInfoBean> queryUserListByAddressIds(String addressIds){
+
+		UserInfoBean bean = new UserInfoBean();
+		bean.setAddressIds(addressIds);
+		return userInfoDao.queryUserInfoList(bean);
+		
+	}
+	
+	@Override
 	public int addOrUpdateUser(UserInfoBean bean) {
 		int num =0;
 		

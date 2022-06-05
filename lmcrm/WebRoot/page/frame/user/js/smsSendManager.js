@@ -7,9 +7,12 @@ var userManager =  new Vue({
         checkAll: false,// 是否全选
         checkedRows: [],// 选中的行标，用于删除行
         userList: [],// 表格数据
-        priceList : [] ,
-        deviceKindList : [],
-        buildingId : '',
+        phoneInfoList: [],// 表格数据
+        paramNum : 3,
+        sms_template : '停水通知：现因{1}，届时您所在的{2}将暂停供水，请做好储水准备！{3}',
+        send_content : '停水通知：现因 ，届时您所在的 将暂停供水，请做好储水准备！',
+        sms_content_count : '30',
+        sms_templateId : 1372643,
         newRow:{}// 新增的行数据，用于新增行
     },
 	created: function(){
@@ -48,7 +51,7 @@ var userManager =  new Vue({
 
 
 
-function queryUserData(){
+function queryTableData(){
 	
 	$.ajax({url:"admin/sms/querySmsSendInfoList.do",
 			type : "POST",
@@ -59,9 +62,6 @@ function queryUserData(){
 			}
 		    var list = result ; // eval('(' + result + ')');
 		    userManager.userList = list;
-		    $('#queryUserModalCenter').modal('hide');
-		    
-		    
 		    
 		    dataTables.fnClearTable();   //将数据清除  
 		    if(list.length >0){
@@ -69,6 +69,86 @@ function queryUserData(){
 		    }
 		    
 		}});
+}
+function showSendSMS(){
+	var addressIds = $("#addressIds").val();
+	
+	if(addressIds.length ==0){
+		alert('请先选择地址！');
+	}else{
+		
+		
+		$('#exampleModalCenter').modal('show');
+	}
+	
+}
+
+function showPhoneInfo(request_id){
+	$.ajax({url:"admin/sms/querySmsSendPhoneList.do",
+		type : "POST",
+		data:{
+			request_id: request_id
+		},
+		success:function(result){
+		  	userManager.phoneInfoList =  result ;
+		}});
+		
+		
+		$('#phoneInfoModalCenter').modal('show');
+}
+
+function sendSMS(){
+	var form = document.updateForm;
+	var sms_name = form.sms_name.value;
+	var params = new Array();
+	if(sms_name == '' ){
+		alert('请输入发送原由');
+		return false;
+	}
+	for(var i = 0 ; i < userManager.paramNum ; i++){
+		params.push(form.params[i].value);
+	}
+	
+	$.ajax({url:"admin/sms/sendSms.do",
+		type : "POST",
+		data:{
+			smsName: form.sms_name.value,
+			templateId: form.sms_templateId.value,
+			addressIds : form.addressIds.value,
+			params: params,
+			content: form.send_content.value
+		},
+		success:function(result){
+		    if(result == 'success'){
+		    	alert('执行发送成功，稍后请查询发送结果');
+		    $('#exampleModalCenter').modal('hide');
+		    }else{
+				alert('执行发送失败！');
+			}
+		    
+		    setTimeout(' queryTableData(); ',1000);
+//		    queryUserData();
+		}});
+}
+
+function reSendSMS(){
+	
+}
+
+function checkContentCount(){
+	
+	var paramNum = userManager.paramNum;
+	var content = userManager.sms_template;
+	for(var i = 1 ; i<= paramNum ;i++){
+		content = content.replaceAll("{"+i+"}", $("#params"+i).val());
+	}
+	
+	
+	userManager.send_content = content;
+	
+	var count = userManager.send_content.length ;
+	userManager.sms_content_count = count ;
+	
 }
 
 function initData(){
@@ -85,25 +165,17 @@ function initData(){
 	$('#tree').on('changed.jstree', function (e, data) {
 		// 树形列表点击事件
 	    var i, j, r ;
-//	    for(i = 0, j = data.selected.length; i < j; i++) {   如果多选，则需要循环
-//	      r= data.instance.get_node(data.selected[i]);
-//	    }
-	    r = data.instance.get_node(data.selected[0]);
-	    r = r.original;
-	//  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
-	    var parent_id = data.instance.get_parent(data.selected[0]) ;
-	    var parent_name = data.instance.get_node(parent_id).text;
-	    $('#addressId').val(r.id);
-	    $('#addressBTN2').text(r.text);
-	    document.updateForm.u_address.value = r.full_name;
-	    
-	    var addressId = r.id ;
-		$("#u_cardno").val('');
-		$("#u_id").val('');
-		$("#addressId").val(addressId);
-	    queryUserData(); //查询用户
-	    
-	    
+	    var addressNames = '',addressIds = '';
+	    for(i = 0, j = data.selected.length; i < j; i++) {  // 如果多选，则需要循环
+	      r= data.instance.get_node(data.selected[i]);
+	      
+	      addressIds += r.id+",";
+	      addressNames += r.text+",";
+	    }
+	  	
+//	    alert(addressIds);
+		$("#addressIds").val(addressIds);
+		$("#addressNames").val(addressNames);
 	  }).jstree({
 		  //树形列表加载参数
 		'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
@@ -111,47 +183,15 @@ function initData(){
 			            'name': 'proton',
 			            'responsive': true
 			        }
-				}
+				},
+		"plugins" : [ "checkbox" ],
+		"checkbox" : {
+		    "keep_selected_style" : false,
+		    "three_state" :  true  //父子级别级联选择
+		 }
 	});
 	
-	
-	var addrName ;
-//  弹窗选择地址的树	
-	//默认打开根节点
-		$("#modalTree").on("ready.jstree", function (e, data) {
-//			alert(data.instance.get_node(6));
-			var id = e.target.firstChild.firstChild.id ; // 获取根节点
-			data.instance.open_node(id);//打开根节点
-		});
-		//双击事件
-		$("#modalTree").on("dblclick.jstree", function (e) {
-			
-			$("#addressModalCenter").modal('hide');
-		});
-		//初始化地址列表的弹框数据
-		$('#modalTree').on('changed.jstree', function (e, data) {
-			// 树形列表点击事件
-		    var i, j, r ;
-		    r = data.instance.get_node(data.selected[0]);
-		    r = r.original;
-		//  alert(r.id+","+ r.text+","+ r.level +","+ r.parent +"," + r.updateDate );
-		    var parent_id = data.instance.get_parent(data.selected[0]) ;
-		    var parent_name = data.instance.get_node(parent_id).text;
-		    $('#addressId2').val(r.id);
-		    $('#addressBTN2').text(r.full_name);
-		    addrName = r.full_name ;
-		  }).jstree({
-			  //树形列表加载参数
-			'core' : { 	'data': { 'url': 'admin/area/ajaxQueryAddressByParent.do' },
-						'themes': {
-				            'name': 'proton',
-				            'responsive': true
-				        }
-					}
-		});
-		
-		
-		
+
 		//  监听滚动条，固定地址树
 		//获取要定位元素距离浏览器顶部的距离
 		var navH = $("#treeDiv").offset().top;
@@ -171,20 +211,20 @@ function initData(){
 
 		
 		dataTables = $('#userDataTable').dataTable({"columns": [
-		    { "data": "id" , render : function(data,type,row,meta){
+/*		    { "data": "id" , render : function(data,type,row,meta){
 		    	return '<input type="radio" id="radio'+meta.row+'" name="u_id" value="'+ meta.row +'"  onclick="userManager.getData('+ meta.row+')"  >'+ ( Number(meta.row) + 1) ;
-		    }},
+		    }},*/
+		    { "data":  function(row, type, set, meta){ return '<button type="button" class="btn btn-info btn-sm"  onclick="showPhoneInfo(\''+ row.request_id+'\');">查看详情</button>' } },
 		    { "data": "templateName" },
-		    { "data": "send_content" },
-		    { "data": "send_time" },
 		    { "data": "send_operator" },
-		    { "data": "send_count" },
+		    { "data": "error_count" } ,
 		    { "data": "success_count" },
-		    { "data": "error_count" },
+		    { "data": "send_count" },
+		    { "data": "send_time" },
+		    { "data": "send_content" },
 //		    { "data":  function(row, type, set, meta){
 //		    			if(type =='set') return;
 //		    			return dictionaryCache.getDescByBeanAttrValue("user","u_status",row.u_status);} },
-		    { "data":  function(row, type, set, meta){ return "查看详情" } }
 		  ],
 		  	"columnDefs" : [{
 		  		"defaultContent": " ",
@@ -209,15 +249,10 @@ function initData(){
 		});
 		$('#userDataTable').on("click","tr",function(e){
 			
-
-			if(e.target.toString().indexOf("Input") > 0){
-				//点击的是 单选按钮 ， 放在input的 onclick中了
-//				userManager.getData(e.target.value);
-
-			}else{
-				userManager.getData(e.target.parentNode.childNodes[0].childNodes[0].value);
-			}
 		});
+		
+		
+		queryTableData();
 }
 
 

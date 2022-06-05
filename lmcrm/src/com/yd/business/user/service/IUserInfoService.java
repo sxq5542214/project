@@ -18,4 +18,6 @@ public interface IUserInfoService {
 
 	UserInfoBean findUserByCardNo(Integer cardno);
 
+	List<UserInfoBean> queryUserListByAddressIds(String addressIds);
+
 }

@@ -36,6 +36,7 @@
 			<if test="u_operatorid != null"> and u_operatorid in ( select o1.o_id from operator o1 ,operator o2 where o2.O_Id=  #{u_operatorid} and o1.O_CompanyId = o2.O_CompanyId  ) </if>
 			<if test="areaid != null"> and u_buildingid in ( select b_id from Building where b_areaid = #{areaid} ) </if>
 			<if test="addressId != null">and exists ( select 1 from  TEMP t where   addressId = t.id  )  </if>
+			<if test="addressIds != null">and addressId in (${addressIds})  </if>
 			
 		</where>
 		<if test="orderby != null"> ${orderby}</if>

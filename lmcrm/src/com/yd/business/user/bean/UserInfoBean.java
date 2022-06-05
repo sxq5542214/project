@@ -74,6 +74,10 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 	private String deviceKindName;
 	private String addressName;
 	private String device_company;
+	
+	
+	private String addressIds;
+	
 	// Constructors
 
 	/** default constructor */
@@ -104,6 +108,16 @@ public class UserInfoBean extends PageinationData implements java.io.Serializabl
 
 	public void setIsdisplay(Integer isdisplay) {
 		this.isdisplay = isdisplay;
+	}
+
+
+	public String getAddressIds() {
+		return addressIds;
+	}
+
+
+	public void setAddressIds(String addressIds) {
+		this.addressIds = addressIds;
 	}
 
 
