@@ -140,7 +140,7 @@ function checkContentCount(){
 	var paramNum = userManager.paramNum;
 	var content = userManager.sms_template;
 	for(var i = 1 ; i<= paramNum ;i++){
-		content = content.replaceAll("{"+i+"}", $("#params"+i).val());
+		content = content.replace("{"+i+"}", $("#params"+i).val());
 	}
 	
 	
