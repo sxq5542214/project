@@ -380,6 +380,34 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		result.setData(value);
 		return result;
 	}
+	@Override
+	public IOTWebDataBean queryDayMeterReadingCountListData(String month,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("billMonth", month);
+		map.put("systemid", systemid);
+//		map.put("operatorid", operatorid);
+		
+		List<Map<String, Object>> value = meterExtendsMapper.queryLast2MonthMeterReadingList(map);
+
+		result.setData(value);
+		return result;
+	}
+	@Override
+	public IOTWebDataBean queryDayOpendedMeterCountListData(String month,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("billMonth", month);
+		map.put("systemid", systemid);
+//		map.put("operatorid", operatorid);
+		
+		List<Map<String, Object>> value = meterExtendsMapper.queryLast2MonthOpenedMeterCountList(map);
+
+		result.setData(value);
+		return result;
+	}
 	
 	
 }

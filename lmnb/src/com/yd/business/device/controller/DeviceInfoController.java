@@ -223,7 +223,7 @@ public class DeviceInfoController extends BaseController {
 		return null;
 	}
 
-	@RequestMapping("admin/device/ajaxQueryOpenedMeterCount")
+	@RequestMapping("admin/device/ajaxQueryOpenedMeterCount.do")
 	public ModelAndView ajaxQueryOpenedMeterCount(HttpServletRequest request,HttpServletResponse response){
 
 		IOTWebDataBean result;
@@ -231,6 +231,56 @@ public class DeviceInfoController extends BaseController {
 			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			
 			result = deviceInfoService.queryOpenedMeterCount(operator.getSystemid());
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+
+	/**
+	 * 查询首页的今日抄表数近2月每日明细数据
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("admin/device/ajaxQueryDayMeterReadingCountListDataByDashboard.do")
+	public ModelAndView ajaxQueryDayMeterReadingCountListDataByDashboard(HttpServletRequest request,HttpServletResponse response){
+
+		IOTWebDataBean result;
+		try {
+			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			
+			result = deviceInfoService.queryDayMeterReadingCountListData(null,operator.getSystemid(),operator.getId());
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+
+	/**
+	 * 查询首页的今日开户数近2月每日明细数据
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("admin/device/ajaxQueryOpenedMeterCountListDataByDashboard.do")
+	public ModelAndView ajaxQueryOpenedMeterCountListDataByDashboard(HttpServletRequest request,HttpServletResponse response){
+
+		IOTWebDataBean result;
+		try {
+			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			
+			result = deviceInfoService.queryDayOpendedMeterCountListData(null,operator.getSystemid(),operator.getId());
 			
 		} catch (Exception e) {
 			log.error(e, e);

@@ -11,11 +11,14 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.report.bean.ReportParamsBean;
 import com.yd.business.report.bean.ReportSimpleBean;
 import com.yd.business.report.dao.IReportDao;
 import com.yd.business.report.service.IReportService;
+import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.StringUtil;
 
 /**
@@ -53,6 +56,10 @@ public class ReportServiceImpl extends BaseService implements IReportService {
 		ReportSimpleBean condition = new ReportSimpleBean();
 		condition.setCode(code);
 		List<ReportSimpleBean> list = reportDao.queryReportSimpleList(condition);
+		LmOperatorModel op = (LmOperatorModel)WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+
+		params.put("operatorid",  op.getId().toString() );
+		
 		for(ReportSimpleBean bean : list) {
 			String execSql = convertActionParameter(bean.getData_sql(), params);
 			

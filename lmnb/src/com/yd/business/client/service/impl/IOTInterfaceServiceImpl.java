@@ -67,8 +67,20 @@ public class IOTInterfaceServiceImpl extends BaseService implements IIOTInterfac
 			mo.setIspid(cmd.getIspid());
 			mo.setExetime(DateUtil.parseDate(cmd.getFinishtime()) );
 			mo.setState(Byte.parseByte(cmd.getState()));
+			MeterModelExtendsBean meter = deviceInfoService.findMeterByIspid(cmd.getIspid());
 			if("2".equals(cmd.getState())){ //成功
 				
+				if("1".equals(mo.getType())){
+					// 开阀类型任务成功
+					meter.setValvestate(MeterModelExtendsBean.VALVESTATE_OPEND);
+					
+				}else if("2".equals(mo.getType())){
+					// 关阀类型任务成功
+					meter.setValvestate(MeterModelExtendsBean.VALVESTATE_CLOSED);
+					
+				}
+				// 更新水表中信息-阀门状态
+				deviceInfoService.updateMeterModel(meter);
 			}else {
 				// 未成功需要做XXX
 				

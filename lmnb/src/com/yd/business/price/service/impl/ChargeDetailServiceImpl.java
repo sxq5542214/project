@@ -327,6 +327,35 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		result.setData(value);
 		return result;
 	}
+
+	@Override
+	public IOTWebDataBean queryDayBuyAmountListData(String month,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("billMonth", month);
+		map.put("systemid", systemid);
+		map.put("operatorid", operatorid);
+		
+		List<Map<String, Object>> value = iPaymentExtendsMapper.queryLast2MonthAmountDayList(map);
+
+		result.setData(value);
+		return result;
+	}
+	@Override
+	public IOTWebDataBean queryDayBuyCountListData(String month,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("billMonth", month);
+		map.put("systemid", systemid);
+		map.put("operatorid", operatorid);
+		
+		List<Map<String, Object>> value = iPaymentExtendsMapper.queryLast2MonthCountDayList(map);
+
+		result.setData(value);
+		return result;
+	}
 	@Override
 	public IOTWebDataBean queryChargeList(LmPaymentModel model) {
 		IOTWebDataBean result = new IOTWebDataBean();

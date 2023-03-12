@@ -64,4 +64,8 @@ public interface IChargeDetailService {
 
 	void updatePaymentMeterCode(String oldMeterCode, String newMeterCode);
 
+	IOTWebDataBean queryDayBuyAmountListData(String month, Integer systemid, Integer operatorid);
+
+	IOTWebDataBean queryDayBuyCountListData(String month, Integer systemid, Integer operatorid);
+
 }

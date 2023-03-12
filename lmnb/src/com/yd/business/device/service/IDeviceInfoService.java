@@ -44,4 +44,8 @@ public interface IDeviceInfoService {
 
 	LmMeterModel findMeterById(int id);
 
+	IOTWebDataBean queryDayMeterReadingCountListData(String month, Integer systemid, Integer operatorid);
+
+	IOTWebDataBean queryDayOpendedMeterCountListData(String month, Integer systemid, Integer operatorid);
+
 }

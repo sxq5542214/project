@@ -61,5 +61,28 @@
 	</select>
 	
 	
+	<select id="queryLast2MonthMeterReadingList" parameterType="map" resultType="map">
+			select ca.value , 
+		( select  ifnull(count(DISTINCT p.meterid),0) from lm_record p where substr(p.curtime,9,2) = ca.value and p.curtime like CONCAT(SUBSTR(CURDATE(),1,7),'%')  <if test="systemid != null"> and p.systemid = #{systemid}</if> ) thisMonthData ,
+		( select  ifnull(count(DISTINCT pa.meterid),0) from lm_record pa where substr(pa.curtime,9,2) = ca.value and pa.curtime like CONCAT(SUBSTR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),1,7),'%')  <if test="systemid != null"> and pa.systemid = #{systemid}</if> ) lastMonthData 
+		from ll_conf_attribute ca
+		where ca.code = 'day_of_month' 
+		group by ca.value
+		order by ca.value 
+		
+	</select>
+	<select id="queryLast2MonthOpenedMeterCountList" parameterType="map" resultType="map">
+		select ca.value ,ifnull(count(DISTINCT p.id),0) thisMonthData ,
+		 (select ifnull(count(DISTINCT pa.id),0) from lm_meter pa where CONCAT(SUBSTR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),1,8),ca.value) >= pa.opentime 
+		 and pa.changed = 0 and pa.opened = 1 <if test="systemid != null"> and pa.systemid = #{systemid}</if> ) lastMonthData
+		
+		 from ll_conf_attribute ca
+		LEFT JOIN lm_meter p on  CONCAT(SUBSTR(CURDATE(),1,8),ca.value ) >= p.opentime  and p.changed = 0 and p.opened = 1
+		<if test="systemid != null"> and p.systemid = #{systemid}</if>
+
+		where ca.code = 'day_of_month' 
+		group by ca.value
+		order by ca.value 
+	</select>
 	
 </mapper>

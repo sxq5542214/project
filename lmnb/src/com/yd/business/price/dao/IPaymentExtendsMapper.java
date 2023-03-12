@@ -14,4 +14,8 @@ public interface IPaymentExtendsMapper extends LmPaymentModelMapper{
 	List<Integer> queryDayBuyAmountSumListOfMonth(Map<String, Object> map);
 	
 	void updatePaymentMeterCode(@Param("oldMeterCode") String oldMeterCode,@Param("newMeterCode")  String newMeterCode);
+	List<Map<String, Object>> queryLast2MonthAmountDayList(Map<String, Object> map);
+	List<Map<String, Object>> queryLast2MonthCountDayList(Map<String, Object> map);
+	
+	
 }

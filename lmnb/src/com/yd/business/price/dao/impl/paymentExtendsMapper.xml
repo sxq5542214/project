@@ -67,6 +67,27 @@
 	</update>
 
 	
+	<select id="queryLast2MonthAmountDayList" parameterType="map" resultType="map">
+		select ca.value ,
+		( select  ifnull(sum(p.payamount),0) from lm_payment p where substr(p.createtime,9,2) = ca.value and p.createtime like CONCAT(SUBSTR(CURDATE(),1,7),'%') <if test="systemid != null"> and p.systemid = #{systemid}</if>  ) thisMonthData ,
+		( select  ifnull(sum(pa.payamount),0) from lm_payment pa where substr(pa.createtime,9,2) = ca.value and pa.createtime like CONCAT(SUBSTR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),1,7),'%')  <if test="systemid != null"> and pa.systemid = #{systemid}</if>  ) lastMonthData 
+		from ll_conf_attribute ca
+
+		where ca.code = 'day_of_month' 
+		group by ca.value
+		order by ca.value 
+	</select>
+	
+	<select id="queryLast2MonthCountDayList" parameterType="map" resultType="map">
+		select ca.value ,
+		( select  ifnull(count(p.payamount),0) from lm_payment p where substr(p.createtime,9,2) = ca.value and p.createtime like CONCAT(SUBSTR(CURDATE(),1,7),'%') <if test="systemid != null"> and p.systemid = #{systemid}</if>  ) thisMonthData ,
+		( select  ifnull(count(pa.payamount),0) from lm_payment pa where substr(pa.createtime,9,2) = ca.value and pa.createtime like CONCAT(SUBSTR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH),1,7),'%')  <if test="systemid != null"> and pa.systemid = #{systemid}</if>  ) lastMonthData 
+		from ll_conf_attribute ca
+
+		where ca.code = 'day_of_month' 
+		group by ca.value
+		order by ca.value 
+	</select>
 	
 	
 </mapper>

@@ -12,4 +12,8 @@ public interface IMeterExtendsMapper extends LmMeterModelMapper{
 	int updateNopayBillMeterBalance(String billMonth);
 	int updateMeterBalanceByMinConsumamount(String billMonth);
 	int countDayMeterReading(Map<String, Object> map);
+	List<Map<String, Object>> queryLast2MonthMeterReadingList(Map<String, Object> map);
+	List<Map<String, Object>> queryLast2MonthOpenedMeterCountList(Map<String, Object> map);
+	
+	
 }
