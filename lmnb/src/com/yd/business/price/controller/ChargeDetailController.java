@@ -405,7 +405,7 @@ public class ChargeDetailController extends BaseController {
 //			c.add(Calendar.MONTH, monthNum);
 			
 			String billmoth = "";  //DateUtil.formatMonth(c.getTime());
-			result = chargeDetailService.queryDayBuyAmountListData( billmoth, op.getSystemid(), null);
+			result = chargeDetailService.queryDayBuyAmountListData( billmoth, op.getSystemid(), opid);
 			
 		} catch (Exception e) {
 			log.error(e, e);
@@ -441,7 +441,7 @@ public class ChargeDetailController extends BaseController {
 //			c.add(Calendar.MONTH, monthNum);
 			
 			String billmoth = "";  //DateUtil.formatMonth(c.getTime());
-			result = chargeDetailService.queryDayBuyCountListData( billmoth, op.getSystemid(), null);
+			result = chargeDetailService.queryDayBuyCountListData( billmoth, op.getSystemid(), opid);
 			
 		} catch (Exception e) {
 			log.error(e, e);

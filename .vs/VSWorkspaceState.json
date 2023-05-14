@@ -5,11 +5,11 @@
     "\\lmnb-web\\src",
     "\\lmnb-web\\src\\views",
     "\\lmnb-web\\src\\views\\business",
-    "\\lmnb-web\\src\\views\\business\\report",
-    "\\lmnb-web\\src\\views\\business\\user",
-    "\\lmnb-web\\src\\views\\login",
-    "\\lmnb-web\\src\\views\\table",
-    "\\lmnb-web\\src\\views\\table\\dynamic-table"
+    "\\lmnb-web\\src\\views\\business\\dashboard",
+    "\\lmnb-web\\src\\views\\business\\dashboard\\admin",
+    "\\lmnb-web\\src\\views\\business\\dashboard\\admin\\components",
+    "\\lmnb-web\\src\\views\\business\\dashboard\\editor",
+    "\\lmnb-web\\src\\views\\business\\dashboard\\editor\\components"
   ],
   "PreviewInSolutionExplorer": false
 }

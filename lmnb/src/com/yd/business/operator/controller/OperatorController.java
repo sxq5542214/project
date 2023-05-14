@@ -163,23 +163,29 @@ public class OperatorController extends BaseController {
 			
 			//通过登录帐号找菜单
 			List<SystemMenuExtModel> menus = systemManagerService.generateSystemMenuByOperator(operator.getId());
-			SystemMenuExtModel last = menus.get(menus.size()-1);
-			
-			OperatorExtBean bean = new OperatorExtBean();
-			bean.setName(operator.getRealname());
-			List<String> roles = new ArrayList<String>(last.getRoles());
-//			roles.add("test");
-			bean.setRoles(roles);
-			bean.setIntroduction(operator.getRealname());
-			bean.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-			bean.setMenus(menus);
-			result.setInfo(operator);
-			result.setData(bean);
-			result.setCode(IOTWebDataBean.CODE_IOTWEB_SUCCESS);
+			if(menus == null || menus.size() == 0) {
+				result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+				result.setMessage("该帐号下未找到菜单，请检查权限配置！");
+			}else {
+				SystemMenuExtModel last = menus.get(menus.size()-1);
+				
+				OperatorExtBean bean = new OperatorExtBean();
+				bean.setName(operator.getRealname());
+				List<String> roles = new ArrayList<String>(last.getRoles());
+//				roles.add("test");
+				bean.setRoles(roles);
+				bean.setIntroduction(operator.getRealname());
+				bean.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+				bean.setMenus(menus);
+				result.setInfo(operator);
+				result.setData(bean);
+				result.setCode(IOTWebDataBean.CODE_IOTWEB_SUCCESS);
+			}
 		
 		} catch (Exception e) {
 			log.error(e, e);
 			result.setCode(-1);
+			result.setMessage(e.getMessage());
 		}
 		writeJson(response, result );
 		return null;
