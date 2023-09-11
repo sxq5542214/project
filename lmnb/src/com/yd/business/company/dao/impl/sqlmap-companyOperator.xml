@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="companyOperator">
+	<select id="queryCompanyOperatorList" resultType="companyOperator" parameterType="companyOperator">
+		select * from company_Operator 
+		<where>
+			
+			<if test="co_companyid != null"> and co_companyid = #{co_companyid}</if>
+			<if test="co_operatorid != null"> and co_operatorid = #{co_operatorid}</if>
+		</where>
+	</select>
+	
+	<insert id="insertCompanyOperator" parameterType="companyOperator" useGeneratedKeys="true" keyProperty="co_id">
+		
+		insert into company_Operator(
+      co_companyid
+      ,co_operatorid  ) values(
+      #{co_companyid}
+      ,#{co_operatorid}   )
+   	</insert>
+	
+	<delete id="deleteCompanyOperator" parameterType="long">
+		delete from  company_Operator
+		where c_id = #{c_id}
+	</delete>
+	
+	
+ 	<update id="updateCompanyOperator" parameterType="companyOperator">
+		update company_Operator 
+		<set>
+			<if test="c_no != null">c_no = #{c_no},</if>
+		</set>
+		<where>
+			c_id = #{c_id}
+		</where>
+		
+	</update>
+	
+</mapper>
+
+

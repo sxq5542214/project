@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="userInfo">
+	<select id="queryUserInfoList" resultType="userInfo" parameterType="userInfo">
+	
+		<if test="addressId != null">
+			 WITH TEMP   --递归
+		     AS (SELECT Id,level,Name,parent_id,comment
+		         FROM   ll_address 
+		         WHERE  Id = #{addressId}   --查询当前地址
+		         UNION ALL
+		         SELECT B.Id,  --查询子集地址
+		                B.level,B.Name,B.parent_id,B.comment
+		         FROM   TEMP A
+		                INNER JOIN ll_address B
+		                        ON B.parent_id = A.Id)
+		</if>
+	
+		select *, (select P_Name from Price where P_Id =U_PriceId ) as priceName , (select full_name from ll_address a where a.id = addressId ) addressName,
+		 dk.dk_name  deviceKindName ,device_company  from userInfo 
+		 left join 	deviceinfo di on  di.di_userid = u_id 
+		 left join 	devicekind dk on  dk.dk_id = di.di_dkid
+		<where>
+			isdisplay != -1 
+			<if test="u_id != null"> and u_id = #{u_id}</if>
+			<if test="u_phone != '' and u_phone != null"> and u_phone like '%' + #{u_phone} + '%'</if>
+			<if test="u_status != '' and u_status != null"> and u_status = #{u_status} </if>
+			<if test="u_cardno != '' and u_cardno != null"> and u_cardno = #{u_cardno} </if>
+			<if test="u_no != '' and u_no != null"> and u_no = #{u_no} </if>
+			<if test="u_name != ''  and u_name != null"> and u_name like '%' + #{u_name} + '%'</if>
+			<if test="u_paperwork != '' and u_paperwork != null"> and u_paperwork like '%' + #{u_paperwork} + '%'</if>
+			<if test="u_buildingid != null"> and u_buildingid = #{u_buildingid} </if>
+			<if test="isdisplay != null"> and isdisplay = #{isdisplay} </if>
+			<if test="u_operatorid != null"> and u_operatorid in ( select o1.o_id from operator o1 ,operator o2 where o2.O_Id=  #{u_operatorid} and o1.O_CompanyId = o2.O_CompanyId  ) </if>
+			<if test="areaid != null"> and u_buildingid in ( select b_id from Building where b_areaid = #{areaid} ) </if>
+			<if test="addressId != null">and exists ( select 1 from  TEMP t where   addressId = t.id  )  </if>
+			<if test="addressIds != null">and addressId in (${addressIds})  </if>
+			
+		</where>
+		<if test="orderby != null"> ${orderby}</if>
+	</select>
+	
+	<insert id="insertUserInfo" parameterType="userInfo" useGeneratedKeys="true" keyProperty="u_id">
+		
+		insert into userInfo(U_BuildingId
+           ,U_PriceId
+           ,U_Group
+           ,U_No
+           ,U_CardNo
+           ,U_Address
+           ,U_Name
+           ,U_Phone
+           ,U_Paperwork
+           ,U_Remark
+           ,U_PeopleSize
+           ,U_MaterialFee
+           ,U_ConstructionCost
+           ,U_Balance
+           ,U_Status
+           ,U_OperatorId
+           ,U_StartDate
+           ,U_CreateDate
+           ,U_UpdateDate
+           ,U_Prepayment
+           ,addressId , isdisplay) values(
+           #{u_buildingid}
+           ,#{u_priceid}
+           ,#{u_group}
+           ,(SELECT max(U_No)+1 FROM userinfo)
+           ,(SELECT max(U_No)+1 FROM userinfo)
+           ,#{u_address}
+           ,#{u_name}
+           ,#{u_phone}
+           ,#{u_paperwork}
+           ,#{u_remark}
+           ,#{u_peoplesize}
+           ,#{u_materialfee}
+           ,#{u_constructioncost}
+           ,#{u_balance}
+           ,#{u_status}
+           ,#{u_operatorid}
+           ,#{u_startdate}
+           ,#{u_createdate}
+           ,#{u_updatedate}
+           ,#{u_prepayment}
+           ,#{addressId} , 1 
+           )
+   	</insert>
+	
+	<delete id="deleteUserInfo" parameterType="userInfo">
+		delete from  userInfo
+		where u_id = #{u_id}
+	</delete>
+	
+	
+ 	<update id="updateUserInfo" parameterType="userInfo">
+		update userInfo 
+		<set>
+			<if test="u_buildingid != null">u_buildingid = #{u_buildingid},</if>
+			<if test="u_priceid != null">u_priceid = #{u_priceid},</if>
+			<if test="u_group != null">u_group = #{u_group},</if>
+			<if test="u_no != null">u_no = #{u_no},</if>
+			<if test="u_cardno != null">u_cardno = #{u_cardno},</if>
+			<if test="u_address != null">u_address = #{u_address},</if>
+			<if test="u_name != null">u_name = #{u_name},</if>
+			<if test="u_phone != null">u_phone = #{u_phone},</if>
+			<if test="u_paperwork != null">u_paperwork = #{u_paperwork},</if>
+			<if test="u_remark != null">u_remark = #{u_remark},</if>
+			<if test="u_peoplesize != null">u_peoplesize = #{u_peoplesize},</if>
+			<if test="u_materialfee != null">u_materialfee = #{u_materialfee},</if>
+			<if test="u_constructioncost != null">u_constructioncost = #{u_constructioncost},</if>
+			<if test="u_balance != null">u_balance = #{u_balance},</if>
+			<if test="u_status != null">u_status = #{u_status},</if>
+			<if test="u_operatorid != null">u_operatorid = #{u_operatorid},</if>
+			<if test="u_startdate != null">u_startdate = #{u_startdate},</if>
+			<if test="u_createdate != null">u_createdate = #{u_createdate},</if>
+			<if test="u_updatedate != null">u_updatedate = #{u_updatedate},</if>
+			<if test="u_prepayment != null">u_prepayment = #{u_prepayment},</if>
+			<if test="addressId != null">addressId = #{addressId},</if>
+			<if test="isdisplay != null">isdisplay = #{isdisplay},</if>
+			
+		</set>
+		<where>
+			u_id = #{u_id}
+		</where>
+		
+	</update>
+	
+</mapper>
+
+

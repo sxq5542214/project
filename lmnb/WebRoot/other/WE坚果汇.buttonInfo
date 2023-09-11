@@ -1,0 +1,49 @@
+{
+    "button": [
+        {
+        	"name": "坚果商城", 
+        	 "type": "view", 
+		     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://m.jg-shop.cn/jgshop/wechat/user/toDefaultPlatformSupplierProduct.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+        }, 
+        {
+            "name": "优惠活动", 
+            "sub_button": [
+//            	{
+//            		"type": "click", 
+//                    "name": "话费20减3", 
+//                   "key": "huafei20jian3"
+//                },
+             	{
+		            "type": "view", 
+                    "name": "我的优惠券", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://m.jg-shop.cn/jgshop/wechat/user/toUserCouponPage.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                },
+            	{
+            		"type": "view", 
+                    "name": "优惠券中心", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://m.jg-shop.cn/jgshop/wechat/user/toCouponCenterPage.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                }
+            ]
+        },
+        {
+            "name": "个人中心", 
+            "sub_button": [
+               {
+		            "type": "view", 
+                    "name": "今日签到", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://m.jg-shop.cn/jgshop/wechat/user/toUserSignPage.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                },
+                {
+                    "type": "view", 
+                    "name": "个人中心", 
+                    "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http://m.jg-shop.cn/jgshop/wechat/user/toUserInfoCenter.do?response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+                },
+                {
+                    "type": "click", 
+                    "name": "关于我们", 
+                    "key": "aboutus"
+                }
+            ]
+        } 
+    ]
+}
