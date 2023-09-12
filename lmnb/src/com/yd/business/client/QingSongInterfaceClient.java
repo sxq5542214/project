@@ -155,27 +155,56 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 		return list;
 	}
 
-	public static QingSongInterfaceBean convertPostMeterReadingResult(String str) {
-		QingSongInterfaceBean bean = new QingSongInterfaceBean();
-		JSONObject jso = new JSONObject(str);
-		bean.setIspid(jso.getString("ispid"));
-		bean.setCurtime(jso.getString("curtime"));
-		bean.setStationcode(jso.getString("stationcode"));
+	public static List<QingSongInterfaceBean> convertPostMeterReadingResult(String str) {
+		List<QingSongInterfaceBean> list = new ArrayList<QingSongInterfaceBean>();
+		JSONArray array = new JSONArray(str);
+		
+		for(int i = 0 ; i < array.length() ; i ++) {
+			QingSongInterfaceBean bean = new QingSongInterfaceBean();
+			
+			JSONObject jso = array.getJSONObject(i);
+			bean.setIspid(jso.getString("ispid"));
+			bean.setCurtime(jso.getString("curtime"));
+			bean.setStationcode(jso.getString("stationcode"));
 
-		Conter conter = bean.new Conter();
-		JSONObject con = jso.getJSONObject("conter");
-		conter.setCurnum(con.getString("curnum"));
-		conter.setValvestate(con.getString("valvestate"));
-		conter.setBattery(con.getString("battery"));
-		conter.setSensor(con.getString("sensor"));
-		conter.setSignalstrength(con.getString("signalstrength"));
-		conter.setReadperiod(con.getString("readperiod"));
-		conter.setReadstate(con.getString("readstate"));
-		conter.setReversenum(con.getString("reversenum"));
+			Conter conter = bean.new Conter();
+			JSONObject con = jso.getJSONObject("conter");
+			conter.setCurnum(con.getString("curnum"));
+			conter.setValvestate(con.getString("valvestate"));
+			conter.setBattery(con.getString("battery"));
+			conter.setSensor(con.getString("sensor"));
+			conter.setSignalstrength(con.getString("signalstrength"));
+			conter.setReadperiod(con.getString("readperiod"));
+			conter.setReadstate(con.getString("readstate"));
+			conter.setReversenum(con.getString("reversenum"));
 
-		bean.setConter(conter);
+			bean.setConter(conter);
+			list.add(bean);
+		}
+		return list;
+	}
 
-		return bean;
+
+	public static List<MeterCMD> convertPostMeterCMDResult(String str) {
+		List<MeterCMD> list = new ArrayList<MeterCMD>();
+		JSONArray array = new JSONArray(str);
+		
+		for(int i = 0 ; i < array.length() ; i ++) {
+			MeterCMD bean = new MeterCMD();
+			
+			JSONObject jso = array.getJSONObject(i);
+			bean.setIspid(jso.getString("ispid"));
+			bean.setType(jso.getString("type"));
+			bean.setId(jso.getString("id"));
+			bean.setOuterid(jso.getString("outerid"));
+			bean.setFinishtime(jso.getString("finishtime"));
+			bean.setState(jso.getString("state"));
+			bean.setCreatetime(jso.getString("createtime"));
+			bean.setSendtime(jso.getString("sendtime"));
+
+			list.add(bean);
+		}
+		return list;
 	}
 
 
@@ -202,7 +231,7 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 			if(resCode == QingSongInterfaceBean.code_success) {
 
 				jso = resJson.getJSONObject("data");
-				MeterCMD cmd = bean.new MeterCMD();
+				MeterCMD cmd = new MeterCMD();
 				cmd.setId(jso.getString("id"));
 				cmd.setState(jso.getString("state"));
 				cmd.setSendtime(jso.getString("sendtime"));

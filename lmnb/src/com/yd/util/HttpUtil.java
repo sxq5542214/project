@@ -1,7 +1,9 @@
 package com.yd.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -566,6 +568,19 @@ public class HttpUtil {
     public static String getIpAddressByRequest() {  
     	HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
     	return getIpAddress(request);
+    }
+    
+    public static String readRequestString(HttpServletRequest request) throws Exception {
+    	HttpServletRequest req = request;
+    	InputStream inputStream = req.getInputStream();
+    	ByteArrayOutputStream result = new ByteArrayOutputStream();
+    	byte[] buffer = new byte[1024];
+    	int length;
+    	while ((length = inputStream.read(buffer)) != -1) {
+    		result.write(buffer, 0, length);
+    	}
+    	String str = result.toString("UTF-8");
+    	return str;
     }
 
 }

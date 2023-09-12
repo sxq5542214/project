@@ -196,7 +196,16 @@ public class QingSongInterfaceBean {
 			this.reversenum = reversenum;
 		}
 	}
-	public class MeterCMD{
+	public static class MeterCMD{
+		public static byte STATE_NOSEND = 0;
+		public static byte STATE_WAITEXECUTE = 1;
+		public static byte STATE_SUCCESS = 2;
+		public static byte STATE_FAILD = 3;
+		public static byte STATE_OFFLINE = 4;
+		public static byte STATE_OVERWIRTE = 5;
+		public static byte STATE_CANCLE = 6;
+		
+		
 		private String id;
 		private String type;
 		private String ispid;

@@ -9,6 +9,7 @@ import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.price.bean.PriceBean;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
+import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 
 public interface IDeviceInfoService {
 
@@ -33,6 +34,6 @@ public interface IDeviceInfoService {
 
 	MeterModelExtendsBean findMeterByIspid(String ispid);
 
-	IOTWebDataBean openOrCloseMeter(String meterCode, Integer opid, boolean isOpen);
+	IOTWebDataBean openOrCloseMeter(String meterCode, LmOperatorModel op, boolean isOpen, String remark);
 
 }

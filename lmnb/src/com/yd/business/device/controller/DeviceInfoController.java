@@ -140,7 +140,7 @@ public class DeviceInfoController extends BaseController {
 			
 			String meterCode = request.getParameter("code");
 			
-			result = deviceInfoService.openOrCloseMeter(meterCode, operator.getId(), true);
+			result = deviceInfoService.openOrCloseMeter(meterCode, operator, true,"界面操作开阀:"+operator.getRealname());
 			
 		} catch (Exception e) {
 			log.error(e, e);
@@ -161,7 +161,7 @@ public class DeviceInfoController extends BaseController {
 			
 			String meterCode = request.getParameter("code");
 			
-			result = deviceInfoService.openOrCloseMeter(meterCode, operator.getId(), false);
+			result = deviceInfoService.openOrCloseMeter(meterCode, operator, false,"界面操作关阀:"+operator.getRealname());
 			
 		} catch (Exception e) {
 			log.error(e, e);

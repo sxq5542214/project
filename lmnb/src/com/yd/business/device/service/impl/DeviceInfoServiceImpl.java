@@ -17,6 +17,7 @@ import com.yd.basic.framework.service.BaseService;
 import com.yd.business.client.QingSongInterfaceClient;
 import com.yd.business.client.bean.QingSongInterfaceBean;
 import com.yd.business.client.bean.QingSongInterfaceBean.DeviceDto;
+import com.yd.business.client.bean.QingSongInterfaceBean.MeterCMD;
 import com.yd.business.client.service.IIOTInterfaceService;
 import com.yd.business.device.bean.DeviceInfoBean;
 import com.yd.business.device.bean.DeviceKindBean;
@@ -25,6 +26,7 @@ import com.yd.business.device.dao.IDeviceDao;
 import com.yd.business.device.dao.IMeterExtendsMapper;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.operator.service.IOperatorService;
+import com.yd.business.other.service.ICommandService;
 import com.yd.business.price.bean.PriceBean;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.iotbusiness.mapper.dao.LmCmdModelMapper;
@@ -51,6 +53,8 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 	private IOperatorService operatorService;
 	@Autowired
 	private IIOTInterfaceService iotInterfaceService;
+	@Autowired
+	private ICommandService commandService;
 	
 	
 	@Override
@@ -274,7 +278,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 	}
 
 	@Override
-	public IOTWebDataBean openOrCloseMeter(String meterCode,Integer opid,boolean isOpen) {
+	public IOTWebDataBean openOrCloseMeter(String meterCode,LmOperatorModel op,boolean isOpen,String remark) {
 		
 		LmMeterModelExample ex = new LmMeterModelExample();
 		LmMeterModelExample.Criteria cri = ex.createCriteria();
@@ -286,10 +290,14 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		}
 		
 		for(LmMeterModel me : list) {
-
-			String outerid = String.valueOf(System.currentTimeMillis());
+			byte state = MeterCMD.STATE_WAITEXECUTE; //待執行
+			LmCmdModel cmd = commandService.createCMDModel(meterCode, me.getFactorycode(), state, type, "", me.getIsp(), me.getIspid(),
+					me.getImei(), QingSongInterfaceClient.STATIONCODE, op.getRealname(), op.getSystemid(), me.getProductid(), me.getId()	, me.getUserid(),op.getId(), remark);
+			String outerid = cmd.getId().toString();
 			QingSongInterfaceBean res = iotInterfaceService.sendQingSongCmd(me.getIspid(), outerid, type);
 			if(QingSongInterfaceBean.code_success != Integer.valueOf(res.getCode())) {
+				//失敗
+				commandService.updateCmdStatus(cmd.getId(), MeterCMD.STATE_FAILD,res.getMsg());
 				throw new RuntimeException(res.getMsg());
 			}else {
 				

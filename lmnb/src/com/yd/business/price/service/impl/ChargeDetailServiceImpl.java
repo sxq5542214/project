@@ -25,6 +25,7 @@ import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LmPaymentModelMapper;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
+import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmPaymentModel;
 import com.yd.iotbusiness.mapper.model.LmPaymentModelExample;
 import com.yd.iotbusiness.mapper.model.LmPaymentModelExample.Criteria;
@@ -304,10 +305,10 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		
 		// 若充值后余额大于0 ，则执行CMD开阀命令、并插入cmd表
 		if(meter.getBalance().compareTo(BigDecimal.ZERO) > 0 ) {
-			
+			LmOperatorModel op = operatorService.findOperatorById(model.getOperatorid());
+			deviceInfoService.openOrCloseMeter(meter.getCode(), op, true,"充值后自动执行开阀");
 		}
 		
-
 		meter.setRecentcmdtime(new Date());
 		
 		deviceInfoService.addOrUpdateMeter(meter);
