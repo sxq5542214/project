@@ -73,7 +73,7 @@ log.info("client/nbApi/postMeterCmd: "+ jsonStr);
 			}
 			
 			
-			writeJson(response, 1 );
+			writeJson(response, 0 );
 		} catch (Exception e) {
 			log.error(e, e);
 		}

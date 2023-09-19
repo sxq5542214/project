@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.business.price.bean.PriceBean;
+import com.yd.iotbusiness.mapper.model.LmPriceModel;
 import com.yd.iotbusiness.mapper.model.LmPricedetailModel;
 
 public interface IPriceService {
@@ -16,10 +17,12 @@ public interface IPriceService {
 	
 	int addOrUpdatePrice(PriceBean bean);
 
-	PriceBean findPriceById(long id);
-
 	IOTWebDataBean queryPriceListByCompany(Integer systemid);
 
 	LmPricedetailModel findPriceDetailById(int id);
+
+	LmPricedetailModel findPriceDetailByPriceId(int id);
+
+	LmPriceModel findPriceById(int id);
 
 }

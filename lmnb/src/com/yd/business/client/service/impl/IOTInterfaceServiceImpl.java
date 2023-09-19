@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.bill.service.IBillService;
 import com.yd.business.bill.service.IRecordService;
+import com.yd.business.bill.service.impl.BillServiceImpl;
 import com.yd.business.client.QingSongInterfaceClient;
 import com.yd.business.client.bean.QingSongInterfaceBean;
 import com.yd.business.client.bean.QingSongInterfaceBean.Conter;
@@ -27,6 +29,7 @@ import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.iotbusiness.mapper.dao.LmCmdModelMapper;
 import com.yd.iotbusiness.mapper.model.LmCmdModel;
+import com.yd.iotbusiness.mapper.model.LmFeeModel;
 import com.yd.iotbusiness.mapper.model.LmRecordModel;
 import com.yd.util.DateUtil;
 
@@ -42,9 +45,10 @@ public class IOTInterfaceServiceImpl extends BaseService implements IIOTInterfac
 	private IConfigAttributeService configAttributeService;
 	@Autowired
 	private IRecordService recordService;
-
 	@Autowired
 	private IDeviceInfoService deviceInfoService;
+	@Autowired
+	private IBillService billService;
 	
 	@Override
 	public void saveQingSongStationCode(String stationCode) {
@@ -133,6 +137,11 @@ public class IOTInterfaceServiceImpl extends BaseService implements IIOTInterfac
 				record.setUserid(meter.getUserid());
 				record.setUsername(meter.getUserName());
 				recordService.saveRecord(record);
+				
+				//生成账单、计算账单
+				billService.generatorBillByRecord(meter.getCode(), record);
+				
+				
 				
 				
 			} catch (ParseException e) {

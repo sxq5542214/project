@@ -113,7 +113,7 @@ bean.setP_ton2(bean.getP_ton1().multiply(new BigDecimal(2)));
 	}
 
 	@Override
-	public LmPricedetailModel findPriceDetailById(int id) {
+	public LmPricedetailModel findPriceDetailByPriceId(int id) {
 		LmPricedetailModelExample model = new LmPricedetailModelExample();
 		LmPricedetailModelExample.Criteria cri = model.createCriteria();
 		
@@ -126,11 +126,16 @@ bean.setP_ton2(bean.getP_ton1().multiply(new BigDecimal(2)));
 		
 		return null;
 	}
+	@Override
+	public LmPricedetailModel findPriceDetailById(int id) {
+		
+		return  pricedetailModelMapper.selectByPrimaryKey(id);
+		
+	}
 
 	@Override
-	public PriceBean findPriceById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public LmPriceModel findPriceById(int id) {
+		return priceModelMapper.selectByPrimaryKey(id);
 	}
 
 	

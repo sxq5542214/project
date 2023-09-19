@@ -325,14 +325,14 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		
 		ChargeDetailBean cd = findChargeDetailById(cdid);
 		UserInfoBean user = userInfoService.findUserById(cd.getCd_userid());
-		PriceBean price = priceService.findPriceById(user.getU_priceid());
+//		PriceBean price = priceService.findPriceById(user.getU_priceid());
 		OperatorBean operator = operatorService.findOperatorById(cd.getCd_operatorid());
 		// 用户信息、价格
 		bean.setTxtUserNo1(user.getU_no().toString());
 		bean.setTxtUserName1(user.getU_name());
 		bean.setTxtUserAddress1(user.getAddressName());
-		bean.setTxtPriceKind1(price.getP_name());
-		bean.setTxtPrice11(price.getP_price1().setScale(2, RoundingMode.HALF_UP).toString());
+//		bean.setTxtPriceKind1(price.getP_name());
+//		bean.setTxtPrice11(price.getP_price1().setScale(2, RoundingMode.HALF_UP).toString());
 		
 		//抄表
 		bean.setTxtReadingDate1("/");
