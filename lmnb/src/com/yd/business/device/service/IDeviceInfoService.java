@@ -36,4 +36,6 @@ public interface IDeviceInfoService {
 
 	IOTWebDataBean openOrCloseMeter(String meterCode, LmOperatorModel op, boolean isOpen, String remark);
 
+	LmMeterModel updateMeterModel(LmMeterModel bean);
+
 }

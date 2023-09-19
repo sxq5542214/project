@@ -28,7 +28,7 @@ import com.yd.util.MD5Util;
  */
 public class QingSongInterfaceClient extends BaseCMDClient{
 	static Logger log = Logger.getLogger(QingSongInterfaceClient.class);
-	public static String STATIONCODE = "538384"; // 测试
+	public static String STATIONCODE = "538391"; // 测试
 	public static String JOIN_FLAG = "QING_SONG"; // 测试
 	public static String QINGSONG_URL_PREFIX = "http://nb.sdqsbj.com:80/"; //测试
 	public static String URL_SUFIX_SENDCMD = "api/third/open/thirdFactory/v1/sendCmd";
@@ -165,7 +165,7 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 			JSONObject jso = array.getJSONObject(i);
 			bean.setIspid(jso.getString("ispid"));
 			bean.setCurtime(jso.getString("curtime"));
-			bean.setStationcode(jso.getString("stationcode"));
+//			bean.setStationcode(jso.getString("stationcode"));
 
 			Conter conter = bean.new Conter();
 			JSONObject con = jso.getJSONObject("conter");
@@ -173,10 +173,10 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 			conter.setValvestate(con.getString("valvestate"));
 			conter.setBattery(con.getString("battery"));
 			conter.setSensor(con.getString("sensor"));
-			conter.setSignalstrength(con.getString("signalstrength"));
+			conter.setSignalstrength(con.getString("signal"));
 			conter.setReadperiod(con.getString("readperiod"));
 			conter.setReadstate(con.getString("readstate"));
-			conter.setReversenum(con.getString("reversenum"));
+//			conter.setReversenum(con.getString("reversenum"));
 
 			bean.setConter(conter);
 			list.add(bean);
@@ -256,10 +256,53 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String code = "200223090143"	;   //200223090143    200223267508
-		DeviceDto res = checkDeviceInfo(code, STATIONCODE);
-
-		System.out.println(res);
+//		String code = "200223267508"	;   //200223090143    200223267508
+//		DeviceDto res = checkDeviceInfo(code, STATIONCODE);
+//		System.out.println(res);
+		
+		
+		testMeterReading();
 	}
-
+	private static void testMeterReading() {
+		String str = "[\r\n"
+				+ "	{\r\n"
+				+ "		\"conter\": {\r\n"
+				+ "			\"alarmNum\": \"null\",\r\n"
+				+ "			\"alarmTime\": \"null\",\r\n"
+				+ "			\"battery\": \"0\",\r\n"
+				+ "			\"curnum\": \"2.00\",\r\n"
+				+ "			\"readperiod\": \"48\",\r\n"
+				+ "			\"readstate\": \"null\",\r\n"
+				+ "			\"sensor\": \"0\",\r\n"
+				+ "			\"signal\": \"12\",\r\n"
+				+ "			\"valvestate\": \"00\"\r\n"
+				+ "		},\r\n"
+				+ "		\"curtime\": \"2023-09-14 15:14:10\",\r\n"
+				+ "		\"ispid\": \"c32f1c3bcfc24a25aabdbc6ed824235b\"\r\n"
+				+ "	},\r\n"
+				+ "	{\r\n"
+				+ "		\"conter\": {\r\n"
+				+ "			\"alarmNum\": \"null\",\r\n"
+				+ "			\"alarmTime\": \"null\",\r\n"
+				+ "			\"battery\": \"0\",\r\n"
+				+ "			\"curnum\": \"0.20\",\r\n"
+				+ "			\"readperiod\": \"48\",\r\n"
+				+ "			\"readstate\": \"null\",\r\n"
+				+ "			\"sensor\": \"0\",\r\n"
+				+ "			\"signal\": \"15\",\r\n"
+				+ "			\"valvestate\": \"00\"\r\n"
+				+ "		},\r\n"
+				+ "		\"curtime\": \"2023-09-13 21:59:49\",\r\n"
+				+ "		\"ispid\": \"1046694471\"\r\n"
+				+ "	}\r\n"
+				+ "]";
+		try {
+			String url = "http://localhost:8080/lmnb/client/nbApi/postMeterReading";
+			HttpUtil.post(url, str);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }

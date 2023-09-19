@@ -5,6 +5,7 @@ package com.yd.business.client.service.impl;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -86,7 +87,10 @@ public class IOTInterfaceServiceImpl extends BaseService implements IIOTInterfac
 		for(int i = 0 ; i < list.size() ; i++) {
 			QingSongInterfaceBean bean = list.get(i);
 			MeterModelExtendsBean meter = deviceInfoService.findMeterByIspid(bean.getIspid());
-			
+			if(meter == null) {
+				log.info(" database not find Meter ,ispid is : " + bean.getIspid());
+				continue;
+			}
 			try {
 				meter.setFeetime(DateUtil.parseDate(bean.getCurtime()));
 				
@@ -98,8 +102,9 @@ public class IOTInterfaceServiceImpl extends BaseService implements IIOTInterfac
 				meter.setStrength(conter.getSignalstrength());
 				meter.setTimer(Integer.parseInt(conter.getReadperiod()));
 				meter.setFlowstate(conter.getReadstate());
-				meter.setReversenum(new BigDecimal(conter.getReversenum()) );
-				deviceInfoService.addOrUpdateMeter(meter);
+				meter.setFeetime(new Date());
+//				meter.setReversenum(new BigDecimal(conter.getReversenum()) );
+				deviceInfoService.updateMeterModel(meter);
 				
 				//插入 recode记录前，先找上一次的数据
 				LmRecordModel lastRecord = recordService.findLastRecord(meter.getCode());

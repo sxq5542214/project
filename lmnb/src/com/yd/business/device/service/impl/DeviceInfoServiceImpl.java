@@ -161,7 +161,9 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 			bean.setImei(dto.getImei());
 			bean.setImsi(dto.getSim());
 			bean.setTimer(Integer.valueOf(dto.getReadperiod()));
-			if("OPEN".equalsIgnoreCase(dto.getValvestate())) {
+			if("OPEN".equalsIgnoreCase(dto.getValvestate()) || "00".equalsIgnoreCase(dto.getValvestate())) {
+				bean.setValvestate((byte) 0);
+			}else if("CLOSE".equalsIgnoreCase(dto.getValvestate()) || "01".equalsIgnoreCase(dto.getValvestate())) {
 				bean.setValvestate((byte) 1);
 			}else {
 				bean.setValvestate((byte) -1);
@@ -179,6 +181,14 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		return result;
 	}
 
+	@Override
+	public LmMeterModel updateMeterModel(LmMeterModel bean) {
+		if(bean.getId() != null) {
+			meterExtendsMapper.updateByPrimaryKeySelective(bean);
+		}
+		return bean;
+	}
+	
 	@Override
 	public IOTWebDataBean queryMeterList(LmMeterModel bean) {
 		IOTWebDataBean result = new IOTWebDataBean();

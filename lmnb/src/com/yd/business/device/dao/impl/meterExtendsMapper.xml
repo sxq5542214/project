@@ -15,6 +15,7 @@
 			<if test="area3 != null"> and u.area3 like '%${area3}%'</if>
 			<if test="area4 != null"> and u.area4 like '%${area4}%'</if>
 			<if test="addressid != null"> and u.addressid = #{addressid}</if>
+			<if test="ispid != null"> and ispid = #{ispid}</if>
 		</where>
 	    <if test="rows != null">
 	      <if test="page != null">

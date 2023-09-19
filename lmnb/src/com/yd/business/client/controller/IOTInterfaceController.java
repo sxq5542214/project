@@ -15,6 +15,8 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.client.QingSongInterfaceClient;
 import com.yd.business.client.bean.QingSongInterfaceBean.MeterCMD;
 import com.yd.business.client.service.IIOTInterfaceService;
+import com.yd.business.device.bean.MeterModelExtendsBean;
+import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.other.service.ICommandService;
 import com.yd.util.HttpUtil;
 import com.yd.util.JsonUtil;
@@ -25,9 +27,11 @@ public class IOTInterfaceController extends BaseController {
 	private IIOTInterfaceService iotInterfaceService;
 	@Resource
 	private ICommandService commandService;
+	@Resource
+	private IDeviceInfoService deviceInfoService;
 
 
-	@RequestMapping("client/nbApi/buildStation")
+	@RequestMapping("/client/nbApi/buildStation")
 	public ModelAndView qingsongBuildStation(HttpServletRequest request,HttpServletResponse response){
 
 		try {
@@ -44,7 +48,7 @@ public class IOTInterfaceController extends BaseController {
 		return null;
 	}
 
-	@RequestMapping("client/nbApi/postMeterCmd")
+	@RequestMapping("/client/nbApi/postMeterCmd")
 	public ModelAndView qingsongPostMeterCmd(HttpServletRequest request,HttpServletResponse response){
 
 		try {
@@ -59,7 +63,13 @@ log.info("client/nbApi/postMeterCmd: "+ jsonStr);
 				Integer cmdid = Integer.parseInt(cmd.getOuterid());
 				Byte state = Byte.parseByte(cmd.getState());
 				
+				//更新cmd 状态
 				commandService.updateCmdStatus(cmdid, state, JsonUtil.convertObjectToJsonString(cmd));
+				
+				//更新水表的阀门状态
+				MeterModelExtendsBean meter = deviceInfoService.findMeterByIspid(cmd.getIspid());
+				meter.setValvestate(Byte.valueOf(cmd.getType()));
+				deviceInfoService.addOrUpdateMeter(meter);
 			}
 			
 			
@@ -70,7 +80,7 @@ log.info("client/nbApi/postMeterCmd: "+ jsonStr);
 		return null;
 	}
 
-	@RequestMapping("client/nbApi/postMeterReading")
+	@RequestMapping("/client/nbApi/postMeterReading")
 	public ModelAndView qingsongPostMeterReading(HttpServletRequest request,HttpServletResponse response){
 
 		try {
