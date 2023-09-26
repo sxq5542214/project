@@ -11,6 +11,8 @@ import javax.annotation.Resource;
 import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Component;
 
+import com.yd.business.bill.service.IBillService;
+import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.other.crons.BaseCrons;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.user.service.IUserWechatService;
@@ -28,6 +30,12 @@ public class BillMonthCrons extends BaseCrons {
 
 	@Resource
 	private IConfigAttributeService configAttributeService;
+	@Resource
+	private IDeviceInfoService deviceInfoService;
+	@Resource
+	private IBillService billService;
+	
+	
 	
 	/* (non-Javadoc)
 	 * @see com.ym.business.other.crons.BaseCrons#execJob(org.quartz.JobExecutionContext)

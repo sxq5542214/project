@@ -7,6 +7,7 @@ import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.business.device.bean.ChangeMeterExtBean;
 import com.yd.iotbusiness.mapper.model.LmBillModel;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
+import com.yd.iotbusiness.mapper.model.LmPaymentModel;
 import com.yd.iotbusiness.mapper.model.LmRecordModel;
 
 public interface IBillService {
@@ -16,6 +17,8 @@ public interface IBillService {
 	LmBillModel generatorBillByRecord(String meterCode, LmRecordModel record);
 
 	LmBillModel queryBillByMonth(int meterId, int billMonth);
+
+	LmBillModel generatorBillByPayment(String meterCode, LmPaymentModel payment);
 
 
 

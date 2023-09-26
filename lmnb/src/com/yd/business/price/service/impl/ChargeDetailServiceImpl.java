@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.operator.bean.OperatorBean;
@@ -24,6 +25,7 @@ import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LmPaymentModelMapper;
+import com.yd.iotbusiness.mapper.model.LmBillModel;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmPaymentModel;
@@ -48,6 +50,8 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	private IOperatorService operatorService;
 	@Resource
 	private LmPaymentModelMapper paymentModelMapper;
+	@Resource
+	private IBillService billService;
 
 	@Override
 	public ChargeDetailBean findLastChargeDetailByUserId(Long userid) throws Exception {
@@ -310,11 +314,15 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		}
 		
 		meter.setRecentcmdtime(new Date());
-		
+
+		//生成账单，如果有则更新账单数据
+		LmBillModel bill = billService.generatorBillByPayment(meter.getCode(), model);
+		//更新水表数据
 		deviceInfoService.addOrUpdateMeter(meter);
 		
-		
-		
+		//更新支付表对应的账单ID
+		model.setBillid(bill.getId());
+		paymentModelMapper.updateByPrimaryKeySelective(model);
 		
 		return num;
 	}

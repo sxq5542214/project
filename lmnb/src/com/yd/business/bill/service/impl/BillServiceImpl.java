@@ -27,6 +27,7 @@ import com.yd.iotbusiness.mapper.model.LmBillModelExample.Criteria;
 import com.yd.util.DateUtil;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.iotbusiness.mapper.model.LmPaymentModel;
 import com.yd.iotbusiness.mapper.model.LmPriceModel;
 import com.yd.iotbusiness.mapper.model.LmPricedetailModel;
 import com.yd.iotbusiness.mapper.model.LmRecordModel;
@@ -101,9 +102,11 @@ public class BillServiceImpl extends BaseService implements IBillService {
 			bill.setCyclestartbalance(meter.getBalance());
 			bill.setMinconsumequantity(price.getMinconsumequantity());
 			bill.setMinconsumamount(priceDetail.getPrice1().multiply(price.getMinconsumequantity()));
+			bill.setBillmonth(fee.getBillmonth());
+			bill.setCyclebuyamount(BigDecimal.ZERO);
 		}
 		bill.setCycleendbalance(fee.getAfterbalance());
-		bill.setCyclebuyamount(null);
+//		bill.setCyclebuyamount(null);
 		BigDecimal curQuantity = bill.getQuantity() == null?BigDecimal.ZERO:bill.getQuantity() ;
 		bill.setQuantity(curQuantity.add(fee.getCurquantity()));
 		bill.setShouldwateramount(bill.getQuantity().multiply(priceDetail.getPrice1()));
@@ -130,6 +133,9 @@ public class BillServiceImpl extends BaseService implements IBillService {
 			billModelMapper.updateByPrimaryKeySelective(bill);
 		}
 		
+		//更新费用表对应的账单ID
+		fee.setBillid(bill.getId());
+		feeModelMapper.updateByPrimaryKeySelective(fee);
 		
 		//扣减余额
 		meter.setBalance(fee.getAfterbalance());
@@ -143,6 +149,58 @@ public class BillServiceImpl extends BaseService implements IBillService {
 			op.setRealname("抄表接口自动触发");
 			//关阀
 			deviceInfoService.openOrCloseMeter(meterCode, op , false, "欠费自动关阀，record："+record.getId());
+		}
+		
+		
+		return bill;
+	}
+	
+	@Override
+	public LmBillModel generatorBillByPayment(String meterCode ,LmPaymentModel payment) {
+		
+		MeterModelExtendsBean meter = deviceInfoService.findMeterByCode(meterCode);
+		
+		LmPricedetailModel priceDetail = priceService.findPriceDetailByPriceId(meter.getPricecode());
+		LmPriceModel price = priceService.findPriceById(meter.getPricecode());
+		
+		//计算账单
+		int billMonth =Integer.valueOf(DateUtil.formatMonthPure(payment.getCreatetime())) ;
+		LmBillModel bill = queryBillByMonth(meter.getId(), billMonth);
+		if(bill == null) {
+			bill = new LmBillModel();
+			bill.setCyclestartbalance(meter.getBalance());
+			bill.setMinconsumequantity(price.getMinconsumequantity());
+			bill.setMinconsumamount(priceDetail.getPrice1().multiply(price.getMinconsumequantity()));
+			bill.setBillmonth(billMonth);
+			bill.setCyclebuyamount(BigDecimal.ZERO);
+			bill.setQuantity(BigDecimal.ZERO);
+		}
+		bill.setCycleendbalance(meter.getBalance().add(payment.getAmount()));
+		bill.setCyclebuyamount(bill.getCyclebuyamount().add(payment.getAmount()));
+//		BigDecimal curQuantity = bill.getQuantity() == null?BigDecimal.ZERO:bill.getQuantity() ;
+//		bill.setQuantity(curQuantity.add(fee.getCurquantity()));
+		bill.setShouldwateramount(bill.getQuantity().multiply(priceDetail.getPrice1()));
+		bill.setRealbillamount(bill.getShouldwateramount());
+		bill.setWaitpayrealbillamount(bill.getShouldwateramount());
+		bill.setWaitpayrealwateramount(bill.getShouldwateramount());
+		bill.setCreatetime(new Date());
+		bill.setState((byte) 2);
+		bill.setSettletype((byte) 1);
+		bill.setFactorycode(meter.getFactorycode());
+		bill.setLifecode(meter.getLifecode());
+		bill.setMeterid(meter.getId());
+		bill.setUserid(meter.getUserid());
+		bill.setSystemid(meter.getSystemid());
+		bill.setSettleid(price.getSettleid());
+		bill.setPriceid(price.getId());
+		bill.setOpername("充值自动触发更新账单");
+		
+		
+		//更新或创建账单
+		if(bill.getId() == null) {
+			billModelMapper.insertSelective(bill);
+		}else {
+			billModelMapper.updateByPrimaryKeySelective(bill);
 		}
 		
 		

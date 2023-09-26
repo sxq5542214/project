@@ -4593,75 +4593,75 @@ public class LmPaymentModelExample {
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountIsNull() {
-            addCriterion("serviceamount is null");
+        public Criteria andBillidIsNull() {
+            addCriterion("billid is null");
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountIsNotNull() {
-            addCriterion("serviceamount is not null");
+        public Criteria andBillidIsNotNull() {
+            addCriterion("billid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountEqualTo(BigDecimal value) {
+        public Criteria andBillidEqualTo(Integer value) {
             if (value != null) {
-                addCriterion("serviceamount =", value, "serviceamount");
+                addCriterion("billid =", value, "billid");
             }
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountNotEqualTo(BigDecimal value) {
+        public Criteria andBillidNotEqualTo(Integer value) {
             if (value != null) {
-                addCriterion("serviceamount <>", value, "serviceamount");
+                addCriterion("billid <>", value, "billid");
             }
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountGreaterThan(BigDecimal value) {
+        public Criteria andBillidGreaterThan(Integer value) {
             if (value != null) {
-                addCriterion("serviceamount >", value, "serviceamount");
+                addCriterion("billid >", value, "billid");
             }
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountGreaterThanOrEqualTo(BigDecimal value) {
+        public Criteria andBillidGreaterThanOrEqualTo(Integer value) {
             if (value != null) {
-                addCriterion("serviceamount >=", value, "serviceamount");
+                addCriterion("billid >=", value, "billid");
             }
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountLessThan(BigDecimal value) {
+        public Criteria andBillidLessThan(Integer value) {
             if (value != null) {
-                addCriterion("serviceamount <", value, "serviceamount");
+                addCriterion("billid <", value, "billid");
             }
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountLessThanOrEqualTo(BigDecimal value) {
+        public Criteria andBillidLessThanOrEqualTo(Integer value) {
             if (value != null) {
-                addCriterion("serviceamount <=", value, "serviceamount");
+                addCriterion("billid <=", value, "billid");
             }
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountIn(List<BigDecimal> values) {
-            addCriterion("serviceamount in", values, "serviceamount");
+        public Criteria andBillidIn(List<Integer> values) {
+            addCriterion("billid in", values, "billid");
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountNotIn(List<BigDecimal> values) {
-            addCriterion("serviceamount not in", values, "serviceamount");
+        public Criteria andBillidNotIn(List<Integer> values) {
+            addCriterion("billid not in", values, "billid");
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("serviceamount between", value1, value2, "serviceamount");
+        public Criteria andBillidBetween(Integer value1, Integer value2) {
+            addCriterion("billid between", value1, value2, "billid");
             return (Criteria) this;
         }
 
-        public Criteria andServiceamountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("serviceamount not between", value1, value2, "serviceamount");
+        public Criteria andBillidNotBetween(Integer value1, Integer value2) {
+            addCriterion("billid not between", value1, value2, "billid");
             return (Criteria) this;
         }
 

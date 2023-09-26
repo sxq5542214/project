@@ -1374,6 +1374,78 @@ public class LmFeeModelExample {
             addCriterion("joinflag not between", value1, value2, "joinflag");
             return (Criteria) this;
         }
+
+        public Criteria andBillidIsNull() {
+            addCriterion("billid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidIsNotNull() {
+            addCriterion("billid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("billid =", value, "billid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidNotEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("billid <>", value, "billid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidGreaterThan(Integer value) {
+            if (value != null) {
+                addCriterion("billid >", value, "billid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidGreaterThanOrEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("billid >=", value, "billid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidLessThan(Integer value) {
+            if (value != null) {
+                addCriterion("billid <", value, "billid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidLessThanOrEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("billid <=", value, "billid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidIn(List<Integer> values) {
+            addCriterion("billid in", values, "billid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidNotIn(List<Integer> values) {
+            addCriterion("billid not in", values, "billid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidBetween(Integer value1, Integer value2) {
+            addCriterion("billid between", value1, value2, "billid");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillidNotBetween(Integer value1, Integer value2) {
+            addCriterion("billid not between", value1, value2, "billid");
+            return (Criteria) this;
+        }
     }
 
     /**

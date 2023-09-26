@@ -63,7 +63,7 @@
     <result column="meterpaper" jdbcType="VARCHAR" property="meterpaper" />
     <result column="meteramount" jdbcType="DECIMAL" property="meteramount" />
     <result column="sewageamount" jdbcType="DECIMAL" property="sewageamount" />
-    <result column="serviceamount" jdbcType="DECIMAL" property="serviceamount" />
+    <result column="billid" jdbcType="INTEGER" property="billid" />
     <result column="servicecharge" jdbcType="DECIMAL" property="servicecharge" />
     <result column="fpdm" jdbcType="VARCHAR" property="fpdm" />
     <result column="fphm" jdbcType="VARCHAR" property="fphm" />
@@ -159,9 +159,9 @@
     quantity3, quantity4, quantity5, amount1, amount2, amount3, amount4, amount5, waterfee, 
     sewagefee, resourcefee, adjustreason, adjustnum, marketcode, machineid, machineserialcode, 
     saleremark, ladderinfo, transseqnum, merchantid, traceno, sewagepaper, meterpaper, 
-    meteramount, sewageamount, serviceamount, servicecharge, fpdm, fphm, fpqqlsh, hjse, 
-    bhsje, c_url, tickettype, invoicestatus, metertype, pricename, pricecode, present, 
-    marking, timenocard, writed
+    meteramount, sewageamount, billid, servicecharge, fpdm, fphm, fpqqlsh, hjse, bhsje, 
+    c_url, tickettype, invoicestatus, metertype, pricename, pricecode, present, marking, 
+    timenocard, writed
   </sql>
   <select id="selectByExample" parameterType="com.yd.iotbusiness.mapper.model.LmPaymentModelExample" resultMap="BaseResultMap">
     <!--
@@ -243,7 +243,7 @@
       machineid, machineserialcode, saleremark, 
       ladderinfo, transseqnum, merchantid, 
       traceno, sewagepaper, meterpaper, 
-      meteramount, sewageamount, serviceamount, 
+      meteramount, sewageamount, billid, 
       servicecharge, fpdm, fphm, 
       fpqqlsh, hjse, bhsje, 
       c_url, tickettype, invoicestatus, 
@@ -268,7 +268,7 @@
       #{machineid,jdbcType=INTEGER}, #{machineserialcode,jdbcType=VARCHAR}, #{saleremark,jdbcType=VARCHAR}, 
       #{ladderinfo,jdbcType=VARCHAR}, #{transseqnum,jdbcType=VARCHAR}, #{merchantid,jdbcType=VARCHAR}, 
       #{traceno,jdbcType=VARCHAR}, #{sewagepaper,jdbcType=VARCHAR}, #{meterpaper,jdbcType=VARCHAR}, 
-      #{meteramount,jdbcType=DECIMAL}, #{sewageamount,jdbcType=DECIMAL}, #{serviceamount,jdbcType=DECIMAL}, 
+      #{meteramount,jdbcType=DECIMAL}, #{sewageamount,jdbcType=DECIMAL}, #{billid,jdbcType=INTEGER}, 
       #{servicecharge,jdbcType=DECIMAL}, #{fpdm,jdbcType=VARCHAR}, #{fphm,jdbcType=VARCHAR}, 
       #{fpqqlsh,jdbcType=VARCHAR}, #{hjse,jdbcType=DECIMAL}, #{bhsje,jdbcType=DECIMAL}, 
       #{cUrl,jdbcType=VARCHAR}, #{tickettype,jdbcType=INTEGER}, #{invoicestatus,jdbcType=INTEGER}, 
@@ -454,8 +454,8 @@
       <if test="sewageamount != null">
         sewageamount,
       </if>
-      <if test="serviceamount != null">
-        serviceamount,
+      <if test="billid != null">
+        billid,
       </if>
       <if test="servicecharge != null">
         servicecharge,
@@ -675,8 +675,8 @@
       <if test="sewageamount != null">
         #{sewageamount,jdbcType=DECIMAL},
       </if>
-      <if test="serviceamount != null">
-        #{serviceamount,jdbcType=DECIMAL},
+      <if test="billid != null">
+        #{billid,jdbcType=INTEGER},
       </if>
       <if test="servicecharge != null">
         #{servicecharge,jdbcType=DECIMAL},
@@ -916,8 +916,8 @@
       <if test="row.sewageamount != null">
         sewageamount = #{row.sewageamount,jdbcType=DECIMAL},
       </if>
-      <if test="row.serviceamount != null">
-        serviceamount = #{row.serviceamount,jdbcType=DECIMAL},
+      <if test="row.billid != null">
+        billid = #{row.billid,jdbcType=INTEGER},
       </if>
       <if test="row.servicecharge != null">
         servicecharge = #{row.servicecharge,jdbcType=DECIMAL},
@@ -1035,7 +1035,7 @@
       meterpaper = #{row.meterpaper,jdbcType=VARCHAR},
       meteramount = #{row.meteramount,jdbcType=DECIMAL},
       sewageamount = #{row.sewageamount,jdbcType=DECIMAL},
-      serviceamount = #{row.serviceamount,jdbcType=DECIMAL},
+      billid = #{row.billid,jdbcType=INTEGER},
       servicecharge = #{row.servicecharge,jdbcType=DECIMAL},
       fpdm = #{row.fpdm,jdbcType=VARCHAR},
       fphm = #{row.fphm,jdbcType=VARCHAR},
@@ -1231,8 +1231,8 @@
       <if test="sewageamount != null">
         sewageamount = #{sewageamount,jdbcType=DECIMAL},
       </if>
-      <if test="serviceamount != null">
-        serviceamount = #{serviceamount,jdbcType=DECIMAL},
+      <if test="billid != null">
+        billid = #{billid,jdbcType=INTEGER},
       </if>
       <if test="servicecharge != null">
         servicecharge = #{servicecharge,jdbcType=DECIMAL},
@@ -1347,7 +1347,7 @@
       meterpaper = #{meterpaper,jdbcType=VARCHAR},
       meteramount = #{meteramount,jdbcType=DECIMAL},
       sewageamount = #{sewageamount,jdbcType=DECIMAL},
-      serviceamount = #{serviceamount,jdbcType=DECIMAL},
+      billid = #{billid,jdbcType=INTEGER},
       servicecharge = #{servicecharge,jdbcType=DECIMAL},
       fpdm = #{fpdm,jdbcType=VARCHAR},
       fphm = #{fphm,jdbcType=VARCHAR},
