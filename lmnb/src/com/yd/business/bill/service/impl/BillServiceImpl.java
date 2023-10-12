@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.bill.dao.IBillExtendsMapper;
 import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.bean.MeterModelExtendsBean;
+import com.yd.business.device.dao.IMeterExtendsMapper;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.service.IUserInfoService;
@@ -39,8 +41,10 @@ import com.yd.iotbusiness.mapper.model.LmRecordModel;
 @Service("billService")
 public class BillServiceImpl extends BaseService implements IBillService {
 	
+//	@Resource
+//	private LmBillModelMapper billModelMapper;
 	@Resource
-	private LmBillModelMapper billModelMapper;
+	private IBillExtendsMapper billExtendsMapper;
 	@Resource
 	private IUserInfoService userInfoService;
 	@Resource
@@ -49,6 +53,8 @@ public class BillServiceImpl extends BaseService implements IBillService {
 	private LmFeeModelMapper feeModelMapper;
 	@Resource
 	private IDeviceInfoService deviceInfoService;
+	@Resource
+	private IMeterExtendsMapper meterExtendsMapper;
 	
 	@Override
 	public IOTWebDataBean queryBillList(LmBillModel model) {
@@ -59,7 +65,7 @@ public class BillServiceImpl extends BaseService implements IBillService {
 		cri.andUseridEqualTo(model.getUserid());
 		cri.andSystemidEqualTo(model.getSystemid());
 		ex.setOrderByClause(" id desc ");
-		List<LmBillModel> list = billModelMapper.selectByExample(ex );
+		List<LmBillModel> list = billExtendsMapper.selectByExample(ex );
 		
 		result.setTotal(Long.valueOf(list.size()));
 		result.setData(list);
@@ -128,9 +134,9 @@ public class BillServiceImpl extends BaseService implements IBillService {
 		
 		//更新或创建账单
 		if(bill.getId() == null) {
-			billModelMapper.insertSelective(bill);
+			billExtendsMapper.insertSelective(bill);
 		}else {
-			billModelMapper.updateByPrimaryKeySelective(bill);
+			billExtendsMapper.updateByPrimaryKeySelective(bill);
 		}
 		
 		//更新费用表对应的账单ID
@@ -198,9 +204,9 @@ public class BillServiceImpl extends BaseService implements IBillService {
 		
 		//更新或创建账单
 		if(bill.getId() == null) {
-			billModelMapper.insertSelective(bill);
+			billExtendsMapper.insertSelective(bill);
 		}else {
-			billModelMapper.updateByPrimaryKeySelective(bill);
+			billExtendsMapper.updateByPrimaryKeySelective(bill);
 		}
 		
 		
@@ -216,11 +222,41 @@ public class BillServiceImpl extends BaseService implements IBillService {
 		cri.andMeteridEqualTo(meterId);
 		cri.andBillmonthEqualTo(billMonth);
 		
-		List<LmBillModel> list = billModelMapper.selectByExample(ex );
+		List<LmBillModel> list = billExtendsMapper.selectByExample(ex );
 		
 		if(list.size() > 0) {
 			return list.get(0);
 		}
 		return null;
 	}
+
+	@Override
+	public void initNoPayUserBills(String billMonth ) {
+		// 创建无数据（支付、读表）的水表账单， 水表状态为开户的
+		billExtendsMapper.createNoPayUserBills(billMonth);
+		
+		//创建完后，要对这批水表账户扣减最低消费, 23.10.11 不再扣减了，因为会计算未达最低消费的账单时一并计算
+//		meterExtendsMapper.updateNopayBillMeterBalance(billMonth);
+		
+	}
+	
+	@Override
+	public void updateBillByDeductionMinconsumamout(String billMonth) {
+		//更新未达到最低消费的账单信息
+		billExtendsMapper.updateBillMinConsumamount(billMonth);
+
+		//更新未达到最低消费的水表余额信息
+		meterExtendsMapper.updateMeterBalanceByMinConsumamount(billMonth);
+		
+		
+	}
+
+	@Override
+	public void updateBillCyclebuyamount(String billMonth) {
+		//更新账单中的周期总购买金额数据
+		billExtendsMapper.updateBillCyclebuyamount(billMonth);
+	}
+	
+	
+	
 }

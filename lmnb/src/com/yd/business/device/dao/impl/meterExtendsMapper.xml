@@ -36,4 +36,22 @@
 		select count(1) from  lm_meter m,lm_user u
 	    <include refid="query_Where_Clause" />
 	</select>
+	
+	<update id="updateNopayBillMeterBalance" parameterType="string">
+		update lm_meter m set balance = balance - (select p.minconsumequantity * pd.price1 from lm_price p,lm_pricedetail pd where p.id = m.pricecode and pd.priceid = p.id )
+		where exists (select 1 from lm_bill b where b.billmonth = #{value} and b.meterid = m.id and b.operName = '定时任务生成无数据账单')
+
+	</update>
+	
+	<update id="updateMeterBalanceByMinConsumamount" parameterType="string">
+		update lm_meter m set m.balance = m.balance - (select b.minconsumamount - ( b.minconsumamount *b.quantity/b.minconsumequantity ) 
+		from lm_bill b where b.billmonth = #{value} and b.meterid = m.id  ),
+		remark = CONCAT('账户补扣最低消费', #{value} )
+		where m.opened = 1 and exists (select 1 from  lm_bill b where b.meterid = m.id 
+		 and b.billmonth = #{value}  and  b.minconsumequantity > b.quantity  ) and ( m.remark not like'账户补扣最低消费%' or m.remark is null  )
+
+	</update>
+	
+	
+	
 </mapper>

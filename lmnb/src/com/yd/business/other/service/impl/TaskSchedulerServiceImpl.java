@@ -44,7 +44,7 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 	private Map<Integer,TaskCronsBean> cronsMap = new HashMap<Integer, TaskCronsBean>();
 	@Resource
 	private StdScheduler schedulerFactory;
-	private Long sleepTime = (long) (100 * 1000);
+	private Long sleepTime = (long) (60 * 1000);
 	
 	public void setSleepTime(Long sleepTime) {
 		this.sleepTime = sleepTime;
@@ -98,7 +98,7 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 						}
 					}catch (Exception e) {
 						e.printStackTrace();
-						log.error(" operation TaskBean id:" + bean.getCron_id() + " Error!", e);
+						log.error(" operation TaskBean id:" + bean.getId() + " Error!", e);
 					}
 				}
 				log.debug("task scheduler will be sleep " + sleepTime +"ms ");
@@ -113,9 +113,9 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 	
 	private void removeTask(TaskCronsBean bean) throws SchedulerException {
 		
-		if(cronsMap.get(bean.getCron_id()) != null ){
-			cronsMap.remove(bean.getCron_id());
-			JobKey key = new JobKey(bean.getCron_id().toString(), Scheduler.DEFAULT_GROUP);
+		if(cronsMap.get(bean.getId()) != null ){
+			cronsMap.remove(bean.getId());
+			JobKey key = new JobKey(bean.getId().toString(), Scheduler.DEFAULT_GROUP);
 			schedulerFactory.deleteJob(key);
 		}
 	}
@@ -130,41 +130,41 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 			throw new Exception(bean.getClass_name() +" not is BaseCrons subClass!" );
 		}
 		
-		if(cronsMap.get(bean.getCron_id()) == null )
+		if(cronsMap.get(bean.getId()) == null )
 		{
 			//添加
 			CronTriggerImpl tigger = new CronTriggerImpl();
-			tigger.setKey(new TriggerKey(bean.getCron_id().toString(),Scheduler.DEFAULT_GROUP));
+			tigger.setKey(new TriggerKey(bean.getId().toString(),Scheduler.DEFAULT_GROUP));
 			tigger.setCronExpression(bean.getExpression());
-			tigger.setName(bean.getCron_id().toString());
+			tigger.setName(bean.getId().toString());
 			
 			JobDetailImpl jobDetail = new JobDetailImpl();
-			jobDetail.setKey(new JobKey(bean.getCron_id().toString(),Scheduler.DEFAULT_GROUP));
+			jobDetail.setKey(new JobKey(bean.getId().toString(),Scheduler.DEFAULT_GROUP));
 			jobDetail.setJobClass(className);
 			jobDetail.getJobDataMap().put(BaseCrons.JOB_DETAIL_KEY, bean);
 			
 			schedulerFactory.scheduleJob(jobDetail, tigger);
 			
-			cronsMap.put(bean.getCron_id(), bean);
+			cronsMap.put(bean.getId(), bean);
 		}else if(hasChange(bean)){
 			//更新
-			CronTriggerImpl trigger = (CronTriggerImpl) schedulerFactory.getTrigger(new TriggerKey(bean.getCron_id().toString(), Scheduler.DEFAULT_GROUP));
+			CronTriggerImpl trigger = (CronTriggerImpl) schedulerFactory.getTrigger(new TriggerKey(bean.getId().toString(), Scheduler.DEFAULT_GROUP));
 			CronTriggerImpl newTrigger = (CronTriggerImpl)trigger;
 			newTrigger.setCronExpression(bean.getExpression());
-			newTrigger.setName(bean.getCron_id().toString());
+			newTrigger.setName(bean.getId().toString());
 			
 //			JobDetailImpl jobDetail = new JobDetailImpl();
 //			jobDetail.setKey();
 //			jobDetail.setJobClass(className);
 //			jobDetail.getJobDataMap().put(BaseCrons.JOB_DETAIL_KEY, bean);
-			newTrigger.setJobKey(new JobKey(bean.getCron_id().toString(),Scheduler.DEFAULT_GROUP));
-			schedulerFactory.rescheduleJob(new TriggerKey(bean.getCron_id().toString(), Scheduler.DEFAULT_GROUP), newTrigger);
-			cronsMap.put(bean.getCron_id(), bean);
+			newTrigger.setJobKey(new JobKey(bean.getId().toString(),Scheduler.DEFAULT_GROUP));
+			schedulerFactory.rescheduleJob(new TriggerKey(bean.getId().toString(), Scheduler.DEFAULT_GROUP), newTrigger);
+			cronsMap.put(bean.getId(), bean);
 		}
 	}
 	
 	private boolean hasChange(TaskCronsBean bean) {
-		TaskCronsBean oldBean = cronsMap.get(bean.getCron_id());
+		TaskCronsBean oldBean = cronsMap.get(bean.getId());
 		
 		if(oldBean.getExpression().equals(bean.getExpression())){
 			return false;
@@ -175,10 +175,10 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 
 //	public void addTaskToScheduler(TaskCronsBean bean) throws SchedulerException{
 //		
-//		if(cronsMap.get(bean.getCron_id())  != null){
-////			TaskCronsBean oldBean = cronsMap.get(bean.getCron_id());
+//		if(cronsMap.get(bean.getId())  != null){
+////			TaskCronsBean oldBean = cronsMap.get(bean.getId());
 //			
-////			scheduler.deleteJob(bean.getCron_id().toString(), Scheduler.DEFAULT_GROUP);
+////			scheduler.deleteJob(bean.getId().toString(), Scheduler.DEFAULT_GROUP);
 //			
 //		}else{
 //			
@@ -191,12 +191,12 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 //				e.printStackTrace();
 //			}
 //			
-//			JobDetail jobDetail = new JobDetail(bean.getCron_id().toString(), Scheduler.DEFAULT_GROUP, bean.getClass());
+//			JobDetail jobDetail = new JobDetail(bean.getId().toString(), Scheduler.DEFAULT_GROUP, bean.getClass());
 //			jobDetail.getJobDataMap().put("testJob", new SchedulerFactory());
 //			
 //			scheduler.addJob(jobDetail, true);
 //			
-//			cronsMap.put(bean.getCron_id(), bean);
+//			cronsMap.put(bean.getId(), bean);
 //			
 //			scheduler.scheduleJob(jobDetail, tigger);
 //		}
@@ -252,7 +252,7 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 
 	@Override
 	public void editTaskCron(TaskCronsBean bean) {
-		if(StringUtil.isNull(bean.getCron_id())){
+		if(StringUtil.isNull(bean.getId())){
 			taskSchedulerDao.insertAdminTaskCron(bean);
 		}else{
 			taskSchedulerDao.updateAdminTaskStatus(bean);

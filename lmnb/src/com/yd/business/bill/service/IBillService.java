@@ -20,6 +20,12 @@ public interface IBillService {
 
 	LmBillModel generatorBillByPayment(String meterCode, LmPaymentModel payment);
 
+	void initNoPayUserBills(String billMonth);
+
+	void updateBillByDeductionMinconsumamout(String billMonth);
+
+	void updateBillCyclebuyamount(String billMonth);
+
 
 
 }

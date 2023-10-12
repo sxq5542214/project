@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper	namespace="com.yd.business.device.dao.IBillExtendsMapper">
+<mapper	namespace="com.yd.business.bill.dao.IBillExtendsMapper">
 
 	<sql id="query_Where_Clause">
 		<where>
@@ -26,14 +26,35 @@
 	      </if>
 	    </if>
 	</sql>
-	<select id="queryMeterAndUserList" resultType="meterModelExtendsBean"
+<!-- 	<select id="queryMeterAndUserList" resultType="meterModelExtendsBean"
 		parameterType="meterModelExtendsBean">
 		select m.*,u.*,u.name userName from lm_meter m,lm_user u
 	    <include refid="query_Where_Clause" />
 	</select>
+	 -->
+	<insert id="createNoPayUserBills" parameterType="string" >
+		insert into lm_bill(billmonth,cyclestartbalance,cycleendbalance,cyclebuyamount,quantity
+		,minconsumequantity,shouldwateramount,minconsumamount,realbillamount,createtime,state,
+		settletype,factorycode,lifecode,meterid,userid,systemid,settleid,priceid,operName)
+		select #{value},m.balance, m.balance ,0,0,p.minconsumequantity,
+		p.minconsumequantity * pd.price1,p.minconsumequantity * pd.price1,p.minconsumequantity * pd.price1,
+		SYSDATE(),2,1,m.factorycode,m.lifecode,m.id,m.userid,m.systemid,p.settleid,p.id, '定时任务生成无数据账单'
+		from lm_meter m , lm_price p , lm_pricedetail pd
+		where 
+		m.pricecode = p.`code` and p.id = pd.priceid and m.opened = 1
+		and not exists (select 1 from lm_bill b where b.meterid = m.id and b.billmonth = #{value})
+	</insert>
 	
-	<select id="countMeterAndUserList" parameterType="meterModelExtendsBean" resultType="int">
-		select count(1) from  lm_meter m,lm_user u
-	    <include refid="query_Where_Clause" />
-	</select>
+	<update id="updateBillMinConsumamount" parameterType="string">
+	update lm_bill b set b.cycleendbalance = b.cycleendbalance - ( b.minconsumamount - ( b.minconsumamount *b.quantity/b.minconsumequantity ) ),
+	operName =  CONCAT('账单补扣最低消费', ( b.minconsumamount - ( b.minconsumamount *b.quantity/b.minconsumequantity ) ) )
+	 where b.billmonth = #{value} and  b.minconsumequantity > b.quantity and ( operName not like '账单补扣最低消费%' or operName is null )
+	
+	</update>
+	
+	<update id="updateBillCyclebuyamount" parameterType="string">
+		update lm_bill b set  b.cyclebuyamount = (select IFNULL(SUM(p.payamount),0) from lm_payment p where DATE_FORMAT(p.createtime,'%Y%m' ) = billmonth and p.meterid = b.meterid )
+		where  b.billmonth =  #{value} 
+	</update>
+	
 </mapper>

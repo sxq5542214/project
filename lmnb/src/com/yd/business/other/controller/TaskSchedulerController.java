@@ -83,8 +83,8 @@ public class TaskSchedulerController extends BaseController {
 	public ModelAndView deleteTaskCron(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		try {
 			TaskCronsBean bean = new TaskCronsBean();
-			bean.setCron_id(Integer.parseInt(request.getParameter("id")));
-			if(!StringUtil.isNull(bean.getCron_id())){
+			bean.setId(Integer.parseInt(request.getParameter("id")));
+			if(!StringUtil.isNull(bean.getId())){
 				taskSchedulerService.deleteTaskCron(bean);
 				bean.setRemark(configCruxService.getValueByTypeAndKey(ConfigCruxBean.CONFIG_CRUX_TYPE_POP_NEWS,ConfigCruxBean.CONFIG_CRUX_KEY_OPERATION_SUCCESS)) ;
 			}else{
@@ -113,7 +113,7 @@ public class TaskSchedulerController extends BaseController {
 		try {
 			String id = request.getParameter("id");
 			if(!StringUtil.isNull(id)){
-			bean.setCron_id(Integer.parseInt(request.getParameter("id")));
+			bean.setId(Integer.parseInt(request.getParameter("id")));
 			}
 			bean.setCron_code(request.getParameter("code"));
 			bean.setCron_name(request.getParameter("name"));

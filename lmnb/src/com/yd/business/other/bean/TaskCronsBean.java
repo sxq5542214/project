@@ -100,7 +100,7 @@ public class TaskCronsBean extends BaseBean {
 
 	
 	
-	private Integer cron_id;
+	private Integer id;
 	private String cron_code;
 	private String cron_name;
 	private String cron_desc;
@@ -125,6 +125,12 @@ public class TaskCronsBean extends BaseBean {
 	
 	private String remark;
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public Integer getStatus() {
 		return status;
 	}
@@ -137,17 +143,11 @@ public class TaskCronsBean extends BaseBean {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Integer getCron_id() {
-		return cron_id;
-	}
 	public String getExpression() {
 		return expression;
 	}
 	public void setExpression(String expression) {
 		this.expression = expression;
-	}
-	public void setCron_id(Integer cron_id) {
-		this.cron_id = cron_id;
 	}
 	public String getCron_code() {
 		return cron_code;

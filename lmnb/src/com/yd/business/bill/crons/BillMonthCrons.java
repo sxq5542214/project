@@ -4,6 +4,7 @@
 package com.yd.business.bill.crons;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -45,10 +46,32 @@ public class BillMonthCrons extends BaseCrons {
 
 		log.debug(" BillMonthCrons begin.....");
 		
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MONTH, -1);
+		String billMonth = DateUtil.formatMonthPure(calendar.getTime());
+		
+		//无支付、无读表数据的账单扣减
+		billService.initNoPayUserBills(billMonth);
+		
+		//查询当月读表未达最低消费的账单进行扣减
+		billService.updateBillByDeductionMinconsumamout(billMonth);
+		
+		//更新账单支付总额
+		billService.updateBillCyclebuyamount(billMonth);
 		
 		
 		log.debug(" BillMonthCrons end.....");
 	}
 	
-
+	
+	
+	
+	
+	public static void main(String[] args) {
+	
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MONTH, -1);
+		String billMonth = DateUtil.formatMonthPure(calendar.getTime());
+		System.out.println(billMonth);
+	}
 }

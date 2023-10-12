@@ -8,4 +8,6 @@ import com.yd.iotbusiness.mapper.dao.LmMeterModelMapper;
 public interface IMeterExtendsMapper extends LmMeterModelMapper{
 	List<MeterModelExtendsBean> queryMeterAndUserList(MeterModelExtendsBean bean);
 	int countMeterAndUserList(MeterModelExtendsBean bean);
+	int updateNopayBillMeterBalance(String billMonth);
+	int updateMeterBalanceByMinConsumamount(String billMonth);
 }

@@ -19,7 +19,7 @@
 				t.enable = #{enable},
 			</if>
 		</set>
-		where t.cron_id = #{id}
+		where t.id = #{id}
 	</update>
 	
 	
@@ -35,7 +35,7 @@
 	<select id="queryTaskCronsPage"  parameterType="task" resultType="task">
 		select * from ll_crons 
 		<where>
-			<if test="cron_id != null"> and `cron_id` = #{cron_id}</if>
+			<if test="id != null"> and `id` = #{id}</if>
 			<if test="cron_code != null and cron_code !=''"> and `cron_code` = #{cron_code}</if>
 			<if test="cron_name !=null and cron_name !=''">and cron_name like concat('%', #{cron_name}, '%')</if>
 			<if test="cron_desc != null and cron_desc !=''"> and `cron_desc` = #{cron_desc}</if>
@@ -58,7 +58,7 @@
 	
 	
 	<delete id="deleteTaskCron" parameterType="task">
-		delete from ll_crons where cron_id = #{cron_id} 
+		delete from ll_crons where id = #{id} 
 	</delete>
 	
 	
@@ -79,7 +79,7 @@
 	        <if test="description!=null and description!=''">`description`=#{description},</if>
 	       	<if test="enable!=null ">`enable`=#{enable},</if>
 	    </set>
-	    where `cron_id`=#{cron_id}
+	    where `id`=#{id}
 	</update>
 	
 	
