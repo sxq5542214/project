@@ -107,6 +107,9 @@ public class IOTInterfaceServiceImpl extends BaseService implements IIOTInterfac
 				meter.setTimer(Integer.parseInt(conter.getReadperiod()));
 				meter.setFlowstate(conter.getReadstate());
 				meter.setFeetime(new Date());
+				
+				meter.setRecentreadtime(new Date());
+				meter.setRecentreadnum(new BigDecimal(conter.getCurnum()));
 //				meter.setReversenum(new BigDecimal(conter.getReversenum()) );
 				deviceInfoService.updateMeterModel(meter);
 				

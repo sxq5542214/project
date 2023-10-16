@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="com.yd.business.price.dao.IPaymentExtendsMapper">
+
+	<sql id="query_Where_Clause">
+		<where>
+			m.userid = u.id 
+			<if test="systemid != null"> and m.systemid = #{systemid}</if>
+			<if test="productid != null"> and m.productid = #{productid}</if>
+			<if test="userid != null"> and m.userid = #{userid}</if>
+			<if test="code != null"> and m.code = #{code}</if>
+			<if test="userName != null"> and u.name like '%${userName}%'</if>
+			<if test="area1 != null"> and u.area1 like '%${area1}%'</if>
+			<if test="area2 != null"> and u.area2 like '%${area2}%'</if>
+			<if test="area3 != null"> and u.area3 like '%${area3}%'</if>
+			<if test="area4 != null"> and u.area4 like '%${area4}%'</if>
+			<if test="addressid != null"> and u.addressid = #{addressid}</if>
+			<if test="ispid != null"> and ispid = #{ispid}</if>
+		</where>
+	    <if test="rows != null">
+	      <if test="page != null">
+	        limit ${(page-1) * rows}, ${rows}
+	      </if>
+	      <if test="page == null">
+	        limit ${rows}
+	      </if>
+	    </if>
+	</sql>
+	
+	<select id="sumMonthChargeAmout" parameterType="map" resultType="java.math.BigDecimal">
+		select ifnull(sum(p.payamount),0) sumpay from lm_payment p 
+		<where>
+			<if test="billMonth != null"> p.createtime like '${billMonth}%' </if>
+			<if test="systemid != null"> and p.systemid = #{systemid}</if>
+			<if test="operatorid != null"> and p.operatorid = #{operatorid}</if>
+		</where>
+	</select>
+	
+	<select id="countDayBuyAmountMeter" parameterType="map" resultType="int">
+		select count(DISTINCT p.meterid) from lm_payment p 
+		<where>
+			<if test="day != null"> p.createtime like '${day}%' </if>
+			<if test="systemid != null"> and p.systemid = #{systemid}</if>
+			<if test="operatorid != null"> and p.operatorid = #{operatorid}</if>
+		</where>
+	</select>
+	
+
+	
+	
+	
+</mapper>
