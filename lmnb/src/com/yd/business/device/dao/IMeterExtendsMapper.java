@@ -1,6 +1,7 @@
 package com.yd.business.device.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.iotbusiness.mapper.dao.LmMeterModelMapper;
@@ -10,4 +11,5 @@ public interface IMeterExtendsMapper extends LmMeterModelMapper{
 	int countMeterAndUserList(MeterModelExtendsBean bean);
 	int updateNopayBillMeterBalance(String billMonth);
 	int updateMeterBalanceByMinConsumamount(String billMonth);
+	int countDayMeterReading(Map<String, Object> map);
 }

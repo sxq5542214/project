@@ -196,4 +196,61 @@ public class ChargeDetailController extends BaseController {
 	}
 	
 	
+
+	/**
+	 * 	查询当月缴费总额
+	 */
+	@RequestMapping("**/admin/chargeDetail/ajaxQueryMonthChargeAmoutSumByDashboard.do")
+	public ModelAndView ajaxQueryMonthChargeAmoutSumByDashboard(HttpServletRequest request,HttpServletResponse response) {
+
+		IOTWebDataBean result ;
+		try {
+			LmOperatorModel op = getCurrentLoginOperator();
+			
+			Integer opid = null;
+			String operatorid = request.getParameter("operatorid");
+			if(StringUtil.isNotNull(operatorid)) {
+				opid = op.getId();
+			}
+			String billMonth = DateUtil.formatMonth(new Date());
+			result = chargeDetailService.queryMonthChargeAmoutSum( billMonth, op.getSystemid(), opid);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setMessage(e.getMessage());
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+		}
+		writeJson(response, result );
+		return null;
+	}
+
+	/**
+	 * 	查询当月缴费总额
+	 */
+	@RequestMapping("**/admin/chargeDetail/ajaxQueryDayChargeAmoutMeterCountByDashboard.do")
+	public ModelAndView ajaxQueryDayChargeAmoutMeterCountByDashboard(HttpServletRequest request,HttpServletResponse response) {
+
+		IOTWebDataBean result ;
+		try {
+			LmOperatorModel op = getCurrentLoginOperator();
+			
+			Integer opid = null;
+			String operatorid = request.getParameter("operatorid");
+			if(StringUtil.isNotNull(operatorid)) {
+				opid = op.getId();
+			}
+			String daystr = DateUtil.getNowOlnyDateStr();
+			result = chargeDetailService.queryDayBuyAmountMeterCount( daystr, op.getSystemid(), opid);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setMessage(e.getMessage());
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+		}
+		writeJson(response, result );
+		return null;
+	}
+	
 }

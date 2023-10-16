@@ -50,4 +50,8 @@ public interface IChargeDetailService {
 
 	Integer handleChargeBalance(LmPaymentModel model);
 
+	IOTWebDataBean queryMonthChargeAmoutSum(String billMonth, Integer systemid, Integer operatorid);
+
+	IOTWebDataBean queryDayBuyAmountMeterCount(String day, Integer systemid, Integer operatorid);
+
 }

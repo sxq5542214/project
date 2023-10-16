@@ -5,7 +5,9 @@ package com.yd.business.device.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -36,6 +38,7 @@ import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmMeterModelExample;
 import com.yd.iotbusiness.mapper.model.LmMeterModelExample.Criteria;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.util.StringUtil;
 
 /**
  * @author ice
@@ -262,6 +265,10 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 	@Override
 	public MeterModelExtendsBean findMeterByCode(String code) {
 		
+		if(StringUtil.isNull(code)) {
+			return null;
+		}
+		
 		MeterModelExtendsBean bean = new MeterModelExtendsBean();
 		bean.setCode(code);
 		List<MeterModelExtendsBean> list = meterExtendsMapper.queryMeterAndUserList(bean);
@@ -320,4 +327,36 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		
 		return result;
 	}
+
+
+	@Override
+	public IOTWebDataBean queryDayMeterReadingCount(String day,Integer systemid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("day", day);
+		map.put("systemid", systemid);
+		
+		int value = meterExtendsMapper.countDayMeterReading(map);
+
+		result.setData(value);
+		return result;
+	}
+
+	@Override
+	public IOTWebDataBean queryOpenedMeterCount(Integer systemid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		LmMeterModelExample ex = new LmMeterModelExample();
+		LmMeterModelExample.Criteria cri = ex.createCriteria();
+		cri.andOpenedEqualTo((byte) 1);
+		cri.andSystemidEqualTo(systemid);
+		
+		long value = meterExtendsMapper.countByExample(ex);
+
+		result.setData(value);
+		return result;
+	}
+	
+	
 }

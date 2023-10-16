@@ -24,6 +24,7 @@ import com.yd.iotbusiness.mapper.model.LlDictionaryModelExample;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.util.AutoInvokeGetSetMethod;
+import com.yd.util.DateUtil;
 
 @Controller
 public class DeviceInfoController extends BaseController {
@@ -172,4 +173,45 @@ public class DeviceInfoController extends BaseController {
 		writeJson(response, result );
 		return null;
 	}
+
+
+	@RequestMapping("admin/device/ajaxQueryDayMeterReadingCount.do")
+	public ModelAndView ajaxQueryDayMeterReadingCount(HttpServletRequest request,HttpServletResponse response){
+
+		IOTWebDataBean result;
+		try {
+			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			
+			String daystr = DateUtil.getNowOlnyDateStr();
+			result = deviceInfoService.queryDayMeterReadingCount(daystr, operator.getSystemid());
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+
+	@RequestMapping("admin/device/ajaxQueryOpenedMeterCount")
+	public ModelAndView ajaxQueryOpenedMeterCount(HttpServletRequest request,HttpServletResponse response){
+
+		IOTWebDataBean result;
+		try {
+			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			
+			result = deviceInfoService.queryOpenedMeterCount(operator.getSystemid());
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+	
 }

@@ -38,4 +38,8 @@ public interface IDeviceInfoService {
 
 	LmMeterModel updateMeterModel(LmMeterModel bean);
 
+	IOTWebDataBean queryDayMeterReadingCount(String day, Integer systemid);
+
+	IOTWebDataBean queryOpenedMeterCount(Integer systemid);
+
 }

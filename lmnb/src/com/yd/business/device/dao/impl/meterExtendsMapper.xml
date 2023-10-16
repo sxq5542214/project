@@ -52,6 +52,14 @@
 
 	</update>
 	
+	<select id="countDayMeterReading" parameterType="map" resultType="int">
+		select count(distinct meterid ) from lm_record r 
+		<where>
+			<if test="day != null"> and r.curtime like '${day}%' </if>
+			<if test="systemid != null"> and r.systemid = #{systemid}</if>
+		</where>
+	</select>
+	
 	
 	
 </mapper>

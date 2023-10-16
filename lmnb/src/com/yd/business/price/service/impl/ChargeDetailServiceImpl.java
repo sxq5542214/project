@@ -3,7 +3,9 @@ package com.yd.business.price.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -20,6 +22,7 @@ import com.yd.business.price.bean.ChargeDetailBean;
 import com.yd.business.price.bean.PriceBean;
 import com.yd.business.price.bean.PrintBean;
 import com.yd.business.price.dao.IChargeDetailDao;
+import com.yd.business.price.dao.IPaymentExtendsMapper;
 import com.yd.business.price.service.IChargeDetailService;
 import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.bean.UserInfoBean;
@@ -49,7 +52,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	@Resource
 	private IOperatorService operatorService;
 	@Resource
-	private LmPaymentModelMapper paymentModelMapper;
+	private IPaymentExtendsMapper iPaymentExtendsMapper;
 	@Resource
 	private IBillService billService;
 
@@ -250,7 +253,35 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		return  chargeDetailDao.queryChargeListByUserId(u_id);
 		
 	}
-	
+
+	@Override
+	public IOTWebDataBean queryMonthChargeAmoutSum(String billMonth,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("billMonth", billMonth);
+		map.put("systemid", systemid);
+		map.put("operatorid", operatorid);
+		
+		BigDecimal value = iPaymentExtendsMapper.sumMonthChargeAmout(map);
+
+		result.setData(value);
+		return result;
+	}
+	@Override
+	public IOTWebDataBean queryDayBuyAmountMeterCount(String day,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("day", day);
+		map.put("systemid", systemid);
+		map.put("operatorid", operatorid);
+		
+		int value = iPaymentExtendsMapper.countDayBuyAmountMeter(map);
+
+		result.setData(value);
+		return result;
+	}
 	@Override
 	public IOTWebDataBean queryChargeList(LmPaymentModel model) {
 		IOTWebDataBean result = new IOTWebDataBean();
@@ -263,7 +294,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 			cri.andMetercodeEqualTo(model.getMetercode());
 		}
 		ex.setOrderByClause(" id desc ");
-		List<LmPaymentModel> list = paymentModelMapper.selectByExample(ex );
+		List<LmPaymentModel> list = iPaymentExtendsMapper.selectByExample(ex );
 		result.setTotal(Long.valueOf(list.size()));
 		result.setData(list);
 		
@@ -296,7 +327,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		model.setPricecode(meter.getPricecode().toString());
 		model.setPricename(meter.getPricename());
 		
-		Integer num = paymentModelMapper.insertSelective(model);
+		Integer num = iPaymentExtendsMapper.insertSelective(model);
 
 		//更新meter表中的余额
 		meter.setBalance(meter.getBalance().add(charge));
@@ -322,7 +353,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		
 		//更新支付表对应的账单ID
 		model.setBillid(bill.getId());
-		paymentModelMapper.updateByPrimaryKeySelective(model);
+		iPaymentExtendsMapper.updateByPrimaryKeySelective(model);
 		
 		return num;
 	}

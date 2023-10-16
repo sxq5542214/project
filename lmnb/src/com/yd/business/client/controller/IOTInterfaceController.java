@@ -1,5 +1,6 @@
 package com.yd.business.client.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -69,6 +70,9 @@ log.info("client/nbApi/postMeterCmd: "+ jsonStr);
 				//更新水表的阀门状态
 				MeterModelExtendsBean meter = deviceInfoService.findMeterByIspid(cmd.getIspid());
 				meter.setValvestate(Byte.valueOf(cmd.getType()));
+				meter.setRecentcmdtime(new Date());
+				meter.setRecentcmdtype(Byte.valueOf(cmd.getType()));
+				meter.setRecentcmdstate(Byte.valueOf(cmd.getState()));
 				deviceInfoService.addOrUpdateMeter(meter);
 			}
 			

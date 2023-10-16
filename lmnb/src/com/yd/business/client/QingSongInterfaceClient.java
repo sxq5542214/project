@@ -200,7 +200,7 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 			bean.setFinishtime(jso.getString("finishtime"));
 			bean.setState(jso.getString("state"));
 			bean.setCreatetime(jso.getString("createtime"));
-			bean.setSendtime(jso.getString("sendtime"));
+			bean.setSendtime(jso.optString("sendtime",null));
 
 			list.add(bean);
 		}
