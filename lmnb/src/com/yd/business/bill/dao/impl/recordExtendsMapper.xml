@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="com.yd.business.bill.dao.IRecordExtendsMapper">
+	
+	<sql id="query_Where_Clause">
+		<where>
+			
+			<if test="systemid != null"> and systemid = #{systemid}</if>
+			<if test="operatorname != null"> and operatorname like  '%${productid}%'</if>
+			<if test="username != null"> and username like  '%${username}%'</if>
+			<if test="pricename != null"> and pricename like  '%${pricename}%'</if>
+			<if test="productname != null"> and productname like  '%${productname}%'</if>
+			<if test="userid != null"> and userid = #{userid}</if>
+			<if test="metercode != null"> and metercode = #{metercode}</if>
+			<if test="meterid != null"> and meterid = #{meterid}</if>
+			<if test="billmonth != null"> and billmonth = #{billmonth}</if>
+		</where>
+	</sql>
+	<sql id="query_limit">
+	    <if test="rows != null">
+	      <if test="page != null">
+	        limit ${(page-1) * rows}, ${rows}
+	      </if>
+	      <if test="page == null">
+	        limit ${rows}
+	      </if>
+	    </if>
+	</sql>
+
+	<select id="selectRecordList" resultType="com.yd.iotbusiness.mapper.model.LmRecordModel"	parameterType="com.yd.iotbusiness.mapper.model.LmRecordModel">
+	
+		select r.*  from lm_record r 
+	    <include refid="query_Where_Clause" />
+	    order by id desc
+	    <include refid="query_limit" />
+	    
+	</select>
+	<select id="countSelectRecordList" resultType="int"	parameterType="com.yd.iotbusiness.mapper.model.LmRecordModel">
+	
+		select count(1)  from lm_record r 
+	    <include refid="query_Where_Clause" />
+	    
+	</select>
+
+	
+</mapper>
