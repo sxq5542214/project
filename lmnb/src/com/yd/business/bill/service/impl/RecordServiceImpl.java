@@ -59,7 +59,7 @@ public class RecordServiceImpl extends BaseService implements IRecordService {
 
 		long total = recordExtendsMapper.countSelectRecordList(model);
 		List<LmRecordModel> list = recordExtendsMapper.selectRecordList(model);
-		
+		 
 		IOTWebDataBean result = new IOTWebDataBean();
 		result.setData(list);
 		result.setTotal(total);
