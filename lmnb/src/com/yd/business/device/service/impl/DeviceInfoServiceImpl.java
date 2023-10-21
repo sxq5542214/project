@@ -30,6 +30,7 @@ import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.other.service.ICommandService;
 import com.yd.business.price.bean.PriceBean;
+import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.iotbusiness.mapper.dao.LmCmdModelMapper;
 import com.yd.iotbusiness.mapper.dao.LmMeterModelMapper;
@@ -38,6 +39,7 @@ import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmMeterModelExample;
 import com.yd.iotbusiness.mapper.model.LmMeterModelExample.Criteria;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.iotbusiness.mapper.model.LmPriceModel;
 import com.yd.util.StringUtil;
 
 /**
@@ -58,6 +60,8 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 	private IIOTInterfaceService iotInterfaceService;
 	@Autowired
 	private ICommandService commandService;
+	@Autowired
+	private IPriceService priceService;
 	
 	
 	@Override
@@ -148,7 +152,15 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 	public IOTWebDataBean addOrUpdateMeter(LmMeterModel	bean) {
 		IOTWebDataBean result = new IOTWebDataBean();
 		
+		
+		if(bean.getOpened() == (byte) 1 && bean.getOpentime() == null) {
+			bean.setOpentime(new Date());
+		}
+		
 		if(bean.getId() == null ) {
+			bean.setInstalldate(new Date());
+			LmPriceModel price = priceService.findPriceById(bean.getPricecode());
+			bean.setPricename(price.getName());
 			meterExtendsMapper.insertSelective(bean);
 			
 		}else {

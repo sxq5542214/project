@@ -197,7 +197,7 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 			bean.setType(jso.getString("type"));
 			bean.setId(jso.getString("id"));
 			bean.setOuterid(jso.getString("outerid"));
-			bean.setFinishtime(jso.getString("finishtime"));
+			bean.setFinishtime(jso.optString("finishtime",null));
 			bean.setState(jso.getString("state"));
 			bean.setCreatetime(jso.getString("createtime"));
 			bean.setSendtime(jso.optString("sendtime",null));
@@ -235,7 +235,7 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 				cmd.setId(jso.getString("id"));
 				cmd.setState(jso.getString("state"));
 				cmd.setSendtime(jso.getString("sendtime"));
-				cmd.setFinishtime(jso.getString("finishtime"));
+				cmd.setFinishtime(jso.optString("finishtime",null));
 
 				return cmd;
 			}else {
