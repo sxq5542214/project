@@ -55,11 +55,11 @@ public class CommandServiceImpl extends BaseService implements ICommandService {
 	}
 	
 	@Override
-	public LmCmdModel updateCmdStatus(int cmdid,byte state,String remark) {
+	public LmCmdModel updateCmdStatus(int cmdid,byte state,String param) {
 		LmCmdModel cmd = findCmdModelById(cmdid);
 		cmd.setState(state);
 		cmd.setExetime(new Date());
-		cmd.setRemark(remark);
+		cmd.setParam(param);
 		cmdModelMapper.updateByPrimaryKeySelective(cmd);
 		return cmd;
 	}
