@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="areaOperator">
+	<select id="queryAreaOperatorList" resultType="areaOperator" parameterType="areaOperator">
+		select * from area_Operator 
+		<where>
+			
+			<if test="ao_areaid != null"> and ao_areaid = #{ao_areaid}</if>
+			<if test="ao_operatorid != null"> and ao_operatorid = #{ao_operatorid}</if>
+		</where>
+	</select>
+	
+	<insert id="insertAreaOperator" parameterType="areaOperator" useGeneratedKeys="true" keyProperty="c_id">
+		
+		insert into area_Operator(
+      ao_areaid
+      ,ao_operatorid  ) values(
+      #{ao_areaid}
+      ,#{ao_operatorid}  )
+   	</insert>
+	
+	<delete id="deleteAreaOperator" parameterType="long">
+		delete from  area_Operator
+		where b_id = #{b_id}
+	</delete>
+	
+	
+ 	<update id="updateAreaOperator" parameterType="areaOperator">
+		update area_Operator 
+		<set>
+			<if test="b_areaid != null">b_areaid = #{b_areaid},</if>
+			<if test="b_name != null">b_name = #{b_name},</if>
+			<if test="b_updatedate != null">b_updatedate = #{b_updatedate},</if>
+		</set>
+		<where>
+			b_id = #{b_id}
+		</where>
+		
+	</update>
+	
+</mapper>
+
+

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="price">
+	<select id="queryPriceList" parameterType="price" resultType="price" useCache="true"  >
+		select * from Price
+		<where>
+			<if test="p_id != null"> and p_id = #{p_id} </if>
+			<if test="p_companyid != null"> and p_companyid = #{p_companyid} </if>
+			<if test="p_enabled != null"> and p_enabled = #{p_enabled} </if>
+			<if test="p_ladder != null"> and p_ladder = #{p_ladder} </if>
+			<if test="p_name != null"> and p_name like '%' + #{p_name} + '%' </if>
+		</where>
+		order by seq 
+	</select>
+	<cache eviction="LRU" size="4096" flushInterval="600"></cache>
+	
+	<insert id="insertPrice" parameterType="price" useGeneratedKeys="true" keyProperty="p_id">
+		insert into price
+           (p_companyid
+           ,p_name
+           ,p_base1
+           ,p_ton1
+           ,p_base2
+           ,p_ton2
+           ,p_base3
+           ,p_other1
+           ,p_other2
+           ,p_price1
+           ,p_price2
+           ,p_price3
+           ,p_lowprice
+           ,p_lowamount
+           ,p_limitamount
+           ,p_storedamount
+           ,p_weakprompt
+           ,p_overflat
+           ,p_enabled
+           ,p_createdate
+           ,p_updatedate
+           ,p_settlemonth
+           ,p_settleday
+           ,p_ladder)
+     values 
+           (#{p_companyid}
+           ,#{p_name}
+           ,#{p_base1}
+           ,#{p_ton1}
+           ,#{p_base2}
+           ,#{p_ton2}
+           ,#{p_base3}
+           ,#{p_other1}
+           ,#{p_other2}
+           ,#{p_price1}
+           ,#{p_price2}
+           ,#{p_price3}
+           ,#{p_lowprice}
+           ,#{p_lowamount}
+           ,#{p_limitamount}
+           ,#{p_storedamount}
+           ,#{p_weakprompt}
+           ,#{p_overflat}
+           ,#{p_enabled}
+           ,#{p_createdate}
+           ,#{p_updatedate}
+           ,#{p_settlemonth}
+           ,#{p_settleday}
+           ,#{p_ladder})
+	</insert>
+	
+	<update id="updatePrice" parameterType="price">
+		update price 
+		<set>
+			<if test="p_companyid != null ">p_companyid = #{p_companyid} ,</if>
+			<if test="p_name != null ">p_name = #{p_name} ,</if>
+			<if test="p_base1 != null ">p_base1 = #{p_base1} ,</if>
+			<if test="p_ton1 != null ">p_ton1 = #{p_ton1} ,</if>
+			<if test="p_base2 != null ">p_base2 = #{p_base2} ,</if>
+			<if test="p_ton2 != null ">p_ton2 = #{p_ton2} ,</if>
+			<if test="p_base3 != null ">p_base3 = #{p_base3} ,</if>
+			<if test="p_other1 != null ">p_other1 = #{p_other1} ,</if>
+			<if test="p_other2 != null ">p_other2 = #{p_other2} ,</if>
+			<if test="p_price1 != null ">p_price1 = #{p_price1} ,</if>
+			<if test="p_price2 != null ">p_price2 = #{p_price2} ,</if>
+			<if test="p_price3 != null ">p_price3 = #{p_price3} ,</if>
+			<if test="p_lowprice != null ">p_lowprice = #{p_lowprice} ,</if>
+			<if test="p_lowamount != null ">p_lowamount = #{p_lowamount} ,</if>
+			<if test="p_limitamount != null ">p_limitamount = #{p_limitamount} ,</if>
+			<if test="p_storedamount != null ">p_storedamount = #{p_storedamount} ,</if>
+			<if test="p_weakprompt != null ">p_weakprompt = #{p_weakprompt} ,</if>
+			<if test="p_overflat != null ">p_overflat = #{p_overflat} ,</if>
+			<if test="p_enabled != null ">p_enabled = #{p_enabled} ,</if>
+			<if test="p_createdate != null ">p_createdate = #{p_createdate} ,</if>
+			<if test="p_updatedate != null ">p_updatedate = #{p_updatedate} ,</if>
+			<if test="p_settlemonth != null ">p_settlemonth = #{p_settlemonth} ,</if>
+			<if test="p_settleday != null ">p_settleday = #{p_settleday} ,</if>
+			<if test="p_ladder != null ">p_ladder = #{p_ladder} ,</if>
+		</set>
+		where
+			<if test="p_id != null"> p_id = #{p_id}</if>
+		
+	</update>
+</mapper>
+
+

@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>后端管理平台</title>
+<link rel="stylesheet" type="text/css" href="page/pc/css/login.css" />
+</head>
+
+<body style="background:#fff">
+<div class="nav_top">
+	<div class="nav_tcon">
+    	<div class="logoimg"></div>
+        <div class="logotitle">
+        	<span>坚果小店</span>
+            <p>Smart mall</p>
+        </div>
+        <div class="logoname">账号登录</div>
+    </div>
+</div>
+<div class="logo_content">
+	<div class="logo_ccon">
+    	<img class="logobei" src="page/pc/img/logobei.png"/>
+	        <div class="logo_enter">
+	        	<span style="border-bottom:solid 1px #cfcfcf">请使用坚果小店账号进行登陆</span>
+	            <span>登录名：</span>
+	            <input id="username" name="username" class="use_name" value="" type="text" placeholder="登录账号" />
+	            <span>登录密码：</span>
+	            <input id="userpass" name="password" class="use_password" value="" type="password" placeholder="登录密码" />
+	            <tr>
+     				 <td height="24" align="center">&nbsp;</td>
+      				 <td height="28" align="center">&nbsp;&nbsp;验证码：</td>
+      				 <td width="33" height="24" align="left">  <input id ="checkCode" name="checkCode" title="验证码区分大小写" type="text" size="4" maxlength="4">        </td>
+      				 <td width="176" align="left">&nbsp;<img src="login/LoginController/checkCode.do" id="createCheckCode" style="border:#999999 solid 1px">
+	  				 <a href="#" onClick="myReload()">看不清?换一个</a></td>
+   				</tr>
+	            <span><a href="page/pc/regist.jsp" style="text-decoration: none;">用户注册</a></span>
+	            <button type="submit" onclick="Login.login();">登&nbsp;&nbsp;录</button>
+	        </div>
+    </div>
+</div>
+</body>
+<script src="page/pc/js/jquery.js"></script>
+<script src="page/pc/js/alertify.min.js"></script>
+<script src="js/login.js"></script>
+<script type="text/javascript">
+window.location.href = "page/login.jsp";
+if(top!=self){
+          if(top.location != self.location)
+               top.location = self.location;
+}
+</script>
+</html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="changeMeter">
+	<select id="queryChangeMeterList" resultType="changeMeterExt" parameterType="changeMeterExt">
+		select cm.*,u.u_no user_no,u.u_name user_name, u.u_address user_address ,u.u_phone user_phone, o.o_name operator_name from changeMeter cm ,userInfo u ,operator o
+		<where>
+			cm.cm_userid = u.u_id and cm.cm_operatorid = o.o_id 
+			<if test="cm_id != null"> and cm_id = #{cm_id}</if>
+			<if test="cm_type != null"> and cm_type = #{cm_type}</if>
+			<if test="user_cardno != null"> and u.u_cardno = #{user_cardno}</if>
+			<if test="user_name != '' and user_name != null"> and u.u_name like '%' + #{user_name} + '%'</if>
+			<if test="user_phone != '' and user_phone != null"> and u.u_phone like '%' + #{user_phone} + '%'</if>
+			
+		</where>
+		<if test="orderby != null"> ${orderby}</if>
+	</select>
+	
+	<insert id="insertChangeMeter" parameterType="changeMeter" useGeneratedKeys="true" keyProperty="cm_id">
+		
+		insert into changeMeter(
+      cm_userid
+      ,cm_oldmetercode
+      ,cm_newmetercode
+      ,cm_happendate
+      ,cm_type
+      ,cm_status
+      ,cm_operatorid
+      ,cm_remark
+      ,cm_oldmeterno
+      ,cm_newmeterno ,old_device_company ,new_device_company ) values(
+      #{cm_userid}
+      ,#{cm_oldmetercode}
+      ,#{cm_newmetercode}
+      ,#{cm_happendate}
+      ,#{cm_type}
+      ,#{cm_status}
+      ,#{cm_operatorid}
+      ,#{cm_remark}
+      ,#{cm_oldmeterno}
+      ,#{cm_newmeterno}  ,#{old_device_company} ,#{new_device_company}  )
+   	</insert>
+	
+	<delete id="deleteChangeMeter" parameterType="long">
+		delete from  changeMeter
+		where cm_id = #{cm_id}
+	</delete>
+	
+	
+ 	<update id="updateChangeMeter" parameterType="changeMeter">
+		update changeMeter 
+		<set>
+			<if test="cm_userid != null">cm_userid = #{cm_userid},</if>
+			<if test="cm_oldmetercode != null">cm_oldmetercode = #{cm_oldmetercode},</if>
+			<if test="cm_newmetercode != null">cm_newmetercode = #{cm_newmetercode},</if>
+			<if test="cm_happendate != null">cm_happendate = #{cm_happendate},</if>
+			<if test="cm_type != null">cm_type = #{cm_type},</if>
+			<if test="cm_status != null">cm_status = #{cm_status},</if>
+			<if test="cm_operatorid != null">cm_operatorid = #{cm_operatorid},</if>
+			<if test="cm_remark != null">cm_remark = #{cm_remark},</if>
+			<if test="cm_oldmeterno != null">cm_oldmeterno = #{cm_oldmeterno},</if>
+			<if test="cm_newmeterno != null">cm_newmeterno = #{cm_newmeterno},</if>
+			<if test="old_device_company != null">old_device_company = #{old_device_company},</if>
+			<if test="new_device_company != null">new_device_company = #{new_device_company},</if>
+			
+			
+		</set>
+		<where>
+			cm_id = #{cm_id}
+		</where>
+		
+	</update>
+	
+</mapper>
+
+

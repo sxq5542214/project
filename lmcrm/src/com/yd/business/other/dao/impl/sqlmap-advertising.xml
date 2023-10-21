@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="advertising">
+	
+	
+	<select id="queryAdvertisingInfo"  parameterType="advertising" resultType="advertising">
+		select * from ll_advertising sp
+		<where>
+			<if test="id != null"> and sp.id = #{id}</if>
+			<if test="code != null"> and sp.code = #{code}</if>
+			<if test="type != null"> and sp.type = #{type}</if>
+			<if test="picture != null"> and sp.picture = #{picture}</if>
+			<if test="picture_link != null"> and sp.picture_link = #{picture_link}</if>
+			<if test="status != null"> and sp.status = #{status}</if>
+			<if test="create_time != null"> and sp.create_time = #{create_time}</if>
+			<if test="modify_time != null"> and sp.modify_time = #{modify_time}</if>
+			<if test="seq != null"> and sp.seq = #{seq}</if>
+		</where>
+		order by sp.seq
+	</select>
+	
+	
+		<select id="queryAdvertisingInfoPage"  parameterType="advertising" resultType="advertising">
+		select * from ll_advertising sp
+		<where>
+			<if test="id != null"> and sp.id = #{id}</if>
+			<if test="code != null and code!=''"> and sp.code like concat('%', #{code}, '%')</if>
+			<if test="type != null"> and sp.type = #{type}</if>
+			<if test="picture != null"> and sp.picture = #{picture}</if>
+			<if test="picture_link != null and picture_link!=''"> and sp.picture_link like concat('%', #{picture_link}, '%')</if>
+			<if test="status != null"> and sp.status = #{status}</if>
+			<if test="create_time != null"> and sp.create_time = #{create_time}</if>
+			<if test="modify_time != null"> and sp.modify_time = #{modify_time}</if>
+			<if test="seq != null"> and sp.seq = #{seq}</if>
+		</where>
+		order by sp.seq
+	</select>
+	
+	
+	<select id="advertisingCount" parameterType="advertising" resultType="int">
+		select count(1) from ll_advertising
+		<where>
+			<if test="status != null"> and `status` = #{status} </if>
+		</where>
+	</select>
+	
+	
+	<delete id="deleteAdvertising" parameterType="advertising">
+		delete from ll_advertising where id = #{id} 
+	</delete>
+	
+	
+	<insert id="insertAdvertising" parameterType="advertising">
+		insert into ll_advertising ( `code`, `type`, `picture`, `picture_link`, `status`, `create_time`, `seq`) values 
+		(#{code},#{type},#{picture},#{picture_link},#{status},#{create_time},#{seq})
+	</insert>
+	
+	<update id="updateAdvertising" parameterType="advertising">
+	    update ll_advertising
+	    <set>
+	        <if test="code!=null and code!=''">`code`=#{code},</if>
+	        <if test="type!=null and type!=''">`type`=#{type},</if>
+	        <if test="type!=null and picture!=''">`picture`=#{picture},</if>
+	        <if test="picture_link!=null and picture_link!=''">`picture_link`=#{picture_link},</if>
+	       	<if test="status!=null ">`status`=#{status},</if>
+	        <if test="modify_time!=null and modify_time!=''">`modify_time`=#{modify_time},</if>
+	        <if test="seq!=null and seq!=''">`seq`=#{seq},</if>
+	    </set>
+	    where id=#{id}
+	</update>
+	
+	
+</mapper>
+
+

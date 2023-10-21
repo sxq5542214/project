@@ -1,0 +1,24 @@
+{
+    "button": [
+        {
+        	"name": "店铺足迹", 
+        	 "type": "view", 
+		     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd5c0adcdb657eb68&redirect_uri=http%3a%2f%2fm.jg-shop.cn%2fjgshop%2fwechat%2fuser%2ftoDistributeControll.do%3fconName%3duser.supplier.toPlatformSupplierListPage&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+        }, 
+        {
+            "name": "店铺入驻", 
+            "sub_button": [
+               {
+		            "type": "click", 
+                    "name": "免费线上开店", 
+                    "key": "shopSetUp"
+				},
+                {
+                    "type": "click", 
+                    "name": "我的店铺", 
+                    "key": "manager"
+                }
+            ]
+        } 
+    ]
+}

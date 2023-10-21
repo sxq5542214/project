@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="device">
+	<select id="queryDeviceInfo" parameterType="deviceInfo" resultType="deviceInfo"   >
+		select * from DeviceInfo
+		<where>
+			<if test="di_id != null"> and di_id = #{di_id} </if>
+			<if test="di_userid != null"> and di_userid = #{di_userid} </if>
+			<if test="di_dkid != null"> and di_dkid = #{di_dkid} </if>
+		</where>
+	</select>
+	<cache eviction="LRU" size="4096" flushInterval="600000"></cache>
+	
+	
+	<insert id="createDeviceInfo" parameterType="deviceInfo" useGeneratedKeys="true" keyProperty="di_id">
+		
+		insert into deviceInfo(
+      di_userid
+      ,di_dkid
+      ,di_totalamount
+      ,di_totalmoney
+      ,di_leaveamount
+      ,di_overflatamount
+      ,di_electricstatus
+      ,di_magneticstatus
+      ,di_motstatus
+      ,di_overflatstatus
+      ,di_brushflag
+      ,di_cardleave
+      ,di_curamount
+      ,di_brushdate
+      ,di_useramount
+      ,di_useramount1
+      ,di_useramount2
+      ,di_useramount3
+      ,di_useramount4
+      ,di_useramount5
+      ,di_useramount6
+      ,di_useramount7
+      ,di_useramount8
+      ,di_useramount9
+      ,di_useramount10
+      ,di_useramount11
+      ,di_useramount12
+      ,di_storedamount
+      ,di_createdate
+      ,di_updatedate
+      ,di_signalintensity
+      ,di_batteryvoltage ,device_company ) values(
+      #{di_userid}
+      ,#{di_dkid}
+      ,#{di_totalamount}
+      ,#{di_totalmoney}
+      ,#{di_leaveamount}
+      ,#{di_overflatamount}
+      ,#{di_electricstatus}
+      ,#{di_magneticstatus}
+      ,#{di_motstatus}
+      ,#{di_overflatstatus}
+      ,#{di_brushflag}
+      ,#{di_cardleave}
+      ,#{di_curamount}
+      ,#{di_brushdate}
+      ,#{di_useramount}
+      ,#{di_useramount1}
+      ,#{di_useramount2}
+      ,#{di_useramount3}
+      ,#{di_useramount4}
+      ,#{di_useramount5}
+      ,#{di_useramount6}
+      ,#{di_useramount7}
+      ,#{di_useramount8}
+      ,#{di_useramount9}
+      ,#{di_useramount10}
+      ,#{di_useramount11}
+      ,#{di_useramount12}
+      ,#{di_storedamount}
+      ,#{di_createdate}
+      ,#{di_updatedate}
+      ,#{di_signalintensity}
+      ,#{di_batteryvoltage} ,#{device_company}  )
+   	</insert>
+	
+	<delete id="deleteDeviceInfo" parameterType="long">
+		delete from  deviceInfo
+		where di_id = #{value}
+	</delete>
+	
+	
+ 	<update id="updateDeviceInfo" parameterType="deviceInfo">
+		update deviceInfo 
+		<set>
+			<if test="di_userid != null">di_userid = #{di_userid},</if>
+			<if test="di_dkid != null">di_dkid = #{di_dkid},</if>
+			<if test="di_totalamount != null">di_totalamount = #{di_totalamount},</if>
+			<if test="di_totalmoney != null">di_totalmoney = #{di_totalmoney},</if>
+			<if test="di_leaveamount != null">di_leaveamount = #{di_leaveamount},</if>
+			<if test="di_overflatamount != null">di_overflatamount = #{di_overflatamount},</if>
+			<if test="di_electricstatus != null">di_electricstatus = #{di_electricstatus},</if>
+			<if test="di_magneticstatus != null">di_magneticstatus = #{di_magneticstatus},</if>
+			<if test="di_motstatus != null">di_motstatus = #{di_motstatus},</if>
+			<if test="di_overflatstatus != null">di_overflatstatus = #{di_overflatstatus},</if>
+			<if test="di_brushflag != null">di_brushflag = #{di_brushflag},</if>
+			<if test="di_cardleave != null">di_cardleave = #{di_cardleave},</if>
+			<if test="di_curamount != null">di_curamount = #{di_curamount},</if>
+			<if test="di_brushdate != null">di_brushdate = #{di_brushdate},</if>
+			<if test="di_useramount != null">di_useramount = #{di_useramount},</if>
+			<if test="di_useramount1 != null">di_useramount1 = #{di_useramount1},</if>
+			<if test="di_useramount2 != null">di_useramount2 = #{di_useramount2},</if>
+			<if test="di_useramount3 != null">di_useramount3 = #{di_useramount3},</if>
+			<if test="di_useramount4 != null">di_useramount4 = #{di_useramount4},</if>
+			<if test="di_useramount5 != null">di_useramount5 = #{di_useramount5},</if>
+			<if test="di_useramount6 != null">di_useramount6 = #{di_useramount6},</if>
+			<if test="di_useramount7 != null">di_useramount7 = #{di_useramount7},</if>
+			<if test="di_useramount8 != null">di_useramount8 = #{di_useramount8},</if>
+			<if test="di_useramount9 != null">di_useramount9 = #{di_useramount9},</if>
+			<if test="di_useramount10 != null">di_useramount10 = #{di_useramount10},</if>
+			<if test="di_useramount11 != null">di_useramount11 = #{di_useramount11},</if>
+			<if test="di_useramount12 != null">di_useramount12 = #{di_useramount12},</if>
+			<if test="di_storedamount != null">di_storedamount = #{di_storedamount},</if>
+			<if test="di_createdate != null">di_createdate = #{di_createdate},</if>
+			<if test="di_updatedate != null">di_updatedate = #{di_updatedate},</if>
+			<if test="di_signalintensity != null">di_signalintensity = #{di_signalintensity},</if>
+			<if test="di_batteryvoltage != null">di_batteryvoltage = #{di_batteryvoltage},</if>
+			<if test="device_company != null">device_company = #{device_company},</if>
+			
+		</set>
+		<where>
+			di_id = #{di_id}
+		</where>
+		
+	</update>
+	
+</mapper>
+
+
