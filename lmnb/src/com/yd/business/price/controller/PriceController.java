@@ -16,6 +16,7 @@ import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.price.bean.PriceBean;
 import com.yd.business.price.service.IPriceService;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.iotbusiness.mapper.model.LmPricedetailModel;
 import com.yd.util.AutoInvokeGetSetMethod;
 
 @Controller
@@ -37,6 +38,26 @@ public class PriceController extends BaseController {
 		} catch (Exception e) {
 			log.error(e, e);
 			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+	@RequestMapping("admin/price/ajaxQueryPriceDetail.do")
+	public ModelAndView ajaxQueryPriceDetail(HttpServletRequest request,HttpServletResponse response){
+		
+		IOTWebDataBean result =  new IOTWebDataBean();
+		try {
+//			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+
+			int id = Integer.parseInt(request.getParameter("priceid"));
+			LmPricedetailModel pd = priceService.findPriceDetailByPriceId(id);
+			
+			result.setData(pd);
+			
+		} catch (Exception e) {
+			log.error(e, e);
 			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
 			result.setMessage(e.getMessage());
 		}
