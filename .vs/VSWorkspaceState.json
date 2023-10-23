@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\lmnb-web",
+    "\\lmnb-web\\src",
+    "\\lmnb-web\\src\\api",
+    "\\lmnb-web\\src\\utils",
+    "\\lmnb-web\\src\\views",
+    "\\lmnb-web\\src\\views\\business",
+    "\\lmnb-web\\src\\views\\business\\address",
+    "\\lmnb-web\\src\\views\\business\\print",
+    "\\lmnb-web\\src\\views\\business\\print\\lodop"
   ],
-  "SelectedNode": "\\G:\\git\\project",
+  "SelectedNode": "\\lmnb-web\\src\\api\\user.js",
   "PreviewInSolutionExplorer": false
 }

@@ -210,7 +210,7 @@
       :limit.sync="listQuery.rows"
       @pagination="getList"
     />
-    <billDialog ref="billDialog" :userid="selectRow.userid" :user-name="selectRow.userName" :meter-code="selectRow.code" />
+    <billDialog ref="billDialog" :userid="selectRow.userid" :user-name="selectRow.userName" :metercode="selectRow.code" :pricename="selectRow.pricename" :priceid="selectRow.pricecode" :address="selectRow.area1+ selectRow.area2 + selectRow.area3 " />
     <chargeLogDialog ref="chargeLogDialog" :userid="selectRow.userid" :user-name="selectRow.userName" :meter-code="selectRow.code" />
     <chargeDialog ref="chargeDialog" :userid="selectRow.userid" :user-name="selectRow.userName" :meter-code="selectRow.code" :balance="selectRow.balance" />
   </div>
@@ -308,7 +308,8 @@ export default {
       this.getList()
     },
     rowClick(row, column, event) {
-      this.selectRow = row
+      //alert(row.pricename);
+      this.selectRow = row;
     },
     showBillDialog() {
       if (this.$refs.billDialog.userid) {

@@ -8,3 +8,10 @@ export function queryPriceList(data) {
   })
 }
 
+export function queryPriceDetail(data) {
+  return request({
+    url: '/admin/price/ajaxQueryPriceDetail.do',
+    method: 'get',
+    params: data
+  })
+}

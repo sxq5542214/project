@@ -191,6 +191,18 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/printManager',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/business/print/printManager'),
+        name: 'printManager',
+        meta: { title: '打印模板', icon: 'el-icon-printer', noCache: true }
+      }
+    ]
+  },
+  {
     path: '/reportManager',
     component: Layout,
     children: [

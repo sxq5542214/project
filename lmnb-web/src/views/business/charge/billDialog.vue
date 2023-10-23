@@ -29,11 +29,15 @@
 </template>
 
 <script>
-
-import { queryBillList } from '@/api/billManager'
-import { initAllDictionary, getDescByBeanAttrValue } from '@/api/dictionaryManager'
-import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
+import { queryPrintTemplateList, updatePrintTemplateStyle } from '@/api/printManager'
+import { getLodop, checkOrTryHttp } from '@/views/business/print/lodop/LodopFuncs'
+  import { queryBillList } from '@/api/billManager'
+  import { queryPriceDetail } from '@/api/priceManager'
+  import { initAllDictionary, getDescByBeanAttrValue } from '@/api/dictionaryManager'
+  import moment from 'moment';
+  import waves from '@/directive/waves' // waves directive
+  import { parseTime } from '@/utils'
+  import { amountToChinese } from '@/utils/price'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -41,17 +45,22 @@ export default {
   directives: { waves },
   filters: {
   },
-  props: {
-    userid: {},
-    meterCode: {}
+    props: {
+      metercode: {},
+      pricename: {},
+      priceid: {},
+      address: {},
+      userid: {}
   },
   data() {
     return {
       dialogTableVisible: false,
-      userName: '用户',
       findDescByValue: getDescByBeanAttrValue,
       tableKey: 0,
       list: null,
+      template: null,
+      priceDetail: null,
+      userName: '用户',
       total: 0,
       listLoading: true,
       showReviewer: false,
@@ -60,10 +69,14 @@ export default {
   },
 
   created() {
-    // this.getList();
+    queryPrintTemplateList({ id: 1 }).then(response => {
+      this.template = response.data
+
+    });
   },
-  methods: {
-    getList() {
+    methods: {
+      getList() {
+        console.log(amountToChinese(0.00));
       if (this.userid) {
         this.listLoading = true
         queryBillList({ userid: this.userid }).then(response => {
@@ -78,10 +91,40 @@ export default {
       }
     },
     openDialog() {
-      this.getList()
+      this.getList();
+
+      queryPriceDetail({ priceid: this.priceid }).then(response => {
+        this.priceDetail = response.data
+      })
     },
     handlePrint(row) {
-      alert('很抱歉，功能正在实现中，后续开放使用')
+
+      var date = moment().format('YYYY-MM-DD');
+      var time = moment().format('HH:mm:ss');
+
+      var styleStr = this.template.style;
+      var LODOP = getLodop();
+      eval(styleStr);
+      //用来修改模板中的变量内容
+      LODOP.SET_PRINT_STYLEA("chargeOperator", 'CONTENT', window.sessionStorage.getItem('operatorName'));
+      LODOP.SET_PRINT_STYLEA("invoiceDate", 'CONTENT', date+" "+time);
+      LODOP.SET_PRINT_STYLEA("customerName", 'CONTENT', this.userName);
+      LODOP.SET_PRINT_STYLEA("customerAddress", 'CONTENT', this.address);
+      LODOP.SET_PRINT_STYLEA("meterNo", 'CONTENT', this.metercode);
+      LODOP.SET_PRINT_STYLEA("lastBalance", 'CONTENT', row.cyclestartbalance);
+      LODOP.SET_PRINT_STYLEA("currentBalance", 'CONTENT', row.cycleendbalance);
+      LODOP.SET_PRINT_STYLEA("chargeAmountUpperCase", 'CONTENT', amountToChinese(row.cyclebuyamount));
+      LODOP.SET_PRINT_STYLEA("chargeAmount", 'CONTENT', row.cyclebuyamount);
+      LODOP.SET_PRINT_STYLEA("chargeDate", 'CONTENT', row.billmonth);
+      LODOP.SET_PRINT_STYLEA("rateName", 'CONTENT', this.pricename);
+      LODOP.SET_PRINT_STYLEA("chargeUnitPrice0", 'CONTENT', this.priceDetail.price1);
+      LODOP.SET_PRINT_STYLEA("chargeCount0", 'CONTENT', row.quantity);
+      LODOP.SET_PRINT_STYLEA("chargeAmount0", 'CONTENT', row.cyclebuyamount);
+      LODOP.SET_PRINT_STYLEA("currentNum", 'CONTENT', '');
+      LODOP.SET_PRINT_STYLEA("customerNo", 'CONTENT', row.meterid);
+
+      LODOP.PRINT_DESIGN();
+
     }
   }
 }
