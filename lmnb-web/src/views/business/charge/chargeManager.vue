@@ -2,143 +2,118 @@
   <div class="app-container">
     <div class="filter-container">
       <div class="demo-input-suffix">
-        <el-input
-          v-model="listQuery.userName"
-          placeholder="请输入户名"
-          style="width: 200px;"
-          class="filter-item"
-          @keyup.enter.native="handleFilter"
-        />
-        <el-input
-          v-model="listQuery.phone"
-          placeholder="请输入电话"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-        />
-        <el-input
-          v-model="listQuery.idcard"
-          placeholder="请输入证件号码"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-        />
+        <el-input v-model="listQuery.userName"
+                  placeholder="请输入户名"
+                  style="width: 200px;"
+                  class="filter-item"
+                  @keyup.enter.native="handleFilter" />
+        <el-input v-model="listQuery.phone"
+                  placeholder="请输入电话"
+                  style="width: 200px;margin-left: 10px;"
+                  class="filter-item" />
+        <el-input v-model="listQuery.idcard"
+                  placeholder="请输入证件号码"
+                  style="width: 200px;margin-left: 10px;"
+                  class="filter-item" />
         <br>
-        <el-select
-          v-model="listQuery.area1"
-          placeholder="请输入镇名"
-          style="width: 200px;"
-          class="filter-item"
-          filterable
-          @change="updateAllArea($event,1)"
-        >
-          <el-option
-            v-for="item in areaList[0]"
-            :key="item.id"
-            :label="item.name"
-            :value="item.name"
-          />
+        <el-select v-model="listQuery.area1"
+                   placeholder="请输入镇名"
+                   style="width: 200px;"
+                   class="filter-item"
+                   filterable
+                   @change="updateAllArea($event,1)">
+          <el-option v-for="item in areaList[0]"
+                     :key="item.id"
+                     :label="item.name"
+                     :value="item.name" />
         </el-select>
-        <el-select
-          v-model="listQuery.area2"
-          placeholder="请输入村名"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-          filterable
-          @change="updateAllArea($event,2)"
-        >
-          <el-option
-            v-for="item1 in areaList[1]"
-            :key="item1.id"
-            :label="item1.name"
-            :value="item1.name"
-          />
+        <el-select v-model="listQuery.area2"
+                   placeholder="请输入村名"
+                   style="width: 200px;margin-left: 10px;"
+                   class="filter-item"
+                   filterable
+                   @change="updateAllArea($event,2)">
+          <el-option v-for="item1 in areaList[1]"
+                     :key="item1.id"
+                     :label="item1.name"
+                     :value="item1.name" />
         </el-select>
-        <el-select
-          v-model="listQuery.area3"
-          placeholder="请输入组名"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-          filterable
-          @change="setArea3($event)"
-        >
-          <el-option
-            v-for="item2 in areaList[2]"
-            :key="item2.id"
-            :label="item2.name"
-            :value="item2.name"
-          />
+        <el-select v-model="listQuery.area3"
+                   placeholder="请输入组名"
+                   style="width: 200px;margin-left: 10px;"
+                   class="filter-item"
+                   filterable
+                   @change="setArea3($event)">
+          <el-option v-for="item2 in areaList[2]"
+                     :key="item2.id"
+                     :label="item2.name"
+                     :value="item2.name" />
         </el-select>
         <div class="btn-group">
-          <el-button
-            v-waves
-            class="filter-item"
-            type="primary"
-            icon="el-icon-search"
-            style="margin-left: 10px;"
-            @click="handleFilter"
-          >查询</el-button>
-          <el-button
-            class="filter-item"
-            style="margin-left: 10px;"
-            type="success"
-            icon="el-icon-money"
-            @click="showChargeDialog"
-          >充值</el-button>
-          <el-button
-            v-waves
-            :loading="downloadLoading"
-            style="margin-left: 10px;"
-            class="filter-item"
-            type="primary"
-            icon="el-icon-check"
-            @click="openValve"
-          >开阀</el-button>
-          <el-button
-            v-waves
-            :loading="downloadLoading"
-            style="margin-left: 10px;"
-            class="filter-item"
-            type="primary"
-            icon="el-icon-close"
-            @click="closeValve"
-          >关阀</el-button>
-          <el-button
-            v-waves
-            :loading="downloadLoading"
-            style="margin-left: 10px;"
-            class="filter-item"
-            type="warning"
-            icon="el-icon-s-order"
-            @click="showChargeLogDialog"
-          >充值记录</el-button>
-          <el-button
-            v-waves
-            style="margin-left: 10px;"
-            class="filter-item"
-            type="warning"
-            icon="el-icon-s-operation"
-            @click="showBillDialog"
-          >账单记录</el-button>
+          <el-button v-waves
+                     class="filter-item"
+                     type="primary"
+                     icon="el-icon-search"
+                     style="margin-left: 10px;"
+                     @click="handleFilter">查询</el-button>
+          <el-button class="filter-item"
+                     style="margin-left: 10px;"
+                     type="success"
+                     icon="el-icon-money"
+                     @click="showChargeDialog">充值</el-button>
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="primary"
+                     icon="el-icon-check"
+                     @click="openValve">开阀</el-button>
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="primary"
+                     icon="el-icon-close"
+                     @click="closeValve">关阀</el-button>
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="danger"
+                     icon="el-icon-guide"
+                     @click="showChangeMeterDialog">换表</el-button>
+
+
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="warning"
+                     icon="el-icon-s-order"
+                     @click="showChargeLogDialog">充值记录</el-button>
+          <el-button v-waves
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="warning"
+                     icon="el-icon-s-operation"
+                     @click="showBillDialog">账单记录</el-button>
         </div>
       </div>
     </div>
 
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-      @row-click="rowClick"
-    >
-      <el-table-column
-        label="水表ID"
-        prop="id"
-        sortable="custom"
-        align="center"
-        width="80"
-      >
+    <el-table :key="tableKey"
+              v-loading="listLoading"
+              :data="list"
+              border
+              fit
+              highlight-current-row
+              style="width: 100%;"
+              @row-click="rowClick">
+      <el-table-column label="水表ID"
+                       prop="id"
+                       sortable="custom"
+                       align="center"
+                       width="80">
         <template slot-scope="{row}">
           <span> {{ row.id }} </span>
         </template>
@@ -188,31 +163,29 @@
           <span>{{ row.idcard }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-        fixed="right"
-      >
+      <el-table-column label="操作"
+                       align="center"
+                       class-name="small-padding fixed-width"
+                       fixed="right">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
           <!--           <el-button   type="danger" size="mini"  @click="handleDelete(row,$index)">
-                      删除
-          </el-button>-->
+                    删除
+        </el-button>-->
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.rows"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0"
+                :total="total"
+                :page.sync="listQuery.page"
+                :limit.sync="listQuery.rows"
+                @pagination="getList" />
     <billDialog ref="billDialog" :userid="selectRow.userid" :user-name="selectRow.userName" :metercode="selectRow.code" :pricename="selectRow.pricename" :priceid="selectRow.pricecode" :address="selectRow.area1+ selectRow.area2 + selectRow.area3 " />
     <chargeLogDialog ref="chargeLogDialog" :userid="selectRow.userid" :user-name="selectRow.userName" :meter-code="selectRow.code" />
     <chargeDialog ref="chargeDialog" :userid="selectRow.userid" :user-name="selectRow.userName" :meter-code="selectRow.code" :balance="selectRow.balance" />
+    <changeMeterDialog ref="changeMeterDialog" :userid="selectRow.userid" :user-name="selectRow.userName" :meter-code="selectRow.code" :meter="selectRow" />
+
   </div>
 </template>
 
@@ -228,10 +201,11 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import billDialog from './billDialog'
 import chargeLogDialog from './chargeLogDialog'
 import chargeDialog from './chargeDialog'
+  import changeMeterDialog from './changeMeterDialog'
 
 export default {
   name: 'ChargeTable',
-  components: { Pagination, billDialog, chargeLogDialog, chargeDialog },
+    components: { Pagination, billDialog, chargeLogDialog, chargeDialog, changeMeterDialog },
   directives: { waves },
   filters: {
   },
@@ -337,6 +311,9 @@ export default {
         })
       }
     },
+
+    showChangeMeterDialog() {      if (this.$refs.changeMeterDialog.userid) {        this.$refs.changeMeterDialog.userName = this.selectRow.userName        this.$refs.changeMeterDialog.meterCode = this.selectRow.code        this.$refs.changeMeterDialog.balance = this.selectRow.balance        this.$refs.changeMeterDialog.meter = this.selectRow        this.$refs.changeMeterDialog.dialogTableVisible = true      } else {        this.$notify({          title: '请先选择水表',          message: '请先选择用户水表，再点击换表',          type: 'error',          duration: 2000        })      }    },
+    
     showChargeDialog() {
       if (this.$refs.chargeDialog.userid) {
         this.$refs.chargeDialog.userName = this.selectRow.userName

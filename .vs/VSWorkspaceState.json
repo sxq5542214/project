@@ -7,10 +7,11 @@
     "\\lmnb-web\\src\\utils",
     "\\lmnb-web\\src\\views",
     "\\lmnb-web\\src\\views\\business",
-    "\\lmnb-web\\src\\views\\business\\address",
-    "\\lmnb-web\\src\\views\\business\\print",
-    "\\lmnb-web\\src\\views\\business\\print\\lodop"
+    "\\lmnb-web\\src\\views\\business\\charge",
+    "\\lmnb-web\\src\\views\\dashboard",
+    "\\lmnb-web\\src\\views\\login",
+    "\\lmnb-web\\src\\views\\login\\components"
   ],
-  "SelectedNode": "\\lmnb-web\\src\\api\\user.js",
+  "SelectedNode": "\\lmnb-web\\src\\api\\priceManager.js",
   "PreviewInSolutionExplorer": false
 }
