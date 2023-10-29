@@ -50,3 +50,11 @@ export function closeValveByCode(data) {
   })
 }
 
+export function changeMeter(data) {
+  return request({
+    url: '/admin/device/changemeter/ajaxChangeMeter.do',
+    method: 'get',
+    params: data
+  })
+}
+

@@ -81,7 +81,6 @@ export default {
       this.payment.metercode = this.meterCode
       this.payment.userid = this.userid
 
-      alert(this.payment.metercode + ',' + this.payment.userid)
 
       chargeBalance(this.payment).then(resp => {
         this.$notify({

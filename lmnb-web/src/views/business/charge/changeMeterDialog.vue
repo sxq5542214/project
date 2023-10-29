@@ -3,7 +3,8 @@
              :visible.sync="dialogTableVisible"
              width="80%"
              @open="openDialog">
-    <el-form :inline="true" :model="payment" class="demo-form-inline" label-position="right" label-width="100px" >
+    <el-form :inline="true" class="demo-form-inline" label-position="right" label-width="100px"  
+         ref="dataForm" :model="meter">
       <el-form-item label="户号">
         <el-input v-model="meter.id" placeholder="户号标识" :disabled="true" />
       </el-form-item>
@@ -29,14 +30,14 @@
       <el-form-item label="换表费用">
         <el-input v-model="changeMeterCost" placeholder="请输入换表费用" />
       </el-form-item>
-      <el-form-item label="新表表号">
-        <el-input v-model="changeMeterCode" placeholder="请输入新表表号" />
+      <el-form-item label="新表表号"  prop="changeMeterCode" :rules="[{required:true,message:'请输入新表表号'}]">
+        <el-input v-model="meter.changeMeterCode" placeholder="请输入新表表号"/>
       </el-form-item>
-      <el-form-item label="旧表止码">
-        <el-input v-model="oldReadNum" placeholder="请输入旧表止码" />
+      <el-form-item label="旧表止码"  prop="oldReadNum">
+        <el-input v-model="oldReadNum" placeholder="请输入旧表止码"/>
       </el-form-item>
-      <el-form-item label="新表起码">
-        <el-input v-model="changeReadNum" placeholder="请输入新表起码" />
+      <el-form-item label="新表起码"  prop="changeReadNum">
+        <el-input v-model="changeReadNum" placeholder="请输入新表起码"/>
       </el-form-item>
       <el-form-item label="维修工">
         <el-input v-model="changeFixUser" placeholder="请输入维修工姓名" />
@@ -55,7 +56,7 @@
 
 <script>
 
-  import { queryChargeList, chargeBalance } from '@/api/chargeManager'
+  import { changeMeter  } from '@/api/meterManager'
   import { initAllDictionary, getDescByBeanAttrList } from '@/api/dictionaryManager'
   import waves from '@/directive/waves' // waves directive
   import { parseTime } from '@/utils'
@@ -69,14 +70,18 @@
     props: {
       userid: {},
       meterCode: 0,
-      meter: {},
-      balance: 0
+      meter: {}
     },
     data() {
       return {
         dialogTableVisible: false,
         userName: '用户',
-        payment: { metercode: undefined, balance: undefined, accountmode: '1', amount: 0, paperflag: '0' },
+        changeMeterCost: 0,
+        changeMeterCode: '',
+        oldReadNum: 0,
+        changeReadNum: 0,
+        changeFixUser: '',
+        remark1: '',
         tableKey: 0,
         paperflagList: getDescByBeanAttrList('paymentModel', 'paperflag'),
         accountmodeList: getDescByBeanAttrList('paymentModel', 'accountmode'),
@@ -95,21 +100,49 @@
         this.$forceUpdate()
       },
       onSubmit() {
-        this.payment.metercode = this.meterCode
-        this.payment.userid = this.userid
 
-        alert(this.payment.metercode + ',' + this.payment.userid)
+        this.meter.changeMeterCost = this.changeMeterCost;
+        //this.meter.changeMeterCode = this.changeMeterCode;
+        this.meter.oldReadNum = this.oldReadNum;
+        this.meter.changeReadNum = this.changeReadNum;
+        this.meter.changeFixUser = this.changeFixUser;
+        this.meter.remark1 = this.remark1;
 
-        chargeBalance(this.payment).then(resp => {
+        console.log(this.meter);
+        //if (this.meter.changeMeterCode)
+        if (this.meter.changeMeterCode.trim() == '') {
           this.$notify({
-            title: '操作结果',
-            message: '充值成功',
-            type: 'success',
+            title: '提醒',
+            message: '请填写新表表号!',
+            type: 'error',
             duration: 2000
           })
-        })
+        }
 
-        this.dialogTableVisible = false
+        this.$refs['dataForm'].validate(valid => {
+          if (valid) {
+
+            changeMeter(this.meter).then(resp => {
+              this.$notify({
+                title: '操作结果',
+                message: '换表成功',
+                type: 'success',
+                duration: 2000
+              });
+            });
+
+            this.dialogTableVisible = false
+          } else {
+            this.$notify({
+              title: '提醒',
+              message: '请填写必填项',
+              type: 'error',
+              duration: 2000
+            });
+          }
+          
+        });
+        
       },
       onCancle() {
         this.dialogTableVisible = false

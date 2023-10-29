@@ -202,7 +202,7 @@ import billDialog from './billDialog'
 import chargeLogDialog from './chargeLogDialog'
 import chargeDialog from './chargeDialog'
   import changeMeterDialog from './changeMeterDialog'
-
+  import { MessageBox } from 'element-ui';
 export default {
   name: 'ChargeTable',
     components: { Pagination, billDialog, chargeLogDialog, chargeDialog, changeMeterDialog },
@@ -332,26 +332,48 @@ export default {
     },
     openValve() {
       if (this.selectRow.code) {
-        openValveByCode({ code: this.selectRow.code }).then(response => {
-          this.$notify({
-            title: '操作结果',
-            message: response.message,
-            type: 'success',
-            duration: 2000
+        MessageBox.confirm('您确定要执行开阀操作吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // 用户点击了确定按钮，执行对应操作
+          openValveByCode({ code: this.selectRow.code }).then(response => {
+            this.$notify({
+              title: '操作结果',
+              message: response.message,
+              type: 'success',
+              duration: 2000
+            })
           })
-        })
+
+        }).catch(() => {
+          // 用户点击了取消按钮，取消对应操作
+        });
+
       }
     },
     closeValve() {
       if (this.selectRow.code) {
-        closeValveByCode({ code: this.selectRow.code }).then(response => {
-          this.$notify({
-            title: '操作结果',
-            message: response.message,
-            type: 'success',
-            duration: 2000
+        MessageBox.confirm('您确定要执行开阀操作吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // 用户点击了确定按钮，执行对应操作
+          closeValveByCode({ code: this.selectRow.code }).then(response => {
+            this.$notify({
+              title: '操作结果',
+              message: response.message,
+              type: 'success',
+              duration: 2000
+            })
           })
-        })
+
+        }).catch(() => {
+          // 用户点击了取消按钮，取消对应操作
+        });
+
       }
     }
   }
