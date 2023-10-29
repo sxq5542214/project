@@ -1,5 +1,6 @@
 package com.yd.business.device.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -10,12 +11,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.device.bean.ChangeMeterExtBean;
 import com.yd.business.device.bean.DeviceKindBean;
 import com.yd.business.device.service.IChangeMeterService;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.device.service.IDeviceKindService;
+import com.yd.iotbusiness.mapper.model.LmMeterModel;
+import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.StringUtil;
 
 @Controller
@@ -57,6 +62,41 @@ public class ChangeMeterController extends BaseController {
 		} catch (Exception e) {
 			log.error(e, e);
 		}
+		return null;
+	}
+	
+
+	@RequestMapping("admin/device/changemeter/ajaxChangeMeter.do")
+	public ModelAndView ajaxChangeMeter(HttpServletRequest request,HttpServletResponse response){
+		IOTWebDataBean result ;
+		try {
+			String changeMeterCost = request.getParameter("changeMeterCost");
+			String changeMeterCode = request.getParameter("changeMeterCode");
+			String oldReadNum = request.getParameter("oldReadNum");
+			String changeReadNum = request.getParameter("changeReadNum");
+			String changeFixUser = request.getParameter("changeFixUser");
+			String remark1 = request.getParameter("remark1");
+			
+			LmMeterModel meter = new LmMeterModel();
+			AutoInvokeGetSetMethod.autoInvoke(request.getParameterMap(), meter);
+			BigDecimal cost = new BigDecimal(changeMeterCost);
+			BigDecimal oldNum = new BigDecimal(oldReadNum);
+			BigDecimal changeNum = new BigDecimal(changeReadNum);
+			
+			LmOperatorModel op = getCurrentLoginOperator();
+			
+			result = changeMeterService.changeMeter(meter.getCode(), changeMeterCode, cost, oldNum, changeNum, changeFixUser, remark1,op.getId());
+			
+			System.out.println(meter);
+			
+			writeJson(response, result );
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
 		return null;
 	}
 	

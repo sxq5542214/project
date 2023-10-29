@@ -9,17 +9,26 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.bill.service.IRecordService;
 import com.yd.business.device.bean.ChangeMeterBean;
 import com.yd.business.device.bean.ChangeMeterExtBean;
 import com.yd.business.device.bean.DeviceInfoBean;
+import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.device.dao.IChangeMeterDao;
 import com.yd.business.device.service.IChangeMeterService;
 import com.yd.business.device.service.IDeviceInfoService;
+import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.iotbusiness.mapper.model.LmMeterModel;
+import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.iotbusiness.mapper.model.LmRecordModel;
+import com.yd.util.DateUtil;
 
 /**
  * @author ice
@@ -34,6 +43,10 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 	private IUserInfoService userInfoService;
 	@Resource
 	private IDeviceInfoService deviceInfoService;
+	@Autowired
+	private IRecordService recordService;
+	@Resource
+	private IOperatorService operatorService;
 	
 	public int createChangeMeter(long user_no, BigDecimal cm_oldmetercode, int cm_type, long cm_operatorid, String cm_remark) {
 		return createChangeMeter(user_no, cm_oldmetercode, BigDecimal.ZERO, 0l, cm_type, cm_operatorid, cm_remark, null,"","");
@@ -75,6 +88,71 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 		
 		return changeMeterDao.listChangeMeter(bean);
 		
+	}
+	
+	@Override
+	public IOTWebDataBean changeMeter(String oldMeterCode,String changeMeterCode,BigDecimal changeMeterCost,BigDecimal oldReadNum,BigDecimal changeReadNum,String changeFixUser,String remark1,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+		
+		//以旧水表为基础
+		MeterModelExtendsBean oldMeter = deviceInfoService.findMeterByCode(oldMeterCode);
+		LmMeterModel newMeter = deviceInfoService.findMeterById(oldMeter.getId());
+		newMeter.setId(null);
+		newMeter.setBalance(oldMeter.getBalance().subtract(changeMeterCost));
+		newMeter.setCode(changeMeterCode);
+		newMeter.setInstalldate(new Date());
+		newMeter.setCycleamount(BigDecimal.ZERO);
+		newMeter.setCyclebuyamount(BigDecimal.ZERO);
+		newMeter.setCyclebuyquantity(BigDecimal.ZERO);
+		newMeter.setCycleendbalance(BigDecimal.ZERO);
+		newMeter.setCyclestartbalance(BigDecimal.ZERO);
+		newMeter.setCyclestartnum(BigDecimal.ZERO);
+		newMeter.setCycleuse(BigDecimal.ZERO);
+		newMeter.setImei(null);
+		newMeter.setIsp(null);
+		newMeter.setIspid(null);
+		newMeter.setOpened(null);
+		newMeter.setRecentcmdstate(null);
+		newMeter.setRecentcmdtime(null);
+		newMeter.setRecentcmdtype(null);
+		newMeter.setRecentfailstate(null);
+		newMeter.setRecentfailtime(null);
+		newMeter.setRecentreadexcept(null);
+		newMeter.setRecentreadnum(null);
+		newMeter.setRecentreadtime(null);
+		newMeter.setStationchecked(null);
+		newMeter.setRemark2("换表收费"+changeMeterCost+"员");
+		deviceInfoService.addOrUpdateMeter(newMeter);
+		
+		oldMeter.setChanged((byte) 1);
+		oldMeter.setChangeid(newMeter.getId());
+		oldMeter.setRemark1(remark1);
+		oldMeter.setRemark2(changeFixUser);
+		oldMeter.setOpened((byte) 2);
+		oldMeter.setStoptime(new Date());
+		deviceInfoService.updateMeterModel(oldMeter);
+
+		//查找操作员
+		LmOperatorModel op = operatorService.findOperatorById(operatorid);
+		
+		//插入 recode记录前，先找上一次的数据
+		LmRecordModel lastRecord = recordService.findLastRecord(oldMeter.getCode());
+		if(lastRecord == null) {
+			lastRecord = new LmRecordModel();
+		}		
+		lastRecord.setId(null);
+		lastRecord.setBillmonth(DateUtil.getNowMonthPureStr());
+		lastRecord.setCurnum(oldReadNum);
+		lastRecord.setCurtime(new Date());
+		
+		lastRecord.setOperatorid(operatorid);
+		lastRecord.setOperatorname(op.getRealname());
+		lastRecord.setReadtype((byte) 6); //换表
+		lastRecord.setState((byte) 1);	//已结算
+		recordService.saveRecord(lastRecord);
+		
+		result.setData(newMeter);
+		return result;
 	}
 	
 	

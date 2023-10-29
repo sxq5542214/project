@@ -153,7 +153,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		IOTWebDataBean result = new IOTWebDataBean();
 		
 		
-		if(bean.getOpened() == (byte) 1 && bean.getOpentime() == null) {
+		if(bean.getOpened() != null && bean.getOpened() == (byte) 1 && bean.getOpentime() == null) {
 			bean.setOpentime(new Date());
 		}
 		
@@ -167,30 +167,34 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 			meterExtendsMapper.updateByPrimaryKeySelective(bean);
 		}
 		
-		DeviceDto dto = iotInterfaceService.checkQingSongMeterCode(bean.getCode());
-		if(dto == null) {
-			throw new RuntimeException("表具校验未通过，请检查水表编码~ " + bean.getCode());
-		}else {
-			bean.setIsp(Byte.valueOf(dto.getIsp()));
-			bean.setIspid(dto.getIspid());
-			bean.setImei(dto.getImei());
-			bean.setImsi(dto.getSim());
-			bean.setTimer(Integer.valueOf(dto.getReadperiod()));
-			if("OPEN".equalsIgnoreCase(dto.getValvestate()) || "00".equalsIgnoreCase(dto.getValvestate())) {
-				bean.setValvestate((byte) 0);
-			}else if("CLOSE".equalsIgnoreCase(dto.getValvestate()) || "01".equalsIgnoreCase(dto.getValvestate())) {
-				bean.setValvestate((byte) 1);
+		if(bean.getStationchecked() == null || bean.getStationchecked() != (byte)1) {
+			
+			//调用服务查询水表是否可用
+			DeviceDto dto = iotInterfaceService.checkQingSongMeterCode(bean.getCode());
+			if(dto == null) {
+				throw new RuntimeException("表具校验未通过，请检查水表编码~ " + bean.getCode());
 			}else {
-				bean.setValvestate((byte) -1);
+				bean.setIsp(Byte.valueOf(dto.getIsp()));
+				bean.setIspid(dto.getIspid());
+				bean.setImei(dto.getImei());
+				bean.setImsi(dto.getSim());
+				bean.setTimer(Integer.valueOf(dto.getReadperiod()));
+				if("OPEN".equalsIgnoreCase(dto.getValvestate()) || "00".equalsIgnoreCase(dto.getValvestate())) {
+					bean.setValvestate((byte) 0);
+				}else if("CLOSE".equalsIgnoreCase(dto.getValvestate()) || "01".equalsIgnoreCase(dto.getValvestate())) {
+					bean.setValvestate((byte) 1);
+				}else {
+					bean.setValvestate((byte) -1);
+				}
+				bean.setRemark3(dto.getValvestate());
+				bean.setStrength(dto.getSignalstrength());
+				bean.setBatterystate(Byte.valueOf(dto.getBattery()));
+				bean.setCode(dto.getCode());
+				bean.setStationchecked((byte) 1);
+				meterExtendsMapper.updateByPrimaryKeySelective(bean);
 			}
-			bean.setRemark3(dto.getValvestate());
-			bean.setStrength(dto.getSignalstrength());
-			bean.setBatterystate(Byte.valueOf(dto.getBattery()));
-			bean.setCode(dto.getCode());
-			bean.setStationchecked((byte) 1);
-			meterExtendsMapper.updateByPrimaryKeySelective(bean);
+
 		}
-		
 		result.setData(bean);
 		
 		return result;
@@ -291,7 +295,14 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		
 		return null;
 	}
-	
+
+	@Override
+	public LmMeterModel findMeterById(int id) {
+		
+		LmMeterModel meter = meterExtendsMapper.selectByPrimaryKey(id);
+		
+		return meter;
+	}
 	@Override
 	public MeterModelExtendsBean findMeterByIspid(String ispid) {
 		

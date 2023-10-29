@@ -42,4 +42,6 @@ public interface IDeviceInfoService {
 
 	IOTWebDataBean queryOpenedMeterCount(Integer systemid);
 
+	LmMeterModel findMeterById(int id);
+
 }
