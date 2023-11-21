@@ -23,7 +23,9 @@ import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.other.service.IAddressService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
+import com.yd.business.system.bean.SystemMenuExtModel;
 import com.yd.business.system.service.ISystemManagerService;
+import com.yd.iotbusiness.mapper.model.LlSystemMenuModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.StringUtil;
@@ -159,13 +161,18 @@ public class OperatorController extends BaseController {
 			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			String sessionid = request.getParameter("token");
 			
+			//通过登录帐号找菜单
+			List<SystemMenuExtModel> menus = systemManagerService.generateSystemMenuByOperator(operator.getId());
+			SystemMenuExtModel last = menus.get(menus.size()-1);
+			
 			OperatorExtBean bean = new OperatorExtBean();
 			bean.setName(operator.getRealname());
-			List<String> roles = new ArrayList<String>();
-			roles.add("admin");
+			List<String> roles = new ArrayList<String>(last.getRoles());
+//			roles.add("test");
 			bean.setRoles(roles);
 			bean.setIntroduction(operator.getRealname());
 			bean.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+			bean.setMenus(menus);
 			result.setInfo(operator);
 			result.setData(bean);
 			result.setCode(IOTWebDataBean.CODE_IOTWEB_SUCCESS);

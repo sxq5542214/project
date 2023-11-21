@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
+import com.yd.business.system.bean.SystemMenuExtModel;
+import com.yd.iotbusiness.mapper.model.LlSystemMenuModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 
 /**
@@ -25,6 +27,7 @@ public class OperatorExtBean extends LmOperatorModel {
 	private String avatar;
 	private String introduction;
 	private List<String> roles;
+	private List<SystemMenuExtModel> menus;
 	
 	private String company_name;
 
@@ -67,6 +70,16 @@ public class OperatorExtBean extends LmOperatorModel {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
+
+	public List<SystemMenuExtModel> getMenus() {
+		return menus;
+	}
+
+	public void setMenus(List<SystemMenuExtModel> menus) {
+		this.menus = menus;
+	}
+
+
 	
 	
 }

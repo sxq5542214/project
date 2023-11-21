@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.dictionary.service.IDictionaryService;
 import com.yd.business.operator.bean.OperatorBean;
@@ -65,6 +66,24 @@ public class SystemManagerController extends BaseController {
 		return null;
 	}
 	
+	/**
+	 * 异步获取菜单数据，用于树形结构展示，前后端分离
+	 * 
+	 */
+	@RequestMapping("**/admin/system/ajaxQuerySystemMenuToShow.do")
+	public ModelAndView ajaxQuerySystemMenuToShow(HttpServletRequest request,HttpServletResponse response){
+		try {
+//			LmOperatorModel op = getCurrentLoginOperator();
+			
+//			IOTWebDataBean data = systemManagerService.generateSystemMenuByOperator(op.getId());
+			
+//			writeJson(response, data);
+		} catch (Exception e) {
+			log.error(e, e);
+			writeJson(response, "失败");
+		}
+		return null;
+	}
 	@RequestMapping("**/admin/system/queryRoleByOperator.do")
 	public ModelAndView queryRoleByOperator(HttpServletRequest request,HttpServletResponse response){
 		try {

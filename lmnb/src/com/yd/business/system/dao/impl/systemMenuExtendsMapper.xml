@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="com.yd.business.system.dao.ISystemMenuExtendsMapper">
+
+	<sql id="query_Where_Clause">
+		<where>
+			
+			<if test="id != null"> and m.id = #{id}</if>
+			<if test="status != null"> and m.status = #{status}</if>
+			<if test="opid != null"> and exists( select 1 from ll_system_role_admin_relation ra,ll_system_role_menu_relation rm where    )</if>
+		</where>
+	    <if test="rows != null">
+	      <if test="page != null">
+	        limit ${(page-1) * rows}, ${rows}
+	      </if>
+	      <if test="page == null">
+	        limit ${rows}
+	      </if>
+	    </if>
+	</sql>
+	<select id="querySystemMenuByExtModel" resultType="systemMenuExtModel"
+		parameterType="systemMenuExtModel">
+		select m.*,ra.role_name,ra.role_id from ll_system_menu m ,ll_system_role_admin_relation ra,ll_system_role_menu_relation rm
+		<where>
+			 rm.menu_id = m.id and rm.role_id = ra.role_id 
+			<if test="id != null"> and m.id = #{id}</if>
+			<if test="status != null"> and m.status = #{status}</if>
+			<if test="opid != null"> and  ra.admin_id = #{opid} </if>
+		</where>
+		
+	    <if test="rows != null">
+	      <if test="page != null">
+	        limit ${(page-1) * rows}, ${rows}
+	      </if>
+	      <if test="page == null">
+	        limit ${rows}
+	      </if>
+	    </if>
+	</select>
+	
+	
+	
+	
+</mapper>

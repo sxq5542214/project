@@ -5,24 +5,36 @@ package com.yd.business.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.client.bean.QingSongInterfaceBean.DeviceDto;
 import com.yd.business.dictionary.service.IDictionaryService;
 import com.yd.business.system.bean.SystemBean;
 import com.yd.business.system.bean.SystemMenuBean;
+import com.yd.business.system.bean.SystemMenuExtModel;
 import com.yd.business.system.bean.SystemRoleAdminRelationBean;
 import com.yd.business.system.bean.SystemRoleBean;
 import com.yd.business.system.bean.SystemRoleMenuRelationBean;
 import com.yd.business.system.dao.ISystemManagerDao;
+import com.yd.business.system.dao.ISystemMenuExtendsMapper;
 import com.yd.business.system.service.ISystemManagerService;
+import com.yd.iotbusiness.mapper.dao.LlSystemMenuModelMapper;
+import com.yd.iotbusiness.mapper.model.LlSystemMenuModel;
+import com.yd.iotbusiness.mapper.model.LlSystemMenuModelExample;
+import com.yd.iotbusiness.mapper.model.LlSystemMenuModelExample.Criteria;
+import com.yd.iotbusiness.mapper.model.LmPriceModel;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
@@ -37,6 +49,8 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 	private ISystemManagerDao systemManagerDao;
 	@Resource
 	private IDictionaryService dictionaryService;
+	@Resource
+	private ISystemMenuExtendsMapper systemMenuExtendsMapper;
 	
 	
 	@Override
@@ -531,6 +545,129 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 		
 		return systemManagerDao.querySystemRoleListByOperatorId(operatorid);
 	}
-	
-	
+
+	@Override
+	public List<SystemMenuExtModel> generateSystemMenuByOperator(int operatorid){
+		
+		SystemMenuExtModel model = new SystemMenuExtModel();
+		model.setStatus(SystemMenuExtModel.STATUS_ENABLE);
+		model.setOpid(operatorid);
+		
+		List<SystemMenuExtModel> resultList = new ArrayList<>();
+		List<SystemMenuExtModel> list = systemMenuExtendsMapper.querySystemMenuByExtModel(model);
+		Set<String> roleNames = new HashSet<>();
+		
+		for(SystemMenuExtModel parent  : list) {
+			
+			if(parent.getParentid() == null) {
+				List<SystemMenuExtModel> childList = new ArrayList<>();
+				parent.setChildren(childList);
+				for(SystemMenuExtModel child  : list) {
+					//找到子集
+					if(child.getParentid() != null && child.getParentid().intValue() == parent.getId().intValue()) {
+						
+						
+						Map<String,Object> meta = new HashMap<>();
+						meta.put("title", child.getTitle());
+						meta.put("icon", child.getIcon());
+						meta.put("noCache", true);
+
+						List<String> roles = new ArrayList<>();
+						roles.add(child.getRole_name());
+						meta.put("roles", roles);
+						
+						child.setMeta(meta);
+						child.setTitle(null);
+						child.setIcon(null);
+						childList.add(child);
+						
+						roleNames.add(child.getRole_name());
+					}
+				}
+				parent.setRoles(roleNames);
+				resultList.add(parent);
+			}
+		}
+		
+		return resultList;
+		
+//		String str = "[\r\n"
+//				+ "  {\r\n"
+//				+ "    path: '/userManager',\r\n"
+//				+ "    component: Layout,\r\n"
+//				+ "    children: [\r\n"
+//				+ "      {\r\n"
+//				+ "        path: 'index',\r\n"
+//				+ "        component: () => import('@/views/business/user/userManager'),\r\n"
+//				+ "        name: 'userManager',\r\n"
+//				+ "        meta: { title: '用户管理', icon: 'peoples', noCache: true }\r\n"
+//				+ "      }\r\n"
+//				+ "    ]\r\n"
+//				+ "  },\r\n"
+//				+ "  {\r\n"
+//				+ "    path: '/addressManager',\r\n"
+//				+ "    component: Layout,\r\n"
+//				+ "    children: [\r\n"
+//				+ "      {\r\n"
+//				+ "        path: 'index',\r\n"
+//				+ "        component: () => import('@/views/business/address/addressManager'),\r\n"
+//				+ "        name: 'addressManager',\r\n"
+//				+ "        meta: { title: '地址管理', icon: 'list', noCache: true }\r\n"
+//				+ "      }\r\n"
+//				+ "    ]\r\n"
+//				+ "  },\r\n"
+//				+ "  {\r\n"
+//				+ "    path: '/chargeManager',\r\n"
+//				+ "    component: Layout,\r\n"
+//				+ "    children: [\r\n"
+//				+ "      {\r\n"
+//				+ "        path: 'index',\r\n"
+//				+ "        component: () => import('@/views/business/charge/chargeManager'),\r\n"
+//				+ "        name: 'chargeManager',\r\n"
+//				+ "        meta: { title: '充值管理', icon: 'money', noCache: true }\r\n"
+//				+ "      }\r\n"
+//				+ "    ]\r\n"
+//				+ "  },\r\n"
+//				+ "  {\r\n"
+//				+ "    path: '/recordManager',\r\n"
+//				+ "    component: Layout,\r\n"
+//				+ "    children: [\r\n"
+//				+ "      {\r\n"
+//				+ "        path: 'index',\r\n"
+//				+ "        component: () => import('@/views/business/record/recordManager'),\r\n"
+//				+ "        name: 'recordManager', \r\n"
+//				+ "        meta: { title: '抄表记录', icon: 'el-icon-s-order', noCache: true }\r\n"
+//				+ "      }\r\n"
+//				+ "    ]\r\n"
+//				+ "  },\r\n"
+//				+ "  {\r\n"
+//				+ "    path: '/printManager',\r\n"
+//				+ "    component: Layout,\r\n"
+//				+ "    children: [\r\n"
+//				+ "      {\r\n"
+//				+ "        path: 'index',\r\n"
+//				+ "        component: () => import('@/views/business/print/printManager'),\r\n"
+//				+ "        name: 'printManager',\r\n"
+//				+ "        meta: { title: '打印模板', icon: 'el-icon-printer', noCache: true }\r\n"
+//				+ "      }\r\n"
+//				+ "    ]\r\n"
+//				+ "  },\r\n"
+//				+ "  {\r\n"
+//				+ "    path: '/reportManager',\r\n"
+//				+ "    component: Layout,\r\n"
+//				+ "    children: [\r\n"
+//				+ "      {\r\n"
+//				+ "        path: 'index',\r\n"
+//				+ "        component: () => import('@/views/business/report/reportManager'),\r\n"
+//				+ "        name: 'reportManager',\r\n"
+//				+ "        meta: { title: '报表查询', icon: 'chart', noCache: true }\r\n"
+//				+ "      }\r\n"
+//				+ "    ]\r\n"
+//				+ "  },\r\n"
+//				+ "  { path: '*', redirect: '/404', hidden: true }\r\n"
+//				+ "]";
+//System.out.println(str);		
+//		
+//		return str;
+	}
 }

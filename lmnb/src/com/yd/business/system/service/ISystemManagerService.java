@@ -6,10 +6,13 @@ package com.yd.business.system.service;
 import java.util.List;
 import java.util.Map;
 
+import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.business.system.bean.SystemMenuBean;
+import com.yd.business.system.bean.SystemMenuExtModel;
 import com.yd.business.system.bean.SystemRoleAdminRelationBean;
 import com.yd.business.system.bean.SystemRoleBean;
 import com.yd.business.system.bean.SystemRoleMenuRelationBean;
+import com.yd.iotbusiness.mapper.model.LlSystemMenuModel;
 
 /**
  * @author ice
@@ -127,5 +130,7 @@ public interface ISystemManagerService {
 	List<SystemMenuBean> querySystemMenuByOperator(long operatorid);
 
 	List<SystemRoleBean> querySystemRoleByOperator(long operatorid);
+
+	List<SystemMenuExtModel> generateSystemMenuByOperator(int operatorid);
 	
 }

@@ -293,6 +293,92 @@ public class LlSystemMenuModelExample {
             return (Criteria) this;
         }
 
+        public Criteria andTitleIsNull() {
+            addCriterion("title is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleIsNotNull() {
+            addCriterion("title is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleEqualTo(String value) {
+            if (value != null) {
+                addCriterion("title =", value, "title");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleNotEqualTo(String value) {
+            if (value != null) {
+                addCriterion("title <>", value, "title");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleGreaterThan(String value) {
+            if (value != null) {
+                addCriterion("title >", value, "title");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleGreaterThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("title >=", value, "title");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleLessThan(String value) {
+            if (value != null) {
+                addCriterion("title <", value, "title");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleLessThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("title <=", value, "title");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleLike(String value) {
+            if (value != null) {
+                addCriterion("title like", "%"+value+"%", "title");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleNotLike(String value) {
+            if (value != null) {
+                addCriterion("title not like", value, "title");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleIn(List<String> values) {
+            addCriterion("title in", values, "title");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleNotIn(List<String> values) {
+            addCriterion("title not in", values, "title");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleBetween(String value1, String value2) {
+            addCriterion("title between", value1, value2, "title");
+            return (Criteria) this;
+        }
+
+        public Criteria andTitleNotBetween(String value1, String value2) {
+            addCriterion("title not between", value1, value2, "title");
+            return (Criteria) this;
+        }
+
         public Criteria andNameIsNull() {
             addCriterion("`name` is null");
             return (Criteria) this;
@@ -379,92 +465,6 @@ public class LlSystemMenuModelExample {
             return (Criteria) this;
         }
 
-        public Criteria andCodeIsNull() {
-            addCriterion("code is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeIsNotNull() {
-            addCriterion("code is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeEqualTo(String value) {
-            if (value != null) {
-                addCriterion("code =", value, "code");
-            }
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeNotEqualTo(String value) {
-            if (value != null) {
-                addCriterion("code <>", value, "code");
-            }
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeGreaterThan(String value) {
-            if (value != null) {
-                addCriterion("code >", value, "code");
-            }
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeGreaterThanOrEqualTo(String value) {
-            if (value != null) {
-                addCriterion("code >=", value, "code");
-            }
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeLessThan(String value) {
-            if (value != null) {
-                addCriterion("code <", value, "code");
-            }
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeLessThanOrEqualTo(String value) {
-            if (value != null) {
-                addCriterion("code <=", value, "code");
-            }
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeLike(String value) {
-            if (value != null) {
-                addCriterion("code like", "%"+value+"%", "code");
-            }
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeNotLike(String value) {
-            if (value != null) {
-                addCriterion("code not like", value, "code");
-            }
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeIn(List<String> values) {
-            addCriterion("code in", values, "code");
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeNotIn(List<String> values) {
-            addCriterion("code not in", values, "code");
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeBetween(String value1, String value2) {
-            addCriterion("code between", value1, value2, "code");
-            return (Criteria) this;
-        }
-
-        public Criteria andCodeNotBetween(String value1, String value2) {
-            addCriterion("code not between", value1, value2, "code");
-            return (Criteria) this;
-        }
-
         public Criteria andParentidIsNull() {
             addCriterion("parentid is null");
             return (Criteria) this;
@@ -537,175 +537,175 @@ public class LlSystemMenuModelExample {
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionIsNull() {
-            addCriterion("description is null");
+        public Criteria andComponentIsNull() {
+            addCriterion("component is null");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionIsNotNull() {
-            addCriterion("description is not null");
+        public Criteria andComponentIsNotNull() {
+            addCriterion("component is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionEqualTo(String value) {
+        public Criteria andComponentEqualTo(String value) {
             if (value != null) {
-                addCriterion("description =", value, "description");
+                addCriterion("component =", value, "component");
             }
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionNotEqualTo(String value) {
+        public Criteria andComponentNotEqualTo(String value) {
             if (value != null) {
-                addCriterion("description <>", value, "description");
+                addCriterion("component <>", value, "component");
             }
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionGreaterThan(String value) {
+        public Criteria andComponentGreaterThan(String value) {
             if (value != null) {
-                addCriterion("description >", value, "description");
+                addCriterion("component >", value, "component");
             }
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
+        public Criteria andComponentGreaterThanOrEqualTo(String value) {
             if (value != null) {
-                addCriterion("description >=", value, "description");
+                addCriterion("component >=", value, "component");
             }
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionLessThan(String value) {
+        public Criteria andComponentLessThan(String value) {
             if (value != null) {
-                addCriterion("description <", value, "description");
+                addCriterion("component <", value, "component");
             }
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionLessThanOrEqualTo(String value) {
+        public Criteria andComponentLessThanOrEqualTo(String value) {
             if (value != null) {
-                addCriterion("description <=", value, "description");
+                addCriterion("component <=", value, "component");
             }
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionLike(String value) {
+        public Criteria andComponentLike(String value) {
             if (value != null) {
-                addCriterion("description like", "%"+value+"%", "description");
+                addCriterion("component like", "%"+value+"%", "component");
             }
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionNotLike(String value) {
+        public Criteria andComponentNotLike(String value) {
             if (value != null) {
-                addCriterion("description not like", value, "description");
+                addCriterion("component not like", value, "component");
             }
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionIn(List<String> values) {
-            addCriterion("description in", values, "description");
+        public Criteria andComponentIn(List<String> values) {
+            addCriterion("component in", values, "component");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionNotIn(List<String> values) {
-            addCriterion("description not in", values, "description");
+        public Criteria andComponentNotIn(List<String> values) {
+            addCriterion("component not in", values, "component");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionBetween(String value1, String value2) {
-            addCriterion("description between", value1, value2, "description");
+        public Criteria andComponentBetween(String value1, String value2) {
+            addCriterion("component between", value1, value2, "component");
             return (Criteria) this;
         }
 
-        public Criteria andDescriptionNotBetween(String value1, String value2) {
-            addCriterion("description not between", value1, value2, "description");
+        public Criteria andComponentNotBetween(String value1, String value2) {
+            addCriterion("component not between", value1, value2, "component");
             return (Criteria) this;
         }
 
-        public Criteria andIconPathIsNull() {
-            addCriterion("icon_path is null");
+        public Criteria andIconIsNull() {
+            addCriterion("icon is null");
             return (Criteria) this;
         }
 
-        public Criteria andIconPathIsNotNull() {
-            addCriterion("icon_path is not null");
+        public Criteria andIconIsNotNull() {
+            addCriterion("icon is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIconPathEqualTo(String value) {
+        public Criteria andIconEqualTo(String value) {
             if (value != null) {
-                addCriterion("icon_path =", value, "iconPath");
+                addCriterion("icon =", value, "icon");
             }
             return (Criteria) this;
         }
 
-        public Criteria andIconPathNotEqualTo(String value) {
+        public Criteria andIconNotEqualTo(String value) {
             if (value != null) {
-                addCriterion("icon_path <>", value, "iconPath");
+                addCriterion("icon <>", value, "icon");
             }
             return (Criteria) this;
         }
 
-        public Criteria andIconPathGreaterThan(String value) {
+        public Criteria andIconGreaterThan(String value) {
             if (value != null) {
-                addCriterion("icon_path >", value, "iconPath");
+                addCriterion("icon >", value, "icon");
             }
             return (Criteria) this;
         }
 
-        public Criteria andIconPathGreaterThanOrEqualTo(String value) {
+        public Criteria andIconGreaterThanOrEqualTo(String value) {
             if (value != null) {
-                addCriterion("icon_path >=", value, "iconPath");
+                addCriterion("icon >=", value, "icon");
             }
             return (Criteria) this;
         }
 
-        public Criteria andIconPathLessThan(String value) {
+        public Criteria andIconLessThan(String value) {
             if (value != null) {
-                addCriterion("icon_path <", value, "iconPath");
+                addCriterion("icon <", value, "icon");
             }
             return (Criteria) this;
         }
 
-        public Criteria andIconPathLessThanOrEqualTo(String value) {
+        public Criteria andIconLessThanOrEqualTo(String value) {
             if (value != null) {
-                addCriterion("icon_path <=", value, "iconPath");
+                addCriterion("icon <=", value, "icon");
             }
             return (Criteria) this;
         }
 
-        public Criteria andIconPathLike(String value) {
+        public Criteria andIconLike(String value) {
             if (value != null) {
-                addCriterion("icon_path like", "%"+value+"%", "iconPath");
+                addCriterion("icon like", "%"+value+"%", "icon");
             }
             return (Criteria) this;
         }
 
-        public Criteria andIconPathNotLike(String value) {
+        public Criteria andIconNotLike(String value) {
             if (value != null) {
-                addCriterion("icon_path not like", value, "iconPath");
+                addCriterion("icon not like", value, "icon");
             }
             return (Criteria) this;
         }
 
-        public Criteria andIconPathIn(List<String> values) {
-            addCriterion("icon_path in", values, "iconPath");
+        public Criteria andIconIn(List<String> values) {
+            addCriterion("icon in", values, "icon");
             return (Criteria) this;
         }
 
-        public Criteria andIconPathNotIn(List<String> values) {
-            addCriterion("icon_path not in", values, "iconPath");
+        public Criteria andIconNotIn(List<String> values) {
+            addCriterion("icon not in", values, "icon");
             return (Criteria) this;
         }
 
-        public Criteria andIconPathBetween(String value1, String value2) {
-            addCriterion("icon_path between", value1, value2, "iconPath");
+        public Criteria andIconBetween(String value1, String value2) {
+            addCriterion("icon between", value1, value2, "icon");
             return (Criteria) this;
         }
 
-        public Criteria andIconPathNotBetween(String value1, String value2) {
-            addCriterion("icon_path not between", value1, value2, "iconPath");
+        public Criteria andIconNotBetween(String value1, String value2) {
+            addCriterion("icon not between", value1, value2, "icon");
             return (Criteria) this;
         }
 
@@ -1180,6 +1180,178 @@ public class LlSystemMenuModelExample {
 
         public Criteria andSeqNotBetween(Integer value1, Integer value2) {
             addCriterion("seq not between", value1, value2, "seq");
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectIsNull() {
+            addCriterion("redirect is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectIsNotNull() {
+            addCriterion("redirect is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectEqualTo(String value) {
+            if (value != null) {
+                addCriterion("redirect =", value, "redirect");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectNotEqualTo(String value) {
+            if (value != null) {
+                addCriterion("redirect <>", value, "redirect");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectGreaterThan(String value) {
+            if (value != null) {
+                addCriterion("redirect >", value, "redirect");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectGreaterThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("redirect >=", value, "redirect");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectLessThan(String value) {
+            if (value != null) {
+                addCriterion("redirect <", value, "redirect");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectLessThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("redirect <=", value, "redirect");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectLike(String value) {
+            if (value != null) {
+                addCriterion("redirect like", "%"+value+"%", "redirect");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectNotLike(String value) {
+            if (value != null) {
+                addCriterion("redirect not like", value, "redirect");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectIn(List<String> values) {
+            addCriterion("redirect in", values, "redirect");
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectNotIn(List<String> values) {
+            addCriterion("redirect not in", values, "redirect");
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectBetween(String value1, String value2) {
+            addCriterion("redirect between", value1, value2, "redirect");
+            return (Criteria) this;
+        }
+
+        public Criteria andRedirectNotBetween(String value1, String value2) {
+            addCriterion("redirect not between", value1, value2, "redirect");
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenIsNull() {
+            addCriterion("hidden is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenIsNotNull() {
+            addCriterion("hidden is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenEqualTo(String value) {
+            if (value != null) {
+                addCriterion("hidden =", value, "hidden");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenNotEqualTo(String value) {
+            if (value != null) {
+                addCriterion("hidden <>", value, "hidden");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenGreaterThan(String value) {
+            if (value != null) {
+                addCriterion("hidden >", value, "hidden");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenGreaterThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("hidden >=", value, "hidden");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenLessThan(String value) {
+            if (value != null) {
+                addCriterion("hidden <", value, "hidden");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenLessThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("hidden <=", value, "hidden");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenLike(String value) {
+            if (value != null) {
+                addCriterion("hidden like", "%"+value+"%", "hidden");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenNotLike(String value) {
+            if (value != null) {
+                addCriterion("hidden not like", value, "hidden");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenIn(List<String> values) {
+            addCriterion("hidden in", values, "hidden");
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenNotIn(List<String> values) {
+            addCriterion("hidden not in", values, "hidden");
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenBetween(String value1, String value2) {
+            addCriterion("hidden between", value1, value2, "hidden");
+            return (Criteria) this;
+        }
+
+        public Criteria andHiddenNotBetween(String value1, String value2) {
+            addCriterion("hidden not between", value1, value2, "hidden");
             return (Criteria) this;
         }
     }
