@@ -53,7 +53,7 @@
       </el-button>
 
       <div style="position:relative">
-        <div class="tips">
+        <!--<div class="tips">
           <span>{{ $t('login.username') }} : admin</span>
           <span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>
         </div>
@@ -62,7 +62,7 @@
             {{ $t('login.username') }} : editor
           </span>
           <span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>
-        </div>
+        </div>-->
 
         <!--        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
           {{ $t('login.thirdparty') }}
@@ -81,13 +81,13 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+/* import { validUsername } from '@/utils/validate' */
 import { initAllDictionary } from '@/api/dictionaryManager'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
+    /* const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
         callback(new Error('Please enter the correct user name'))
       } else {
@@ -100,15 +100,17 @@ export default {
       } else {
         callback()
       }
-    }
+    } */
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: window.localStorage.getItem('username'),
+        password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        /*       username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]   */
+        username: [{ required: true, trigger: 'blur' }],
+        password: [{ required: true, trigger: 'blur' }]
       },
       passwordType: 'password',
       capsTooltip: false,
@@ -167,6 +169,9 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
+              window.localStorage.setItem('username', this.loginForm.username)
+              //window.localStorage.setItem('password', this.loginForm.password)
+
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })

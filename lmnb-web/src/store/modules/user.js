@@ -11,6 +11,14 @@ const state = {
 }
 
 const mutations = {
+  SET_MENU: (state, i) => {
+    // 管理员菜单
+    state.menu = i
+  },
+  SET_IS_SUPER: (state, i) => {
+    // 设置是否为超级管理员
+    state.isSuper = i
+  },
   SET_TOKEN: (state, token) => {
     state.token = token
   },
@@ -49,22 +57,24 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
+        console.info('getInfo响应数据',response);
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('Verification failed, please Login again.（认证失败，请重新登录！）')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction ,menus } = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+          reject('getInfo: roles must be a non-null array!(您没有权限或权限为空！)')
         }
-
+        var isSuperAdmin = 0;
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
+        commit('SET_MENU', menus)
+        commit('SET_IS_SUPER', isSuperAdmin)
         resolve(data)
       }).catch(error => {
         reject(error)

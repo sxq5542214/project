@@ -14,7 +14,7 @@ export default {
   components: { adminDashboard, editorDashboard },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      currentRole: 'editorDashboard'
     }
   },
   computed: {
@@ -22,9 +22,10 @@ export default {
       'roles'
     ])
   },
-  created() {
-    if (!this.roles.includes('admin')) {
-      this.currentRole = 'editorDashboard'
+    created() {
+      console.log("this.roles:", this.roles);
+      if (this.roles.includes('admin') || this.roles.includes('系统管理员')) {
+      this.currentRole = 'adminDashboard'
     }
   }
 }

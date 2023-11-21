@@ -3,14 +3,14 @@
     "",
     "\\lmnb-web",
     "\\lmnb-web\\src",
+    "\\lmnb-web\\src\\store",
+    "\\lmnb-web\\src\\store\\modules",
     "\\lmnb-web\\src\\views",
-    "\\lmnb-web\\src\\views\\business",
-    "\\lmnb-web\\src\\views\\business\\address",
-    "\\lmnb-web\\src\\views\\business\\user",
     "\\lmnb-web\\src\\views\\dashboard",
+    "\\lmnb-web\\src\\views\\dashboard\\editor",
     "\\lmnb-web\\src\\views\\login",
     "\\lmnb-web\\src\\views\\login\\components"
   ],
-  "SelectedNode": "\\lmnb-web\\src\\views\\business\\charge\\chargeDialog.vue",
+  "SelectedNode": "\\lmnb-web\\src\\store\\modules\\user.js",
   "PreviewInSolutionExplorer": false
 }
