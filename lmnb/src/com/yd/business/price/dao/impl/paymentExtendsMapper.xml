@@ -30,19 +30,36 @@
 	<select id="sumMonthChargeAmout" parameterType="map" resultType="java.math.BigDecimal">
 		select ifnull(sum(p.payamount),0) sumpay from lm_payment p 
 		<where>
-			<if test="billMonth != null"> p.createtime like '${billMonth}%' </if>
+			<if test="billMonth != null"> and p.createtime like '${billMonth}%' </if>
 			<if test="systemid != null"> and p.systemid = #{systemid}</if>
 			<if test="operatorid != null"> and p.operatorid = #{operatorid}</if>
+			<if test="day != null"> and p.createtime like '${day}%' </if>
 		</where>
 	</select>
 	
 	<select id="countDayBuyAmountMeter" parameterType="map" resultType="int">
 		select count(DISTINCT p.meterid) from lm_payment p 
 		<where>
-			<if test="day != null"> p.createtime like '${day}%' </if>
+			<if test="day != null"> and p.createtime like '${day}%' </if>
 			<if test="systemid != null"> and p.systemid = #{systemid}</if>
 			<if test="operatorid != null"> and p.operatorid = #{operatorid}</if>
+			<if test="billMonth != null"> and p.createtime like '${billMonth}%' </if>
 		</where>
+	</select>
+	
+	
+	<select id="queryDayBuyAmountSumListOfMonth" parameterType="map" resultType="int">
+		select ifnull(sum(p.payamount),0) sumpay from ll_conf_attribute ca
+		LEFT JOIN lm_payment p on substr(p.createtime,9,2) = ca.value
+			<if test="billMonth != null"> and p.createtime like '${billMonth}%' </if>
+			<if test="systemid != null"> and p.systemid = #{systemid}</if>
+			<if test="operatorid != null"> and p.operatorid = #{operatorid}</if>
+			<if test="day != null"> and p.createtime like '${day}%' </if>
+		<where>
+			ca.code = 'day_of_month'
+		</where>
+		group by ca.value
+		order by ca.value
 	</select>
 	
 

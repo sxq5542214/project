@@ -1,0 +1,24 @@
+
+<form bindsubmit="onSubmit" bindreset="">
+  <view class="page-body">
+    <view class="page-section">
+      <view class="weui-cells__title" style="color:black;">请为您的门锁起个名字吧</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input name="lockname" class="weui-input" auto-focus placeholder="如：某某小区2#201"/>
+        </view>
+      </view>
+      <view class="weui-cells__title" style="color:black;">门锁密钥</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input name="lockkey" class="weui-input" type="number" pattern="[0-9]*" value="{{key}}" placeholder="请输入6-10位纯数字"/>
+        </view>
+      </view>
+      
+    </view>
+    <view class="btn-area">
+      <button formType="submit" class='btn success'>保存</button>
+    </view>
+    <view class="weui-cells__title" style="color:grey;">个人标识：{{openid}} </view>
+  </view>
+</form>

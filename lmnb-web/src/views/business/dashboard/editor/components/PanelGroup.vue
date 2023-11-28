@@ -8,7 +8,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            当月缴费额
+            当月收费额
           </div>
           <count-to :start-val="0" :end-val="monthBuyAmount" :duration="2000" class="card-panel-num" />
         </div>
@@ -21,9 +21,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            今日缴费数
+            今日收费额
           </div>
-          <count-to :start-val="0" :end-val="dayBuyAmountUserCount" :duration="1800" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="dayBuyAmount" :duration="1800" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -34,9 +34,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            今日抄表数
+            当月收费数
           </div>
-          <count-to :start-val="0" :end-val="dayMeterReadingCount" :duration="2200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="monthBuyAmountUserCount" :duration="2200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -47,9 +47,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            水表总开户数
+            今日收费数
           </div>
-          <count-to :start-val="0" :end-val="meterOpendCount" :duration="1900" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="dayBuyAmountUserCount" :duration="1800" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -58,7 +58,7 @@
 
 <script>
 import CountTo from 'vue-count-to'
-import { queryMonthBuyAmount, queryDayBuyAmountMeterCount, queryDayMeterReadingCount, queryOpenedMeterCount } from '@/api/dashboardManager'
+  import { queryMonthBuyAmount, queryDayBuyAmountMeterCount, queryDayBuyAmount, queryMonthBuyAmountMeterCount } from '@/api/dashboardManager'
 
 export default {
   components: {
@@ -67,16 +67,16 @@ export default {
   data() {
     return {
       monthBuyAmount: 100,
+      dayBuyAmount: 100,
       dayBuyAmountUserCount: 100,
-      dayMeterReadingCount: 100,
-      meterOpendCount: 100
+      monthBuyAmountUserCount: 100
     }
   },
-  created() {
-    queryMonthBuyAmount({ operatorid: 1 }).then(response => { this.monthBuyAmount = Number(response.data) })
-    queryDayBuyAmountMeterCount({ operatorid: 1 }).then(response => { this.dayBuyAmountUserCount = Number(response.data) })
-    queryDayMeterReadingCount({ operatorid: 1 }).then(response => { this.dayMeterReadingCount = Number(response.data) })
-    queryOpenedMeterCount({ operatorid: 1 }).then(response => { this.meterOpendCount = Number(response.data) })
+    created() {
+      queryMonthBuyAmount({ operatorid: 1 }).then(response => { this.monthBuyAmount = Number(response.data) })
+      queryDayBuyAmountMeterCount({ operatorid: 1 }).then(response => { this.dayBuyAmountUserCount = Number(response.data) })
+      queryDayBuyAmount({ operatorid: 1 }).then(response => { this.dayBuyAmount = Number(response.data) })
+      queryMonthBuyAmountMeterCount({ operatorid: 1 }).then(response => { this.monthBuyAmountUserCount = Number(response.data) })
   },
   methods: {
     handleSetLineChartData(type) {

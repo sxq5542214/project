@@ -3,6 +3,7 @@
  */
 package com.yd.business.report.controller;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.report.bean.ReportSimpleBean;
@@ -53,6 +55,96 @@ public class ReportController extends BaseController {
 		} catch (Exception e) {
 			log.error(e, e);
 		}
+		return null;
+	}
+	
+	@RequestMapping("**/admin/report/ajaxQuerySimpleReportList.do")
+	public ModelAndView ajaxQuerySimpleReportList(HttpServletRequest request, HttpServletResponse response){
+		IOTWebDataBean result = new IOTWebDataBean();
+		try {
+			LmOperatorModel op = getCurrentLoginOperator();
+			//根据登录用户的报表权限查询报表清单
+			List<ReportSimpleBean> list = reportService.queryReportSimpleListByAdminRole(op.getId());
+			
+			result.setData(list);
+			
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result);
+		return null;
+	}
+
+	@RequestMapping("**/admin/report/ajaxSimpleReportDataView.do")
+	public ModelAndView ajaxSimpleReportDataView(HttpServletRequest request, HttpServletResponse response){
+		IOTWebDataBean result = new IOTWebDataBean();
+		try {
+			LmOperatorModel op = getCurrentLoginOperator();
+			
+
+			String code = request.getParameter("code");
+			String id = request.getParameter("report_id");
+			//根据登录用户的报表权限查询报表清单
+			ReportSimpleBean report = reportService.findReportSimpleById(Integer.parseInt(id));
+			String columnCodes = report.getColumn_codes();
+			String columnNames = report.getColumn_names();
+			List<ReportSimpleBean> dataList = new ArrayList<>();
+			int num = columnNames.split(",").length ;
+			for(int i = 0 ; i < num ; i++) {
+				ReportSimpleBean bean = new ReportSimpleBean();
+				String name = columnNames.split(",")[i];
+				String cod = columnCodes.split(",")[i];
+				bean.setName(name);
+				bean.setCode(cod);
+				dataList.add(bean);
+			}
+			
+			result.setData(dataList);
+			
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result);
+		return null;
+	}
+	@RequestMapping("**/admin/report/ajaxSimpleReportTableColumns.do")
+	public ModelAndView ajaxSimpleReportTableColumns(HttpServletRequest request, HttpServletResponse response){
+		IOTWebDataBean result = new IOTWebDataBean();
+		try {
+			LmOperatorModel op = getCurrentLoginOperator();
+
+			String code = request.getParameter("code");
+			String id = request.getParameter("report_id");
+			//根据登录用户的报表权限查询报表清单
+			ReportSimpleBean report = reportService.findReportSimpleById(Integer.parseInt(id));
+			String columnCodes = report.getColumn_codes();
+			String columnNames = report.getColumn_names();
+			List<ReportSimpleBean> dataList = new ArrayList<>();
+			int num = columnNames.split(",").length ;
+			for(int i = 0 ; i < num ; i++) {
+				ReportSimpleBean bean = new ReportSimpleBean();
+				String name = columnNames.split(",")[i];
+				String cod = columnCodes.split(",")[i];
+				bean.setName(name);
+				bean.setCode(cod);
+				dataList.add(bean);
+			}
+			
+			result.setData(dataList);
+			
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result);
 		return null;
 	}
 	

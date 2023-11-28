@@ -54,4 +54,10 @@ public interface IChargeDetailService {
 
 	IOTWebDataBean queryDayBuyAmountMeterCount(String day, Integer systemid, Integer operatorid);
 
+	IOTWebDataBean queryDayChargeAmoutSum(String day, Integer systemid, Integer operatorid);
+
+	IOTWebDataBean queryMonthBuyAmountMeterCount(String month, Integer systemid, Integer operatorid);
+
+	IOTWebDataBean queryDayBuyAmountSumListOfMonth(String month, Integer systemid, Integer operatorid);
+
 }

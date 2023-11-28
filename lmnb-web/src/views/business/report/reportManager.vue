@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
+   <!-- <div class="filter-container">
       <div class="demo-input-suffix">
         <el-input
           v-model="listQuery.name"
@@ -30,7 +30,7 @@
           @click="handleFilter"
         >查询</el-button>
       </div>
-    </div>
+    </div>-->
 
     <el-table
       :key="tableKey"
@@ -42,51 +42,24 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column
-        label="序号"
-        prop="id"
-        sortable="custom"
-        align="center"
-        width="80"
-        :class-name="getSortClass('id')"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="户名" width="150px" align="center">
+      <el-table-column label="报表名称" width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="地址" min-width="150px" :show-overflow-tooltip="true">
+      <el-table-column label="报表说明" min-width="150px" :show-overflow-tooltip="true" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <span>{{ row.area1 }} - {{ row.area2 }} - {{ row.area3 }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="电话" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.phone }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="身份证号" width="110px" align="center" :show-overflow-tooltip="true">
-        <template slot-scope="{row}">
-          <span>{{ row.idcard }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="开户时间" width="100px" align="center" :show-overflow-tooltip="true">
-        <template slot-scope="{row}">
-          <span>{{ row.createtime }}</span>
+          <span>{{ row.remark }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="操作"
         align="center"
-        class-name="small-padding fixed-width"
-        fixed="right"
+        width="150px"
+        
       >
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleClick(row)">查看</el-button>
+          <el-button type="primary" size="mini" @click="handleClick(row)">查看数据</el-button>
           <!--           <el-button   type="danger" size="mini"  @click="handleDelete(row,$index)">
                       删除
           </el-button>-->
@@ -115,17 +88,9 @@
 </template>
 
 <script>
-
-import {
-  queryUserList,
-  addUser,
-  updateUser,
-  deleteUser
-} from '@/api/userManager'
-import { queryAddressList } from '@/api/addressManager'
-import { addMeter, queryMeterList, updateMeter } from '@/api/meterManager'
+  import { querySimpleReportList } from '@/api/reportManager'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
+  import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -157,21 +122,21 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-    },
-    handleClick() {
-      alert('视线中')
-    },
-
-    formatJson(filterVal) {
-      return this.list.map(v =>
-        filterVal.map(j => {
-          if (j === 'timestamp') {
-            return parseTime(v[j])
-          } else {
-            return v[j]
-          }
+      querySimpleReportList().then(response => {
+        this.list = response.data;
+        this.listLoading = false;
         })
-      )
+
+
+    },
+    handleClick(row) {
+      this.$router.push({
+        path: '/reportDataView',
+         query: {
+           report_id: row.id,
+           code: row.code
+        }
+      })
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort

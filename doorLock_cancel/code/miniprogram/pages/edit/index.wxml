@@ -1,0 +1,58 @@
+
+<form bindsubmit="onSubmit" bindreset="">
+  <view class="page-body">
+    <view class="page-section">
+      <view class="weui-cells__title" style="color:black;">请在此修改您的门锁名称</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input name="lockname" class="weui-input" auto-focus  value="{{item.lockname}}"/>
+        </view>
+      </view>
+      <view class="weui-cells__title" style="color:black;">门锁密钥（6-10位数字）</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input name="lockkey" class="weui-input" value="{{item.lockkey}}"   />
+        </view>
+      </view>
+    </view>
+    <view class='bottom'>
+        <button formType="submit" class='btn success'>保存</button>
+        <button class='btn del' bindtap="onDelete">删除</button>
+    </view>
+
+
+
+    <view class="weui-panel__hd" style="padding-bottom:5rpx;">门锁密码生成记录（长按可再次复制）</view>
+    <view class="weui-form-preview" style="width:90%;margin:0 auto;margin-top:20rpx;border:1rpx solid #bdbdbd;border-radius:20rpx;" wx:for="{{items}}"  wx:key="index" data-key="{{index}}" bindlongpress="copyRecord">
+          <view>
+            <view style="padding:5rpx;position:relative;text-align:center;line-height:auto;border-bottom:1px solid #bdbdbd;">
+                <view class="weui-form-preview__item">
+                    <!-- <view class="weui-form-preview__label">付款金额</view> -->
+                    <view class="weui-form-preview__value" style="margin:5rpx;font-size:25rpx;color:gray;"> {{item.typeStr}}【{{item.lockName}}】</view>
+                </view>
+            </view>
+            <view class="weui-form-preview__bd" style="text-align:center;padding:0rpx;line-height:normal;">
+                <view class="weui-form-preview__item">
+                    <!-- <view class="weui-form-preview__label">密码</view> -->
+                    <view class="weui-form-preview__value" style="color:black;font-size:40rpx;font-weight:bold;margin-top:15rpx;">{{item.keyStr}}</view>
+                </view>
+                <view class="weui-form-preview__item" style="border-bottom:1px solid #bdbdbd;margin-top:10rpx;">
+                    <view class="weui-form-preview__value" style="font-size:22rpx;padding:10rpx;">{{item.limitStr}}</view>
+                </view>
+              </view>
+              <view class="weui-form-preview__ft" style="line-height:inherit;font-size:25rpx;padding:10rpx;padding-left:30rpx;color:gray;text-align:center">
+              操作时间【{{item.time}}】  <view style="position:absolute;right:30rpx;color:black;" bindtap="deleteRecord" data-key="{{index}}" >删除</view>
+              </view>
+            </view>
+            <block  wx:if="{{items.length < 1}}" >
+                  <view class="weui-media-box weui-media-box_text">
+                      <view class="weui-media-box__title weui-media-box__title_in-text">很抱歉，您暂时没有密码记录</view>
+                      <view class="weui-media-box__desc">很抱歉，您暂时没有密码记录。</view>
+                  </view>
+              </block>
+    </view>
+
+
+    
+  </view>
+</form>

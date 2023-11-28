@@ -3,14 +3,13 @@
     "",
     "\\lmnb-web",
     "\\lmnb-web\\src",
-    "\\lmnb-web\\src\\store",
-    "\\lmnb-web\\src\\store\\modules",
     "\\lmnb-web\\src\\views",
-    "\\lmnb-web\\src\\views\\dashboard",
-    "\\lmnb-web\\src\\views\\dashboard\\editor",
-    "\\lmnb-web\\src\\views\\login",
-    "\\lmnb-web\\src\\views\\login\\components"
+    "\\lmnb-web\\src\\views\\business",
+    "\\lmnb-web\\src\\views\\business\\dashboard",
+    "\\lmnb-web\\src\\views\\business\\dashboard\\admin",
+    "\\lmnb-web\\src\\views\\business\\dashboard\\editor",
+    "\\lmnb-web\\src\\views\\business\\dashboard\\editor\\components"
   ],
-  "SelectedNode": "\\lmnb-web\\src\\store\\modules\\user.js",
+  "SelectedNode": "\\lmnb-web\\src\\components",
   "PreviewInSolutionExplorer": false
 }

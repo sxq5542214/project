@@ -30,6 +30,8 @@
 		 select distinct rs.* from ll_report_simple rs , ll_report_role_admin_relation ar,ll_report_role_relation rrr
 			where ar.report_role_id = rrr.report_role_id and rrr.report_id = rs.id and rs.status = 1
 			and ar.admin_id = #{value}
+			
+		order by rs.seq 
 	</select>
 		
 		

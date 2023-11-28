@@ -1,0 +1,53 @@
+
+<form bindsubmit="onSubmit" bindreset="">
+  <view class="page-body" style="margin-bottom:30rpx;">
+    <view class="weui-panel__hd" style="padding-bottom:5rpx;">门锁密码生成记录（长按可再次复制）</view>
+    <view class="weui-form-preview" style="width:90%;margin:0 auto;margin-top:20rpx;border:1rpx solid #bdbdbd;border-radius:20rpx;" wx:for="{{items}}"  wx:key="index" data-key="{{index}}" bindlongpress="copyRecord">
+          <view>
+            <view style="padding:5rpx;position:relative;text-align:center;line-height:auto;border-bottom:1px solid #bdbdbd;">
+                <view class="weui-form-preview__item">
+                    <!-- <view class="weui-form-preview__label">付款金额</view> -->
+                    <view class="weui-form-preview__value" style="margin:5rpx;font-size:25rpx;color:gray;"> {{item.typeStr}}【{{item.lockName}}】</view>
+                </view>
+            </view>
+            <view class="weui-form-preview__bd" style="text-align:center;padding:0rpx;line-height:normal;">
+                <view class="weui-form-preview__item">
+                    <!-- <view class="weui-form-preview__label">密码</view> -->
+                    <view class="weui-form-preview__value" style="color:black;font-size:40rpx;font-weight:bold;margin-top:15rpx;">开锁码：{{item.keyStr}}</view>
+                </view>
+                <view class="weui-form-preview__item" style="border-bottom:1px solid #bdbdbd;margin-top:10rpx;">
+                    <text class="weui-form-preview__value" style="font-size:22rpx;padding:10rpx;">{{item.limitStr}}</text>
+                </view>
+              </view>
+              <view class="weui-form-preview__ft" style="line-height:inherit;font-size:25rpx;padding:10rpx;padding-left:30rpx;color:gray;text-align:center">
+              操作时间【{{item.time}}】  <view style="position:absolute;right:30rpx;color:black;" bindtap="deleteRecord" data-key="{{index}}" >删除</view>
+              </view>
+            </view>
+            <block  wx:if="{{items.length < 1}}" >
+                  <view class="weui-media-box weui-media-box_text">
+                      <view class="weui-media-box__title weui-media-box__title_in-text">很抱歉，您暂时没有密码记录</view>
+                      <view class="weui-media-box__desc">很抱歉，您暂时没有密码记录。</view>
+                  </view>
+              </block>
+    </view>
+ <!-- <view class="weui-panel weui-panel_access">
+            <view class="weui-panel__hd">门锁密码复制记录（长按可再次复制）</view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text" wx:for="{{items}}"  wx:key="index" data-key="{{index}}" bindlongpress="copyRecord">
+                   <view class="weui-media-box__title weui-media-box__title_in-text" >{{item.typeStr}} </view>  
+                    <view class="weui-media-box__desc" style="-webkit-line-clamp:4;color:rgba(0,0,0,.9)">{{item.recordStr}}</view>
+                  <view class="weui-media-box__title weui-media-box__title_in-text" style="color:rgba(0,0,0,.5);font-size:15px;text-align:right;margin-bottom:0px;" >操作时间【{{item.time}}】   </view> 
+                    
+                </view>
+               
+            </view>
+             <view class="weui-panel__ft">
+                <view class="weui-cell weui-cell_access weui-cell_link">
+                    <view class="weui-cell__bd">查看更多</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                </view>
+            </view>
+        </view> -->
+      
+  </view>
+</form>

@@ -49,26 +49,27 @@ import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
 import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
-import BoxCard from './components/BoxCard'
+  import BoxCard from './components/BoxCard'
+  import { queryDayBuyAmountSumListOfMonth } from '@/api/dashboardManager'
 
-const lineChartData = {
-  newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
-  },
-  messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
-  },
-  purchases: {
-    expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
-  },
-  shoppings: {
-    expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
-  }
-}
+  //const lineChartDataConst = {
+  //    newVisitis: {
+  //      expectedData: [100, 120, 161, 134, 105, 160, 165],
+  //      actualData: [120, 82, 91, 154, 162, 140, 145]
+  //    },
+  //    messages: {
+  //      expectedData: [200, 192, 120, 144, 160, 130, 140],
+  //      actualData: [180, 160, 151, 106, 145, 150, 130]
+  //    },
+  //    purchases: {
+  //      lastData: [80, 100, 121, 104, 105, 90, 100],
+  //      curData: [120, 90, 100, 138, 142, 130, 130]
+  //    },
+  //    shoppings: {
+  //      expectedData: [130, 140, 141, 142, 145, 150, 160],
+  //      actualData: [120, 82, 91, 154, 162, 140, 130]
+  //    }
+  //  }
 
 export default {
   name: 'DashboardAdmin',
@@ -85,12 +86,40 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.purchases
-    }
-  },
+        lineChartData : {
+          newVisitis: {
+            expectedData: [100, 120, 161, 134, 105, 160, 165],
+            actualData: [120, 82, 91, 154, 162, 140, 145]
+          },
+          messages: {
+            expectedData: [200, 192, 120, 144, 160, 130, 140],
+            actualData: [180, 160, 151, 106, 145, 150, 130]
+          },
+          purchases: {
+            expectedData: [80, 100, 121, 104, 105, 90, 100],
+            actualData: [120, 90, 100, 138, 142, 130, 130]
+          },
+          shoppings: {
+            expectedData: [130, 140, 141, 142, 145, 150, 160],
+            actualData: [120, 82, 91, 154, 162, 140, 130]
+          }
+        },
+      serverData: {
+        expectedData: [],
+        actualData :[]
+      }
+      }
+    },
+    created() {
+
+      queryDayBuyAmountSumListOfMonth({ operatorid: 1, month: -1 }).then(response => { this.serverData.expectedData = response.data })
+      queryDayBuyAmountSumListOfMonth({ operatorid: 1, month: 0 }).then(response => { this.serverData.actualData = response.data })
+
+      setTimeout(this.handleSetLineChartData('purchases'), 2000)
+    },
   methods: {
     handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
+      this.lineChartData = this.serverData
     }
   }
 }

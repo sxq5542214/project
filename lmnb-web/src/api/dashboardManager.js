@@ -29,3 +29,28 @@ export function queryOpenedMeterCount(data) {
     params: data
   })
 }
+
+export function queryDayBuyAmount(data) {
+  return request({
+    url: '/admin/chargeDetail/ajaxQueryDayChargeAmoutSumByDashboard.do',
+    method: 'get',
+    params: data
+  })
+}
+
+export function queryMonthBuyAmountMeterCount(data) {
+  return request({
+    url: '/admin/chargeDetail/ajaxQueryMonthChargeAmoutMeterCountByDashboard.do',
+    method: 'get',
+    params: data
+  })
+}
+
+export function queryDayBuyAmountSumListOfMonth(data) {
+  return request({
+    url: '/admin/chargeDetail/ajaxQueryDayBuyAmountSumListOfMonthByDashboard.do',
+    method: 'get',
+    params: data
+  })
+}
+

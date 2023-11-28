@@ -1,0 +1,19 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/feedback/index",
+    "pages/feedback/aboutus",
+    "pages/edit/index",
+    "pages/create/index",
+    "pages/savelock/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#00aaff",
+    "navigationBarTitleText": "Ukey智能门锁密码",
+    "navigationBarTextStyle": "white",
+    "backgroundTextStyle": "light",
+    "backgroundColor": "#efeff4",
+    "enablePullDownRefresh": true
+  },
+  "sitemapLocation": "sitemap.json"
+}

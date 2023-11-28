@@ -1,0 +1,10 @@
+@import "../../lib/weui.wxss";
+
+.page-section{
+  margin-bottom: 20rpx;
+}
+.btn.success{
+
+    background: #1aad19;
+    color: #fff;
+}

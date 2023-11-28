@@ -1,0 +1,34 @@
+<!--index.wxml-->
+<view class="container">
+    <!--新增门锁-->
+    <view class='col'>
+        <view class='item add_box'  bindtap="onNewItem">
+            <image class="add_bg" src="../../images/add.png" style="width:120rpx;height:120rpx;"></image>
+        </view> 
+        <!--没有门锁时的提示-->
+        <block wx:if="{{items.length < 1}}">
+            <view class='tips'>
+                <view class='tips_box'>
+                    <image class='tips_icon' src="../../images/tips_icon.png"style="width:70rpx;height:70rpx;"></image>
+                </view>
+                <view class='tips_txt'>请点此添加新的门锁</view>
+            </view>
+        </block>
+    </view>
+
+    <!--门锁列表-->
+    <block wx:for="{{items}}"  wx:key="index" >
+        <view class="col" wx:if="{{ item.state != 3 }}"  >
+            <view class='item notepad notepad' >
+                <view class='content' data-key="{{item.index}}" bindtap="onEditItem">
+                    <view class='txt'>{{item.lockname}}</view> 
+                </view>
+                <view class='orange' data-key="{{item.index}}" bindtap="showSecret">
+                    <view class='txt'>
+                        查看开锁密码
+                    </view>
+                </view>
+            </view>
+        </view>
+    </block>
+</view>

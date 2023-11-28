@@ -4,6 +4,7 @@
 package com.yd.business.price.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -224,9 +225,35 @@ public class ChargeDetailController extends BaseController {
 		writeJson(response, result );
 		return null;
 	}
-
 	/**
-	 * 	查询当月缴费总额
+	 * 	查询当日缴费总额
+	 */
+	@RequestMapping("**/admin/chargeDetail/ajaxQueryDayChargeAmoutSumByDashboard.do")
+	public ModelAndView ajaxQueryDayChargeAmoutSumByDashboard(HttpServletRequest request,HttpServletResponse response) {
+
+		IOTWebDataBean result ;
+		try {
+			LmOperatorModel op = getCurrentLoginOperator();
+			
+			Integer opid = null;
+			String operatorid = request.getParameter("operatorid");
+			if(StringUtil.isNotNull(operatorid)) {
+				opid = op.getId();
+			}
+			String today = DateUtil.formatDateOnlyDate(new Date());
+			result = chargeDetailService.queryDayChargeAmoutSum( today, op.getSystemid(), opid);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setMessage(e.getMessage());
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+		}
+		writeJson(response, result );
+		return null;
+	}
+	/**
+	 * 	查询当日缴费总额
 	 */
 	@RequestMapping("**/admin/chargeDetail/ajaxQueryDayChargeAmoutMeterCountByDashboard.do")
 	public ModelAndView ajaxQueryDayChargeAmoutMeterCountByDashboard(HttpServletRequest request,HttpServletResponse response) {
@@ -252,5 +279,68 @@ public class ChargeDetailController extends BaseController {
 		writeJson(response, result );
 		return null;
 	}
+	/**
+	 * 	查询当月缴费总额
+	 */
+	@RequestMapping("**/admin/chargeDetail/ajaxQueryMonthChargeAmoutMeterCountByDashboard.do")
+	public ModelAndView ajaxQueryMonthChargeAmoutMeterCountByDashboard(HttpServletRequest request,HttpServletResponse response) {
+
+		IOTWebDataBean result ;
+		try {
+			LmOperatorModel op = getCurrentLoginOperator();
+			
+			Integer opid = null;
+			String operatorid = request.getParameter("operatorid");
+			if(StringUtil.isNotNull(operatorid)) {
+				opid = op.getId();
+			}
+			String billmoth = DateUtil.formatMonth(new Date());
+			result = chargeDetailService.queryMonthBuyAmountMeterCount( billmoth, op.getSystemid(), opid);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setMessage(e.getMessage());
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+		}
+		writeJson(response, result );
+		return null;
+	}
 	
+	/**
+	 * 	查询当月缴费总额
+	 */
+	@RequestMapping("**/admin/chargeDetail/ajaxQueryDayBuyAmountSumListOfMonthByDashboard.do")
+	public ModelAndView ajaxQueryDayBuyAmountSumListOfMonthByDashboard(HttpServletRequest request,HttpServletResponse response) {
+	
+		IOTWebDataBean result ;
+		try {
+			LmOperatorModel op = getCurrentLoginOperator();
+
+			Integer opid = null;
+			Integer monthNum = 0;
+			String operatorid = request.getParameter("operatorid");
+			String month = request.getParameter("month");
+			if(StringUtil.isNotNull(operatorid)) {
+				opid = op.getId();
+			}
+			if(StringUtil.isNotNull(month)) {
+				monthNum = Integer.parseInt(month);
+			}
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.MONTH, monthNum);
+			
+			String billmoth = DateUtil.formatMonth(c.getTime());
+			result = chargeDetailService.queryDayBuyAmountSumListOfMonth( billmoth, op.getSystemid(), opid);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setMessage(e.getMessage());
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+		}
+		writeJson(response, result );
+		return null;
+	}
+
 }

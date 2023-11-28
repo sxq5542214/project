@@ -1,0 +1,225 @@
+<!--index.wxml-->
+<view class="container">
+  <view style="width:100%;text-align:center;background:#00aaff;margin-bottom:-120rpx;">
+    <image src="../../images/door-lock.png"  style="width:200rpx;height:200rpx;margin-bottom:120rpx;"></image>
+  </view>
+  <!-- 生成密码界面 -->
+        <view class="page__bd" style="width:85%;margin:auto;border-radius: 20px;-webkit-border-radius: 20px;box-shadow: 0px 0px 2px 2px rgba(0,0,0,.1);">
+          <view class="weui-panel weui-panel_access" style="border-radius: 20px;">
+    <!-->         <view class="weui-panel__hd">图文组合列表</view>  <-->
+              <view class="weui-media-box weui-media-box_appmsg" style="padding:10rpx;padding-bottom:1px;border-bottom:1rpx solid #E5E5E5;">
+                          <view class="weui-media-box__hd weui-media-box__hd_in-appmsg" style="width: 140rpx;height: 100rpx;line-height: 100rpx;">
+                              <image class="weui-media-box__thumb" style="width:80rpx;height:80rpx;vertical-align: middle;margin-bottom:10rpx;" src="../../images/icon-home.png" />
+                          </view>
+                          <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                              <view class="weui-media-box__title" style="color:rgba(0,0,0,{{lockNameOpacity}});font-size:32rpx;font-weight:bold;padding-top:30rpx;">{{lockName}}</view>
+                          </view>
+                      </view>
+              <view class='log'>
+                  <view class="{{currentTab==0?'selected':'default'}}" data-current="0" bindtap='switchNav'>
+                    次数密码
+                  </view>
+                  <view class="{{currentTab==1?'selected':'default'}}" data-current="1" bindtap='switchNav'>
+                    时间段密码
+                  </view>
+                  <view class="{{currentTab==2?'selected':'default'}}" data-current="2" bindtap='switchNav'>
+                    日期段密码
+                  </view>
+<!-->
+                  <view class="{{currentTab==3?'selected':'default'}}" data-current="3" bindtap='switchNav'>
+                    临时密码
+                  </view>
+<-->
+                </view>
+
+                <swiper current='{{currentTab}}'  style="height:480rpx;" bindchange='bindChange'>
+  <!-->    第一页。。。。。。。。 <-->
+
+                  <swiper-item>
+                    <view class="weui-panel__bd">
+                      
+                      <view class="weui-media-box weui-media-box_appmsg" >
+                          
+                        <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                          <view style="width:100%;margin:auto;margin-top:5rpx;">
+                            
+                            <picker mode="selector" value="{{notsOpenNumber}}" range="{{notsOpenNumberArray}}" bindchange="bindNotsOpenNumberChange">
+                                      <button style="color:#999"   class="weui-btn" type="default">{{notsOpenNumber}}</button>
+                                    </picker>
+
+                                <view style="width:100%;text-align:center;height:180rpx;font-size:35rpx;margin-top:10rpx;">
+                                    <text >{{limitDate4}}</text>
+                                </view>
+                                <button class="weui-btn" style="border:1px solid #00aaff;color:#00aaff;background:white;" bindtap="copySecret4" data-key="{{indexKey}}" >复制密码</button>
+
+                                <label style="font-size:24rpx;color:#999;position:absolute;margin-right:16px;right:0px;margin-top:8rpx;" bindtap="showCopyRecordList">密码历史记录  </label>
+                              </view>
+                          </view>
+                      </view>
+                    </view>
+                  </swiper-item>
+
+  <!--    第二页。。。。。。。。 -->
+                  <swiper-item>
+                    <view class="weui-panel__bd">
+                      
+                      <view class="weui-media-box weui-media-box_appmsg" >
+                          
+                        <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                          <view style="width:100%;margin:auto;margin-top:10rpx;">
+                              <picker mode="date" value="{{endDateTimeSlot}}" start="{{nowDate}}" end="2035-12-31" bindchange="bindEndDateTimeSlotChange" style="margin-bottom:20rpx;">
+                                <button style="color:#999" class="weui-btn"  type="default">{{endDateTimeSlot}}</button>
+                              </picker> 
+
+                              <view class="weui-cell " style="border-radius: 5px;padding:2px;">
+                                <!-- <view class="weui-cell__hd" style="width:50%;">
+                                  <picker mode="time" value="{{startTimeSlot}}" start="09:01" end="21:01" bindchange="bindStartTimeChange">
+                                    <button class="weui-btn" type="default">{{startTimeSlot}}</button>
+                                  </picker>
+                                </view> -->
+                                <view class="weui-cell__hd" style="width:50%;">
+                                  <picker mode="selector" value="{{startTimeSlot}}"  range="{{objectMultiArray}}" bindchange="bindStartTimeChange">
+                                    <button style="color:#999"  class="weui-btn" type="default" >{{startTimeSlot}}</button>
+                                  </picker>
+                                </view>
+                                <view class="weui-cell__bd" style="text-align:center;" bindtap="" >
+                                    <picker mode="selector" value="{{endTimeSlot}}" range="{{objectMultiArray}}" bindchange="bindEndTimeChange">
+                                      <button style="color:#999"   class="weui-btn" type="default">{{endTimeSlot}}</button>
+                                    </picker>
+                                  </view> 
+                                </view>
+                                <view style="height:10rpx;">
+                                    
+                                </view>
+
+                                <view class="weui-cell " style="border:1px solid #00aaff ;border-radius: 5px;padding:2px;">
+                                    <view class="weui-cell__hd" style="width:100%;">
+                                      <textarea class="weui-textarea" placeholder="请点击生成开锁密码和取消密码" placeholder-class="center"  disabled="disabled" bindtap="generateEDTQPWD" style="text-align:center;width:100%;margin:0 auto;font-size:40rpx;height:3em;" value="{{dynamicSecret2}}" ></textarea>
+                                    </view>
+                                    <!-- <view class="weui-cell__bd" style="text-align:center;" bindtap="copySecret2" >
+                                      <label style="font-size:40rpx;color:#00aaff;">复制  </label>
+                                    </view>  -->
+                                </view>
+                                <label style="font-size:30rpx;color:#00aaff;" bindtap="copySecret2" >复制密码</label>
+                                <label style="font-size:24rpx;color:#999;position:absolute;margin-right:16px;right:0px;margin-top:8rpx;" bindtap="showCopyRecordList">密码历史记录  </label>
+                              </view>
+                          </view>
+                      </view>
+                    </view>
+                  </swiper-item>
+
+                  
+  <!-->    第三页。。。。。。。。 <-->
+                  <swiper-item>
+                    <view class="weui-panel__bd">
+                      
+                      <view class="weui-media-box weui-media-box_appmsg" >
+                          
+                        <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                          <view style="width:100%;margin:auto;margin-top:10rpx;">
+                              <picker mode="date" value="{{startDateSlot}}" start="{{nowDate}}" end="2035-12-31"  bindchange="bindStartDateSlotChange">
+                                <button style="color:#999"  class="weui-btn" type="default">{{startDateSlot}}</button>
+                              </picker> 
+                              <picker mode="date" value="{{endDateSlot}}" start="{{nowDate}}" end="2035-12-31"  bindchange="bindEndDateSlotChange" style="margin-top:20rpx;">
+                                <button style="color:#999"  class="weui-btn" type="default">{{endDateSlot}}</button>
+                              </picker> 
+                           
+                                <view style="height:40rpx;">
+                                    
+                                </view>
+
+                                <view class="weui-cell " style="border:1px solid #00aaff ;border-radius: 5px;padding:2px;">
+                                    <view class="weui-cell__hd" style="width:100%;">
+                                      <textarea class="weui-textarea" placeholder="请点击生成开锁密码和取消密码" placeholder-class="center"  disabled="disabled" bindtap="generateSDEDPWD" style="text-align:center;width:100%;margin:0 auto;font-size:40rpx;height:3em;" value="{{dynamicSecret3}}" ></textarea>
+                                    </view>
+                                    <!-- <view class="weui-cell__bd" style="text-align:center;" bindtap="copySecret2" >
+                                      <label style="font-size:40rpx;color:#00aaff;">复制  </label>
+                                    </view>  -->
+                                </view>
+                                <label style="font-size:30rpx;color:#00aaff;" bindtap="copySecret3" >复制密码</label>
+                                  <label style="font-size:24rpx;color:#999;position:absolute;margin-right:16px;right:0px;margin-top:8rpx;" bindtap="showCopyRecordList">密码历史记录  </label>
+                              </view>
+                          </view>
+                      </view>
+                    </view>
+                  </swiper-item>
+
+
+
+  <!-->    第四页。。。。。。。。 <-->
+  <swiper-item>
+                    <view class="weui-panel__bd">
+                      
+                      <view class="weui-media-box weui-media-box_appmsg" >
+                          
+                        <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                          <view style="width:100%;margin:auto;margin-top:50rpx;">
+                            <button class="weui-btn" style="border:1px solid #00aaff;color:#00aaff;background:white;" bindtap="showSecret" data-key="{{indexKey}}" >生成动态密码</button>
+                                <view style="height:70rpx;">
+                                    
+                                </view>
+
+                                <view class="weui-cell " style="border:1px solid #00aaff ;border-radius: 5px;padding:2px;">
+                                    <view class="weui-cell__hd" style="width:75%;border-right:1px solid #00aaff;">
+                                      <input class="weui-input" placeholder="动态密码" data-key="{{indexKey}}" bindtap="showSecret" disabled="disabled" placeholder-class="center" style="text-align:center;font-size:50rpx;" value="{{dynamicSecret}}"/>
+                                    </view>
+                                    <view class="weui-cell__bd" style="text-align:center;" bindtap="copySecret" >
+                                      <label style="font-size:40rpx;color:#00aaff;">复制  </label>
+                                    </view>
+
+                                    
+                                </view>
+                                <view style="width:100%;text-align:center;height:40rpx;">
+                                  {{limitDate}}
+                                </view>
+                              </view>
+                          </view>
+                      </view>
+                    </view>
+                  </swiper-item>
+
+
+
+
+                </swiper>
+        </view>
+      </view>
+
+    <view style="width:100%;margin-left:25rpx;color:white;margin-top:80rpx;font-weight:bold;">
+      管理门锁（单击生成动态密码，长按修改门锁名称）
+    </view>
+
+
+  
+    <!--新增门锁-->
+    <view class='col'>
+        <view class='item add_box'  bindtap="onNewItem" style="width:200rpx;height:200rpx;">
+            <image class="add_bg" src="../../images/add.png" style="width:120rpx;height:120rpx;"></image>
+        </view> 
+        <!--没有门锁时的提示-->
+        <block wx:if="{{items.length < 1}}">
+            <view class='tips'>
+                <view class='tips_box'>
+                    <image class='tips_icon' src="../../images/tips_icon.png"style="width:70rpx;height:70rpx;"></image>
+                </view>
+                <view class='tips_txt'>请点此添加新的门锁</view>
+            </view>
+        </block>
+    </view>
+
+    <!--门锁列表-->
+    <block wx:for="{{items}}"  wx:key="index" >
+        <view class="col" wx:if="{{ item.state != 3 }}"  >
+            <view id='{{item.index}}' class='item notepad notepad'  style='width:200rpx;height:200rpx;{{chooseKey==item.index?"background:lightYellow;":""}};'  data-key='{{item.index}}' bindtap="showSecret4" bindlongtap="onEditItem" >
+                <view class='content'style="background:url(../../images/lock-background.png);background-position:center;background-repeat:no-repeat;background-size:90% 60%;opacity: 0.3;">
+                    <view class='txt' style="word-wrap:break-word;opacity:1;">{{item.lockname}}</view> 
+                </view>
+                <!-- <view class='orange' data-key="{{item.index}}" bindtap="showSecret">
+                    <view class='txt'>
+                        {{item.create_date}}
+                    </view>
+                </view> -->
+            </view>
+        </view>
+    </block>
+</view>

@@ -268,6 +268,21 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		result.setData(value);
 		return result;
 	}
+
+	@Override
+	public IOTWebDataBean queryDayChargeAmoutSum(String day,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("day", day);
+		map.put("systemid", systemid);
+		map.put("operatorid", operatorid);
+		
+		BigDecimal value = iPaymentExtendsMapper.sumMonthChargeAmout(map);
+
+		result.setData(value);
+		return result;
+	}
 	@Override
 	public IOTWebDataBean queryDayBuyAmountMeterCount(String day,Integer systemid,Integer operatorid) {
 		IOTWebDataBean result = new IOTWebDataBean();
@@ -278,6 +293,35 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		map.put("operatorid", operatorid);
 		
 		int value = iPaymentExtendsMapper.countDayBuyAmountMeter(map);
+
+		result.setData(value);
+		return result;
+	}
+	@Override
+	public IOTWebDataBean queryMonthBuyAmountMeterCount(String month,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("billMonth", month);
+		map.put("systemid", systemid);
+		map.put("operatorid", operatorid);
+		
+		int value = iPaymentExtendsMapper.countDayBuyAmountMeter(map);
+
+		result.setData(value);
+		return result;
+	}
+
+	@Override
+	public IOTWebDataBean queryDayBuyAmountSumListOfMonth(String month,Integer systemid,Integer operatorid) {
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("billMonth", month);
+		map.put("systemid", systemid);
+		map.put("operatorid", operatorid);
+		
+		List<Integer> value = iPaymentExtendsMapper.queryDayBuyAmountSumListOfMonth(map);
 
 		result.setData(value);
 		return result;
