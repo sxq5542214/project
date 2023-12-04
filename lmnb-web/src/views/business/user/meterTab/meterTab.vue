@@ -1,55 +1,52 @@
 <template>
-  <el-form
-    ref="dataForm"
-    :rules="rules"
-    :model="meter"
-    :inline="true"
-    label-position="left"
-    label-width="auto"
-    style=" "
-  >
+  <el-form ref="dataForm" 
+           :rules="rules"
+           :model="meter"
+           :inline="true"
+           label-position="left"
+           label-width="auto"
+           style=" ">
     <el-form-item label="表号" prop="code">
-      <el-input v-model="meter.code" placeholder="请输入表号" />
+      <el-input v-model="meter.code" placeholder="请输入表号"  style="width:200px" />
     </el-form-item>
     <el-form-item label="表地址" prop="installposition">
-      <el-input v-model="meter.installposition" placeholder="请输入表安装地址" />
+      <el-input v-model="meter.installposition" placeholder="请输入表安装地址"  style="width:200px" />
     </el-form-item>
     <el-form-item label="表底数" prop="basenum">
-      <el-input v-model="meter.basenum" placeholder="请输入用户名称" :disabled="isDisabled" />
+      <el-input v-model="meter.basenum" placeholder="请输入用户名称" :disabled="isDisabled"  style="width:200px" />
+    </el-form-item>
+    <el-form-item label="开户费" prop="openfee">
+      <el-input  v-model.number="meter.openfee" placeholder="请输入开户费用" style="width:200px" />
     </el-form-item>
     <el-form-item label="价格类型" prop="pricecode">
-      <el-select v-model="meter.pricecode" placeholder="请选择" class="filter-item" filterable>
+      <el-select v-model="meter.pricecode" placeholder="请选择" class="filter-item" filterable style="width:200px" >
         <el-option v-for="item in priceList" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
     </el-form-item>
     <el-form-item label="厂商" prop="factorycode">
-      <el-select v-model="meter.factorycode" placeholder="请选择" class="filter-item" filterable>
+      <el-select v-model="meter.factorycode" placeholder="请选择" class="filter-item" filterable style="width:200px" >
         <el-option v-for="item in supplierList" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
     </el-form-item>
     <el-form-item label="产品类型" prop="productid">
-      <el-select v-model="meter.productid" placeholder="请选择" class="filter-item" filterable>
+      <el-select v-model="meter.productid" placeholder="请选择" class="filter-item" filterable style="width:200px" >
         <el-option v-for="item in productList" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
     </el-form-item>
     <el-form-item label="口径" prop="caliber">
-      <el-select v-model="meter.caliber" placeholder="请选择" class="filter-item" filterable>
-        <el-option
-          v-for="item in caliberList"
-          :key="item.value"
-          :label="item.description"
-          :value="item.value"
-        />
+      <el-select v-model="meter.caliber" placeholder="请选择" class="filter-item" filterable style="width:200px" >
+        <el-option v-for="item in caliberList"
+                   :key="item.value"
+                   :label="item.description"
+                   :value="item.value" />
       </el-select>
     </el-form-item>
     <el-form-item label="账户状态" prop="opened">
-      <el-select v-model="meter.opened" placeholder="请选择" class="filter-item" filterable>
-        <el-option
-          v-for="item in openedList"
-          :key="item.value"
-          :label="item.description"
-          :value="item.value"
-        />
+      <el-select v-model="meter.opened" placeholder="请选择" class="filter-item" filterable style="width:200px" >
+        <el-option v-for="item in openedList"
+                   :key="item.value"
+                   :label="item.description"
+                   :value="item.value" />
       </el-select>
     </el-form-item>
   </el-form>
@@ -73,7 +70,7 @@ export default {
     return {
       list: null,
       validateFlag: false,
-      meter: { basenum: 0, code: '', installposition: '', factorycode: '', pricecode: '', productid: '', caliber: '', opened: '', userid: '', id: undefined },
+      meter: { basenum: 0, code: '', installposition: '', factorycode: '', pricecode: '', productid: '', caliber: '', opened: '', userid: '', openfee: undefined, id: undefined },
       priceList: {},
       supplierList: {},
       productList: {},
@@ -87,7 +84,8 @@ export default {
         sort: '+id'
       },
       rules: {
-        code: [{ required: true, message: '请输入表号' }]
+        code: [{ required: true, message: '请输入表号' }],
+        openfee: [{ required: true, message: '请正确输入开户费用', type: 'number' }]
       },
       loading: false
     }

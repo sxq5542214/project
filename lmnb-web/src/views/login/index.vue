@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container" style="background: url('http://www.hqlmgs.cn:8088/lmnb/images/login/login_background2.png')">
+  <div class="login-container" style="background: url('http://www.hqlmgs.cn:8088/lmnb/images/login/login_background2.png'); background-size: cover; background-position: center center; ">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">

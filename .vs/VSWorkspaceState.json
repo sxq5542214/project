@@ -3,13 +3,10 @@
     "",
     "\\lmnb-web",
     "\\lmnb-web\\src",
+    "\\lmnb-web\\src\\router",
     "\\lmnb-web\\src\\views",
     "\\lmnb-web\\src\\views\\business",
-    "\\lmnb-web\\src\\views\\business\\dashboard",
-    "\\lmnb-web\\src\\views\\business\\dashboard\\admin",
-    "\\lmnb-web\\src\\views\\business\\dashboard\\editor",
-    "\\lmnb-web\\src\\views\\business\\dashboard\\editor\\components"
+    "\\lmnb-web\\src\\views\\business\\report"
   ],
-  "SelectedNode": "\\lmnb-web\\src\\components",
   "PreviewInSolutionExplorer": false
 }

@@ -174,7 +174,7 @@
         style=" "
       >
         <el-form-item label="镇级" prop="area1">
-          <el-select
+          <el-select  style="width:200px" 
             v-model="temp.area1"
             placeholder="请选择镇"
             class="filter-item"
@@ -190,7 +190,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="村级" prop="area2">
-          <el-select
+          <el-select  style="width:200px" 
             v-model="temp.area2"
             placeholder="请选择村"
             class="filter-item"
@@ -205,8 +205,8 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="组级" prop="area3">
-          <el-select
+        <el-form-item label="组级" prop="area3" >
+          <el-select  style="width:200px" 
             v-model="temp.area3"
             placeholder="请选择组"
             class="filter-item"
@@ -222,16 +222,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="户名" prop="name">
-          <el-input v-model="temp.name" placeholder="请输入用户名称" />
+          <el-input v-model="temp.name" placeholder="请输入用户名称"  style="width:200px" />
         </el-form-item>
         <el-form-item label="电话" prop="phone">
-          <el-input v-model="temp.phone" placeholder="请输入电话号码" />
+          <el-input v-model="temp.phone" placeholder="请输入电话号码"  style="width:200px" />
         </el-form-item>
         <el-form-item label="身份证" prop="idcard">
-          <el-input v-model="temp.idcard" placeholder="请输入身份证号码" />
+          <el-input v-model="temp.idcard" placeholder="请输入身份证号码"  style="width:200px" />
         </el-form-item>
         <el-form-item label="户号" prop="id">
-          <el-input v-model="temp.id" placeholder="无需输入自动生成" disabled="disabled" />
+          <el-input v-model="temp.id" placeholder="无需输入自动生成" disabled="disabled"  style="width:200px" />
         </el-form-item>
         <div class="tab-container">
           <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
