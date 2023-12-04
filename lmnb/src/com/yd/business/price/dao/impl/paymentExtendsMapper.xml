@@ -62,6 +62,9 @@
 		order by ca.value
 	</select>
 	
+	<update id="updatePaymentMeterCode">
+		update lm_payment set metercode = #{newMeterCode} where metercode = #{oldMeterCode}
+	</update>
 
 	
 	

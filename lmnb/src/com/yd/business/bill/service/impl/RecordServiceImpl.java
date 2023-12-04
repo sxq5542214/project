@@ -68,5 +68,10 @@ public class RecordServiceImpl extends BaseService implements IRecordService {
 		return result;
 	}
 	
+
+	@Override
+	public void updateRecordMeterCode(String oldMeterCode,String newMeterCode) {
+		recordExtendsMapper.updateRecordMeterCode(oldMeterCode, newMeterCode);
+	}
 	
 }

@@ -19,12 +19,15 @@ import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.device.service.IDeviceKindService;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.price.bean.PriceBean;
+import com.yd.business.price.service.IChargeDetailService;
+import com.yd.business.price.service.IPriceService;
 import com.yd.iotbusiness.mapper.model.LlDictionaryModel;
 import com.yd.iotbusiness.mapper.model.LlDictionaryModelExample;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
+import com.yd.util.StringUtil;
 
 @Controller
 public class DeviceInfoController extends BaseController {
@@ -32,6 +35,8 @@ public class DeviceInfoController extends BaseController {
 	private IDeviceInfoService deviceInfoService;
 	@Resource
 	private IDeviceKindService deviceKindService;
+	@Resource
+	private IChargeDetailService chargeDetailService;
 
 	@RequestMapping("admin/device/toDeviceInfoPage.do")
 	public ModelAndView toDeviceInfoPage(HttpServletRequest request,HttpServletResponse response){
@@ -71,6 +76,15 @@ public class DeviceInfoController extends BaseController {
 			AutoInvokeGetSetMethod.autoInvoke(request.getParameterMap(), bean);
 			bean.setSystemid(operator.getSystemid());
 			result = deviceInfoService.addOrUpdateMeter(bean);
+			
+			String openfeeStr = request.getParameter("openfee");
+			if(StringUtil.isNotNull(openfeeStr)) {
+				// 是否有开户费，有则记录
+				Integer openfee = Integer.parseInt(openfeeStr);
+				chargeDetailService.createOpenFeePayment(bean.getCode(),openfee,"开户费："+openfeeStr);
+			}
+			
+			
 			
 		} catch (Exception e) {
 			log.error(e, e);

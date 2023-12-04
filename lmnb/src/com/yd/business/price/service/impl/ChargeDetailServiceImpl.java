@@ -346,6 +346,38 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	}
 	
 	@Override
+	public LmPaymentModel createOpenFeePayment(String metercode,int openfee,String remark) {
+		LmPaymentModel payment = new LmPaymentModel();
+		BigDecimal charge = new BigDecimal(openfee);
+		// 插入payment表
+		MeterModelExtendsBean meter = deviceInfoService.findMeterByCode(payment.getMetercode());
+		LmPricedetailModel price = priceService.findPriceDetailById(meter.getPricecode());
+		payment.setUserid(meter.getUserid());
+		payment.setSystemid(meter.getSystemid());
+		payment.setPayamount(charge);
+		payment.setPrebalance(meter.getBalance());
+		payment.setAfterbalacne(meter.getBalance());
+		payment.setCreatetime(new Date());
+		payment.setUsername(meter.getUserName());
+		payment.setUseraddress(meter.getArea1()+"-"+meter.getArea2()+"-"+meter.getArea3()+"-"+meter.getArea4());
+		payment.setMeterid(meter.getId());
+		payment.setMetercode(meter.getCode());
+		payment.setLifecode(meter.getId());
+		payment.setSerialnum(meter.getCode()+"-"+payment.getAccountmode() +"-"+DateUtil.getNowDateStrSSS());
+		payment.setQuantity1(BigDecimal.ZERO);
+		payment.setAmount(charge);
+		payment.setAmount1(BigDecimal.ZERO);
+		payment.setWaterfee(BigDecimal.ZERO);
+		payment.setPricecode(meter.getPricecode().toString());
+		payment.setPricename(meter.getPricename());
+		payment.setSaleremark(remark);
+
+		Integer num = iPaymentExtendsMapper.insertSelective(payment);
+		
+		return payment;
+	}
+	
+	@Override
 	public Integer handleChargeBalance(LmPaymentModel model) {
 		BigDecimal charge = model.getAmount();
 		
@@ -400,6 +432,11 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		iPaymentExtendsMapper.updateByPrimaryKeySelective(model);
 		
 		return num;
+	}
+	
+	@Override
+	public void updatePaymentMeterCode(String oldMeterCode,String newMeterCode) {
+		iPaymentExtendsMapper.updatePaymentMeterCode(oldMeterCode,newMeterCode);
 	}
 	
 	@Override

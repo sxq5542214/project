@@ -23,6 +23,7 @@ import com.yd.business.device.dao.IChangeMeterDao;
 import com.yd.business.device.service.IChangeMeterService;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.operator.service.IOperatorService;
+import com.yd.business.price.service.IChargeDetailService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
@@ -47,6 +48,8 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 	private IRecordService recordService;
 	@Resource
 	private IOperatorService operatorService;
+	@Resource
+	private IChargeDetailService chargeDetailService;
 	
 	public int createChangeMeter(long user_no, BigDecimal cm_oldmetercode, int cm_type, long cm_operatorid, String cm_remark) {
 		return createChangeMeter(user_no, cm_oldmetercode, BigDecimal.ZERO, 0l, cm_type, cm_operatorid, cm_remark, null,"","");
@@ -124,14 +127,23 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 		newMeter.setRemark2("换表收费"+changeMeterCost+"员");
 		deviceInfoService.addOrUpdateMeter(newMeter);
 		
-		oldMeter.setChanged((byte) 1);
+		oldMeter.setChanged(MeterModelExtendsBean.CHANGED_TRUE);
 		oldMeter.setChangeid(newMeter.getId());
 		oldMeter.setRemark1(remark1);
 		oldMeter.setRemark2(changeFixUser);
-		oldMeter.setOpened((byte) 2);
+		oldMeter.setOpened(MeterModelExtendsBean.OPEND_CLOSE);
+		oldMeter.setStationchecked(MeterModelExtendsBean.STATIONCHECKED_FALSE);
 		oldMeter.setStoptime(new Date());
+		oldMeter.setIspid("old"+oldMeter.getIspid());
+		
+		String targetOldMeterCode = "old"+oldMeterCode;
+		oldMeter.setCode(targetOldMeterCode);
 		deviceInfoService.updateMeterModel(oldMeter);
-
+		//因为更新了旧表的metercode ，需要连带更新payment表和record表
+		chargeDetailService.updatePaymentMeterCode(oldMeterCode, targetOldMeterCode);
+		recordService.updateRecordMeterCode(oldMeterCode, targetOldMeterCode);
+		
+		
 		//查找操作员
 		LmOperatorModel op = operatorService.findOperatorById(operatorid);
 		

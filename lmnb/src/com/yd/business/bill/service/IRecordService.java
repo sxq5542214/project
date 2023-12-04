@@ -11,4 +11,6 @@ public interface IRecordService {
 
 	IOTWebDataBean queryRecordList(LmRecordModel model);
 
+	void updateRecordMeterCode(String oldMeterCode, String newMeterCode);
+
 }

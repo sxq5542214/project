@@ -60,4 +60,8 @@ public interface IChargeDetailService {
 
 	IOTWebDataBean queryDayBuyAmountSumListOfMonth(String month, Integer systemid, Integer operatorid);
 
+	LmPaymentModel createOpenFeePayment(String metercode, int openfee, String remark);
+
+	void updatePaymentMeterCode(String oldMeterCode, String newMeterCode);
+
 }

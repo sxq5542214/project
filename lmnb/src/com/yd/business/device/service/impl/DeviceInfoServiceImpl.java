@@ -153,7 +153,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		IOTWebDataBean result = new IOTWebDataBean();
 		
 		
-		if(bean.getOpened() != null && bean.getOpened() == (byte) 1 && bean.getOpentime() == null) {
+		if(bean.getOpened() != null && bean.getOpened() == MeterModelExtendsBean.OPEND_YES && bean.getOpentime() == null) {
 			bean.setOpentime(new Date());
 		}
 		
@@ -167,7 +167,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 			meterExtendsMapper.updateByPrimaryKeySelective(bean);
 		}
 		
-		if(bean.getStationchecked() == null || bean.getStationchecked() != (byte)1) {
+		if(bean.getStationchecked() == null || bean.getStationchecked() != MeterModelExtendsBean.STATIONCHECKED_TRUE) {
 			
 			//调用服务查询水表是否可用
 			DeviceDto dto = iotInterfaceService.checkQingSongMeterCode(bean.getCode());
@@ -180,17 +180,17 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 				bean.setImsi(dto.getSim());
 				bean.setTimer(Integer.valueOf(dto.getReadperiod()));
 				if("OPEN".equalsIgnoreCase(dto.getValvestate()) || "00".equalsIgnoreCase(dto.getValvestate())) {
-					bean.setValvestate((byte) 0);
+					bean.setValvestate(MeterModelExtendsBean.VALVESTATE_OPEND);
 				}else if("CLOSE".equalsIgnoreCase(dto.getValvestate()) || "01".equalsIgnoreCase(dto.getValvestate())) {
-					bean.setValvestate((byte) 1);
+					bean.setValvestate(MeterModelExtendsBean.VALVESTATE_CLOSED);
 				}else {
-					bean.setValvestate((byte) -1);
+					bean.setValvestate(MeterModelExtendsBean.VALVESTATE_UNKNOW);
 				}
 				bean.setRemark3(dto.getValvestate());
 				bean.setStrength(dto.getSignalstrength());
 				bean.setBatterystate(Byte.valueOf(dto.getBattery()));
 				bean.setCode(dto.getCode());
-				bean.setStationchecked((byte) 1);
+				bean.setStationchecked(MeterModelExtendsBean.STATIONCHECKED_TRUE);
 				meterExtendsMapper.updateByPrimaryKeySelective(bean);
 			}
 
@@ -372,7 +372,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 
 		LmMeterModelExample ex = new LmMeterModelExample();
 		LmMeterModelExample.Criteria cri = ex.createCriteria();
-		cri.andOpenedEqualTo((byte) 1);
+		cri.andOpenedEqualTo(MeterModelExtendsBean.OPEND_YES);
 		cri.andSystemidEqualTo(systemid);
 		
 		long value = meterExtendsMapper.countByExample(ex);

@@ -41,6 +41,12 @@
 	    <include refid="query_Where_Clause" />
 	    
 	</select>
-
+	
+	
+	<update id="updateRecordMeterCode">
+		update lm_record set metercode = #{newMeterCode} where metercode = #{oldMeterCode}
+	</update>
+	
+	
 	
 </mapper>
