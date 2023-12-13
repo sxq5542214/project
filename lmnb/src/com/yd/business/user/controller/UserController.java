@@ -17,12 +17,15 @@ import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
+import com.yd.business.area.service.IAreaService;
+import com.yd.business.area.service.impl.AreaServiceImpl;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.other.service.IAddressService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.iotbusiness.mapper.model.LlAddressModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.util.AutoInvokeGetSetMethod;
@@ -38,7 +41,7 @@ public class UserController extends BaseController {
 	@Resource
 	private IAreaDataService areaDataService;
 	@Resource
-	private IAddressService addressService;
+	private IAreaService areaService;
 	@Resource
 	private ThreadPoolTaskExecutor taskExecutor;
 	@Resource
@@ -115,6 +118,10 @@ public class UserController extends BaseController {
 			
 			bean.setSystemid(operator.getSystemid());
 			
+			
+			LlAddressModel address = areaService.findAddressByFullname(bean.getArea1()+bean.getArea2()+bean.getArea3());
+			bean.setAddressid(address.getId());
+			
 			int num = userInfoService.addOrUpdateUser(bean);
 			result.setCode(IOTWebDataBean.CODE_IOTWEB_SUCCESS);
 			result.setData(bean);
@@ -122,8 +129,9 @@ public class UserController extends BaseController {
 			writeJson(response, result );
 		} catch (Exception e) {
 			log.error(e, e);
-			result.setCode(-1);
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
 			result.setMessage(e.getMessage());
+			writeJson(response, result );
 		}
 		return null;
 	}

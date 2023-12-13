@@ -4,7 +4,9 @@
 package com.yd.business.area.service.impl;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -138,12 +140,25 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 		
 		return list;
 	}
-	
+
 	@Override
 	public LlAddressModel findAddressById(int id)  {
 		
 		LlAddressModel bean = addressModelMapper.selectByPrimaryKey(id);
 		return bean;
+	}
+	@Override
+	public LlAddressModel findAddressByFullname(String fullname)  {
+		LlAddressModelExample ex = new LlAddressModelExample();
+		LlAddressModelExample.Criteria cri = ex.createCriteria();
+		cri.andFullNameEqualTo(fullname);
+		
+		List<LlAddressModel> list = addressModelMapper.selectByExample(ex);
+		if(list.size()== 1 ) {
+			return list.get(0);
+		}else {
+			throw new RuntimeException("未找到地址 或 地址有重复！请检查："+ fullname +" " +list.size());
+		}
 	}
 
 	@Override
@@ -174,5 +189,27 @@ public class AreaServiceImpl extends BaseService implements IAreaService {
 			
 		}
 	}
+	
+	@Override
+	public Set<Integer> querySubAddressIdsByArray(List<LlAddressModel> addressids){
+
+		Set<Integer> result = new HashSet<>();
+		for(LlAddressModel addr : addressids) {
+			result.add(addr.getId());
+			
+			LlAddressModelExample ex = new LlAddressModelExample();
+			LlAddressModelExample.Criteria cri = ex.createCriteria();
+			cri.andParentIdEqualTo(addr.getId());
+			
+			List<LlAddressModel> list = addressModelMapper.selectByExample(ex );
+			if(list.size()>=0) {
+				Set<Integer> subIds = querySubAddressIdsByArray(list);
+				result.addAll(subIds);
+			}
+			
+		}
+		return result ;
+	}
+	
 	
 }

@@ -4,7 +4,9 @@
 package com.yd.business.msg.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,12 +17,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.controller.BaseController;
+import com.yd.business.area.service.IAreaService;
 import com.yd.business.msg.bean.SmsTxSendInfoLogBean;
 import com.yd.business.msg.bean.SmsTxSendPhoneLogBean;
 import com.yd.business.msg.service.ISMSService;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.other.bean.ConfigAttributeBean;
+import com.yd.business.other.service.IAddressService;
+import com.yd.business.user.service.IUserInfoService;
+import com.yd.iotbusiness.mapper.model.LlAddressModel;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
 
 /**
  * @author ice
@@ -30,6 +38,10 @@ import com.yd.business.other.bean.ConfigAttributeBean;
 public class SmsController extends BaseController {
 	@Autowired
 	private ISMSService smsService;
+	@Autowired
+	private IAreaService areaService;
+	@Autowired
+	private IUserInfoService userInfoService;
 	
 	
 	@RequestMapping("admin/sms/querySmsTemplateList.do")
@@ -100,7 +112,45 @@ public class SmsController extends BaseController {
 		}
 		return null;
 	}
-	
+
+	@RequestMapping("admin/sms/ajaxSendSMSByAddress.do")
+	public ModelAndView ajaxSendSMSByAddress(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		IOTWebDataBean result ;
+		try {
+
+			String addressids = request.getParameter("addressids");
+			String content = request.getParameter("content");
+
+			System.out.println(addressids);
+			System.out.println(content);
+			
+			String[] addressArray = addressids.split(",");
+			List<LlAddressModel> addrList = new ArrayList<>();
+			for(String idStr : addressArray) {
+				LlAddressModel a = new LlAddressModel();
+				a.setId(Integer.parseInt(idStr));
+				addrList.add(a);
+			}
+			//递归查询所有子集地址
+			Set<Integer> allAddrIds = areaService.querySubAddressIdsByArray(addrList);
+			
+			//查询对应地址的用户号码
+			List<LmUserModel> users = userInfoService.queryUsersPhoneByAddressList(allAddrIds);
+			
+			smsService.sendJXTsms(users , content, getCurrentLoginOperator());
+
+			result = new IOTWebDataBean();
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setMessage(e.getMessage());
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+		}
+		writeJson(response, result );
+		return null;
+	}
 	
 	
 }

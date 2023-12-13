@@ -25,6 +25,6 @@ public abstract class BaseRunable implements Runnable {
 		
 	}
 	
-	public abstract void runMethod();
+	public abstract void runMethod() throws Exception;
 	
 }

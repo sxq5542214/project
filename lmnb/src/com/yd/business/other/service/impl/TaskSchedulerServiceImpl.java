@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.context.BaseContext;
 import com.yd.basic.framework.pageination.PageinationData;
+import com.yd.basic.framework.runable.BaseRunable;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.other.bean.TaskCronsBean;
 import com.yd.business.other.crons.BaseCrons;
@@ -41,6 +45,7 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 	
 	@Resource
 	private ITaskSchedulerDao taskSchedulerDao;
+	private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(10, 100,600L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(1024));;
 	private Map<Integer,TaskCronsBean> cronsMap = new HashMap<Integer, TaskCronsBean>();
 	@Resource
 	private StdScheduler schedulerFactory;
@@ -258,4 +263,10 @@ public class TaskSchedulerServiceImpl extends BaseService implements ITaskSchedu
 			taskSchedulerDao.updateAdminTaskStatus(bean);
 		}
 	}
+	
+	@Override
+	public void startThreadByPool(BaseRunable extendBaseRunable) {
+		threadPool.execute(extendBaseRunable);
+	}
+	
 }

@@ -1,6 +1,7 @@
 package com.yd.business.user.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.business.user.bean.UserInfoBean;
@@ -24,5 +25,7 @@ public interface IUserInfoService {
 
 	int addOrUpdateUser(LmUserModel bean);
 	int addOrUpdateUser(UserInfoBean bean);
+
+	List<LmUserModel> queryUsersPhoneByAddressList(Set<Integer> addressids);
 
 }

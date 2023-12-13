@@ -3,8 +3,11 @@
  */
 package com.yd.business.user.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LmUserModelMapper;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.iotbusiness.mapper.model.LmUserModelExample;
+import com.yd.iotbusiness.mapper.model.LmUserModelExample.Criteria;
 
 /**
  * @author ice
@@ -142,6 +146,18 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 		return 0;
 	}
 	
-	
+	@Override
+	public List<LmUserModel> queryUsersPhoneByAddressList(Set<Integer> addressids){
+		
+		if(addressids.size() == 0) {
+			return null;
+		}
+		LmUserModelExample ex = new LmUserModelExample();
+		LmUserModelExample.Criteria cri = ex.createCriteria();
+		cri.andAddressidIn(new ArrayList<>(addressids));
+		
+		return userModelMapper.selectByExample(ex);
+		
+	}
 	
 }

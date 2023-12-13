@@ -1,6 +1,7 @@
 package com.yd.business.other.service;
 
 import com.yd.basic.framework.pageination.PageinationData;
+import com.yd.basic.framework.runable.BaseRunable;
 import com.yd.business.other.bean.TaskCronsBean;
 
 public interface ITaskSchedulerService {
@@ -19,4 +20,6 @@ public interface ITaskSchedulerService {
 	 * 更改crons表数据
 	 */
 	public void editTaskCron(TaskCronsBean bean);
+
+	public void startThreadByPool(BaseRunable extendBaseRunable);
 }

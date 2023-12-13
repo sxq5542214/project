@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
+import com.yd.basic.framework.runable.BaseRunable;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.msg.bean.SmsTxSendInfoLogBean;
 import com.yd.business.msg.bean.SmsTxSendPhoneLogBean;
+import com.yd.business.msg.client.JXTSmsClient;
 import com.yd.business.msg.client.TXSmsClient;
 import com.yd.business.msg.dao.ISMSDao;
 import com.yd.business.msg.service.ISMSService;
@@ -23,8 +25,14 @@ import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.other.bean.ConfigAttributeBean;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.other.service.ITaskSchedulerService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.iotbusiness.mapper.dao.LlSmsSendlogModelMapper;
+import com.yd.iotbusiness.mapper.model.LlSmsSendlogModel;
+import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
+import com.yd.iotbusiness.mapper.model.LmUserModelExample;
 import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
 
@@ -35,14 +43,114 @@ import com.yd.util.StringUtil;
 @Service("smsService")
 public class SMSServiceImpl extends BaseService implements ISMSService {
 	
+	private static String SMS_CHANNEL_JXT = "吉讯通";
+	
 	@Autowired
 	private ISMSDao smsDao;
+	@Autowired
+	private LlSmsSendlogModelMapper smsSendlogModelMapper;
 	
 	@Autowired
 	private IUserInfoService userInfoService;
 	@Autowired
 	private IConfigAttributeService configAttributeService;
+	@Autowired
+	private ITaskSchedulerService taskSchedulerService;
 	
+	
+
+	/**
+	 * 发送吉讯通接口的短信
+	 * @param phones
+	 * @param params
+	 * @return
+	 */
+	@Override
+	public String sendJXTsms(List<LmUserModel> userList,String content,LmOperatorModel op){
+
+		try {
+			
+			JXTSmsClient smsClient = JXTSmsClient.getInstance();
+			for(LmUserModel user : userList) {
+				
+				// 根据号码启动线程发送短信
+				taskSchedulerService.startThreadByPool(new BaseRunable() {
+					
+					@Override
+					public void runMethod() throws Exception {
+						String response = smsClient.postSMS(user.getPhone(), content);
+						
+						LlSmsSendlogModel sms = new LlSmsSendlogModel();
+						sms.setContent(content);
+						sms.setOperatorid(op.getId().toString());
+						sms.setPhonenumber(user.getPhone());
+						sms.setResult(response);
+						sms.setSendtime(DateUtil.getNowDateStrSSS());
+						sms.setSmsChannel(SMS_CHANNEL_JXT);
+						try {
+							if("000".equals(response.substring(0, 3))) {
+								sms.setStatus("成功");
+							}else {
+								sms.setStatus("失败");
+							}
+						}catch (Exception e) {
+							sms.setStatus(e.toString());
+							log.error(e,e);
+						}
+						smsSendlogModelMapper.insertSelective(sms);
+					}
+				});
+			}
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			return "error";
+		}
+		return "success";
+		
+		
+	}
+	/**
+	 * 发送吉讯通接口的短信
+	 * @param phones
+	 * @param params
+	 * @return
+	 */
+	@Override
+	public String sendJXTsms(String[] phones,String content,LmOperatorModel op){
+		
+		try {
+			
+			JXTSmsClient smsClient = JXTSmsClient.getInstance();
+			for(String phone : phones) {
+				
+				// 根据号码启动线程发送短信
+				taskSchedulerService.startThreadByPool(new BaseRunable() {
+					
+					@Override
+					public void runMethod() throws Exception {
+						String response = smsClient.postSMS(phone, content);
+						
+						LlSmsSendlogModel sms = new LlSmsSendlogModel();
+						sms.setContent(content);
+						sms.setOperatorid(op.getId().toString());
+						sms.setPhonenumber(phone);
+						sms.setResult(response);
+						sms.setSendtime(DateUtil.getNowDateStrSSS());
+						sms.setSmsChannel(SMS_CHANNEL_JXT);
+						smsSendlogModelMapper.insertSelective(sms);
+					}
+				});
+			}
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			return "error";
+		}
+		return "success";
+	}
+	
+
 	/**
 	 * 发送腾讯接口的短信
 	 * @param phones
@@ -83,7 +191,6 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 		}
 		return "success";
 	}
-	
 	
 	/**
 	 * 发送腾讯接口的短信

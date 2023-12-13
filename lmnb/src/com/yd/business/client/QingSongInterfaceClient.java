@@ -259,9 +259,9 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 //		String code = "200223267508"	;   //200223090143    200223267508
 //		DeviceDto res = checkDeviceInfo(code, STATIONCODE);
 //		System.out.println(res);
-		
-		
-		testMeterReading();
+String str = "000/Send:1/Consumption:.055/Tmoney:3098.725/sid:1213224623120293";
+		System.out.println(str.substring(0, 3));
+//		testMeterReading();
 	}
 	private static void testMeterReading() {
 		String str = "[\r\n"

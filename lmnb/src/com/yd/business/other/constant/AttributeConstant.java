@@ -59,6 +59,8 @@ public interface AttributeConstant {
 	public static final String CODE_SMS_TX_TEMPLATE_STOP = "sms_tx_Template_Stop";
 	public static final String CODE_SMS_REMARK_INFO = "sms_remark_info";
 	
-	
+
+	public static final String CODE_SMS_JXT_APPID = "sms_jxt_appID";
+	public static final String CODE_SMS_JXT_APPPWD = "sms_jxt_appPWD";
 	
 }

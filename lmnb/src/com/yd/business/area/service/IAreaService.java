@@ -1,6 +1,7 @@
 package com.yd.business.area.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.business.area.bean.AddressBean;
@@ -20,5 +21,9 @@ public interface IAreaService {
 	IOTWebDataBean queryAreaList(LlAddressModel model);
 
 	IOTWebDataBean addOrUpdateAddress(LlAddressModel bean) throws Exception;
+
+	LlAddressModel findAddressByFullname(String fullname);
+
+	Set<Integer> querySubAddressIdsByArray(List<LlAddressModel> addressids);
 
 }
