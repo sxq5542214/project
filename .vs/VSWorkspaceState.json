@@ -3,10 +3,11 @@
     "",
     "\\lmnb-web",
     "\\lmnb-web\\src",
-    "\\lmnb-web\\src\\router",
     "\\lmnb-web\\src\\views",
     "\\lmnb-web\\src\\views\\business",
-    "\\lmnb-web\\src\\views\\business\\report"
+    "\\lmnb-web\\src\\views\\business\\address",
+    "\\lmnb-web\\src\\views\\business\\message",
+    "\\lmnb-web\\src\\views\\login"
   ],
   "PreviewInSolutionExplorer": false
 }
