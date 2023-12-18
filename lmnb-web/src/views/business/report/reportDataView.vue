@@ -1,5 +1,13 @@
 <template>
   <div class="app-container">
+    <div>
+
+      <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
+        导出数据
+      </el-button>
+
+    </div>
+
    <!-- <div class="filter-container">
       <div class="demo-input-suffix">
         <el-input
@@ -97,6 +105,9 @@ export default {
         sort: '+id'
       },
       showReviewer: false,
+      filename: '数据导出',
+      autoWidth: true,
+      bookType: 'xlsx',
       downloadLoading: false
     }
   },
@@ -118,12 +129,37 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      querySimpleReportList().then(response => {
+      querySimpleReportDataView({ report_id: this.listQuery.id, code: this.listQuery.code}).then(response => {
         this.list = response.data;
         this.listLoading = false;
         })
 
 
+    },
+    handleDownload() {
+      this.downloadLoading = true;
+      var labels = new Array();
+      var codes = new Array();
+      for (var i = 0; i < this.listLabel.length; i++) {
+        var item = this.listLabel[i];
+        labels.push(item.name);
+        codes.push(item.code);
+      }
+      console.log(labels);
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = labels
+        const filterVal = codes
+        const list = this.list
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+        this.downloadLoading = false
+      })
     },
     handleClick() {
       alert('视线中')
@@ -131,6 +167,15 @@ export default {
     getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     }
   }
 }
