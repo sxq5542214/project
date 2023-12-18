@@ -96,7 +96,9 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 	@Override
 	public IOTWebDataBean changeMeter(String oldMeterCode,String changeMeterCode,BigDecimal changeMeterCost,BigDecimal oldReadNum,BigDecimal changeReadNum,String changeFixUser,String remark1,Integer operatorid) {
 		IOTWebDataBean result = new IOTWebDataBean();
-		
+
+		//查找操作员
+		LmOperatorModel op = operatorService.findOperatorById(operatorid);
 		//以旧水表为基础
 		MeterModelExtendsBean oldMeter = deviceInfoService.findMeterByCode(oldMeterCode);
 		LmMeterModel newMeter = deviceInfoService.findMeterById(oldMeter.getId());
@@ -109,7 +111,7 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 		newMeter.setCyclebuyquantity(BigDecimal.ZERO);
 		newMeter.setCycleendbalance(BigDecimal.ZERO);
 		newMeter.setCyclestartbalance(BigDecimal.ZERO);
-		newMeter.setCyclestartnum(BigDecimal.ZERO);
+		newMeter.setCyclestartnum(changeReadNum);
 		newMeter.setCycleuse(BigDecimal.ZERO);
 		newMeter.setImei(null);
 		newMeter.setIsp(null);
@@ -121,16 +123,17 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 		newMeter.setRecentfailstate(null);
 		newMeter.setRecentfailtime(null);
 		newMeter.setRecentreadexcept(null);
-		newMeter.setRecentreadnum(null);
+		newMeter.setRecentreadnum(changeReadNum);
 		newMeter.setRecentreadtime(null);
 		newMeter.setStationchecked(null);
-		newMeter.setRemark2("换表收费"+changeMeterCost+"员");
+		newMeter.setRemark2("换表收费"+changeMeterCost+"元");
 		deviceInfoService.addOrUpdateMeter(newMeter);
 		
 		oldMeter.setChanged(MeterModelExtendsBean.CHANGED_TRUE);
 		oldMeter.setChangeid(newMeter.getId());
 		oldMeter.setRemark1(remark1);
 		oldMeter.setRemark2(changeFixUser);
+		oldMeter.setLyname(op.getRealname());
 		oldMeter.setOpened(MeterModelExtendsBean.OPEND_CLOSE);
 		oldMeter.setStationchecked(MeterModelExtendsBean.STATIONCHECKED_FALSE);
 		oldMeter.setStoptime(new Date());
@@ -144,8 +147,6 @@ public class ChangeMeterServiceImpl extends BaseService implements IChangeMeterS
 		recordService.updateRecordMeterCode(oldMeterCode, targetOldMeterCode);
 		
 		
-		//查找操作员
-		LmOperatorModel op = operatorService.findOperatorById(operatorid);
 		
 		//插入 recode记录前，先找上一次的数据
 		LmRecordModel lastRecord = recordService.findLastRecord(oldMeter.getCode());

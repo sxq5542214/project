@@ -89,20 +89,9 @@ public class ReportController extends BaseController {
 			String id = request.getParameter("report_id");
 			//根据登录用户的报表权限查询报表清单
 			ReportSimpleBean report = reportService.findReportSimpleById(Integer.parseInt(id));
-			String columnCodes = report.getColumn_codes();
-			String columnNames = report.getColumn_names();
-			List<ReportSimpleBean> dataList = new ArrayList<>();
-			int num = columnNames.split(",").length ;
-			for(int i = 0 ; i < num ; i++) {
-				ReportSimpleBean bean = new ReportSimpleBean();
-				String name = columnNames.split(",")[i];
-				String cod = columnCodes.split(",")[i];
-				bean.setName(name);
-				bean.setCode(cod);
-				dataList.add(bean);
-			}
+			List<Map<String, Object>> list = reportService.querySingleReportData(report.getData_sql());
 			
-			result.setData(dataList);
+			result.setData(list);
 			
 			
 		} catch (Exception e) {
