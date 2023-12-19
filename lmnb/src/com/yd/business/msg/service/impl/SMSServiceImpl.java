@@ -66,7 +66,7 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 	 * @return
 	 */
 	@Override
-	public String sendJXTsms(List<LmUserModel> userList,String content,LmOperatorModel op){
+	public String sendJXTsms(List<LmUserModel> userList,String content,LmOperatorModel op,String sendType){
 
 		try {
 			
@@ -87,6 +87,8 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 						sms.setResult(response);
 						sms.setSendtime(DateUtil.getNowDateStrSSS());
 						sms.setSmsChannel(SMS_CHANNEL_JXT);
+						sms.setUserid(user.getId());
+						sms.setSendtype(sendType);
 						try {
 							if("000".equals(response.substring(0, 3))) {
 								sms.setStatus("成功");
@@ -117,7 +119,7 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 	 * @return
 	 */
 	@Override
-	public String sendJXTsms(String[] phones,String content,LmOperatorModel op){
+	public String sendJXTsms(String[] phones,String content,LmOperatorModel op,String sendType){
 		
 		try {
 			
@@ -138,6 +140,7 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 						sms.setResult(response);
 						sms.setSendtime(DateUtil.getNowDateStrSSS());
 						sms.setSmsChannel(SMS_CHANNEL_JXT);
+						sms.setSendtype(sendType);
 						smsSendlogModelMapper.insertSelective(sms);
 					}
 				});

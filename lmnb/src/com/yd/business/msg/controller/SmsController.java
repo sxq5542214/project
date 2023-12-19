@@ -138,7 +138,7 @@ public class SmsController extends BaseController {
 			//查询对应地址的用户号码
 			List<LmUserModel> users = userInfoService.queryUsersPhoneByAddressList(allAddrIds);
 			
-			smsService.sendJXTsms(users , content, getCurrentLoginOperator());
+			smsService.sendJXTsms(users , content, getCurrentLoginOperator(),"手动群发短信");
 
 			result = new IOTWebDataBean();
 			

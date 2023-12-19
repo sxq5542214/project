@@ -42,13 +42,6 @@ public interface ISMSService {
 	String sendTXsms(String addressIds, String[] params, String templateId, String templateStr, String smsName,
 			OperatorBean op);
 
-	/**
-	 * 发送吉讯通接口的短信
-	 * @param phones
-	 * @param params
-	 * @return
-	 */
-	String sendJXTsms(String[] phones, String content, LmOperatorModel op);
 
 	/**
 	 * 发送吉讯通接口的短信
@@ -56,6 +49,14 @@ public interface ISMSService {
 	 * @param params
 	 * @return
 	 */
-	String sendJXTsms(List<LmUserModel> userList, String content, LmOperatorModel op);
+	String sendJXTsms(List<LmUserModel> userList, String content, LmOperatorModel op, String sendType);
+
+	/**
+	 * 发送吉讯通接口的短信
+	 * @param phones
+	 * @param params
+	 * @return
+	 */
+	String sendJXTsms(String[] phones, String content, LmOperatorModel op, String sendType);
 
 }

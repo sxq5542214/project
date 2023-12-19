@@ -551,6 +551,92 @@ public class LlSmsSendlogModelExample {
             return (Criteria) this;
         }
 
+        public Criteria andSendtypeIsNull() {
+            addCriterion("sendtype is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeIsNotNull() {
+            addCriterion("sendtype is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeEqualTo(String value) {
+            if (value != null) {
+                addCriterion("sendtype =", value, "sendtype");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeNotEqualTo(String value) {
+            if (value != null) {
+                addCriterion("sendtype <>", value, "sendtype");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeGreaterThan(String value) {
+            if (value != null) {
+                addCriterion("sendtype >", value, "sendtype");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeGreaterThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("sendtype >=", value, "sendtype");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeLessThan(String value) {
+            if (value != null) {
+                addCriterion("sendtype <", value, "sendtype");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeLessThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("sendtype <=", value, "sendtype");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeLike(String value) {
+            if (value != null) {
+                addCriterion("sendtype like", "%"+value+"%", "sendtype");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeNotLike(String value) {
+            if (value != null) {
+                addCriterion("sendtype not like", value, "sendtype");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeIn(List<String> values) {
+            addCriterion("sendtype in", values, "sendtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeNotIn(List<String> values) {
+            addCriterion("sendtype not in", values, "sendtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeBetween(String value1, String value2) {
+            addCriterion("sendtype between", value1, value2, "sendtype");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendtypeNotBetween(String value1, String value2) {
+            addCriterion("sendtype not between", value1, value2, "sendtype");
+            return (Criteria) this;
+        }
+
         public Criteria andSendtimeIsNull() {
             addCriterion("sendtime is null");
             return (Criteria) this;
@@ -634,6 +720,150 @@ public class LlSmsSendlogModelExample {
 
         public Criteria andSendtimeNotBetween(String value1, String value2) {
             addCriterion("sendtime not between", value1, value2, "sendtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridIsNull() {
+            addCriterion("userid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridIsNotNull() {
+            addCriterion("userid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("userid =", value, "userid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridNotEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("userid <>", value, "userid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridGreaterThan(Integer value) {
+            if (value != null) {
+                addCriterion("userid >", value, "userid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridGreaterThanOrEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("userid >=", value, "userid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridLessThan(Integer value) {
+            if (value != null) {
+                addCriterion("userid <", value, "userid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridLessThanOrEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("userid <=", value, "userid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridIn(List<Integer> values) {
+            addCriterion("userid in", values, "userid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridNotIn(List<Integer> values) {
+            addCriterion("userid not in", values, "userid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridBetween(Integer value1, Integer value2) {
+            addCriterion("userid between", value1, value2, "userid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseridNotBetween(Integer value1, Integer value2) {
+            addCriterion("userid not between", value1, value2, "userid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridIsNull() {
+            addCriterion("meterid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridIsNotNull() {
+            addCriterion("meterid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("meterid =", value, "meterid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridNotEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("meterid <>", value, "meterid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridGreaterThan(Integer value) {
+            if (value != null) {
+                addCriterion("meterid >", value, "meterid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridGreaterThanOrEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("meterid >=", value, "meterid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridLessThan(Integer value) {
+            if (value != null) {
+                addCriterion("meterid <", value, "meterid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridLessThanOrEqualTo(Integer value) {
+            if (value != null) {
+                addCriterion("meterid <=", value, "meterid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridIn(List<Integer> values) {
+            addCriterion("meterid in", values, "meterid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridNotIn(List<Integer> values) {
+            addCriterion("meterid not in", values, "meterid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridBetween(Integer value1, Integer value2) {
+            addCriterion("meterid between", value1, value2, "meterid");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeteridNotBetween(Integer value1, Integer value2) {
+            addCriterion("meterid not between", value1, value2, "meterid");
             return (Criteria) this;
         }
 
