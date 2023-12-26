@@ -3,13 +3,13 @@
     "",
     "\\lmnb-web",
     "\\lmnb-web\\src",
-    "\\lmnb-web\\src\\api",
     "\\lmnb-web\\src\\views",
     "\\lmnb-web\\src\\views\\business",
-    "\\lmnb-web\\src\\views\\business\\address",
-    "\\lmnb-web\\src\\views\\business\\message",
-    "\\lmnb-web\\src\\views\\login"
+    "\\lmnb-web\\src\\views\\business\\report",
+    "\\lmnb-web\\src\\views\\business\\user",
+    "\\lmnb-web\\src\\views\\login",
+    "\\lmnb-web\\src\\views\\table",
+    "\\lmnb-web\\src\\views\\table\\dynamic-table"
   ],
-  "SelectedNode": "\\lmnb-web\\src\\api\\messageManager.js",
   "PreviewInSolutionExplorer": false
 }

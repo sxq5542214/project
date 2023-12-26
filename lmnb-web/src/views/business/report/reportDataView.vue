@@ -1,8 +1,32 @@
 <template>
   <div class="app-container">
     <div>
+      <el-form :model="listQuery" ref="queryForm" label-width="auto" :inline="true">
 
-      <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
+        <el-form-item label="起始日期" prop="timestamp">
+          <el-date-picker v-model="start_date" type="datetime" placeholder="请选择时间" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" />
+        </el-form-item>
+
+        <el-form-item label="结束日期" prop="timestamp">
+          <el-date-picker v-model="end_date" type="datetime" placeholder="请选择时间" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" />
+        </el-form-item>
+
+        <el-form-item v-for="(item,index) in listParam" :key="index" :label="item.param_name">
+          <el-date-picker v-if="item.param_type == 'date'" v-model="'listQuery.'+item.param_code"
+                          type="date" placeholder="请选择日期">
+          </el-date-picker>
+          <el-input v-else v-model="'listQuery.' + item.param_code" :type="item.param_type"></el-input>
+        </el-form-item>
+        <!-- 可以添加更多的查询条件 -->
+
+      </el-form>
+
+      <el-button :loading="listLoading" style="margin:0 0" type="Info" icon="el-icon-arrow-left" @click="goback">
+        返回
+      </el-button><el-button :loading="listLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="getList">
+        查询数据
+      </el-button>
+      <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="warning" icon="el-icon-document" @click="handleDownload">
         导出数据
       </el-button>
 
@@ -46,8 +70,7 @@
               border
               fit
               highlight-current-row
-              style="width: 100%;"
-              @sort-change="sortChange">
+              style="width: 100%;">
       <el-table-column
           v-for="(item, index) in listLabel"
           :key="index"
@@ -67,15 +90,6 @@
       @pagination="getList"
     />
 
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -91,11 +105,14 @@ export default {
   directives: { waves },
   data() {
     return {
+      start_date: parseTime(new Date().setHours(0, 0, 0),null),
+      end_date: parseTime(new Date().setHours(23, 59, 59),null),
       tableKey: 0,
       list: null,
       total: 0,
       listLoading: true,
-      listLabel: null ,
+      listLabel: null,
+      listParam: [],
       listQuery: {
         page: 1,
         rows: 20,
@@ -104,6 +121,7 @@ export default {
         type: undefined,
         sort: '+id'
       },
+      datetest: '2023-12-12',
       showReviewer: false,
       filename: '数据导出',
       autoWidth: true,
@@ -129,9 +147,12 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      querySimpleReportDataView({ report_id: this.listQuery.id, code: this.listQuery.code}).then(response => {
-        this.list = response.data;
+      querySimpleReportDataView({ report_id: this.listQuery.id, code: this.listQuery.code , queryParam : this.listQuery ,start_date:this.start_date,end_date:this.end_date }).then(response => {
+        this.list = response.data.dataList;
         this.listLoading = false;
+
+        this.listParam = response.data.paramsList;
+        //console.log('listParam', this.listParam);
         })
 
 
@@ -164,9 +185,8 @@ export default {
     handleClick() {
       alert('视线中')
     },
-    getSortClass: function(key) {
-      const sort = this.listQuery.sort
-      return sort === `+${key}` ? 'ascending' : 'descending'
+    goback() {
+      this.$router.go(-1)
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {

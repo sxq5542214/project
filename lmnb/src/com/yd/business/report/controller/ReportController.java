@@ -23,6 +23,7 @@ import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.report.bean.ReportSimpleBean;
 import com.yd.business.report.service.IReportService;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
 
@@ -87,11 +88,26 @@ public class ReportController extends BaseController {
 
 			String code = request.getParameter("code");
 			String id = request.getParameter("report_id");
-			//根据登录用户的报表权限查询报表清单
-			ReportSimpleBean report = reportService.findReportSimpleById(Integer.parseInt(id));
-			List<Map<String, Object>> list = reportService.querySingleReportData(report.getData_sql());
+			String start_date = request.getParameter("start_date");
+			String end_date = request.getParameter("end_date");
+			if(StringUtil.isNull(start_date)) {
+				start_date = DateUtil.getNowOnlyDateStr();
+			}
+			if(StringUtil.isNull(end_date)) {
+				// 加一天
+				end_date = DateUtil.formatDateOnlyDate(System.currentTimeMillis() + 43200000) ;
+			}
 			
-			result.setData(list);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("start_date", start_date);
+			map.put("end_date", end_date);
+			
+
+			//根据登录用户的报表权限查询报表清单
+			ReportSimpleBean report = reportService.querySimpleReportAndDataByCode(code,map);
+//			List<Map<String, Object>> list = reportService.querySingleReportData(report.getData_sql());
+			
+			result.setData(report);
 			
 			
 		} catch (Exception e) {

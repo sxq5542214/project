@@ -16,6 +16,7 @@ import com.yd.business.report.bean.ReportParamsBean;
 import com.yd.business.report.bean.ReportSimpleBean;
 import com.yd.business.report.dao.IReportDao;
 import com.yd.business.report.service.IReportService;
+import com.yd.util.StringUtil;
 
 /**
  * @author ice
@@ -82,11 +83,13 @@ public class ReportServiceImpl extends BaseService implements IReportService {
 		List<ReportParamsBean> paramsList = reportDao.queryReportParamsList(bean);
 		
 		for(ReportParamsBean param : paramsList) {
-			String execSql = convertActionParameter(param.getParam_sql(), params);
+			if(StringUtil.isNotNull(param.getParam_sql())) {
+				String execSql = convertActionParameter(param.getParam_sql(), params);
 			
-			List<Map<String, Object>> dataList = reportDao.queryCustomSql(execSql);
-			param.setDataList(dataList);
-			param.setParam_sql(null);
+				List<Map<String, Object>> dataList = reportDao.queryCustomSql(execSql);
+				param.setDataList(dataList);
+				param.setParam_sql(null);
+			}
 		}
 		
 		return paramsList;

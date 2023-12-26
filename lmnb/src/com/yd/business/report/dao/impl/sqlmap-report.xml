@@ -9,7 +9,7 @@
 		<where>
 			<if test="id != null"> and id = #{id}</if>
 			<if test="name != null"> and name = #{name}</if>
-			<if test="code != null"> and code like  '%' + #{code} + '%' </if>
+			<if test="code != null"> and code like  CONCAT('%' , #{code} , '%') </if>
 			<if test="data_sql != null"> and data_sql = #{data_sql}</if>
 			<if test="status != null"> and status = #{status}</if>
 			<if test="seq != null"> and seq = #{seq}</if>
