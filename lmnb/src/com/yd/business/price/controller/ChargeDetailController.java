@@ -65,44 +65,44 @@ public class ChargeDetailController extends BaseController {
 	
 	
 
-	@RequestMapping("**/admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do")
-	public ModelAndView ajaxUpdateChargeDetailBrushFlagToSuccess(HttpServletRequest request,HttpServletResponse response) {
-		try {
-			String u_cardno = request.getParameter("u_cardno");
-			String useDate = request.getParameter("useDate");
-			String u_id = request.getParameter("u_id");
-			UserInfoBean user = null;
-
-			UserInfoBean bean = new UserInfoBean();
-			if(StringUtil.isNotNull(u_id)) {
-				user = userInfoService.findUserById(Long.parseLong(u_id));
-			}else {
-				bean.setU_cardno(Integer.parseInt(u_cardno));
-				
-				List<UserInfoBean> userList = userInfoService.queryUserInfo(bean);
-				if(userList.size() != 1 ) {
-					bean.setDataList(userList);
-					bean.setResultCode(UserInfoBean.RESULTCODE_FAILD);
-					bean.setResultDesc("用户卡号"+ u_cardno +"有重复！");
-					writeJson(response, bean);
-					return null;
-				}else {
-					user = userList.get(0);
-				}
-			
-			}
-			ChargeDetailBean last = chargeDetailService.findLastChargeDetailByUserId(user.getU_id());
-			if(last.getCd_brushflag().intValue() == ChargeDetailBean.BRUSHFLAG_NO) {
-				Date brushDate = DateUtil.parseDateOnlyDate(useDate);
-				chargeDetailService.updateChargeDetailBrushFlagToSuccess(last.getCd_id(),brushDate);
-			}
-
-		} catch (Exception e) {
-			log.error(e, e);
-		}
-		return null;
-		
-	}
+//	@RequestMapping("**/admin/chargeDetail/ajaxUpdateChargeDetailBrushFlagToSuccess.do")
+//	public ModelAndView ajaxUpdateChargeDetailBrushFlagToSuccess(HttpServletRequest request,HttpServletResponse response) {
+//		try {
+//			String u_cardno = request.getParameter("u_cardno");
+//			String useDate = request.getParameter("useDate");
+//			String u_id = request.getParameter("u_id");
+//			UserInfoBean user = null;
+//
+//			UserInfoBean bean = new UserInfoBean();
+//			if(StringUtil.isNotNull(u_id)) {
+//				user = userInfoService.findUserById(Long.parseLong(u_id));
+//			}else {
+//				bean.setU_cardno(Integer.parseInt(u_cardno));
+//				
+//				List<UserInfoBean> userList = userInfoService.queryUserInfo(bean);
+//				if(userList.size() != 1 ) {
+//					bean.setDataList(userList);
+//					bean.setResultCode(UserInfoBean.RESULTCODE_FAILD);
+//					bean.setResultDesc("用户卡号"+ u_cardno +"有重复！");
+//					writeJson(response, bean);
+//					return null;
+//				}else {
+//					user = userList.get(0);
+//				}
+//			
+//			}
+//			ChargeDetailBean last = chargeDetailService.findLastChargeDetailByUserId(user.getU_id());
+//			if(last.getCd_brushflag().intValue() == ChargeDetailBean.BRUSHFLAG_NO) {
+//				Date brushDate = DateUtil.parseDateOnlyDate(useDate);
+//				chargeDetailService.updateChargeDetailBrushFlagToSuccess(last.getCd_id(),brushDate);
+//			}
+//
+//		} catch (Exception e) {
+//			log.error(e, e);
+//		}
+//		return null;
+//		
+//	}
 	
 	
 

@@ -35,6 +35,7 @@ import com.yd.iotbusiness.mapper.model.LmPaymentModel;
 import com.yd.iotbusiness.mapper.model.LmPaymentModelExample;
 import com.yd.iotbusiness.mapper.model.LmPaymentModelExample.Criteria;
 import com.yd.iotbusiness.mapper.model.LmPricedetailModel;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.util.DateUtil;
 import com.yd.util.NumberUtil;
 import com.yd.util.StringUtil;
@@ -59,16 +60,16 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	@Override
 	public ChargeDetailBean findLastChargeDetailByUserId(Long userid) throws Exception {
 		
-		UserInfoBean user = userInfoService.findUserById(userid);
-		ChargeDetailBean bean = new ChargeDetailBean();
-		bean.setCd_userid(user.getU_id());
-		bean.setOrderby("order by cd_no desc ");
-		List<ChargeDetailBean> list = chargeDetailDao.queryChargeDetailList(bean);
-
-		if(list.size() > 0 ) {
-			bean = list.get(0);
-			return bean;
-		}
+//		UserInfoBean user = userInfoService.findUserById(userid);
+//		ChargeDetailBean bean = new ChargeDetailBean();
+//		bean.setCd_userid(user.getU_id());
+//		bean.setOrderby("order by cd_no desc ");
+//		List<ChargeDetailBean> list = chargeDetailDao.queryChargeDetailList(bean);
+//
+//		if(list.size() > 0 ) {
+//			bean = list.get(0);
+//			return bean;
+//		}
 		return null;
 	}
 
@@ -444,13 +445,13 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		PrintBean bean = new PrintBean();
 		
 		ChargeDetailBean cd = findChargeDetailById(cdid);
-		UserInfoBean user = userInfoService.findUserById(cd.getCd_userid());
+		LmUserModel user = userInfoService.findUserById(cd.getCd_userid().intValue());
 //		PriceBean price = priceService.findPriceById(user.getU_priceid());
 		OperatorBean operator = operatorService.findOperatorById(cd.getCd_operatorid());
 		// 用户信息、价格
-		bean.setTxtUserNo1(user.getU_no().toString());
-		bean.setTxtUserName1(user.getU_name());
-		bean.setTxtUserAddress1(user.getAddressName());
+		bean.setTxtUserNo1(user.getCode());
+		bean.setTxtUserName1(user.getName());
+		bean.setTxtUserAddress1(user.getArea1()+user.getArea2()+user.getArea3());
 //		bean.setTxtPriceKind1(price.getP_name());
 //		bean.setTxtPrice11(price.getP_price1().setScale(2, RoundingMode.HALF_UP).toString());
 		
@@ -469,7 +470,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		//实收金额
 		bean.setTxtPaidMoney(cd.getCd_paidmoney().setScale(2, RoundingMode.HALF_UP).toString());
 		//用户余额
-		bean.setTxtBalance(user.getU_balance().setScale(2, RoundingMode.HALF_UP).toString());
+//		bean.setTxtBalance(user.getU_balance().setScale(2, RoundingMode.HALF_UP).toString());
 		bean.setTxtOperator11(operator.getO_name());
 		
 		//收费日期

@@ -77,11 +77,8 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	
 
 	@Override
-	public UserInfoBean findUserById(Long id){
-		UserInfoBean bean = new UserInfoBean();
-		bean.setU_id(id);
-		List<UserInfoBean> list = userInfoDao.queryUserInfoList(bean);
-		return list.size()>0 ? list.get(0):null;
+	public LmUserModel  findUserById(Integer id){
+		return userModelMapper.selectByPrimaryKey(id);
 		
 	}
 

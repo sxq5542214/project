@@ -11,8 +11,6 @@ public interface IUserInfoService {
 
 	List<UserInfoBean> queryUserInfo(UserInfoBean bean);
 
-	UserInfoBean findUserById(Long id);
-
 	void updateUserStatusToNormal(Long userid);
 
 	UserInfoBean findUserByNo(Long no);
@@ -27,5 +25,7 @@ public interface IUserInfoService {
 	int addOrUpdateUser(UserInfoBean bean);
 
 	List<LmUserModel> queryUsersPhoneByAddressList(Set<Integer> addressids);
+
+	LmUserModel findUserById(Integer id);
 
 }

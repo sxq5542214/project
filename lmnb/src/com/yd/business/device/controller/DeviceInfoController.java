@@ -1,5 +1,6 @@
 package com.yd.business.device.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,10 +22,12 @@ import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.price.bean.PriceBean;
 import com.yd.business.price.service.IChargeDetailService;
 import com.yd.business.price.service.IPriceService;
+import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.model.LlDictionaryModel;
 import com.yd.iotbusiness.mapper.model.LlDictionaryModelExample;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
@@ -37,6 +40,9 @@ public class DeviceInfoController extends BaseController {
 	private IDeviceKindService deviceKindService;
 	@Resource
 	private IChargeDetailService chargeDetailService;
+	@Resource
+	private IUserInfoService userInfoService;
+	
 
 	@RequestMapping("admin/device/toDeviceInfoPage.do")
 	public ModelAndView toDeviceInfoPage(HttpServletRequest request,HttpServletResponse response){
@@ -81,6 +87,14 @@ public class DeviceInfoController extends BaseController {
 			if(StringUtil.isNotNull(openfeeStr)) {
 				// 是否有开户费，有则记录
 				Integer openfee = Integer.parseInt(openfeeStr);
+				
+				//更新用户表中的开户费
+				Integer userid = bean.getUserid();
+				LmUserModel user = userInfoService.findUserById(userid);
+				user.setOpenfee(new BigDecimal(openfee));
+				userInfoService.addOrUpdateUser(user);
+				
+				//创建充值表中的开户费
 				chargeDetailService.createOpenFeePayment(bean.getCode(),openfee,"开户费："+openfeeStr);
 			}
 			
