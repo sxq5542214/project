@@ -61,10 +61,10 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ lastMonthData, thisMonthData } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日', '11日', '12日', '13日', '14日', '15日', '16日', '17日', '18日', '19日', '20日', '21日', '22日', '23日', '24日', '25日', '26日', '27日', '28日', '29日', '30日', '31日'],
           boundaryGap: false,
           axisTick: {
             show: false
@@ -90,10 +90,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ['lastMonthData', 'thisMonthData']
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: '上月', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -104,12 +104,12 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: expectedData,
+          data: lastMonthData,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
         },
         {
-          name: 'actual',
+          name: '本月',
           smooth: true,
           type: 'line',
           itemStyle: {
@@ -124,7 +124,7 @@ export default {
               }
             }
           },
-          data: actualData,
+          data: thisMonthData,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]

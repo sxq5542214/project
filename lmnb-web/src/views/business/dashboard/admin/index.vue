@@ -41,6 +41,7 @@
 </template>
 
 <script>
+  import { queryDayBuyAmountAdminListData, queryDayBuyCountListData, queryDayMeterReadingCountListData, queryOpenedMeterCountListData } from '@/api/dashboardManager'
 import GithubCorner from '@/components/GithubCorner'
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
@@ -51,22 +52,39 @@ import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
 
+
 const lineChartData = {
   newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
+    lastMonthData: [100, 120, 161, 134, 105, 160, 165],
+    thisMonthData: [120, 82, 91, 154, 162, 140, 145]
   },
   messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
+    lastMonthData: [200, 192, 120, 144, 160, 130, 140],
+    thisMonthData: [180, 160, 151, 106, 145, 150, 130]
   },
   purchases: {
-    expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
+    lastMonthData: [80, 100, 121, 104, 105, 90, 100],
+    thisMonthData: [120, 90, 100, 138, 142, 130, 130]
   },
   shoppings: {
-    expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
+    lastMonthData: [130, 140, 141, 142, 145, 150, 160],
+    thisMonthData: [120, 82, 91, 154, 162, 140, 130]
+  },
+  dayBuyAmountListData: {
+    lastMonthData: [],
+    thisMonthData: []
+  },
+  dayBuyCountListData: {
+    lastMonthData: [],
+    thisMonthData: []
+  },
+  dayMeterReadingListData: {
+    lastMonthData: [],
+    thisMonthData: []
+  },
+  dayOpenUserListData: {
+    lastMonthData: [],
+    thisMonthData: []
   }
 }
 
@@ -85,8 +103,39 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.purchases
+      lineChartData: lineChartData.dayBuyAmountListData
     }
+  },
+
+    created() {
+       
+      queryDayBuyAmountAdminListData().then(response => {
+        for (var i = 0; i < response.data.length; i++) {
+          lineChartData.dayBuyAmountListData.lastMonthData.push(response.data[i].lastMonthData);
+          lineChartData.dayBuyAmountListData.thisMonthData.push(response.data[i].thisMonthData);
+        }
+      });
+      queryDayBuyCountListData().then(response => {
+        for (var i = 0; i < response.data.length; i++) {
+          lineChartData.dayBuyCountListData.lastMonthData.push(response.data[i].lastMonthData);
+          lineChartData.dayBuyCountListData.thisMonthData.push(response.data[i].thisMonthData);
+        }
+      });
+      queryDayMeterReadingCountListData().then(response => {
+        for (var i = 0; i < response.data.length; i++) {
+          lineChartData.dayMeterReadingListData.lastMonthData.push(response.data[i].lastMonthData);
+          lineChartData.dayMeterReadingListData.thisMonthData.push(response.data[i].thisMonthData);
+        }
+      });
+      queryOpenedMeterCountListData().then(response => {
+        for (var i = 0; i < response.data.length; i++) {
+          lineChartData.dayOpenUserListData.lastMonthData.push(response.data[i].lastMonthData);
+          lineChartData.dayOpenUserListData.thisMonthData.push(response.data[i].thisMonthData);
+        }
+      });
+
+
+
   },
   methods: {
     handleSetLineChartData(type) {
