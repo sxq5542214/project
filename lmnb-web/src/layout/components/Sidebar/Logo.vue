@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'Vue Element Admin',
+      title: '龙马水厂管理平台',
       logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
     }
   }

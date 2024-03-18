@@ -62,8 +62,10 @@ const actions = {
           reject('Verification failed, please Login again.（认证失败，请重新登录！）')
         }
 
-        const { roles, name, avatar, introduction ,menus } = data
+        const { roles, name, avatar, introduction, menus } = data;
 
+        var opid = response.info.id;
+        window.localStorage.setItem('opid', opid);
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!(您没有权限或权限为空！)')

@@ -61,8 +61,9 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ lastMonthData, thisMonthData } = {}) {
       this.chart.setOption({
+        title: { text: '近两月数据情况表', left: '45%', top: '0%'},
         xAxis: {
           data: ['1日', '2日', '3日', '4日', '5日', '6日', '7日', '8日', '9日', '10日', '11日', '12日', '13日', '14日', '15日', '16日', '17日', '18日', '19日', '20日', '21日', '22日', '23日', '24日', '25日', '26日', '27日', '28日', '29日', '30日', '31日'],
           boundaryGap: false,
@@ -90,10 +91,10 @@ export default {
           }
         },
         legend: {
-          data: ['上月收费额', '当月收费额']
+          data: ['lastMonthData', 'thisMonthData']
         },
         series: [{
-          name: '上月收费额', itemStyle: {
+          name: '上月', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -104,12 +105,12 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: expectedData,
+          data: lastMonthData,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
         },
         {
-          name: '当月收费额',
+          name: '当月',
           smooth: true,
           type: 'line',
           itemStyle: {
@@ -124,7 +125,7 @@ export default {
               }
             }
           },
-          data: actualData,
+          data: thisMonthData,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]
