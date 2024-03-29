@@ -380,7 +380,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		LmPaymentModel payment = new LmPaymentModel();
 		BigDecimal charge = new BigDecimal(openfee);
 		// 插入payment表
-		MeterModelExtendsBean meter = deviceInfoService.findMeterByCode(payment.getMetercode());
+		MeterModelExtendsBean meter = deviceInfoService.findMeterByCode(metercode);
 		LmPricedetailModel price = priceService.findPriceDetailById(meter.getPricecode());
 		payment.setUserid(meter.getUserid());
 		payment.setSystemid(meter.getSystemid());
