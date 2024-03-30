@@ -32,7 +32,7 @@ public class IOTInterfaceController extends BaseController {
 	private IDeviceInfoService deviceInfoService;
 
 
-	@RequestMapping("/client/nbApi/buildStation")
+	@RequestMapping("**/client/nbApi/buildStation")
 	public ModelAndView qingsongBuildStation(HttpServletRequest request,HttpServletResponse response){
 
 		try {
@@ -49,7 +49,7 @@ public class IOTInterfaceController extends BaseController {
 		return null;
 	}
 
-	@RequestMapping("/client/nbApi/postMeterCmd")
+	@RequestMapping("**/client/nbApi/postMeterCmd")
 	public ModelAndView qingsongPostMeterCmd(HttpServletRequest request,HttpServletResponse response){
 
 		try {
@@ -84,7 +84,7 @@ log.info("client/nbApi/postMeterCmd: "+ jsonStr);
 		return null;
 	}
 
-	@RequestMapping("/client/nbApi/postMeterReading")
+	@RequestMapping("**/client/nbApi/postMeterReading")
 	public ModelAndView qingsongPostMeterReading(HttpServletRequest request,HttpServletResponse response){
 
 		try {

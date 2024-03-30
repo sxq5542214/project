@@ -115,7 +115,7 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 				dev.setReadperiod(resData.getString("readperiod"));
 //				dev.setReversenum(resData.getString("reversenum"));
 				dev.setImei(resData.getString("imei"));
-				dev.setSim(resData.getString("sim"));
+				dev.setSim(resData.optString("sim",null));
 				dev.setCurnum(resData.getString("curnum"));
 				dev.setSensor(resData.getString("sensor"));
 				
