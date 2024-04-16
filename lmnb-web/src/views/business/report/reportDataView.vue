@@ -149,10 +149,10 @@ export default {
       this.listLoading = true
       querySimpleReportDataView({ report_id: this.listQuery.id, code: this.listQuery.code , queryParam : this.listQuery ,start_date:this.start_date,end_date:this.end_date }).then(response => {
         this.list = response.data.dataList;
-        this.listLoading = false;
 
         this.listParam = response.data.paramsList;
         //console.log('listParam', this.listParam);
+        this.listLoading = false;
         })
 
 
