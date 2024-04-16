@@ -14,6 +14,8 @@
 			<if test="metercode != null"> and metercode = #{metercode}</if>
 			<if test="meterid != null"> and meterid = #{meterid}</if>
 			<if test="billmonth != null"> and billmonth = #{billmonth}</if>
+			<if test="start_date != null"> and curtime >= #{start_date}</if>
+			<if test="end_date != null"> and #{end_date}  >= curtime  </if>
 		</where>
 	</sql>
 	<sql id="query_limit">
@@ -27,7 +29,7 @@
 	    </if>
 	</sql>
 
-	<select id="selectRecordList" resultType="com.yd.iotbusiness.mapper.model.LmRecordModel"	parameterType="com.yd.iotbusiness.mapper.model.LmRecordModel">
+	<select id="selectRecordList" resultType="recordModelExtendsBean"	parameterType="recordModelExtendsBean">
 	
 		select r.*  from lm_record r 
 	    <include refid="query_Where_Clause" />
@@ -35,7 +37,7 @@
 	    <include refid="query_limit" />
 	    
 	</select>
-	<select id="countSelectRecordList" resultType="int"	parameterType="com.yd.iotbusiness.mapper.model.LmRecordModel">
+	<select id="countSelectRecordList" resultType="int"	parameterType="recordModelExtendsBean">
 	
 		select count(1)  from lm_record r 
 	    <include refid="query_Where_Clause" />

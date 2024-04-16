@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.business.user.bean.UserInfoBean;
+import com.yd.business.user.bean.UserModelExtendsBean;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 
 public interface IUserInfoService {
@@ -27,5 +28,7 @@ public interface IUserInfoService {
 	List<LmUserModel> queryUsersPhoneByAddressList(Set<Integer> addressids);
 
 	LmUserModel findUserById(Integer id);
+
+	IOTWebDataBean queryUserAndMeterList(UserModelExtendsBean bean);
 
 }

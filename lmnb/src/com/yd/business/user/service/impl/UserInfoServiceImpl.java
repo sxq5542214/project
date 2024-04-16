@@ -18,6 +18,8 @@ import com.yd.basic.framework.service.BaseService;
 import com.yd.business.area.service.IAreaService;
 import com.yd.business.area.service.IBuildingService;
 import com.yd.business.user.bean.UserInfoBean;
+import com.yd.business.user.bean.UserModelExtendsBean;
+import com.yd.business.user.dao.IUserExtendsMapper;
 import com.yd.business.user.dao.IUserInfoDao;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LmUserModelMapper;
@@ -35,10 +37,8 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	private IBuildingService buildingService;
 	@Autowired
 	private IUserInfoDao userInfoDao;
-	@Autowired 
-	private LmUserModelMapper userModelMapper;
 	@Autowired
-	private LmUserModelMapper userMapper;
+	private IUserExtendsMapper userMapper;
 	
 	private IAreaService areaService;
 	
@@ -46,7 +46,7 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	public List<UserInfoBean> queryUserInfo(UserInfoBean bean){
 		return userInfoDao.queryUserInfoList(bean);
 	}
-	
+
 	@Override
 	public IOTWebDataBean queryUserList(LmUserModel bean){
 		
@@ -74,11 +74,23 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 		
 		return result;
 	}
+	@Override
+	public IOTWebDataBean queryUserAndMeterList(UserModelExtendsBean bean){
+		
+		long total = userMapper.countUserAndMeterByExtend(bean);
+		List<UserModelExtendsBean> list = userMapper.queryUserAndMeterByExtend(bean);
+		IOTWebDataBean result = new IOTWebDataBean();
+		result.setData(list);
+		result.setTotal(total);
+		result.setCode(IOTWebDataBean.CODE_IOTWEB_SUCCESS);
+		
+		return result;
+	}
 	
 
 	@Override
 	public LmUserModel  findUserById(Integer id){
-		return userModelMapper.selectByPrimaryKey(id);
+		return userMapper.selectByPrimaryKey(id);
 		
 	}
 
@@ -128,10 +140,10 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 			LmUserModelExample model = new LmUserModelExample();
 			
 			
-			num = userModelMapper.insertSelective(bean);
+			num = userMapper.insertSelective(bean);
 		}else {
 			bean.setModifytime(new Date());
-			num = userModelMapper.updateByPrimaryKey(bean);
+			num = userMapper.updateByPrimaryKey(bean);
 		}
 		
 		return num;
@@ -153,7 +165,7 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 		LmUserModelExample.Criteria cri = ex.createCriteria();
 		cri.andAddressidIn(new ArrayList<>(addressids));
 		
-		return userModelMapper.selectByExample(ex);
+		return userMapper.selectByExample(ex);
 		
 	}
 	

@@ -24,6 +24,7 @@ import com.yd.business.other.service.IAddressService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.user.bean.UserInfoBean;
+import com.yd.business.user.bean.UserModelExtendsBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.model.LlAddressModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
@@ -83,9 +84,9 @@ public class UserController extends BaseController {
 
 //			OperatorBean operator = getCurrentLoginOperator();
 			
-			LmUserModel bean = new LmUserModel();
+			UserModelExtendsBean bean = new UserModelExtendsBean();
 			AutoInvokeGetSetMethod.autoInvoke(request.getParameterMap(), bean);
-			result = userInfoService.queryUserList(bean);
+			result = userInfoService.queryUserAndMeterList(bean);
 			
 		} catch (Exception e) {
 			result = new IOTWebDataBean();

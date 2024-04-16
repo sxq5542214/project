@@ -64,7 +64,7 @@ public class BillServiceImpl extends BaseService implements IBillService {
 		
 		cri.andUseridEqualTo(model.getUserid());
 		cri.andSystemidEqualTo(model.getSystemid());
-		ex.setOrderByClause(" id desc ");
+		ex.setOrderByClause(" billmonth desc, id desc ");
 		List<LmBillModel> list = billExtendsMapper.selectByExample(ex );
 		
 		result.setTotal(Long.valueOf(list.size()));

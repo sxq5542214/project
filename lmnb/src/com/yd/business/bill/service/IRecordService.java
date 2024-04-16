@@ -1,6 +1,7 @@
 package com.yd.business.bill.service;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
+import com.yd.business.bill.bean.RecordModelExtendsBean;
 import com.yd.iotbusiness.mapper.model.LmRecordModel;
 
 public interface IRecordService {
@@ -9,7 +10,7 @@ public interface IRecordService {
 
 	LmRecordModel findLastRecord(String meterCode);
 
-	IOTWebDataBean queryRecordList(LmRecordModel model);
+	IOTWebDataBean queryRecordList(RecordModelExtendsBean model);
 
 	void updateRecordMeterCode(String oldMeterCode, String newMeterCode);
 

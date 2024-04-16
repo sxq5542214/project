@@ -11,18 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.bill.bean.RecordModelExtendsBean;
 import com.yd.business.bill.dao.IRecordExtendsMapper;
-import com.yd.business.bill.service.IBillService;
 import com.yd.business.bill.service.IRecordService;
 import com.yd.business.user.service.IUserInfoService;
-import com.yd.iotbusiness.mapper.dao.LmBillModelMapper;
-import com.yd.iotbusiness.mapper.dao.LmRecordModelMapper;
-import com.yd.iotbusiness.mapper.model.LmBillModel;
-import com.yd.iotbusiness.mapper.model.LmBillModelExample;
-import com.yd.iotbusiness.mapper.model.LmBillModelExample.Criteria;
 import com.yd.iotbusiness.mapper.model.LmRecordModel;
 import com.yd.iotbusiness.mapper.model.LmRecordModelExample;
-import com.yd.iotbusiness.mapper.model.LmUserModel;
 
 /**
  * @author ice
@@ -55,10 +49,10 @@ public class RecordServiceImpl extends BaseService implements IRecordService {
 	}
 	
 	@Override
-	public IOTWebDataBean queryRecordList(LmRecordModel model) {
+	public IOTWebDataBean queryRecordList(RecordModelExtendsBean model) {
 
 		long total = recordExtendsMapper.countSelectRecordList(model);
-		List<LmRecordModel> list = recordExtendsMapper.selectRecordList(model);
+		List<RecordModelExtendsBean> list = recordExtendsMapper.selectRecordList(model);
 		 
 		IOTWebDataBean result = new IOTWebDataBean();
 		result.setData(list);

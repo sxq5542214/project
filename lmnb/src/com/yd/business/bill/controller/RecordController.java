@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.controller.BaseController;
+import com.yd.business.bill.bean.RecordModelExtendsBean;
 import com.yd.business.bill.service.IRecordService;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmRecordModel;
@@ -29,7 +30,7 @@ public class RecordController extends BaseController {
 		try {
 			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			
-			LmRecordModel bean = new LmRecordModel();
+			RecordModelExtendsBean bean = new RecordModelExtendsBean();
 			
 			AutoInvokeGetSetMethod.autoInvoke(request.getParameterMap(), bean);
 			bean.setSystemid(operator.getSystemid());
