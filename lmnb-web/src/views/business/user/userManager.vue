@@ -2,158 +2,197 @@
   <div class="app-container">
     <div class="filter-container">
       <div class="demo-input-suffix">
-        <el-input
-          v-model="listQuery.name"
-          placeholder="请输入户名"
-          style="width: 200px;"
-          class="filter-item"
-          @keyup.enter.native="handleFilter"
-        />
-        <el-input
-          v-model="listQuery.phone"
-          placeholder="请输入电话"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-        />
-        <el-input
-          v-model="listQuery.idcard"
-          placeholder="请输入证件号码"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-        />
-        <br>
-        <el-select
-          v-model="listQuery.area1"
-          placeholder="请输入镇名"
-          style="width: 200px;"
-          class="filter-item"
-          filterable
-          @change="updateAllArea($event,1)"
-        >
-          <el-option
-            v-for="item in areaList[0]"
-            :key="item.id"
-            :label="item.name"
-            :value="item.name"
-          />
-        </el-select>
-        <el-select
-          v-model="listQuery.area2"
-          placeholder="请输入村名"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-          filterable
-          @change="updateAllArea($event,2)"
-        >
-          <el-option
-            v-for="item1 in areaList[1]"
-            :key="item1.id"
-            :label="item1.name"
-            :value="item1.name"
-          />
-        </el-select>
-        <el-select
-          v-model="listQuery.area3"
-          placeholder="请输入组名"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-          filterable
-          @change="setArea3($event)"
-        >
-          <el-option
-            v-for="item2 in areaList[2]"
-            :key="item2.id"
-            :label="item2.name"
-            :value="item2.name"
-          />
-        </el-select>
-        <el-button
-          v-waves
-          class="filter-item"
-          type="primary"
-          icon="el-icon-search"
-          style="margin-left: 10px;"
-          @click="handleFilter"
-        >查询</el-button>
-        <el-button
-          class="filter-item"
-          style="margin-left: 10px;"
-          type="success"
-          icon="el-icon-edit"
-          @click="handleCreate"
-        >添加</el-button>
-        <el-button
-          v-waves
-          :loading="downloadLoading"
-          class="filter-item"
-          type="primary"
-          icon="el-icon-download"
-          @click="handleDownload"
-        >导出</el-button>
-      </div>
+        <el-form :inline="true" class="demo-form-inline" label-width="70px">
+
+          <el-form-item label="镇名" style="margin-bottom:0px;">
+            <el-select v-model="listQuery.area1"
+                       placeholder="请选择镇名"
+                       style="width: 180px;"
+                       class="filter-item"
+                       filterable
+                       @change="updateAllArea($event,1)">
+              <el-option v-for="item in areaList[0]"
+                         :key="item.id"
+                         :label="item.name"
+                         :value="item.name" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="村名" style="margin-bottom:0px;">
+            <el-select v-model="listQuery.area2"
+                       placeholder="请选择村名"
+                       style="width: 180px; "
+                       class="filter-item"
+                       filterable
+                       @change="updateAllArea($event,2)">
+              <el-option v-for="item1 in areaList[1]"
+                         :key="item1.id"
+                         :label="item1.name"
+                         :value="item1.name" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="组名" style="margin-bottom:0px;">
+            <el-select v-model="listQuery.area3"
+                       placeholder="请选择组名"
+                       style="width: 180px; "
+                       class="filter-item"
+                       filterable
+                       @change="setArea3($event)">
+              <el-option v-for="item2 in areaList[2]"
+                         :key="item2.id"
+                         :label="item2.name"
+                         :value="item2.name" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="户号" style="margin-bottom:0px;">
+            <el-input v-model="listQuery.code"
+                      placeholder="请输入户号"
+                      style="width: 180px; "
+                      class="filter-item"
+                      @keyup.enter.native="handleFilter" />
+          </el-form-item>
+          <el-form-item label="户名" style="margin-bottom:0px;">
+            <el-input v-model="listQuery.name"
+                      placeholder="请输入户名"
+                      style="width: 180px; "
+                      class="filter-item"
+                      @keyup.enter.native="handleFilter" />
+          </el-form-item>
+
+          <el-form-item label="电话" style="margin-bottom:0px;">
+            <el-input v-model="listQuery.phone"
+                      placeholder="请输入电话"
+                      style="width: 180px; "
+                      class="filter-item" />
+          </el-form-item>
+
+          <el-form-item label="身份证" style="margin-bottom:0px;">
+            <el-input v-model="listQuery.idcard"
+                      placeholder="请输入证件号码"
+                      style="width: 180px; "
+                      class="filter-item" />
+          </el-form-item>
+          <el-form-item label="房间号" style="margin-bottom:0px;">
+            <el-input v-model="listQuery.area4"
+                      placeholder="请输入房间号"
+                      style="width: 180px; "
+                      class="filter-item" />
+          </el-form-item>
+          <el-form-item label="厂商" style="margin-bottom:0px;">
+            <el-select v-model="listQuery.factoryCode" placeholder="请选择" class="filter-item" filterable style="width:180px">
+              <el-option v-for="item in supplierList" :key="item.id" :label="item.name" :value="item.id" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="价格类型" style="margin-bottom:0px;">
+            <el-select v-model="listQuery.priceCode" placeholder="请选择" class="filter-item" filterable style="width: 180px">
+              <el-option v-for="item in priceList" :key="item.id" :label="item.name" :value="item.id" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="账户状态" style="margin-bottom:0px;">
+            <el-select v-model="listQuery.meterOpened" placeholder="请选择" class="filter-item" filterable style="width:180px">
+              <el-option v-for="item in openedList"
+                         :key="item.value"
+                         :label="item.description"
+                         :value="item.value" />
+            </el-select>
+          </el-form-item>
+
+          <el-button v-waves
+                     class="filter-item"
+                     type="primary"
+                     icon="el-icon-search"
+                     style="margin-left: 10px;"
+                     @click="handleFilter">查询</el-button>
+          <el-button class="filter-item"
+                     style="margin-left: 10px;"
+                     type="success"
+                     icon="el-icon-edit"
+                     @click="handleCreate">添加</el-button>
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     class="filter-item"
+                     type="primary"
+                     icon="el-icon-download"
+                     @click="handleDownload">导出</el-button>
+        </el-form>
+</div>
     </div>
 
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-      @sort-change="sortChange"
-    >
-      <el-table-column
-        label="用户标识"
-        prop="id"
-        sortable="custom"
-        align="center"
-        width="80"
-        :class-name="getSortClass('id')"
-      >
+    <el-table :key="tableKey"
+              v-loading="listLoading"
+              :data="list"
+              border
+              fit
+              highlight-current-row
+              style="width: 100%;"
+              @sort-change="sortChange">
+      <el-table-column label="户号" prop="code" align="center" width="80px" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+          <span>{{ row.code }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="户名" width="150px" align="center">
+      <el-table-column label="户名" width="120px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="地址" min-width="150px" :show-overflow-tooltip="true">
+      <el-table-column label="用户地址" min-width="150px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
-          <span>{{ row.area1 }} - {{ row.area2 }} - {{ row.area3 }}</span>
+          <span>{{ row.area1 }} - {{ row.area2 }} - {{ row.area3 }} {{ row.area4 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="电话" width="110px" align="center">
+      <el-table-column label="表号" width="120px" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.metercode }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="电话" width="120px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="身份证号" width="110px" align="center" :show-overflow-tooltip="true">
+      <el-table-column label="身份证号" width="120px" align="center" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.idcard }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="开户时间" width="100px" align="center" :show-overflow-tooltip="true">
-        <template slot-scope="{row}">
-          <span>{{ row.createtime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-        fixed="right"
-      >
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
-          <!--           <el-button   type="danger" size="mini"  @click="handleDelete(row,$index)">
-                      删除
-          </el-button>-->
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column label="价格类型" width="80px" align="center" :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            <span>{{ row.priceName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="开户时间" width="120px" align="center" :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            <span>{{ row.createtime }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="账户状态" width="80px" align="center" :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            <span>{{ row.meterOpened }}</span>
+          </template>
+        </el-table-column>
+        
+        <el-table-column label="报停时间" width="120px" align="center" :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            <span>{{ row.meterStoptime }}</span>
+          </template>
+        </el-table-column>
+          <el-table-column label="操作"
+                           width="160px"
+                           align="center"
+                           class-name="small-padding fixed-width"
+                           fixed="right">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
+              <el-button type="danger" size="mini" @click="handleUpdate(row)">删除</el-button>
+              <!--           <el-button   type="danger" size="mini"  @click="handleDelete(row,$index)">
+              删除
+  </el-button>-->
+            </template>
+          </el-table-column>
+</el-table>
 
     <pagination
       v-show="total>0"
@@ -164,84 +203,74 @@
     />
 
     <el-dialog title="新增/编辑用户" :visible.sync="dialogFormVisible" width="80%">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        :inline="true"
-        label-position="left"
-        label-width="auto"
-        style=" "
-      >
+      <el-form ref="dataForm"
+               :rules="rules"
+               :model="temp"
+               :inline="true"
+               label-position="left"
+               label-width="auto"
+               style=" ">
         <el-form-item label="镇级" prop="area1">
-          <el-select  style="width:200px" 
-            v-model="temp.area1"
-            placeholder="请选择镇"
-            class="filter-item"
-            filterable
-            @change="updateTempArea($event,1)"
-          >
-            <el-option
-              v-for="item in tempAreaList[0]"
-              :key="item.id"
-              :label="item.name"
-              :value="item.name"
-            />
+          <el-select style="width:200px"
+                     v-model="temp.area1"
+                     placeholder="请选择镇"
+                     class="filter-item"
+                     filterable
+                     @change="updateTempArea($event,1)">
+            <el-option v-for="item in tempAreaList[0]"
+                       :key="item.id"
+                       :label="item.name"
+                       :value="item.name" />
           </el-select>
         </el-form-item>
         <el-form-item label="村级" prop="area2">
-          <el-select  style="width:200px" 
-            v-model="temp.area2"
-            placeholder="请选择村"
-            class="filter-item"
-            filterable
-            @change="updateTempArea($event,2)"
-          >
-            <el-option
-              v-for="item1 in tempAreaList[1]"
-              :key="item1.id"
-              :label="item1.name"
-              :value="item1.name"
-            />
+          <el-select style="width:200px"
+                     v-model="temp.area2"
+                     placeholder="请选择村"
+                     class="filter-item"
+                     filterable
+                     @change="updateTempArea($event,2)">
+            <el-option v-for="item1 in tempAreaList[1]"
+                       :key="item1.id"
+                       :label="item1.name"
+                       :value="item1.name" />
           </el-select>
         </el-form-item>
-        <el-form-item label="组级" prop="area3" >
-          <el-select  style="width:200px" 
-            v-model="temp.area3"
-            placeholder="请选择组"
-            class="filter-item"
-            filterable
-            @change="setTempArea3($event)"
-          >
-            <el-option
-              v-for="item2 in tempAreaList[2]"
-              :key="item2.id"
-              :label="item2.name"
-              :value="item2.name"
-            />
+        <el-form-item label="组级" prop="area3">
+          <el-select style="width:200px"
+                     v-model="temp.area3"
+                     placeholder="请选择组"
+                     class="filter-item"
+                     filterable
+                     @change="setTempArea3($event)">
+            <el-option v-for="item2 in tempAreaList[2]"
+                       :key="item2.id"
+                       :label="item2.name"
+                       :value="item2.name" />
           </el-select>
         </el-form-item>
         <el-form-item label="户名" prop="name">
-          <el-input v-model="temp.name" placeholder="请输入用户名称"  style="width:200px" />
+          <el-input v-model="temp.name" placeholder="请输入用户名称" style="width:200px" />
         </el-form-item>
         <el-form-item label="电话" prop="phone">
-          <el-input v-model="temp.phone" placeholder="请输入电话号码"  style="width:200px" />
+          <el-input v-model="temp.phone" placeholder="请输入电话号码" style="width:200px" />
         </el-form-item>
         <el-form-item label="身份证" prop="idcard">
-          <el-input v-model="temp.idcard" placeholder="请输入身份证号码"  style="width:200px" />
+          <el-input v-model="temp.idcard" placeholder="请输入身份证号码" style="width:200px" />
+        </el-form-item>
+        <el-form-item label="房间号" prop="area4">
+          <el-input v-model="temp.area4" placeholder="请填写房间号信息" style="width:200px" />
         </el-form-item>
         <el-form-item label="户号" prop="id">
-          <el-input v-model="temp.id" placeholder="无需输入自动生成" disabled="disabled"  style="width:200px" />
+          <el-input v-model="temp.id" placeholder="无需输入自动生成" disabled="disabled" style="width:200px" />
         </el-form-item>
         <div class="tab-container">
           <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
-            <el-tab-pane
-              v-for="item in meterTabs"
-              :key="item.id"
-              ref="meterTabPane"
-              :label="item.code"
-              :name="item.code"
-            >
+            <el-tab-pane v-for="item in meterTabs"
+                         :key="item.id"
+                         ref="meterTabPane"
+                         :label="item.code"
+                         :name="item.code">
               <keep-alive>
                 <tab-pane v-if="activeName==item.code" :type="item.code" :cur-meter="item" @create="showCreatedTimes" />
               </keep-alive>
@@ -272,16 +301,15 @@
 
 <script>
 import TabPane from './meterTab/meterTab'
-import {
-  queryUserList,
-  addUser,
-  updateUser,
-  deleteUser
-} from '@/api/userManager'
+import {  queryUserList,  addUser,  updateUser,  deleteUser  } from '@/api/userManager'
+import { queryPriceList } from '@/api/priceManager'
+import { querySupplierList } from '@/api/supplierManager'
+import { queryProductList } from '@/api/productManager'
 import { queryAddressList } from '@/api/addressManager'
 import { addMeter, queryMeterList, updateMeter } from '@/api/meterManager'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
+import { queryMeterCaliberList, queryMeterOpenedList } from '@/api/dictionaryManager'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 const calendarTypeOptions = [
@@ -336,6 +364,10 @@ export default {
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
       areaList: [],
+      priceList: {},
+      supplierList: {},
+      productList: {},
+      openedList: {},
       tempAreaList: [],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
@@ -372,7 +404,23 @@ export default {
     this.updateAddressList(1, null)
 
     // init the default selected meterTab
-    this.activeName = '新增水表'
+    this.activeName = '新增水表';
+    querySupplierList().then(response => {
+      this.supplierList = response.data
+      this.meter.factorycode = response.data[0].id
+    })
+    queryPriceList().then(response => {
+      this.priceList = response.data
+      this.meter.pricecode = response.data[0].id
+    })
+    queryProductList().then(response => {
+      this.productList = response.data
+      this.meter.productid = response.data[0].id
+    })
+    queryMeterOpenedList().then(response => {
+      this.openedList = response.data
+      this.meter.opened = response.data[0].value
+    })
   },
   methods: {
     getList() {

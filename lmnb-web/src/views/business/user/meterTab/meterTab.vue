@@ -9,9 +9,9 @@
     <el-form-item label="表号" prop="code">
       <el-input v-model="meter.code" placeholder="请输入表号"  style="width:200px" />
     </el-form-item>
-    <el-form-item label="表地址" prop="installposition">
+<!--    <el-form-item label="表地址" prop="installposition">
       <el-input v-model="meter.installposition" placeholder="请输入表安装地址"  style="width:200px" />
-    </el-form-item>
+    </el-form-item>-->
     <el-form-item label="表底数" prop="basenum">
       <el-input v-model="meter.basenum" placeholder="请输入用户名称" :disabled="isDisabled"  style="width:200px" />
     </el-form-item>

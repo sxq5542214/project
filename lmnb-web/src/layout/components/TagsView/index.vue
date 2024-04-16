@@ -217,7 +217,7 @@ export default {
       color: #495060;
       background: #fff;
       padding: 0 8px;
-      font-size: 12px;
+      font-size: 13px;
       margin-left: 5px;
       margin-top: 4px;
       &:first-of-type {

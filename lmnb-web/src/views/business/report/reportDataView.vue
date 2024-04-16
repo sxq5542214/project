@@ -71,13 +71,13 @@
               fit
               highlight-current-row
               style="width: 100%;">
-      <el-table-column
+      <el-table-column :show-overflow-tooltip="true"
           v-for="(item, index) in listLabel"
           :key="index"
           :prop="item.code"
           :label="item.name"
                                      >
-
+        
       </el-table-column>
 
     </el-table>
