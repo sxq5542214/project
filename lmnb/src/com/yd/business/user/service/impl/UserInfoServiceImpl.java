@@ -136,11 +136,11 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 		if(bean.getId() == null) {
 			bean.setCreatetime(new Date());
 			bean.setModifytime(new Date());
-			//设置用户编码
-			LmUserModelExample model = new LmUserModelExample();
-			
 			
 			num = userMapper.insertSelective(bean);
+			//设置用户编码（户号）
+			bean.setCode(String.valueOf(bean.getId()));
+			userMapper.updateByPrimaryKey(bean);
 		}else {
 			bean.setModifytime(new Date());
 			num = userMapper.updateByPrimaryKey(bean);
