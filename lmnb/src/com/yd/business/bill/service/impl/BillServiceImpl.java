@@ -4,11 +4,14 @@
 package com.yd.business.bill.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
@@ -18,6 +21,7 @@ import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.device.dao.IMeterExtendsMapper;
 import com.yd.business.device.service.IDeviceInfoService;
+import com.yd.business.msg.service.ISMSService;
 import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LmBillModelMapper;
@@ -33,6 +37,7 @@ import com.yd.iotbusiness.mapper.model.LmPaymentModel;
 import com.yd.iotbusiness.mapper.model.LmPriceModel;
 import com.yd.iotbusiness.mapper.model.LmPricedetailModel;
 import com.yd.iotbusiness.mapper.model.LmRecordModel;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
 
 /**
  * @author ice
@@ -55,6 +60,8 @@ public class BillServiceImpl extends BaseService implements IBillService {
 	private IDeviceInfoService deviceInfoService;
 	@Resource
 	private IMeterExtendsMapper meterExtendsMapper;
+	@Autowired
+	private ISMSService smsService;
 	
 	@Override
 	public IOTWebDataBean queryBillList(LmBillModel model) {
@@ -76,6 +83,7 @@ public class BillServiceImpl extends BaseService implements IBillService {
 	public LmBillModel generatorBillByRecord(String meterCode ,LmRecordModel record) {
 		
 		MeterModelExtendsBean meter = deviceInfoService.findMeterByCode(meterCode);
+		LmUserModel user = userInfoService.findUserById(meter.getUserid());
 		
 		LmPricedetailModel priceDetail = priceService.findPriceDetailByPriceId(meter.getPricecode());
 		LmPriceModel price = priceService.findPriceById(meter.getPricecode());
@@ -155,6 +163,19 @@ public class BillServiceImpl extends BaseService implements IBillService {
 			op.setRealname("抄表接口自动触发");
 			//关阀
 			deviceInfoService.openOrCloseMeter(meterCode, op , false, "欠费自动关阀，record："+record.getId());
+			
+			//发送关阀提醒短信
+			String content = "您的水表账户余额已不足(0元)，日内将关闭阀门，停止供水，请续交水费恢复供水。谢谢合作！户号："+user.getCode()+" 表号："+meterCode;
+			smsService.sendJXTsms(Arrays.asList(user) , content, op,"关阀告警");
+		
+		}else if(meter.getBalance().compareTo(BigDecimal.TEN) < 0) {
+			//余额不足10元，发送余额不足告警
+			LmOperatorModel op = new LmOperatorModel();
+			op.setId(-1);
+			op.setRealname("抄表接口自动触发");
+			
+			String content = "您的水表账户尚有"+meter.getBalance()+"元余额可用，请于近日续缴水费，以免欠费关阀影响您的用水。谢谢合作!户号："+user.getCode()+" 表号："+meterCode;
+			smsService.sendJXTsms(Arrays.asList(user) , content, op,"余额告警");
 		}
 		
 		

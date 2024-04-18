@@ -2,6 +2,7 @@ package com.yd.business.price.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
@@ -16,6 +18,7 @@ import com.yd.basic.framework.service.BaseService;
 import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.device.service.IDeviceInfoService;
+import com.yd.business.msg.service.ISMSService;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.price.bean.ChargeDetailBean;
@@ -56,6 +59,8 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 	private IPaymentExtendsMapper iPaymentExtendsMapper;
 	@Resource
 	private IBillService billService;
+	@Autowired
+	private ISMSService smsService;
 
 	@Override
 	public ChargeDetailBean findLastChargeDetailByUserId(Long userid) throws Exception {
@@ -414,6 +419,9 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		// 插入payment表
 		MeterModelExtendsBean meter = deviceInfoService.findMeterByCode(model.getMetercode());
 		LmPricedetailModel price = priceService.findPriceDetailById(meter.getPricecode());
+		LmOperatorModel op = operatorService.findOperatorById(model.getOperatorid());
+		LmUserModel user = userInfoService.findUserById(meter.getUserid());
+		
 		model.setUserid(meter.getUserid());
 		model.setSystemid(meter.getSystemid());
 		model.setPayamount(charge);
@@ -446,7 +454,6 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		
 		// 若充值后余额大于0 ，则执行CMD开阀命令、并插入cmd表
 		if(meter.getBalance().compareTo(BigDecimal.ZERO) > 0 ) {
-			LmOperatorModel op = operatorService.findOperatorById(model.getOperatorid());
 			deviceInfoService.openOrCloseMeter(meter.getCode(), op, true,"充值后自动执行开阀");
 		}
 		
@@ -460,6 +467,10 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		//更新支付表对应的账单ID
 		model.setBillid(bill.getId());
 		iPaymentExtendsMapper.updateByPrimaryKeySelective(model);
+		
+		//触发缴费通知短信
+		String content = "您于"+DateUtil.getNowDateStr()+"已交水费"+charge+"元，账户余额"+meter.getBalance()+"元，请您知晓！户号："+user.getCode()+" 表号："+meter.getCode();
+		smsService.sendJXTsms(Arrays.asList(user) , content, op,"缴费通知");
 		
 		return num;
 	}
