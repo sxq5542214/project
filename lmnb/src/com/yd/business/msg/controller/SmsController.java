@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.area.service.IAreaService;
+import com.yd.business.msg.bean.SMSSendLogBean;
 import com.yd.business.msg.bean.SmsTxSendInfoLogBean;
 import com.yd.business.msg.bean.SmsTxSendPhoneLogBean;
 import com.yd.business.msg.service.ISMSService;
@@ -138,7 +139,7 @@ public class SmsController extends BaseController {
 			//查询对应地址的用户号码
 			List<LmUserModel> users = userInfoService.queryUsersPhoneByAddressList(allAddrIds);
 			
-			smsService.sendJXTsms(users , content, getCurrentLoginOperator(),"手动群发短信");
+			smsService.sendJXTsms(users , content, getCurrentLoginOperator(),SMSSendLogBean.SENDTYPE_MANUALSENDING);
 
 			result = new IOTWebDataBean();
 			

@@ -15,6 +15,7 @@ import com.tencentcloudapi.sms.v20210111.models.SendSmsResponse;
 import com.tencentcloudapi.sms.v20210111.models.SendStatus;
 import com.yd.basic.framework.runable.BaseRunable;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.msg.bean.SMSSendLogBean;
 import com.yd.business.msg.bean.SmsTxSendInfoLogBean;
 import com.yd.business.msg.bean.SmsTxSendPhoneLogBean;
 import com.yd.business.msg.client.JXTSmsClient;
@@ -30,6 +31,8 @@ import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LlSmsSendlogModelMapper;
 import com.yd.iotbusiness.mapper.model.LlSmsSendlogModel;
+import com.yd.iotbusiness.mapper.model.LlSmsSendlogModelExample;
+import com.yd.iotbusiness.mapper.model.LlSmsSendlogModelExample.Criteria;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.iotbusiness.mapper.model.LmUserModelExample;
@@ -60,7 +63,37 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 	
 
 	/**
-	 * 发送吉讯通接口的短信
+	 * 保存吉讯通接口的短信请求
+	 * @param phones
+	 * @param params
+	 * @return
+	 */
+	@Override
+	public void saveSMSSendRequest(LmUserModel user,Integer meterid, String content,LmOperatorModel op,String sendType) {
+
+		try {
+			
+				
+				LlSmsSendlogModel sms = new LlSmsSendlogModel();
+				sms.setCreateTime(DateUtil.getNowDateStrSSS());
+				sms.setContent(content);
+				sms.setOperatorid(op.getId().toString());
+				sms.setPhonenumber(user.getPhone());
+				sms.setSmsChannel(SMS_CHANNEL_JXT);
+				sms.setUserid(user.getId());
+				sms.setMeterid(meterid);
+				sms.setSendtype(sendType);
+				sms.setStatus(SMSSendLogBean.STATUS_WAIT);
+				smsSendlogModelMapper.insertSelective(sms);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		
+	}
+
+	/**
+	 * 直接发送吉讯通接口的短信
 	 * @param phones
 	 * @param params
 	 * @return
@@ -81,6 +114,7 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 						String response = smsClient.postSMS(user.getPhone(), content);
 						
 						LlSmsSendlogModel sms = new LlSmsSendlogModel();
+						sms.setCreateTime(DateUtil.getNowDateStrSSS());
 						sms.setContent(content);
 						sms.setOperatorid(op.getId().toString());
 						sms.setPhonenumber(user.getPhone());
@@ -91,9 +125,9 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 						sms.setSendtype(sendType);
 						try {
 							if("000".equals(response.substring(0, 3))) {
-								sms.setStatus("成功");
+								sms.setStatus(SMSSendLogBean.STATUS_SUCCESS);
 							}else {
-								sms.setStatus("失败");
+								sms.setStatus(SMSSendLogBean.STATUS_FAIL);
 							}
 						}catch (Exception e) {
 							sms.setStatus(e.toString());
@@ -113,35 +147,98 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 		
 	}
 	/**
-	 * 发送吉讯通接口的短信
+	 * 直接发送吉讯通接口的短信
 	 * @param phones
 	 * @param params
 	 * @return
 	 */
 	@Override
-	public String sendJXTsms(String[] phones,String content,LmOperatorModel op,String sendType){
-		
+	public String sendJXTsms(LmUserModel user,Integer meterid,String content,LmOperatorModel op,String sendType){
+
 		try {
 			
 			JXTSmsClient smsClient = JXTSmsClient.getInstance();
-			for(String phone : phones) {
+				
+			// 根据号码启动线程发送短信
+			taskSchedulerService.startThreadByPool(new BaseRunable() {
+				
+				@Override
+				public void runMethod() throws Exception {
+					String response = smsClient.postSMS(user.getPhone(), content);
+					
+					LlSmsSendlogModel sms = new LlSmsSendlogModel();
+					sms.setCreateTime(DateUtil.getNowDateStrSSS());
+					sms.setContent(content);
+					sms.setOperatorid(op.getId().toString());
+					sms.setPhonenumber(user.getPhone());
+					sms.setResult(response);
+					sms.setSendtime(DateUtil.getNowDateStrSSS());
+					sms.setSmsChannel(SMS_CHANNEL_JXT);
+					sms.setUserid(user.getId());
+					sms.setMeterid(meterid);
+					sms.setSendtype(sendType);
+					try {
+						if("000".equals(response.substring(0, 3))) {
+							sms.setStatus(SMSSendLogBean.STATUS_SUCCESS);
+						}else {
+							sms.setStatus(SMSSendLogBean.STATUS_FAIL);
+						}
+					}catch (Exception e) {
+						sms.setStatus(e.toString());
+						log.error(e,e);
+					}
+					smsSendlogModelMapper.insertSelective(sms);
+				}
+			});
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			return "error";
+		}
+		return "success";
+		
+		
+	}
+	/**
+	 * 根据待发送状态发送吉讯通接口的短信
+	 * @param phones
+	 * @param params
+	 * @return
+	 */
+	@Override
+	public String sendJXTsmsByWait(){
+		
+		try {
+			//查询所有待发送
+			LlSmsSendlogModelExample example = new LlSmsSendlogModelExample();
+			Criteria cri = example.createCriteria();
+			cri.andStatusEqualTo(SMSSendLogBean.STATUS_WAIT);
+			
+			List<LlSmsSendlogModel> list = smsSendlogModelMapper.selectByExample(example );
+			
+			JXTSmsClient smsClient = JXTSmsClient.getInstance();
+			for(LlSmsSendlogModel sms : list) {
 				
 				// 根据号码启动线程发送短信
 				taskSchedulerService.startThreadByPool(new BaseRunable() {
 					
 					@Override
 					public void runMethod() throws Exception {
-						String response = smsClient.postSMS(phone, content);
-						
-						LlSmsSendlogModel sms = new LlSmsSendlogModel();
-						sms.setContent(content);
-						sms.setOperatorid(op.getId().toString());
-						sms.setPhonenumber(phone);
+						String response = smsClient.postSMS(sms.getPhonenumber(), sms.getContent());
+						try {
+							if("000".equals(response.substring(0, 3))) {
+								sms.setStatus(SMSSendLogBean.STATUS_SUCCESS);
+							}else {
+								sms.setStatus(SMSSendLogBean.STATUS_FAIL);
+							}
+						}catch (Exception e) {
+							sms.setStatus(e.toString());
+							log.error(e,e);
+						}
 						sms.setResult(response);
 						sms.setSendtime(DateUtil.getNowDateStrSSS());
-						sms.setSmsChannel(SMS_CHANNEL_JXT);
-						sms.setSendtype(sendType);
-						smsSendlogModelMapper.insertSelective(sms);
+						smsSendlogModelMapper.updateByPrimaryKeySelective(sms);
+						
 					}
 				});
 			}
@@ -268,6 +365,20 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 		return list;
 	}
 	
+	@Override
+	public List<LlSmsSendlogModel> querySMSSendLogList(Integer userid,Integer meterid,String sendtype,String status,String createTime){
+
+		//查询所有待发送
+		LlSmsSendlogModelExample example = new LlSmsSendlogModelExample();
+		Criteria cri = example.createCriteria();
+		cri.andUseridEqualTo(userid);
+		cri.andMeteridEqualTo(meterid);
+		cri.andSendtypeEqualTo(sendtype);
+		cri.andStatusEqualTo(status);
+		cri.andCreateTimeLike(createTime);
+		
+		return smsSendlogModelMapper.selectByExample(example);
+	}
 
 	@Override
 	public List<SmsTxSendInfoLogBean> querySmsSendInfoList(Long companyId){

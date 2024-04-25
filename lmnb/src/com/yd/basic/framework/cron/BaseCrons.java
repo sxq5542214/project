@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.yd.business.other.crons;
+package com.yd.basic.framework.cron;
 
 import javax.annotation.Resource;
 

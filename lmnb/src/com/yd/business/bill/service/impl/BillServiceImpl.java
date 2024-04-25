@@ -4,6 +4,7 @@
 package com.yd.business.bill.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -21,11 +22,13 @@ import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.device.dao.IMeterExtendsMapper;
 import com.yd.business.device.service.IDeviceInfoService;
+import com.yd.business.msg.bean.SMSSendLogBean;
 import com.yd.business.msg.service.ISMSService;
 import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LmBillModelMapper;
 import com.yd.iotbusiness.mapper.dao.LmFeeModelMapper;
+import com.yd.iotbusiness.mapper.model.LlSmsSendlogModel;
 import com.yd.iotbusiness.mapper.model.LmBillModel;
 import com.yd.iotbusiness.mapper.model.LmBillModelExample;
 import com.yd.iotbusiness.mapper.model.LmFeeModel;
@@ -165,17 +168,23 @@ public class BillServiceImpl extends BaseService implements IBillService {
 			deviceInfoService.openOrCloseMeter(meterCode, op , false, "欠费自动关阀，record："+record.getId());
 			
 			//发送关阀提醒短信
-			String content = "您的水表账户余额已不足(0元)，日内将关闭阀门，停止供水，请续交水费恢复供水。谢谢合作！户号："+user.getCode()+" 表号："+meterCode;
-			smsService.sendJXTsms(Arrays.asList(user) , content, op,"关阀告警");
-		
-		}else if(meter.getBalance().compareTo(BigDecimal.TEN) < 0) {
+			String content = "您的水表账户余额已不足(0元)，日内将关闭阀门，停止供水，请续交水费恢复供水。谢谢合作！户号："+user.getCode()+" 户名："+user.getName();
+			smsService.saveSMSSendRequest(user ,meter.getId(), content, op,SMSSendLogBean.SENDTYPE_STOPVALVE);
+
 			//余额不足10元，发送余额不足告警
-			LmOperatorModel op = new LmOperatorModel();
-			op.setId(-1);
-			op.setRealname("抄表接口自动触发");
+		}else if(meter.getBalance().compareTo(BigDecimal.TEN) < 0) {
 			
-			String content = "您的水表账户尚有"+meter.getBalance()+"元余额可用，请于近日续缴水费，以免欠费关阀影响您的用水。谢谢合作!户号："+user.getCode()+" 表号："+meterCode;
-			smsService.sendJXTsms(Arrays.asList(user) , content, op,"余额告警");
+			//判断是否已经发送过，余额不足的情况每个月仅发一次
+			List<LlSmsSendlogModel> list = smsService.querySMSSendLogList(user.getId(), meter.getId(),SMSSendLogBean.SENDTYPE_BALANCEALARM, SMSSendLogBean.STATUS_SUCCESS ,DateUtil.getNowMonthStr()+"%");
+			
+			if(list.size() == 0) {
+				LmOperatorModel op = new LmOperatorModel();
+				op.setId(-1);
+				op.setRealname("抄表接口自动触发");
+				
+				String content = "您的水表账户尚有"+meter.getBalance().setScale(1, RoundingMode.HALF_UP)+"元余额可用，请于近日续缴水费，以免欠费关阀影响您的用水。谢谢合作!户号："+user.getCode()+" 户名："+user.getName();
+				smsService.saveSMSSendRequest(user ,meter.getId(), content, op,SMSSendLogBean.SENDTYPE_BALANCEALARM);
+			}
 		}
 		
 		

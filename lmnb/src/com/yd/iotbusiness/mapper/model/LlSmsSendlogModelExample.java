@@ -637,6 +637,92 @@ public class LlSmsSendlogModelExample {
             return (Criteria) this;
         }
 
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeEqualTo(String value) {
+            if (value != null) {
+                addCriterion("create_time =", value, "createTime");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotEqualTo(String value) {
+            if (value != null) {
+                addCriterion("create_time <>", value, "createTime");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThan(String value) {
+            if (value != null) {
+                addCriterion("create_time >", value, "createTime");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("create_time >=", value, "createTime");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThan(String value) {
+            if (value != null) {
+                addCriterion("create_time <", value, "createTime");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("create_time <=", value, "createTime");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLike(String value) {
+            if (value != null) {
+                addCriterion("create_time like", "%"+value+"%", "createTime");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotLike(String value) {
+            if (value != null) {
+                addCriterion("create_time not like", value, "createTime");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIn(List<String> values) {
+            addCriterion("create_time in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotIn(List<String> values) {
+            addCriterion("create_time not in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeBetween(String value1, String value2) {
+            addCriterion("create_time between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotBetween(String value1, String value2) {
+            addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
         public Criteria andSendtimeIsNull() {
             addCriterion("sendtime is null");
             return (Criteria) this;

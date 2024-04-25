@@ -12,9 +12,9 @@ import javax.annotation.Resource;
 import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Component;
 
+import com.yd.basic.framework.cron.BaseCrons;
 import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.service.IDeviceInfoService;
-import com.yd.business.other.crons.BaseCrons;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
@@ -26,7 +26,7 @@ import com.yd.util.DateUtil;
  * @author ice
  *	月账单定时任务
  */
-@Component("billMonthCronsCrons")
+@Component("billMonthCrons")
 public class BillMonthCrons extends BaseCrons {
 
 	@Resource

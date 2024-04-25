@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 import org.quartz.JobExecutionContext;
 import org.springframework.stereotype.Component;
 
-import com.yd.business.other.crons.BaseCrons;
+import com.yd.basic.framework.cron.BaseCrons;
 import com.yd.business.user.dao.IUserWechatDao;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.user.service.impl.UserWechatServiceImpl;

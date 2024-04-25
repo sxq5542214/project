@@ -18,6 +18,7 @@ import com.yd.basic.framework.service.BaseService;
 import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.device.service.IDeviceInfoService;
+import com.yd.business.msg.bean.SMSSendLogBean;
 import com.yd.business.msg.service.ISMSService;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.operator.service.IOperatorService;
@@ -469,8 +470,8 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		iPaymentExtendsMapper.updateByPrimaryKeySelective(model);
 		
 		//触发缴费通知短信
-		String content = "您于"+DateUtil.getNowDateStr()+"已交水费"+charge+"元，账户余额"+meter.getBalance()+"元，请您知晓！户号："+user.getCode()+" 表号："+meter.getCode();
-		smsService.sendJXTsms(Arrays.asList(user) , content, op,"缴费通知");
+		String content = "您于"+DateUtil.getNowDateStr()+"已交水费"+charge.setScale(2, RoundingMode.HALF_UP)+"元，账户余额"+meter.getBalance()+"元，请您知晓！户号："+user.getCode()+" 户名："+user.getName();
+		smsService.sendJXTsms(user,meter.getId(), content, op,SMSSendLogBean.SENDTYPE_CHARGENOTIFY);
 		
 		return num;
 	}

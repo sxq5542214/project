@@ -9,6 +9,7 @@ import com.yd.business.msg.bean.SmsTxSendInfoLogBean;
 import com.yd.business.msg.bean.SmsTxSendPhoneLogBean;
 import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.other.bean.ConfigAttributeBean;
+import com.yd.iotbusiness.mapper.model.LlSmsSendlogModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 
@@ -57,6 +58,19 @@ public interface ISMSService {
 	 * @param params
 	 * @return
 	 */
-	String sendJXTsms(String[] phones, String content, LmOperatorModel op, String sendType);
+	String sendJXTsmsByWait();
+
+	void saveSMSSendRequest(LmUserModel user, Integer meterid, String content, LmOperatorModel op, String sendType);
+
+	/**
+	 * 直接发送吉讯通接口的短信
+	 * @param phones
+	 * @param params
+	 * @return
+	 */
+	String sendJXTsms(LmUserModel user, Integer meterid, String content, LmOperatorModel op, String sendType);
+
+	List<LlSmsSendlogModel> querySMSSendLogList(Integer userid, Integer meterid, String sendtype, String status,
+			String createTime);
 
 }
