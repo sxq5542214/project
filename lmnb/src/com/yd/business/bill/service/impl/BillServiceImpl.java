@@ -24,6 +24,7 @@ import com.yd.business.device.dao.IMeterExtendsMapper;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.msg.bean.SMSSendLogBean;
 import com.yd.business.msg.service.ISMSService;
+import com.yd.business.other.service.ICommandService;
 import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LmBillModelMapper;
@@ -33,6 +34,7 @@ import com.yd.iotbusiness.mapper.model.LmBillModel;
 import com.yd.iotbusiness.mapper.model.LmBillModelExample;
 import com.yd.iotbusiness.mapper.model.LmFeeModel;
 import com.yd.iotbusiness.mapper.model.LmBillModelExample.Criteria;
+import com.yd.iotbusiness.mapper.model.LmCmdModel;
 import com.yd.util.DateUtil;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
@@ -63,8 +65,10 @@ public class BillServiceImpl extends BaseService implements IBillService {
 	private IDeviceInfoService deviceInfoService;
 	@Resource
 	private IMeterExtendsMapper meterExtendsMapper;
-	@Autowired
+	@Resource
 	private ISMSService smsService;
+	@Resource
+	private ICommandService commandService;
 	
 	@Override
 	public IOTWebDataBean queryBillList(LmBillModel model) {
@@ -164,13 +168,26 @@ public class BillServiceImpl extends BaseService implements IBillService {
 			LmOperatorModel op = new LmOperatorModel();
 			op.setId(-1);
 			op.setRealname("抄表接口自动触发");
-			//关阀
-			deviceInfoService.openOrCloseMeter(meterCode, op , false, "欠费自动关阀，record："+record.getId());
 			
-			//发送关阀提醒短信
-			String content = "您的水表账户余额已不足(0元)，日内将关闭阀门，停止供水，请续交水费恢复供水。谢谢合作！户号："+user.getCode()+" 户名："+user.getName();
-			smsService.saveSMSSendRequest(user ,meter.getId(), content, op,SMSSendLogBean.SENDTYPE_STOPVALVE);
+			// 判断24小时内仅发送一次关阀指令
+			Date start = new Date(System.currentTimeMillis() - 24*60*60*1000);
+			Date end = new Date();
+			List<LmCmdModel> listCmd = commandService.queryCmdList(meter.getUserid(), meterCode, null, ICommandService.CMD_TYPE_CLOSE, start, end);
+			if(listCmd.size() ==0) {
+				//关阀
+				deviceInfoService.openOrCloseMeter(meterCode, op , false, "欠费自动关阀，record："+record.getId());
+			}
+			
+			//判断是否已经发送过，余额不足的情况每个月仅发一次
+			List<LlSmsSendlogModel> list = smsService.querySMSSendLogList(user.getId(), meter.getId(),SMSSendLogBean.SENDTYPE_STOPVALVE, SMSSendLogBean.STATUS_SUCCESS ,DateUtil.getNowMonthStr()+"%");
+			if(list.size() == 0) {
 
+				//发送关阀提醒短信
+				String content = "您的水表账户余额已欠费("+meter.getBalance().setScale(1, RoundingMode.HALF_UP)+"元)，日内将关闭阀门，停止供水，请续交水费恢复供水。谢谢合作！户号："+user.getCode()+" 户名："+user.getName();
+				smsService.saveSMSSendRequest(user ,meter.getId(), content, op,SMSSendLogBean.SENDTYPE_STOPVALVE);
+			}
+			
+			
 			//余额不足10元，发送余额不足告警
 		}else if(meter.getBalance().compareTo(BigDecimal.TEN) < 0) {
 			

@@ -338,7 +338,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 			if(QingSongInterfaceBean.code_success != Integer.valueOf(res.getCode())) {
 				//失敗
 				commandService.updateCmdStatus(cmd.getId(), MeterCMD.STATE_FAILD,res.getMsg());
-				throw new RuntimeException(res.getMsg());
+				throw new RuntimeException("充值时开阀指令发送失败，请重试！"+res.getMsg());
 			}else {
 				
 			}

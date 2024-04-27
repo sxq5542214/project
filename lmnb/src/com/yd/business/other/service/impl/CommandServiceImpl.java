@@ -4,6 +4,7 @@
 package com.yd.business.other.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import com.yd.basic.framework.service.BaseService;
 import com.yd.business.other.service.ICommandService;
 import com.yd.iotbusiness.mapper.dao.LmCmdModelMapper;
 import com.yd.iotbusiness.mapper.model.LmCmdModel;
+import com.yd.iotbusiness.mapper.model.LmCmdModelExample;
+import com.yd.iotbusiness.mapper.model.LmCmdModelExample.Criteria;
 
 /**
  * 
@@ -47,6 +50,23 @@ public class CommandServiceImpl extends BaseService implements ICommandService {
 		cmdModelMapper.insertSelective(model);
 		return model;
 	}
+	@Override
+	public List<LmCmdModel> queryCmdList(Integer userid,String metercode,Byte state,String type,Date createtimeStart,Date createtimeEnd){
+		
+		
+		LmCmdModelExample ex = new LmCmdModelExample();
+		LmCmdModelExample.Criteria cri = ex.createCriteria();
+		cri.andUseridEqualTo(userid);
+		cri.andMetercodeEqualTo(metercode);
+		if(state != null) {
+			cri.andStateEqualTo(state);
+		}
+		cri.andTypeEqualTo(type);
+		cri.andCreatetimeBetween(createtimeStart, createtimeEnd);
+		
+		return cmdModelMapper.selectByExample(ex );
+	}
+	
 	
 	@Override
 	public LmCmdModel findCmdModelById(int cmdid) {
