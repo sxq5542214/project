@@ -179,7 +179,7 @@ public class BillServiceImpl extends BaseService implements IBillService {
 			}
 			
 			//判断是否已经发送过，余额不足的情况每个月仅发一次
-			List<LlSmsSendlogModel> list = smsService.querySMSSendLogList(user.getId(), meter.getId(),SMSSendLogBean.SENDTYPE_STOPVALVE, SMSSendLogBean.STATUS_SUCCESS ,DateUtil.getNowMonthStr()+"%");
+			List<LlSmsSendlogModel> list = smsService.querySMSSendLogList(user.getId(), meter.getId(),SMSSendLogBean.SENDTYPE_STOPVALVE, null ,DateUtil.getNowMonthStr()+"%");
 			if(list.size() == 0) {
 
 				//发送关阀提醒短信
@@ -192,7 +192,7 @@ public class BillServiceImpl extends BaseService implements IBillService {
 		}else if(meter.getBalance().compareTo(BigDecimal.TEN) < 0) {
 			
 			//判断是否已经发送过，余额不足的情况每个月仅发一次
-			List<LlSmsSendlogModel> list = smsService.querySMSSendLogList(user.getId(), meter.getId(),SMSSendLogBean.SENDTYPE_BALANCEALARM, SMSSendLogBean.STATUS_SUCCESS ,DateUtil.getNowMonthStr()+"%");
+			List<LlSmsSendlogModel> list = smsService.querySMSSendLogList(user.getId(), meter.getId(),SMSSendLogBean.SENDTYPE_BALANCEALARM, null ,DateUtil.getNowMonthStr()+"%");
 			
 			if(list.size() == 0) {
 				LmOperatorModel op = new LmOperatorModel();

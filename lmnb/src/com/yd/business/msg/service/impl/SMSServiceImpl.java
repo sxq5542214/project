@@ -374,7 +374,9 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 		cri.andUseridEqualTo(userid);
 		cri.andMeteridEqualTo(meterid);
 		cri.andSendtypeEqualTo(sendtype);
-		cri.andStatusEqualTo(status);
+		if(status != null) {
+			cri.andStatusEqualTo(status);
+		}
 		cri.andCreateTimeLike(createTime);
 		
 		return smsSendlogModelMapper.selectByExample(example);
