@@ -48,4 +48,6 @@ public interface IDeviceInfoService {
 
 	IOTWebDataBean queryDayOpendedMeterCountListData(String month, Integer systemid, Integer operatorid);
 
+	int deleteMeterForStatus(int meterid);
+
 }

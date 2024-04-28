@@ -4,7 +4,7 @@
 
 	<sql id="query_Where_Clause">
 		<where>
-			m.userid = u.id 
+			m.userid = u.id and u.status != -1
 			<if test="systemid != null"> and m.systemid = #{systemid}</if>
 			<if test="productid != null"> and m.productid = #{productid}</if>
 			<if test="name != null"> and u.name like '%${userName}%'</if>

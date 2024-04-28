@@ -39,6 +39,7 @@
     <result column="openFee" jdbcType="DECIMAL" property="openfee" />
     <result column="changeFee" jdbcType="DECIMAL" property="changefee" />
     <result column="guardianphone" jdbcType="VARCHAR" property="guardianphone" />
+    <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -114,7 +115,7 @@
     id, systemid, code, `name`, room, area1, area2, area3, area4, addressid, idcard, 
     population, `size`, createtime, cardcode, mail, mobile, phone, salecode, archivescode, 
     smsflag, wxflag, exinstalldate, remarks, contractsigning, labormoney, workticket, 
-    modifier, modifytime, paperarchives, openFee, changeFee, guardianphone
+    modifier, modifytime, paperarchives, openFee, changeFee, guardianphone, `status`
   </sql>
   <select id="selectByExample" parameterType="com.yd.iotbusiness.mapper.model.LmUserModelExample" resultMap="BaseResultMap">
     <!--
@@ -188,7 +189,8 @@
       exinstalldate, remarks, contractsigning, 
       labormoney, workticket, modifier, 
       modifytime, paperarchives, openFee, 
-      changeFee, guardianphone)
+      changeFee, guardianphone, `status`
+      )
     values (#{systemid,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{room,jdbcType=VARCHAR}, #{area1,jdbcType=VARCHAR}, #{area2,jdbcType=VARCHAR}, 
       #{area3,jdbcType=VARCHAR}, #{area4,jdbcType=VARCHAR}, #{addressid,jdbcType=INTEGER}, 
@@ -199,7 +201,8 @@
       #{exinstalldate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}, #{contractsigning,jdbcType=VARCHAR}, 
       #{labormoney,jdbcType=VARCHAR}, #{workticket,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, 
       #{modifytime,jdbcType=TIMESTAMP}, #{paperarchives,jdbcType=VARCHAR}, #{openfee,jdbcType=DECIMAL}, 
-      #{changefee,jdbcType=DECIMAL}, #{guardianphone,jdbcType=VARCHAR})
+      #{changefee,jdbcType=DECIMAL}, #{guardianphone,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.yd.iotbusiness.mapper.model.LmUserModel">
     <!--
@@ -307,6 +310,9 @@
       <if test="guardianphone != null">
         guardianphone,
       </if>
+      <if test="status != null">
+        `status`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="systemid != null">
@@ -404,6 +410,9 @@
       </if>
       <if test="guardianphone != null">
         #{guardianphone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -523,6 +532,9 @@
       <if test="row.guardianphone != null">
         guardianphone = #{row.guardianphone,jdbcType=VARCHAR},
       </if>
+      <if test="row.status != null">
+        `status` = #{row.status,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -566,7 +578,8 @@
       paperarchives = #{row.paperarchives,jdbcType=VARCHAR},
       openFee = #{row.openfee,jdbcType=DECIMAL},
       changeFee = #{row.changefee,jdbcType=DECIMAL},
-      guardianphone = #{row.guardianphone,jdbcType=VARCHAR}
+      guardianphone = #{row.guardianphone,jdbcType=VARCHAR},
+      `status` = #{row.status,jdbcType=INTEGER}
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -674,6 +687,9 @@
       <if test="guardianphone != null">
         guardianphone = #{guardianphone,jdbcType=VARCHAR},
       </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -714,7 +730,8 @@
       paperarchives = #{paperarchives,jdbcType=VARCHAR},
       openFee = #{openfee,jdbcType=DECIMAL},
       changeFee = #{changefee,jdbcType=DECIMAL},
-      guardianphone = #{guardianphone,jdbcType=VARCHAR}
+      guardianphone = #{guardianphone,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

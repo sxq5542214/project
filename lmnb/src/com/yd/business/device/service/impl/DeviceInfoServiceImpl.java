@@ -409,5 +409,13 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		return result;
 	}
 	
+	@Override
+	public int deleteMeterForStatus(int meterid) {
+		LmMeterModel meter = findMeterById(meterid);
+		meter.setOpened(MeterModelExtendsBean.OPEND_DELETED);
+		meter.setCode(null);
+		return meterExtendsMapper.updateByPrimaryKeySelective(meter);
+	}
+	
 	
 }

@@ -23,12 +23,13 @@ public interface IUserInfoService {
 	IOTWebDataBean queryUserList(LmUserModel bean);
 
 	int addOrUpdateUser(LmUserModel bean);
-	int addOrUpdateUser(UserInfoBean bean);
 
 	List<LmUserModel> queryUsersPhoneByAddressList(Set<Integer> addressids);
 
 	LmUserModel findUserById(Integer id);
 
 	IOTWebDataBean queryUserAndMeterList(UserModelExtendsBean bean);
+
+	int deleteUser(int userid);
 
 }

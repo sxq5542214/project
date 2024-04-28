@@ -13,10 +13,11 @@ public class MeterModelExtendsBean extends LmMeterModel implements java.io.Seria
 	private static final long serialVersionUID = -8923671707564903643L;
 	public static final byte CHANGED_TRUE = 1;
 	public static final byte CHANGED_FALSE = 0;
-	//'账户状态 0未开户 1已开户 2已报停(不计最低消费)',
+	//'账户状态 -1已删除 0未开户 1已开户 2已报停(不计最低消费)',
 	public static final byte OPEND_NO = 0;
 	public static final byte OPEND_YES = 1;
 	public static final byte OPEND_CLOSE = 2;
+	public static final byte OPEND_DELETED = -1;
 	//'nb是否经过校验 0未经过校验 1已校验',
 	public static final byte STATIONCHECKED_TRUE = 1;
 	public static final byte STATIONCHECKED_FALSE = 0;

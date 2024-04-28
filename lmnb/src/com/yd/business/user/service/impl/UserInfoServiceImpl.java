@@ -17,12 +17,14 @@ import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.service.BaseService;
 import com.yd.business.area.service.IAreaService;
 import com.yd.business.area.service.IBuildingService;
+import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.bean.UserModelExtendsBean;
 import com.yd.business.user.dao.IUserExtendsMapper;
 import com.yd.business.user.dao.IUserInfoDao;
 import com.yd.business.user.service.IUserInfoService;
 import com.yd.iotbusiness.mapper.dao.LmUserModelMapper;
+import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.iotbusiness.mapper.model.LmUserModelExample;
 import com.yd.iotbusiness.mapper.model.LmUserModelExample.Criteria;
@@ -39,8 +41,8 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	private IUserInfoDao userInfoDao;
 	@Autowired
 	private IUserExtendsMapper userMapper;
-	
-	private IAreaService areaService;
+	@Autowired
+	private IDeviceInfoService deviceInfoService;
 	
 	@Override
 	public List<UserInfoBean> queryUserInfo(UserInfoBean bean){
@@ -150,9 +152,22 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	}
 
 	@Override
-	public int addOrUpdateUser(UserInfoBean bean) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteUser(int userid) {
+		LmUserModel user = findUserById(userid);
+		user.setStatus(UserModelExtendsBean.STATUS_DELETED);
+		
+		int r = userMapper.updateByPrimaryKeySelective(user);
+		
+		LmMeterModel meter = new LmMeterModel();
+		meter.setUserid(user.getId());
+		//删除用户下的水表
+		IOTWebDataBean result = deviceInfoService.queryMeterList(meter );
+		List<LmMeterModel> list =  (List<LmMeterModel>)result.getData();
+		for(LmMeterModel m : list) {
+			deviceInfoService.deleteMeterForStatus(m.getId());
+		}
+		
+		return r;
 	}
 	
 	@Override

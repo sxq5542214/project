@@ -108,7 +108,7 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping("**/admin/user/ajaxAddOrUpdateUser.do")
 	public ModelAndView ajaxAddOrUpdateUser(HttpServletRequest request,HttpServletResponse response){
-		IOTWebDataBean result= new IOTWebDataBean();;
+		IOTWebDataBean result= new IOTWebDataBean();
 		try {
 			Map<String, String[]> map = request.getParameterMap();
 			System.out.println(map);
@@ -145,21 +145,24 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping("**/admin/user/ajaxDeleteUser.do")
 	public ModelAndView ajaxDeleteUser(HttpServletRequest request,HttpServletResponse response){
-		
+		IOTWebDataBean result= new IOTWebDataBean();
 		try {
 
 			LmOperatorModel operator = getCurrentLoginOperator();
-			String u_id = request.getParameter("id");
-//			UserInfoBean bean = new UserInfoBean();
-//			
-//			bean.setU_id(Long.parseLong(u_id));
-//			bean.setIsdisplay(UserInfoBean.ISDISPLAY_NO);
-//			int num = userInfoService.addOrUpdateUser(bean);
+			String uid = request.getParameter("id");
+			LmUserModel user = userInfoService.findUserById(Integer.parseInt(uid));
 			
-			
-//			writeJson(response, bean.getU_id() );
+			if(user.getSystemid().intValue() == operator.getSystemid().intValue()) {
+				userInfoService.deleteUser(user.getId());
+			}
+
+			result.setMessage("用户及水表删除成功！");
+			writeJson(response, result );
 		} catch (Exception e) {
 			log.error(e, e);
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+			writeJson(response, result );
 		}
 		return null;
 	}
