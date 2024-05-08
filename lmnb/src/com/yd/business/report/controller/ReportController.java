@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +26,7 @@ import com.yd.business.report.service.IReportService;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
+import com.yd.util.JsonUtil;
 import com.yd.util.StringUtil;
 
 /**
@@ -86,22 +88,29 @@ public class ReportController extends BaseController {
 			LmOperatorModel op = getCurrentLoginOperator();
 			
 
+			Map<String, String> map = getRequestParamsMap(request);
+			String queryParam = map.get("queryParam");
+			
 			String code = request.getParameter("code");
 			String id = request.getParameter("report_id");
 			String start_date = request.getParameter("start_date");
 			String end_date = request.getParameter("end_date");
-			if(StringUtil.isNull(start_date)) {
+			if(start_date == null && queryParam == null) {
 				start_date = DateUtil.getNowOnlyDateStr();
 			}
-			if(StringUtil.isNull(end_date)) {
+			if(end_date == null && queryParam == null) {
 				// 加一天
 				end_date = DateUtil.formatDateOnlyDate(System.currentTimeMillis() + 43200000) ;
 			}
 			
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("start_date", start_date);
-			map.put("end_date", end_date);
+//			new HashMap<String, String>();
+			map.put("start_date", StringUtil.convertNull(start_date));
+			map.put("end_date", StringUtil.convertNull(end_date));
 			
+			Map<String, String> queryParamMap = JsonUtil.parseJSONToMap(queryParam);
+			map.remove("queryParam");
+			map.putAll(queryParamMap);
+//System.out.println("=========================="+map);
 
 			//根据登录用户的报表权限查询报表清单
 			ReportSimpleBean report = reportService.querySimpleReportAndDataByCode(code,map);

@@ -69,12 +69,13 @@ public class ReportServiceImpl extends BaseService implements IReportService {
 			
 			//查询 参数列表
 			List<ReportParamsBean> paramsList = queryReportParamsList(bean.getId(), params);
+			//将default的值变更为界面查询输入的值
+			for(ReportParamsBean param : paramsList) {
+				if(params.get(param.getParam_code()) != null) {
+					param.setDefault_value(params.get(param.getParam_code()));
+				}
+			}
 			bean.setParamsList(paramsList);
-//			for(ReportParamsBean param : paramsList) {
-//				if(params.get(param.getParam_code()) == null) {
-				
-//				}
-//			}
 			
 			return bean;
 		}

@@ -13,6 +13,8 @@ import com.yd.iotbusiness.mapper.model.LmUserModel;
 
 @Alias("userModelExtendsBean")
 public class UserModelExtendsBean extends LmUserModel {
+	public static final int STATUS_DELETED = -1;
+	public static final int STATUS_NORMAL = 1;
 
 	/**
 	 * 

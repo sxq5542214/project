@@ -22,7 +22,22 @@ public class ReportParamsBean extends BaseBean {
 	private String param_sql;
 	private String param_url;
 	private String param_category;
+	private Integer seq;
+	private String default_value;
 	
+	
+	public Integer getSeq() {
+		return seq;
+	}
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
+	public String getDefault_value() {
+		return default_value;
+	}
+	public void setDefault_value(String default_value) {
+		this.default_value = default_value;
+	}
 	public Integer getId() {
 		return id;
 	}
