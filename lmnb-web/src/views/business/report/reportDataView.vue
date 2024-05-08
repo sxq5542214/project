@@ -1,21 +1,21 @@
 <template>
   <div class="app-container">
     <div>
-      <el-form :model="listQuery" ref="queryForm" label-width="auto" :inline="true">
+      <el-form :model="listQuery" ref="queryForm" label-width="70px" :inline="true" >
 
-        <el-form-item label="起始日期" prop="timestamp">
-          <el-date-picker v-model="start_date" type="datetime" placeholder="请选择时间" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" />
+        <el-form-item label="起始日期" prop="timestamp" style="margin-bottom:5px;">
+          <el-date-picker v-model="start_date" type="datetime" placeholder="请选择时间" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" style="width: 200px; " />
         </el-form-item>
 
-        <el-form-item label="结束日期" prop="timestamp">
-          <el-date-picker v-model="end_date" type="datetime" placeholder="请选择时间" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" />
+        <el-form-item label="结束日期" prop="timestamp" style="margin-bottom:5px;">
+          <el-date-picker v-model="end_date" type="datetime" placeholder="请选择时间" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"  style="width: 200px; " />
         </el-form-item>
-
-        <el-form-item v-for="(item,index) in listParam" :key="index" :label="item.param_name">
-          <el-date-picker v-if="item.param_type == 'date'" v-model="'listQuery.'+item.param_code"
+        <el-form-item v-for="(item,index) in listParam" :key="index" :label="item.param_name" style="margin-bottom:5px;">
+          <el-date-picker v-if="item.param_type == 'date'" v-model="'listQuery.'+item.param_code" style="width: 200px; "
                           type="date" placeholder="请选择日期">
           </el-date-picker>
-          <el-input v-else v-model="'listQuery.' + item.param_code" :type="item.param_type"></el-input>
+          <el-input v-else :value="listQuery[item.param_code]" @input="updateParamValue(item.param_code, $event)" style="width: 200px; "
+                    :type="item.param_type"></el-input>
         </el-form-item>
         <!-- 可以添加更多的查询条件 -->
 
@@ -32,37 +32,37 @@
 
     </div>
 
-   <!-- <div class="filter-container">
-      <div class="demo-input-suffix">
-        <el-input
-          v-model="listQuery.name"
-          placeholder="请输入户名"
-          style="width: 200px;"
-          class="filter-item"
-          @keyup.enter.native="handleFilter"
-        />
-        <el-input
-          v-model="listQuery.phone"
-          placeholder="请输入电话"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-        />
-        <el-input
-          v-model="listQuery.idcard"
-          placeholder="请输入证件号码"
-          style="width: 200px;margin-left: 10px;"
-          class="filter-item"
-        />
-        <el-button
-          v-waves
-          class="filter-item"
-          type="primary"
-          icon="el-icon-search"
-          style="margin-left: 10px;"
-          @click="handleFilter"
-        >查询</el-button>
-      </div>
-    </div>-->
+    <!-- <div class="filter-container">
+     <div class="demo-input-suffix">
+       <el-input
+         v-model="listQuery.name"
+         placeholder="请输入户名"
+         style="width: 200px;"
+         class="filter-item"
+         @keyup.enter.native="handleFilter"
+       />
+       <el-input
+         v-model="listQuery.phone"
+         placeholder="请输入电话"
+         style="width: 200px;margin-left: 10px;"
+         class="filter-item"
+       />
+       <el-input
+         v-model="listQuery.idcard"
+         placeholder="请输入证件号码"
+         style="width: 200px;margin-left: 10px;"
+         class="filter-item"
+       />
+       <el-button
+         v-waves
+         class="filter-item"
+         type="primary"
+         icon="el-icon-search"
+         style="margin-left: 10px;"
+         @click="handleFilter"
+       >查询</el-button>
+     </div>
+   </div>-->
 
     <el-table :key="tableKey"
               v-loading="listLoading"
@@ -72,23 +72,21 @@
               highlight-current-row
               style="width: 100%;">
       <el-table-column :show-overflow-tooltip="true"
-          v-for="(item, index) in listLabel"
-          :key="index"
-          :prop="item.code"
-          :label="item.name"
+                       v-for="(item, index) in listLabel"
+                       :key="index"
+                       :prop="item.code"
+                       :label="item.name"
                                      >
-        
+
       </el-table-column>
 
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.rows"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0"
+                :total="total"
+                :page.sync="listQuery.page"
+                :limit.sync="listQuery.rows"
+                @pagination="getList" />
 
   </div>
 </template>
@@ -151,8 +149,17 @@ export default {
         this.list = response.data.dataList;
 
         this.listParam = response.data.paramsList;
+
+        for (var i = 0; i < this.listParam.length; i++) {
+          var param = this.listParam[i];
+          //console.log(param)
+          if (param.default_value === undefined) param.default_value = '';
+          this.listQuery[param.param_code] = param.default_value;
+        };
+
         //console.log('listParam', this.listParam);
         this.listLoading = false;
+        this.$forceUpdate();
         })
 
 
@@ -166,7 +173,7 @@ export default {
         labels.push(item.name);
         codes.push(item.code);
       }
-      console.log(labels);
+      //console.log(labels);
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = labels
         const filterVal = codes
@@ -184,6 +191,14 @@ export default {
     },
     handleClick() {
       alert('视线中')
+    },
+    updateParamValue(paramCode, event) {
+      //alert(paramCode + "," + event);
+      if (this.listQuery[paramCode] === undefined ) { this.listQuery[paramCode] = ''; }
+      var newValue = event;
+      this.listQuery[paramCode] = newValue;
+      this.$forceUpdate();
+      //
     },
     goback() {
       this.$router.go(-1)

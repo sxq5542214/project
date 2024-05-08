@@ -186,7 +186,7 @@
                            fixed="right">
             <template slot-scope="{row}">
               <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
-              <el-button type="danger" size="mini" @click="handleUpdate(row)">删除</el-button>
+              <el-button type="danger" size="mini" @click="handleDelete(row)">删除</el-button>
               <!--           <el-button   type="danger" size="mini"  @click="handleDelete(row,$index)">
               删除
   </el-button>-->
@@ -544,7 +544,7 @@ export default {
       })
     },
     createData() {
-      console.log(this.$refs.meterTabPane[0].$children[0])
+      //console.log(this.$refs.meterTabPane[0].$children[0])
       this.$refs.meterTabPane[0].$children[0].validateForm()
       var canMeterSubmit = this.$refs.meterTabPane[0].$children[0].validateFlag
       if (!canMeterSubmit) return
@@ -637,16 +637,27 @@ export default {
         }
       })
     },
-    handleDelete(row, index) {
-      deleteUser(row).then(response => {
-        this.list.splice(index, 1)
-        this.$notify({
-          title: '成功',
-          message: '删除成功',
-          type: 'success',
-          duration: 2000
-        })
-      })
+    handleDelete(row ) {
+      this.$confirm('请确认用户水表的表号是否已经置空？'  , '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 确认删除操作
+        deleteUser(row).then(response => {
+          this.list.splice(this.list.indexOf(row), 1)
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+        });
+      }).catch(() => {
+        // 取消删除操作
+        console.log('Element UI 取消删除');
+      });
+
     },
     handleFetchPv(pv) {
       fetchPv(pv).then(response => {
