@@ -14,6 +14,11 @@
           <el-date-picker v-if="item.param_type == 'date'" v-model="'listQuery.'+item.param_code" style="width: 200px; "
                           type="date" placeholder="请选择日期">
           </el-date-picker>
+
+          <el-select v-else-if="item.param_type == 'select'" clearable v-model="listQuery[item.param_code]" placeholder="请选择" style="width: 200px; " @change="updateSelectValue()" >
+            <el-option v-for="op in listSelect[item.param_code]" :key="op.value" :label="op.label" :value="op.value"></el-option>
+          </el-select>
+
           <el-input v-else :value="listQuery[item.param_code]" @input="updateParamValue(item.param_code, $event)" style="width: 200px; "
                     :type="item.param_type"></el-input>
         </el-form-item>
@@ -111,6 +116,7 @@ export default {
       listLoading: true,
       listLabel: null,
       listParam: [],
+      listSelect: {},
       listQuery: {
         page: 1,
         rows: 20,
@@ -150,14 +156,21 @@ export default {
 
         this.listParam = response.data.paramsList;
 
+        // 查询条件参数的初始化
         for (var i = 0; i < this.listParam.length; i++) {
           var param = this.listParam[i];
-          //console.log(param)
+          //下拉框的初始化
+          if (param.param_type == 'select') {
+            var selectJson = JSON.parse(param.param_url);
+            this.listSelect[param.param_code] = selectJson;
+
+          }
+          // 默认值的初始化
           if (param.default_value === undefined) param.default_value = '';
           this.listQuery[param.param_code] = param.default_value;
-        };
+        }
 
-        //console.log('listParam', this.listParam);
+        //console.log('listSelect', this.listSelect);
         this.listLoading = false;
         this.$forceUpdate();
         })
@@ -199,6 +212,9 @@ export default {
       this.listQuery[paramCode] = newValue;
       this.$forceUpdate();
       //
+    },
+    updateSelectValue() {
+      this.$forceUpdate();
     },
     goback() {
       this.$router.go(-1)
