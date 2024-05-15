@@ -54,7 +54,7 @@
 	
 	<update id="updateBillCyclebuyamount" parameterType="string">
 		update lm_bill b set  b.cyclebuyamount = (select IFNULL(SUM(p.payamount),0) from lm_payment p where DATE_FORMAT(p.createtime,'%Y%m' ) = billmonth and p.meterid = b.meterid )
-		where  b.billmonth =  #{value} 
+		where  b.billmonth =  #{value}  and saleremark not like '开户费%'
 	</update>
 	
 </mapper>

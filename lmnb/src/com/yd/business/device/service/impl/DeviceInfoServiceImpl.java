@@ -191,6 +191,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 				bean.setBatterystate(Byte.valueOf(dto.getBattery()));
 				bean.setCode(dto.getCode());
 				bean.setStationchecked(MeterModelExtendsBean.STATIONCHECKED_TRUE);
+				bean.setLifecode(bean.getId());
 				meterExtendsMapper.updateByPrimaryKeySelective(bean);
 			}
 

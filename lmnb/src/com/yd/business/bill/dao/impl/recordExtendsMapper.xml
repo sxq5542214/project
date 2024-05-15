@@ -31,7 +31,8 @@
 
 	<select id="selectRecordList" resultType="recordModelExtendsBean"	parameterType="recordModelExtendsBean">
 	
-		select r.*  from lm_record r 
+		select r.* ,u.code user_code from lm_record r ,lm_user u
+		where r.userid = u.id 
 	    <include refid="query_Where_Clause" />
 	    order by id desc
 	    <include refid="query_limit" />

@@ -47,6 +47,9 @@ public class ChargeDetailBean extends BaseBean implements Serializable {
 	public static final int PRINT_STATUS_NO = 0 ;  //未打印发票
 	public static final int PRINT_STATUS_YES = 1 ; //已打印
 	
+	public static final byte PAY_STATUS_WAIT = 1 ; //待支付
+	public static final byte PAY_STATUS_SUCCESS = 2 ; //已支付
+	
 	
 	
 	// Fields

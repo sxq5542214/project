@@ -407,6 +407,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		payment.setPricecode(meter.getPricecode().toString());
 		payment.setPricename(meter.getPricename());
 		payment.setSaleremark(remark);
+		payment.setPaystate(ChargeDetailBean.PAY_STATUS_SUCCESS);
 
 		Integer num = iPaymentExtendsMapper.insertSelective(payment);
 		

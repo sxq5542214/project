@@ -29,7 +29,7 @@ public class MeterModelExtendsBean extends LmMeterModel implements java.io.Seria
 	public static final byte VALVESTATE_NOHAVE = 2;
 	
 	
-	
+	private String userCode;
 	private String userName;
 	private String area1;
 	private String area2;
@@ -39,6 +39,12 @@ public class MeterModelExtendsBean extends LmMeterModel implements java.io.Seria
 	private String phone;
 	private String idcard;
 	
+	public String getUserCode() {
+		return userCode;
+	}
+	public void setUserCode(String userCode) {
+		this.userCode = userCode;
+	}
 	public Integer getAddressid() {
 		return addressid;
 	}

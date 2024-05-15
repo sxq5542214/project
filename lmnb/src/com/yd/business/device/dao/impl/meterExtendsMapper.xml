@@ -28,7 +28,7 @@
 	</sql>
 	<select id="queryMeterAndUserList" resultType="meterModelExtendsBean"
 		parameterType="meterModelExtendsBean">
-		select m.*,u.*,u.name userName from lm_meter m,lm_user u
+		select m.*,u.*,u.name userName,u.code userCode from lm_meter m,lm_user u
 	    <include refid="query_Where_Clause" />
 	</select>
 	

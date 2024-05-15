@@ -18,8 +18,19 @@ public class RecordModelExtendsBean extends LmRecordModel {
 	 */
 	private static final long serialVersionUID = -3165404785116726465L;
 	
+	private String user_code;
+	
+	
 	private String start_date;
 	private String end_date;
+	
+	
+	public String getUser_code() {
+		return user_code;
+	}
+	public void setUser_code(String user_code) {
+		this.user_code = user_code;
+	}
 	public String getStart_date() {
 		return start_date;
 	}
