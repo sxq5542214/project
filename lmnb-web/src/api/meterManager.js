@@ -57,4 +57,11 @@ export function changeMeter(data) {
     params: data
   })
 }
+export function ajaxCheckDeviceStation(data) {
+  return request({
+    url: '/admin/device/ajaxCheckDeviceStation.do',
+    method: 'get',
+    params: data
+  })
+}
 

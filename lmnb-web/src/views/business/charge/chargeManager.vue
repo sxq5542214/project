@@ -204,7 +204,7 @@
                        align="center"
                        width="80">
         <template slot-scope="{row}">
-          <span> {{ row.lifecode }} </span>
+          <span> {{ row.userCode }} </span>
         </template>
       </el-table-column>
       <el-table-column label="户名" align="center" width="80px" :show-overflow-tooltip="true">
@@ -469,7 +469,7 @@ export default {
     },
     closeValve() {
       if (this.selectRow.code) {
-        MessageBox.confirm('您确定要执行开阀操作吗？', '提示', {
+        MessageBox.confirm('您确定要执行关阀操作吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

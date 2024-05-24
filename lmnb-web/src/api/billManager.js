@@ -7,4 +7,13 @@ export function queryBillList(data) {
     params: data
   })
 }
+export function ajaxQueryBillWaterList(data) {
+  return request({
+    url: '/admin/bill/ajaxQueryBillWaterList.do',
+    method: 'get',
+    params: data
+  })
+}
+
+
 

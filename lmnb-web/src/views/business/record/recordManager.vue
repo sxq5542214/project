@@ -5,7 +5,7 @@
         <el-form :model="listQuery" ref="queryForm" label-width="auto" :inline="true">
 
           <el-form-item label="户号" style="margin-bottom:0px;">
-            <el-input v-model="listQuery.lifecode"
+            <el-input v-model="listQuery.user_code"
                       placeholder="请输入户号"
                       style="width: 200px;"
                       class="filter-item"
@@ -70,7 +70,7 @@
                        width="60px"
                        :class-name="getSortClass('id')">
         <template slot-scope="{row}">
-          <span>{{ row.lifecode }}</span>
+          <span>{{ row.user_code }}</span>
         </template>
       </el-table-column>
       <el-table-column label="户名" align="center">
