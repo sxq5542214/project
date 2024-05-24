@@ -585,6 +585,10 @@ public class SystemManagerServiceImpl extends BaseService implements ISystemMana
 					}
 				}
 				parent.setRoles(roleNames);
+				Map<String,Object> parentMeta = new HashMap<>();
+				parentMeta.put("title", parent.getTitle());
+				parentMeta.put("icon", parent.getIcon());
+				parent.setMeta(parentMeta);
 				resultList.add(parent);
 			}
 		}

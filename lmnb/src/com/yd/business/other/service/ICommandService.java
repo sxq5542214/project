@@ -35,4 +35,6 @@ public interface ICommandService {
 	List<LmCmdModel> queryCmdList(Integer userid, String metercode, Byte state, String type, Date createtimeStart,
 			Date createtimeEnd);
 
+	List<LmCmdModel> queryCmdList(String metercode);
+
 }

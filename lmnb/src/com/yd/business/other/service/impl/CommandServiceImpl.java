@@ -67,6 +67,16 @@ public class CommandServiceImpl extends BaseService implements ICommandService {
 		return cmdModelMapper.selectByExample(ex );
 	}
 	
+	@Override
+	public List<LmCmdModel> queryCmdList(String metercode){
+		
+		LmCmdModelExample ex = new LmCmdModelExample();
+		LmCmdModelExample.Criteria cri = ex.createCriteria();
+		cri.andMetercodeEqualTo(metercode);
+		ex.setOrderByClause(" id desc ");
+		
+		return cmdModelMapper.selectByExample(ex );
+	}
 	
 	@Override
 	public LmCmdModel findCmdModelById(int cmdid) {

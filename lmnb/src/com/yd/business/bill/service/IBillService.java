@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
+import com.yd.business.bill.bean.BillModelExtendBean;
 import com.yd.business.device.bean.ChangeMeterExtBean;
 import com.yd.iotbusiness.mapper.model.LmBillModel;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
@@ -25,6 +26,8 @@ public interface IBillService {
 	void updateBillByDeductionMinconsumamout(String billMonth);
 
 	void updateBillCyclebuyamount(String billMonth);
+
+	IOTWebDataBean queryBillWaterList(BillModelExtendBean bean);
 
 
 

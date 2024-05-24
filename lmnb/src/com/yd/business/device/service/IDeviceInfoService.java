@@ -3,6 +3,7 @@ package com.yd.business.device.service;
 import java.util.List;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
+import com.yd.business.client.bean.QingSongInterfaceBean.DeviceDto;
 import com.yd.business.device.bean.DeviceInfoBean;
 import com.yd.business.device.bean.DeviceKindBean;
 import com.yd.business.device.bean.MeterModelExtendsBean;
@@ -49,5 +50,7 @@ public interface IDeviceInfoService {
 	IOTWebDataBean queryDayOpendedMeterCountListData(String month, Integer systemid, Integer operatorid);
 
 	int deleteMeterForStatus(int meterid);
+
+	DeviceDto checkDeviceStation(Integer id);
 
 }

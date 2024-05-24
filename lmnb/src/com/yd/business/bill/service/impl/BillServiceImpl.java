@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.service.BaseService;
+import com.yd.business.bill.bean.BillModelExtendBean;
 import com.yd.business.bill.dao.IBillExtendsMapper;
 import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.bean.MeterModelExtendsBean;
@@ -85,6 +86,21 @@ public class BillServiceImpl extends BaseService implements IBillService {
 		result.setData(list);
 		return result;
 	}
+	
+
+	@Override
+	public IOTWebDataBean queryBillWaterList(BillModelExtendBean bean) {
+		IOTWebDataBean result = new IOTWebDataBean();
+//		BillModelExtendBean bean = new BillModelExtendBean();
+//		bean.setMeterid(meterid);
+//		bean.setOrderby(" id desc ");
+		List<BillModelExtendBean> list = billExtendsMapper.queryBillWaterList(bean );
+		
+		result.setTotal(Long.valueOf(list.size()));
+		result.setData(list);
+		return result;
+	}
+	
 	
 	@Override
 	public LmBillModel generatorBillByRecord(String meterCode ,LmRecordModel record) {

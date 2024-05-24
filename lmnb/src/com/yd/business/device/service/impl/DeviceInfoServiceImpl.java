@@ -168,39 +168,46 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		}
 		
 		if(bean.getStationchecked() == null || bean.getStationchecked() != MeterModelExtendsBean.STATIONCHECKED_TRUE) {
-			
 			//调用服务查询水表是否可用
-			DeviceDto dto = iotInterfaceService.checkQingSongMeterCode(bean.getCode());
-			if(dto == null) {
-				throw new RuntimeException("表具校验未通过，请检查水表编码~ " + bean.getCode());
-			}else {
-				bean.setIsp(Byte.valueOf(dto.getIsp()));
-				bean.setIspid(dto.getIspid());
-				bean.setImei(dto.getImei());
-				bean.setImsi(dto.getSim());
-				bean.setTimer(Integer.valueOf(dto.getReadperiod()));
-				if("OPEN".equalsIgnoreCase(dto.getValvestate()) || "00".equalsIgnoreCase(dto.getValvestate())) {
-					bean.setValvestate(MeterModelExtendsBean.VALVESTATE_OPEND);
-				}else if("CLOSE".equalsIgnoreCase(dto.getValvestate()) || "01".equalsIgnoreCase(dto.getValvestate())) {
-					bean.setValvestate(MeterModelExtendsBean.VALVESTATE_CLOSED);
-				}else {
-					bean.setValvestate(MeterModelExtendsBean.VALVESTATE_UNKNOW);
-				}
-				bean.setRemark3(dto.getValvestate());
-				bean.setStrength(dto.getSignalstrength());
-				bean.setBatterystate(Byte.valueOf(dto.getBattery()));
-				bean.setCode(dto.getCode());
-				bean.setStationchecked(MeterModelExtendsBean.STATIONCHECKED_TRUE);
-				bean.setLifecode(bean.getId());
-				meterExtendsMapper.updateByPrimaryKeySelective(bean);
-			}
-
+			DeviceDto dto = checkDeviceStation(bean.getId());
 		}
 		result.setData(bean);
 		
 		return result;
 	}
 
+	@Override
+	public DeviceDto checkDeviceStation(Integer id) {
+		LmMeterModel bean = meterExtendsMapper.selectByPrimaryKey(id);
+		//调用服务查询水表是否可用
+		DeviceDto dto = iotInterfaceService.checkQingSongMeterCode(bean.getCode());
+		if(dto == null) {
+			throw new RuntimeException("表具校验未通过，请检查水表编码~ " + bean.getCode());
+		}else {
+			bean.setIsp(Byte.valueOf(dto.getIsp()));
+			bean.setIspid(dto.getIspid());
+			bean.setImei(dto.getImei());
+			bean.setImsi(dto.getSim());
+			bean.setTimer(Integer.valueOf(dto.getReadperiod()));
+			if("OPEN".equalsIgnoreCase(dto.getValvestate()) || "00".equalsIgnoreCase(dto.getValvestate())) {
+				bean.setValvestate(MeterModelExtendsBean.VALVESTATE_OPEND);
+			}else if("CLOSE".equalsIgnoreCase(dto.getValvestate()) || "01".equalsIgnoreCase(dto.getValvestate())) {
+				bean.setValvestate(MeterModelExtendsBean.VALVESTATE_CLOSED);
+			}else {
+				bean.setValvestate(MeterModelExtendsBean.VALVESTATE_UNKNOW);
+			}
+			bean.setRemark3(dto.getValvestate());
+			bean.setStrength(dto.getSignalstrength());
+			bean.setBatterystate(Byte.valueOf(dto.getBattery()));
+			bean.setCode(dto.getCode());
+			bean.setStationchecked(MeterModelExtendsBean.STATIONCHECKED_TRUE);
+			bean.setLifecode(bean.getId());
+			meterExtendsMapper.updateByPrimaryKeySelective(bean);
+		}
+		return dto;
+	}
+	
+	
 	@Override
 	public LmMeterModel updateMeterModel(LmMeterModel bean) {
 		if(bean.getId() != null) {

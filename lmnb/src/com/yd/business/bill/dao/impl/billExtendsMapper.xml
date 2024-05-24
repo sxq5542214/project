@@ -4,19 +4,15 @@
 
 	<sql id="query_Where_Clause">
 		<where>
-			m.userid = u.id 
-			<if test="systemid != null"> and m.systemid = #{systemid}</if>
-			<if test="productid != null"> and m.productid = #{productid}</if>
-			<if test="userid != null"> and m.userid = #{userid}</if>
-			<if test="code != null"> and m.code = #{code}</if>
-			<if test="userName != null"> and u.name like '%${userName}%'</if>
-			<if test="area1 != null"> and u.area1 like '%${area1}%'</if>
-			<if test="area2 != null"> and u.area2 like '%${area2}%'</if>
-			<if test="area3 != null"> and u.area3 like '%${area3}%'</if>
-			<if test="area4 != null"> and u.area4 like '%${area4}%'</if>
-			<if test="addressid != null"> and u.addressid = #{addressid}</if>
-			<if test="ispid != null"> and ispid = #{ispid}</if>
+			<if test="systemid != null"> and systemid = #{systemid}</if>
+			<if test="billmonth != null"> and billmonth = #{billmonth}</if>
+			<if test="userid != null"> and userid = #{userid}</if>
+			<if test="meterid != null"> and meterid = #{meterid}</if>
+			<if test="priceid != null"> and priceid = #{priceid}</if>
 		</where>
+	    <if test="orderby != null">
+	    	order by ${orderby}
+	    </if>
 	    <if test="rows != null">
 	      <if test="page != null">
 	        limit ${(page-1) * rows}, ${rows}
@@ -26,6 +22,14 @@
 	      </if>
 	    </if>
 	</sql>
+	
+	<select id="queryBillWaterList" resultType="billModelExtendBean"
+		parameterType="billModelExtendBean">
+		select b.*,(select  max(curnum) from lm_record r where r.billmonth = b.billmonth and r.meterid = b.meterid  ) curnum from lm_bill b
+	    <include refid="query_Where_Clause" />
+	</select>
+	
+	
 <!-- 	<select id="queryMeterAndUserList" resultType="meterModelExtendsBean"
 		parameterType="meterModelExtendsBean">
 		select m.*,u.*,u.name userName from lm_meter m,lm_user u

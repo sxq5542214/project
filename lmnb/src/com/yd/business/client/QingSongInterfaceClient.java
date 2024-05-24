@@ -102,7 +102,8 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 
 				JSONArray resDataList = resJson.getJSONArray("data");
 				if(resDataList.length() == 0) {
-					return null;
+					throw new RuntimeException("表具校验未通过，返回成功但没有数据内容： " + result);
+					
 				}
 				JSONObject resData = resDataList.getJSONObject(0);
 				DeviceDto dev = bean.new DeviceDto();

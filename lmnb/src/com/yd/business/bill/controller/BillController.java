@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.controller.BaseController;
+import com.yd.business.bill.bean.BillModelExtendBean;
 import com.yd.business.bill.service.IBillService;
 import com.yd.business.device.bean.ChangeMeterExtBean;
 import com.yd.business.device.bean.DeviceKindBean;
@@ -51,6 +52,30 @@ public class BillController extends BaseController {
 		return null;
 	}
 	
-	
+
+	@RequestMapping("admin/bill/ajaxQueryBillWaterList.do")
+	public ModelAndView ajaxQueryBillWaterList(HttpServletRequest request,HttpServletResponse response){
+		IOTWebDataBean result ;
+		try {
+			
+			BillModelExtendBean model = new BillModelExtendBean();
+			LmOperatorModel op = getCurrentLoginOperator();
+			model.setSystemid(op.getSystemid());
+			
+			
+			Integer meterid = Integer.parseInt(request.getParameter("meterid"));
+			model.setMeterid(meterid);
+			model.setOrderby(" billmonth desc ");
+			result = billService.queryBillWaterList(model);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setMessage(e.getMessage());
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+		}
+		writeJson(response, result );
+		return null;
+	}
 	
 }

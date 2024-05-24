@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.context.WebContext;
 import com.yd.basic.framework.controller.BaseController;
+import com.yd.business.client.bean.QingSongInterfaceBean.DeviceDto;
 import com.yd.business.device.bean.DeviceKindBean;
 import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.device.service.IDeviceInfoService;
@@ -109,6 +110,33 @@ public class DeviceInfoController extends BaseController {
 		writeJson(response, result );
 		return null;
 	}
+	
+
+
+	@RequestMapping("admin/device/ajaxCheckDeviceStation.do")
+	public ModelAndView ajaxCheckDeviceStation(HttpServletRequest request,HttpServletResponse response){
+		
+		IOTWebDataBean result;
+		try {
+			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
+			
+			String meterid = request.getParameter("meterid");
+			
+			DeviceDto dto = deviceInfoService.checkDeviceStation(Integer.parseInt(meterid));
+			result = new IOTWebDataBean();
+			result.setMessage("表具校验通过！");
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+
+	
 	
 
 	@RequestMapping("admin/device/ajaxQueryMeterList.do")
