@@ -176,6 +176,8 @@ public class BillServiceImpl extends BaseService implements IBillService {
 		
 		//扣减余额
 		meter.setBalance(fee.getAfterbalance());
+		meter.setDayuse(record.getCurquantity());
+		meter.setMonthuse(bill.getQuantity());
 		deviceInfoService.updateMeterModel(meter);
 		
 		

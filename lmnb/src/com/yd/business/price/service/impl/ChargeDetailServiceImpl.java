@@ -370,6 +370,7 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		LmPaymentModelExample.Criteria cri = ex.createCriteria();
 		cri.andUseridEqualTo( model.getUserid());
 		cri.andSystemidEqualTo(model.getSystemid());
+		cri.andSaleremarkNotLike("%开户费%");
 		if(StringUtil.isNotNull(model.getMetercode())){
 			cri.andMetercodeEqualTo(model.getMetercode());
 		}

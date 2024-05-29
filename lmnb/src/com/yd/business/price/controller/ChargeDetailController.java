@@ -124,6 +124,7 @@ public class ChargeDetailController extends BaseController {
 			model.setMetercode(request.getParameter("meterCode"));
 			
 			model.setUserid(Integer.parseInt(request.getParameter("userid")));
+			model.setPaystate(ChargeDetailBean.PAY_STATUS_SUCCESS);
 			result = chargeDetailService.queryChargeList(model);
 			
 		} catch (Exception e) {
