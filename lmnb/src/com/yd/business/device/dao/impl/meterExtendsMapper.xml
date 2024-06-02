@@ -48,7 +48,7 @@
 		from lm_bill b where b.billmonth = #{value} and b.meterid = m.id  ),
 		remark = CONCAT('账户补扣最低消费', #{value} )
 		where m.opened = 1 and exists (select 1 from  lm_bill b where b.meterid = m.id 
-		 and b.billmonth = #{value}  and  b.minconsumequantity > b.quantity  ) and ( m.remark not like'账户补扣最低消费%' or m.remark is null  )
+		 and b.billmonth = #{value}  and  b.minconsumequantity > b.quantity  ) and ( m.remark not like concat('账户补扣最低消费',#{value},'%') or m.remark is null  )
 
 	</update>
 	
