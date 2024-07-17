@@ -58,7 +58,7 @@ public class BigDecimalOptimizeTypeHandler extends BigDecimalTypeHandler {
 		// TODO Auto-generated method stub
 //		System.out.println(" getResult(ResultSet 2........");
 		BigDecimal b = rs.getBigDecimal(columnName);
-		if(b != null) return b.setScale(2, RoundingMode.HALF_UP);
+		if(b != null) return b.setScale(4, RoundingMode.HALF_UP);
 		return super.getResult(rs, columnName);
 	}
 }
