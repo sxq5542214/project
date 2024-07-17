@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="device">
-	<select id="queryDeviceInfo" parameterType="deviceInfo" resultType="deviceInfo"   >
+	<select id="queryDeviceInfo" parameterType="deviceInfo" resultType="deviceInfo"  flushCache="true" >
 		select * from DeviceInfo
 		<where>
 			<if test="di_id != null"> and di_id = #{di_id} </if>
@@ -11,8 +11,8 @@
 			<if test="di_dkid != null"> and di_dkid = #{di_dkid} </if>
 		</where>
 	</select>
-	<cache eviction="LRU" size="4096" flushInterval="600000"></cache>
-	
+<!--  涉及余额不能加缓存	<cache eviction="LRU" size="4096" flushInterval="600000"></cache>
+ -->	
 	
 	<insert id="createDeviceInfo" parameterType="deviceInfo" useGeneratedKeys="true" keyProperty="di_id">
 		
@@ -89,7 +89,7 @@
 	</delete>
 	
 	
- 	<update id="updateDeviceInfo" parameterType="deviceInfo">
+ 	<update id="updateDeviceInfo" parameterType="deviceInfo" flushCache="true">
 		update deviceInfo 
 		<set>
 			<if test="di_userid != null">di_userid = #{di_userid},</if>

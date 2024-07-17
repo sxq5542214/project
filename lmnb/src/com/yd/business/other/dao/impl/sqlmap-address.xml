@@ -15,7 +15,7 @@
 			<if test="status != null"> and status = #{status} </if>
 		</where>
 	</select>
-	<cache eviction="LRU" size="4096" ></cache>
+	<cache eviction="LRU" size="4096" flushInterval="100000" ></cache>
 </mapper>
 
 

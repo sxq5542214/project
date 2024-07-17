@@ -199,9 +199,10 @@ public class BillServiceImpl extends BaseService implements IBillService {
 			//判断是否已经发送过，余额不足的情况每个月仅发一次
 			List<LlSmsSendlogModel> list = smsService.querySMSSendLogList(user.getId(), meter.getId(),SMSSendLogBean.SENDTYPE_STOPVALVE, null ,DateUtil.getNowMonthStr()+"%");
 			if(list.size() == 0) {
-
+				
+				BigDecimal oweFee = meter.getBalance().add(BigDecimal.ZERO);
 				//发送关阀提醒短信
-				String content = "您的水表账户余额已欠费("+meter.getBalance().setScale(1, RoundingMode.HALF_UP)+"元)，日内将关闭阀门，停止供水，请续交水费恢复供水。谢谢合作！户号："+user.getCode()+" 户名："+user.getName();
+				String content = "您的水表账户余额已欠费("+ oweFee.setScale(1, RoundingMode.HALF_UP)+"元)，日内将关闭阀门，停止供水，请续交水费恢复供水。谢谢合作！户号："+user.getCode()+" 户名："+user.getName();
 				smsService.saveSMSSendRequest(user ,meter.getId(), content, op,SMSSendLogBean.SENDTYPE_STOPVALVE);
 			}
 			
@@ -216,8 +217,9 @@ public class BillServiceImpl extends BaseService implements IBillService {
 				LmOperatorModel op = new LmOperatorModel();
 				op.setId(-1);
 				op.setRealname("抄表接口自动触发");
-				
-				String content = "您的水表账户尚有"+meter.getBalance().setScale(1, RoundingMode.HALF_UP)+"元余额可用，请于近日续缴水费，以免欠费关阀影响您的用水。谢谢合作!户号："+user.getCode()+" 户名："+user.getName();
+
+				BigDecimal oweFee = meter.getBalance().add(BigDecimal.ZERO);
+				String content = "您的水表账户尚有"+ oweFee.setScale(1, RoundingMode.HALF_UP)+"元余额可用，请于近日续缴水费，以免欠费关阀影响您的用水。谢谢合作!户号："+user.getCode()+" 户名："+user.getName();
 				smsService.saveSMSSendRequest(user ,meter.getId(), content, op,SMSSendLogBean.SENDTYPE_BALANCEALARM);
 			}
 		}
