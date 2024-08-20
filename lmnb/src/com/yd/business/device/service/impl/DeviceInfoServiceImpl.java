@@ -238,7 +238,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		
 		
 		List<MeterModelExtendsBean> list = meterExtendsMapper.queryMeterAndUserList(bean);
-		bean.setRows(null);
+		bean.setRows(null);  // 不然分页查询的时候带上limit 会报错
 		long total = meterExtendsMapper.countMeterAndUserList(bean);
 		IOTWebDataBean result = new IOTWebDataBean();
 		result.setData(list);

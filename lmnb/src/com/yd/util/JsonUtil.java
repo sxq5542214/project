@@ -3,6 +3,7 @@
  */
 package com.yd.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.yd.basic.framework.bean.IOTWebDataBean;
 
 /**
  * @author ice
@@ -113,10 +116,16 @@ public class JsonUtil {
 
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("nick_name","123321");
-		  JSONObject jso = new JSONObject(map);
+			
+			BigDecimal b = new BigDecimal("3.7850");
+
+			IOTWebDataBean d = new IOTWebDataBean();
+			d.setData(b);
+			
+		  JSONObject jso = new JSONObject(d);
 		  System.out.println(jso);
-		  System.out.println(jso.toString());
-		  System.out.println(convertObjectToJsonString(map));
+		  System.out.println(convertObjectToJsonString(d));
+//		  System.out.println(convertObjectToJsonString(map));
 		  
 		  
 	}

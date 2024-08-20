@@ -79,8 +79,9 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 	@Override
 	public IOTWebDataBean queryUserAndMeterList(UserModelExtendsBean bean){
 		
-		long total = userMapper.countUserAndMeterByExtend(bean);
 		List<UserModelExtendsBean> list = userMapper.queryUserAndMeterByExtend(bean);
+		bean.setRows(null);   // 不然分页查询的时候带上limit 会报错
+		long total = userMapper.countUserAndMeterByExtend(bean);
 		IOTWebDataBean result = new IOTWebDataBean();
 		result.setData(list);
 		result.setTotal(total);
