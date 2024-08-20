@@ -40,7 +40,7 @@
 	</select>
 	<select id="countUserAndMeterByExtend" resultType="int"
 		parameterType="userModelExtendsBean">
-		select count(distinct u.id)  from lm_meter m,lm_user u
+		select count( u.id)  from lm_meter m,lm_user u
 	    <include refid="query_Where_Clause" />
 	</select>
 	
