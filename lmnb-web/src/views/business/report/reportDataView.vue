@@ -88,13 +88,12 @@
     </el-table>
 
     <pagination v-show="total>0"
-                @current-change="handleCurrentPageChange"
                 @size-change="handlePageSizeChange"
                 :total="total"
-
                 :page.sync="listQuery.page"
                 :limit.sync="listQuery.rows"
-                @pagination="getList" />
+                @pagination="handlePagination"
+                 />
 
   </div>
 </template>
@@ -152,49 +151,53 @@ export default {
       this.getList()
 
   },
-  methods: {
-    getList() {
-      this.listLoading = true
-      querySimpleReportDataView({ report_id: this.listQuery.id, code: this.listQuery.code , queryParam : this.listQuery ,start_date:this.start_date,end_date:this.end_date }).then(response => {
-        this.list = response.data.dataList;
+    methods: {
+      getList() {
+        this.listLoading = true
+        querySimpleReportDataView({ report_id: this.listQuery.id, code: this.listQuery.code, queryParam: this.listQuery, start_date: this.start_date, end_date: this.end_date }).then(response => {
+          this.list = response.data.dataList;
 
-        this.listParam = response.data.paramsList;
+          this.listParam = response.data.paramsList;
 
-        // 查询条件参数的初始化
-        for (var i = 0; i < this.listParam.length; i++) {
-          var param = this.listParam[i];
-          //下拉框的初始化
-          if (param.param_type == 'select') {
-            var selectJson = JSON.parse(param.param_url);
-            this.listSelect[param.param_code] = selectJson;
+          // 查询条件参数的初始化
+          for (var i = 0; i < this.listParam.length; i++) {
+            var param = this.listParam[i];
+            //下拉框的初始化
+            if (param.param_type == 'select') {
+              var selectJson = JSON.parse(param.param_url);
+              this.listSelect[param.param_code] = selectJson;
 
+            }
+            // 默认值的初始化
+            if (param.default_value === undefined) param.default_value = '';
+            this.listQuery[param.param_code] = param.default_value;
           }
-          // 默认值的初始化
-          if (param.default_value === undefined) param.default_value = '';
-          this.listQuery[param.param_code] = param.default_value;
-        }
 
-        //console.log('listSelect', this.listSelect);
-        this.listLoading = false;
-        this.handleCurrentPageChange(this.total == this.list.length ? this.listQuery.page : 1 );
-        this.$forceUpdate();
+          //console.log('listSelect', this.listSelect);
+          this.listLoading = false;
+          this.handleCurrentPageChange(this.total == this.list.length ? this.listQuery.page : 1);
+          this.$forceUpdate();
         })
 
+      },
+      handlePagination() {
+        this.handleCurrentPageChange(this.total == this.list.length ? this.listQuery.page : 1);
+      },
+      handleCurrentPageChange(val) {  // 前端分页判断
+        if (val) {
+          this.listQuery.page = val;
+        }
+        this.total = this.list.length ;
+        this.currentData = this.list.slice(
+          (this.listQuery.page - 1) * this.listQuery.rows,
+          this.listQuery.page * this.listQuery.rows
+        );
+      },
+      handlePageSizeChange(val) {  // 前端分页判断
+        this.listQuery.rows = val;
+        this.handleCurrentPageChange(1);
 
-    },
-    handleCurrentPageChange(val) {  // 前端分页判断
-      console.log("listQuery.page:" + val);
-      this.listQuery.page =  val ;
-      this.total = this.list.length ;
-      this.currentData = this.list.slice(
-        (this.listQuery.page - 1) * this.listQuery.rows,
-        this.listQuery.page * this.listQuery.rows
-      );
-    },
-    handlePageSizeChange(val) {  // 前端分页判断
-      this.listQuery.rows = val;
-
-    },
+      },
     handleDownload() {
       this.downloadLoading = true;
       var labels = new Array();
