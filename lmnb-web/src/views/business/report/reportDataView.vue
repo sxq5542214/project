@@ -221,11 +221,18 @@ export default {
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
+
+        try {
+          const num = Number(v[j]);
+          if (!isNaN(num) && num < 99999999) {
+            return num;
+          } else {
+            return v[j];// 无法转化为数字
+          }
+        } catch (e) { // 无法转化为数字
+          return v[j];
         }
+
       }))
     }
   }
