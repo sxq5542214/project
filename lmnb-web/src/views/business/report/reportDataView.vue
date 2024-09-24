@@ -71,7 +71,7 @@
 
     <el-table :key="tableKey"
               v-loading="listLoading"
-              :data="list"
+              :data="currentData"
               border
               fit
               highlight-current-row
@@ -88,7 +88,10 @@
     </el-table>
 
     <pagination v-show="total>0"
+                @current-change="handleCurrentPageChange"
+                @size-change="handlePageSizeChange"
                 :total="total"
+
                 :page.sync="listQuery.page"
                 :limit.sync="listQuery.rows"
                 @pagination="getList" />
@@ -112,6 +115,7 @@ export default {
       end_date: parseTime(new Date().setHours(23, 59, 59),null),
       tableKey: 0,
       list: null,
+      currentData : null,
       total: 0,
       listLoading: true,
       listLabel: null,
@@ -172,9 +176,23 @@ export default {
 
         //console.log('listSelect', this.listSelect);
         this.listLoading = false;
+        this.handleCurrentPageChange(this.total == this.list.length ? this.listQuery.page : 1 );
         this.$forceUpdate();
         })
 
+
+    },
+    handleCurrentPageChange(val) {  // 前端分页判断
+      console.log("listQuery.page:" + val);
+      this.listQuery.page =  val ;
+      this.total = this.list.length ;
+      this.currentData = this.list.slice(
+        (this.listQuery.page - 1) * this.listQuery.rows,
+        this.listQuery.page * this.listQuery.rows
+      );
+    },
+    handlePageSizeChange(val) {  // 前端分页判断
+      this.listQuery.rows = val;
 
     },
     handleDownload() {
