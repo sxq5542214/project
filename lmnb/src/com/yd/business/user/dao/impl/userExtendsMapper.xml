@@ -7,7 +7,7 @@
 			m.userid = u.id and u.status != -1
 			<if test="systemid != null"> and m.systemid = #{systemid}</if>
 			<if test="productid != null"> and m.productid = #{productid}</if>
-			<if test="name != null"> and u.name like '%${userName}%'</if>
+			<if test="name != null"> and u.name like '%${name}%'</if>
 			<if test="area1 != null"> and u.area1 like '%${area1}%'</if>
 			<if test="area2 != null"> and u.area2 like '%${area2}%'</if>
 			<if test="area3 != null"> and u.area3 like '%${area3}%'</if>

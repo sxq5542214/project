@@ -9,6 +9,7 @@
 			<if test="productid != null"> and m.productid = #{productid}</if>
 			<if test="userid != null"> and m.userid = #{userid}</if>
 			<if test="code != null"> and m.code = #{code}</if>
+			<if test="userCode != null"> and u.code = #{userCode}</if>
 			<if test="userName != null"> and u.name like '%${userName}%'</if>
 			<if test="area1 != null"> and u.area1 like '%${area1}%'</if>
 			<if test="area2 != null"> and u.area2 like '%${area2}%'</if>
