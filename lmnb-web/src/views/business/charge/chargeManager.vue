@@ -139,55 +139,55 @@
                     style="width: 200px;margin-left: 10px;"
                     class="filter-item" />-->
 
-          <div class="btn-group">
-            <el-button v-waves
-                       class="filter-item"
-                       type="primary"
-                       icon="el-icon-search"
-                       style="margin-left: 10px;"
-                       @click="handleFilter">查询</el-button>
-            <el-button class="filter-item"
-                       style="margin-left: 10px;"
-                       type="success"
-                       icon="el-icon-money"
-                       @click="showChargeDialog">充值</el-button>
-            <el-button v-waves
-                       :loading="downloadLoading"
-                       style="margin-left: 10px;"
-                       class="filter-item"
-                       type="primary"
-                       icon="el-icon-check"
-                       @click="openValve">开阀</el-button>
-            <el-button v-waves
-                       :loading="downloadLoading"
-                       style="margin-left: 10px;"
-                       class="filter-item"
-                       type="primary"
-                       icon="el-icon-close"
-                       @click="closeValve">关阀</el-button>
-            <el-button v-waves
-                       :loading="downloadLoading"
-                       style="margin-left: 10px;"
-                       class="filter-item"
-                       type="danger"
-                       icon="el-icon-guide"
-                       @click="showChangeMeterDialog">换表</el-button>
+        <div class="btn-group">
+          <el-button v-waves
+                     class="filter-item"
+                     type="primary"
+                     icon="el-icon-search"
+                     style="margin-left: 10px;"
+                     @click="handleFilter">查询</el-button>
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="primary"
+                     icon="el-icon-check"
+                     @click="openValve">开阀</el-button>
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="primary"
+                     icon="el-icon-close"
+                     @click="closeValve">关阀</el-button>
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="danger"
+                     icon="el-icon-guide"
+                     @click="showChangeMeterDialog">换表</el-button>
 
 
-            <el-button v-waves
-                       :loading="downloadLoading"
-                       style="margin-left: 10px;"
-                       class="filter-item"
-                       type="warning"
-                       icon="el-icon-s-order"
-                       @click="showChargeLogDialog">充值记录</el-button>
-            <el-button v-waves
-                       style="margin-left: 10px;"
-                       class="filter-item"
-                       type="warning"
-                       icon="el-icon-s-operation"
-                       @click="showBillDialog">账单记录</el-button>
-          </div>
+          <el-button v-waves
+                     :loading="downloadLoading"
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="warning"
+                     icon="el-icon-s-order"
+                     @click="showChargeLogDialog">充值记录</el-button>
+          <el-button v-waves
+                     style="margin-left: 10px;"
+                     class="filter-item"
+                     type="warning"
+                     icon="el-icon-s-operation"
+                     @click="showBillDialog">账单记录</el-button>
+          <el-button class="filter-item"
+                     style="margin-left: 10px;"
+                     type="success"
+                     icon="el-icon-money"
+                     @click="showChargeDialog">充值</el-button>
+        </div>
       </div>
     </div>
 
@@ -197,7 +197,7 @@
               border
               fit
               highlight-current-row
-              style="width: 100%;"
+              style="width: 100%;"  height="300px"
               @row-click="rowClick">
       <el-table-column label="户号"
                        prop="id"

@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     openDialog() {
+      this.payment.amount = 0;
       this.$forceUpdate()
     },
     onSubmit() {

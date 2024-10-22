@@ -125,7 +125,7 @@
               border
               fit
               highlight-current-row
-              style="width: 100%;"
+              style="width: 100%;" height="300px"
               @sort-change="sortChange">
       <el-table-column label="户号" prop="code" align="center" width="80px" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
