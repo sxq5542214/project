@@ -168,7 +168,7 @@ System.out.println(url+param);
 System.out.println(resStr);
 			JSONObject jso = new JSONObject(resStr);
 			
-			writeJson(response, jso.opt("openid"));
+			writeJson(response, jso.optString("openid"));
 
 		} catch (Exception e) {
 			log.error(e);

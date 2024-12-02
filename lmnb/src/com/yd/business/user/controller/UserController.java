@@ -60,8 +60,10 @@ public class UserController extends BaseController {
 			LmUserModel user = userWechatService.findLmUserByOpenId(openid);
 			if(user != null) {
 				user.setIdcard(null);
+				writeJson(response, user);
+			}else {
+				writeJson(response, "null");
 			}
-			writeJson(response, user);
 		} catch (Exception e) {
 			log.error(e, e);
 		}
