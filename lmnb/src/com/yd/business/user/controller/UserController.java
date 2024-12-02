@@ -1,6 +1,5 @@
 package com.yd.business.user.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -18,25 +17,22 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
 import com.yd.business.area.service.IAreaService;
-import com.yd.business.area.service.impl.AreaServiceImpl;
-import com.yd.business.operator.bean.OperatorBean;
-import com.yd.business.other.service.IAddressService;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
-import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.bean.UserModelExtendsBean;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.business.user.service.IUserWechatService;
 import com.yd.iotbusiness.mapper.model.LlAddressModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.util.AutoInvokeGetSetMethod;
-import com.yd.util.NumberUtil;
-import com.yd.util.StringUtil;
 @Controller
 public class UserController extends BaseController {
 
 	@Autowired
 	private IUserInfoService userInfoService;
+	@Autowired
+	private IUserWechatService userWechatService;
 	@Resource
 	private IConfigAttributeService configAttributeService;
 	@Resource
@@ -55,14 +51,17 @@ public class UserController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("**/user/checkPhone.do")
-	public ModelAndView checkPhone(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/user/findUserByOpenid.do")
+	public ModelAndView findUserByOpenid(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
 			
-			String phone = request.getParameter("phone");
-			AreaDataBean ad = areaDataService.getAreaDataByPhone(phone);
-			writeJson(response, ad);
+			String openid = request.getParameter("openid");
+			LmUserModel user = userWechatService.findLmUserByOpenId(openid);
+			if(user != null) {
+				user.setIdcard(null);
+			}
+			writeJson(response, user);
 		} catch (Exception e) {
 			log.error(e, e);
 		}

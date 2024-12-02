@@ -8,10 +8,10 @@ import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
 import com.yd.business.user.bean.UserWechatFriendBean;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
 
 public interface IUserWechatService {
 
-	UserWechatBean findUserWechatByOpenId(String openid);
 
 	void updateUserOfflineNumWechat(String parentId);
 
@@ -138,5 +138,7 @@ public interface IUserWechatService {
 	UserWechatFriendBean createUserWechatFriend(Integer userId, String friendOpenId);
 
 	Integer readUserSenceLog(String openid, Integer senceId, Integer senceType, String share_type);
+
+	LmUserModel findLmUserByOpenId(String openId);
 
 }

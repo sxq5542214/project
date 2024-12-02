@@ -17,12 +17,14 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.json.JSONObject;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.yd.basic.framework.controller.BaseController;
+import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
@@ -30,6 +32,7 @@ import com.yd.business.wechat.bean.WechatPayInfoBean;
 import com.yd.business.wechat.bean.WechatPayResultBean;
 import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
+import com.yd.util.HttpUtil;
 import com.yd.util.JsonUtil;
 import com.yd.util.MD5Util;
 import com.yd.util.NumberUtil;
@@ -140,6 +143,38 @@ public class WechatController extends BaseController {
 //	}
 	
 	
+	
+	/**
+	 * 微信页面code换取openid
+	 * @param json
+	 * @return
+	 * @throws Exception 
+	 * @throws JSONException
+	 */
+	@RequestMapping("/wechat/getUserOpenidByCode.do")
+	public ModelAndView getJsSign(HttpServletRequest request,HttpServletResponse response) throws Exception{
+		String wechat_code = request.getParameter("wechat_code");
+		
+		try {
+
+			String url = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_ACCESS_TOKEN);
+	
+			String appid = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_APP_ID);
+			String secert = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_APP_SECRET);
+			String param = "appid="+ appid +"&secret="+secert+"&code="+ wechat_code +"&grant_type=authorization_code" ;
+
+System.out.println(url+param);
+			String resStr = HttpUtil.get(url+param);
+System.out.println(resStr);
+			JSONObject jso = new JSONObject(resStr);
+			
+			writeJson(response, jso.opt("openid"));
+
+		} catch (Exception e) {
+			log.error(e);
+		}
+		return null;
+	}
 	
 
 	/**

@@ -23,8 +23,13 @@ import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
 import com.yd.business.user.bean.UserWechatFriendBean;
 import com.yd.business.user.dao.IUserWechatDao;
+import com.yd.business.user.service.IUserInfoService;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.service.IWechatService;
+import com.yd.iotbusiness.mapper.dao.LmPlatformModelMapper;
+import com.yd.iotbusiness.mapper.model.LmPlatformModel;
+import com.yd.iotbusiness.mapper.model.LmPlatformModelExample;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
 
@@ -41,16 +46,37 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 	private IWechatService wechatService;
 	@Resource
 	private IConfigAttributeService configAttributeService;
+	@Resource
+	private IUserInfoService userInfoService;
+	@Resource
+	private LmPlatformModelMapper platformModelMapper;
 	
 	
 	private static final boolean IS_OPEN_SENCE_LOG = true;
 	
 	@Override
-	public UserWechatBean findUserWechatByOpenId(String openId){
+	public LmUserModel findLmUserByOpenId(String openId){
 		if(StringUtil.isNull(openId)){
 			return null;
 		}
-		return userWechatDao.findUserByOpenId(openId);
+		LmPlatformModelExample exam = new LmPlatformModelExample();
+		LmPlatformModelExample.Criteria cri = exam.createCriteria();
+		cri.andCodeEqualTo(openId);
+
+		List<LmPlatformModel> list = platformModelMapper.selectByExample(exam );
+		if(list.size() > 0 ) {
+			LmPlatformModel  model = list.get(0);
+			int userid = model.getUserid();
+			return userInfoService.findUserById(userid);
+		}
+		
+		return null;
+	}
+	
+	
+
+	public UserWechatBean findUserWechatByOpenId(String openId){
+		return null;
 	}
 	
 	@Override

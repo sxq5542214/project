@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	<base href="../../">
+        <meta charset="utf-8" />
+        <title>Hyper - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body>
+
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+                	
+					<div class="row">
+                  <div class="col-12">
+                
+                                <!-- Simple card -->
+                                <div class="card d-block">
+                                    <div class="card-body">
+                                    	<h3 class="card-title text-center ">用户主页</h3>
+                                        <p class="card-text">欢迎您使用龙马供水，我们将竭诚为您提供优质、更高效的服务。供水电话：0564-6941888</p>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div><!-- end col -->
+					</div>
+                
+                    <!-- Start user menu-->
+					<div class="row">
+                            <div class="col-6">
+                
+                                <!-- Simple card -->
+                                <div class="card d-block">
+                                    <div class="card-body">
+                                        <a href="javascript: void(0);" ><img class="card-img-top" src="images/wechat/userHomePage/pay-logo.png" alt="Card image cap"></a>
+                                        <h5 class="card-title text-center">户表缴费</h5>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div><!-- end col -->
+
+                            <div class="col-6">
+                                <div class="card d-block">
+                                    <div class="card-body">
+                                        <a href="javascript: void(0);" ><img class="card-img-top" src="images/wechat/userHomePage/bill-logo.png" alt="Card image cap"></a>
+                                        <h5 class="card-title text-center">缴费记录</h5>
+                                    </div>
+                                   
+                                </div> <!-- end card-->
+                            </div><!-- end col -->
+					</div>
+                	<div class="row">
+                            <div class="col-6">
+                
+                                <!-- Simple card -->
+                                <div class="card d-block">
+                                    <div class="card-body">
+                                        <a href="javascript: void(0);" ><img class="card-img-top" src="images/wechat/userHomePage/year-logo.png" alt="Card image cap"></a>
+                                        <h5 class="card-title text-center">周期账单</h5>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div><!-- end col -->
+
+                            <div class="col-6">
+                                <div class="card d-block">
+                                    <div class="card-body">
+                                        <a href="javascript: void(0);" ><img class="card-img-top" src="images/wechat/userHomePage/msg-logo.png" alt="Card image cap"></a>
+                                        <h5 class="card-title text-center">短信记录</h5>
+                                    </div>
+                                   
+                                </div> <!-- end card-->
+                            </div><!-- end col -->
+					</div>
+                
+                    <!-- end user menu-->
+
+
+
+
+                </div> <!-- content -->
+
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                2018 - 2025 © 龙马供水
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-right footer-links d-none d-md-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+
+        <!-- App js -->
+        <script src="assets/js/app.min.js"></script>
+        <script src="assets\staticFiles\jquery@3.5.1\dist\jquery.min.js"></script>
+		<script  type="text/javascript" >
+			const params = new URLSearchParams(window.location.search);
+			const wechat_code = params.get('code'); 
+			
+			if(wechat_code == null){
+				// 非微信中打开，提示
+				alert('请在微信环境中打开本页面！')
+				Window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FuserHomePage.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
+			}else{
+				$.ajax({
+				    url: './wechat/getUserOpenidByCode.do?wechat_code='+wechat_code, // 你的API端点
+				    success: function(data) {
+				        // 请求成功时的回调函数
+				        console.log(data);
+				        
+						var openid = data;
+						findUserByOpenid(openid);
+						
+				    },
+				    error: function(error) {
+						alert(error);
+				        // 请求失败时的回调函数
+				        console.error(error);
+				    }
+				});
+			}
+			
+			function findUserByOpenid(openid){
+				$.ajax({
+				    url: './user/findUserByOpenid.do?openid='+openid, // 你的API端点
+				    success: function(data) {
+				        // 请求成功时的回调函数
+				        console.log(data);
+						var user = data;
+						if(user == null){
+							alert();
+							toBindUserByOpenid(openid)
+						}
+				    },
+				    error: function(error) {
+						alert(error);
+				        // 请求失败时的回调函数
+				        console.error(error);
+				    }
+				});
+			}
+			function toBindUserByOpenid(openid){
+				window.location.href = 'http://www.baidu.com';
+			}
+			
+			alert(wechat_code);
+		</script>
+
+    </body>
+</html>
