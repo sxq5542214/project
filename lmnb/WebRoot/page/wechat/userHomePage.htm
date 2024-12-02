@@ -131,7 +131,7 @@
 			if(wechat_code == null){
 				// 非微信中打开，提示
 				alert('请在微信环境中打开本页面！')
-				Window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FuserHomePage.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
+				window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FuserHomePage.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
 			}else{
 				$.ajax({
 				    url: './wechat/getUserOpenidByCode.do?wechat_code='+wechat_code, // 你的API端点
@@ -139,7 +139,9 @@
 				        // 请求成功时的回调函数
 				        console.log(data);
 				        
+//				        var openid = 'oo789xJk2jYuCIyFi4uN0QICsbWU';
 						var openid = data;
+// alert('openid:'+openid);
 						findUserByOpenid(openid);
 						
 				    },
@@ -158,9 +160,11 @@
 				        // 请求成功时的回调函数
 				        console.log(data);
 						var user = data;
-						if(user == null){
-							alert();
+						if(user == null || user == '' || user == 'null'){
+							alert('您的微信还没有绑定户号，请先绑定~');
 							toBindUserByOpenid(openid)
+						}else{
+							alert(user.name);
 						}
 				    },
 				    error: function(error) {
@@ -174,7 +178,6 @@
 				window.location.href = 'http://www.baidu.com';
 			}
 			
-			alert(wechat_code);
 		</script>
 
     </body>
