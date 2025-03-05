@@ -96,6 +96,29 @@ public class UserInfoServiceImpl extends BaseService implements IUserInfoService
 		return userMapper.selectByPrimaryKey(id);
 		
 	}
+	@Override
+	public LmUserModel  findUserByCode(String code){
+		LmUserModelExample exam = new LmUserModelExample();
+		LmUserModelExample.Criteria cri = exam.createCriteria();
+		cri.andCodeEqualTo(code);
+		List<LmUserModel> list = userMapper.selectByExample(exam );
+		if(list.size()>0) {
+			return list.get(0);
+		}
+		return null;
+	}
+	@Override
+	public LmUserModel  findUserByCodeAndName(String code,String name){
+		LmUserModelExample exam = new LmUserModelExample();
+		LmUserModelExample.Criteria cri = exam.createCriteria();
+		cri.andCodeEqualTo(code);
+		cri.andNameEqualTo(name);
+		List<LmUserModel> list = userMapper.selectByExample(exam );
+		if(list.size()>0) {
+			return list.get(0);
+		}
+		return null;
+	}
 
 	@Override
 	public UserInfoBean findUserByNo(Long no){

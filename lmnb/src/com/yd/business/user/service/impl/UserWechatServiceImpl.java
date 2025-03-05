@@ -74,6 +74,28 @@ public class UserWechatServiceImpl extends BaseService implements IUserWechatSer
 	}
 	
 	
+	@Override
+	public LmPlatformModel bindUserByOpenid(String openid,String userCode,String userName) {
+		LmUserModel um = findLmUserByOpenId(openid);
+		LmPlatformModel pm = null;
+		if(um == null) {
+			
+			um = userInfoService.findUserByCodeAndName(userCode,userName);
+			
+			if(um != null) {
+				pm = new LmPlatformModel();
+				pm.setCode(openid);
+				pm.setType((byte) 1);
+				pm.setUserid(um.getId());
+				platformModelMapper.insertSelective(pm);
+				return pm;
+			}else {
+				throw new RuntimeException("户号或户名不正确，请检查并修改后重新提交~"+userCode+","+userName+","+openid);
+			}
+		}else {
+			throw new RuntimeException("之前此微信号已绑定过其他户号:"+um.getCode()+"，无法再绑定~ "+openid);
+		}
+	}
 
 	public UserWechatBean findUserWechatByOpenId(String openId){
 		return null;

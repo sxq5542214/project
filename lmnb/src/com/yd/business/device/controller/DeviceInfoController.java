@@ -24,6 +24,7 @@ import com.yd.business.price.bean.PriceBean;
 import com.yd.business.price.service.IChargeDetailService;
 import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.business.user.service.IUserWechatService;
 import com.yd.iotbusiness.mapper.model.LlDictionaryModel;
 import com.yd.iotbusiness.mapper.model.LlDictionaryModelExample;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
@@ -43,6 +44,8 @@ public class DeviceInfoController extends BaseController {
 	private IChargeDetailService chargeDetailService;
 	@Resource
 	private IUserInfoService userInfoService;
+	@Resource
+	private IUserWechatService userWechatService;
 	
 
 	@RequestMapping("admin/device/toDeviceInfoPage.do")
@@ -164,6 +167,31 @@ public class DeviceInfoController extends BaseController {
 		return null;
 	}
 
+	@RequestMapping("device/ajaxQueryMeterListByOpenid.do")
+	public ModelAndView ajaxQueryMeterListByOpenid(HttpServletRequest request,HttpServletResponse response){
+		
+		IOTWebDataBean result;
+		try {
+			
+			String openid = request.getParameter("openid");
+			
+			LmUserModel user = userWechatService.findLmUserByOpenId(openid);
+			
+			LmMeterModel meterModel = new LmMeterModel();
+			meterModel.setUserid(user.getId());
+			meterModel.setChanged(MeterModelExtendsBean.CHANGED_FALSE);
+			result = deviceInfoService.queryMeterList(meterModel );
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+	
 	@RequestMapping("admin/device/ajaxQueryMeterAndUserList.do")
 	public ModelAndView ajaxQueryMeterAndUserList(HttpServletRequest request,HttpServletResponse response){
 		

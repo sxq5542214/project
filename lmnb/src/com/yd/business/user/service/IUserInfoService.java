@@ -32,4 +32,8 @@ public interface IUserInfoService {
 
 	int deleteUser(int userid);
 
+	LmUserModel findUserByCode(String code);
+
+	LmUserModel findUserByCodeAndName(String code, String name);
+
 }

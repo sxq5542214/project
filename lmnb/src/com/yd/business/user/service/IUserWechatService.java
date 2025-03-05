@@ -8,6 +8,7 @@ import com.yd.business.user.bean.UserQrCodeBean;
 import com.yd.business.user.bean.UserWechatBean;
 import com.yd.business.user.bean.UserWechatConditionBean;
 import com.yd.business.user.bean.UserWechatFriendBean;
+import com.yd.iotbusiness.mapper.model.LmPlatformModel;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 
 public interface IUserWechatService {
@@ -140,5 +141,7 @@ public interface IUserWechatService {
 	Integer readUserSenceLog(String openid, Integer senceId, Integer senceType, String share_type);
 
 	LmUserModel findLmUserByOpenId(String openId);
+
+	LmPlatformModel bindUserByOpenid(String openid, String userName, String userCode);
 
 }

@@ -3,7 +3,7 @@
     <head>
     	<base href="../../">
         <meta charset="utf-8" />
-        <title>Hyper - Responsive Bootstrap 4 Admin Dashboard</title>
+        <title>龙马供水-用户中心</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -47,7 +47,7 @@
                 
                                 <!-- Simple card -->
                                 <div class="card d-block">
-                                    <div class="card-body">
+                                    <div class="card-body" onclick="toUserChargePage()">
                                         <a href="javascript: void(0);" ><img class="card-img-top" src="images/wechat/userHomePage/pay-logo.png" alt="Card image cap"></a>
                                         <h5 class="card-title text-center">户表缴费</h5>
                                     </div> <!-- end card-body-->
@@ -125,9 +125,10 @@
         <script src="assets/js/app.min.js"></script>
         <script src="assets\staticFiles\jquery@3.5.1\dist\jquery.min.js"></script>
 		<script  type="text/javascript" >
+			var openid ;
 			const params = new URLSearchParams(window.location.search);
 			const wechat_code = params.get('code'); 
-			
+			var userid ;
 			if(wechat_code == null){
 				// 非微信中打开，提示
 				alert('请在微信环境中打开本页面！')
@@ -135,13 +136,14 @@
 			}else{
 				$.ajax({
 				    url: './wechat/getUserOpenidByCode.do?wechat_code='+wechat_code, // 你的API端点
+				    async: false, // 设置为同步请求
 				    success: function(data) {
 				        // 请求成功时的回调函数
 				        console.log(data);
 				        
-//				        var openid = 'oo789xJk2jYuCIyFi4uN0QICsbWU';
-						var openid = data;
-// alert('openid:'+openid);
+//				        openid = 'oo789xJk2jYuCIyFi4uN0QICsbWU';
+						openid = data;
+
 						findUserByOpenid(openid);
 						
 				    },
@@ -156,6 +158,7 @@
 			function findUserByOpenid(openid){
 				$.ajax({
 				    url: './user/findUserByOpenid.do?openid='+openid, // 你的API端点
+				    async: false, // 设置为同步请求
 				    success: function(data) {
 				        // 请求成功时的回调函数
 				        console.log(data);
@@ -164,7 +167,9 @@
 							alert('您的微信还没有绑定户号，请先绑定~');
 							toBindUserByOpenid(openid)
 						}else{
-							alert(user.name);
+							//获取了用户信息
+							userid = user.id;
+//							alert(user.name);
 						}
 				    },
 				    error: function(error) {
@@ -175,9 +180,11 @@
 				});
 			}
 			function toBindUserByOpenid(openid){
-				window.location.href = 'http://www.baidu.com';
+				window.location.href = './page/wechat/bindUserPage.htm?openid=' + openid;
 			}
-			
+			function toUserChargePage(){
+				window.location.href = './page/wechat/userChargeMeter.htm?openid=' + openid;
+			}
 		</script>
 
     </body>

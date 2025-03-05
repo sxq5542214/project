@@ -68,4 +68,6 @@ public interface IChargeDetailService {
 
 	IOTWebDataBean queryDayBuyCountListData(String month, Integer systemid, Integer operatorid);
 
+	LmPaymentModel findPayMentBySerialnum(String serialnum);
+
 }

@@ -139,6 +139,34 @@ public class UserController extends BaseController {
 	}
 
 	/**
+	 *  绑定用户
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/user/ajaxBindUser.do")
+	public ModelAndView ajaxBindUser(HttpServletRequest request,HttpServletResponse response){
+		IOTWebDataBean result= new IOTWebDataBean();
+		try {
+			String openid = request.getParameter("openid");
+			String user_code = request.getParameter("user_code");
+			String user_name = request.getParameter("user_name");
+			
+			userWechatService.bindUserByOpenid(openid, user_code, user_name);
+			result.setMessage("绑定成功");
+			writeJson(response, result );
+		} catch (Exception e) {
+			log.error(e, e);
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+			writeJson(response, result );
+		}
+		return null;
+	}
+	
+	
+
+	/**
 	 *  界面删除用户
 	 * @param request
 	 * @param response
@@ -167,7 +195,6 @@ public class UserController extends BaseController {
 		}
 		return null;
 	}
-	
 	/**
 	 *  界面查询未开户用户列表
 	 * @param request

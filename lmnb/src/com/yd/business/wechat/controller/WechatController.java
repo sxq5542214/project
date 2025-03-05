@@ -3,6 +3,9 @@
  */
 package com.yd.business.wechat.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,6 +15,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -26,16 +30,22 @@ import org.springframework.web.servlet.ModelAndView;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.other.constant.AttributeConstant;
 import com.yd.business.other.service.IConfigAttributeService;
+import com.yd.business.price.service.IChargeDetailService;
+import com.yd.business.price.service.impl.ChargeDetailServiceImpl;
 import com.yd.business.user.service.IUserWechatService;
 import com.yd.business.wechat.bean.WechatOriginalInfoBean;
 import com.yd.business.wechat.bean.WechatPayInfoBean;
 import com.yd.business.wechat.bean.WechatPayResultBean;
 import com.yd.business.wechat.service.IWechatOriginalInfoService;
 import com.yd.business.wechat.service.IWechatService;
+import com.yd.iotbusiness.mapper.model.LmPaymentModel;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
+import com.yd.util.DateUtil;
 import com.yd.util.HttpUtil;
 import com.yd.util.JsonUtil;
 import com.yd.util.MD5Util;
 import com.yd.util.NumberUtil;
+import com.yd.util.RandomUtil;
 import com.yd.util.WebUtil;
 
 /**
@@ -55,6 +65,8 @@ public class WechatController extends BaseController {
 	private ThreadPoolTaskExecutor taskExecutor;
 	@Resource
 	private IWechatOriginalInfoService wechatOriginalInfoService;
+	@Resource
+	private IChargeDetailService chargeDetailService;
 	
 //	@Deprecated
 //	@RequestMapping("/wechat/handle.do")
@@ -152,7 +164,7 @@ public class WechatController extends BaseController {
 	 * @throws JSONException
 	 */
 	@RequestMapping("/wechat/getUserOpenidByCode.do")
-	public ModelAndView getJsSign(HttpServletRequest request,HttpServletResponse response) throws Exception{
+	public ModelAndView getUserOpenidByCode(HttpServletRequest request,HttpServletResponse response) throws Exception{
 		String wechat_code = request.getParameter("wechat_code");
 		
 		try {
@@ -317,11 +329,99 @@ System.out.println(resStr);
 	 * 获取统一下单接口的预支付交易单号
 	 * @return
 	 */
-	@RequestMapping("**/wechat/createUnifiedOrderByShop.do")
-	public ModelAndView createUnifiedOrderByShop(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping("**/wechat/createUnifiedOrderByUser.do")
+	public ModelAndView createUnifiedOrderByUser(HttpServletRequest request,HttpServletResponse response){
+
+		String openid = request.getParameter("openid");								//openid 	123
+		String price = request.getParameter("price");								//用户需要支付的价格		14.20
+		String meterCode = request.getParameter("meterCode");											//充值的水表号			18755171111
+		
+		
+		LmUserModel user = userWechatService.findLmUserByOpenId(openid);				//通过openid到user表中查找记录
+		if(user == null){																		//做一个验证,确定此openid能够找到对应的用户
+			throw new RuntimeException(" createUnifiedOrder user is null! 当前微信未绑定用户号~");
+		}
+		
+		
+		//wx26a55db19faf530f
+		String appidStr = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_APP_ID);
+		
+		String appid = "appid=" + appidStr; 
+		String mchid = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_PAY_MUH_ID);
+		//商户号
+		String mch_id = "mch_id=" + mchid;
+		//随机码
+		String nonce_str = "nonce_str=" + UUID.randomUUID().toString().replaceAll("-", "");
+		//附加数据，微信会原样返回,
+		String attach = "attach="+ meterCode ;
+		//商品详情
+		String body = "body=支付商品";
+		//商户订单号
+		String out_no = this.createOutTradeNo("WX", user.getId().toString(),new Date(),true);
+		String out_trade_no = "out_trade_no="+out_no;
+		//需要支付的总金额,以分为单位
+		int rmb = (int) (Double.parseDouble(price)  * 100);
+		String total_fee = "total_fee="+ rmb;
+		//客户IP
+		String spbill_create_ip = request.getRemoteAddr();
+		if(spbill_create_ip == null){ spbill_create_ip = "115.28.43.16"; }
+		spbill_create_ip = "spbill_create_ip="+spbill_create_ip;
+		
+		//回调URL
+		String notify_url = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_NOTIFY_URL);
+		notify_url = "notify_url="+ notify_url ; //+ "wechat/serverNotify.html";
+		
+		//交易类型
+		String trade_type = "trade_type=JSAPI";
+		//用户ID //oiRcFuKHjk9_V8-eWwHA1W4x1XWc
+		openid = "openid=" + openid;
+		//设备信息，公众号使用WEB
+		String device_info = "device_info=WEB";
+		//指定支付方式，不可使用信用卡
+		String limit_pay = "limit_pay=no_credit";
+		String key = "key=" + configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_SIGN_KEY);
+		
+
+		Object[] params={appid,mch_id,nonce_str,attach,body,out_trade_no,device_info,
+				total_fee,spbill_create_ip,notify_url,trade_type,openid,limit_pay};
+		String tempStr = WebUtil.concatParam(params);
+		//签名,需要把key放在最后
+		tempStr += "&"+key;
+		String sign = "sign="+MD5Util.encode16(tempStr,"UTF-8").toUpperCase();
+		
+		Object[] newParam = ArrayUtils.addAll(params, new String[]{sign});
+		String xml = convertToXML(newParam);
+		
+		String callUrl = configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_UNIFIED_URL);
+		long time = System.currentTimeMillis();
+		try {
+			//调用微信的预支付接口
+			String responseStr = HttpUtil.post(callUrl, xml);
+			WechatPayResultBean resultBean = parseWechatPayResult(responseStr);
+			System.out.println("调用微信的预支付接口 cost:"+ (System.currentTimeMillis() - time));
+			if(resultBean.getPrepay_id() != null){
+				
+				
+				//在表中增加预订购记录
+				//  暂时不加
+				
+				//返回界面需要支付的信息
+				WechatPayInfoBean data = createPayInfo(appidStr,resultBean.getPrepay_id(),key);
+				data.setOutTradeNo(out_no);
+				writeJson(response, data);
+				return null;
+			}else{
+				log.error("调用微信的预支付接口失败！ requseXML:"+xml+" respXML:"+ responseStr);
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error(e,e);
+		}
+		writeJson(response, "false");
+		
 		return null;
-		
-		
 	}
 	
 	
@@ -397,7 +497,7 @@ System.out.println(resStr);
 					result.getReturn_code().equalsIgnoreCase("SUCCESS") ){
 				validateNotifySign(result);
 				
-				notifyShopOrderProduct(result);
+				notifyWechatOrderResult(result);
 				
 			}
 			
@@ -422,77 +522,30 @@ System.out.println(resStr);
 	 * 商城定购成功通知
 	 * @param result
 	 */
-	private void notifyShopOrderProduct(final WechatPayResultBean result){
+	private void notifyWechatOrderResult(final WechatPayResultBean result){
 
 		//更新用户余额
 //		userWechatService.updateUserBalance(result.getOut_trade_no(),result.getAttach());
 		
 		String orderCode = result.getOut_trade_no().split("-")[0];
 		String attachStr = result.getAttach();
-		int cash_fee = Integer.parseInt(result.getCash_fee()); //支付金额
-		Map<String, String> attach = JsonUtil.parseJSONToMap(attachStr);
+		int cash_fee = Integer.parseInt(result.getCash_fee()); //支付金额,分为单位
 		
-		String typeStr = attach.get("type");
-		if(typeStr != null) {
-			Integer type = Integer.parseInt(typeStr);
-			Integer sid = Integer.parseInt(attach.get("sid"));
-			Integer coupon_id = NumberUtil.parseInt(attach.get("coupon_record_id"));
-			Integer card_record_id = NumberUtil.parseInt(attach.get("balance_card_id"));
-			String remark = attach.get("remark");
-			
-			
-//			shopOrderService.notifyShopOrder(sid, orderCode, result.getOpenid(), cash_fee, coupon_id, card_record_id, type, remark);
-			
-			
-		}
+		String meterCode = attachStr;
 		
+		LmPaymentModel model = new LmPaymentModel();
+		model.setWxorderid(result.getTransaction_id());
+		model.setSerialnum(orderCode);
+		model.setMetercode(meterCode);
+		model.setAmount(new BigDecimal(cash_fee).divide(new BigDecimal(100),3, RoundingMode.HALF_UP));
+		model.setOperatorid(-1);
+		model.setPaystate((byte) 2); //wechat充值记为已支付
+		model.setAccountmode((byte) 4);
+		model.setPaychannel((byte) 2);
+		model.setDealmode((byte) 1);
+		model.setPaperflag((byte) 0);
+		chargeDetailService.handleChargeBalance(model );
 		
-		
-		
-//		UserConsumeInfoBean consumeInfo = userConsumeInfoService.findUserConsumeInfo(result.getOut_trade_no());
-//		OrderProductLogBean orderLog = orderProductLogService.findOrderProductLogByCode(result.getOut_trade_no());
-//		//随机生成用户红包
-//		orderProductLogService.dealOrderProductLuckyMoney(orderLog);
-//		//判断是否是预定的订单
-//		if(consumeInfo.getEff_num() != null && consumeInfo.getEff_num() >0){
-//			
-//			OrderProductEffBean condition = new OrderProductEffBean();
-//			condition.setType(OrderProductEffBean.TYPE_USER_EFF);
-//			condition.setEff_id(orderLog.getId());
-//			//有预定记录的，就是预定单，不去再次生成了
-//			List<OrderProductEffBean> effs = orderService.queryOrderProductEff(condition);
-//			if(effs.size() == 0){
-//				orderService.createOrderProductEffByOrderProductLog(orderLog,consumeInfo.getEff_num());
-//			}
-//		}else{
-//			//启动线程去进行订购
-//			taskExecutor.execute(new Runnable() {
-//				@Override
-//				public void run() {
-//					try{
-//						orderService.orderProductByUser(result.getOut_trade_no(), result.getAttach());
-//					}catch (Exception e) {
-//						log.error(e, e);
-//					}
-//				}
-//			});
-//		}
-		
-//		Consumetable consumeTable = consumetableService.findByOutTradeNo(result.getOut_trade_no());
-//		if(consumeTable != null && consumeTable.getMoney() <0){
-//			//微信是以分为单位的，所以需要除100 或 乘0.01
-//			double recMoney = Double.valueOf(result.getTotal_fee()) ;
-//			consumeTable.setMoney(recMoney);
-//			consumeTable.setInterfaceType(Consumetable.INTERFACETYPE_WEICHAT_AFTER);
-//			
-//			User user = userService.findUserByOpenid(result.getOpenid());
-//			Double temp = user.getBalance() + recMoney;
-//			user.setBalance(temp);
-//			userService.add(user);
-//			
-//			//资金池的修改 已不用，在mycartaction中用户用户余额支付才修改，因为此处微信通知，不知道用户买了哪几个商品
-//			consumetableService.add(consumeTable);
-//		}
 	}
 	
 	/**
@@ -504,11 +557,11 @@ System.out.println(resStr);
 		
 		List<String> list = result.getParams();
 		String appid = result.getAppid();
-		WechatOriginalInfoBean info = new WechatOriginalInfoBean();
-		info.setAppid(appid);
-		info = wechatOriginalInfoService.queryWechatOriginalInfo(info).get(0);
+//		WechatOriginalInfoBean info = new WechatOriginalInfoBean();
+//		info.setAppid(appid);
+//		info = wechatOriginalInfoService.queryWechatOriginalInfo(info).get(0);
 		
-		String key = "key=" + info.getPay_wechat_sign_key();
+		String key = "key=" + configAttributeService.getValueByCode(AttributeConstant.CODE_PAY_WECHAT_SIGN_KEY);
 //		Object[] strParams =  list.toArray();
 //		Arrays.sort(strParams);
 		
@@ -526,7 +579,16 @@ System.out.println(resStr);
 		return null;
 	}
 	
-	
+	private String createOutTradeNo(String type,String userId,Date date,boolean addRandom){
+
+		String no = type + "_" + userId +"_"+DateUtil.formatDatePure(date) ;
+		if(addRandom){
+			int random = RandomUtil.nextInt(999);
+			no = no + random;
+		}
+		
+		return no;
+	}
 
 	private static String convertToXML(Object... params){
 		Document doc = DocumentHelper.createDocument();

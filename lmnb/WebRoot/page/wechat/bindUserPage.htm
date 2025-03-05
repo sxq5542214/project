@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	<base href="../../">
+        <meta charset="utf-8" />
+        <title>龙马供水-绑定户号</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body>
+
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+                	
+					<div class="row">
+                  <div class="col-12">
+                
+                                <!-- Simple card -->
+                                <div class="card d-block">
+                                    <div class="card-body">
+                                    	<h3 class="card-title text-center ">绑定户号</h3>
+                                        <p class="card-text"></p>
+                                        <div class="form-group ">
+                                            <label for="example-helping">户号：</label>
+	                                        <input type="text" id="user_code" name="user_code" class="form-control" placeholder="请输入户号">
+                                            <label for="example-helping">姓名：</label>
+	                                        <input type="text" id="user_name" name="user_name" class="form-control" placeholder="请输入姓名">
+	                                        <button type="button" class="btn btn-block btn-primary" style="margin-top:10px;" onclick="bindUserByOpenid()">提交</button>
+                                        
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div><!-- end col -->
+					</div>
+                
+
+                </div> <!-- content -->
+
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                2018 - 2025 © 龙马供水
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-right footer-links d-none d-md-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+
+        <!-- App js -->
+        <script src="assets/js/app.min.js"></script>
+        <script src="assets\staticFiles\jquery@3.5.1\dist\jquery.min.js"></script>
+		<script  type="text/javascript" >
+			const params = new URLSearchParams(window.location.search);
+			const openid = params.get('openid'); 
+			if(openid == null){
+				// 非微信中打开，提示
+				alert('请在微信环境中打开本页面！')
+				window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FuserHomePage.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
+			}else{
+				
+			}
+			
+			function bindUserByOpenid(){
+				var user_code =$("#user_code").val();
+				var user_name =$("#user_name").val();
+				
+				if(confirm('确定绑定至'+user_name+'？')){
+					$.ajax({
+					    url: './user/ajaxBindUser.do' , // 你的API端点
+					    data: { openid : openid , user_code : user_code , user_name : user_name },
+					    async: false, // 设置为同步请求
+					    success: function(data) {
+					        // 请求成功时的回调函数
+					        console.log(data);
+					        
+					        if(data.code == 20000){
+						        alert("绑定成功，请将返回用户中心主页~")
+								window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FuserHomePage.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
+						
+							}else{
+								alert(data.message);
+							}
+					        
+					    },
+					    error: function(error) {
+							alert(error);
+					        // 请求失败时的回调函数
+					        console.error(error);
+					    }
+					});
+					
+				}
+			}
+		</script>
+
+    </body>
+</html>

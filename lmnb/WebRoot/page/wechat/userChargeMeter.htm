@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	<base href="../../">
+        <meta charset="utf-8" />
+        <title>龙马供水-用户充值</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body>
+
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+                	
+					<div class="row">
+                  <div class="col-12">
+                
+                                <!-- Simple card -->
+                                <div class="card d-block" id="chargeCard">
+                                    <div class="card-body"  id="chargeCardBody">
+                                    	<h3 class="card-title text-center ">水表充值</h3>
+                                        <p class="card-text"></p>
+                                        <div class="form-group ">
+                                            <label for="example-helping">水表号：</label>
+                                            <label id="meterCode"></label></br>
+                                            <label for="example-helping">目前余额：</label>
+                                            <label id="balance"></label></br>
+                                            <label for="example-helping">充值金额：</label>
+	                                        <input type="text" id="money" name="money" class="form-control" placeholder="请输入金额">
+	                                        <button type="button" id="chargeBTN" class="btn btn-block btn-primary" style="margin-top:10px;" onclick="chargeMoney(0)">提交</button>
+                                        
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div><!-- end col -->
+					</div>
+                
+
+                </div> <!-- content -->
+
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                2018 - 2025 © 龙马供水
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-right footer-links d-none d-md-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+
+        <!-- App js -->
+        <script src="assets/js/app.min.js"></script>
+        <script src="assets\staticFiles\jquery@3.5.1\dist\jquery.min.js"></script>
+		<script  type="text/javascript" >
+			const params = new URLSearchParams(window.location.search);
+			const openid = params.get('openid'); 
+			if(openid == null){
+				// 非微信中打开，提示
+				alert('请在微信环境中打开本页面！')
+				window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FuserHomePage.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
+			}else{
+				
+				//获取用户的水表列表
+				$.ajax({
+					    url: './device/ajaxQueryMeterListByOpenid.do' , // 你的API端点
+					    data: { openid : openid  },
+					    async: false, // 设置为同步请求
+					    success: function(result) {
+					        // 请求成功时的回调函数
+					        console.log(result);
+					        if(result.code == 20000){
+					        	var list = result.data;
+								//多个水表的场景
+								for(var i = 0; i<list.length;i++){
+								
+									 // 克隆原始卡片
+							        var clonedCardBody = $('#chargeCardBody').clone(true);
+									clonedCardBody.find('#meterCode').attr('id','meterCode'+i);
+									clonedCardBody.find('#meterCode'+i).html(list[i].code);
+									clonedCardBody.find('#balance').attr('id','balance'+i);
+									clonedCardBody.find('#balance'+i).html(list[i].balance);
+									clonedCardBody.find('#money').attr('id','money'+i);
+									clonedCardBody.find('#chargeBTN').attr('id','chargeBTN'+i);
+									clonedCardBody.find('#chargeBTN'+i).on('click',chargeMoney(i,list[i].code));
+									
+									
+							        // 将克隆的卡片添加到容器中
+							        $('#chargeCard').append(clonedCardBody);
+							        
+							        $('#chargeCardBody').hide();
+								}
+					        	
+								
+							}else{
+								alert(result.message)
+							}
+					    },
+					    error: function(error) {
+							alert(error);
+					        // 请求失败时的回调函数
+					        console.error(error);
+					    }
+					});
+			}
+			
+			function chargeMoney(index,meterCode){
+				return function(){
+					
+					var price = $('#money'+index).val();
+					alert(index+','+meterCode + '，充值' + price);
+					
+					//调用微信创建统一订单
+				$.ajax({
+					    url: './wechat/createUnifiedOrderByUser.do' , // 你的API端点
+					    data: { openid : openid ,price : price , meterCode : meterCode },
+					    async: false, // 设置为同步请求
+					    success: function(result) {
+					        // 请求成功时的回调函数
+					        console.log(result);
+							alert(result);
+							
+							// 调起微信支付
+							WeixinJSBridge.invoke(
+						      'getBrandWCPayRequest', {
+						         "appId": result.appId,     //公众号ID，由商户传入     
+						         "timeStamp": result.timeStamp ,         //时间戳，自1970年以来的秒数     
+						         "nonceStr": result.nonceStr , //随机串     
+						         "package": result.packages ,     
+						         "signType": result.signType ,         //微信签名方式：     
+						         "paySign": result.paySign  //微信签名 
+						      },
+						      function(res){
+						      if(res.err_msg == "get_brand_wcpay_request:ok" ){
+						      // 使用以上方式判断前端返回,微信团队郑重提示：
+						            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+						      } 
+						   }); 
+							
+					    },
+					    error: function(error) {
+							alert(error);
+					        // 请求失败时的回调函数
+					        console.error(error);
+					    }
+					});
+					
+					
+				}
+			}
+		</script>
+
+    </body>
+</html>

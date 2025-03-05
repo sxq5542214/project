@@ -260,6 +260,16 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		return  chargeDetailDao.queryChargeListByUserId(u_id);
 		
 	}
+	
+	@Override
+	public LmPaymentModel findPayMentBySerialnum(String serialnum){
+		LmPaymentModelExample exam = new LmPaymentModelExample();
+		LmPaymentModelExample.Criteria cri = exam.createCriteria();
+		cri.andSerialnumEqualTo(serialnum);
+		List<LmPaymentModel> list = iPaymentExtendsMapper.selectByExample(exam );
+		if(list.size() > 0 ) return list.get(0);
+		return null;
+	}
 
 	@Override
 	public IOTWebDataBean queryMonthChargeAmoutSum(String billMonth,Integer systemid,Integer operatorid) {
@@ -436,7 +446,13 @@ public class ChargeDetailServiceImpl extends BaseService implements IChargeDetai
 		model.setMeterid(meter.getId());
 		model.setMetercode(meter.getCode());
 		model.setLifecode(meter.getId());
-		model.setSerialnum(meter.getCode()+"-"+model.getAccountmode() +"-"+DateUtil.getNowDateStrSSS());
+		if(model.getSerialnum() == null) {
+			model.setSerialnum(meter.getCode()+"-"+model.getAccountmode() +"-"+DateUtil.formatDateToPureSSS(model.getCreatetime()));
+		}else {
+			// 如果已有订单号，查询是否已创建，对于已创建的微信支付单，直接结束，因为可能是微信多次回调的
+			LmPaymentModel pay = findPayMentBySerialnum(model.getSerialnum());
+			if(pay != null && pay.getSerialnum().startsWith("WX")) return 1;
+		}
 		model.setQuantity1(charge.divide(price.getPrice1()));
 		model.setAmount(charge);
 		model.setAmount1(charge);
