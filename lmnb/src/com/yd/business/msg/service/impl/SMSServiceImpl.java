@@ -382,6 +382,19 @@ public class SMSServiceImpl extends BaseService implements ISMSService {
 		return smsSendlogModelMapper.selectByExample(example);
 	}
 
+
+	@Override
+	public List<LlSmsSendlogModel> querySMSSendLogListByUserId(Integer userid){
+
+		//查询所有待发送
+		LlSmsSendlogModelExample example = new LlSmsSendlogModelExample();
+		Criteria cri = example.createCriteria();
+		cri.andUseridEqualTo(userid);
+		example.setOrderByClause(" id desc ");
+		
+		return smsSendlogModelMapper.selectByExample(example);
+	}
+
 	@Override
 	public List<SmsTxSendInfoLogBean> querySmsSendInfoList(Long companyId){
 		

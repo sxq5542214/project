@@ -73,4 +73,6 @@ public interface ISMSService {
 	List<LlSmsSendlogModel> querySMSSendLogList(Integer userid, Integer meterid, String sendtype, String status,
 			String createTime);
 
+	List<LlSmsSendlogModel> querySMSSendLogListByUserId(Integer userid);
+
 }

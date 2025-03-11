@@ -56,7 +56,7 @@
 
                             <div class="col-6">
                                 <div class="card d-block">
-                                    <div class="card-body">
+                                    <div class="card-body" onclick="toUserPaymentPage()">
                                         <a href="javascript: void(0);" ><img class="card-img-top" src="images/wechat/userHomePage/bill-logo.png" alt="Card image cap"></a>
                                         <h5 class="card-title text-center">缴费记录</h5>
                                     </div>
@@ -70,7 +70,7 @@
                                 <!-- Simple card -->
                                 <div class="card d-block">
                                     <div class="card-body">
-                                        <a href="javascript: void(0);" ><img class="card-img-top" src="images/wechat/userHomePage/year-logo.png" alt="Card image cap"></a>
+                                        <a href="javascript: void(0);" onclick="toUserBillPage()" ><img class="card-img-top" src="images/wechat/userHomePage/year-logo.png" alt="Card image cap"></a>
                                         <h5 class="card-title text-center">周期账单</h5>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
@@ -79,7 +79,7 @@
                             <div class="col-6">
                                 <div class="card d-block">
                                     <div class="card-body">
-                                        <a href="javascript: void(0);" ><img class="card-img-top" src="images/wechat/userHomePage/msg-logo.png" alt="Card image cap"></a>
+                                        <a href="javascript: void(0);"  onclick="toSMSSendLogPage()"><img class="card-img-top" src="images/wechat/userHomePage/msg-logo.png" alt="Card image cap"></a>
                                         <h5 class="card-title text-center">短信记录</h5>
                                     </div>
                                    
@@ -185,6 +185,17 @@
 			function toUserChargePage(){
 				window.location.href = './page/wechat/userChargeMeter.htm?openid=' + openid;
 			}
+			function toUserPaymentPage(){
+				window.location.href = './page/wechat/userPaymentLog.htm?openid=' + openid;
+			}
+			function toSMSSendLogPage(){
+				window.location.href = './page/wechat/smsSendLog.htm?openid=' + openid;
+			}
+			function toUserBillPage(){
+				window.location.href = './page/wechat/userBillPage.htm?openid=' + openid;
+			}
+			
+			
 		</script>
 
     </body>

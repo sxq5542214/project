@@ -97,7 +97,7 @@ public class BaseContext {
 			}
 		}
 		String default_mch_name = ((IConfigAttributeService) getBean("configAttributeService"))
-				.getValueByCode(AttributeConstant.CODE_DEFAULT_MCH_NAME);
+				.getValueByCode(AttributeConstant.CODE_WECHAT_PAY_MCH_NAME);
 
 		return default_mch_name;
 	}

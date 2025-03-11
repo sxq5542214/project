@@ -347,7 +347,7 @@ System.out.println(resStr);
 		String appidStr = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_APP_ID);
 		
 		String appid = "appid=" + appidStr; 
-		String mchid = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_PAY_MUH_ID);
+		String mchid = configAttributeService.getValueByCode(AttributeConstant.CODE_WECHAT_PAY_MCH_ID);
 		//商户号
 		String mch_id = "mch_id=" + mchid;
 		//随机码

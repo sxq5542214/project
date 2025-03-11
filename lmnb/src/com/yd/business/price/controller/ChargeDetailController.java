@@ -30,9 +30,11 @@ import com.yd.business.price.bean.PrintBean;
 import com.yd.business.price.service.IChargeDetailService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.business.user.service.IUserWechatService;
 import com.yd.iotbusiness.mapper.model.LmBillModel;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmPaymentModel;
+import com.yd.iotbusiness.mapper.model.LmUserModel;
 import com.yd.util.AutoInvokeGetSetMethod;
 import com.yd.util.DateUtil;
 import com.yd.util.StringUtil;
@@ -48,6 +50,8 @@ public class ChargeDetailController extends BaseController {
 	private IChargeDetailService chargeDetailService;
 	@Autowired
 	private IUserInfoService userInfoService;
+	@Autowired
+	private IUserWechatService userWechatService;
 	
 
 	@RequestMapping("**/admin/chargeDetail/ajaxUpdateChargeDetailStatusToSuccess.do")
@@ -137,6 +141,37 @@ public class ChargeDetailController extends BaseController {
 		return null;
 	}
 
+
+	/**
+	 *  手机界面查询缴费记录
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/charge/ajaxQueryPaymentListByOpenid.do")
+	public ModelAndView ajaxQueryPaymentListByOpenid(HttpServletRequest request,HttpServletResponse response){
+		
+		IOTWebDataBean result ;
+		try {
+			
+			String openid = request.getParameter("openid");
+			LmPaymentModel model = new LmPaymentModel();
+			LmUserModel user = userWechatService.findLmUserByOpenId(openid);
+			
+			model.setUserid(user.getId());
+//			model.setPaystate(ChargeDetailBean.PAY_STATUS_SUCCESS);
+			result = chargeDetailService.queryChargeList(model);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setMessage(e.getMessage());
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_INSERT_ERROR);
+		}
+		writeJson(response, result );
+		return null;
+	}
+	
 	/**
 	 *  界面查询用户列表
 	 * @param request

@@ -31,8 +31,8 @@ public interface AttributeConstant {
 	public static final String CODE_WECHAT_ACCESS_TOKEN = "wechat_access_token";
 	public static final String CODE_WECHAT_APP_ID = "wechat_app_id";
 	public static final String CODE_WECHAT_APP_SECRET = "wechat_app_secret";
-	public static final String CODE_WECHAT_PAY_MUH_ID = "wechat_pay_mch_id";
-	public static final String CODE_WECHAT_PAY_MUH_NAME = "wechat_pay_mch_name";
+	public static final String CODE_WECHAT_PAY_MCH_ID = "wechat_pay_mch_id";
+	public static final String CODE_WECHAT_PAY_MCH_NAME = "wechat_pay_mch_name";
 	public static final String CODE_WECHAT_DEFAULT_SHARE_URL = "wechat_default_share_url";
 	public static final String CODE_WECHAT_DEFAULT_SHARE_TITLE = "wechat_default_share_title";
 	public static final String CODE_WECHAT_USER_SIGN_LAST_48HOUR_SUCCESS = "wechat_user_sign_last_48hour_success";

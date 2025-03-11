@@ -3,12 +3,16 @@
  */
 package com.yd.business.log.service.impl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanMap;
+import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,20 +80,31 @@ public class OperatorLogServiceImpl extends BaseService implements IOperatorLogS
 						}
 					}
 
-					OperatorLogBean bean = new OperatorLogBean();
-					bean.setOl_happendate(new Date());
-					bean.setOl_operatorid(op.getO_id());
-					bean.setOl_remark(template);
-					if(jsonParamMap != null && LogTemplateBean.IS_SAVE_PARAMS_TRUE == logTemplate.getIs_save_params()) {
-						bean.setParams(jsonParamMap.toString());
+
+					try {
+				        
+						OperatorLogBean bean = new OperatorLogBean();
+						bean.setOl_happendate(new Date());
+						bean.setOl_operatorid(op.getO_id());
+						bean.setOl_remark(template);
+						if(jsonParamMap != null && LogTemplateBean.IS_SAVE_PARAMS_TRUE == logTemplate.getIs_save_params()) {
+							bean.setParams(jsonParamMap.toString());
+						}
+						
+						if(request.getInputStream() != null) {
+							ServletInputStream inputStream = request.getInputStream();
+					        // 读取输入流  
+					        SAXReader reader = new SAXReader();  
+					        Document document = reader.read(inputStream);  
+					        bean.setParams(document.asXML());
+						}
+						operatorLogDao.insertOperatorLog(bean );
+					} catch (Exception e) {
+						e.printStackTrace();
+						log.error(e, e);
 					}
-					operatorLogDao.insertOperatorLog(bean );
 				}
-				
-				
 			}
-			
-			
 		}
 	}
 	

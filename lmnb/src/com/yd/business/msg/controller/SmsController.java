@@ -21,14 +21,13 @@ import com.yd.basic.framework.bean.IOTWebDataBean;
 import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.area.service.IAreaService;
 import com.yd.business.msg.bean.SMSSendLogBean;
-import com.yd.business.msg.bean.SmsTxSendInfoLogBean;
 import com.yd.business.msg.bean.SmsTxSendPhoneLogBean;
 import com.yd.business.msg.service.ISMSService;
-import com.yd.business.operator.bean.OperatorBean;
 import com.yd.business.other.bean.ConfigAttributeBean;
-import com.yd.business.other.service.IAddressService;
 import com.yd.business.user.service.IUserInfoService;
+import com.yd.business.user.service.IUserWechatService;
 import com.yd.iotbusiness.mapper.model.LlAddressModel;
+import com.yd.iotbusiness.mapper.model.LlSmsSendlogModel;
 import com.yd.iotbusiness.mapper.model.LmUserModel;
 
 /**
@@ -43,6 +42,8 @@ public class SmsController extends BaseController {
 	private IAreaService areaService;
 	@Autowired
 	private IUserInfoService userInfoService;
+	@Autowired
+	private IUserWechatService userWechatService;
 	
 	
 	@RequestMapping("admin/sms/querySmsTemplateList.do")
@@ -153,5 +154,24 @@ public class SmsController extends BaseController {
 		return null;
 	}
 	
+
+	@RequestMapping("sms/ajaxQuerySmsSendLogListByOpenid.do")
+	public ModelAndView ajaxQuerySmsSendLogListByOpenid(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		try {
+
+			String openid = request.getParameter("openid");
+			LmUserModel user = userWechatService.findLmUserByOpenId(openid);
+			
+			List<LlSmsSendlogModel> list = smsService.querySMSSendLogListByUserId(user.getId());
+			
+			writeJson(response, list);
+			
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		return null;
+	}
 	
 }
