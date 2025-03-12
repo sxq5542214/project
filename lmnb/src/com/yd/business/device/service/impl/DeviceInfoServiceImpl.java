@@ -223,7 +223,11 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		LmMeterModelExample ex = new LmMeterModelExample();
 		LmMeterModelExample.Criteria cri = ex.createCriteria();
 		cri.andUseridEqualTo(bean.getUserid());
+		if(bean.getChanged() != null) {
+			cri.andChangedEqualTo(bean.getChanged());
+		}
 		
+		ex.setOrderByClause(" id desc ");
 		
 		List<LmMeterModel> list = meterExtendsMapper.selectByExample(ex );
 			
