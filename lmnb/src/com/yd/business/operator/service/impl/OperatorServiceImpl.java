@@ -73,6 +73,9 @@ public class OperatorServiceImpl extends BaseService implements IOperatorService
 	
 	@Override
 	public LmOperatorModel findOperatorByOpenid(String openid) {
+		if(openid == null) {
+			return null;
+		}
 		
 		LmOperatorModelExample bean = new LmOperatorModelExample();
 		LmOperatorModelExample.Criteria criteria = bean.createCriteria();

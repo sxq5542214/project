@@ -108,6 +108,7 @@
 
         <!-- App js -->
 		<script  type="text/javascript" >
+			var that = this;
 			var openid ;
 			const params = new URLSearchParams(window.location.search);
 			const wechat_code = params.get('code'); 
@@ -115,9 +116,8 @@
 			if(wechat_code == null){
 				// 非微信中打开，提示
 				alert('请在微信环境中打开本页面！')
-//				window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FqingsongOperation.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
-			
-				findOperatorByOpenid('oo789xJk2jYuCIyFi4uN0QICsbWU');
+				//window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FqingsongOperation.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
+			findOperatorByOpenid('oo789xJk2jYuCIyFi4uN0QICsbWU')
 			}else{
 				$.ajax({
 				    url: './wechat/getUserOpenidByCode.do?wechat_code='+wechat_code, // 你的API端点
@@ -126,8 +126,7 @@
 				        // 请求成功时的回调函数
 				        console.log(data);
 				        
-						openid = data;
-			//	        openid = 'oo789xJk2jYuCIyFi4uN0QICsbWU';
+						this.openid = data;
 
 						findOperatorByOpenid(openid);
 						
@@ -140,25 +139,24 @@
 				});
 			}
 			
-			function findOperatorByOpenid(openid){
+			function findOperatorByOpenid(opid){
 				$.ajax({
-				    url: './operator/findOperatorByOpenid.do?openid='+openid, // 你的API端点
+				    url: './operator/findOperatorByOpenid.do?openid='+opid, // 你的API端点
 				    async: false, // 设置为同步请求
 				    success: function(data) {
 				        // 请求成功时的回调函数
 				        console.log(data);
 						var op = data;
 						if(op == null || op == '' || op == 'null'){
-							alert('请先截图找管理员绑定~openid:'+openid);
-//							toShowOpenid(openid);
+							alert('请先截图找管理员绑定~openid:'+opid);
 						}else{
 							//获取了用户信息
 							isBind = true;
-							this.openid = openid;
+							openid = opid;
 						}
 				    },
 				    error: function(error) {
-						alert('您的微信号还没有绑定，请现在截图找管理员绑定~openid:'+openid);
+						alert('您的微信号还没有绑定，请现在截图找管理员绑定~openid:'+opid);
 				        // 请求失败时的回调函数
 				        console.error(error);
 				    }
@@ -174,11 +172,12 @@
 				},
 			    methods:{
 					openOrCloseMeter: function(meterCode,isOpen){
+						
 						var operation = isOpen? '开阀':'关阀';
 						if(confirm('确认执行水表'+operation+'操作？')){
 							$.ajax({url:"device/ajaxOperatorQingSongMeterByWechatPage.do",
 									type : "POST" ,  async: false, // 设置为同步请求
-									data:{ openid: this.openid ,meterCode: meterCode,isOpen:isOpen },
+									data:{ openid: that.openid ,meterCode: meterCode,isOpen:isOpen },
 								success:function(result){
 								    alert(result.message);
 								}
@@ -196,13 +195,16 @@
 				
 				// 绑定微信号的再展示数据
 				if(isBind){
+					
 					$.ajax({url:"device/ajaxQueryQingSongMeterListByWechatPage.do",
 							type : "POST" ,  async: false, // 设置为同步请求
-							data:{ openid: this.openid ,userCode: userCode },
+							data:{ openid: that.openid ,userCode: userCode },
 						success:function(result){
 						    var list = result.data ; 
 						    billManager.dataList = list;
 						}});
+				}else{
+					alert('您没有绑定，无法查询~ openid:'+ this.openid)
 				}
 			}
 			
