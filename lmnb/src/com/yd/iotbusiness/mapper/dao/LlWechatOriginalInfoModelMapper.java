@@ -1,11 +1,9 @@
 package com.yd.iotbusiness.mapper.dao;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.yd.iotbusiness.mapper.model.LlWechatOriginalInfoModel;
 import com.yd.iotbusiness.mapper.model.LlWechatOriginalInfoModelExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface LlWechatOriginalInfoModelMapper {
     /**

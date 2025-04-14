@@ -14,6 +14,7 @@ public interface IMeterExtendsMapper extends LmMeterModelMapper{
 	int countDayMeterReading(Map<String, Object> map);
 	List<Map<String, Object>> queryLast2MonthMeterReadingList(Map<String, Object> map);
 	List<Map<String, Object>> queryLast2MonthOpenedMeterCountList(Map<String, Object> map);
+	List<Map<String, Object>> queryQingSongMeterList(Map<String, Object> map);
 	
 	
 }

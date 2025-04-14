@@ -28,8 +28,9 @@ import com.yd.util.MD5Util;
  */
 public class QingSongInterfaceClient extends BaseCMDClient{
 	static Logger log = Logger.getLogger(QingSongInterfaceClient.class);
-	public static String STATIONCODE = "538391"; // 测试
-	public static String JOIN_FLAG = "QING_SONG"; // 测试
+	public static String STATIONCODE_LMNB = "538391"; // lmnb的
+	public static String STATIONCODE_QINGSONG = "538233"; // 轻松的
+	public static String JOIN_FLAG_LMNB = "QING_SONG"; // 测试
 	public static String QINGSONG_URL_PREFIX = "http://nb.sdqsbj.com:80/"; //测试
 	public static String URL_SUFIX_SENDCMD = "api/third/open/thirdFactory/v1/sendCmd";
 	public static String URL_SUFIX_GETCMD_RESULT = "api/third/open/thirdFactory/v1/getCmd";
@@ -50,7 +51,7 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 
 
 			bean.setJoinFlag(null);
-			bean.setStationcode(STATIONCODE);
+			bean.setStationcode(STATIONCODE_LMNB);
 			listBean.add(bean);
 			JSONArray jso = new JSONArray(listBean);
 			String result = HttpUtil.postJSON(url, jso.toString(), list);
@@ -85,7 +86,7 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 			ArrayList<QingSongInterfaceBean> listBean = new ArrayList<QingSongInterfaceBean>();
 			QingSongInterfaceBean bean = new QingSongInterfaceBean();
 			bean.setCode(code);
-			bean.setStationcode(STATIONCODE);
+			bean.setStationcode(STATIONCODE_LMNB);
 			
 			listBean.add(bean);
 			JSONArray jso = new JSONArray(listBean);
@@ -138,8 +139,8 @@ public class QingSongInterfaceClient extends BaseCMDClient{
 		String curTimes = String.valueOf(System.currentTimeMillis());
 //		String curTimes = "1693895555477" ;
 		Header times = new BasicHeader("times", curTimes);
-		Header stationcode = new BasicHeader("stationcode", STATIONCODE);
-		String secretStr =  curTimes+ JOIN_FLAG;
+		Header stationcode = new BasicHeader("stationcode", STATIONCODE_LMNB);
+		String secretStr =  curTimes+ JOIN_FLAG_LMNB;
 		String md5secret = MD5Util.md5_32(secretStr);
 		Header secret = new BasicHeader("secret", md5secret.toLowerCase());
 

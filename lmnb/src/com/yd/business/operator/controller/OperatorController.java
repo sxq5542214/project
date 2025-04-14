@@ -218,5 +218,32 @@ public class OperatorController extends BaseController {
 		return null;
 	}
 	
+
+	/**
+	 *  根据openid查询系统操作员信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("**/operator/findOperatorByOpenid.do")
+	public ModelAndView findOperatorByOpenid(HttpServletRequest request,HttpServletResponse response){
+		LmOperatorModel op = null;
+		try {
+			String openid = request.getParameter("openid");
+			op = operatorService.findOperatorByOpenid(openid);
+			if(op != null) {
+				op.setPass(null);
+				op.setLoginname(null);
+			}else {
+				System.out.println("========= not find Operator By openid: "+ openid);
+				log.warn("========= not find Operator By openid: "+ openid);
+			}
+			
+		} catch (Exception e) {
+			log.error(e, e);
+		}
+		writeJson(response, op );
+		return null;
+	}
 	
 }

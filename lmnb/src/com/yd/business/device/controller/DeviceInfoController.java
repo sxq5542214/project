@@ -20,6 +20,7 @@ import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.device.service.IDeviceInfoService;
 import com.yd.business.device.service.IDeviceKindService;
 import com.yd.business.operator.bean.OperatorBean;
+import com.yd.business.operator.service.IOperatorService;
 import com.yd.business.price.bean.PriceBean;
 import com.yd.business.price.service.IChargeDetailService;
 import com.yd.business.price.service.IPriceService;
@@ -46,6 +47,8 @@ public class DeviceInfoController extends BaseController {
 	private IUserInfoService userInfoService;
 	@Resource
 	private IUserWechatService userWechatService;
+	@Resource
+	private IOperatorService operatorService;
 	
 
 	@RequestMapping("admin/device/toDeviceInfoPage.do")
@@ -337,6 +340,69 @@ public class DeviceInfoController extends BaseController {
 			LmOperatorModel operator = (LmOperatorModel) WebContext.getObjectBySession(WebContext.SESSION_ATTRIBUTE_CURRENT_OPERATOR);
 			
 			result = deviceInfoService.queryDayOpendedMeterCountListData(null,operator.getSystemid(),operator.getId());
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+
+	/**
+	 * 微信界面查询轻松水表信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("device/ajaxQueryQingSongMeterListByWechatPage.do")
+	public ModelAndView ajaxQueryQingSongMeterListByWechatPage(HttpServletRequest request,HttpServletResponse response){
+
+		IOTWebDataBean result = null;
+		try {
+			
+			String openid = request.getParameter("openid");
+			LmOperatorModel op = operatorService.findOperatorByOpenid(openid);
+			
+			if(op != null) {
+				String userCode = request.getParameter("userCode");
+				result = deviceInfoService.queryQingSongMeterList(userCode);
+			}
+			
+			
+		} catch (Exception e) {
+			log.error(e, e);
+			result = new IOTWebDataBean();
+			result.setCode(IOTWebDataBean.CODE_IOTWEB_QUERY_ERROR);
+			result.setMessage(e.getMessage());
+		}
+		writeJson(response, result );
+		return null;
+	}
+	/**
+	 * 微信界面操作水表信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("device/ajaxOperatorQingSongMeterByWechatPage.do")
+	public ModelAndView ajaxOperatorQingSongMeterByWechatPage(HttpServletRequest request,HttpServletResponse response){
+
+		IOTWebDataBean result = null;
+		try {
+			
+			String openid = request.getParameter("openid");
+			LmOperatorModel op = operatorService.findOperatorByOpenid(openid);
+			
+			if(op != null) {
+				String meterCode = request.getParameter("meterCode");
+				String isOpen = request.getParameter("isOpen");
+				System.out.println(isOpen);
+				result = deviceInfoService.openOrCloseMeterByQingSong(meterCode, op, Boolean.valueOf(isOpen), "");
+			}
+			
 			
 		} catch (Exception e) {
 			log.error(e, e);

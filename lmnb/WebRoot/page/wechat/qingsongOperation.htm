@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    	<base href="../../">
+        <meta charset="utf-8" />
+        <title>龙马供水-轻松水表信息查询</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+		<script src="/staticFiles/jquery@3.5.1/dist/jquery.min.js" ></script>
+ 		<script src="/staticFiles/vue/dist/vue.min.js"></script>
+
+    </head>
+
+    <body>
+
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+                	
+					<div class="row">
+                  <div class="col-12">
+                
+                                <!-- Simple card -->
+                                <div class="card d-block">
+                                    <div class="card-body" id="billTableDiv" >
+                                    	<h3 class="card-title text-center ">轻松水表信息查询</h3>
+                                        <p class="card-text"></p>
+                                          <div class="form-group ">
+	                                        <input type="text" id="userCode" name="userCode" class="form-control" placeholder="请输入户号查询">
+	                                        <button type="button" class="btn btn-block btn-primary" style="margin-top:10px;" onclick="queryData()">查询户号</button>
+                                        
+                                        </div>
+                                        
+                                        <div class="table-responsive" >
+                                            <table class="table  mb-0 table-hover table-centered text-nowrap"  >
+                                                <thead>
+                                                    <tr>
+												      <th scope="col" >姓名</th>
+												      <th scope="col">手机号</th>
+												      <th scope="col">余额</th>
+												      <th scope="col" >阀门状态</th>
+												      <th scope="col">地址</th>
+												      <th scope="col">操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody >
+												  <tr v-for="(data,index) in dataList"  >
+												      <td style="width: 20px;">{{data.name }}</td>
+												      <td>{{data.phone }}</td>
+												      <td>{{Number(data.balance).toFixed(3) }}</td>
+												      <td>{{data.valvestate }}</td>
+												      <td>{{data.addressname }}</td>
+												      <td>
+												      	  <button type="button" class="btn btn-block btn-primary" style="margin-top:10px;" @click="openOrCloseMeter(data.metercode,true)">开阀</button>
+                                       					  <button type="button" class="btn btn-block btn-success" style="margin-top:10px;" @click="openOrCloseMeter(data.metercode,false)">关阀</button>
+                                        			  </td>
+												  </tr>
+												  
+                                                </tbody>
+                                            </table>
+                                        </div> <!-- end table-responsive-->
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div><!-- end col -->
+					</div>
+                
+
+                </div> <!-- content -->
+
+                <!-- Footer Start -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                2018 - 2025 © 龙马供水
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-md-right footer-links d-none d-md-block">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+        <!-- App js -->
+		<script  type="text/javascript" >
+			var openid ;
+			const params = new URLSearchParams(window.location.search);
+			const wechat_code = params.get('code'); 
+			var isBind = false ;
+			if(wechat_code == null){
+				// 非微信中打开，提示
+				alert('请在微信环境中打开本页面！')
+//				window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe155bafc776f7659&redirect_uri=http%3A%2F%2Fwww.hqlmgs.cn%2Flmnb%2Fpage%2Fwechat%2FqingsongOperation.htm&response_type=code&scope=snsapi_base&state=123#wechat_redirect';
+			
+				findOperatorByOpenid('oo789xJk2jYuCIyFi4uN0QICsbWU');
+			}else{
+				$.ajax({
+				    url: './wechat/getUserOpenidByCode.do?wechat_code='+wechat_code, // 你的API端点
+				    async: false, // 设置为同步请求
+				    success: function(data) {
+				        // 请求成功时的回调函数
+				        console.log(data);
+				        
+						openid = data;
+			//	        openid = 'oo789xJk2jYuCIyFi4uN0QICsbWU';
+
+						findOperatorByOpenid(openid);
+						
+				    },
+				    error: function(error) {
+						alert(error);
+				        // 请求失败时的回调函数
+				        console.error(error);
+				    }
+				});
+			}
+			
+			function findOperatorByOpenid(openid){
+				$.ajax({
+				    url: './operator/findOperatorByOpenid.do?openid='+openid, // 你的API端点
+				    async: false, // 设置为同步请求
+				    success: function(data) {
+				        // 请求成功时的回调函数
+				        console.log(data);
+						var op = data;
+						if(op == null || op == '' || op == 'null'){
+							alert('请先截图找管理员绑定~openid:'+openid);
+//							toShowOpenid(openid);
+						}else{
+							//获取了用户信息
+							isBind = true;
+							this.openid = openid;
+						}
+				    },
+				    error: function(error) {
+						alert('您的微信号还没有绑定，请现在截图找管理员绑定~openid:'+openid);
+				        // 请求失败时的回调函数
+				        console.error(error);
+				    }
+				});
+			}
+			
+			var billManager =  new Vue({
+			    el: "#billTableDiv",
+			    data: {
+			        dataList: []
+			    },
+				created: function(){
+				},
+			    methods:{
+					openOrCloseMeter: function(meterCode,isOpen){
+						var operation = isOpen? '开阀':'关阀';
+						if(confirm('确认执行水表'+operation+'操作？')){
+							$.ajax({url:"device/ajaxOperatorQingSongMeterByWechatPage.do",
+									type : "POST" ,  async: false, // 设置为同步请求
+									data:{ openid: this.openid ,meterCode: meterCode,isOpen:isOpen },
+								success:function(result){
+								    alert(result.message);
+								}
+							});
+						}
+					}
+			    }
+			});
+			function queryData(){
+				var userCode = $("#userCode").val();
+				if(userCode == ''){
+					alert('请输入用户户号再点击查询');
+					return;
+				}
+				
+				// 绑定微信号的再展示数据
+				if(isBind){
+					$.ajax({url:"device/ajaxQueryQingSongMeterListByWechatPage.do",
+							type : "POST" ,  async: false, // 设置为同步请求
+							data:{ openid: this.openid ,userCode: userCode },
+						success:function(result){
+						    var list = result.data ; 
+						    billManager.dataList = list;
+						}});
+				}
+			}
+			
+			
+		</script>
+
+
+    </body>
+</html>
+

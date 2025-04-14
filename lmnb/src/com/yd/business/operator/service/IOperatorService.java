@@ -22,4 +22,6 @@ public interface IOperatorService {
 
 	LmOperatorModel findOperatorById(Integer id);
 
+	LmOperatorModel findOperatorByOpenid(String openid);
+
 }

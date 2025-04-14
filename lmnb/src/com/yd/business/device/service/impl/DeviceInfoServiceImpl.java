@@ -34,12 +34,17 @@ import com.yd.business.price.service.IPriceService;
 import com.yd.business.user.bean.UserInfoBean;
 import com.yd.iotbusiness.mapper.dao.LmCmdModelMapper;
 import com.yd.iotbusiness.mapper.dao.LmMeterModelMapper;
+import com.yd.iotbusiness.mapper.dao.QsMeterModelMapper;
+import com.yd.iotbusiness.mapper.dao.QsCmdModelMapper;
 import com.yd.iotbusiness.mapper.model.LmCmdModel;
 import com.yd.iotbusiness.mapper.model.LmMeterModel;
 import com.yd.iotbusiness.mapper.model.LmMeterModelExample;
 import com.yd.iotbusiness.mapper.model.LmMeterModelExample.Criteria;
 import com.yd.iotbusiness.mapper.model.LmOperatorModel;
 import com.yd.iotbusiness.mapper.model.LmPriceModel;
+import com.yd.iotbusiness.mapper.model.QsCmdModel;
+import com.yd.iotbusiness.mapper.model.QsMeterModel;
+import com.yd.iotbusiness.mapper.model.QsMeterModelExample;
 import com.yd.util.StringUtil;
 
 /**
@@ -52,6 +57,10 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 	private IDeviceDao deviceDao;
 	@Autowired
 	private IMeterExtendsMapper meterExtendsMapper;
+	@Autowired
+	private QsMeterModelMapper qsMeterModelMapper;
+	@Autowired
+	private QsCmdModelMapper qsCmdModelMapper;
 	@Autowired
 	private LmCmdModelMapper cmdModelMapper;
 	@Autowired
@@ -274,7 +283,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		cmd.setCreatetime(new Date());
 		cmd.setIsp(meter.getIsp());
 		cmd.setImei(meter.getImei());
-		cmd.setStationcode(QingSongInterfaceClient.STATIONCODE );
+		cmd.setStationcode(QingSongInterfaceClient.STATIONCODE_LMNB );
 		cmd.setRemark(remark);
 		cmd.setOperatorid(op.getId());
 		cmd.setOperatorname(op.getRealname());
@@ -344,7 +353,7 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 		for(LmMeterModel me : list) {
 			byte state = MeterCMD.STATE_WAITEXECUTE; //待執行
 			LmCmdModel cmd = commandService.createCMDModel(meterCode, me.getFactorycode(), state, type, "", me.getIsp(), me.getIspid(),
-					me.getImei(), QingSongInterfaceClient.STATIONCODE, op.getRealname(), op.getSystemid(), me.getProductid(), me.getId()	, me.getUserid(),op.getId(), remark);
+					me.getImei(), QingSongInterfaceClient.STATIONCODE_LMNB, op.getRealname(), op.getSystemid(), me.getProductid(), me.getId()	, me.getUserid(),op.getId(), remark);
 			String outerid = cmd.getId().toString();
 			QingSongInterfaceBean res = iotInterfaceService.sendQingSongCmd(me.getIspid(), outerid, type);
 			if(QingSongInterfaceBean.code_success != Integer.valueOf(res.getCode())) {
@@ -364,6 +373,80 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 	}
 
 
+	@Override
+	public IOTWebDataBean openOrCloseMeterByQingSong(String meterCode,LmOperatorModel op,boolean isOpen,String remark) {
+		
+		QsMeterModelExample ex = new QsMeterModelExample();
+		QsMeterModelExample.Criteria cri = ex.createCriteria();
+		cri.andCodeEqualTo(meterCode);
+		List<QsMeterModel> list =  qsMeterModelMapper.selectByExample(ex );
+		String type = "2";
+		if(isOpen) {
+			type = "1";
+		}
+		
+		for(QsMeterModel me : list) {
+			byte state = MeterCMD.STATE_NOSEND; //待執行
+			
+			// 创建轻松的cmd任务
+			QsCmdModel model = new QsCmdModel();
+			model.setCommtype((byte) 1);
+			model.setCentercode("");
+			model.setChannelcode((byte) -1);
+			model.setTaskrepeat((byte) 0);
+			model.setValve((byte) 0);
+			model.setTaskid("-1");
+			model.setCenterid(-1);
+			model.setMetercode(meterCode);
+			model.setFactorycode(me.getFactorycode());
+			model.setState(state);
+			model.setType(type);
+			model.setParam("");
+			model.setIsp(me.getIsp());
+			model.setIspid(me.getIspid());
+			model.setImei(me.getImei());
+			model.setStationcode(QingSongInterfaceClient.STATIONCODE_QINGSONG);
+			model.setOperatorid(-1);
+			model.setOperatorname(op.getRealname());
+			model.setSystemid(me.getSystemid());
+			model.setProductid(me.getProductid());
+			model.setMeterid(me.getId());
+			model.setUserid(me.getUserid());
+			model.setRemark(op.getRealname()+"通过微信页面直接操作"+remark);
+			model.setCreatetime(new Date());
+			qsCmdModelMapper.insert(model);
+		}
+		
+		IOTWebDataBean result = new IOTWebDataBean();
+		result.setMessage("提交成功，请等待30秒后再操作水表~");
+		result.setCode(IOTWebDataBean.CODE_IOTWEB_SUCCESS);
+		
+		return result;
+	}
+	
+	
+	
+	/**
+	 * 微信界面查询轻松系统的数据
+	 * @param usercode
+	 * @return
+	 */
+	@Override
+	public IOTWebDataBean queryQingSongMeterList(String usercode) {
+
+		IOTWebDataBean result = new IOTWebDataBean();
+
+		Map<String, Object> map= new HashMap<>();
+		map.put("usercode", usercode);
+		
+		List<Map<String, Object>> list = meterExtendsMapper.queryQingSongMeterList(map);
+
+		result.setData(list);
+		return result;
+	}
+	
+	
+	
 	@Override
 	public IOTWebDataBean queryDayMeterReadingCount(String day,Integer systemid) {
 		IOTWebDataBean result = new IOTWebDataBean();

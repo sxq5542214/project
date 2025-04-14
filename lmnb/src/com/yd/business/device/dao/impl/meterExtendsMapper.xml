@@ -86,4 +86,18 @@
 		order by ca.value 
 	</select>
 	
+	
+	<select id="queryQingSongMeterList" parameterType="map" resultType="map">
+		select u.code usercode, u.name , CONCAT(u.area1,u.area2,u.area3,u.area4) addressname ,u.phone , m.balance, m.code metercode,
+		(select description from ll_dictionary d where d.tablename = 'meterModel' and d.attribute = 'valvestate' and d.value = valvestate ) valvestate
+		 from `imeterx-longma`.meter m, `imeterx-longma`.user u 
+		 where m.userid = u.id and m.changed = 0
+		 
+		 and u.code = #{usercode}
+		 
+		order by m.id desc 
+
+	</select>
+	
+	
 </mapper>

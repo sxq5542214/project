@@ -983,6 +983,92 @@ public class LmOperatorModelExample {
             addCriterion("passterms not between", value1, value2, "passterms");
             return (Criteria) this;
         }
+
+        public Criteria andOpenidIsNull() {
+            addCriterion("openid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidIsNotNull() {
+            addCriterion("openid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidEqualTo(String value) {
+            if (value != null) {
+                addCriterion("openid =", value, "openid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidNotEqualTo(String value) {
+            if (value != null) {
+                addCriterion("openid <>", value, "openid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidGreaterThan(String value) {
+            if (value != null) {
+                addCriterion("openid >", value, "openid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidGreaterThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("openid >=", value, "openid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidLessThan(String value) {
+            if (value != null) {
+                addCriterion("openid <", value, "openid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidLessThanOrEqualTo(String value) {
+            if (value != null) {
+                addCriterion("openid <=", value, "openid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidLike(String value) {
+            if (value != null) {
+                addCriterion("openid like", "%"+value+"%", "openid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidNotLike(String value) {
+            if (value != null) {
+                addCriterion("openid not like", value, "openid");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidIn(List<String> values) {
+            addCriterion("openid in", values, "openid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidNotIn(List<String> values) {
+            addCriterion("openid not in", values, "openid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidBetween(String value1, String value2) {
+            addCriterion("openid between", value1, value2, "openid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOpenidNotBetween(String value1, String value2) {
+            addCriterion("openid not between", value1, value2, "openid");
+            return (Criteria) this;
+        }
     }
 
     /**

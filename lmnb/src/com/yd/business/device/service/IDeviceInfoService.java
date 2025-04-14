@@ -53,4 +53,13 @@ public interface IDeviceInfoService {
 
 	DeviceDto checkDeviceStation(Integer id);
 
+	IOTWebDataBean openOrCloseMeterByQingSong(String meterCode, LmOperatorModel op, boolean isOpen, String remark);
+
+	/**
+	 * 微信界面查询轻松系统的数据
+	 * @param usercode
+	 * @return
+	 */
+	IOTWebDataBean queryQingSongMeterList(String usercode);
+
 }
