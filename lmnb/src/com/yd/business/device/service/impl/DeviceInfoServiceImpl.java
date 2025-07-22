@@ -173,6 +173,8 @@ public class DeviceInfoServiceImpl extends BaseService implements IDeviceInfoSer
 			meterExtendsMapper.insertSelective(bean);
 			
 		}else {
+			LmPriceModel price = priceService.findPriceById(bean.getPricecode());
+			bean.setPricename(price.getName());
 			meterExtendsMapper.updateByPrimaryKeySelective(bean);
 		}
 		

@@ -17,6 +17,7 @@ import com.yd.basic.framework.controller.BaseController;
 import com.yd.business.area.bean.AreaDataBean;
 import com.yd.business.area.service.IAreaDataService;
 import com.yd.business.area.service.IAreaService;
+import com.yd.business.device.bean.MeterModelExtendsBean;
 import com.yd.business.other.service.IConfigAttributeService;
 import com.yd.business.other.service.IConfigCruxService;
 import com.yd.business.user.bean.UserModelExtendsBean;
@@ -87,6 +88,7 @@ public class UserController extends BaseController {
 			
 			UserModelExtendsBean bean = new UserModelExtendsBean();
 			AutoInvokeGetSetMethod.autoInvoke(request.getParameterMap(), bean);
+			bean.setChanged(MeterModelExtendsBean.CHANGED_FALSE);
 			result = userInfoService.queryUserAndMeterList(bean);
 			
 		} catch (Exception e) {

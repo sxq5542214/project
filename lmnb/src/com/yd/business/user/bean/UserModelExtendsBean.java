@@ -29,6 +29,14 @@ public class UserModelExtendsBean extends LmUserModel {
 	private String meterStoptime;
 	private String factoryCode;
 	private String factoryName;
+	private Byte changed;
+	
+	public Byte getChanged() {
+		return changed;
+	}
+	public void setChanged(Byte changed) {
+		this.changed = changed;
+	}
 	public String getMetercode() {
 		return metercode;
 	}

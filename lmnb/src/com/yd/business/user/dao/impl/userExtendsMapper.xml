@@ -21,6 +21,7 @@
 			<if test="meterOpened != null"> and m.opened = #{meterOpened}</if>
 			<if test="priceCode != null"> and m.pricecode = #{priceCode}</if>
 			<if test="factoryCode != null"> and m.factorycode = #{factoryCode}</if>
+			<if test="changed != null"> and m.changed = #{changed}</if>
 		</where>
 	    <if test="rows != null">
 	      <if test="page != null">
